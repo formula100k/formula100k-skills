@@ -1,0 +1,490 @@
+---
+name: recursos-de-video-formula100k
+description: Skill que convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) listos para superponerse sobre la toma. Variante de `graficos-de-video-formula100k`. Ofrece 3 modos: (1) IA — solo recursos generados con Higgsfield, (2) WEB — solo recursos reales cazados en Pinterest, Google Images, TikTok virales y medios de noticias, (3) HÍBRIDO — combina ambos por timestamp. NO usa bancos de stock (Shutterstock, Getty, Unsplash, Pexels, Pixabay, iStock, Freepik, Adobe Stock, 123rf, Depositphotos). NO edita ni renderiza el video final — para componer el BORRADOR_AUTO.mp4 está la skill `editor-video-formula100k`. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "cazame recursos para este video", "busca b-roll real", "no quiero todo IA, busca clips reales", "tráeme recursos web para este video", "mezcla IA + recursos reales", "recursos híbridos para este reel", "buscame TikToks virales para este tema", "tráeme imágenes de Pinterest/Google/noticias para acompañar", o cualquier variación que combine un video grabado con la intención de cazar recursos visuales existentes. Output: carpeta `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/` con subcarpetas WEB/{pinterest,google,tiktok,noticias} + IA/ + MANIFEST.md que la skill `editor-video-formula100k` consume después.
+allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__claude_ai_supadara__supadata_scrape, mcp__claude_ai_supadara__supadata_transcript, mcp__claude_ai_supadara__supadata_metadata, mcp__claude_ai_Tavily__authenticate, mcp__claude_ai_Tavily__complete_authentication
+delegates-to:
+  - guionizacion-formula100k    # para generar el header viral (gancho textual)
+  - banana                       # para generar la imagen gancho del segundo 1
+---
+
+# Recursos de Video — FÓRMULA 100K
+
+Pipeline para convertir un video grabado por Andrea en un set de recursos de edición (B-roll, overlays, referencias visuales) listos para superponer sobre la toma.
+
+**Esta skill SOLO caza recursos y arma el MANIFEST.md.** No edita ni renderiza el video. Para auto-componer el `BORRADOR_AUTO.mp4` final, usar `editor-video-formula100k` después de que esta skill termine.
+
+## Cuándo activar
+
+Activar cuando se cumplan AMBAS:
+1. El usuario provee un archivo de video local (`.mov`, `.mp4`, `.m4v`, `.mkv`).
+2. Pide recursos reales / b-roll / clips virales / referencias web / mix IA+web.
+
+Si el usuario solo dice "hazme gráficos / scrapbook / overlays con IA" → usar `graficos-de-video-formula100k` directamente.
+
+## NO activar para
+
+- Solo gráficos scrapbook con IA → `graficos-de-video-formula100k`.
+- Editar/componer el video final → `editor-video-formula100k`.
+- Stories de Instagram → `historias-a-imagenes-nanobanana`.
+- Carruseles de IG → `carrusel-render-formula100k`.
+- Miniaturas YouTube → `miniatura-youtube-formula100k`.
+
+## Regla NO-STOCK (obligatoria)
+
+NUNCA usar resultados de estos dominios. Si el agente de búsqueda los encuentra, descartarlos:
+
+```
+shutterstock.com, gettyimages.com, istockphoto.com, unsplash.com, pexels.com,
+pixabay.com, freepik.com, stock.adobe.com, 123rf.com, depositphotos.com,
+dreamstime.com, alamy.com, vecteezy.com, canstockphoto.com, bigstockphoto.com
+```
+
+Si en algún paso un dominio de stock aparece en los top resultados, reformula la query (más nicho, más narrativo, más editorial) y vuelve a buscar.
+
+## Regla NO-PLACEHOLDER (obligatoria)
+
+NUNCA usar servicios de imagen aleatoria / placeholder / lorem-ipsum, ni siquiera como "test" o "demo". Bloqueados:
+
+```
+picsum.photos, lorem-picsum, fastly.picsum.photos, placekitten.com,
+placebear.com, placehold.it, placehold.co, via.placeholder.com,
+fakeimg.pl, dummyimage.com, baconmockup.com, fillmurray.com
+```
+
+Estos servicios devuelven imágenes ALEATORIAS — nunca van a matchear el contenido del video. Si no se puede cazar un recurso real relevante después de los intentos del Paso 7, **dejar el cue sin recurso** (no incluirlo en MANIFEST). Es mejor no tener overlay que tener uno que no tiene nada que ver con lo que Andrea está diciendo en ese segundo.
+
+## Regla VALIDACIÓN-VISUAL (obligatoria)
+
+Cada archivo cazado (WEB o IA) debe pasar una inspección visual antes de incluirse en `MANIFEST.md`. No se acepta nada "a ciegas" basado solo en la URL/query/título del resultado.
+
+Para cada candidato:
+
+1. **Imágenes (.jpg, .png, .webp):** usar `Read` sobre el archivo descargado y comparar contra el `concepto_visual` + `texto_clave` del momento. Preguntarse: "¿Esta imagen ilustra LITERALMENTE lo que Andrea está diciendo en ese segundo del video?" Si la respuesta es "más o menos", "podría servir", "es genérica pero está bien" → **descartar**. Solo aceptar matches CLAROS.
+
+2. **Videos (.mp4, .mov):** extraer 3 keyframes con ffmpeg (al 25%, 50%, 75%) y leer cada uno (ya documentado en Paso 7c para subtítulos quemados). Aplicar el mismo criterio de relevancia visual.
+
+3. **IA generada (Higgsfield):** misma regla — leer el rawUrl después del job, confirmar que el output respeta el prompt y no derivó (sucede a veces con `nano_banana_2`).
+
+Si tras 3 intentos de cazada/regenerada un cue no consigue un match relevante, marcar ese cue como **"sin recurso"** y omitirlo del MANIFEST. Andrea prefiere un reel con menos overlays que con overlays incorrectos.
+
+> Ejemplo de fallo a evitar: video habla de "descargar recursos de Internet" en el segundo 42. La cazadora encuentra una foto bonita de lluvia de chispas en cámara lenta. Visualmente impactante pero NO TIENE NADA QUE VER con internet/redes/contenido. **Descartar.** Mejor dejar ese segundo sin overlay.
+
+## Pipeline (10 pasos)
+
+### Paso 1 — Validar input
+
+```bash
+file "$VIDEO_PATH"
+ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$VIDEO_PATH"
+```
+
+Si >5 min, avisa y confirma antes de seguir.
+
+### Paso 2 — Transcribir (idempotente)
+
+Llamar al script de la skill `editor-video-formula100k` que corta silencios y transcribe word-level. Esto produce `_source_cut.mov` + `captions.json` que después la skill editor reutiliza sin re-transcribir:
+
+```bash
+python3 ~/.claude/skills/editor-video-formula100k/scripts/cut_silences_and_fillers.py \
+  "$VIDEO_PATH" "$DEST"
+```
+
+Outputs en `$DEST/`:
+- `_source_cut.mov` — video sin silencios ni muletillas
+- `captions.json` — word-timestamps del video cortado (usar para verificar que los `keyword` del Paso 3 existen)
+- `edl.json` — mapping orig→nuevo tiempo (debugging)
+
+### Paso 3 — Identificar momentos (4-8 momentos)
+
+Cantidad por duración del video:
+- <30s → 2-3
+- 30-90s → 4-6
+- >90s → 6-8
+
+Por momento extrae:
+- `timestamp_in`, `timestamp_out` (informativo, no se usa en el MANIFEST nuevo — el editor resuelve por keyword)
+- `concepto_visual` (1 línea)
+- `texto_clave` (frase literal del audio en ese segmento)
+- **`keyword`** — UNA palabra del `texto_clave` que ancla el cue al transcript. Reglas obligatorias:
+  - Aparece **literalmente** en el audio (la skill editor la busca en `captions.json`)
+  - Lo más **única** posible dentro del video (no usar "es", "el", "que" — usar sustantivos/verbos específicos)
+  - En lowercase, sin puntuación
+  - Si el texto_clave usa una palabra rara/marca/nombre propio, ESE es el keyword ideal
+- `clase_visual` — **overlay** o **broll**:
+  - `overlay` → gráfico pequeño que se superpone sobre el pecho de Andrea (~480px ancho). Aplicable a: scrapbook IA, infografías de Pinterest, screenshots de UI, charts, iconos, capturas de redes.
+  - `broll` → reemplaza fullscreen la cámara durante unos segundos. Aplicable a: TikToks virales, fotos de lugares/personas/eventos reales, clips de noticias.
+- `tipo_dominante` (pantalla IG / comparación / dato duro / persona / objeto / lugar / proceso / emoción)
+- `riqueza_visual` (alta / media / baja) — qué tan "buscable" es ese momento en la web
+
+**Regla de oro de keyword:** si en el video Andrea dice "...con la skill de Cloud Remotion que edita...", el keyword puede ser `remotion` (única, fácil de encontrar). Si dice "...Yapper Method...", el keyword es `japer` o `yapper` — lo que efectivamente diga el audio (mlx-whisper a veces lo transcribe como "Japer"). Si dudas, mejor inspecciona `captions.json` después del corte para elegir keywords que sí estén ahí.
+
+### Paso 3.5 — Diseñar el Header del reel (delegar a `guionizacion-formula100k`)
+
+El reel tiene un **header persistente de 2 líneas** centrado arriba durante TODO el video. Es la promesa principal — no cambia, no por-timestamp.
+
+**Cómo generarlo:** invocar la skill `guionizacion-formula100k` con el transcript del Paso 2 + el tema central + las 3-5 ideas que el video promete entregar. Pedirle que devuelva **3 variantes de gancho textual** siguiendo su framework "Gancho Textual del Top 1%" (declaración punzante, contraste, número fuerte, contraintuitivo).
+
+Cada variante en formato `línea 1` / `línea 2`, 3-5 palabras por línea, sentence case (NO all caps).
+
+Ejemplo de prompt a la skill:
+```
+Tengo este transcript: [pegar]
+El video promete: [resumen 1 línea]
+Necesito 3 variantes de gancho textual en formato:
+  Línea 1 (3-5 palabras)
+  Línea 2 (3-5 palabras)
+Aplicar framework "Gancho Textual del Top 1%". Sin all caps.
+```
+
+Mostrar las 3 variantes a Andrea con `AskUserQuestion` y dejar que elija. Si pide variaciones, volver a invocar la skill con feedback específico.
+
+> Si la skill `guionizacion-formula100k` no está instalada, generar el header tú mismo aplicando estas reglas, pero avisar a Andrea: "para mejor calidad de gancho instala guionizacion-formula100k".
+
+### Paso 3.6 — Imagen gancho del segundo 1 (OPCIONAL — preguntar a Andrea)
+
+La imagen gancho es un **sticker editorial** que aparece en el segundo 0.3-2.5 en una esquina superior, rotado ligeramente, sin tapar la cara. Es CRÍTICA para el primer segundo cuando se usa — el viewer la registra antes que el header. PERO no siempre se quiere: a veces el primer segundo está mejor "limpio" para que el viewer fije la mirada en la cara y el header.
+
+**Preguntar SIEMPRE a Andrea antes de generar nada:**
+
+```
+AskUserQuestion:
+  question: "¿Quieres una imagen gancho en el segundo 1 de este reel?"
+  header: "Imagen gancho"
+  multiSelect: false
+  options:
+    - label: "Sí, genera el sticker editorial"
+      description: "Genero una miniatura tipo YouTube (380px) con la skill banana — tachados, contrastes, símbolos en estilo scrapbook FÓRMULA 100K. Aparece top-right en seg 0.3-2.5, rotada 3°, sin tapar la cara."
+    - label: "No, dejar el segundo 1 limpio"
+      description: "Sólo header centrado arriba + cara + subtítulos. El primer segundo respira; el viewer fija la mirada en ti directamente."
+```
+
+**Atajos textuales que saltan la pregunta:**
+- "sin imagen gancho" / "sin sticker" / "limpio el primer segundo" → modo SIN
+- "con imagen gancho" / "con sticker" / "hazme el hook" → modo CON
+
+**Si Andrea elige "Sí":**
+
+Concepto: una "miniatura" tipo YouTube comprimida en 380px que sintetiza el video en UN visual potente. Ejemplos:
+- Video sobre perfeccionismo → tachado rojo sobre "PERFECCIÓN" + post-it "publica HOY" con flecha
+- Video sobre auto-edición → captura de pantalla scrapbook con Cloud + Remotion + flechita
+- Video sobre formato vertical → móvil con grid 9:16 vs 16:9 con un check y una X
+
+**Cómo generarlo:**
+1. Diseñar el concepto visual en 1 línea (tachados, contrastes, símbolos antes/después)
+2. Invocar la skill `banana` con un prompt scrapbook estilo FÓRMULA 100K:
+   - Aspect ratio cuadrado o ligeramente vertical (1:1 o 4:5)
+   - Paleta crema + amarillo + coral
+   - Washi tape, post-its, tachados rojos, flechas amarillas, X grandes
+   - Borde recortado tipo "stickerSlapped"
+   - Una sola idea, lectura en 0.5s
+3. Guardar en `IA/HOOK_<slug>.png` (a la raíz de `IA/`, sin prefijo T)
+4. Validación visual (Read tool): la imagen DEBE leerse claro a 380px de ancho. Si tiene texto, debe ser ≥48pt equivalente. Descartar y regenerar si está apretada.
+
+Una vez aprobada, registrarla en MANIFEST.md sección `## Gancho visual`.
+
+**Si Andrea elige "No":**
+
+Saltar la generación. **NO incluir** la sección `## Gancho visual` en MANIFEST.md (el editor la ignora silenciosamente si no existe). El primer segundo del reel queda con header + cara + subs únicamente.
+
+### Paso 4 — Preguntar modo
+
+**Salvo que el usuario ya lo haya dicho** (frases como "solo IA", "solo recursos web", "mezcla los dos") preguntar:
+
+```
+AskUserQuestion:
+  question: "¿Qué tipo de recursos quieres para este video?"
+  header: "Modo recursos"
+  options:
+    - label: "Solo IA (generados con Higgsfield)"
+      description: "Gráficos scrapbook 100% on-brand. Comportamiento idéntico a graficos-de-video."
+    - label: "Solo Web (Pinterest, Google, TikTok, noticias)"
+      description: "Recursos reales cazados de la web. Sin stock. Tú decides en edición qué usar."
+    - label: "Híbrido (los dos por timestamp)"
+      description: "Por cada momento da 1 opción IA + 1-2 opciones web. Más para elegir."
+```
+
+Atajos textuales que saltan la pregunta:
+- "modo ia" / "solo ia" / "solo generados" → modo IA
+- "modo web" / "solo web" / "solo reales" / "sin ia" → modo WEB
+- "híbrido" / "mezcla" / "los dos" / "ambos" → modo HÍBRIDO
+
+### Paso 5 — Decidir cantidad y fuentes por timestamp (adaptativo)
+
+Para cada momento, la skill decide cuántos recursos buscar y de qué fuentes según `riqueza_visual` + `tipo_dominante`:
+
+| Riqueza visual | Cantidad total | Fuentes priorizadas |
+|----------------|----------------|---------------------|
+| Alta (visualmente potente, viral, persona/lugar reconocible) | 3-4 | TikTok + noticias + Pinterest + Google |
+| Media (concepto claro pero genérico) | 2 | Pinterest + Google |
+| Baja (concepto abstracto, nicho) | 1-2 | Pinterest + (IA si modo híbrido) |
+
+Mapeo `tipo_dominante` → fuente más probable:
+- `persona` / `lugar` / `evento` → **noticias** + TikTok (porque son hechos reales)
+- `pantalla IG` / `comparación` / `dato duro` → **Pinterest** (infografías virales) + IA
+- `proceso` / `tutorial` → **TikTok** + Pinterest
+- `emoción` / `objeto` → **Google Images** + Pinterest
+- `nicho de Andrea` (algoritmo IG, ventas DM, contenido) → **TikTok** + Pinterest
+
+### Paso 6 — Mostrar plan y confirmar
+
+Antes de gastar créditos/tiempo de búsqueda, muestra una tabla:
+
+```
+| # | TS    | Keyword     | Clase   | Concepto              | Modo    | Fuentes        |
+|---|-------|-------------|---------|-----------------------|---------|----------------|
+| 1 | 00:02 | perfección  | overlay | Tachado/cruz sobre G1 | Híbrido | IA + Pinterest |
+| 2 | 00:15 | japer       | overlay | Logo/UI Yapper Method | IA      | IA             |
+| 3 | 00:38 | remotion    | broll   | Capturas Claude IDE   | Web     | Google + TikTok|
+...
+```
+
+Adicional: confirmar el **Header** propuesto (`línea 1` / `línea 2`) y si la **imagen gancho** se va a generar o no (resultado del Paso 3.6).
+
+`AskUserQuestion`: "¿Procedo con este plan, ajusto cantidades, cambio el header, cambio modo/keyword/clase de algún timestamp, o cambio la decisión de la imagen gancho?"
+
+Atajo: si el video dura <60s y el plan es claro, saltar la confirmación.
+
+### Paso 7 — Ejecutar búsquedas en paralelo
+
+**TODAS las búsquedas se lanzan en paralelo** (un solo mensaje con múltiples tool calls). El downloading se hace después, cuando ya tienes las URLs.
+
+> **Recordatorio:** todo asset cazado en este paso (Pinterest, Google, TikTok, noticias, IA) DEBE pasar la **Regla VALIDACIÓN-VISUAL** antes de incluirse en MANIFEST. Inspeccionar el archivo (Read) y descartar si no matchea el `concepto_visual` del cue. Las reglas NO-STOCK y NO-PLACEHOLDER siguen aplicando.
+
+#### 7a. Pinterest (vía agent-browser)
+
+Cargar la skill agent-browser si no está cargada:
+```bash
+agent-browser skills get core
+```
+
+Workflow:
+1. `agent-browser navigate https://www.pinterest.com/search/pins/?q=<query>` con query en inglés derivada del concepto + tipo.
+2. Snapshot la accessibility tree. Identificar los primeros 5-10 pins.
+3. Para los pins seleccionados, obtener URL de imagen full-size (no thumbnail).
+4. Descargar con `curl` al destino.
+
+Si Pinterest pide login, usar la sesión persistente del agent-browser (vault).
+
+#### 7b. Google Images (vía agent-browser)
+
+1. `agent-browser navigate https://www.google.com/search?tbm=isch&q=<query>+-site:shutterstock.com+-site:gettyimages.com+-site:istockphoto.com`
+2. Tomar los 5 primeros resultados que NO sean del blocklist de stock.
+3. Click en cada uno para obtener la imagen full-res (no thumbnail).
+4. Descargar con `curl`.
+
+Si un dominio de stock aparece en top 5, agregarlo a la query con `-site:` y reintentar.
+
+#### 7c. TikTok virales (vía Tavily + yt-dlp)
+
+1. `mcp__claude_ai_Tavily__authenticate` si hace falta.
+2. Buscar con Tavily: query en español + filtros virales. Ej: `"tiktok viral algoritmo instagram 2025 millones de vistas site:tiktok.com"`.
+3. Tomar 4-6 URLs candidatas de tiktok.com/@user/video/12345 (más de las que vas a usar).
+4. Para cada URL, llamar `mcp__claude_ai_supadara__supadata_metadata` para confirmar:
+   - vistas > 100k (umbral viral)
+   - duración relevante (5-60s típicamente)
+   - idioma compatible (es/en)
+5. **Descargar el .mp4** con yt-dlp:
+   ```bash
+   yt-dlp -f "best[ext=mp4]" -o "$DEST/WEB/tiktok/T<n>_<slug>.%(ext)s" "$URL"
+   ```
+6. **🚫 FILTRO ANTI-SUBTÍTULOS QUEMADOS (obligatorio, regla de Andrea):**
+   Los TikToks con captions/subtítulos quemados sobre el video crean ruido visual cuando se superponen. Antes de aceptar un TikTok como recurso final:
+   
+   a. Extraer 3 keyframes distribuidos (al 25%, 50%, 75%):
+   ```bash
+   DUR=$(ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$VIDEO")
+   for pct in 0.25 0.5 0.75; do
+     t=$(python3 -c "print($DUR * $pct)")
+     ffmpeg -ss "$t" -i "$VIDEO" -frames:v 1 -y "/tmp/check_${pct}.jpg"
+   done
+   ```
+   
+   b. Inspeccionar visualmente cada keyframe (Read tool sobre los .jpg). Si en cualquiera aparece texto/subtítulos/captions quemados → **descartar ese TikTok** (borrar .mp4 + keyframes) y probar el siguiente candidato.
+   
+   c. Solo conservar TikToks **limpios**. Si tras 4 candidatos no encuentras uno limpio, marcar el timestamp como "sin TikTok" en MANIFEST.
+   
+   Tips: los tipo POV/reaction/show suelen estar limpios. Los tipo "explainer/tutorial" casi siempre tienen subtítulos. Filtra con palabras como "raw", "POV", "no commentary", "sin texto", "show", "process".
+
+7. Una vez aprobado, capturar **screenshot del segundo clave** con ffmpeg para el manifest:
+   ```bash
+   ffmpeg -ss <seg> -i "$DEST/WEB/tiktok/T<n>_<slug>.mp4" -frames:v 1 -y "$DEST/WEB/tiktok/T<n>_<slug>_keyframe.jpg"
+   ```
+
+#### 7d. Medios de noticias (vía agent-browser)
+
+Lista priorizada de medios (español primero, inglés después). NUNCA stock:
+
+```
+Español:
+- bbc.com/mundo, cnnespanol.cnn.com, elpais.com, lanacion.com.ar,
+  infobae.com, clarin.com, eluniversal.com.mx, forbes.com.mx,
+  bloomberglinea.com, expansion.mx, semana.com
+
+Inglés:
+- reuters.com, apnews.com, bbc.com, theguardian.com, nytimes.com,
+  forbes.com, bloomberg.com, wired.com, techcrunch.com, theverge.com
+```
+
+Workflow:
+1. `agent-browser navigate https://www.google.com/search?tbm=isch&q=<query>+(site:bbc.com/mundo+OR+site:reuters.com+OR+...)`
+2. Tomar 2-3 imágenes editoriales relevantes.
+3. Descargar respetando la URL original del medio (para crédito en el manifest).
+
+Filtrar dominios de stock incluso si Google los devuelve.
+
+#### 7e. IA (Higgsfield) — solo si modo IA o HÍBRIDO
+
+Mismo flujo que en `graficos-de-video-formula100k`:
+- Construir prompt scrapbook con brandkit FÓRMULA 100K
+- `mcp__higgsfield__generate_image` con `nano_banana_2`, aspect ratio según video (1:1 default)
+- `mcp__higgsfield__job_status` con `sync: true`
+- Capturar `rawUrl`
+
+### Paso 8 — Estructura de carpeta destino
+
+```bash
+DEST="/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
+mkdir -p "$DEST/IA"
+mkdir -p "$DEST/WEB/pinterest"
+mkdir -p "$DEST/WEB/google"
+mkdir -p "$DEST/WEB/tiktok"
+mkdir -p "$DEST/WEB/noticias"
+```
+
+`<nombre_descriptivo>` en snake_case sin acentos (ej: `algoritmo_instagram_recursos`).
+
+Convención de nombre de archivo (CRÍTICA — la skill editor depende de ella):
+- `IA/T<n>_G<g>_<slug>_<mmss-mmss>.png`
+- `WEB/pinterest/T<n>_P<p>_<slug>.jpg`
+- `WEB/google/T<n>_GI<g>_<slug>.jpg`
+- `WEB/tiktok/T<n>_TT<t>_<slug>.mp4` + `_keyframe.jpg`
+- `WEB/noticias/T<n>_N<m>_<slug>_<medio>.jpg`
+
+El prefijo `T<n>_` es **recomendado** (no obligatorio en el nuevo lineamiento, pero ayuda a navegar la carpeta y a debuggear cuando un cue no carga). El editor ya no auto-descubre alternativas — cada cue del MANIFEST apunta a UN archivo explícito.
+
+### Paso 9 — Generar MANIFEST.md (formato keyword-based)
+
+Archivo `MANIFEST.md` en la raíz de `$DEST`. La skill `editor-video-formula100k` lo consume con este formato exacto:
+
+```markdown
+# Reel — <nombre del video>
+
+- **Video fuente:** <ruta absoluta al .mov/.mp4>
+- **Fecha:** <YYYY-MM-DD>
+- **Modo:** <IA | Web | Híbrido>
+
+## Header
+
+- **Línea 1:** <línea 1 del header — 3-5 palabras, sentence case>
+- **Línea 2:** <línea 2 del header — 3-5 palabras, sentence case>
+
+## Gancho visual
+
+- **Archivo:** `IA/HOOK_<slug>.png`
+- **Posición:** right          (o `left`)
+- **Inicio:** 0.3              (segundos)
+- **Duración:** 2.2            (segundos)
+- **Ancho:** 380               (px)
+- **Rotación:** 3              (grados, suave)
+
+## Énfasis
+
+| Keyword     | Texto                 | Duración |
+|-------------|-----------------------|----------|
+| <keyword1>  | <texto caja blanca>   | 1.6      |
+| <keyword2>  | ...                   | 1.6      |
+
+## Overlays
+
+| Keyword     | Archivo                                       | Ancho | Duración |
+|-------------|-----------------------------------------------|-------|----------|
+| <keyword>   | `IA/T1_..._.png` o `WEB/.../T1_..._.jpg`      | 480   | 2.4      |
+
+## B-roll
+
+| Keyword     | Archivo                                  | Duración | Estilo         |
+|-------------|------------------------------------------|----------|----------------|
+| <keyword>   | `WEB/tiktok/T3_..._.mp4`                 | 3.0      | monitor-photo  |
+
+## Créditos (recursos web)
+
+[tablas por fuente con URL original de cada archivo]
+```
+
+**Cómo llenar cada sección:**
+
+**Header** (obligatoria):
+- 2 líneas que resumen la promesa del video, no por-timestamp. Ver Paso 3.5.
+
+**Énfasis** (recomendada):
+- 4-10 cajas blancas que aparecen al centro del video durante 1.4-2.0s cada una.
+- Cada fila ancla a UNA `keyword` que existe literalmente en el audio.
+- El `Texto` de la caja puede ser DISTINTO de la keyword: la keyword es solo el ancla temporal; el texto es lo que se muestra (más corto/punzante).
+- Ej: `keyword: perfección` → `Texto: Olvida la perfección`. La caja aparece cuando Andrea dice "perfección".
+- Buenos candidatos: declaraciones definitivas, frases-bomba, números importantes, veredictos.
+
+**Overlays** (recomendada — recursos pequeños sobre el pecho):
+- Una fila por cada recurso clasificado como `overlay` en el Paso 3.
+- `Archivo` es path relativo a `$DEST/` (ej. `IA/T1_..._.png`, `WEB/pinterest/T2_..._.jpg`).
+- `Ancho` por default 480px. Subir a 560 si el gráfico necesita detalle.
+- `Duración` por default **3.0s** (mínimo recomendado para que el viewer lo registre). Subir a 4-5s si tiene mucho texto. No bajar de 2.5s.
+- Mientras hay énfasis activo en el mismo segundo, el overlay se oculta automáticamente. El editor además **desplaza** automáticamente cualquier overlay que quede visible <1.8s al final del emphasis con el que choque — así la duración configurada se respeta siempre. No hace falta evitar manualmente que keyword de overlay y keyword de emphasis coincidan.
+
+**B-roll** (opcional — recursos fullscreen):
+- Una fila por cada recurso clasificado como `broll` en el Paso 3.
+- `Estilo: monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% — simula una foto de pantalla, lo que da un toque editorial sin ser solemne. Default.
+- `Estilo: clean` deja la imagen plana sin efectos. Usar para tomas que ya tienen mucho carácter (TikToks dinámicos, lugares con composición fuerte).
+- Header sigue visible sobre el B-roll. Subtítulos también.
+
+**🚫 REGLA: para B-roll priorizar recursos verticales (9:16)**
+
+Los B-roll se renderean con `object-fit: cover`. Si el recurso es horizontal se va a cropear bastante — perderás contexto en los bordes. Para que se vea bien:
+- TikToks ya son verticales (✓)
+- Fotos de noticias: prefiere las verticales/cuadradas; si solo hay horizontal, conserva pero avisa
+- Pinterest pins: prefiere los verticales
+- Screenshots de UI: NO mandar a B-roll, mejor como overlay
+
+**No hay más columna `Layout`.** Los recursos van a una de dos tablas (`Overlays` o `B-roll`), y cada tabla tiene su rendering fijo. Esto es más simple y predecible que el viejo `pip` / `fullscreen` / `split`.
+
+### Paso 10 — Entregar al usuario
+
+1. `mcp__higgsfield__job_display` con UUIDs de IA (si hubo).
+2. `open "$DEST"` para abrir Finder.
+3. Resumen en chat:
+   - Total de recursos por modo y por fuente.
+   - Cuáles momentos quedaron sin recurso web.
+   - Cualquier dominio de stock que se haya descartado.
+4. **Sugerir el siguiente paso:** "Para componer el borrador automático del video, corre `/render <ruta de DEST>` o di 'edita este video' — invocará `editor-video-formula100k` con todo lo que acabamos de armar."
+
+## Iteración
+
+Si el usuario pide regenerar un timestamp o cambiar un recurso:
+1. Re-ejecutar solo esa búsqueda con query ajustada.
+2. Sobrescribir solo ese archivo.
+3. Actualizar `MANIFEST.md`.
+
+Si pide "este momento mejor IA": llamar a `mcp__higgsfield__generate_image` solo para ese timestamp y guardar en `IA/`.
+
+## Errores y fallbacks
+
+| Error | Acción |
+|-------|--------|
+| `agent-browser` no instalado | `npm i -g agent-browser && agent-browser install` (avisar al usuario). |
+| `yt-dlp` no instalado | `brew install yt-dlp`. Mientras tanto, guardar solo URL + thumbnail de Supadata. |
+| Tavily no autenticado | Llamar `mcp__claude_ai_Tavily__authenticate` y guiar al user por el flow. |
+| Pinterest exige login | Reintentar con sesión persistente del agent-browser. Si sigue, marcar el timestamp como "solo Google + IA". |
+| TikTok URL caída / privada | Buscar otra. Si después de 3 intentos no hay clip viable, marcar el timestamp como "sin TikTok" en MANIFEST. |
+| Todos los TikToks tienen subtítulos quemados | Reformular query con "raw"/"POV"/"no text" hasta 2 veces. Si igual, marcar como "sin TikTok". |
+| Todos los resultados son stock | Reformular query (más editorial, más nicho) hasta 2 veces. Si igual sale stock, marcar timestamp como "sin web" y proponer IA. |
+| Carpeta destino existe | Confirmar sobrescribir, o agregar `_v2`. |
+
+## Atajos conversacionales
+
+- `/recursos-video <ruta>` → modo HÍBRIDO por default, aspect ratio 1:1, decide cantidad adaptativo.
+- `/recursos-video <ruta> --modo ia` → modo solo IA.
+- `/recursos-video <ruta> --modo web` → modo solo web, sin IA.
+- `/recursos-video <ruta> --solo-tiktok` → solo TikToks virales.
+
+Para videos <60s con plan claro, saltar paso 6 (confirmación) y ejecutar directo.
+
+**Cadena con la skill editor:** si el usuario añade `--render` o "y luego edita" al comando, al terminar el Paso 10 invocar inmediatamente la skill `editor-video-formula100k` con la carpeta DEST recién creada.

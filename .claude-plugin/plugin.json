@@ -1,0 +1,12 @@
+{
+  "name": "formula100k",
+  "version": "1.0.0",
+  "description": "Suite completa de skills de FÓRMULA 100K — la metodología de Andrea Vega para crear contenido viral, vender en redes y construir comunidades en español.",
+  "author": {
+    "name": "Andrea Vega",
+    "email": "andrea@formula100k.app",
+    "url": "https://formula100k.app"
+  },
+  "homepage": "https://formula100k.app",
+  "license": "Proprietary"
+}

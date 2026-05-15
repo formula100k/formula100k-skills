@@ -31,9 +31,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-MIN_SILENCE = 0.45  # seconds — gap larger than this is treated as silence and trimmed
-PAD = 0.06  # seconds — padding around each kept word to avoid clipped consonants
-MIN_SEGMENT = 0.12  # don't keep segments smaller than this
+MIN_SILENCE = 0.15  # seconds — gap larger than this is treated as silence and trimmed
+PAD = 0.025  # seconds — padding around each kept word to avoid clipped consonants
+MIN_SEGMENT = 0.08  # don't keep segments smaller than this
 FILLER_REGEX = re.compile(
     r'^[¿¡"\'(\[]*(eh+|em+|um+|uh+|ah+|mm+|ehm+|emm+)[.,;:!?\)\]\'\"…]*$',
     re.IGNORECASE,

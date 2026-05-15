@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {
   AbsoluteFill,
+  Audio,
   Img,
   OffthreadVideo,
   Sequence,
@@ -28,6 +29,10 @@ const {fontFamily: INTER} = loadFont('normal', {
 const MIN_OVERLAY_VISIBLE_SECONDS = 1.8;
 const DEFAULT_OVERLAY_DURATION = 3.0;
 const DEFAULT_BROLL_DURATION = 3.5;
+
+// SFX que suena al inicio de cada imagen (hook, overlays, B-roll)
+const SFX_SRC = 'sfx/pop.wav';
+const SFX_DURATION_SECONDS = 0.18;
 
 // ──────────────────────────────────────────────────────────────────────
 // Helpers
@@ -184,39 +189,6 @@ function shiftOverlaysAroundEmphasis(
 // No auto-recap — el usuario lo pidió explícitamente.
 
 // ──────────────────────────────────────────────────────────────────────
-// Subtitle grouping — agrupa 1-3 palabras consecutivas si total < 0.6s
-// ──────────────────────────────────────────────────────────────────────
-
-type SubGroup = {
-  text: string;
-  start: number;
-  end: number;
-};
-
-function groupSubtitles(words: TranscriptWord[]): SubGroup[] {
-  const out: SubGroup[] = [];
-  let i = 0;
-  while (i < words.length) {
-    let j = i;
-    let duration = words[j].end - words[i].start;
-    while (duration < 0.6 && j - i < 2 && j + 1 < words.length) {
-      j++;
-      duration = words[j].end - words[i].start;
-    }
-    out.push({
-      text: words
-        .slice(i, j + 1)
-        .map((w) => w.text.toLowerCase())
-        .join(' '),
-      start: words[i].start,
-      end: words[j].end,
-    });
-    i = j + 1;
-  }
-  return out;
-}
-
-// ──────────────────────────────────────────────────────────────────────
 // Layer components
 // ──────────────────────────────────────────────────────────────────────
 
@@ -234,14 +206,14 @@ const HookImage: React.FC<{cue: HookCue; durationInFrames: number}> = ({
   const w = cue.width ?? 360;
   const rotation = cue.rotation ?? (position === 'left' ? -3 : 3);
 
-  // Spring drop entry
+  // Spring entry — slide up from below (anclado al fondo del frame)
   const dropProgress = spring({
     frame,
     fps,
     config: {damping: 13, mass: 0.7, stiffness: 120},
     durationInFrames: 18,
   });
-  const dropOffsetY = (1 - dropProgress) * -300;
+  const dropOffsetY = (1 - dropProgress) * 300;
 
   const fadeOut = interpolate(
     frame,
@@ -260,19 +232,20 @@ const HookImage: React.FC<{cue: HookCue; durationInFrames: number}> = ({
   const wobble = Math.sin(frame / 12) * 0.5;
   const finalRotation = rotation + wobble;
 
-  // Posición: top-right (default) o top-left.
-  // y=340 deja espacio para el header (paddingTop 140 + ~140 alto) sin chocar
-  // x=margen 40 desde el borde elegido
+  // Posición: bottom-right (default) o bottom-left.
+  // Anclado al fondo del frame para no chocar con el header grande de arriba.
+  // bottom=520 lo coloca encima de overlays (bottom 180) y emphasis (bottom 220),
+  // dejando espacio visual de respiración.
   const margin = 40;
   const left = position === 'left' ? margin : width - w - margin;
-  const top = 340;
+  const bottom = 520;
 
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       <div
         style={{
           position: 'absolute',
-          top,
+          bottom,
           left,
           width: w,
           transform: `translateY(${dropOffsetY}px) rotate(${finalRotation}deg)`,
@@ -298,7 +271,7 @@ const Header: React.FC<{line1: string; line2: string}> = ({line1, line2}) => (
   <AbsoluteFill
     style={{
       alignItems: 'center',
-      paddingTop: 140,
+      paddingTop: 280,
       pointerEvents: 'none',
     }}
   >
@@ -307,13 +280,15 @@ const Header: React.FC<{line1: string; line2: string}> = ({line1, line2}) => (
         margin: 0,
         fontFamily: INTER,
         fontWeight: 800,
-        fontSize: 64,
-        lineHeight: 1.08,
+        fontSize: 92,
+        lineHeight: 1.06,
         color: '#FFFFFF',
-        textShadow: '0 2px 12px rgba(0,0,0,0.35)',
+        WebkitTextStroke: '6px #000000',
+        paintOrder: 'stroke fill',
+        textShadow: '0 4px 14px rgba(0,0,0,0.45)',
         letterSpacing: -0.5,
         textAlign: 'center',
-        maxWidth: '88%',
+        maxWidth: '90%',
       }}
     >
       {line1}
@@ -427,9 +402,9 @@ const OverlayLayer: React.FC<{
       <div
         style={{
           position: 'absolute',
-          top: 1100,
+          bottom: 180,
           left: '50%',
-          transform: `translate(-50%, -50%) translateY(${floatY}px) scale(${enterScale})`,
+          transform: `translate(-50%, 0) translateY(${floatY}px) scale(${enterScale})`,
           opacity,
         }}
       >
@@ -486,9 +461,9 @@ const EmphasisLayer: React.FC<{
       <div
         style={{
           position: 'absolute',
-          top: '54%',
+          bottom: 220,
           left: '50%',
-          transform: `translate(-50%, -50%) scale(${scale})`,
+          transform: `translate(-50%, 0) scale(${scale})`,
           opacity,
           background: '#FFFFFF',
           borderRadius: 24,
@@ -514,52 +489,6 @@ const EmphasisLayer: React.FC<{
         </span>
       </div>
     </AbsoluteFill>
-  );
-};
-
-const Subtitles: React.FC<{groups: SubGroup[]}> = ({groups}) => {
-  const {fps} = useVideoConfig();
-  return (
-    <>
-      {groups.map((g, i) => {
-        const from = Math.floor(g.start * fps);
-        const dur = Math.max(1, Math.floor((g.end - g.start) * fps));
-        return (
-          <Sequence
-            key={`sub-${i}`}
-            from={from}
-            durationInFrames={dur}
-            layout="none"
-          >
-            <AbsoluteFill style={{pointerEvents: 'none'}}>
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 280,
-                  left: 0,
-                  right: 0,
-                  textAlign: 'center',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: INTER,
-                    fontWeight: 800,
-                    fontSize: 72,
-                    color: '#FFFFFF',
-                    WebkitTextStroke: '5px #000000',
-                    paintOrder: 'stroke fill',
-                    textShadow: '0 3px 0 rgba(0,0,0,0.4)',
-                  }}
-                >
-                  {g.text}
-                </span>
-              </div>
-            </AbsoluteFill>
-          </Sequence>
-        );
-      })}
-    </>
   );
 };
 
@@ -595,8 +524,6 @@ export const CreaContenidoViral: React.FC<CreaContenidoViralProps> = ({
     () => resolveBroll(brollCues, transcript),
     [brollCues, transcript]
   );
-
-  const subtitleGroups = useMemo(() => groupSubtitles(transcript), [transcript]);
 
   return (
     <AbsoluteFill style={{backgroundColor: '#000000'}}>
@@ -684,8 +611,27 @@ export const CreaContenidoViral: React.FC<CreaContenidoViralProps> = ({
         );
       })}
 
-      {/* CAPA 5 — Subtítulos word-level (siempre encima) */}
-      <Subtitles groups={subtitleGroups} />
+      {/* CAPA 5 — SFX "pop" al aparecer cada imagen (hook + overlays + B-roll) */}
+      {(() => {
+        const sfxStarts: number[] = [];
+        if (hookCue && hookCue.src) sfxStarts.push(hookCue.start ?? 0.3);
+        for (const o of overlays) sfxStarts.push(o.start);
+        for (const b of broll) sfxStarts.push(b.start);
+        const sfxDurFrames = Math.max(
+          1,
+          Math.floor(SFX_DURATION_SECONDS * fps)
+        );
+        return sfxStarts.map((t, i) => (
+          <Sequence
+            key={`sfx-${i}`}
+            from={Math.max(0, Math.floor(t * fps))}
+            durationInFrames={sfxDurFrames}
+            layout="none"
+          >
+            <Audio src={staticFile(SFX_SRC)} volume={0.55} />
+          </Sequence>
+        ));
+      })()}
     </AbsoluteFill>
   );
 };

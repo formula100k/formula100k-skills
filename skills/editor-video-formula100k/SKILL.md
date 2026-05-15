@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: Skill que toma un video grabado por Andrea + un MANIFEST.md (keyword-based, con header, énfasis, overlays y B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque fino. Corta silencios y muletillas, transcribe word-level, y compone el preset visual "Crea contenido viral" — talking-head 9:16 con header persistente arriba a la izquierda, caja blanca de énfasis al centro, overlays sobre el pecho, B-roll fullscreen estilo monitor-photo, y subtítulos word-level abajo. La sincronización es por keyword sobre el transcript (no por timestamp), así que sobrevive al corte de silencios sin remapear. Renderiza local con Remotion (gratis, sin nube). Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", o cualquier variación que combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. La primera vez instala node, ffmpeg, yt-dlp, uv y Remotion vía bootstrap.
+description: Skill que toma un video grabado por Andrea + un MANIFEST.md (keyword-based, con header, énfasis, overlays y B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque fino. Corta silencios (>0.15s) y muletillas con precisión, transcribe word-level, y compone el preset visual "Crea contenido viral" — talking-head 9:16 con header grande con trazo negro debajo de la mitad superior, caja blanca de énfasis al centro, overlays en la parte inferior para no tapar la cara, y B-roll fullscreen estilo monitor-photo. SIN subtítulos. La sincronización es por keyword sobre el transcript (no por timestamp), así que sobrevive al corte de silencios sin remapear. Renderiza local con Remotion (gratis, sin nube). Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", o cualquier variación que combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. La primera vez instala node, ffmpeg, yt-dlp, uv y Remotion vía bootstrap.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -9,12 +9,13 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 Pipeline automatizado: toma una grabación de Andrea + un `MANIFEST.md` (keyword-based) y produce `BORRADOR_AUTO.mp4` listo para retoque fino en CapCut/Premiere.
 
 El preset visual es **"Crea contenido viral"** — talking-head 9:16 a 30fps con:
-- Header persistente (2 líneas) centrado arriba
-- **Imagen gancho** tipo sticker editorial en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
-- Caja blanca de énfasis al centro (anclada a keywords del transcript)
-- Overlays gráficos sobre el pecho (~58% Y, anclados a keywords)
+- Header persistente (2 líneas) grande, con trazo negro, debajo del cuarto superior
+- **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
+- Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
+- Overlays gráficos en la parte inferior del frame — **pixel-avatar mascot** generado o **screenshots** del usuario (anclados a keywords, no tapan la cara)
 - B-roll fullscreen estilo `monitor-photo` (anclados a keywords)
-- Subtítulos word-level estilo CapCut al pie
+- **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
+- **Sin subtítulos** — la cara y los gráficos llevan todo el peso visual
 
 **Diferencia clave con la versión anterior:** los cues se anclan por **keyword** sobre el transcript del video cortado, no por timestamp. Eso significa que `_source_cut.mov` puede regenerarse cuantas veces haga falta sin tener que remapear nada — los keywords resuelven contra el `captions.json` del corte vigente.
 
@@ -54,7 +55,7 @@ bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/render.sh "$
 Lo que hace `render.sh` internamente:
 
 1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
-   - `_source_cut.mov` — video cortado (silencios > 0.45s y muletillas `eh/em/uhh/...` removidos, padding de 60ms para no clipar consonantes)
+   - `_source_cut.mov` — video cortado **agresivamente** (silencios > 0.15s y muletillas `eh/em/uhh/...` removidos, padding mínimo de 25ms para no clipar consonantes)
    - `edl.json` — mapping orig→nuevo tiempo (no se usa en el pipeline nuevo pero queda para debugging)
    - `captions.json` — word-timestamps del CUT video (no del original)
 
@@ -120,13 +121,13 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 ### Reglas por sección
 
-**Header** — Líneas 1 y 2. Persistente durante todo el reel. Inter 800 64px, blanco con sombra, centrado horizontal, anclado a `paddingTop: 140`.
+**Header** — Líneas 1 y 2. Persistente durante todo el reel. Inter 800 92px, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea).
 
 **Gancho visual** — Imagen tipo sticker (UN solo archivo) que aparece en los primeros segundos en una esquina superior. Columnas: `Archivo | Posición | Inicio | Duración | Ancho | Rotación`. Defaults: `Posición=right`, `Inicio=0.3s`, `Duración=2.2s`, `Ancho=360px`, `Rotación=3°`. Anclado a `top: 340px` para no chocar con el header. Spring drop desde fuera del frame + wobble sutil + fade out. NO cubre la cara centrada (zona segura x≥640 si position=right).
 
-**Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece al centro (54% Y), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente.
+**Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece en la parte inferior del frame (`bottom: 220`), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente para no superponerse.
 
-**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `WEB/...`). Renderiza al ~58% Y (sobre el pecho de Andrea), con spring de entrada y float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0).
+**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `WEB/...`). Renderiza en la parte inferior del frame (`bottom: 180`) para no tapar la cara de Andrea, con spring de entrada y float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0).
 
 **B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll.
 
@@ -143,17 +144,15 @@ t_end   = t_start + duration
 ### Reglas de oro de la composición
 
 1. El **header NUNCA desaparece**.
-2. **Emphasis excluye overlay** — si ambos coinciden en un frame, gana el emphasis. El overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
-3. **Los subtítulos word-level siempre van encima de todo.**
-4. **Cada 7s máximo debe ocurrir un cambio visual.** Si entre dos cues consecutivos hay > 7s, el componente inserta automáticamente un emphasis "auto-recap" con el texto del último emphasis (a la mitad del gap).
-5. **Sentence case** en cajas blancas y captions — NUNCA all caps.
+2. **Emphasis excluye overlay** — ambos viven en la zona inferior, así que si coinciden en un frame gana el emphasis. El overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
+3. **La cara de Andrea queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
+4. **Sin subtítulos quemados.** Si el usuario los quiere los pone en post.
+5. **Sentence case** en cajas blancas — NUNCA all caps.
 
-### Subtítulos word-level
+### Subtítulos
 
-- Se generan automáticamente desde `captions.json` (no se configuran en MANIFEST)
-- Inter 800 72px, blanco con stroke negro de 5px, anclados a `bottom: 280`
-- Cut in/out duro (sin animación), texto en minúsculas
-- Agrupa hasta 3 palabras consecutivas cuando la duración total < 0.6s
+- **Desactivados.** El preset no quema subtítulos sobre el video — la cara de Andrea + el header + los énfasis llevan el peso textual.
+- Si el usuario quiere subtítulos, los agrega en CapCut/Premiere encima del `BORRADOR_AUTO.mp4`.
 
 ---
 

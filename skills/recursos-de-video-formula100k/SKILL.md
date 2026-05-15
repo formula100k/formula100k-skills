@@ -1,6 +1,6 @@
 ---
 name: recursos-de-video-formula100k
-description: Skill que convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) listos para superponerse sobre la toma. Variante de `graficos-de-video-formula100k`. Ofrece 3 modos: (1) IA — solo recursos generados con Higgsfield, (2) WEB — solo recursos reales cazados en Pinterest, Google Images, TikTok virales y medios de noticias, (3) HÍBRIDO — combina ambos por timestamp. NO usa bancos de stock (Shutterstock, Getty, Unsplash, Pexels, Pixabay, iStock, Freepik, Adobe Stock, 123rf, Depositphotos). NO edita ni renderiza el video final — para componer el BORRADOR_AUTO.mp4 está la skill `editor-video-formula100k`. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "cazame recursos para este video", "busca b-roll real", "no quiero todo IA, busca clips reales", "tráeme recursos web para este video", "mezcla IA + recursos reales", "recursos híbridos para este reel", "buscame TikToks virales para este tema", "tráeme imágenes de Pinterest/Google/noticias para acompañar", o cualquier variación que combine un video grabado con la intención de cazar recursos visuales existentes. Output: carpeta `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/` con subcarpetas WEB/{pinterest,google,tiktok,noticias} + IA/ + MANIFEST.md que la skill `editor-video-formula100k` consume después.
+description: Skill que convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) listos para superponerse sobre la toma. Variante de `graficos-de-video-formula100k`. Ofrece 3 modos: (1) IA — pixel-avatar mascot generados con Higgsfield (estilo retro 16-bit, cuerpo salmón, contorno blanco), (2) WEB — recursos reales cazados en Pinterest, Google Images, TikTok virales y medios de noticias, (3) HÍBRIDO — combina ambos por timestamp. Además admite SCREENSHOTS que el usuario pasa manualmente (carpeta USER/). NO usa bancos de stock (Shutterstock, Getty, Unsplash, Pexels, Pixabay, iStock, Freepik, Adobe Stock, 123rf, Depositphotos). NO usa scrapbook tradicional. NO edita ni renderiza el video final — para componer el BORRADOR_AUTO.mp4 está la skill `editor-video-formula100k`. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "cazame recursos para este video", "busca b-roll real", "no quiero todo IA, busca clips reales", "tráeme recursos web para este video", "mezcla IA + recursos reales", "recursos híbridos para este reel", "buscame TikToks virales para este tema", "tráeme imágenes de Pinterest/Google/noticias para acompañar", o cualquier variación que combine un video grabado con la intención de cazar recursos visuales existentes. Output: carpeta `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/` con subcarpetas WEB/{pinterest,google,tiktok,noticias} + IA/ + USER/ + MANIFEST.md que la skill `editor-video-formula100k` consume después.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__claude_ai_supadara__supadata_scrape, mcp__claude_ai_supadara__supadata_transcript, mcp__claude_ai_supadara__supadata_metadata, mcp__claude_ai_Tavily__authenticate, mcp__claude_ai_Tavily__complete_authentication
 delegates-to:
   - guionizacion-formula100k    # para generar el header viral (gancho textual)
@@ -140,9 +140,35 @@ Mostrar las 3 variantes a Andrea con `AskUserQuestion` y dejar que elija. Si pid
 
 > Si la skill `guionizacion-formula100k` no está instalada, generar el header tú mismo aplicando estas reglas, pero avisar a Andrea: "para mejor calidad de gancho instala guionizacion-formula100k".
 
+### Paso 3.55 — Carpeta de fotos de referencia del usuario (OBLIGATORIO antes de generar IA)
+
+El pixel-mascot se genera **inspirado en una foto del usuario** (pelo, complexión, color de piel). Sin foto de referencia el mascot sale genérico — perderías el efecto "es mi avatar".
+
+```
+AskUserQuestion:
+  question: "¿Tienes una carpeta con selfies / fotos personales para inspirar el pixel-mascot?"
+  header: "Fotos de referencia"
+  multiSelect: false
+  options:
+    - label: "Sí, uso esta ruta:"
+      description: "Carpeta con .jpg / .png frontales o de medio cuerpo. El sistema elegirá automáticamente una clara con cara visible para usar como referencia en Higgsfield (medias role:image)."
+    - label: "No, usa un mascot genérico"
+      description: "El mascot sale en estilo pixel genérico, sin parecido al usuario. Útil si nunca van a ver su cara en el reel y solo es decoración."
+```
+
+**Default para Andrea (siempre):** si la usuaria es Andrea (revisar memoria `reference_andrea_selfies_folder.md`), saltar la pregunta y usar `/Users/kissita/Documents/ANDREA SELFIES`. Listar el directorio, leer 2-3 archivos con Read y elegir el que tenga cara frontal/3-cuartos clara, buena iluminación, sin objetos tapando el rostro.
+
+Una vez elegida la foto:
+1. Subirla a Higgsfield con `mcp__higgsfield__media_upload` (returns `upload_url`).
+2. PUT el binary a esa URL con `curl -X PUT -T <file> "<upload_url>"`.
+3. Llamar `mcp__higgsfield__media_confirm` para registrarla.
+4. Capturar el `media_id` (UUID). Lo vas a pasar en `medias: [{value: <UUID>, role: "image"}]` en CADA `generate_image` que use el mascot.
+
+Guardar el `media_id` en memoria conversacional (se reusa en TODAS las generaciones del reel — el HOOK + los 4-5 overlays).
+
 ### Paso 3.6 — Imagen gancho del segundo 1 (OPCIONAL — preguntar a Andrea)
 
-La imagen gancho es un **sticker editorial** que aparece en el segundo 0.3-2.5 en una esquina superior, rotado ligeramente, sin tapar la cara. Es CRÍTICA para el primer segundo cuando se usa — el viewer la registra antes que el header. PERO no siempre se quiere: a veces el primer segundo está mejor "limpio" para que el viewer fije la mirada en la cara y el header.
+La imagen gancho es un **pixel-avatar mascot** que aparece en el segundo 0.3-2.5 en la parte inferior del frame (para no tapar el header grande), rotado ligeramente, sin chocar con la cara. Es CRÍTICA para el primer segundo cuando se usa — el viewer la registra antes que el header. PERO no siempre se quiere: a veces el primer segundo está mejor "limpio" para que el viewer fije la mirada en la cara y el header.
 
 **Preguntar SIEMPRE a Andrea antes de generar nada:**
 
@@ -152,39 +178,64 @@ AskUserQuestion:
   header: "Imagen gancho"
   multiSelect: false
   options:
-    - label: "Sí, genera el sticker editorial"
-      description: "Genero una miniatura tipo YouTube (380px) con la skill banana — tachados, contrastes, símbolos en estilo scrapbook FÓRMULA 100K. Aparece top-right en seg 0.3-2.5, rotada 3°, sin tapar la cara."
+    - label: "Sí, genera el pixel mascot"
+      description: "Genero un pixel-avatar mascot (380px) con la skill banana — cuerpo blocky salmón, contorno blanco grueso, ojos cuadrados, haciendo la acción del gancho. Aparece top-right en seg 0.3-2.5, rotado 3°, sin tapar la cara."
+    - label: "Sí, usar captura mía"
+      description: "Andrea pasa la ruta a una captura de pantalla (PNG/JPG) que se usa tal cual como gancho. Útil para mostrar conversaciones, UI de IG, dashboards, mensajes, etc."
     - label: "No, dejar el segundo 1 limpio"
-      description: "Sólo header centrado arriba + cara + subtítulos. El primer segundo respira; el viewer fija la mirada en ti directamente."
+      description: "Sólo header centrado arriba + cara. El primer segundo respira; el viewer fija la mirada en ti directamente."
 ```
 
 **Atajos textuales que saltan la pregunta:**
 - "sin imagen gancho" / "sin sticker" / "limpio el primer segundo" → modo SIN
-- "con imagen gancho" / "con sticker" / "hazme el hook" → modo CON
+- "con pixel" / "con mascot" / "hazme el hook" → modo PIXEL (genera)
+- "con captura" / "usa esta foto" + ruta → modo CAPTURA
 
-**Si Andrea elige "Sí":**
+**Si Andrea elige "Sí, pixel mascot":**
 
-Concepto: una "miniatura" tipo YouTube comprimida en 380px que sintetiza el video en UN visual potente. Ejemplos:
-- Video sobre perfeccionismo → tachado rojo sobre "PERFECCIÓN" + post-it "publica HOY" con flecha
-- Video sobre auto-edición → captura de pantalla scrapbook con Cloud + Remotion + flechita
-- Video sobre formato vertical → móvil con grid 9:16 vs 16:9 con un check y una X
+Concepto: un **personaje pixel-art chunky** (estilo retro 16-bit / sprite de juego) representando a Andrea haciendo la acción que sintetiza el video. Mismo personaje recurrente entre videos, distinta pose por gancho. Ejemplos:
+- Video sobre perfeccionismo → mascot con cara dubitativa rompiendo un papel + ✗ pixelada
+- Video sobre auto-edición → mascot con pulgar arriba + ✓ pixelada azul
+- Video sobre venta en DM → mascot sosteniendo un teléfono pixelado con notificación
+- Video sobre haters → mascot indiferente con escudo pixelado
 
-**Cómo generarlo:**
-1. Diseñar el concepto visual en 1 línea (tachados, contrastes, símbolos antes/después)
-2. Invocar la skill `banana` con un prompt scrapbook estilo FÓRMULA 100K:
-   - Aspect ratio cuadrado o ligeramente vertical (1:1 o 4:5)
-   - Paleta crema + amarillo + coral
-   - Washi tape, post-its, tachados rojos, flechas amarillas, X grandes
-   - Borde recortado tipo "stickerSlapped"
-   - Una sola idea, lectura en 0.5s
-3. Guardar en `IA/HOOK_<slug>.png` (a la raíz de `IA/`, sin prefijo T)
-4. Validación visual (Read tool): la imagen DEBE leerse claro a 380px de ancho. Si tiene texto, debe ser ≥48pt equivalente. Descartar y regenerar si está apretada.
+**Cómo generarlo (Higgsfield `nano_banana_2`):**
 
-Una vez aprobada, registrarla en MANIFEST.md sección `## Gancho visual`.
+Prompt base — copiar y rellenar `<ACCIÓN>` y `<PELO Y RASGOS>`. Pasar SIEMPRE el `media_id` del Paso 3.55 en `medias: [{value: <UUID>, role: "image"}]`:
+
+```
+Chunky pixel-art mascot character in 16-bit retro game sprite style, INSPIRED BY THE REFERENCE PHOTO,
+preserve the person's <PELO Y RASGOS: ej. "long straight dark-auburn hair, light-tan skin tone, soft features">
+translated to chunky pixels (hair as blocky pixel locks, skin as solid color),
+square blocky body, tiny black square dot eyes, small simple mouth line,
+thick crisp white pixel outline around the entire silhouette (3-4px equivalent),
+flat colors only — NO gradients, NO anti-aliasing, NO shading,
+visible chunky square pixels (low-res aesthetic upscaled with nearest-neighbor),
+character is <ACCIÓN: pose/objeto/expresión específica>,
+SOLID BLACK BACKGROUND (#000000) — fills the entire canvas edge to edge,
+centered composition, single subject only,
+aspect ratio 1:1, 1024x1024px.
+```
+
+Reglas:
+1. Aspect ratio cuadrado (1:1)
+2. UNA acción por imagen — nada de escenas complejas
+3. Si la acción incluye un objeto (cartas, teléfono, escudo, ✓, ✗), describir el objeto también en estilo pixel
+4. NO escribir texto dentro de la imagen — los textos van en el header y en la caja de énfasis
+5. Guardar en `IA/HOOK_<slug>.png` (raíz de `IA/`, sin prefijo T)
+6. Validación visual (Read tool): el mascot debe leerse claro a 380px. El contorno blanco debe destacar contra cualquier fondo. Descartar y regenerar si parece tridimensional / con sombras suaves / sin contorno.
+
+**Si Andrea elige "Sí, captura":**
+
+1. Pedirle la ruta del archivo (`AskUserQuestion` o input directo).
+2. Copiar/hardlinkar el archivo a `IA/HOOK_<slug>.png`.
+3. Validación visual: ¿se entiende el contenido a 380px? Si es una conversación con texto pequeño, sugerirle recortar/zoomar antes.
+
+Una vez aprobada (cualquiera de los dos modos), registrarla en MANIFEST.md sección `## Gancho visual`.
 
 **Si Andrea elige "No":**
 
-Saltar la generación. **NO incluir** la sección `## Gancho visual` en MANIFEST.md (el editor la ignora silenciosamente si no existe). El primer segundo del reel queda con header + cara + subs únicamente.
+Saltar la generación. **NO incluir** la sección `## Gancho visual` en MANIFEST.md (el editor la ignora silenciosamente si no existe). El primer segundo del reel queda con header + cara únicamente.
 
 ### Paso 4 — Preguntar modo
 
@@ -334,27 +385,76 @@ Filtrar dominios de stock incluso si Google los devuelve.
 
 #### 7e. IA (Higgsfield) — solo si modo IA o HÍBRIDO
 
-Mismo flujo que en `graficos-de-video-formula100k`:
-- Construir prompt scrapbook con brandkit FÓRMULA 100K
-- `mcp__higgsfield__generate_image` con `nano_banana_2`, aspect ratio según video (1:1 default)
+**Estilo único permitido: pixel-avatar mascot.** Ya NO se usan prompts scrapbook — todos los overlays generados con IA siguen la misma estética de pixel-art mascot que el gancho, así el reel tiene coherencia visual y el mascot se vuelve "personaje recurrente" entre videos.
+
+Prompt base — copiar y rellenar `<ACCIÓN>` y `<PELO Y RASGOS>`. **SIEMPRE** pasar el `media_id` del Paso 3.55 en `medias: [{value: <UUID>, role: "image"}]`:
+
+```
+Chunky pixel-art mascot character in 16-bit retro game sprite style, INSPIRED BY THE REFERENCE PHOTO,
+preserve the person's <PELO Y RASGOS: ej. "long straight dark-auburn hair, light-tan skin tone, soft features">
+translated to chunky pixels (hair as blocky pixel locks, skin as solid color),
+square blocky body, tiny black square dot eyes, small simple mouth line,
+thick crisp white pixel outline around the entire silhouette (3-4px equivalent),
+flat colors only — NO gradients, NO anti-aliasing, NO shading,
+visible chunky square pixels (low-res aesthetic upscaled with nearest-neighbor),
+character is <ACCIÓN: pose/objeto/expresión específica>,
+SOLID BLACK BACKGROUND (#000000) — fills the entire canvas edge to edge,
+centered composition, single subject only,
+aspect ratio 1:1, 1024x1024px.
+```
+
+Reglas obligatorias:
+- **UNA acción por imagen.** Pose limpia, un solo objeto/gesto.
+- **Cero texto dentro de la imagen** — los textos van en header y caja de énfasis.
+- **Contorno blanco grueso** siempre visible (es la firma del estilo).
+- **Mismo personaje en todo el reel** — pasa la MISMA foto de referencia (mismo `media_id`) en TODAS las generaciones para que pelo/piel/rasgos sean consistentes.
+- **Fondo negro sólido** (#000000) — NUNCA transparente ni cuadriculado.
+- Si la acción requiere objeto (✓, ✗, teléfono, cartas, escudo, llave, candado, reloj), describirlo también en pixel-art.
+
+Flujo de generación:
+- `mcp__higgsfield__generate_image` con `nano_banana_2`, aspect_ratio `1:1`, prompt llenado, `medias: [{value: <media_id>, role: "image"}]`
 - `mcp__higgsfield__job_status` con `sync: true`
-- Capturar `rawUrl`
+- Capturar `rawUrl` y descargar a `$DEST/IA/T<n>_G<g>_<slug>_<mmss-mmss>.png`
+- **Validación visual (Read tool):** confirmar que (a) tiene contorno blanco grueso, (b) los píxeles son cuadrados/chunky visibles, (c) NO hay shading suave ni gradientes, (d) el mascot está centrado y completo, (e) el fondo es negro sólido (no cuadriculado/transparente), (f) los rasgos respetan la foto de referencia. Si falla cualquiera → regenerar con prompt reforzado en esa dimensión.
+
+> Si `nano_banana_2` deriva al estilo "ilustración digital suave" en lugar de pixel-art (pasa ~10% del tiempo), reforzar el prompt con: `MUST be pixel art with visible square pixels, like a Stardew Valley or Minecraft mob sprite — NOT a digital painting, NOT smooth illustration`.
+
+#### 7f. Capturas del usuario (modo SCREENSHOT)
+
+Andrea puede aportar **screenshots propios** (DMs, dashboards, posts virales, conversaciones, UI de IG/TikTok, gráficas reales, mensajes de pago) que se usan tal cual como overlay sin generación IA. Útil cuando necesita mostrar **prueba real** o data específica que un mascot no puede representar.
+
+Flujo:
+1. Durante el Paso 6 (confirmación de plan), preguntar si algún timestamp se cubre con captura propia.
+2. Si sí, pedirle la(s) ruta(s) (`AskUserQuestion` con campo libre, o ella las pega en chat).
+3. Copiar a `$DEST/USER/T<n>_<slug>.png` (crear `USER/` si no existe).
+4. Validación visual: ¿el contenido se entiende a ~480px de ancho? Si tiene texto chico, sugerirle recortar/zoomar a la parte clave antes.
+5. En el MANIFEST, este cue va a la tabla **Overlays** con `Archivo: USER/T<n>_<slug>.png` exactamente como cualquier otro overlay.
+
+Atajos textuales:
+- "uso mi captura de pantalla aquí" + ruta → modo SCREENSHOT en ese timestamp
+- "para el momento X, esta foto: <ruta>" → modo SCREENSHOT en X
 
 ### Paso 8 — Estructura de carpeta destino
 
 ```bash
 DEST="/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
 mkdir -p "$DEST/IA"
+mkdir -p "$DEST/USER"
 mkdir -p "$DEST/WEB/pinterest"
 mkdir -p "$DEST/WEB/google"
 mkdir -p "$DEST/WEB/tiktok"
 mkdir -p "$DEST/WEB/noticias"
 ```
 
+`IA/` → pixel-avatar mascots generados.
+`USER/` → screenshots que Andrea pasó manualmente.
+`WEB/` → recursos cazados de la web.
+
 `<nombre_descriptivo>` en snake_case sin acentos (ej: `algoritmo_instagram_recursos`).
 
 Convención de nombre de archivo (CRÍTICA — la skill editor depende de ella):
-- `IA/T<n>_G<g>_<slug>_<mmss-mmss>.png`
+- `IA/T<n>_G<g>_<slug>_<mmss-mmss>.png` (pixel-avatar mascot generado)
+- `USER/T<n>_<slug>.png` (captura del usuario)
 - `WEB/pinterest/T<n>_P<p>_<slug>.jpg`
 - `WEB/google/T<n>_GI<g>_<slug>.jpg`
 - `WEB/tiktok/T<n>_TT<t>_<slug>.mp4` + `_keyframe.jpg`
@@ -396,9 +496,9 @@ Archivo `MANIFEST.md` en la raíz de `$DEST`. La skill `editor-video-formula100k
 
 ## Overlays
 
-| Keyword     | Archivo                                       | Ancho | Duración |
-|-------------|-----------------------------------------------|-------|----------|
-| <keyword>   | `IA/T1_..._.png` o `WEB/.../T1_..._.jpg`      | 480   | 2.4      |
+| Keyword     | Archivo                                                   | Ancho | Duración |
+|-------------|-----------------------------------------------------------|-------|----------|
+| <keyword>   | `IA/T1_..._.png` · `USER/T1_..._.png` · `WEB/.../...jpg`  | 480   | 2.4      |
 
 ## B-roll
 

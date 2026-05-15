@@ -95,15 +95,19 @@ def main() -> int:
     )
 
     # Paso C — Preparar public/ del template
+    # Limpieza selectiva: borra solo los assets del proyecto anterior,
+    # preserva archivos del template como sfx/pop.wav.
     step('3/4', 'Preparando public/ ...')
     pub = template_dir / 'public'
-    if pub.exists():
-        shutil.rmtree(pub)
-    pub.mkdir(parents=True)
-    for sub in ('WEB', 'IA'):
+    pub.mkdir(parents=True, exist_ok=True)
+    for sub in ('WEB', 'IA', 'USER'):
+        if (pub / sub).exists():
+            shutil.rmtree(pub / sub)
         srcd = dest / sub
         if srcd.is_dir():
             copy_or_link(srcd, pub / sub)
+    if (pub / '_source_cut.mov').exists():
+        (pub / '_source_cut.mov').unlink()
     copy_or_link(cut_video, pub / '_source_cut.mov')
 
     # Paso D — Render con npx tsx

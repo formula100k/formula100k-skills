@@ -61,6 +61,7 @@ check "ffmpeg"    "command -v ffmpeg"                                "brew insta
 check "yt-dlp"    "command -v yt-dlp"                                "brew install yt-dlp"
 check "uv (uvx)"  "command -v uvx"                                   "brew install uv"
 check "Remotion node_modules" "[ -d \"$TEMPLATE_DIR/node_modules/remotion\" ]"  "cd \"$TEMPLATE_DIR\" && npm install --cache=/tmp/npm-cache-$(whoami)"
+check "SFX pop.wav" "[ -f \"$TEMPLATE_DIR/public/sfx/pop.wav\" ]"  "mkdir -p \"$TEMPLATE_DIR/public/sfx\" && ffmpeg -y -f lavfi -i 'sine=f=1200:d=0.06' -f lavfi -i 'sine=f=820:d=0.10' -filter_complex '[0][1]acrossfade=d=0.04,volume=0.45,afade=t=in:st=0:d=0.005,afade=t=out:st=0.10:d=0.04' \"$TEMPLATE_DIR/public/sfx/pop.wav\""
 
 if [ ${#MISSING[@]} -eq 0 ]; then
   echo

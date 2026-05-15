@@ -94,12 +94,16 @@ Outputs en `$DEST/`:
 - `captions.json` — word-timestamps del video cortado (usar para verificar que los `keyword` del Paso 3 existen)
 - `edl.json` — mapping orig→nuevo tiempo (debugging)
 
-### Paso 3 — Identificar momentos (4-8 momentos)
+### Paso 3 — Identificar momentos (mínimo 7 por video)
 
-Cantidad por duración del video:
-- <30s → 2-3
-- 30-90s → 4-6
-- >90s → 6-8
+**Regla obligatoria: SIEMPRE al menos 7 momentos por video**, sin importar la duración. Los reels viven o mueren por la densidad visual — menos de 7 deja muchos segundos "secos" donde solo hay cara hablando.
+
+Si el video es más largo, escalar proporcionalmente:
+- ≤60s → **7 momentos** (mínimo absoluto, ~1 cada 8s)
+- 60-120s → 7-10 momentos
+- >120s → 10-14 momentos
+
+Si el video es muy corto (<20s) y honestamente no caben 7 momentos sin saturar, avisarle a Andrea con un AskUserQuestion antes de saltarse la regla — pero el default es siempre 7+.
 
 Por momento extrae:
 - `timestamp_in`, `timestamp_out` (informativo, no se usa en el MANIFEST nuevo — el editor resuelve por keyword)
@@ -212,7 +216,7 @@ thick crisp white pixel outline around the entire silhouette (3-4px equivalent),
 flat colors only — NO gradients, NO anti-aliasing, NO shading,
 visible chunky square pixels (low-res aesthetic upscaled with nearest-neighbor),
 character is <ACCIÓN: pose/objeto/expresión específica>,
-SOLID BLACK BACKGROUND (#000000) — fills the entire canvas edge to edge,
+SOLID BRIGHT CHROMA-KEY GREEN BACKGROUND (#00FF00) — pure saturated green fills the entire canvas edge to edge with NO gradient, NO shadow on the background, NO green pixels touching the character outline (background must be flat key-out green),
 centered composition, single subject only,
 aspect ratio 1:1, 1024x1024px.
 ```
@@ -220,10 +224,11 @@ aspect ratio 1:1, 1024x1024px.
 Reglas:
 1. Aspect ratio cuadrado (1:1)
 2. UNA acción por imagen — nada de escenas complejas
-3. Si la acción incluye un objeto (cartas, teléfono, escudo, ✓, ✗), describir el objeto también en estilo pixel
+3. Si la acción incluye un objeto (cartas, teléfono, escudo, ✓, ✗), describir el objeto también en estilo pixel — **NUNCA usar verde** en el mascot o sus objetos (chocaría con el chroma key)
 4. NO escribir texto dentro de la imagen — los textos van en el header y en la caja de énfasis
 5. Guardar en `IA/HOOK_<slug>.png` (raíz de `IA/`, sin prefijo T)
-6. Validación visual (Read tool): el mascot debe leerse claro a 380px. El contorno blanco debe destacar contra cualquier fondo. Descartar y regenerar si parece tridimensional / con sombras suaves / sin contorno.
+6. **Post-procesar con chroma key OBLIGATORIO** (ver Paso 7g) — el PNG final guardado en `IA/` debe tener alpha transparente, no fondo verde
+7. Validación visual (Read tool): el mascot debe leerse claro a 380px. El contorno blanco debe destacar contra cualquier fondo. Descartar y regenerar si parece tridimensional / con sombras suaves / sin contorno, o si tiene pixeles verdes en el mascot.
 
 **Si Andrea elige "Sí, captura":**
 
@@ -398,7 +403,7 @@ thick crisp white pixel outline around the entire silhouette (3-4px equivalent),
 flat colors only — NO gradients, NO anti-aliasing, NO shading,
 visible chunky square pixels (low-res aesthetic upscaled with nearest-neighbor),
 character is <ACCIÓN: pose/objeto/expresión específica>,
-SOLID BLACK BACKGROUND (#000000) — fills the entire canvas edge to edge,
+SOLID BRIGHT CHROMA-KEY GREEN BACKGROUND (#00FF00) — pure saturated green fills the entire canvas edge to edge with NO gradient, NO shadow on the background, NO green pixels touching the character outline (background must be flat key-out green),
 centered composition, single subject only,
 aspect ratio 1:1, 1024x1024px.
 ```
@@ -408,16 +413,44 @@ Reglas obligatorias:
 - **Cero texto dentro de la imagen** — los textos van en header y caja de énfasis.
 - **Contorno blanco grueso** siempre visible (es la firma del estilo).
 - **Mismo personaje en todo el reel** — pasa la MISMA foto de referencia (mismo `media_id`) en TODAS las generaciones para que pelo/piel/rasgos sean consistentes.
-- **Fondo negro sólido** (#000000) — NUNCA transparente ni cuadriculado.
-- Si la acción requiere objeto (✓, ✗, teléfono, cartas, escudo, llave, candado, reloj), describirlo también en pixel-art.
+- **Fondo verde chroma key** (#00FF00) — Nanobanana sale verde plano, después el Paso 7g lo convierte en alpha transparente. NUNCA usar verde en el mascot o sus objetos (chocaría con el key).
+- Si la acción requiere objeto (✓, ✗, teléfono, cartas, escudo, llave, candado, reloj), describirlo también en pixel-art (sin verde).
 
 Flujo de generación:
 - `mcp__higgsfield__generate_image` con `nano_banana_2`, aspect_ratio `1:1`, prompt llenado, `medias: [{value: <media_id>, role: "image"}]`
 - `mcp__higgsfield__job_status` con `sync: true`
-- Capturar `rawUrl` y descargar a `$DEST/IA/T<n>_G<g>_<slug>_<mmss-mmss>.png`
-- **Validación visual (Read tool):** confirmar que (a) tiene contorno blanco grueso, (b) los píxeles son cuadrados/chunky visibles, (c) NO hay shading suave ni gradientes, (d) el mascot está centrado y completo, (e) el fondo es negro sólido (no cuadriculado/transparente), (f) los rasgos respetan la foto de referencia. Si falla cualquiera → regenerar con prompt reforzado en esa dimensión.
+- Capturar `rawUrl` y descargar a `$DEST/IA/T<n>_G<g>_<slug>_<mmss-mmss>.png` (versión raw, fondo verde)
+- **Validación visual (Read tool):** confirmar que (a) tiene contorno blanco grueso, (b) los píxeles son cuadrados/chunky visibles, (c) NO hay shading suave ni gradientes, (d) el mascot está centrado y completo, (e) el fondo es verde sólido brillante (#00FF00, no oscuro ni con gradiente), (f) NO hay pixeles verdes en el mascot, (g) los rasgos respetan la foto de referencia. Si falla cualquiera → regenerar con prompt reforzado en esa dimensión.
+- **Inmediatamente después de aprobar la validación, aplicar chroma key (Paso 7g) y SOBRESCRIBIR el archivo en `IA/`** — el PNG que va al MANIFEST tiene que tener alpha transparente, NO fondo verde.
 
 > Si `nano_banana_2` deriva al estilo "ilustración digital suave" en lugar de pixel-art (pasa ~10% del tiempo), reforzar el prompt con: `MUST be pixel art with visible square pixels, like a Stardew Valley or Minecraft mob sprite — NOT a digital painting, NOT smooth illustration`.
+
+#### 7g. Aplicar chroma key a los PNGs IA (OBLIGATORIO)
+
+Después de generar y validar cada imagen, **convertir el fondo verde a alpha transparente** con el script de la skill:
+
+```bash
+bash ~/.claude/skills/recursos-de-video-formula100k/scripts/chroma_key.sh "$DEST/IA/T1_G1_xxx.png"
+```
+
+El script usa `ffmpeg` con `chromakey=color=0x00FF00:similarity=0.30:blend=0.10` y SOBRESCRIBE el archivo de entrada. El resultado es un PNG con alpha — el mascot recortado, listo para flotar sobre el video real sin caja contenedora.
+
+**Procesar TODOS los PNGs IA generados en este proyecto** (HOOK + overlays). No olvidar ninguno: si un PNG queda con fondo verde, el viewer va a ver un cuadrado verde feo en el reel.
+
+Atajo para procesar toda la carpeta:
+```bash
+for f in "$DEST/IA/"*.png; do
+  bash ~/.claude/skills/recursos-de-video-formula100k/scripts/chroma_key.sh "$f"
+done
+```
+
+**Validación post-chroma-key (Read tool):**
+- El mascot conserva su contorno blanco grueso (no se erosionó)
+- NO hay halo verde fino alrededor del mascot (si lo hay, re-correr con `--similarity 0.40 --blend 0.15`)
+- El fondo es transparente (Read mostrará el patrón cuadriculado de transparencia)
+- Los pixeles internos del mascot no se hicieron transparentes accidentalmente (si pasó, hay verde en el mascot — regenerar la imagen con prompt reforzado en "NO green on character")
+
+Si tras 2 intentos el halo verde no se va, revertir al fondo negro (cambiar prompt + omitir chroma key) — el negro con contorno blanco también queda bien aunque sin el efecto recortado.
 
 #### 7f. Capturas del usuario (modo SCREENSHOT)
 

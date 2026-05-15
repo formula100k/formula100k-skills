@@ -36,6 +36,14 @@ Abre Claude Code en cualquier proyecto y corre:
 /plugin install formula100k@formula100k
 ```
 
+### Paso 4 — Activa tus MCPs (importante)
+
+Las skills se potencian con **MCPs** (conexiones a herramientas como generadores de imagen, búsqueda web, transcripciones, etc.). Sin MCPs las skills funcionan a medias.
+
+👉 **Lee [`MCPS.md`](./MCPS.md)** — te explica cuáles activar primero (la mayoría son gratis).
+
+**Resumen del mínimo viable (gratis):** Playwright + Nanobanana + Tavily + Supadata. Con eso tienes el ~80% de las skills funcionando sin pagar nada.
+
 ¡Listo! Reinicia Claude Code y ya tienes acceso a las 33 skills.
 
 ---

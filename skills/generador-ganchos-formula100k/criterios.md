@@ -148,26 +148,52 @@ Aspect: 9:16
 
 ## 6. SCORING PONDERADO del Predictor
 
-Cuando llegan los 6 indicadores del Virality Predictor por variante, calcula el score final así:
+**Motor real del Virality Predictor de Higgsfield:** modelo `brain_activity`. Devuelve scores agregados + activación de 5 regiones cerebrales por frame. Validado en el primer LAB real (2026-05-15, tema "tokens Claude") — el Default Mode resultó ser el mejor discriminador entre variantes.
+
+### Métricas reales que devuelve el predictor
+
+**Scores agregados** (escala 0-100):
+- `hook_score` — fuerza del hook en ventana 0-3s
+- `overall_score` — score agregado tipo "creative performance"
+- `viral_potential` — potencial viral predicho
+- `brain_engagement` — engagement neural agregado
+- `sustain` — retención; **atención: satura a 100 en clips ≤4s** (poco discriminante en clips cortos)
+
+**Regiones cerebrales** (cada una con `mean_score`, `peak_score`, `values_by_frame` — escala 0-1, multiplicar × 100):
+- `visual_occipital` — procesamiento visual
+- `auditory_temporal` — preparación auditiva (anticipación de voz)
+- `language_frontotemporal` — redes de lectura/lenguaje
+- `frontoparietal_attention` — atención sostenida
+- `default_mode` — **lower better**. Default Mode alto = cerebro divagando = malo.
+
+### Tabla de pesos del score ponderado
 
 | Métrica | Peso | Justificación |
 |---------|------|---------------|
-| Hook Strength | 35% | Es lo único que importa en el primer segundo. Tope. |
-| Creative Performance | 25% | Score agregado del modelo — alta correlación con desempeño real. |
-| Retention Risk (invertido) | 20% | Si la gente se cae en los primeros segundos, el hook no funcionó. Invertir: `100 - retention_risk_score`. |
-| Engagement | 12% | Likes/comentarios/shares predichos. |
-| Attention | 8% | Atención sostenida en los primeros segundos. |
+| `hook_score` | 30% | Score directo del modelo en ventana 0-3s. Los AI clips lo subestiman ~10-15 pts vs grabación real con rostro/charisma reales. |
+| `overall_score` | 20% | Score agregado del modelo, proxy de creative performance. |
+| `default_mode` invertido | 15% | **MÁS IMPORTANTE EN PRÁCTICA.** DMN alto = cerebro idle = malo. Invertir: `100 - default_mode.mean_score × 100`. |
+| `brain_engagement` | 12% | Engagement neural — proxy de likes/comentarios/shares. |
+| `sustain` | 10% | Retención. Pesarlo más (15-20%) en clips de 8-10s donde sí discrimina. |
+| `frontoparietal_attention` | 8% | Atención sostenida (mean × 100). |
+| `language_frontotemporal` | 5% | Activación de redes de lectura del texto en pantalla (mean × 100). |
 
-**Fórmula:**
+### Fórmula
 ```
-score_final = (hook_strength × 0.35)
-            + (creative_performance × 0.25)
-            + ((100 - retention_risk) × 0.20)
-            + (engagement × 0.12)
-            + (attention × 0.08)
+score_final = (hook_score × 0.30)
+            + (overall_score × 0.20)
+            + ((100 - default_mode.mean_score × 100) × 0.15)
+            + (brain_engagement × 0.12)
+            + (sustain × 0.10)
+            + (frontoparietal_attention.mean_score × 100 × 0.08)
+            + (language_frontotemporal.mean_score × 100 × 0.05)
 ```
 
-Todos los indicadores normalizados a escala 0-100 antes de aplicar pesos.
+Todos los valores en escala 0-100 antes de aplicar pesos.
+
+### Insight clave heredado del primer LAB real
+
+> En el test "tokens Claude" (2026-05-15), la diferencia entre V1 ganadora (61.8) y V2 perdedora (52.3) se explicó casi enteramente por **Default Mode**: V1 = 48.7 (cerebro enfocado), V2 = 60.7 (cerebro divagando). Hook_score absoluto fue bajo en ambas (43 vs 33) porque la mujer AI no replica charisma real — esperar lift de 10-15 pts al grabar con Andrea. Conclusión: **mira siempre la curva del DMN antes de declarar ganador.**
 
 ### Bandas de calidad del score_final
 
@@ -182,10 +208,12 @@ Todos los indicadores normalizados a escala 0-100 antes de aplicar pesos.
 
 ## 7. DESEMPATES y CASOS BORDE
 
-- **Empate ≤3 pts entre top 2:** gana la que tenga mejor Hook Strength puro. Es el indicador más confiable del modelo.
-- **Una variante con Hook Strength altísimo pero Retention Risk peligroso:** bajarla un puesto. El hook engancha pero el video va a perder gente — eso baja CTR efectivo.
-- **Todas las variantes ≤ 50:** no entregues "ganadora" — entrega un mensaje claro: "Las 3 variantes caen en banda débil. Sugiero revisar la promesa del guion antes de grabar." Recomienda reescribir y volver a correr el lab.
-- **Variante con score muy disperso entre métricas** (ej: Hook Strength 90, Engagement 30): anótalo en el reporte. Puede ser un hook que engancha pero no genera comentarios — útil para crecimiento, no para venta.
+- **Empate ≤3 pts entre top 2:** gana la que tenga mejor `hook_score` puro. Es el indicador más confiable del modelo en ventana 0-3s.
+- **Empate ≤3 pts con hook_score igual:** gana la que tenga **Default Mode más bajo**. Es el mejor desempate de profundidad.
+- **Una variante con `hook_score` altísimo pero `sustain` bajo o DMN alto:** bajarla un puesto. El hook engancha pero el cerebro se cae.
+- **Todas las variantes ≤ 50:** no entregues "ganadora" — entrega un mensaje claro: "Las N variantes caen en banda débil. Sugiero revisar la promesa del guion antes de grabar." Recomienda reescribir y volver a correr el lab.
+- **Variante con score muy disperso entre métricas** (ej: hook_score 90, brain_engagement 30): anótalo en el reporte. Puede ser un hook que engancha pero no genera comentarios — útil para crecimiento, no para venta.
+- **`sustain` = 100 en todas las variantes:** estás en clip ≤4s donde el indicador satura. Considera regenerar clips a 8-10s para discriminar retención real.
 
 ---
 
@@ -207,7 +235,8 @@ El Virality Predictor es un modelo. Hay que evitar dos sesgos:
 - [ ] Cada variante tiene 3-5 gatillos justificados
 - [ ] N clips generados con Nanobanana + Seedance
 - [ ] N llamadas al Virality Predictor completadas (o N-1 con disclaimer)
-- [ ] Score ponderado calculado para cada variante
+- [ ] Score ponderado calculado para cada variante usando los pesos reales del modelo `brain_activity` (sección 6)
+- [ ] Curva de Default Mode revisada por variante (debe ser <50 idealmente, alarma si >55)
 - [ ] Ranking con tie-breakers aplicados
 - [ ] Brief de producción de la ganadora listo para grabar
 - [ ] Carpeta `/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_tema/` con todos los artefactos

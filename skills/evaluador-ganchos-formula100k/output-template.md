@@ -73,6 +73,28 @@ Texto detectado: "[texto exacto del gancho]"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+🤖 LECTURA CUANTITATIVA · VIRALITY PREDICTOR (Higgsfield)
+
+[Solo incluir si el input fue VIDEO y el predictor corrió. Si solo hubo screenshot o falló, escribir: "No disponible — input fue screenshot únicamente" o "No disponible — el Virality Predictor no pudo procesarse en esta corrida" y saltar esta sección.]
+
+Job ID: [uuid del análisis]
+Dashboard: [URL del dashboard interactivo]
+
+• Hook Strength: [valor / banda] — [interpretación 1 línea]
+• Retention Risk: [valor / dónde se cae] — [interpretación]
+• Engagement: [valor / banda] — [interpretación]
+• Attention: [valor / banda] — [interpretación]
+• Audience Response: [valor] — [interpretación]
+• Creative Performance: [valor agregado] — [interpretación]
+
+🔀 Cruce con el score manual F100K:
+[Una de 3 lecturas:]
+- ✓ Coinciden — manual y predictor apuntan al mismo veredicto.
+- ⚠ Conflicto — manual dice X, predictor dice Y. Hipótesis: [explicación]. Veredicto: el manual manda, pero revisar [aspecto específico].
+- ⓘ Complementan — el predictor revela [insight nuevo no detectable en el frame: ej. caída de retención al segundo 4, falta de pico de atención].
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ✅ ACIERTOS
 
 [Listar 2-4 cosas que el gancho hace bien. Si no hay nada bien hecho, ser honesto: "Hay poco que rescatar — recomiendo reconstruir."]

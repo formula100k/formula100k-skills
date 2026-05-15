@@ -1,6 +1,6 @@
 ---
 name: evaluador-ganchos-formula100k
-description: Skill para evaluar ganchos visuales a partir de capturas del primer segundo de videos. Activar SIEMPRE que alguien pida "evalúa este gancho", "analiza mi primer segundo", "revisa mi gancho", "diagnostica este primer segundo", "qué le falta a este gancho", "puntaje de mi gancho", "es viral este gancho", "audita mi thumbnail", "mejora este primer segundo". También activar cuando alguien suba una captura de pantalla de un video y quiera saber si funciona. Aplica toda la metodología de FÓRMULA 100K: Sistema E.N.C. (Estímulo Núcleo, Nivel de Carga Cognitiva, Contextualización), las 5 Formas Visuales (F1-F5), los 15 Gatillos de Viralidad, el Gancho Textual del Top 1%, y el Test del 1 Segundo.
+description: Skill para evaluar ganchos visuales a partir de capturas del primer segundo de videos O del video completo. Activar SIEMPRE que alguien pida "evalúa este gancho", "analiza mi primer segundo", "revisa mi gancho", "diagnostica este primer segundo", "qué le falta a este gancho", "puntaje de mi gancho", "es viral este gancho", "audita mi thumbnail", "mejora este primer segundo", "predice si va a viralizar", "pásalo por virality predictor". También activar cuando alguien suba una captura de pantalla O un archivo de video (.mp4/.mov) y quiera saber si funciona. Aplica toda la metodología de FÓRMULA 100K: Sistema E.N.C. (Estímulo Núcleo, Nivel de Carga Cognitiva, Contextualización), las 5 Formas Visuales (F1-F5), los 15 Gatillos de Viralidad, el Gancho Textual del Top 1%, y el Test del 1 Segundo. Cuando el input es un VIDEO, complementa la lectura manual con un análisis cuantitativo del Virality Predictor de Higgsfield (mcp__higgsfield__virality_predictor) que mide hook strength, retention risk, engagement y atención.
 argument-hint: [contexto del video opcional]
 ---
 
@@ -29,18 +29,21 @@ Diagnostica una captura del primer segundo de un video aplicando los frameworks 
 
 ### Paso 1: Recibir input
 
-El input puede llegar de 3 formas:
+El input puede llegar de 4 formas:
 1. **Imagen + texto explicativo** ("evalúa este gancho, es para un video sobre X")
 2. **Solo imagen** ("¿qué tal está?")
-3. **Texto que pide subir imagen** ("quiero evaluar mi gancho")
+3. **Video completo (.mp4/.mov)** — habilita el análisis cuantitativo con Virality Predictor además del manual
+4. **Texto que pide subir material** ("quiero evaluar mi gancho")
 
-Si NO hay imagen adjunta, pide la captura del primer segundo antes de continuar:
-> "Comparte la captura de pantalla del primer segundo de tu video. Si tienes el video, pausa exactamente al segundo 1 y captura esa pantalla."
+Si NO hay imagen ni video adjunto, pide material antes de continuar:
+> "Comparte la captura del primer segundo del video, o si lo tienes a mano, pásame el archivo de video completo (.mp4/.mov) — con el video puedo correr también el Virality Predictor de Higgsfield para sumar una lectura cuantitativa."
 
 Si hay imagen pero falta contexto, haz UNA pregunta clave (no más):
 > "¿De qué trata el video y para quién es? Eso me ayuda a evaluar si tu gancho comunica la promesa correcta."
 
 Si Andrea aporta el contexto en el mensaje inicial, no preguntes nada — procede a evaluar.
+
+**Si el input es un VIDEO (no solo screenshot):** habilita el Paso 7 (Virality Predictor). El análisis manual sigue siendo obligatorio sobre el primer cuadro — toma un frame del segundo 1 (manual o con ffmpeg) y aplica los criterios. Luego, en paralelo o al final, lanza el predictor para complementar.
 
 ### Paso 2: Cargar la rúbrica
 
@@ -124,6 +127,52 @@ Al final, ofrece una **versión mejorada concreta**:
 - Si el problema es visual: describe la composición ideal paso a paso (qué eliminar, qué añadir, dónde colocar cada elemento)
 - Si el problema es la forma: sugiere cuál de las F1-F5 funcionaría mejor para ese contenido
 
+### Paso 7: Análisis cuantitativo con Virality Predictor (solo si hay VIDEO)
+
+Este paso **complementa** el diagnóstico manual; no lo reemplaza. La rúbrica F100K es el veredicto principal — el Predictor aporta una segunda lectura medida por modelo (engagement, retención, fuerza del hook).
+
+**Cuándo activarlo:**
+- El usuario subió un archivo de video (.mp4/.mov) — no solo un screenshot.
+- O el usuario pidió explícitamente "pásalo por virality predictor", "predice si va a viralizar", "score de Higgsfield", etc.
+
+**Flujo:**
+
+1. **Subir el video a Higgsfield** (si aún no está en la cuenta):
+   - `mcp__higgsfield__media_upload` con la ruta local → obtienes `upload_url` + `media_id` pendiente.
+   - `mcp__higgsfield__media_confirm` con el `media_id` para dejarlo en estado `confirmed`.
+   - Si el video YA fue generado en Higgsfield (Seedance/Kling), usa directamente su `job_id` — no hace falta re-subir.
+
+2. **Lanzar el análisis:**
+   ```
+   mcp__higgsfield__virality_predictor
+   action: "create"
+   params:
+     model: "virality_predictor"
+     medias: [{ role: "video", id: "<media_id o job_id>" }]
+   ```
+
+3. **Guardar el `job_id`** que devuelve. Es necesario para reabrir el dashboard después con `action: "preview"`.
+
+4. **Leer resultados** (el predictor entrega un dashboard interactivo con):
+   - **Hook Strength** — fuerza del primer cuadro/segundo. Cotejar contra el Test del 1 Segundo manual.
+   - **Retention Risk** — dónde se cae la audiencia (curva de retención).
+   - **Engagement** — predicción de likes/comentarios/shares relativos.
+   - **Attention** — atención sostenida.
+   - **Audience Response** — respuesta esperada del público.
+   - **Creative Performance** — score creativo agregado.
+
+5. **Integrar la lectura en el diagnóstico:**
+   - Añade la sección "LECTURA CUANTITATIVA · VIRALITY PREDICTOR" del template (entre Gatillos y Aciertos).
+   - **Cruzar con el score manual:**
+     - Si el score F100K es alto pero Hook Strength es bajo → el gancho engaña visualmente pero el video pierde fuerza → revisar segundos 2-5.
+     - Si el score F100K es bajo pero Engagement predicho es alto → puede ser un hook plano que igual genera comentarios polarizados — investigar por qué.
+     - Si Retention Risk está alto en los primeros 3s → el gancho NO está reteniendo → priorizar reconstruir primer segundo aunque el manual lo apruebe.
+   - **Mantén el veredicto del score manual como principal.** El Predictor es señal complementaria, no juez final. Si entran en conflicto, decláralo y explica la hipótesis de por qué.
+
+6. **Entregar el link del dashboard** al usuario al final del diagnóstico para que pueda explorar la curva de retención y los frames críticos por su cuenta.
+
+**Si el Predictor falla o no está disponible:** indica claramente "Análisis cuantitativo no disponible en esta corrida" y entrega solo el manual. Nunca inventes números del Predictor.
+
 ## Reglas anti-error
 
 - **NO inventes elementos** que no estén en la imagen. Si no ves el texto claramente, dilo.
@@ -132,6 +181,8 @@ Al final, ofrece una **versión mejorada concreta**:
 - **NO recomiendes cosas genéricas** ("mejora la calidad", "ponle más onda"). Sé técnico: "elimina la planta del fondo derecho", "reduce el texto de 12 a 6 palabras", "cambia la fuente Arial por una bold tipo Inter".
 - **NO uses el bot de ganchos visuales** — esta skill ES el reemplazo manual del bot.
 - **NO evalúes audio** — solo lo visual. Si la usuaria menciona audio, recuerda que evaluamos solo el primer cuadro.
+- **NO inventes números del Virality Predictor.** Si el tool falla, no devuelve scores, o el usuario solo dio screenshot, indica que no hay lectura cuantitativa y sigue con el diagnóstico manual.
+- **NO dejes que el Virality Predictor sobrescriba el veredicto manual.** El score F100K manda; el Predictor complementa. Si entran en conflicto, declara el conflicto y explícalo.
 
 ## Casos especiales
 
@@ -145,6 +196,7 @@ Al final, ofrece una **versión mejorada concreta**:
 Mientras evalúas, comunica brevemente:
 1. "Cargando rúbrica de evaluación"
 2. "Analizando E.N.C. en la imagen"
-3. (Generar diagnóstico)
+3. (Si hay video) "Lanzando Virality Predictor de Higgsfield"
+4. (Generar diagnóstico)
 
-Luego entrega el diagnóstico completo siguiendo el template.
+Luego entrega el diagnóstico completo siguiendo el template, incluyendo la sección de Virality Predictor si corresponde y el link del dashboard al final.

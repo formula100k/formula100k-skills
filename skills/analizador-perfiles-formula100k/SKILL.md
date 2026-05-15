@@ -1,7 +1,7 @@
 ---
 name: analizador-perfiles-formula100k
 description: >
-  Skill para analizar perfiles de Instagram y TikTok a profundidad usando Supadata MCP. Usar SIEMPRE que alguien pida: analizar un perfil, revisar métricas, identificar qué videos funcionan, qué videos repetir, qué videos dejar de hacer, qué genera seguidores, qué genera ventas, auditar una cuenta, diagnosticar por qué no crece un perfil, o cualquier solicitud de análisis de contenido en redes sociales. Basada en la metodología de FORMULA 100K para leer métricas como experto.
+  Skill para analizar perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que alguien pida: analizar un perfil, revisar métricas, identificar qué videos funcionan, qué videos repetir, qué videos dejar de hacer, qué genera seguidores, qué genera ventas, auditar una cuenta, diagnosticar por qué no crece un perfil, o cualquier solicitud de análisis de contenido en redes sociales. Stack permanente de captura de datos: **agent-browser** SIEMPRE primero — entra logueado con la sesión real de Andrea, extrae reels/posts/carruseles/stories con caption verbatim + views + métricas que solo se ven con login (insights, vistas exactas). **Supadata MCP** entra como complemento puntual para transcripts de videos públicos y landings sin login. agent-browser nunca es "fallback" cuando Supadata falla — es el motor principal porque Instagram/TikTok cierran el acceso público a casi todo. Basada en la metodología de FORMULA 100K para leer métricas como experto.
 ---
 
 # Skill: Analizador de Perfiles FORMULA 100K
@@ -19,20 +19,63 @@ Preguntar si no se proporcionó:
 3. ¿Cuánto tiempo lleva activo el perfil?
 4. ¿Hay algún video o período específico que preocupa?
 
-### PASO 2 — Extraer datos con Supadata MCP
-Usar las herramientas de Supadata MCP para obtener:
-- **`supadata_scrape`** o **`supadata_metadata`** → métricas generales del perfil (seguidores, posts, engagement rate)
-- **`supadata_transcript`** → transcripción de videos clave para analizar ángulos de contenido
-- **`supadata_map`** o **`supadata_crawl`** → listar todos los videos/reels disponibles con sus URLs
+### PASO 2 — Extraer datos · agent-browser primero, Supadata como complemento
 
-Para TikTok usar URLs del tipo: `https://www.tiktok.com/@usuario`
-Para Instagram usar URLs del tipo: `https://www.instagram.com/usuario/`
+**Stack obligatorio (en este orden):**
 
-Extraer al menos los últimos 20-30 videos si están disponibles.
+**A. agent-browser (motor principal)**
 
-### PASO 2.5 — Scrapear comentarios de los videos más virales
-Identificar los **top 5 videos** del perfil con mayor número de comentarios o vistas.
-Usar **`supadata_scrape`** apuntando directamente a la URL de cada video para extraer sus comentarios.
+Lanzar agent-browser con sesión real logueada para extraer lo que ningún API puede ver:
+
+```
+[agent-browser]
+
+Abre Chrome con sesión existente (IG/TikTok logueados como Andrea).
+
+Para el perfil @[usuario]:
+1. Visita instagram.com/[usuario]/reels/ (o tiktok.com/@[usuario])
+2. Extrae los 30 reels/videos más recientes con:
+   - URL del reel
+   - Caption completo
+   - Views (número exacto si IG lo muestra)
+   - Likes + comentarios + compartidos (si visibles)
+   - Formato del primer frame (rostro/texto grande/split/B-roll/etc.)
+   - Tipo (reel, carrusel, post estático)
+3. Si Andrea es dueña del perfil → entrar a Reels Insights y sacar:
+   - Retención promedio
+   - Alcance no-seguidores
+   - Guardados, compartidos
+4. Para los TOP 5 por engagement: visita cada reel y extrae los 50 comentarios principales.
+
+OUTPUT: markdown crudo con secciones por video. Sin análisis.
+```
+
+**B. Supadata MCP (complemento)**
+
+Solo cuando agent-browser ya extrajo el listado y necesitas:
+- `supadata_transcript` → texto completo de un video específico (útil para analizar el guion)
+- `supadata_metadata` → datos generales del perfil si el público es accesible
+
+Para TikTok: `https://www.tiktok.com/@usuario`
+Para Instagram: `https://www.instagram.com/usuario/`
+
+**Si Supadata responde con "limit-exceeded" o login wall:** agent-browser ya tiene los datos, no hay bloqueo. Sigue adelante.
+
+Extraer mínimo los últimos 20-30 videos.
+
+### PASO 2.5 — Comentarios de los videos más virales (agent-browser)
+
+agent-browser ya los trajo en el PASO 2.A.4. Si quedaron pendientes, ejecuta:
+
+```
+[agent-browser]
+
+Para cada URL de video en [lista_top5]:
+1. Visita la URL
+2. Despliega TODOS los comentarios visibles (scroll + clic en "ver más respuestas")
+3. Extrae cada comentario con: autor · texto · likes · respuestas
+4. Output markdown ordenado por likes descendente.
+```
 
 **Qué buscar en los comentarios (clasificar cada comentario en una categoría):**
 

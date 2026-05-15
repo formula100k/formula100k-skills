@@ -1,7 +1,7 @@
 ---
 name: investigacion-contenido-formula100k
 description: >
-  Skill especializada en investigación de tendencias e ideas de contenido viral usando la metodología de FORMULA 100K. Usar SIEMPRE que alguien pida: investigar tendencias, encontrar ideas de contenido, cazar temas virales, buscar qué está funcionando en mi nicho, investigar a la competencia, encontrar ganchos visuales, espiar anuncios, validar ideas, encontrar preguntas de la audiencia, encontrar outliers de YouTube para convertir en reels, o cualquier solicitud relacionada con descubrir qué contenido crear. También usar cuando alguien diga "no sé de qué hablar" o "quiero ideas para mis videos". Usa Tavily MCP (tavily_search, tavily_research, tavily_extract) para tendencias web en tiempo real Y vidIQ MCP (outlier_detection, keyword_research, video_transcript, video_comments, trending_videos, breakout_channels, +8 tools más) para cazar outliers reales de YouTube y traducirlos a reels virales según el nicho.
+  Skill especializada en investigación de tendencias e ideas de contenido viral usando la metodología de FORMULA 100K. Usar SIEMPRE que alguien pida: investigar tendencias, encontrar ideas de contenido, cazar temas virales, buscar qué está funcionando en mi nicho, investigar a la competencia, encontrar ganchos visuales, espiar anuncios, validar ideas, encontrar preguntas de la audiencia, encontrar outliers de YouTube para convertir en reels, o cualquier solicitud relacionada con descubrir qué contenido crear. También usar cuando alguien diga "no sé de qué hablar" o "quiero ideas para mis videos". Stack permanente de investigación (cuatro motores que trabajan juntos, no en exclusión): (1) **agent-browser** SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales de las cuentas referencia — es la fuente más rica de data viral en vivo; (2) **Tavily MCP** (tavily_search, tavily_research, tavily_extract) para tendencias web y validación cruzada; (3) **vidIQ MCP** (outlier_detection, keyword_research, video_transcript, video_comments) para outliers reales de YouTube; (4) **Supadata MCP** como complemento puntual para landings sin login. agent-browser nunca es "fallback" — es parte fija del stack.
 ---
 
 # Skill: Investigación de Contenido — Fórmula 100K
@@ -16,6 +16,21 @@ Al entrar a esta skill, Claude deja de ser consumidor de contenido y se conviert
 
 ---
 
+## STACK PERMANENTE DE INVESTIGACIÓN
+
+Cuatro motores trabajan SIEMPRE juntos, no se excluyen. Cada uno tiene su zona donde nadie más entra:
+
+| Motor | Zona exclusiva | Cuándo es protagonista |
+|-------|----------------|------------------------|
+| **agent-browser** | IG/TikTok logueado · captions verbatim · views reales · reels carousel · DMs · stories · cualquier cosa detrás de login | SIEMPRE que haya cuentas referencia, perfiles a auditar, hashtags a explorar o contenido que solo se ve estando logueada |
+| **Tavily MCP** | Web abierta · tendencias · artículos · validación cruzada | Para dimensionar tendencia con fuentes públicas y encontrar dónde más se valida el tema |
+| **vidIQ MCP** | YouTube outliers + transcripts + comentarios + keyword research | Para cazar videos largos con multiplicador real de views y convertirlos en reels |
+| **Supadata MCP** | Landings, blogs, transcripts de YouTube cuando vidIQ no aplica | Complemento — NO competir con agent-browser para IG/TikTok logueado |
+
+**Regla de oro:** si la usuaria ya nombró cuentas referencia o el target es IG/TikTok, agent-browser entra SIEMPRE en el primer paso. No esperar a que otra herramienta falle.
+
+---
+
 ## PROCESO DE INVESTIGACIÓN (paso a paso)
 
 ### Paso 1 — Entender el nicho y objetivo
@@ -23,6 +38,24 @@ Antes de buscar, preguntar si no está claro:
 - ¿Cuál es tu nicho o tema principal?
 - ¿Qué tipo de contenido buscas? (educativo, de venta, viral, storytelling)
 - ¿Tienes algún tema o palabra clave en mente?
+- ¿Tienes 1-5 cuentas referencia que quieras que analice a fondo? (si dice sí → agent-browser es OBLIGATORIO)
+
+### Paso 1.5 — agent-browser PRIMERO si hay cuentas referencia
+
+Si la usuaria nombró cuentas IG/TikTok (suyas o competencia), arrancar SIEMPRE con agent-browser antes de Tavily/vidIQ. agent-browser:
+- Entra logueado con la sesión de Andrea (más data que cualquier API)
+- Extrae los reels top de cada cuenta con caption + views + formato del primer frame
+- Saca ganchos verbatim de la pestaña Reels
+- Mina hashtags y exploración por tema dentro de IG/TikTok
+
+Prompt típico para agent-browser:
+```
+Abre Chrome con sesión existente (IG y TikTok logueados).
+Para cada cuenta [@handle], visita /reels/, extrae los 9 reels top con:
+- URL · caption completo · views · formato del primer frame.
+Después busca [keyword] en TikTok y trae top 5 con URL + caption + views.
+Output: markdown crudo, una sección por cuenta.
+```
 
 ### Paso 2 — Buscar tendencias con Tavily MCP
 Usar **tavily_search** para búsquedas rápidas y **tavily_research** para investigación profunda con síntesis. Usar **tavily_extract** para extraer contenido completo de una URL específica. Estrategias de búsqueda:
@@ -92,6 +125,55 @@ No entregar solo links o datos crudos. Transformar cada hallazgo en:
 ---
 
 ## FUENTES Y PLATAFORMAS DE INVESTIGACIÓN
+
+### 0. AGENT-BROWSER — motor permanente del stack (NUEVO, ARRANCA AQUÍ)
+
+**Por qué entra primero:** las APIs/MCPs (Supadata, Tavily, vidIQ) chocan con login walls de IG y TikTok. agent-browser usa la sesión real de Chrome de Andrea — ve TODO lo que ella ve cuando está logueada. Es la fuente más rica para data viral en vivo de Instagram y TikTok.
+
+**Qué extrae que ninguna otra herramienta puede:**
+- Reels top de un perfil con caption verbatim + views + thumbnail
+- Posts y carruseles completos con todos los slides
+- Stories destacadas
+- Hashtags explorados desde la cuenta (algoritmo personalizado)
+- Resultados de búsqueda TikTok desde una sesión real (no muestra los mismos resultados a usuarios públicos)
+- DMs guardados, mensajes, etiquetas
+- Métricas que solo aparecen con login (Reels Insights, vistas)
+
+**Cuándo usarlo (regla simple):**
+- ✅ SIEMPRE que la usuaria nombre 1+ cuenta IG/TikTok
+- ✅ SIEMPRE que el target sea "investigar a la competencia en IG/TikTok"
+- ✅ SIEMPRE que se pida "ganchos reales" o "captions verbatim"
+- ✅ Para cazar hashtags trending dentro de la plataforma (no en buscadores externos)
+- ✅ Para validar lo que Tavily/vidIQ encontraron, mirando los videos reales
+
+**Prompt base reutilizable:**
+
+```
+[agent-browser]
+
+Abre Chrome con la sesión existente de Andrea (IG y TikTok logueados).
+
+TAREA A — IG. Para cada cuenta [@h1, @h2, ...]:
+  1. Visita instagram.com/[handle]/reels/
+  2. Extrae los 9 reels más vistos con: URL · caption completo · views · formato del primer frame.
+
+TAREA B — TikTok. Búsquedas: [keyword1, keyword2, ...]
+  Para cada búsqueda: top 5 videos con URL · caption · handle · views.
+
+TAREA C — Hashtags IG (opcional). Hashtags: [#h1, #h2]
+  Top 9 posts por hashtag con caption + formato.
+
+OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. No analizar — yo lo proceso después.
+```
+
+**Convivencia con Supadata MCP:**
+- Si Supadata responde con data útil de un perfil → genial, usa esa data
+- Si Supadata devuelve "limit-exceeded" o login wall → agent-browser entra al ring SIN preguntar
+- Para landings públicas (sin login), Supadata sigue siendo más rápido — úsalo
+
+**Convivencia con vidIQ MCP:**
+- vidIQ es insustituible para YouTube (transcripts, comments, outliers con multiplicador real)
+- agent-browser puede complementar visitando los canales reales para ver thumbnails, títulos y miniaturas en contexto
 
 ### 1. TikTok Creative Center — ads.tiktok.com/business/creativecenter
 **Para qué sirve:**
@@ -223,8 +305,10 @@ Por cada outlier convertido, agregar al final:
 
 | Objetivo | Fuente principal | Qué buscar |
 |----------|-----------------|------------|
+| **Cuentas referencia IG/TikTok logueado** | **agent-browser** | Top reels + captions verbatim + views + formato visual |
 | **Outliers YouTube → reels** | **vidIQ MCP** | `outlier_detection` + `video_transcript` + `video_comments` por nicho |
-| Ideas virales ahora | TikTok Creative Center | Videos Hot + formatos trending |
+| **Hashtags trending dentro de IG/TikTok** | **agent-browser** | Top 9 posts por hashtag desde sesión real (algoritmo personalizado) |
+| Ideas virales ahora | TikTok Creative Center + **agent-browser** | Videos Hot + formatos trending (validar con tiktok.com logueado) |
 | Ángulos de venta | Meta Ads Library + TikTok Ads | Anuncios antiguos activos + CTR alto |
 | Validar si un tema crece | Google Trends + Glimpse + **vidIQ trending_videos** | % crecimiento + related queries + views reales en video |
 | Preguntas de la audiencia | Perplexity + web_search + **vidIQ video_comments** | "preguntas frecuentes [nicho]" + comentarios de outliers |

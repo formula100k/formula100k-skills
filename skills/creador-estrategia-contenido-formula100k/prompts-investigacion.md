@@ -1,10 +1,56 @@
 # Prompts de Investigación con MCPs
 
-Queries exactos para Tavily, Supadata y Playwright. Ejecutar en este orden de prioridad.
+Stack permanente: agent-browser + Tavily + vidIQ + Supadata. Los cuatro trabajan juntos, no se excluyen. Cada uno tiene zona donde nadie más entra.
 
 ---
 
-## 1. TAVILY MCP (primario)
+## STACK PERMANENTE — REGLA DE ENTRADA
+
+| # | Motor | Zona exclusiva | Cuándo entra |
+|---|-------|----------------|--------------|
+| 1 | **agent-browser** | IG/TikTok logueado, captions verbatim, métricas privadas, hashtags personalizados | SIEMPRE que la alumna nombró 1+ cuenta referencia o el nicho es IG/TikTok |
+| 2 | **Tavily MCP** | Web abierta, tendencias, artículos, validación cruzada | SIEMPRE para mapear tendencias + foros + Reddit + reportes |
+| 3 | **vidIQ MCP** | YouTube outliers + transcripts + comentarios + keyword research | Cuando el nicho tiene actividad en YouTube (que es casi siempre) |
+| 4 | **Supadata MCP** | Transcripts YouTube, landings sin login, blogs | Complemento. NO competir con agent-browser para IG/TikTok |
+
+**Regla de oro:** agent-browser NUNCA es "fallback". Si la alumna nombró cuentas referencia, agent-browser entra primero. Si Tavily/vidIQ se cae, agent-browser sigue corriendo igual.
+
+---
+
+## 1. AGENT-BROWSER (PRIMER MOTOR)
+
+Solo si la alumna pasó 1+ cuenta IG/TikTok como referencia. Prompt reutilizable:
+
+```
+[agent-browser]
+
+Abre Chrome con sesión existente (IG y TikTok logueados como Andrea).
+
+TAREA A — Para cada cuenta [@h1, @h2, @h3]:
+  1. Visita instagram.com/[handle]/reels/
+  2. Extrae los 9 reels más vistos: URL · caption completo · views · formato del primer frame (rostro/texto grande/split/B-roll).
+  3. Si es TikTok, visita tiktok.com/@[handle] y haz lo mismo.
+
+TAREA B — Búsquedas TikTok: [keyword1, keyword2]
+  Para cada búsqueda: top 5 videos con URL · caption · handle · views.
+
+TAREA C — Hashtags IG (opcional): [#hashtag1, #hashtag2]
+  Top 9 posts por hashtag con caption + tipo (reel/carrusel/foto).
+
+OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. Sin análisis.
+```
+
+### Cómo procesar el output de agent-browser
+
+Extrae para cada cuenta/búsqueda:
+1. **Top 5-10 ganchos verbatim** (primera línea del caption o texto en pantalla)
+2. **Formato dominante** del primer frame (rostro/texto/split/B-roll)
+3. **Tipos de contenido** (reel/carrusel/foto) y frecuencia
+4. **Cifras shock** (views, likes — si los muestra)
+
+---
+
+## 2. TAVILY MCP
 
 Ejecuta 3 búsquedas en paralelo. Reemplaza `[NICHO]` y `[KEYWORDS]` con datos del bloque 3.
 
@@ -38,101 +84,75 @@ mcp__tavily__tavily_research:
   depth: "deep"
 ```
 
-### Cómo procesar el output de Tavily
-
-Extrae:
-1. **Top 10 temas recurrentes** del nicho
-2. **5-7 ganchos verbales** que se repiten
-3. **3 formatos** que dominan
-4. **Cuentas mencionadas** (para enriquecer competidores)
-
-NO copies y pegues los resultados crudos. Sintetiza en bullets accionables.
+**Tavily auth:** si Tavily no está autenticado, `WebSearch` nativo sirve como respaldo equivalente.
 
 ---
 
-## 2. SUPADATA MCP (si la alumna dio cuentas referencia)
+## 3. VIDIQ MCP (YouTube outliers)
 
-Solo si la alumna proporcionó 1-3 handles de Instagram/TikTok.
-
-### Para cada cuenta:
+Si el nicho tiene presencia en YouTube (casi siempre):
 
 ```
-mcp__supadata__profile_analysis:
-  username: "[handle_sin_arroba]"
-  platform: "instagram" o "tiktok"
-  analyze: ["top_posts", "engagement_patterns", "hooks", "formats"]
+mcp__vidiq__outlier_detection:
+  keyword: "[NICHO_KEYWORD]"
 ```
 
-Si Supadata no tiene esa función exacta, usa los nombres reales de los métodos disponibles. Algunos comunes:
-- Lista de top posts del último mes
-- Análisis de patrones de engagement
-- Extracción de captions/ganchos
+Para los top 3 outliers:
+- `mcp__vidiq__video_transcript` → identifica el "momento ajá" exacto
+- `mcp__vidiq__video_comments` → mina el dolor real de la audiencia
 
-### Cómo procesar el output de Supadata
-
-Para cada cuenta extrae:
-1. **Top 10 posts por engagement** (con texto del caption + tipo de contenido)
-2. **Formato dominante** (reel/carrusel/static)
-3. **Patrones de gancho** (frases iniciales recurrentes)
-4. **Frecuencia de publicación** (cuántas piezas/semana)
+Convierte cada outlier → 1 idea de reel/short con la tabla YouTube → Reel.
 
 ---
 
-## 3. PLAYWRIGHT MCP (fallback)
+## 4. SUPADATA MCP (complemento)
 
-Solo si Tavily falla o se necesita un perfil específico que Supadata no cubre.
+Útil para:
+- Transcripts de videos YouTube específicos (cuando vidIQ no aplica)
+- Landings públicas sin login (sales pages de competencia)
 
-### Caso típico: scrape de explore page de Instagram para un hashtag
-
-```
-mcp__playwright__browser_navigate:
-  url: "https://www.instagram.com/explore/tags/[hashtag-del-nicho]/"
-
-mcp__playwright__browser_snapshot
-```
-
-Extraer del snapshot los top 9 posts visibles y sus captions.
-
-**ADVERTENCIA:** Playwright es lento (~2-3 min). Solo úsalo si los otros fallan.
+NO usar para IG/TikTok perfil — ahí ya está agent-browser.
 
 ---
 
-## 4. FALLBACK: SIN MCPs DISPONIBLES
+## 5. FALLBACKS HONESTOS
 
-Si NINGÚN MCP responde, comunica a la alumna:
-
-> "No pude acceder a la investigación web automática en este momento. Voy a generar tu estrategia basándome 100% en lo que me contaste de tu avatar y oferta. Esto significa que las ideas serán sólidas pero no validadas con tendencias actuales del mercado. Te recomiendo, después de tener la estrategia base, ejecutar manualmente la skill `investigacion-contenido-formula100k` para enriquecer."
-
-Procede sin investigación pero genera ideas conservadoras que se basen ÚNICAMENTE en:
-- Dolores del avatar (bloque 1)
-- Vehículo único (bloque 2)
-- Pilares confirmados (bloque 3)
+| Caso | Qué hacer |
+|------|-----------|
+| agent-browser no disponible | Decir explícito: "no puedo entrar logueada, solo tengo Tavily/WebSearch + Supadata para landings". Procede sin captions verbatim. |
+| Tavily sin auth | Usa WebSearch nativo con queries equivalentes |
+| vidIQ sin auth | Avisa: "para outliers YouTube reales necesito vidIQ autenticado — corre `/mcp`" |
+| Supadata limit-exceeded | Sin impacto, agent-browser y Tavily ya cubren lo crítico |
+| NINGÚN motor disponible | Avisa a la alumna. Genera estrategia basada solo en avatar + oferta. Recomienda correr `investigacion-contenido-formula100k` después. |
 
 ---
 
-## 5. CÓMO INTEGRAR LA INVESTIGACIÓN EN EL OUTPUT
+## 6. CÓMO INTEGRAR LA INVESTIGACIÓN EN EL OUTPUT
 
-Después de ejecutar los MCPs, presenta a la alumna un resumen breve antes de generar las 20 ideas:
+Después de ejecutar los motores, presenta a la alumna un resumen breve antes de generar las 20 ideas:
 
 ```
 🔍 Investigación completada · [NICHO]
 
-TEMAS QUE MÁS VIRALIZAN:
+CUENTAS REFERENCIA ANALIZADAS (agent-browser):
+- @[cuenta1] · top reel: "[caption]" · [N] views · formato: [X]
+- @[cuenta2] · top reel: "[caption]" · [N] views · formato: [X]
+
+TEMAS QUE MÁS VIRALIZAN (Tavily):
 - [tema 1]
 - [tema 2]
 - [tema 3]
 
-GANCHOS QUE SE REPITEN:
+OUTLIERS YOUTUBE (vidIQ):
+- "[título]" · [Nx] del promedio · momento ajá: "[frase]"
+
+GANCHOS QUE SE REPITEN (cruce agent-browser + Tavily):
 - "[gancho 1]"
 - "[gancho 2]"
 
 FORMATOS DOMINANTES:
 - [formato 1] ([%])
 - [formato 2] ([%])
-
-CUENTAS REFERENCIA DETECTADAS:
-- @[cuenta1] · [característica destacable]
-- @[cuenta2] · [característica destacable]
 
 Ahora genero tus 20 ideas integrando esta data...
 ```
@@ -141,24 +161,27 @@ Esto le da contexto a la alumna y muestra que la investigación fue real, no fab
 
 ---
 
-## 6. CÓMO USAR LOS DATOS PARA GENERAR IDEAS
+## 7. CÓMO USAR LOS DATOS PARA GENERAR IDEAS
 
 Cada idea generada debe poder rastrearse a:
 - Un dolor del avatar (bloque 1) o
-- Un tema viral encontrado en investigación o
-- Un patrón de la competencia identificado
+- Un gancho verbatim cazado con agent-browser o
+- Un tema viral encontrado en Tavily o
+- Un outlier YouTube identificado en vidIQ o
+- Un patrón de la competencia (cruce agent-browser + análisis)
 
 **Ejemplo:**
 > Idea: "El error que comete el 90% al guionizar reels"
-> Rastreo: dolor "no sé qué decir" + dato encontrado en Tavily ("90% de creadores fallan en el gancho") + formato top en Supadata (carrusel educativo)
+> Rastreo: dolor "no sé qué decir" del avatar + gancho similar cazado con agent-browser en @[cuenta_ref] con [N] views + dato en Tavily ("90% de creadores fallan en el gancho")
 
-NO inventes ideas que no tengan rastreo. Si una idea no se sustenta, descártala.
+NO inventes ideas que no tengan rastreo. Si una idea no se sustenta, descártala o márcala como ÁNGULO ORIGINAL.
 
 ---
 
-## 7. LÍMITE DE INVESTIGACIÓN
+## 8. LÍMITES DE INVESTIGACIÓN
 
-- Tiempo máximo: 90 segundos en total
-- Si Tavily devuelve poco/nada útil, NO sigas escarbando — procede con lo que tienes
+- Tiempo total objetivo: 2-3 minutos (más con agent-browser, vale la pena)
+- agent-browser por cuenta: ~30 segundos
 - NO ejecutes más de 4 búsquedas Tavily por sesión (cuesta tokens)
-- NO ejecutes Playwright a menos que sea estrictamente necesario
+- NO ejecutes más de 5 outliers de vidIQ en transcripts (costo)
+- Si la alumna pasó >5 cuentas referencia, prioriza las 3 más relevantes para agent-browser

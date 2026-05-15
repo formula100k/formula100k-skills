@@ -1,6 +1,6 @@
 ---
 name: benchmark-producto-formula100k
-description: Skill para hacer benchmark de producto/competencia profundo en cualquier nicho (cursos, comunidades Skool, coaching, SaaS, productos físicos). Activar SIEMPRE que alguien pida "benchmark de producto", "análisis de competencia", "investiga a mi competencia", "qué hace mi competencia", "estudia el mercado de X", "comparativa de competidores", "mapeo competitivo", "investigación de mercado", "qué ofrecen otros en mi nicho", "research de competidores", "espía a mi competencia", "qué precios maneja el mercado", "tendencias del mercado en X", "oportunidades de posicionamiento", "qué gaps tiene mi nicho", "investigación de productos similares". Orquesta Tavily (discovery) + Supadata (landings públicas) + Apify (reviews/ads/Skool) + agent-browser (fallback) para generar un reporte detallado con resumen ejecutivo, mapa competitivo, fichas individuales de top 10, patrones/tendencias, oportunidades estratégicas y plan 30/60/90. NO usar para auditar UNA comunidad específica del cliente (ahí va auditor-formula100k modo skool). NO usar para analizar UN solo perfil de IG/TikTok (ahí va analizador-perfiles-formula100k). NO usar para investigación de CONTENIDO viral (ahí va investigacion-contenido-formula100k).
+description: Skill para hacer benchmark de producto/competencia profundo en cualquier nicho (cursos, comunidades Skool, coaching, SaaS, productos físicos). Activar SIEMPRE que alguien pida "benchmark de producto", "análisis de competencia", "investiga a mi competencia", "qué hace mi competencia", "estudia el mercado de X", "comparativa de competidores", "mapeo competitivo", "investigación de mercado", "qué ofrecen otros en mi nicho", "research de competidores", "espía a mi competencia", "qué precios maneja el mercado", "tendencias del mercado en X", "oportunidades de posicionamiento", "qué gaps tiene mi nicho", "investigación de productos similares". Stack permanente que orquesta cuatro motores juntos: Tavily (discovery web) + Supadata (landings públicas sin login) + Apify (reviews/ads/Skool con auth) + **agent-browser (permanente, no fallback)** para cualquier sitio con login propio, anti-bot, comunidades Skool privadas, IG/TikTok del competidor, y captura visual con screenshots. agent-browser entra SIEMPRE en el paso 3 — no espera a que algo falle. Genera reporte detallado con resumen ejecutivo, mapa competitivo, fichas individuales de top 10, patrones/tendencias, oportunidades estratégicas y plan 30/60/90. NO usar para auditar UNA comunidad específica del cliente (ahí va auditor-formula100k modo skool). NO usar para analizar UN solo perfil de IG/TikTok (ahí va analizador-perfiles-formula100k). NO usar para investigación de CONTENIDO viral (ahí va investigacion-contenido-formula100k).
 argument-hint: "[nicho o vertical a investigar]"
 ---
 
@@ -25,7 +25,7 @@ Antes de cualquier acción, verificar qué MCPs están activos. Esto define qué
 | **Tavily MCP** | Discovery, búsquedas web amplias | Buscar `mcp__claude_ai_Tavily__*` en tools disponibles |
 | **Supadata MCP** | Scrape de landings públicas (pricing, copy, features) | Buscar `mcp__claude_ai_supadara__*` |
 | **Apify MCP** | Reviews (G2/Capterra/Trustpilot), ads (Meta/TikTok), Skool, LinkedIn | Buscar `mcp__apify__*` |
-| **agent-browser** | Fallback para sitios con login propio o anti-bot | Skill `agent-browser` activable |
+| **agent-browser** | **Motor PERMANENTE.** Sitios con login propio, IG/TikTok del competidor, comunidades Skool con sesión, screenshots fullpage, anti-bot, captura visual de UX | Skill `agent-browser` siempre activable. NUNCA es fallback — entra en PASO 3 por defecto |
 | **WebFetch/WebSearch** | Básico, siempre disponibles | Tools nativos |
 
 ### Si Apify NO está conectado
@@ -179,9 +179,36 @@ Solo si el cliente tiene acceso de miembro. Sino, saltar y marcar como "interior
 WebFetch(https://builtwith.com/{competitor-domain}, "Lista el stack tech principal: CMS, e-commerce, analytics, comunidad")
 ```
 
-### F) Captura visual (agent-browser) — opcional
+### F) agent-browser — SIEMPRE (motor permanente del stack)
 
-Solo si la profundidad es Deep o si el competidor es top-3. Pedir screenshot fullpage para anexar al reporte.
+agent-browser entra en el PASO 3 por defecto para cada competidor confirmado, no espera a que algo falle. Cubre las zonas donde APIs no llegan:
+
+**Tareas obligatorias por competidor:**
+1. **Screenshot fullpage** de la landing principal (para anexar al reporte HTML)
+2. **Captura del checkout/pricing page** (a veces los precios están detrás de un toggle JS que Supadata no resuelve)
+3. **IG/TikTok del fundador o marca:** top 9 reels con caption + views + formato. Esto NO lo da ninguna API pública.
+4. **Comunidad Skool del competidor** (si es público o tienes acceso): tomar screenshots del About + leaderboard + foro destacado
+5. **Funnel completo** (si aplica): seguir el flow real desde un ad o link de bio hasta el checkout, capturando cada paso
+
+**Prompt típico:**
+
+```
+[agent-browser]
+
+Abre Chrome con sesión existente. Para cada competidor en [lista]:
+
+1. Visita su landing → screenshot fullpage → guardar en /BENCHMARKS/[fecha]/screenshots/[competidor]-landing.png
+2. Visita su pricing → screenshot + extrae todos los planes en markdown
+3. Visita instagram.com/[handle]/reels/ → top 9 reels con URL+caption+views
+4. Si tiene Skool público: visita skool.com/[community] → screenshots del About + leaderboard
+
+OUTPUT: markdown crudo por competidor + carpeta de screenshots.
+```
+
+agent-browser captura lo que Apify y Supadata no ven, especialmente:
+- Funnels detrás de login propio
+- Contenido orgánico del fundador (que es donde vive el "vehículo único" real)
+- UX/UI del producto en vivo (para evaluar dimensión Tech stack)
 
 ### Almacenamiento
 

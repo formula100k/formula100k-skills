@@ -1,6 +1,6 @@
 ---
 name: recursos-de-video-formula100k
-description: Skill que convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) listos para superponerse sobre la toma. Variante de `graficos-de-video-formula100k`. Ofrece 3 modos: (1) IA — pixel-avatar mascot generados con Higgsfield (estilo retro 16-bit, cuerpo salmón, contorno blanco), (2) WEB — recursos reales cazados en Pinterest, Google Images, TikTok virales y medios de noticias, (3) HÍBRIDO — combina ambos por timestamp. Además admite SCREENSHOTS que el usuario pasa manualmente (carpeta USER/). NO usa bancos de stock (Shutterstock, Getty, Unsplash, Pexels, Pixabay, iStock, Freepik, Adobe Stock, 123rf, Depositphotos). NO usa scrapbook tradicional. NO edita ni renderiza el video final — para componer el BORRADOR_AUTO.mp4 está la skill `editor-video-formula100k`. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "cazame recursos para este video", "busca b-roll real", "no quiero todo IA, busca clips reales", "tráeme recursos web para este video", "mezcla IA + recursos reales", "recursos híbridos para este reel", "buscame TikToks virales para este tema", "tráeme imágenes de Pinterest/Google/noticias para acompañar", o cualquier variación que combine un video grabado con la intención de cazar recursos visuales existentes. Output: carpeta `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/` con subcarpetas WEB/{pinterest,google,tiktok,noticias} + IA/ + USER/ + MANIFEST.md que la skill `editor-video-formula100k` consume después.
+description: Skill que convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) listos para superponerse sobre la toma. Variante de `graficos-de-video-formula100k`. Ofrece 3 modos: (1) IA — pixel-avatar mascot generados con Higgsfield (estilo retro 16-bit, cuerpo salmón, contorno blanco) en dos sub-tipos: **mascot** (acción única, overlay) e **infografía-pixel** (mapa/grid/comparación densa, B-roll fullscreen, ambos sobre fondo chroma key verde listo para recortar), (2) WEB — recursos reales cazados en Pinterest, Google Images, TikTok virales y medios de noticias, (3) HÍBRIDO — combina ambos por timestamp. Además admite SCREENSHOTS que el usuario pasa manualmente (carpeta USER/). NO usa bancos de stock (Shutterstock, Getty, Unsplash, Pexels, Pixabay, iStock, Freepik, Adobe Stock, 123rf, Depositphotos). NO usa scrapbook tradicional. NO edita ni renderiza el video final — para componer el BORRADOR_AUTO.mp4 está la skill `editor-video-formula100k`. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "cazame recursos para este video", "busca b-roll real", "no quiero todo IA, busca clips reales", "tráeme recursos web para este video", "mezcla IA + recursos reales", "recursos híbridos para este reel", "buscame TikToks virales para este tema", "tráeme imágenes de Pinterest/Google/noticias para acompañar", o cualquier variación que combine un video grabado con la intención de cazar recursos visuales existentes. Output: carpeta `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/` con subcarpetas WEB/{pinterest,google,tiktok,noticias} + IA/ + USER/ + MANIFEST.md que la skill `editor-video-formula100k` consume después.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__claude_ai_supadara__supadata_scrape, mcp__claude_ai_supadara__supadata_transcript, mcp__claude_ai_supadara__supadata_metadata, mcp__claude_ai_Tavily__authenticate, mcp__claude_ai_Tavily__complete_authentication
 delegates-to:
   - guionizacion-formula100k    # para generar el header viral (gancho textual)
@@ -115,9 +115,12 @@ Por momento extrae:
   - En lowercase, sin puntuación
   - Si el texto_clave usa una palabra rara/marca/nombre propio, ESE es el keyword ideal
 - `clase_visual` — **overlay** o **broll**:
-  - `overlay` → gráfico pequeño que se superpone sobre el pecho de Andrea (~480px ancho). Aplicable a: scrapbook IA, infografías de Pinterest, screenshots de UI, charts, iconos, capturas de redes.
-  - `broll` → reemplaza fullscreen la cámara durante unos segundos. Aplicable a: TikToks virales, fotos de lugares/personas/eventos reales, clips de noticias.
-- `tipo_dominante` (pantalla IG / comparación / dato duro / persona / objeto / lugar / proceso / emoción)
+  - `overlay` → gráfico pequeño que se superpone sobre el pecho de Andrea (~480px ancho). Aplicable a: scrapbook IA, mascots de acción única, infografías de Pinterest, screenshots de UI, charts, iconos, capturas de redes.
+  - `broll` → reemplaza fullscreen la cámara durante unos segundos. Aplicable a: TikToks virales, fotos de lugares/personas/eventos reales, clips de noticias, **infografías-pixel** generadas con IA.
+- `tipo_dominante` (pantalla IG / comparación / dato duro / persona / objeto / lugar / proceso / emoción / **ecosistema** / **grid** / **mapa**)
+- `subtipo_ia` (solo si `clase_visual: broll` o si modo IA/HÍBRIDO) — **mascot** o **infografia-pixel**:
+  - `mascot` (default) → un solo personaje pixel-art haciendo una acción. Usa overlay pequeño.
+  - `infografia-pixel` → panel denso multi-elemento (mandala de tiles, grid 2×5, split comparativo). Usar cuando el `texto_clave` enumera ≥3 elementos, o el `tipo_dominante` es `ecosistema | comparación | grid | mapa`, o Andrea dice explícitamente "muéstralo como infografía / mapa / sistema". Va SIEMPRE a B-roll.
 - `riqueza_visual` (alta / media / baja) — qué tan "buscable" es ese momento en la web
 
 **Regla de oro de keyword:** si en el video Andrea dice "...con la skill de Cloud Remotion que edita...", el keyword puede ser `remotion` (única, fácil de encontrar). Si dice "...Yapper Method...", el keyword es `japer` o `yapper` — lo que efectivamente diga el audio (mlx-whisper a veces lo transcribe como "Japer"). Si dudas, mejor inspecciona `captions.json` después del corte para elegir keywords que sí estén ahí.
@@ -390,7 +393,14 @@ Filtrar dominios de stock incluso si Google los devuelve.
 
 #### 7e. IA (Higgsfield) — solo si modo IA o HÍBRIDO
 
-**Estilo único permitido: pixel-avatar mascot.** Ya NO se usan prompts scrapbook — todos los overlays generados con IA siguen la misma estética de pixel-art mascot que el gancho, así el reel tiene coherencia visual y el mascot se vuelve "personaje recurrente" entre videos.
+**Dos sub-tipos pixel-art, ambos sobre chroma green:**
+
+- **7e.1 — Mascot** (default): un solo personaje pixel-art haciendo una acción. Va a tabla `Overlays` (~480px). Usar para cues con `subtipo_ia: mascot` o cuando no se especifica.
+- **7e.2 — Infografía pixel** (NUEVO): panel denso multi-elemento (mandala de tiles, grid 2×N, split comparativo). Va SIEMPRE a tabla `B-roll` (fullscreen). Usar para cues con `subtipo_ia: infografia-pixel` (ecosistema / comparación / grid / mapa / lista enumerada).
+
+> Nota: la skill `infografia-reel-formula100k` también hace infografías pero entrega un REEL completo 9:16 listo para subir a IG. Esta sub-sección 7e.2 es distinta — genera una **infografía estática 1:1 como inserto B-roll** dentro de un reel talking-head de Andrea, recortable con chroma key. Si el usuario quiere infografía como deliverable final (no inserto), redirigir a `infografia-reel-formula100k`.
+
+#### 7e.1 — Mascot (acción única, overlay)
 
 Prompt base — copiar y rellenar `<ACCIÓN>` y `<PELO Y RASGOS>`. **SIEMPRE** pasar el `media_id` del Paso 3.55 en `medias: [{value: <UUID>, role: "image"}]`:
 
@@ -424,6 +434,63 @@ Flujo de generación:
 - **Inmediatamente después de aprobar la validación, aplicar chroma key (Paso 7g) y SOBRESCRIBIR el archivo en `IA/`** — el PNG que va al MANIFEST tiene que tener alpha transparente, NO fondo verde.
 
 > Si `nano_banana_2` deriva al estilo "ilustración digital suave" en lugar de pixel-art (pasa ~10% del tiempo), reforzar el prompt con: `MUST be pixel art with visible square pixels, like a Stardew Valley or Minecraft mob sprite — NOT a digital painting, NOT smooth illustration`.
+
+#### 7e.2 — Infografía pixel (sistema/ecosistema/comparación, B-roll fullscreen)
+
+Cuándo dispararla, en orden de prioridad:
+1. El `texto_clave` del cue enumera ≥3 elementos discretos (ej: "tengo 9 áreas / 5 ofertas / 3 tipos / 7 fases").
+2. `tipo_dominante` ∈ `{ecosistema, comparación, grid, mapa}`.
+3. Andrea dice explícitamente en el video o en chat "muéstralo como infografía / mapa / sistema / grid / poster".
+4. El concepto necesita densidad visual que un solo mascot no resuelve (ej: "mi ecosistema completo", "antes vs después con 5 puntos cada uno", "los 10 subagentes").
+
+Si ninguna se cumple → usar 7e.1 (mascot). No sobre-aplicar: una infografía mal usada interrumpe el reel.
+
+Tres layouts soportados (elegir según el contenido del cue):
+
+| Layout | Cuándo | Estructura |
+|---|---|---|
+| **`mandala`** | Sistema con 1 centro + N satélites (3-9) | Mascot central salmón con cartel del número, N tiles de colores alrededor conectadas con líneas pixeladas |
+| **`grid-2xN`** | Lista de 4-10 ítems paralelos | 2 columnas × N filas de cartas, cada una con mini-mascot + label + 3-5 chips |
+| **`split`** | Comparación A vs B | Panel izquierdo color 1 + panel derecho color 2, mascot+stack de bullets en cada lado |
+
+Prompt base — copiar, elegir layout, llenar `<TÍTULO>`, `<SUBTÍTULO>` y `<CONTENIDO>`. Pasar el `media_id` del Paso 3.55 en `medias` si quieres que los mascots internos respeten los rasgos de Andrea:
+
+```
+Retro 16-bit pixel art infographic, sharp chunky pixels, no anti-aliasing, no smooth gradients.
+SOLID BRIGHT CHROMA-KEY GREEN BACKGROUND (#00FF00) — pure saturated green fills the entire canvas edge to edge with NO gradient, NO shadow on the background, NO green pixels touching any element outline.
+
+Title at top in chunky pixel font, white with black 1px outline and small drop shadow: "<TÍTULO 3-5 palabras, MÁX 25 caracteres>".
+Subtitle in smaller pixel font: "<SUBTÍTULO 1 línea, opcional>".
+
+LAYOUT: <mandala | grid-2xN | split>
+<CONTENIDO específico según layout:
+  · mandala  → "central salmon (#FF8C8C) pixel mascot with thick white outline holding a sign with the chunky pixel number <N>, surrounded by <N> colored tiles connected by pixelated dashed lines and chunky pixel arrows. Each tile has a 2px white pixel border and shows a label in chunky pixel font + a number badge + 3 sub-items in tiny pixel font: <listar tile1: color · label · sub-items / tile2 ... >"
+  · grid-2xN → "grid of <N> pixel-art trading cards arranged as 2 columns × <N/2> rows. Each card has a 2px white pixel border, a solid colored background, a small 32x32 salmon-pink mascot avatar at the top (different prop per card), the agent name in chunky pixel font on a colored header band, and 3-5 tiny pill-shaped chips below with item names: <listar card1: color · prop · name · chips / card2 ... >"
+  · split    → "split-screen left vs right. Left panel: <COLOR1> background, mascot character with <PROP1>, header '<LABEL1>', stack of 3-5 bullet chips: <items>. Right panel: <COLOR2> background, mascot with <PROP2>, header '<LABEL2>', stack of bullets: <items>. Pixel-art vertical divider between panels.">
+
+Decorative pixel elements: small 8x8 pixel stars sparkles, pixel hearts, pixel arrows, pixel coins scattered between elements.
+
+NEVER use realistic textures. NEVER use smooth shading. NEVER include extra text or watermarks beyond what is specified. ONLY chunky retro 16-bit pixel-art aesthetic like Super Nintendo or Game Boy Advance era. Background MUST be flat solid chroma green #00FF00 with zero gradient, ready for chroma key removal in video editing.
+
+Aspect ratio 1:1, 1024×1024px.
+```
+
+Reglas obligatorias para infografía-pixel:
+- **Aspect ratio: 1:1.** El B-roll del editor mete cualquier ratio en `object-fit: cover` — el 1:1 cropea aceptable a 9:16. Si Andrea pide vertical nativo, usar 9:16 pero avisar que el texto interno se ve más chico.
+- **Máx 10 elementos discretos** en el panel. Más densidad → el texto se vuelve ilegible incluso a 4K.
+- **Texto interno por bloque: ≤ 25 caracteres** (regla de Nano Banana). Abreviar nombres largos (ej: `guionizacion-formula100k` → `GUIONES`).
+- **Mismo personaje salmón** en todos los cards/tiles si aparecen mascots internos — pasar el `media_id` de Andrea para que pelo/piel respeten su look. Si la infografía no incluye mascots de cara, el `media_id` se puede omitir.
+- **Cero verde en los elementos** — chocaría con el chroma key.
+- **NO escribir texto que no esté en el prompt** — Nano Banana inventa labels si no le pides cero extra text. Reforzar con la frase "NEVER include extra text" en el prompt final.
+- **Validación visual obligatoria (Read tool)**: (a) los elementos prometidos están y son legibles, (b) los colores corresponden a los del prompt, (c) no hay micro-typos en labels críticos (si los hay y son corregibles, re-generar el cue específico — vale más generar 3 veces que dejar un typo en un B-roll), (d) fondo es verde plano #00FF00 sin gradiente.
+
+Flujo de generación:
+- `mcp__higgsfield__generate_image` con `nano_banana_2`, aspect_ratio `1:1`, prompt llenado, `medias` opcional
+- `mcp__higgsfield__job_status` con `sync: true`
+- Descargar a `$DEST/IA/T<n>_INFO_<slug>_<mmss-mmss>.png` (el prefijo `INFO` distingue infografías de mascots para debugging)
+- Aplicar chroma key (Paso 7g) — sobrescribe en sitio
+
+> Si `nano_banana_2` deriva al estilo "ilustración suave / mood board / collage" en lugar de pixel-art, reforzar con: `MUST be chunky pixel art with visible 4-8px square pixels, like a Super Nintendo cartridge cover or a Stardew Valley promotional poster — NOT a digital illustration, NOT a flat vector design, NOT a watercolor`.
 
 #### 7g. Aplicar chroma key a los PNGs IA (OBLIGATORIO)
 
@@ -486,7 +553,8 @@ mkdir -p "$DEST/WEB/noticias"
 `<nombre_descriptivo>` en snake_case sin acentos (ej: `algoritmo_instagram_recursos`).
 
 Convención de nombre de archivo (CRÍTICA — la skill editor depende de ella):
-- `IA/T<n>_G<g>_<slug>_<mmss-mmss>.png` (pixel-avatar mascot generado)
+- `IA/T<n>_G<g>_<slug>_<mmss-mmss>.png` (pixel-avatar mascot generado, overlay)
+- `IA/T<n>_INFO_<slug>_<mmss-mmss>.png` (infografía-pixel generada, B-roll fullscreen)
 - `USER/T<n>_<slug>.png` (captura del usuario)
 - `WEB/pinterest/T<n>_P<p>_<slug>.jpg`
 - `WEB/google/T<n>_GI<g>_<slug>.jpg`
@@ -564,9 +632,10 @@ Archivo `MANIFEST.md` en la raíz de `$DEST`. La skill `editor-video-formula100k
 - Mientras hay énfasis activo en el mismo segundo, el overlay se oculta automáticamente. El editor además **desplaza** automáticamente cualquier overlay que quede visible <1.8s al final del emphasis con el que choque — así la duración configurada se respeta siempre. No hace falta evitar manualmente que keyword de overlay y keyword de emphasis coincidan.
 
 **B-roll** (opcional — recursos fullscreen):
-- Una fila por cada recurso clasificado como `broll` en el Paso 3.
+- Una fila por cada recurso clasificado como `broll` en el Paso 3 — incluye TikToks, fotos de noticias, screenshots fullscreen, **y todas las infografías-pixel generadas con 7e.2**.
 - `Estilo: monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% — simula una foto de pantalla, lo que da un toque editorial sin ser solemne. Default.
-- `Estilo: clean` deja la imagen plana sin efectos. Usar para tomas que ya tienen mucho carácter (TikToks dinámicos, lugares con composición fuerte).
+- `Estilo: clean` deja la imagen plana sin efectos. Usar para tomas que ya tienen mucho carácter (TikToks dinámicos, lugares con composición fuerte, **infografías-pixel** — el chroma green ya recortado se ve mejor sin la rotación de monitor-photo).
+- Para `IA/T<n>_INFO_*.png` el default recomendado es **`clean`** con duración **3.5-5s** (necesita más tiempo en pantalla que un TikTok porque tiene texto que leer).
 - Header sigue visible sobre el B-roll. Subtítulos también.
 
 **🚫 REGLA: para B-roll priorizar recursos verticales (9:16)**

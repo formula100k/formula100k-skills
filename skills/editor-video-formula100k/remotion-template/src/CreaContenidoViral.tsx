@@ -267,7 +267,11 @@ const HookImage: React.FC<{cue: HookCue; durationInFrames: number}> = ({
   );
 };
 
-const Header: React.FC<{line1: string; line2: string}> = ({line1, line2}) => (
+const Header: React.FC<{line1: string; line2: string; hideAfter?: number}> = ({line1, line2, hideAfter}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  if (hideAfter != null && frame / fps >= hideAfter) return null;
+  return (
   <AbsoluteFill
     style={{
       alignItems: 'center',
@@ -296,7 +300,8 @@ const Header: React.FC<{line1: string; line2: string}> = ({line1, line2}) => (
       {line2}
     </h1>
   </AbsoluteFill>
-);
+  );
+};
 
 const BrollLayer: React.FC<{cue: ResolvedBroll; durationInFrames: number}> = ({
   cue,
@@ -539,7 +544,7 @@ export const CreaContenidoViral: React.FC<CreaContenidoViralProps> = ({
       />
 
       {/* CAPA 1 — Header persistente */}
-      <Header line1={header.line1} line2={header.line2} />
+      <Header line1={header.line1} line2={header.line2} hideAfter={header.hideAfter} />
 
       {/* CAPA 1.5 — Imagen gancho (sólo segundos iniciales, sticker editorial) */}
       {hookCue && hookCue.src ? (() => {
@@ -569,7 +574,7 @@ export const CreaContenidoViral: React.FC<CreaContenidoViralProps> = ({
             layout="none"
           >
             <BrollLayer cue={cue} durationInFrames={dur} />
-            <Header line1={header.line1} line2={header.line2} />
+            <Header line1={header.line1} line2={header.line2} hideAfter={header.hideAfter} />
           </Sequence>
         );
       })}

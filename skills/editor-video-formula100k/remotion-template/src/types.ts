@@ -11,6 +11,7 @@ export type TranscriptWord = {
 export type ReelHeader = {
   line1: string;
   line2: string;
+  hideAfter?: number;  // segundo (en timeline del cut) a partir del cual el header desaparece
 };
 
 export type EmphasisCue = {

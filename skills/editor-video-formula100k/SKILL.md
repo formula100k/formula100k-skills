@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: Skill que toma un video grabado por Andrea + un MANIFEST.md (keyword-based, con header, énfasis, overlays y B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque fino. Corta silencios (>0.15s) y muletillas con precisión, transcribe word-level, y compone el preset visual "Crea contenido viral" — talking-head 9:16 con header grande con trazo negro debajo de la mitad superior, caja blanca de énfasis al centro, overlays en la parte inferior para no tapar la cara, y B-roll fullscreen estilo monitor-photo. SIN subtítulos. La sincronización es por keyword sobre el transcript (no por timestamp), así que sobrevive al corte de silencios sin remapear. Renderiza local con Remotion (gratis, sin nube). Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", o cualquier variación que combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. La primera vez instala node, ffmpeg, yt-dlp, uv y Remotion vía bootstrap.
+description: Skill que toma un video grabado por Andrea + un MANIFEST.md (keyword-based, con header, énfasis, overlays y B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque fino. Corta silencios (>~0.20s efectivos, con 60ms de respiración al final de cada palabra para no clipar la cola), muletillas y repeticiones consecutivas con precisión, transcribe word-level, y compone el preset visual "Crea contenido viral" — talking-head 9:16 con header grande con trazo negro debajo de la mitad superior (visible solo los primeros 8s como gancho, override con `Esconder después: N`), caja blanca de énfasis al centro, overlays en la parte inferior para no tapar la cara, y B-roll fullscreen estilo monitor-photo. SIN subtítulos. La sincronización es por keyword sobre el transcript (no por timestamp), así que sobrevive al corte de silencios sin remapear. Renderiza local con Remotion (gratis, sin nube). Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", o cualquier variación que combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. La primera vez instala node, ffmpeg, yt-dlp, uv y Remotion vía bootstrap.
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -55,7 +55,8 @@ bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/render.sh "$
 Lo que hace `render.sh` internamente:
 
 1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
-   - `_source_cut.mov` — video cortado **agresivamente** (silencios > 0.15s y muletillas `eh/em/uhh/...` removidos, padding mínimo de 25ms para no clipar consonantes)
+   - `_source_cut.mov` — video cortado **agresivamente**: silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola (consonantes/vocales finales tienen aire para terminar).
+   - Tunables vía flags: `--min-silence 0.08`, `--pad 0.06`, `--no-dedupe`, `--dedupe-max-gap 1.2`.
    - `edl.json` — mapping orig→nuevo tiempo (no se usa en el pipeline nuevo pero queda para debugging)
    - `captions.json` — word-timestamps del CUT video (no del original)
 
@@ -85,6 +86,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 - **Línea 1:** Publica todos
 - **Línea 2:** los días sin perfección
+- **Esconder después:** 8   <!-- opcional. Default 8s. Pon 0 si querés que se quede todo el video. -->
 
 ## Gancho visual
 
@@ -121,7 +123,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 ### Reglas por sección
 
-**Header** — Líneas 1 y 2. Persistente durante todo el reel. Inter 800 92px, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea).
+**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de Andrea limpia. Inter 800 92px, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
 
 **Gancho visual** — Imagen tipo sticker (UN solo archivo) que aparece en los primeros segundos en una esquina superior. Columnas: `Archivo | Posición | Inicio | Duración | Ancho | Rotación`. Defaults: `Posición=right`, `Inicio=0.3s`, `Duración=2.2s`, `Ancho=360px`, `Rotación=3°`. Anclado a `top: 340px` para no chocar con el header. Spring drop desde fuera del frame + wobble sutil + fade out. NO cubre la cara centrada (zona segura x≥640 si position=right).
 
@@ -129,7 +131,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 **Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `WEB/...`). Renderiza en la parte inferior del frame (`bottom: 180`) para no tapar la cara de Andrea, con spring de entrada y float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0).
 
-**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll.
+**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
 ### Sincronización por keyword
 
@@ -143,7 +145,7 @@ t_end   = t_start + duration
 
 ### Reglas de oro de la composición
 
-1. El **header NUNCA desaparece**.
+1. El **header funciona como gancho** — vive los primeros 8s (default) y luego se quita. Si se necesita persistente, override con `Esconder después: 0` en el MANIFEST.
 2. **Emphasis excluye overlay** — ambos viven en la zona inferior, así que si coinciden en un frame gana el emphasis. El overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
 3. **La cara de Andrea queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
 4. **Sin subtítulos quemados.** Si el usuario los quiere los pone en post.
@@ -172,10 +174,17 @@ Para invocación natural ("edita este video"), preguntar al usuario por la carpe
 1. Editar la fila correspondiente en `MANIFEST.md` (cambiar keyword, texto, duración, o el archivo)
 2. Re-correr `render.sh` (el corte se saltea porque `_source_cut.mov` ya existe; el render reusa los assets de `public/`)
 
-**Re-cortar con regla diferente** (ej. incluir más muletillas):
-1. Editar `FILLER_REGEX` en `scripts/cut_silences_and_fillers.py`
-2. Borrar `_source_cut.mov` y `captions.json` del DEST
-3. Re-correr `render.sh` (re-genera el corte y los captions, los keywords se re-resuelven contra el nuevo transcript)
+**Re-cortar con regla diferente** (más/menos agresivo, otros fillers, etc.):
+1. Opciones rápidas vía flags al invocar `cut_silences_and_fillers.py` manualmente:
+   - `--min-silence 0.05` para cortar aún más apretado (default 0.08)
+   - `--min-silence 0.15` para más respiración entre frases
+   - `--pad 0.09` si todavía sientes que se cortan las colas de las palabras (default 0.06)
+   - `--pad 0.03` si quieres un ritmo más apretado (sacrificando algo de naturalidad)
+   - `--no-dedupe` si querés conservar repeticiones intencionales ("muy, muy bueno")
+   - `--dedupe-max-gap 0.6` para colapsar solo repeticiones muy seguidas
+2. Para cambiar la lista de muletillas: editar `FILLER_REGEX` en el script
+3. Borrar `_source_cut.mov` y `captions.json` del DEST
+4. Re-correr `render.sh` (re-genera el corte y los captions, los keywords se re-resuelven contra el nuevo transcript)
 
 **Cambiar estética visual** (tamaños, posiciones, animaciones, fuente):
 1. Editar `remotion-template/src/CreaContenidoViral.tsx`

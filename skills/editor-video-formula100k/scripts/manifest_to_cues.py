@@ -107,10 +107,14 @@ def _clean_inline(s: str) -> str:
     return re.sub(r'[*`]+', '', s).strip().strip('"').strip("'")
 
 
+DEFAULT_HEADER_HIDE_AFTER = 8.0  # segundos — el header funciona como gancho, no debe quedarse todo el video
+
+
 def parse_header(text: str) -> dict:
     sec = _section(text, 'Header')
     line1 = ''
     line2 = ''
+    hide_after: float | None = None
     if sec:
         for line in sec.splitlines():
             m = re.search(r'L[ií]nea\s*1.*?[:\-]\s*(.+?)\s*$', line, re.IGNORECASE)
@@ -120,7 +124,18 @@ def parse_header(text: str) -> dict:
             m = re.search(r'L[ií]nea\s*2.*?[:\-]\s*(.+?)\s*$', line, re.IGNORECASE)
             if m:
                 line2 = _clean_inline(m.group(1))
-    return {'line1': line1, 'line2': line2}
+                continue
+            m = re.search(
+                r'(?:Esconder\s+despu[eé]s|Hide\s*After|Ocultar\s+despu[eé]s)\s*\**\s*[:\-]\**\s*([\d.,]+)',
+                line, re.IGNORECASE,
+            )
+            if m:
+                hide_after = _to_float(_clean_inline(m.group(1)), 0.0)
+    out: dict = {'line1': line1, 'line2': line2}
+    # Si el MANIFEST no especifica un override, el header desaparece a los 8s por default.
+    effective_hide = hide_after if (hide_after is not None and hide_after > 0) else DEFAULT_HEADER_HIDE_AFTER
+    out['hideAfter'] = effective_hide
+    return out
 
 
 def parse_emphasis(text: str) -> list[dict]:

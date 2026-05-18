@@ -57,8 +57,8 @@ Lo que hace `render.sh` internamente:
 1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
    - `_source_cut.mov` — video cortado **agresivamente**: silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola (consonantes/vocales finales tienen aire para terminar).
    - Tunables vía flags: `--min-silence 0.08`, `--pad 0.06`, `--no-dedupe`, `--dedupe-max-gap 1.2`.
-   - `edl.json` — mapping orig→nuevo tiempo (no se usa en el pipeline nuevo pero queda para debugging)
-   - `captions.json` — word-timestamps del CUT video (no del original)
+   - `edl.json` — mapping orig→nuevo tiempo. Lo usa el remap de captions, no es debug.
+   - `captions.json` — word-timestamps del transcript original **remapeados** al timeline del corte vía `edl.json`. No se re-transcribe el video cortado (eso introducía alucinaciones de Whisper y drift fonético tipo "reels"→"reales"). Una sola transcripción = fuente de verdad.
 
 2. **MANIFEST.md → cues.json** (`manifest_to_cues.py`) — parsea las secciones Header, Énfasis, Overlays, B-roll del MANIFEST y emite `cues.json`. Si `captions.json` existe, avisa con `[warn]` si alguna keyword no aparece en el transcript.
 

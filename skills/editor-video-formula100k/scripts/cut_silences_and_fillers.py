@@ -20,12 +20,17 @@ Outputs (inside dest_folder):
 
 Strategy:
   1. Extract mono 16kHz audio
-  2. Transcribe with whisper --word-timestamps True
+  2. Transcribe with whisper --word-timestamps True  (single source of truth)
   3. Drop consecutive repeated words (stutters), keeping the LAST attempt
-  4. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
-  5. Compute "keep" ranges; any gap > MIN_SILENCE between kept words is cut
-  6. Use ffmpeg with select+aselect to build the cut video
-  7. Re-transcribe the cut video with word timestamps for captions
+  4. Drop phrase restarts (Andrea stumbles + retries)
+  5. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
+  6. Compute "keep" ranges; any gap > MIN_SILENCE between kept words is cut
+  7. Use ffmpeg with select+aselect to build the cut video
+  8. Remap the kept words' timestamps onto the cut timeline via the EDL —
+     NO re-transcription. This kills three failure modes at once:
+       - Whisper hallucination loops on the cut audio
+       - Phoneme drift on cut audio (e.g. "reels" → "reales")
+       - Dedupe acting on unstable re-transcribed captions
 """
 
 from __future__ import annotations
@@ -43,6 +48,12 @@ DEFAULT_MIN_SILENCE = 0.08  # seconds — gap larger than this is treated as sil
 DEFAULT_PAD = 0.06  # seconds — padding around each kept word; gives the tail of the word room to breathe so consonants/vowels no se cortan
 DEFAULT_DEDUPE_MAX_GAP = 1.2  # seconds — repeats farther apart than this aren't stutters
 MIN_SEGMENT = 0.08  # don't keep segments smaller than this
+# Fricatives have low amplitude tails so Whisper's word_end lands BEFORE the
+# sibilant. Without extra room they get clipped ("carísimas" → "carísima",
+# "diez" → "die", "francés" → "francé"). Extending only the end-pad of these
+# words keeps the rest of the timeline tight.
+FRICATIVE_PAD_EXTRA = 0.04
+FRICATIVE_END_RE = re.compile(r'(?:ch|[szjxf])$', re.IGNORECASE)
 FILLER_REGEX = re.compile(
     r'^[¿¡"\'(\[]*(eh+|em+|um+|uh+|ah+|mm+|ehm+|emm+)[.,;:!?\)\]\'\"…]*$',
     re.IGNORECASE,
@@ -50,11 +61,75 @@ FILLER_REGEX = re.compile(
 _PUNCT_STRIP = re.compile(r'^[\W_]+|[\W_]+$', re.UNICODE)
 
 
+def _ends_in_fricative(word: str) -> bool:
+    """True if `word` ends in a Spanish fricative (s/z/j/x/f or 'ch' digraph).
+
+    Strips surrounding punctuation first so "carísimas," still resolves as
+    fricative-ending.
+    """
+    stripped = _PUNCT_STRIP.sub('', word.strip().lower())
+    return bool(stripped and FRICATIVE_END_RE.search(stripped))
+
+
 def _normalize_token(text: str) -> str:
     """Lowercase, strip surrounding punctuation, drop accents — for dedupe matching."""
     s = _PUNCT_STRIP.sub('', text.strip().lower())
     s = unicodedata.normalize('NFD', s)
     return ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+
+
+def detect_hallucinations(words: list[dict]) -> list[dict]:
+    """Spot likely Whisper loop artifacts in a raw transcript.
+
+    Two signatures:
+      - 6+ consecutive words with identical normalized token ("descargas
+        descargas descargas..." failure mode).
+      - 5+ words sharing the same start timestamp (Whisper sometimes piles
+        many tokens on one frame when the decoder is stuck).
+
+    Returns a list of finding dicts; doesn't modify `words`. The remap-via-EDL
+    pipeline already contains the damage of an isolated loop, so this exists
+    only as observability — callers should warn, not abort.
+    """
+    findings: list[dict] = []
+    n = len(words)
+    if n < 5:
+        return findings
+    # Consecutive identical normalized tokens
+    i = 0
+    while i < n:
+        norm = _normalize_token(words[i]['word'])
+        j = i
+        while j + 1 < n and norm and _normalize_token(words[j + 1]['word']) == norm:
+            j += 1
+        run = j - i + 1
+        if run >= 6:
+            findings.append({
+                'kind': 'repeat_run',
+                'token': norm,
+                'count': run,
+                'start': words[i]['start'],
+                'end': words[j]['end'],
+            })
+        i = j + 1
+    # Collapsed timestamps (many words on the same frame)
+    i = 0
+    while i < n:
+        base = words[i]['start']
+        j = i
+        while j + 1 < n and abs(words[j + 1]['start'] - base) < 0.005:
+            j += 1
+        if j - i + 1 >= 5:
+            sample = ' '.join(w['word'].strip() for w in words[i:j + 1])
+            findings.append({
+                'kind': 'timestamp_collapse',
+                'count': j - i + 1,
+                'start': base,
+                'end': words[j]['end'],
+                'sample': sample[:60] + ('...' if len(sample) > 60 else ''),
+            })
+        i = j + 1
+    return findings
 
 
 def remove_repeated_words(words: list[dict], max_gap: float) -> tuple[list[dict], list[str]]:
@@ -252,6 +327,15 @@ def _transcribe_mlx(audio_path: Path, work_dir: Path) -> list[dict]:
         '--word-timestamps', 'True',
         '--output-format', 'json',
         '--output-dir', str(work_dir),
+        # Anti-hallucination: disable previous-text conditioning so the decoder
+        # can't lock into a repeating phrase loop (the "descargas y lo descargas..."
+        # failure mode observed on cut videos with rhythmic Spanish speech).
+        '--condition-on-previous-text', 'False',
+        '--temperature', '0',
+        '--compression-ratio-threshold', '2.0',
+        '--logprob-threshold', '-1.0',
+        '--no-speech-threshold', '0.5',
+        '--hallucination-silence-threshold', '1.0',
     ]
     subprocess.run(cmd, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     data = json.loads(out_json.read_text(encoding='utf-8'))
@@ -309,7 +393,8 @@ def compute_keep_segments(
     for w in words:
         if FILLER_REGEX.match(w['word'].strip()):
             continue
-        kept.append((max(0.0, w['start'] - pad), min(total, w['end'] + pad)))
+        end_pad = pad + FRICATIVE_PAD_EXTRA if _ends_in_fricative(w['word']) else pad
+        kept.append((max(0.0, w['start'] - pad), min(total, w['end'] + end_pad)))
 
     if not kept:
         return [(0.0, total)]
@@ -364,6 +449,38 @@ def build_edl(segments: list[tuple[float, float]]) -> list[dict]:
     return edl
 
 
+def remap_words_via_edl(words: list[dict], edl: list[dict]) -> list[dict]:
+    """Translate word timestamps from the original timeline onto the cut timeline.
+
+    A word is kept iff its midpoint falls inside an EDL segment; its new
+    start/end are shifted by `seg.newStart - seg.origStart` and clamped to the
+    segment's new boundaries. Words from cut regions (silences, fillers,
+    dedupe drops) are skipped — they never appear in the cut video.
+
+    Using the midpoint (instead of requiring `start >= origStart AND
+    end <= origEnd`) tolerates words whose tail was nudged by the segment
+    pad/merge logic.
+    """
+    if not edl:
+        return []
+    result: list[dict] = []
+    for w in words:
+        mid = (w['start'] + w['end']) / 2
+        for seg in edl:
+            if seg['origStart'] <= mid < seg['origEnd']:
+                offset = seg['newStart'] - seg['origStart']
+                new_start = max(seg['newStart'], w['start'] + offset)
+                new_end = min(seg['newEnd'], w['end'] + offset)
+                if new_end > new_start:
+                    result.append({
+                        'word': w['word'],
+                        'start': round(new_start, 3),
+                        'end': round(new_end, 3),
+                    })
+                break
+    return result
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('source')
@@ -405,6 +522,24 @@ def main() -> int:
         print(f'[2/5] Transcribing source with word timestamps...', file=sys.stderr)
         words = transcribe_words(audio, work)
         print(f'      → {len(words)} words', file=sys.stderr)
+
+        hallucinations = detect_hallucinations(words)
+        if hallucinations:
+            print(f'      ⚠ {len(hallucinations)} possible Whisper hallucination(s):',
+                  file=sys.stderr)
+            for h in hallucinations[:5]:
+                if h['kind'] == 'repeat_run':
+                    print(f'        • "{h["token"]}" × {h["count"]} '
+                          f'@ {h["start"]:.2f}-{h["end"]:.2f}s',
+                          file=sys.stderr)
+                else:
+                    print(f'        • {h["count"]} words on one frame '
+                          f'@ {h["start"]:.2f}s: {h["sample"]!r}',
+                          file=sys.stderr)
+            if len(hallucinations) > 5:
+                print(f'        ... ({len(hallucinations) - 5} more)', file=sys.stderr)
+            print(f'      (remap-via-EDL contains the damage; '
+                  f'inspect captions.json if quality is off)', file=sys.stderr)
 
         if args.no_dedupe:
             stutters: list[str] = []
@@ -452,82 +587,16 @@ def main() -> int:
         (dest / 'edl.json').write_text(json.dumps(edl, indent=2), encoding='utf-8')
 
         if args.no_recaption:
-            print('[5/5] Skipped re-captioning (--no-recaption)', file=sys.stderr)
-            cap_words = None
+            print('[5/5] Skipped captions (--no-recaption)', file=sys.stderr)
         else:
-            print(f'[5/5] Re-transcribing cut video for captions...', file=sys.stderr)
-            cut_audio = work / 'cut_audio.wav'
-            subprocess.run(
-                ['ffmpeg', '-y', '-i', str(out_video), '-vn', '-ac', '1',
-                 '-ar', '16000', '-c:a', 'pcm_s16le', str(cut_audio)],
-                check=True, stderr=subprocess.DEVNULL,
-            )
-            cap_words = transcribe_words(cut_audio, work)
+            print(f'[5/5] Remapping word timestamps onto cut timeline via EDL...',
+                  file=sys.stderr)
+            cap_words = remap_words_via_edl(words, edl)
             (dest / 'captions.json').write_text(
                 json.dumps(cap_words, indent=2), encoding='utf-8'
             )
-            print(f'      → captions.json ({len(cap_words)} words)', file=sys.stderr)
-
-        # ── Post-cut phrase-dedupe pass ─────────────────────────────────
-        # mlx-whisper sometimes merges restarts at the source-transcription level
-        # (when condition_on_previous_text=True kicks in on long audio). The
-        # POST-cut recaption transcribes each segment fresher and tends to split
-        # restarts correctly. So we re-run phrase-dedupe on the cleaner captions
-        # and produce a final tightened cut.
-        if (not args.no_phrase_dedupe and not args.no_recaption and cap_words):
-            clean_words, post_kills = remove_phrase_restarts(
-                cap_words, max_gap=args.phrase_max_gap
-            )
-            if post_kills:
-                print(f'[6/6] Post-cut phrase-dedupe: dropping {len(post_kills)} more restarts',
-                      file=sys.stderr)
-                for ph in post_kills[:10]:
-                    snippet = ph if len(ph) <= 70 else ph[:67] + '...'
-                    print(f'        − {snippet}', file=sys.stderr)
-                if len(post_kills) > 10:
-                    print(f'        ... ({len(post_kills) - 10} more)', file=sys.stderr)
-
-                # Convert kept word timestamps into ffmpeg-select segments
-                PAD = max(args.pad, 0.06)
-                MERGE_GAP = max(args.min_silence, 0.1)
-                refined: list[tuple[float, float]] = []
-                if clean_words:
-                    cur_s = max(0.0, clean_words[0]['start'] - PAD)
-                    cur_e = clean_words[0]['end'] + PAD
-                    for w in clean_words[1:]:
-                        s = max(0.0, w['start'] - PAD)
-                        e = w['end'] + PAD
-                        if s - cur_e <= MERGE_GAP:
-                            cur_e = max(cur_e, e)
-                        else:
-                            refined.append((cur_s, cur_e))
-                            cur_s, cur_e = s, e
-                    refined.append((cur_s, cur_e))
-
-                refined_video = dest / '_source_cut_refined.mov'
-                cut_video(out_video, refined, refined_video)
-                refined_video.replace(out_video)
-                refined_total = sum(e - s for s, e in refined)
-                print(f'        cut: {cut_total:.2f}s → {refined_total:.2f}s', file=sys.stderr)
-                cut_total = refined_total
-
-                # Re-transcribe the refined cut for final captions
-                with tempfile.TemporaryDirectory() as td2:
-                    work2 = Path(td2)
-                    final_audio = work2 / 'final.wav'
-                    subprocess.run(
-                        ['ffmpeg', '-y', '-i', str(out_video), '-vn', '-ac', '1',
-                         '-ar', '16000', '-c:a', 'pcm_s16le', str(final_audio)],
-                        check=True, stderr=subprocess.DEVNULL,
-                    )
-                    final_words = transcribe_words(final_audio, work2)
-                (dest / 'captions.json').write_text(
-                    json.dumps(final_words, indent=2), encoding='utf-8'
-                )
-                print(f'        captions: {len(final_words)} words', file=sys.stderr)
-            else:
-                print(f'[6/6] Post-cut phrase-dedupe: no further restarts found',
-                      file=sys.stderr)
+            print(f'      → captions.json ({len(cap_words)} words, no re-transcription)',
+                  file=sys.stderr)
 
     print(f'\nDone.', file=sys.stderr)
     print(f'  cut video:  {out_video}', file=sys.stderr)

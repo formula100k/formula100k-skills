@@ -1,7 +1,7 @@
 ---
 name: analizador-perfiles-formula100k
 description: >
-  Skill para analizar perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que alguien pida: analizar un perfil, revisar métricas, identificar qué videos funcionan, qué videos repetir, qué videos dejar de hacer, qué genera seguidores, qué genera ventas, auditar una cuenta, diagnosticar por qué no crece un perfil, o cualquier solicitud de análisis de contenido en redes sociales. Stack permanente de captura de datos: **agent-browser** SIEMPRE primero — entra logueado con la sesión real de Andrea, extrae reels/posts/carruseles/stories con caption verbatim + views + métricas que solo se ven con login (insights, vistas exactas). **Supadata MCP** entra como complemento puntual para transcripts de videos públicos y landings sin login. agent-browser nunca es "fallback" cuando Supadata falla — es el motor principal porque Instagram/TikTok cierran el acceso público a casi todo. Basada en la metodología de FORMULA 100K para leer métricas como experto.
+  Skill para analizar perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que alguien pida: analizar un perfil, revisar métricas, identificar qué videos funcionan, qué videos repetir, qué videos dejar de hacer, qué genera seguidores, qué genera ventas, auditar una cuenta, diagnosticar por qué no crece un perfil, o cualquier solicitud de análisis de contenido en redes sociales. Stack permanente de captura de datos: **agent-browser** SIEMPRE primero — entra logueado con la sesión real de Andrea, extrae reels/posts/carruseles/stories con caption verbatim + views + métricas que solo se ven con login (insights, vistas exactas). **Supadata MCP** entra como complemento puntual para transcripts de videos públicos y landings sin login. agent-browser nunca es "fallback" cuando Supadata falla — es el motor principal porque Instagram/TikTok cierran el acceso público a casi todo. **Modo opcional de auditoría profunda con Apify** (`apify/instagram-reel-scraper`) — se activa solo si el usuario lo pide en el PASO 1; descarga N reels con transcripciones de audio y extrae patrones de CTA ganadores. Útil cuando agent-browser es bloqueado por detección CDP de Instagram o cuando se necesitan 60+ reels con audio. Basada en la metodología de FORMULA 100K para leer métricas como experto.
 ---
 
 # Skill: Analizador de Perfiles FORMULA 100K
@@ -18,6 +18,13 @@ Preguntar si no se proporcionó:
 2. ¿Cuál es el objetivo del creador? (vender, crecer audiencia, monetizar, autoridad)
 3. ¿Cuánto tiempo lleva activo el perfil?
 4. ¿Hay algún video o período específico que preocupa?
+5. **¿Quieres una evaluación profunda con descarga de reels y transcripciones de audio?** (usa Apify, costo ~$0.40-$3 según volumen, tarda 1-2 minutos extra). Si sí → activar PASO 2.C además de los demás.
+
+> **Importante:** la pregunta 5 NO se hace automáticamente para auditorías express. Solo cuando el usuario:
+> - Pidió explícitamente analizar CTAs, ganchos o patrones reproducibles
+> - Pidió un análisis "completo", "profundo" o "exhaustivo"
+> - agent-browser falló por detección CDP (página de error de IG)
+> - Quiere transcripciones del audio de varios reels
 
 ### PASO 2 — Extraer datos · agent-browser primero, Supadata como complemento
 
@@ -62,6 +69,22 @@ Para Instagram: `https://www.instagram.com/usuario/`
 **Si Supadata responde con "limit-exceeded" o login wall:** agent-browser ya tiene los datos, no hay bloqueo. Sigue adelante.
 
 Extraer mínimo los últimos 20-30 videos.
+
+**C. Apify · `apify/instagram-reel-scraper` (OPCIONAL, solo si el usuario lo pidió en PASO 1.5)**
+
+Activar este módulo cuando:
+- El usuario respondió SÍ a la pregunta de auditoría profunda en el PASO 1
+- O agent-browser fue bloqueado por la página de error de IG (detección CDP)
+- O se necesitan 60+ reels con transcripciones de audio palabra-por-palabra
+
+Proceso de 2 pasadas (instrucciones completas en `references/auditoria-profunda-apify.md`):
+
+1. **Pasada 1** — `mcp__apify__call-actor` con `apify/instagram-reel-scraper` + `{username:[usuario], resultsLimit:60}` para obtener metadata de 60 reels SIN transcript. Costo ~$0.16.
+2. **Ordenar por `commentsCount` descendente** y elegir top 5-10.
+3. **Pasada 2** — re-llamar al actor pasando las URLs específicas + `includeTranscript: true`. Costo ~$0.24.
+4. Output cruza con el análisis de patrones de CTA (ver `references/auditoria-profunda-apify.md` → sección "Análisis de patrones de CTA" y la memoria [[feedback-ctas-guiones]]).
+
+**Gotcha:** el transcriber confunde "Claude" con "Cloud". Corregir en el reporte final.
 
 ### PASO 2.5 — Comentarios de los videos más virales (agent-browser)
 
@@ -115,6 +138,7 @@ Listar los videos con MÁS comentarios → estos son los **ángulos de venta gan
 - Las vistas NO igualan ventas
 - El video con más comentarios = el tema que más conecta con intención de compra
 - Cruzar con el análisis de comentarios del PASO 2.5 para validar qué ángulos tienen demanda real
+- **Si se ejecutó PASO 2.C (modo profundo con Apify)**: agregar al reporte una sección dedicada "Top N CTAs ganadores" con caption verbatim, transcripción corregida (Claude/Cloud), gancho del primer segundo, CTA exacto y los 6 patrones que se cumplen. Estructura completa en `references/auditoria-profunda-apify.md` → sección "Output del modo profundo".
 
 ### PASO 5.5 — Detectar Vacíos de Contenido en Competidores
 Si se analizaron comentarios de competidores en el PASO 2.5:
@@ -172,3 +196,6 @@ Para estructura del reporte final:
 
 Para scrapeo y clasificación de comentarios + detección de vacíos de contenido:
 → `references/analisis-comentarios.md`
+
+Para auditoría profunda OPCIONAL con Apify (descarga masiva de reels + transcripciones + análisis de patrones de CTA):
+→ `references/auditoria-profunda-apify.md`

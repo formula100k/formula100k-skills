@@ -29,19 +29,42 @@ Esta skill contiene todos los frameworks de guionización de FORMULA 100K para c
 8. ¿Es alcanzable para el espectador promedio?
 9. ¿Tiene un giro propio si parte de una idea conocida?
 
-### Paso 3 — Proponer 2 o 3 estructuras posibles
+### Paso 3 — Identificar el Pilar de Valor (OBLIGATORIO)
+
+Aportar valor no es solo "dar un tip". Antes de proponer estructuras, identificar qué pilar de valor sostiene el video — aunque el valor sea implícito o tácito. **Elegir UNO solo como pilar central.** Si no se identifica ninguno con claridad, la idea no está lista para guionizar: regresar al Paso 1 y reformular.
+
+Los 7 Pilares de Valor:
+
+| # | Pilar | Qué es | Impacto en la audiencia |
+|---|-------|--------|------------------------|
+| 1 | 💡 **Revelación (Insight)** | Información basada en experiencia propia o investigación que pocos conocen | El usuario siente que accede a un 'secreto' que beneficia su vida |
+| 2 | 🛠️ **Utilidad Práctica** | Tutoriales o simplificación de conceptos complejos | Genera GUARDADOS. Lo conserva porque le ahorra tiempo o esfuerzo futuro |
+| 3 | ❤️ **Validación Emocional** | Reflexiones que validan cómo se siente el usuario | Genera COMPARTIDOS. Lo envía: 'Esto es exactamente lo que me pasa' |
+| 4 | 🎮 **Desafío (Gamificación)** | Tests, retos o diagnósticos que invitan a participar | Toca el ego positivo. Se siente inteligente o desafiado al participar |
+| 5 | 📰 **Actualidad (Curiosidad)** | Noticias o revelaciones de interés público vinculadas al nicho | Te posiciona como fuente relevante y 'al día' |
+| 6 | 🔍 **Curaduría** | Filtrar el ruido: 'Analicé 50 herramientas y estas 3 sirven' | El valor es el TIEMPO que le ahorras al otro |
+| 7 | ⚡ **Disrupción (Anti-consejo)** | Cuestionar lo que todos dicen con lógica y datos | Genera DEBATE y pensamiento crítico, demuestra autoridad superior |
+
+**Cómo aplicarlo:**
+1. Declarar explícitamente: "El pilar de valor de este video es **[N - Nombre]**".
+2. Justificar en 1 frase cuál es el valor concreto que recibe el espectador (aunque sea tácito).
+3. Si la idea no calza con ningún pilar → advertir al usuario que el video corre riesgo de ser "contenido vacío" y proponer cómo reformularlo para activar uno.
+4. El pilar elegido condiciona la estructura del Paso 4 (ej. Validación Emocional → estructura 13 El Espejo; Curaduría → estructura 9 Regla de 3 o 17 How to Template; Disrupción → estructura 10 Gancho Controversial o 19 Desafío Contracorriente).
+
+### Paso 4 — Proponer 2 o 3 estructuras posibles
 Revisar TODAS las estructuras disponibles (ver references/estructuras.md) y seleccionar las más adecuadas según:
+- **Pilar de valor identificado en Paso 3** (filtro principal)
 - Objetivo del video (ventas, comentarios, autoridad, educación, viralidad)
 - Nivel de consciencia del público
 - Tipo de transformación (emocional, práctica, económica, identidad)
 - Potencial de controversia o conversación
 
-Explicar brevemente POR QUÉ cada estructura es adecuada para ese caso específico.
+Explicar brevemente POR QUÉ cada estructura es adecuada para ese pilar y caso específico.
 
-### Paso 4 — Dejar que el usuario elija la estructura
+### Paso 5 — Dejar que el usuario elija la estructura
 Solo después de que confirme, desarrollar el guion completo.
 
-### Paso 5 — Verificación de Viralidad con Referencia Real (OBLIGATORIO)
+### Paso 6 — Verificación de Viralidad con Referencia Real (OBLIGATORIO)
 Antes de entregar el guion final, ejecutar el módulo de verificación de viralidad.
 Ver instrucciones completas en: `references/verificacion-viralidad.md`
 
@@ -58,10 +81,11 @@ Este paso garantiza que el gancho no sea genérico sino basado en lo que ya prob
 
 ## ORDEN DE ENTREGA AL ESCRIBIR EL GUION
 
-1. Indicar la estructura elegida + listar sus componentes
-2. Ejecutar verificación de viralidad (referencias reales) → ver `references/verificacion-viralidad.md`
-3. Desarrollar el sistema completo de ganchos (verbal, visual, textual) basado en referencia viral
-4. Entregar el guion completo paso a paso
+1. Indicar el **pilar de valor** identificado (1 de los 7) + justificación de 1 frase
+2. Indicar la estructura elegida + listar sus componentes
+3. Ejecutar verificación de viralidad (referencias reales) → ver `references/verificacion-viralidad.md`
+4. Desarrollar el sistema completo de ganchos (verbal, visual, textual) basado en referencia viral
+5. Entregar el guion completo paso a paso
 
 ---
 

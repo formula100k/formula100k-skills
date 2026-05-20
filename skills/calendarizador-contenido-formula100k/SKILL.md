@@ -5,12 +5,15 @@ description: >
   de FÓRMULA 100K. Usar SIEMPRE que Andrea pida "arma mi calendario", "calendariza estos guiones", "ordena estas ideas
   en un calendario", "convierte esto en calendario semanal", "haz mi calendario en Excel", "calendario de la semana",
   "organiza mis guiones por día", "calendariza este lote", "calendariza estos enlaces", "calendariza estos TikToks",
-  "calendariza estos reels de referencia", o cualquier variación que combine ideas/guiones/enlaces con intención de
-  organizarlos por día de la semana. Maneja 3 modos de entrada: (1) guiones listos para organizar, (2) ideas sueltas
-  que se desarrollan llamando a guionizacion-formula100k o carrusel-viral-formula100k, (3) enlaces de video que se
-  transcriben con transcripcion-youtube-formula100k y se reescriben como referencia. Genera tabla con columnas
-  DÍA, IDEA, GUION, LLAMADO A LA ACCIÓN, FORMATO, REFERENCIA — distribuida según el propósito del calendario
-  (Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30).
+  "calendariza estos reels de referencia", "calendariza estos carruseles", "haz un calendario de carruseles", o
+  cualquier variación que combine ideas/guiones/enlaces con intención de organizarlos por día de la semana. Maneja
+  3 modos de entrada: (1) guiones listos para organizar, (2) ideas sueltas que se desarrollan llamando a
+  guionizacion-formula100k o carrusel-viral-formula100k, (3) enlaces de video que se transcriben con
+  transcripcion-youtube-formula100k y se reescriben como referencia. Soporta DOS TIPOS DE PIEZA: REELS (default,
+  columnas DÍA · IDEA · GUION · CTA · FORMATO · REFERENCIA) y CARRUSELES (columnas DÍA · FECHA · # · IDEA ·
+  GUION SLIDE x SLIDE · CTA · FORMATO, con altura de fila dinámica para que el guion completo entre en la celda).
+  Distribución según el propósito del calendario (Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10,
+  Venta 20/50/30).
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 
@@ -18,11 +21,9 @@ argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres cale
 
 Convierte guiones, ideas sueltas o enlaces de referencia en un **calendario semanal Lunes-Domingo** listo para producir, exportado a CSV y XLSX.
 
----
+Soporta **dos tipos de pieza** con esquemas de columnas distintos:
 
-## QUÉ HACE
-
-Organiza contenido en una tabla con 6 columnas:
+### Tipo REELS (default)
 
 | Columna | Qué contiene |
 |---|---|
@@ -33,24 +34,62 @@ Organiza contenido en una tabla con 6 columnas:
 | **FORMATO** | 1 de los 40 formatos del catálogo F100K |
 | **REFERENCIA** | URL del video referencia o "Original" |
 
+### Tipo CARRUSELES
+
+| Columna | Qué contiene |
+|---|---|
+| **DÍA** | Día semana (LUN/MAR/MIE/…) coloreado por semana (S1 amarillo `#FCE96B`, S2 lila `#D9CCEC`) |
+| **FECHA** | Fecha absoluta (ej. "18 MAY 2026") |
+| **#** | Número del carrusel (01-99) |
+| **IDEA** | Título del carrusel |
+| **GUION (SLIDE x SLIDE)** | Texto de cada slide concatenado con saltos de línea reales. Altura de fila se ajusta automáticamente al largo del guion (wrap text activado, vertical-align top) |
+| **CTA** | Palabra clave del CTA (ej. "MÁQUINA", "ROAST") |
+| **FORMATO** | "Carrusel · N slides" |
+
+El tipo CARRUSELES soporta **calendarios de hasta 2 semanas** (11-14 carruseles) en una sola hoja, con coloreo de la columna DÍA por semana para que visualmente se identifique el bloque S1 vs S2.
+
 Distribución de los 7 días según el **propósito del calendario** (los 4 modos de la Estrategia V3.0).
 
 ---
 
 ## OUTPUTS
 
-Carpeta de salida: `/Users/kissita/Documents/FORMULA100K/CALENDARIOS/`
+Carpeta de salida según tipo de pieza:
+- **REELS:** `/Users/kissita/Documents/FORMULA100K/CALENDARIOS/`
+- **CARRUSELES:** `/Users/kissita/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/`
 
 Genera **3 archivos** por sesión:
-1. `calendario_[modo]_[YYYY-MM-DD].csv` — CSV separado por comas, encoding UTF-8
+1. `calendario_[modo]_[YYYY-MM-DD].csv` — CSV separado por comas, encoding UTF-8 (solo modo reels)
 2. `calendario_[modo]_[YYYY-MM-DD].xlsx` — Excel con header en negrita, columnas anchas
 3. Tabla markdown en el chat (preview)
+
+Para tipo CARRUSELES el nombre por defecto es `00_CALENDARIO_CARRUSELES.xlsx` (en la carpeta destino del proyecto), pero el usuario puede pedir un nombre con fecha.
 
 Donde `[modo]` es uno de: `experimentacion`, `crecimiento`, `nutricion`, `venta`.
 
 ---
 
 ## FLUJO COMPLETO (seguir en orden)
+
+### PASO 0 · Detectar tipo de pieza (REELS vs CARRUSELES)
+
+**Antes que nada**, determinar si lo que se va a calendarizar son **reels** (default) o **carruseles**.
+
+Señales para detectar tipo CARRUSELES:
+- Usuario menciona explícitamente "carrusel", "carruseles", "slides", "diapositivas"
+- Input incluye estructura "SLIDE 1 / SLIDE 2 / …" o "Slide 1: … Slide 2: …"
+- Usuario pasa archivos `.md` generados por la skill `carrusel-viral-formula100k`
+- Carpeta de origen es `/Users/kissita/Documents/FORMULA100K/CARRUSELES/`
+
+Si no hay señales explícitas → asumir **REELS**.
+
+Si hay ambigüedad → preguntar:
+> ¿Estos son reels o carruseles? Cambia las columnas del calendario y el formato del guion.
+
+El tipo de pieza determina:
+- Esquema de columnas del CSV/XLSX (ver tabla de `QUÉ HACE` arriba)
+- Si el guion va resumido en una línea (reels) o slide-by-slide completo (carruseles)
+- Carpeta de output: `CALENDARIOS/` para reels · `CARRUSELES/CALENDARIO DE CARRUSELES/` para carruseles
 
 ### PASO 1 · Detectar modo de entrada
 
@@ -140,16 +179,28 @@ Si el guion ya trae CTA, respétalo (solo verifica que coincida con el tipo del 
 
 ### PASO 6 · Generar archivos CSV y XLSX
 
-Ejecutar el script Python `generate_calendar.py` (ubicado en `references/generate_calendar.py`) pasando los datos como JSON via stdin:
+Ejecutar el script Python `generate_calendar.py` (ubicado en `references/generate_calendar.py`) pasando los datos como JSON via stdin. El argumento `--tipo-pieza` cambia el esquema de columnas y el layout del Excel:
 
+**Modo REELS:**
 ```bash
 python3 /Users/kissita/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+  --tipo-pieza "reels" \
   --modo "[modo]" \
   --output-dir "/Users/kissita/Documents/FORMULA100K/CALENDARIOS/" \
   --data-json '<JSON_DATA>'
 ```
 
-Donde `<JSON_DATA>` es:
+**Modo CARRUSELES:**
+```bash
+python3 /Users/kissita/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+  --tipo-pieza "carruseles" \
+  --modo "[modo]" \
+  --output-dir "/Users/kissita/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/" \
+  --output-name "00_CALENDARIO_CARRUSELES" \
+  --data-json '<JSON_DATA>'
+```
+
+JSON para REELS:
 
 ```json
 {
@@ -157,13 +208,40 @@ Donde `<JSON_DATA>` es:
   "fecha_inicio": "2026-05-04",
   "filas": [
     {"dia":"Lunes","idea":"...","guion":"...","cta":"...","formato":"Pizarra (#19)","referencia":"Original"},
-    {"dia":"Martes","idea":"...","guion":"...","cta":"...","formato":"POV (#3)","referencia":"https://..."},
-    ...7 filas total
+    {"dia":"Martes","idea":"...","guion":"...","cta":"...","formato":"POV (#3)","referencia":"https://..."}
   ]
 }
 ```
 
-El script genera ambos archivos automáticamente. Si Python no tiene `openpyxl` instalado, intenta `pip install openpyxl --quiet` antes; si falla, generar solo CSV y avisar al usuario que el XLSX requiere `pip install openpyxl`.
+JSON para CARRUSELES (más campos por fila):
+
+```json
+{
+  "modo": "crecimiento",
+  "fecha_inicio": "2026-05-18",
+  "titulo": "CALENDARIO DE CARRUSELES — SEMANA 18 MAYO 2026",
+  "subtitulo": "Andrea Vega · FÓRMULA 100K · @andraestratega",
+  "filas": [
+    {
+      "dia": "LUN",
+      "fecha": "18 MAY 2026",
+      "numero": "01",
+      "idea": "Te están viendo la cara con Claude",
+      "guion": "SLIDE 1 — GANCHO\n\"Te están viendo la cara con Claude\"\n\nSLIDE 2 — EL PROBLEMA\n...",
+      "cta": "MÁQUINA",
+      "formato": "Carrusel · 7 slides",
+      "semana": "S1"
+    }
+  ]
+}
+```
+
+Notas clave del modo carruseles:
+- Campo `semana` con valor `"S1"` o `"S2"` colorea la celda DÍA (amarillo `#FCE96B` o lila `#D9CCEC`).
+- Campo `guion` debe traer los slides separados con `\n\n` o títulos `SLIDE N — …`. El script calcula la altura de fila automáticamente.
+- El script NO genera CSV para tipo carruseles (los saltos de línea internos del guion rompen Excel CSV); solo XLSX.
+
+El script genera los archivos automáticamente. Si Python no tiene `openpyxl` instalado, intenta `pip install openpyxl --quiet` antes; si falla, generar solo CSV (reels) o avisar (carruseles).
 
 ### PASO 7 · Mostrar preview en chat
 

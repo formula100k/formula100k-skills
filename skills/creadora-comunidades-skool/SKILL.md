@@ -1,6 +1,6 @@
 ---
 name: creadora-comunidades-skool
-description: Use when someone asks to create a Skool community, write an About Page for Skool, design an onboarding, write a VSL script, set up community structure, configure foro categories, leaderboard levels, pinned posts, cancellation video, design an irresistible offer for a community, build a vehículo único, or any copy or structure for a Skool community. Also triggers on: "construye mi Skool", "About Page de Skool", "onboarding para mi comunidad", "VSL de comunidad", "estructura de Skool", "configura mi Skool", "descripción de comunidad", "vehículo único", "oferta de mi comunidad", "diseña mi oferta para Skool".
+description: Use when someone asks to create a Skool community, write an About Page for Skool, design an onboarding, write a VSL script, set up community structure, configure foro categories, leaderboard levels, pinned posts, cancellation video, design an irresistible offer for a community, build a vehículo único, or any copy or structure for a Skool community. Also triggers on: "construye mi Skool", "About Page de Skool", "onboarding para mi comunidad", "VSL de comunidad", "estructura de Skool", "configura mi Skool", "descripción de comunidad", "vehículo único", "oferta de mi comunidad", "diseña mi oferta para Skool", "propuesta integral de Skool", "propuesta final para cliente Skool", "armame el docx de la propuesta de comunidad", "entregable final de Skool".
 ---
 
 ## Qué hace esta skill
@@ -28,6 +28,7 @@ Siempre trabaja en español, segunda persona (tú), con narrativa emocional, dir
 | 9 | Categorías del foro | Estructura y nombres de secciones |
 | 10 | Módulos / Fases | Títulos y descripciones motivadoras |
 | 11 | Estructura completa desde cero | Todas las piezas en orden lógico |
+| 12 | **Propuesta Integral Final (.docx)** | Documento consolidado para entregar al cliente — 16 secciones (ver [propuesta-integral.md](propuesta-integral.md)) |
 
 ---
 
@@ -120,12 +121,61 @@ Siempre seguir este flujo — nunca saltarse pasos:
 Seguir este orden y confirmar con el usuario antes de pasar a cada pieza:
 **Vehículo único → Descripción → About Page → Onboarding → Posts Fijados → Leaderboard → Categorías Foro → VSL → Video Cancelación**
 
+### 12. PROPUESTA INTEGRAL FINAL (.docx)
+Este es el **formato de entrega final** para clientes (Skool premium: Truelany, Adriana, Barbara, Ana Romero, Florencia, Felipe, Sol, Aaron Khaleb, etc.). NO se entrega como chat ni como pieza suelta — se entrega como UN documento .docx con las 16 secciones consolidadas.
+
+Brief consolidado (preguntar lo que falte, NO inventar):
+1. Nombre de la fundadora + identidad (historia personal, autoridad real, libros/TEDx/medios, portafolio o credenciales)
+2. Nombre tentativo de la comunidad + tagline
+3. Avatar específico (edad, profesión, ingresos, dolores verbatim)
+4. Insight estratégico (la tesis: "el mercado vende X, nosotros vendemos Y")
+5. Top 5-7 competidores con plataforma + promesa + debilidad
+6. Vehículo único propio (framework, leyes, reglas, fases — todo lo registrable)
+7. Promesa central + transformación Estado A → Estado B en X meses
+8. Módulos (M0 a M6 o equivalente) con objetivo, temas, resultado y entregable de la miembro
+9. Lista de videos pregrabados (código, título, duración, formato TH/SC/MX/MC, hook, promesa, estructura)
+10. Dinámicas exclusivas (accountability, hot seats, investment club, deal flow, etc.)
+11. Ritmo semanal (lunes-domingo + mensual/trimestral/anual)
+12. Categorías del foro (propósito, quién publica, tipo de post)
+13. Leaderboard + retos por módulo + recompensas
+14. Estética visual (paleta hex, tipografías, sí/no fotográfico, metáfora visual)
+15. Propuestas de portada (prompt base IA + specs + concepto por módulo)
+16. Roadmap de grabación por meses
+
+Ver estructura detallada en [propuesta-integral.md](propuesta-integral.md).
+
+**Flujo de generación automática (end-to-end):**
+
+1. Recolectar el brief completo en conversación (sección por sección, una pregunta a la vez, NO formularios).
+2. Confirmar con la usuaria que está todo bien antes de generar.
+3. Volcar el brief consolidado a un archivo `brief.json` siguiendo el schema de [`brief.example.json`](brief.example.json) (el ejemplo está poblado con datos reales de Poder Inversionista — usarlo como referencia de estructura).
+4. Ejecutar:
+   ```bash
+   python3 /Users/kissita/.claude/skills/creadora-comunidades-skool/build_docx.py /ruta/a/brief.json
+   ```
+5. El script aplica automáticamente todas las reglas de formato del memory `feedback-docx-formato`:
+   - Sin tabla de contenidos.
+   - Texto justificado en todo el documento (incluido dentro de celdas).
+   - Bordes solo en tablas reales (single, sz=6, color `#4B5563`). Nunca `pBdr` ni `shd` en párrafos sueltos.
+   - Sin bullets decorativos (●, o, •). Solo listas numeradas 1, 2, 3.
+   - Sin emojis decorativos en el cuerpo (excepción intencional: el copy de posts fijados de Skool en sección 13 SÍ los conserva porque va a publicarse dentro de Skool).
+   - Párrafos vacíos consecutivos colapsados.
+
+**Output por defecto:** `/Users/<usuario>/Downloads/<CLIENTE> - Propuesta Skool FINAL.docx`. Para forzar otra ruta: `--out /ruta/custom.docx`.
+
+**Dependencias:** `python-docx` y `emoji` (ya instaladas en el entorno de Andrea). Si una alumna corre la skill y faltan, instalar con `pip install python-docx emoji`.
+
+**Notas de uso:**
+- El schema de `brief.json` lleva 16 claves principales (`cliente`, `tagline`, `subtitle`, `s1_resumen`, `s2_brief`, ..., `s16_roadmap`). Cualquier sección omitida no aparece en el .docx — útil para entregas parciales.
+- Si el cliente entrega su propio brand kit (paleta, tipografías, logos), respetarlo en `s14_estetica` — no imponer el azul/dorado del ejemplo.
+- El brief mínimo viable debe tener al menos: `cliente`, `s1_resumen`, `s2_brief`, `s4_identidad`, `s5_vehiculo`, `s5b_oferta`, `s6_modulos`. Si faltan piezas, devolver una pregunta concreta antes de generar.
+
 ---
 
 ## Reglas Globales
 
 - **NUNCA inventar** métricas, precios, número de alumnos, urgencias, plazos ni autoridad. Si falta, preguntar.
-- **Siempre en español**, segunda persona (tú), narrativa Skool: emocional, directa, aspiracional, clara
+- **Siempre en español neutro**, segunda persona (tú), narrativa Skool: emocional, directa, aspiracional, clara. Nunca jerga argentina (vos/tenés/copiá/acá).
 - **Siempre confirmar** el tipo de pieza antes de escribir cuando hay ambigüedad
 - **Una pregunta a la vez** — nunca lanzar formularios
 - **Confirmar antes de generar** — presentar resumen, esperar "Sí, continúa"
@@ -133,9 +183,11 @@ Seguir este orden y confirmar con el usuario antes de pasar a cada pieza:
 - **Nunca presentar bonos antes del precio** — siempre después
 - **Siempre garantía** — en ofertas premium, mínimo 2 tipos combinados
 - **Ofrecer ajuste** después de entregar
+- **Formato de entrega final:** cuando el cliente contrata el armado completo de su Skool, el entregable NO es chat ni piezas sueltas — es un .docx integral con las 16 secciones de [propuesta-integral.md](propuesta-integral.md) aplicando las reglas del memory `feedback-docx-formato` (sin TOC, justificado, bordes solo en tablas, sin emojis decorativos, sin bullets `●`).
 
 ---
 
 ## Referencia de Plantillas
 
-Ver [templates.md](templates.md) para las plantillas exactas de cada pieza.
+- [templates.md](templates.md) — plantillas exactas por pieza (1-11).
+- [propuesta-integral.md](propuesta-integral.md) — estructura completa de las 16 secciones del .docx final que se entrega al cliente (pieza 12).

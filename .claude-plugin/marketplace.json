@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "formula100k",
   "owner": {
     "name": "FÓRMULA 100K",
@@ -8,7 +9,7 @@
   "plugins": [
     {
       "name": "formula100k",
-      "source": ".",
+      "source": "./",
       "description": "Suite completa de skills de FÓRMULA 100K para creadoras de contenido hispano: guionización, calendarios, audios de venta, VSL, ofertas, comunidades Skool, ediciones de video, miniaturas, carruseles, historias y más.",
       "version": "1.0.0",
       "category": "content-creation",

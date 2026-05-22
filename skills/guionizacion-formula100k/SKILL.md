@@ -171,6 +171,11 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | 32 | Versus de Nivel Estratégico | Básico vs estratégico en situaciones reales |
 | 33 | Análisis de Caso Estratégico | Desmenuzar caso real → lección implícita |
 
+### ESTRUCTURAS DE SERIE / EDITORIAL (34+)
+| # | Nombre | Objetivo principal |
+|---|--------|-------------------|
+| 34 | Manifiesto de Serie | Video piloto que pre-vende una saga de contenidos vinculados |
+
 ---
 
 ## REGLAS DE REDACCIÓN
@@ -195,6 +200,7 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | Educación / valor | 9, 15, 17, 26, 27, 28 |
 | Comparación / debate | 10, 19, 29, 32 |
 | Misterio / intriga | 18, 24, 25, 33 |
+| Lanzamiento de serie / Episodio 0 | 34 |
 
 ---
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="_tokens.css">
+<style>
+.list-card {
+  width: 720px;
+  padding: 36px 44px;
+}
+.list-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 36px;
+  color: var(--ink);
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+.list-title.hidden { display: none; }
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  font-family: var(--font-body);
+  font-size: 21px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.list-item .check {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin-top: 2px;
+}
+.list-item strong { font-weight: 700; }
+.list-item code {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  background: var(--gray-soft);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body data-bg="{{bg}}">
+<div class="stage" data-bg="{{bg}}">
+  <div class="list-card">
+    <h2 class="list-title {{title_hidden}}">{{title}}</h2>
+    <div class="list-items">{{items_html}}</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="_tokens.css">
+<style>
+.callout {
+  width: 880px;
+  display: flex;
+  gap: 18px;
+  padding: 22px 26px;
+  border-radius: var(--r-callout);
+  border-left: 5px solid var(--c-accent);
+  background: var(--c-bg);
+  font-family: var(--font-body);
+}
+.callout[data-variant="info"]    { --c-accent: var(--info);    --c-bg: var(--info-bg);    }
+.callout[data-variant="warning"] { --c-accent: var(--warning); --c-bg: var(--warning-bg); }
+.callout[data-variant="success"] { --c-accent: var(--success); --c-bg: var(--success-bg); }
+.callout[data-variant="note"]    { --c-accent: var(--ink-soft); --c-bg: var(--gray-soft); }
+.callout[data-variant="error"]   { --c-accent: var(--error);   --c-bg: var(--error-bg);   }
+
+.callout-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-top: 1px;
+}
+.callout-text {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  font-weight: 400;
+  flex: 1;
+  padding-top: 2px;
+}
+.callout-text strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.callout-text code {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  background: rgba(255,255,255,0.6);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body data-bg="{{bg}}">
+<div class="stage" data-bg="{{bg}}">
+  <div class="callout" data-variant="{{variant}}">
+    <div class="callout-icon">{{icon}}</div>
+    <div class="callout-text">{{body}}</div>
+  </div>
+</div>
+</body>
+</html>

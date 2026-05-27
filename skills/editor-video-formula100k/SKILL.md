@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: Skill que toma un video grabado por Andrea + un MANIFEST.md (keyword-based, con header, énfasis, overlays y B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque fino. Corta silencios (>~0.20s efectivos, con 60ms de respiración al final de cada palabra para no clipar la cola), muletillas y repeticiones consecutivas con precisión, transcribe word-level, y compone el preset visual "Crea contenido viral" — talking-head 9:16 con header grande con trazo negro debajo de la mitad superior (visible solo los primeros 8s como gancho, override con `Esconder después: N`), caja blanca de énfasis al centro, overlays en la parte inferior para no tapar la cara, y B-roll fullscreen estilo monitor-photo. SIN subtítulos. La sincronización es por keyword sobre el transcript (no por timestamp), así que sobrevive al corte de silencios sin remapear. Renderiza local con Remotion (gratis, sin nube). Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", o cualquier variación que combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. La primera vez instala node, ffmpeg, yt-dlp, uv y Remotion vía bootstrap.
+description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll fullscreen. SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -12,7 +12,7 @@ El preset visual es **"Crea contenido viral"** — talking-head 9:16 a 30fps con
 - Header persistente (2 líneas) grande, con trazo negro, debajo del cuarto superior
 - **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
 - Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
-- Overlays gráficos en la parte inferior del frame — **pixel-avatar mascot** generado o **screenshots** del usuario (anclados a keywords, no tapan la cara)
+- Overlays gráficos a la **altura del pecho** (debajo del rostro, `bottom: 520`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, no tapan la cara)
 - B-roll fullscreen estilo `monitor-photo` (anclados a keywords)
 - **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
 - **Sin subtítulos** — la cara y los gráficos llevan todo el peso visual
@@ -38,21 +38,145 @@ Requisitos:
 - Stories → `historias-a-imagenes-nanobanana`
 - Miniaturas → `miniatura-youtube-formula100k`
 
-## Primera vez: bootstrap
+## Requisitos previos (precondición)
 
+La skill funciona en **macOS** (Apple Silicon o Intel) y **Windows 10/11**. Cada plataforma tiene una sola precondición: un gestor de paquetes que la skill usa para instalar todo lo demás. Si lo tienes, el bootstrap se encarga del resto solo.
+
+### En macOS — Homebrew
+
+**Homebrew** debe estar instalado ANTES de usar la skill por primera vez. El bootstrap NO lo instala automáticamente.
+
+Verificar si Homebrew está instalado:
+```bash
+command -v brew
+```
+
+Si no responde nada, instalar con el comando oficial:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Después de instalar Homebrew, seguir las instrucciones que imprime al final (suelen pedir agregar `brew` al PATH con dos comandos `echo >> ~/.zprofile` + `eval`).
+
+### En Windows — winget
+
+**winget** (Windows Package Manager) debe estar disponible. Viene preinstalado en **Windows 10 build 1809+** y **Windows 11**, así que en la práctica casi todo el mundo ya lo tiene.
+
+Verificar en PowerShell:
+```powershell
+winget --version
+```
+
+Si no aparece nada o da error:
+1. Abre **Microsoft Store**
+2. Busca **"App Installer"** (de Microsoft) e instala/actualiza
+3. Cierra y vuelve a abrir PowerShell
+
+Alternativa manual si Microsoft Store no funciona: https://github.com/microsoft/winget-cli/releases/latest
+
+Una vez que tu gestor de paquetes esté listo (`brew` en Mac, `winget` en Windows), **la skill se auto-configura sola** la primera vez que la corras.
+
+## Primera vez: bootstrap automático
+
+La primera vez que invocas `/render <carpeta>` o `/edita <carpeta>`, el wrapper ejecuta el bootstrap correspondiente a tu plataforma y se encarga del resto.
+
+### macOS
+
+`render.sh` invoca `bootstrap.sh`:
+- Verifica Homebrew (si falta, aborta con instrucciones claras)
+- Instala vía `brew`: Node 18+, ffmpeg, yt-dlp, uv (para `uvx mlx-whisper`)
+- Corre `npm install` dentro de `remotion-template/` (baja Remotion y sus deps)
+- Genera el SFX `pop.wav` con ffmpeg
+
+Para correrlo manualmente:
 ```bash
 bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
 ```
 
-Instala Homebrew (precondición), Node 18+, ffmpeg, yt-dlp, uv (para `uvx mlx-whisper`) y `npm install` del template Remotion. ~5-8 min en Mac limpia, sólo una vez. `render.sh` lo invoca automáticamente si detecta que falta algo.
+Sólo verificar sin instalar:
+```bash
+bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
+```
+
+### Windows
+
+`render.ps1` invoca `bootstrap.ps1`:
+- Verifica winget (si falta, aborta con instrucciones)
+- Instala vía `winget`: Node 18+, Python 3.10+, ffmpeg, yt-dlp
+- Instala `faster-whisper` vía `pip` (alternativa de Whisper para Windows; en Mac se usa `mlx-whisper` que es nativo de Apple Silicon)
+- Corre `npm install` dentro de `remotion-template/`
+
+Para correrlo manualmente desde PowerShell (en la carpeta de la skill):
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\bootstrap.ps1"
+```
+
+Sólo verificar sin instalar:
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\bootstrap.ps1" -Check
+```
+
+**Importante en Windows:** después de la primera instalación de Node o Python, cerrar y volver a abrir PowerShell para que el PATH se actualice.
+
+Tarda ~5-8 min en máquina limpia, **sólo la primera vez**. Las invocaciones siguientes saltean el bootstrap.
+
+## Paso 0 — Confirmar el gancho textual (OBLIGATORIO antes del render)
+
+Antes de invocar `render.sh` / `render.ps1`, el agente **SIEMPRE** debe revisar y ofrecer variantes del header del MANIFEST. El header es el **gancho textual** del reel — vive sobre la cara de Andrea los primeros 8 segundos y carga el 80% del trabajo de retención. No se renderiza ciegamente lo que está en el MANIFEST; se valida con Andrea, aunque ella nunca lo haya pedido.
+
+Esta regla aplica incluso si:
+- El MANIFEST viene recién generado por `recursos-de-video-formula100k` (sí, ese flujo ya pregunta en Paso 3.5 — pero al saltar a `/render` directamente o en un re-render posterior, esa elección puede no haber pasado).
+- El usuario invoca con `/render <carpeta>` o "edita este video" sin mencionar el header.
+- El header existente "parece bien".
+
+**Flujo:**
+
+1. Leer `$DEST/MANIFEST.md` y extraer `## Header` → `Línea 1` + `Línea 2`. Si falta el header, marcar el actual como vacío (no abortar).
+
+2. Si `captions.json` ya existe (re-render), leerlo para tener el transcript real. Si no, leer el campo `**Video fuente:**` y avisar que las variantes se generan sobre la promesa del MANIFEST (sin transcript todavía).
+
+3. **Invocar la skill `guionizacion-formula100k`** pidiéndole 3 variantes de gancho textual aplicando su framework "Gancho Textual del Top 1%":
+   - Cada variante en formato `Línea 1` / `Línea 2`
+   - 3-5 palabras por línea
+   - Sentence case (NO all caps)
+   - Estilos diversos: una declaración punzante, una con contraste/contraintuitivo, una con número fuerte o promesa concreta
+
+4. Mostrar a Andrea con `AskUserQuestion` **siempre 4 opciones** en este orden:
+   - **Opción 1 (Recomendada solo si no hay nada mejor):** "Conservar el actual — `<L1 actual>` / `<L2 actual>`"
+   - **Opción 2:** Variante 1 — `<L1>` / `<L2>` (estilo: declaración punzante)
+   - **Opción 3:** Variante 2 — `<L1>` / `<L2>` (estilo: contraste / contraintuitivo)
+   - **Opción 4:** Variante 3 — `<L1>` / `<L2>` (estilo: número fuerte / promesa concreta)
+
+   Header del AskUserQuestion: `"Gancho textual"`. Pregunta literal: `"¿Cuál usamos como header del reel? Aparece sobre la cara los primeros 8s."`. multiSelect: false.
+
+5. Si Andrea elige una variante distinta a la actual, **reescribir el header del MANIFEST.md** preservando todo lo demás:
+   - Solo tocar las dos líneas que empiezan con `- **Línea 1:**` y `- **Línea 2:**` dentro de la sección `## Header`.
+   - NO tocar el resto del archivo.
+   - Si la sección `## Header` no existía, agregarla inmediatamente después del frontmatter (`# Reel — ...` + metadata).
+
+6. Si Andrea elige "Otro" (input libre del AskUserQuestion), interpretar su texto como un nuevo `Línea 1 / Línea 2` y aplicarlo. Si pide variaciones ("dame 3 más"), volver a invocar `guionizacion-formula100k` con feedback específico y repetir el paso 4.
+
+7. Solo cuando el header esté confirmado y guardado en el MANIFEST, continuar con el pipeline de render abajo.
+
+**Si `guionizacion-formula100k` no está disponible:** generar las 3 variantes aplicando estas reglas a mano sobre el transcript, pero avisar a Andrea: "para mejor calidad de gancho instala `guionizacion-formula100k`".
+
+**Re-renders y atajo de skip:** si Andrea explícitamente dice "renderiza tal cual", "no toques el header", "el header está bien", "skip", o invoca con `/render <carpeta> --skip-hook`, saltar este paso. Por default — incluso en re-render — se pregunta.
+
+---
 
 ## Pipeline (un solo comando)
 
+**macOS:**
 ```bash
 bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/render.sh "$DEST" "$VIDEO_PATH"
 ```
 
-Lo que hace `render.sh` internamente:
+**Windows (PowerShell):**
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\render.ps1" "$DEST" "$VIDEO_PATH"
+```
+
+Lo que hace el wrapper internamente (idéntico en ambas plataformas — la lógica vive en `render.py`):
 
 1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
    - `_source_cut.mov` — video cortado **agresivamente**: silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola (consonantes/vocales finales tienen aire para terminar).
@@ -129,7 +253,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 **Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece en la parte inferior del frame (`bottom: 220`), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente para no superponerse.
 
-**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `WEB/...`). Renderiza en la parte inferior del frame (`bottom: 180`) para no tapar la cara de Andrea, con spring de entrada y float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0).
+**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`). Renderiza a la **altura del pecho** (`bottom: 520`) — la misma zona donde vive la imagen gancho, debajo del rostro de Andrea. Esto vale para todos los tipos (mascot pixel, screenshots, capturas UI tutorial): un callout/step/terminal queda anclado al cuerpo, no al borde inferior del frame. Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) queda visualmente debajo y compite por la atención.
 
 **B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
@@ -146,7 +270,7 @@ t_end   = t_start + duration
 ### Reglas de oro de la composición
 
 1. El **header funciona como gancho** — vive los primeros 8s (default) y luego se quita. Si se necesita persistente, override con `Esconder después: 0` en el MANIFEST.
-2. **Emphasis excluye overlay** — ambos viven en la zona inferior, así que si coinciden en un frame gana el emphasis. El overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
+2. **Emphasis excluye overlay** — el énfasis (`bottom: 220`) y el overlay (`bottom: 520`) están en bandas distintas, pero si coinciden en un frame compiten por la atención visual; gana el emphasis y el overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
 3. **La cara de Andrea queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
 4. **Sin subtítulos quemados.** Si el usuario los quiere los pone en post.
 5. **Sentence case** en cajas blancas — NUNCA all caps.
@@ -160,11 +284,12 @@ t_end   = t_start + duration
 
 ## Atajos conversacionales
 
-- `/render <carpeta>` → pipeline completo. Auto-detecta el video fuente desde `**Video fuente:**` del MANIFEST.
+- `/render <carpeta>` → pipeline completo. Auto-detecta el video fuente desde `**Video fuente:**` del MANIFEST. **Antes de renderizar siempre corre el Paso 0** (confirmación de gancho textual con 3 variantes).
 - `/edita <carpeta>` → equivalente.
-- `/setup` → corre `bootstrap.sh` para instalar/verificar dependencias.
+- `/render <carpeta> --skip-hook` → saltea el Paso 0. Úsalo cuando Andrea ya confirmó el header en una invocación previa de esta misma sesión, cuando explícitamente dijo "renderiza tal cual", o cuando se está iterando solo sobre énfasis/overlays sin tocar el header.
+- `/setup` → corre el bootstrap correspondiente a la plataforma para instalar/verificar dependencias (`bootstrap.sh` en Mac, `bootstrap.ps1` en Windows).
 
-Para invocación natural ("edita este video"), preguntar al usuario por la carpeta DEST si no es obvia.
+Para invocación natural ("edita este video"), preguntar al usuario por la carpeta DEST si no es obvia y luego correr el Paso 0 antes del pipeline. La skill detecta la plataforma automáticamente: en Mac llama `render.sh`, en Windows llama `render.ps1`. El usuario no necesita elegir.
 
 ---
 
@@ -206,10 +331,12 @@ npx tsx scripts/render.ts \
 
 | Error | Acción |
 |-------|--------|
-| `bootstrap.sh --check` reporta Homebrew faltante | Mostrar URL oficial al usuario y abortar |
-| `bootstrap.sh` falla al instalar Remotion (npm cache corrupto) | El script usa `--cache=/tmp/npm-cache-kissita`. Si persiste: `sudo chown -R 501:20 ~/.npm` o borrar `~/.npm` |
+| (Mac) `bootstrap.sh` reporta Homebrew faltante | Instalar Homebrew con el comando oficial y reintentar |
+| (Win) `bootstrap.ps1` reporta winget faltante | Instalar/actualizar "App Installer" desde Microsoft Store y reabrir PowerShell |
+| (Mac) `bootstrap.sh` falla al instalar Remotion (npm cache corrupto) | El script usa `--cache=/tmp/npm-cache-<user>`. Si persiste: `sudo chown -R 501:20 ~/.npm` o borrar `~/.npm` |
+| (Win) `node` o `python` no se reconocen después de bootstrap | Cerrar PowerShell y abrir una ventana nueva para que el PATH se actualice |
 | `manifest_to_cues.py` reporta keywords sin match | La keyword no aparece en `captions.json`. Editar el MANIFEST con una palabra que sí esté en el transcript |
-| Remotion falla con "Can only download URLs starting with http:// or https://" | El path del asset salió de `public/`. Verificar que `WEB/`/`IA/` y `_source_cut.mov` estén hard-linkeados al template (lo hace `render.sh`) |
+| Remotion falla con "Can only download URLs starting with http:// or https://" | El path del asset salió de `public/`. Verificar que `WEB/`/`IA/` y `_source_cut.mov` estén linkeados/copiados al template (lo hace `render.py`) |
 | Carpeta destino sin `MANIFEST.md` | Necesita correr antes `recursos-de-video-formula100k` o armar el MANIFEST a mano |
 
 ---

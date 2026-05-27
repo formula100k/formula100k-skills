@@ -12,6 +12,7 @@ Flags:
   --no-dedupe           disable consecutive-stutter removal
   --dedupe-max-gap F    max gap between repeats to count as stutter (default 1.2)
   --no-recaption        skip word-level re-transcription of the cut video
+  --no-snap             disable energy-based silence snapping (use fixed pad)
 
 Outputs (inside dest_folder):
   _source_cut.mov  — video with silences, fillers, and stutters removed
@@ -25,6 +26,9 @@ Strategy:
   4. Drop phrase restarts (Andrea stumbles + retries)
   5. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
   6. Compute "keep" ranges; any gap > MIN_SILENCE between kept words is cut
+  6b. Snap every cut boundary onto the nearest REAL silence in the audio energy
+      envelope, so cuts never land mid-word (fixes clipped tails/onsets). The
+      fixed/fricative pad is only a fallback when the envelope can't be built.
   7. Use ffmpeg with select+aselect to build the cut video
   8. Remap the kept words' timestamps onto the cut timeline via the EDL —
      NO re-transcription. This kills three failure modes at once:
@@ -377,23 +381,172 @@ def transcribe_words(audio_path: Path, work_dir: Path) -> list[dict]:
     return _transcribe_faster_whisper(audio_path, work_dir)
 
 
+# ── Energy-aware boundary snapping ───────────────────────────────────────
+# Whisper's word_start/word_end land *inside* the acoustic word (±50-150 ms),
+# so cutting at word_end+pad slices through still-voiced audio: clipped tails
+# ("carísimas"→"carísima") and chopped onsets. Instead of trusting a fixed pad,
+# we read the real audio energy envelope and push every CUT boundary out to the
+# nearest sustained silence. The cut then always lands in silence, regardless of
+# whether the word ends in s, d, n, a vowel, etc. This supersedes the
+# fricative-only pad heuristic (kept only as a fallback when the envelope can't
+# be computed).
+
+SNAP_MIN_SILENCE = 0.04   # sec — a gap must stay below thresh this long to count
+                          # as real silence (ignores stop-consonant closures /t/ /k/)
+SNAP_MARGIN = 0.02        # sec — nudge the snapped cut this far INTO the silence
+
+
+def load_energy_envelope(wav_path: Path, hop: float = 0.01, win: float = 0.025):
+    """Return (env, sr, hop): a per-frame RMS energy envelope of the mono audio.
+
+    env[i] is the RMS over [i*hop, i*hop+win]. Used to locate the true acoustic
+    end/start of words so cuts can be snapped into real silence.
+    """
+    import wave
+    import numpy as np
+
+    w = wave.open(str(wav_path), 'rb')
+    sr = w.getframerate()
+    n = w.getnframes()
+    raw = w.readframes(n)
+    w.close()
+    a = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768.0
+    hop_n = max(1, int(round(hop * sr)))
+    win_n = max(hop_n, int(round(win * sr)))
+    if len(a) < win_n:
+        val = float(np.sqrt(np.mean(a * a))) if len(a) else 0.0
+        return np.array([val], dtype=np.float32), sr, hop
+    nfr = 1 + (len(a) - win_n) // hop_n
+    env = np.empty(nfr, dtype=np.float32)
+    for i in range(nfr):
+        s = i * hop_n
+        seg = a[s:s + win_n]
+        env[i] = np.sqrt(np.mean(seg * seg))
+    return env, sr, hop
+
+
+def compute_silence_threshold(env) -> float:
+    """Adaptive RMS floor separating silence from speech for this clip.
+
+    Anchored to the clip's own noise floor (10th pct) and speech level (75th pct)
+    so it survives background hum without eating soft fricatives.
+    """
+    import numpy as np
+    noise = float(np.percentile(env, 10))
+    speech = float(np.percentile(env, 75))
+    thr = noise + 0.15 * (speech - noise)
+    return max(thr, noise * 1.5, 1e-4)
+
+
+def _snap_end_forward(env, hop: float, thresh: float, t: float, t_max: float,
+                      min_sil: float = SNAP_MIN_SILENCE) -> float:
+    """Move an end-cut at time `t` forward to the first SUSTAINED silence.
+
+    Only walks while audio is voiced (energy ≥ thresh); a silence shorter than
+    `min_sil` (a stop-consonant closure inside a word) is skipped. Capped at
+    `t_max` (midpoint of the gap to the next kept segment) so neighbours can't
+    overlap. If speech runs all the way to t_max, the cut stays at t_max.
+    """
+    if t >= t_max:
+        return t
+    nfr = len(env)
+    i = min(max(int(round(t / hop)), 0), nfr - 1)
+    imax = min(max(int(round(t_max / hop)), 0), nfr - 1)
+    need = max(1, int(round(min_sil / hop)))
+    j = i
+    while j < imax:
+        if env[j] < thresh:
+            cnt = 0
+            k = j
+            while k <= imax and k < nfr and env[k] < thresh and cnt < need:
+                cnt += 1
+                k += 1
+            if cnt >= need or k > imax:
+                return min(t_max, j * hop)
+            j = k
+        else:
+            j += 1
+    return t_max
+
+
+def _snap_start_backward(env, hop: float, thresh: float, t: float, t_min: float,
+                         min_sil: float = SNAP_MIN_SILENCE) -> float:
+    """Move a start-cut at time `t` backward to the first SUSTAINED silence.
+
+    Mirror of `_snap_end_forward`: protects the word onset (initial consonant)
+    from being clipped. Capped at `t_min` (gap midpoint to the previous segment).
+    """
+    if t <= t_min:
+        return t
+    nfr = len(env)
+    i = min(max(int(round(t / hop)), 0), nfr - 1)
+    imin = min(max(int(round(t_min / hop)), 0), nfr - 1)
+    need = max(1, int(round(min_sil / hop)))
+    j = i
+    while j > imin:
+        if env[j] < thresh:
+            cnt = 0
+            k = j
+            while k >= imin and env[k] < thresh and cnt < need:
+                cnt += 1
+                k -= 1
+            if cnt >= need or k < imin:
+                return max(t_min, j * hop)
+            j = k
+        else:
+            j -= 1
+    return t_min
+
+
+def _snap_segments_to_silence(merged, total, env, sr, hop, thresh):
+    """Snap each merged segment's outer cut boundaries into real silence."""
+    out: list[list[float]] = []
+    n = len(merged)
+    for idx in range(n):
+        s, e = merged[idx][0], merged[idx][1]
+        prev_end = merged[idx - 1][1] if idx > 0 else 0.0
+        next_start = merged[idx + 1][0] if idx + 1 < n else total
+        s_min = (prev_end + s) / 2 if idx > 0 else 0.0
+        e_max = (e + next_start) / 2 if idx + 1 < n else total
+        new_s = _snap_start_backward(env, hop, thresh, s, s_min)
+        new_e = _snap_end_forward(env, hop, thresh, e, e_max)
+        new_s = max(s_min, new_s - SNAP_MARGIN)
+        new_e = min(e_max, new_e + SNAP_MARGIN)
+        if new_e <= new_s:  # degenerate guard
+            new_s, new_e = s, e
+        out.append([new_s, new_e])
+    return out
+
+
 def compute_keep_segments(
     words: list[dict],
     total: float,
     min_silence: float,
     pad: float,
+    env=None,
+    sr=None,
+    hop=None,
+    thresh=None,
 ) -> list[tuple[float, float]]:
     """Build a list of (start, end) ranges to keep, in seconds.
 
     Drops:
       - Silence longer than min_silence (in the padded timeline)
       - Words matching FILLER_REGEX
+
+    When an energy envelope is supplied (`env`/`sr`/`hop`/`thresh`), every cut
+    boundary is snapped to the nearest real silence in the audio, so words are
+    never sliced mid-phoneme. Without it, falls back to the fixed + fricative pad.
     """
+    have_env = env is not None and sr and hop and thresh is not None
     kept: list[tuple[float, float]] = []
     for w in words:
         if FILLER_REGEX.match(w['word'].strip()):
             continue
-        end_pad = pad + FRICATIVE_PAD_EXTRA if _ends_in_fricative(w['word']) else pad
+        if have_env:
+            end_pad = pad  # snapping handles word tails; no fricative special-case
+        else:
+            end_pad = pad + FRICATIVE_PAD_EXTRA if _ends_in_fricative(w['word']) else pad
         kept.append((max(0.0, w['start'] - pad), min(total, w['end'] + end_pad)))
 
     if not kept:
@@ -407,6 +560,10 @@ def compute_keep_segments(
             merged[-1][1] = max(prev_end, e)
         else:
             merged.append([s, e])
+
+    # Snap real cut boundaries into silence (kills mid-word clipping)
+    if have_env:
+        merged = _snap_segments_to_silence(merged, total, env, sr, hop, thresh)
 
     # Drop tiny segments
     return [(s, e) for s, e in merged if (e - s) >= MIN_SEGMENT]
@@ -500,6 +657,8 @@ def main() -> int:
                     help='max gap between phrase attempts to count as restart (default 3.5)')
     ap.add_argument('--no-recaption', action='store_true',
                     help='Skip word-level re-transcription of the cut video')
+    ap.add_argument('--no-snap', action='store_true',
+                    help='disable energy-based silence snapping (use fixed/fricative pad)')
     args = ap.parse_args()
 
     source = Path(args.source).expanduser().resolve()
@@ -564,12 +723,30 @@ def main() -> int:
                 print(f'        ... ({len(phrase_kills) - 10} more)', file=sys.stderr)
 
         total = probe_duration(source)
-        segments = compute_keep_segments(words, total, args.min_silence, args.pad)
+
+        # Energy envelope → snap every cut into real silence (no mid-word clips)
+        env = sr_env = hop_env = thresh = None
+        if not args.no_snap:
+            try:
+                env, sr_env, hop_env = load_energy_envelope(audio)
+                thresh = compute_silence_threshold(env)
+                print(f'      silence-snap ON (RMS thresh={thresh:.4f}, '
+                      f'{len(env)} frames)', file=sys.stderr)
+            except Exception as ex:  # numpy/wave unavailable → graceful fallback
+                env = sr_env = hop_env = thresh = None
+                print(f'      ⚠ silence-snap OFF, using pad fallback ({ex})',
+                      file=sys.stderr)
+
+        segments = compute_keep_segments(
+            words, total, args.min_silence, args.pad,
+            env=env, sr=sr_env, hop=hop_env, thresh=thresh,
+        )
         cut_total = sum(e - s for s, e in segments)
         ratio = cut_total / total if total else 0
         print(f'[3/5] Keep segments: {len(segments)} | '
               f'{cut_total:.2f}s of {total:.2f}s ({ratio:.0%}) | '
-              f'min_silence={args.min_silence}s pad={args.pad}s',
+              f'min_silence={args.min_silence}s pad={args.pad}s '
+              f'snap={"on" if env is not None else "off"}',
               file=sys.stderr)
 
         # Count fillers removed (the original word list before dedupe is gone,

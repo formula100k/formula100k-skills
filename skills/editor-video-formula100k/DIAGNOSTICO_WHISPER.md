@@ -64,8 +64,7 @@ Resultado: 302 palabras limpias, 0 loops. Duration estable.
 
 **Fix aplicado (2026-05-18):** pad adaptativo por fonema final. `_ends_in_fricative()` detecta palabras que terminan en `s`, `z`, `j`, `x`, `f` o el dígrafo `ch` (post-strip de puntuación) y a esas SOLO les suma `FRICATIVE_PAD_EXTRA = 0.04` en el end-pad. El resto del timeline mantiene el `--pad` del usuario sin inflar. Permite volver a defaults agresivos (`--pad 0.02`) sin volver a clipar colas sibilantes.
 
-**Fix pendiente más profundo (no urgente):**
-- Usar el VAD (silero) para encontrar el final REAL del fonema (cuando la energía cae bajo umbral) en lugar de confiar en el `word_end` de Whisper. Daría precisión sub-fonémica, pero el pad adaptativo cubre el 95% del problema con costo cero.
+**Fix de raíz aplicado (2026-05-27):** *silence-snapping por envelope de energía.* En vez de confiar en `word_end+pad`, el script ahora lee la energía RMS real del audio (`load_energy_envelope`) y empuja CADA borde de corte al silencio sostenido más cercano (`_snap_end_forward` / `_snap_start_backward`), topado al punto medio del hueco con el segmento vecino para que no se solapen. El corte cae siempre en silencio sin importar el fonema final (s, d, n, vocal, l, r…), así que reemplaza el parche de fricativas (que queda solo como fallback si numpy/wave no están). Validado en IMG_2411: cortes cayendo sobre voz 13/17 → 4/17 (los 4 restantes son uniones de frases borradas, no clips). Flag `--no-snap` para desactivar.
 
 ---
 
@@ -104,6 +103,6 @@ Resultado: 302 palabras limpias, 0 loops. Duration estable.
 | 2 | Remap de captions vía EDL en lugar de re-transcribir | 1-2 h | Alto — elimina Problemas 1, 3 y 4 a la vez | ✅ Aplicado |
 | 3 | Pad adaptativo según consonante final | 1 h | Calidad de cola de palabras (sin sacrificar densidad) | ✅ Aplicado |
 | 4 | Validación post-transcripción (detectar loops antes del dedupe) | 30 min | Defensa en profundidad | ✅ Aplicado |
-| 5 | VAD-based phoneme end-detection (reemplaza pad fijo) | 3-4 h | Marginal sobre #3 | 🔴 Pendiente (no urgente) |
+| 5 | Silence-snapping por envelope de energía (reemplaza pad fijo) | 2 h | Alto — corta siempre en silencio, mata clips de cola/onset | ✅ Aplicado (2026-05-27) |
 
 `detect_hallucinations()` corre justo después de `transcribe_words()` y reporta runs de ≥6 tokens normalizados idénticos consecutivos o ≥5 palabras compartiendo timestamp (< 5ms de diferencia). Solo emite warning a stderr — el remap por EDL ya neutraliza el daño, este es el cinturón de observabilidad.

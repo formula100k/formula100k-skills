@@ -8,7 +8,7 @@ Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, 
 
 ## ¿Qué son las skills de FÓRMULA 100K?
 
-Son **38 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
+Son **44 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
 
 Cubren: guionización, calendarios de contenido e historias, audios de venta, VSL, construcción de ofertas, comunidades Skool, edición de video, miniaturas, carruseles, infografías reel, lead magnets y más.
 
@@ -79,7 +79,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 
 - **Comunidad Skool:** [skool.com/formula100k](https://skool.com/formula100k)
 - **Web:** [formula100k.app](https://formula100k.app)
-- **Instagram:** [@andraestratega](https://instagram.com/andraestratega)
+- **Instagram:** [@andreaestratega](https://instagram.com/andreaestratega)
 
 ---
 
@@ -129,6 +129,27 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `transcripcion-youtube-formula100k` — Transcribir videos de YouTube
 - `publicar-ig` — Publicar directo a Instagram desde Claude Code
 - `capturas-tutorial-formula100k` — Overlays UI tipo tutorial (terminal, callout, step, claude-input) renderizados HTML+CSS+Puppeteer
+
+---
+
+## 🤖 Autopilot F100K
+
+Familia de 6 skills que automatizan tu rutina diaria y semanal de contenido. **Configura una vez, recibe resultados cada día.**
+
+| Skill | Frecuencia | Qué hace |
+|-------|-----------|----------|
+| `rutina-maestra-formula100k` | Una vez (setup) | Onboarding interactivo — configura tu nicho, keywords, email y programa todos los módulos |
+| `radar-virales-f100k` | Diario (lun-vie) | Caza el viral más relevante del día + genera guion de reacción listo para grabar |
+| `calendario-semanal-f100k` | Semanal (lunes) | Arma el calendario de 7 días con refs virales reales + guiones exportados a CSV/XLSX |
+| `radar-tendencias-f100k` | Diario (lun-vie) | Detecta tendencias emergentes 24-72h antes del pico para que publiques primero |
+| `digest-comunidad-f100k` | Semanal (viernes) | Analiza comentarios de la semana y los convierte en las 5 ideas que pide tu audiencia |
+| `metricas-semanales-f100k` | Semanal (domingo) | Qué post ganó esta semana, por qué funcionó, y qué replicar la próxima |
+
+**Cómo empezar:** Corre `/rutina-maestra-formula100k` una vez. Responde 8 preguntas rápidas. Tu Autopilot queda activo.
+
+**Config:** Guardada en `~/.f100k-radar/config.json` en tu máquina (local, no en el repo — cada alumna tiene la suya).
+
+**MCPs requeridos:** Apify, Tavily, Gmail. Ver [`MCPS.md`](./MCPS.md).
 
 ---
 

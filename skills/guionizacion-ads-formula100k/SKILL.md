@@ -1,7 +1,6 @@
 ---
 name: guionizacion-ads-formula100k
-description: >
-  Skill DEDICADA a guionizar anuncios PAGADOS (Meta Ads, TikTok Ads, YouTube Ads, Reels promocionados) usando el sistema H × M × C de FÓRMULA 100K (Hook 80% + Meat 15% + CTA 5%), derivado del framework GOAT de Alex Hormozi. Activar SIEMPRE que alguien pida: "guioniza un ad", "guion para anuncio", "escribe el creativo de un ad", "necesito el script de un anuncio", "redacta un ad de Meta", "guion de Facebook Ads", "guion de TikTok Ads", "hazme un ad pagado", "script para ad", "guion para creativo de paid", "convierte mi reel en ad pagado", "adapta este contenido orgánico a ad", "dame 30 variantes de este ad", "modulariza este ad en H × M × C", "10 hooks + 3 meats + 3 CTAs", "guion de creativo para retargeting", "ad para tráfico frío", "ad para lookalike", "ad para tráfico caliente", "guion de paid traffic", "creativo para Meta Ads Library", "ad de 30 segundos", "ad de 60 segundos", o cualquier variación que combine intención de GUIONIZAR + formato PAGADO. NO confundir con [[guionizacion-formula100k]] (esa es para contenido ORGÁNICO con 33 estructuras). NO confundir con [[investigacion-ads-formula100k]] (esa CAZA ads de competencia, esta los ESCRIBE). NO usar para VSL largo de 5-15 min (ahí va [[vsl-expert-f100k]]). NO usar para audios de venta en DM (ahí va [[audios-venta-f100k]]). Genera 10 hooks GOAT (7 clásicos + 3 modernos), construye el meat con 4 bloques (Agitación + Descalificación + Vehículo Único + Prueba), cierra con 3 niveles de CTA (suave/medio/directo), y entrega 3 guiones completos calibrados al nivel de consciencia + plataforma + duración. Modo "variantes masivas" produce 30-150 ads modularizados para A/B testing.
+description: "Guioniza anuncios PAGADOS (Meta Ads, TikTok Ads, YouTube Ads, Reels promocionados) con el sistema H x M x C de FÓRMULA 100K (Hook 80% + Meat 15% + CTA 5%), derivado del GOAT de Hormozi. Activar SIEMPRE que se pida 'guioniza un ad', 'guion para anuncio', 'escribe el creativo de un ad', 'script de un anuncio', 'guion de Facebook/TikTok Ads', 'hazme un ad pagado', 'convierte mi reel en ad', 'adapta este orgánico a ad', 'dame 30 variantes de este ad', 'modulariza en H x M x C', 'ad para tráfico frío/caliente/retargeting/lookalike', 'ad de 30/60 segundos', o cualquier variación que combine GUIONIZAR + formato PAGADO. NO confundir con guionizacion-formula100k (orgánico), investigacion-ads-formula100k (caza ads de competencia), vsl-expert-f100k (VSL largo) ni audios-venta-f100k (DM). Genera 10 hooks GOAT, meat de 4 bloques (Agitación + Descalificación + Vehículo Único + Prueba), 3 niveles de CTA y 3 guiones calibrados a consciencia + plataforma + duración. Modo variantes masivas: 30-150 ads."
 ---
 
 # Skill: Guionización de Ads F100K — Sistema H × M × C
@@ -81,20 +80,38 @@ El meat son 4 bloques. Generas las 4 opciones de cada bloque para combinar. Ver 
 
 | Bloque | Función | Duración aprox. |
 |--------|---------|-----------------|
-| A) Agitación | Profundizar el dolor | 5-8s |
-| B) Descalificación | Eliminar soluciones falsas | 5-8s |
-| C) Vehículo único | Revelar tu mecanismo con nombre | 8-12s |
-| D) Prueba tangible | Caso/captura/número específico | 5-8s |
+| A) Agitación | Profundizar el dolor — con detalle vivido, no genérico | 8-15s |
+| B) Descalificación | Eliminar soluciones falsas — nombrar cada una que han intentado | 8-15s |
+| C) Vehículo único | Revelar tu mecanismo con nombre + demostración o descripción concreta | 15-25s |
+| D) Prueba tangible | Caso real o captura o número verificable — el más específico posible | 10-15s |
+
+**Regla de longitud del meat:** Un ad de 60 segundos necesita al menos 35-45 segundos de meat. Un ad de 30 segundos al menos 18-22s. Meats cortos (menos de 15s total) no construyen suficiente confianza para que el CTA convierta. Si el meat se ve corto al escribirlo, desarrolla más el bloque C (vehículo único) y el bloque D (prueba). Nunca recortes el meat para "hacer el ad más corto" — recorta el hook o el CTA.
+
+**Demostración obligatoria:** Al menos uno de los 3 meats de cada concepto debe incluir un screen recording real o una descripción visual detallada de cómo funciona la app/skill/sistema. "Decir" no reemplaza "mostrar".
 
 ### PASO 4 — Construir el CTA (5%)
 
-3 versiones por nivel de consciencia. Ver `references/cta-3-niveles.md` para anatomía y plantillas.
+> ⚠️ DISTINCIÓN CRÍTICA — ads pagados vs. contenido orgánico:
+>
+> - **Contenido orgánico (reels, TikTok):** CTA = "Comenta [PALABRA]" para activar DM automático. Funciona porque el algoritmo impulsa el engagement.
+> - **Ads pagados (Meta Ads, TikTok Ads):** CTA = "Dale click al botón de aquí abajo". NO se usa "comenta" en un ad pagado — el botón de compra/registro ya está en el formato del ad. Nunca mezclar los dos.
 
-| CTA | Para | Acción típica |
-|-----|------|----------------|
-| Suave | Tráfico frío | Lead magnet, comentar palabra clave |
-| Medio | Tráfico tibio / retargeting | Aplicación, llamada, link a landing |
-| Directo | Tráfico caliente / lookalike de compradores | Compra inmediata con scarcity |
+**Las 2 plantillas de CTA para ads pagados de F100K:**
+
+**CTA Tipo 1 — Ingreso directo (tráfico caliente / lookalike de compradores)**
+> "Dale click al botón de aquí abajo para ingresar a FÓRMULA 100K con todos esos beneficios por [precio]."
+
+**CTA Tipo 2 — VSL intermedio (tráfico frío / retargeting)**
+> "Dale click al botón de aquí abajo para ver el video que te explica cómo puedes aplicar todos estos sistemas de contenido en tu negocio."
+
+**Cuándo usar cada uno:**
+
+| CTA | Para | Cuando usar |
+|-----|------|-------------|
+| Tipo 1 · Ingreso directo | Tráfico caliente, lookalike de compradores, retargeting de visitantes de checkout | La persona ya conoce F100K o vio un ad anterior |
+| Tipo 2 · VSL intermedio | Tráfico frío, audiencias nuevas, intereses fríos | La persona no conoce F100K — necesita el video de venta antes del click de compra |
+
+**Regla:** Siempre incluyes las 2 versiones para que la campaña pueda testear cuál convierte mejor por segmento de audiencia.
 
 ### PASO 5 — Entregar 3 GUIONES COMPLETOS
 
@@ -155,6 +172,10 @@ Entregas en tabla:
 9. **Español NEUTRO siempre.** Prohibido vos/tenés/copiá/acá. Usa tú/tienes/copia/aquí. (Ver memoria `feedback_espanol_neutro.md`).
 
 10. **El vehículo único de la marca SIEMPRE aparece explícito en el meat.** Si Andrea pide un ad para F100K, el vehículo único es "creación de contenido orientada a venta" (no productividad/gestión — ver memoria `feedback_f100k_angulo_creacion_para_vender.md`).
+
+11. **NUNCA uses "Comenta [PALABRA]" como CTA en un ad pagado.** Ese patrón es exclusivo de contenido orgánico. En ads pagados el CTA siempre empieza con "Dale click al botón de aquí abajo para…" seguido de una de las 2 plantillas (ingreso directo o VSL intermedio). Mezclar los dos formatos quiebra el flujo del ad y confunde al espectador.
+
+12. **El meat NUNCA puede ser menor a 15 segundos totales en un ad de 30s, ni menor a 35 segundos en un ad de 60s.** Si el meat resulta corto, desarrolla más el bloque C (vehículo único con demostración concreta) antes de recortar. Un meat corto = hook que no paga la promesa = CTR alto, conversión baja.
 
 ---
 

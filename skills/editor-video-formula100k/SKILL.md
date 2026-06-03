@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll fullscreen. SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
+description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll fullscreen. SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: genera motion graphics animados (badge deslizante, browser con pasos, typing effect, contador, kinetic type, etc.) con HyperFrames (HTML+GSAP, gratis, local) y los agrega al MANIFEST como overlays o B-roll animado. 8 estilos visuales + 11 técnicas disponibles. Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -12,7 +12,7 @@ El preset visual es **"Crea contenido viral"** — talking-head 9:16 a 30fps con
 - Header persistente (2 líneas) grande, con trazo negro, debajo del cuarto superior
 - **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
 - Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
-- Overlays gráficos a la **altura del pecho** (debajo del rostro, `bottom: 520`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, no tapan la cara)
+- Overlays gráficos en el **tercio inferior** (muy por debajo del rostro, `bottom: 150`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, NUNCA tapan la cara, ni cuando Andrea se acerca a cámara)
 - B-roll fullscreen estilo `monitor-photo` (anclados a keywords)
 - **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
 - **Sin subtítulos** — la cara y los gráficos llevan todo el peso visual
@@ -253,7 +253,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 **Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece en la parte inferior del frame (`bottom: 220`), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente para no superponerse.
 
-**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`). Renderiza a la **altura del pecho** (`bottom: 520`) — la misma zona donde vive la imagen gancho, debajo del rostro de Andrea. Esto vale para todos los tipos (mascot pixel, screenshots, capturas UI tutorial): un callout/step/terminal queda anclado al cuerpo, no al borde inferior del frame. Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) queda visualmente debajo y compite por la atención.
+**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`). Renderiza en el **tercio inferior** (`bottom: 150`) — MUY por debajo del rostro de Andrea, en la zona pecho/manos. Regla dura: los overlays NUNCA tapan la cara, ni siquiera cuando Andrea se acerca a cámara. Esto vale para todos los tipos (mascot pixel, screenshots, capturas UI tutorial). Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
 
 **B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
@@ -270,7 +270,7 @@ t_end   = t_start + duration
 ### Reglas de oro de la composición
 
 1. El **header funciona como gancho** — vive los primeros 8s (default) y luego se quita. Si se necesita persistente, override con `Esconder después: 0` en el MANIFEST.
-2. **Emphasis excluye overlay** — el énfasis (`bottom: 220`) y el overlay (`bottom: 520`) están en bandas distintas, pero si coinciden en un frame compiten por la atención visual; gana el emphasis y el overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
+2. **Emphasis excluye overlay** — el énfasis (`bottom: 220`) y el overlay (`bottom: 150`) viven ambos en el tercio inferior; si coinciden en un frame compiten por la atención visual; gana el emphasis y el overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
 3. **La cara de Andrea queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
 4. **Sin subtítulos quemados.** Si el usuario los quiere los pone en post.
 5. **Sentence case** en cajas blancas — NUNCA all caps.
@@ -353,6 +353,159 @@ $DEST/
 ├── BORRADOR_AUTO.mp4        ← OUTPUT FINAL
 ├── WEB/                     ← recursos web (no se toca)
 └── IA/                      ← recursos generados con IA (no se toca)
+```
+
+---
+
+---
+
+## Motion Graphics Nativos — Remotion (Nueva Opción)
+
+El template de Remotion incluye 4 composiciones standalone listas para usar como overlays, intros o B-roll animado. No requieren HyperFrames ni dependencias adicionales — ya están compiladas dentro del template.
+
+### Las 4 composiciones
+
+| ID | Componente | Props principales | Duración | Mejor para |
+|----|-----------|-------------------|----------|-----------|
+| `motion-badge` | `BadgeSlide` | `badgeNumber`, `title`, `subtitle?`, `accentColor?` | 90f (3s) | Intro de punto numerado, paso de tutorial |
+| `motion-stat` | `StatCounter` | `value`, `label`, `suffix?`, `accentColor?` | 60f (2s) | Métricas, logros, números impactantes |
+| `motion-quote` | `QuoteCard` | `quote`, `author?`, `accentColor?` | 90f (3s) | Testimonios, frases de autoridad |
+| `motion-list` | `ListReveal` | `items[]`, `title?`, `accentColor?` | 30+12×n frames | Beneficios, pasos, listas de resultados |
+
+### Cómo renderizar
+
+```bash
+cd /Users/kissita/.claude/skills/editor-video-formula100k/remotion-template
+
+# Badge numerado
+npx tsx scripts/render.ts \
+  --composition motion-badge \
+  --props '{"badgeNumber": 1, "title": "Este método cambia todo", "subtitle": "F100K"}' \
+  --out "$DEST/IA/badge-overlay.mp4"
+
+# Contador animado
+npx tsx scripts/render.ts \
+  --composition motion-stat \
+  --props '{"value": 50000, "label": "seguidores ganados", "suffix": "+"}' \
+  --out "$DEST/IA/stat-overlay.mp4"
+
+# Cita con wipe
+npx tsx scripts/render.ts \
+  --composition motion-quote \
+  --props '{"quote": "El contenido que vende no es el más bonito, es el más claro.", "author": "Andrea Vega"}' \
+  --out "$DEST/IA/quote-overlay.mp4"
+
+# Lista reveal (duración auto según numero de items)
+npx tsx scripts/render.ts \
+  --composition motion-list \
+  --props '{"title": "Lo que vas a aprender", "items": ["Crear contenido que vende", "Automatizar con IA", "Construir tu comunidad"]}' \
+  --out "$DEST/IA/list-overlay.mp4"
+```
+
+> Para todos los clips motion nativos usar `Ancho: 1080` y `Duración` = duración del clip en el MANIFEST.
+
+### Principios de animación (Emil Kowalski)
+
+Todas las composiciones siguen estas reglas que producen motion UI de alta calidad:
+- Solo se animan `transform` y `opacity` — nunca `width`/`height` directamente
+- Spring values para UI: stiffness 280-320, damping 26-32 (sin bounce exagerado)
+- Máximo 300ms por transición individual de UI
+- Entradas con ease-out feel (spring que decelera suavemente)
+- Sin `ease-in` — se siente abrupto al espectador
+
+### HyperFrames vs Remotion nativo — cuándo usar cada uno
+
+| Aspecto | HyperFrames | Remotion nativo |
+|---------|-------------|-----------------|
+| Setup | Node >= 22, `npx hyperframes` | Ya instalado en el template |
+| Estilos visuales | 8 temas predefinidos (Swiss Pulse, Velvet, etc.) | 4 composiciones optimizadas para reel |
+| Flexibilidad | Alta — cualquier HTML/CSS/GSAP | Media — props definidas por composición |
+| Velocidad de render | Headless browser (Puppeteer) | Render nativo React + Remotion |
+| Mejor para | Diseños custom complejos, mockups, tipografía cinética | Badges, stats, quotes, listas |
+
+### Técnicas de motion disponibles (todas las opciones)
+
+| Técnica | Herramienta | Comando |
+|---------|-------------|---------|
+| Badge numerado deslizante | Remotion nativo | `--composition motion-badge` |
+| Contador animado | Remotion nativo | `--composition motion-stat` |
+| Cita con wipe horizontal | Remotion nativo | `--composition motion-quote` |
+| Lista reveal con stagger | Remotion nativo | `--composition motion-list` |
+| Typing effect | HyperFrames | `npx hyperframes render` |
+| Browser mockup con pasos | HyperFrames | `npx hyperframes render` |
+| CSS 3D card flip | HyperFrames | `npx hyperframes render` |
+| Partículas procedurales | HyperFrames | `npx hyperframes render` |
+| Audio-reactive | HyperFrames | `npx hyperframes render` |
+
+---
+
+## Motion Graphics Animados — HyperFrames (Opción Extra)
+
+En lugar de imágenes estáticas como overlays, se puede generar un clip `.mp4` animado con HyperFrames. Estos clips son 1080×1920 (9:16) y se usan exactamente igual que cualquier otro overlay o B-roll en el MANIFEST.
+
+### Cuándo usar HyperFrames vs imagen estática
+
+| Imagen estática (default) | Clip HyperFrames animado |
+|--------------------------|--------------------------|
+| El recurso ya está generado | Quieres entrada animada |
+| Cue simple: aparece y desaparece | Badge/título que desliza desde la izquierda |
+| Pixel avatar, screenshot de app | Browser mockup con pasos en cascada |
+| | Contador que sube de 0 al valor final |
+| | Texto que se escribe solo (typing effect) |
+| | Cualquiera de los 8 estilos visuales |
+
+### Prerequisito
+
+```bash
+node --version  # necesita Node.js >= 22
+# No instalar nada más — se usa via npx hyperframes
+```
+
+### Flujo para generar un clip animado
+
+1. Editar `~/Documents/f100k-overlays/index.html` con el contenido del overlay (o crear nuevo proyecto)
+2. Previsualizar: `npx hyperframes preview`
+3. Renderizar: `npx hyperframes render --output $DEST/IA/nombre-overlay.mp4`
+4. Agregar al MANIFEST:
+
+```markdown
+## Overlays
+
+| Keyword | Archivo | Ancho | Duración |
+|---------|---------|-------|----------|
+| claude  | IA/badge-overlay.mp4 | 1080 | 8.0 |
+```
+
+> Para clips HyperFrames usar `Ancho: 1080` y `Duración` = duración exacta del clip.
+
+### 8 estilos visuales disponibles
+
+| Estilo | Mood | Mejor para |
+|--------|------|-----------|
+| Swiss Pulse | Clínico, preciso | SaaS, datos, métricas |
+| Velvet Standard | Premium, atemporal | Lujo, empresarial |
+| Deconstructed | Industrial, raw | Tech, glitch, punk |
+| Maximalist Type | Ruidoso, cinético | Lanzamientos, hype |
+| Data Drift | Futurista, inmersivo | IA, ML, tech |
+| Soft Signal | Íntimo, cálido | Wellness, historias personales |
+| Folk Frequency | Cultural, vívido | Comunidad, consumidor |
+| Shadow Cut | Oscuro, cinemático | Revelaciones dramáticas |
+
+### Prompts rápidos
+
+**Badge + título (el estilo del reel de referencia):**
+```
+Usando HyperFrames, crea overlay 1080×1920 con badge naranja (#F59E0B)
+"#1 Skill de Claude Code", título blanco "Esta herramienta cambia todo",
+badge entra desde la izquierda expo.out, título sube con fade. Duración 8s.
+Fondo #0d0d0d. Guarda en ~/Documents/f100k-overlays/ y renderiza el .mp4.
+```
+
+**Browser con 3 pasos:**
+```
+Usando HyperFrames, crea overlay 1080×1920 con browser mockup oscuro.
+3 pasos numerados con badges amarillos que aparecen cada 0.8s.
+URL: "formula100k.app/skills". Duración 10s. Fondo #0d0d0d.
 ```
 
 ---

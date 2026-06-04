@@ -83,6 +83,7 @@ Mostrar opciones con descripción de cada una:
 - **Alerta de Tendencias Emergentes** — corre junto al radar, te avisa si algo está despegando
 - **Digest de Comunidad** — cada viernes, las 5 preguntas más repetidas de tus seguidores convertidas en ideas
 - **Resumen de Métricas Semanales** — cada domingo, qué funcionó y qué replicar
+- **Análisis de Patrones IG** — cada lunes, transcribe tus videos de la semana, detecta patrones virales vs negativos, y actualiza tu memoria para que los guiones mejoren solos
 
 Guardar como: `modules` objeto con booleans
 
@@ -114,7 +115,8 @@ Guardar el siguiente JSON en `~/.f100k-radar/config.json` usando la herramienta 
     "weekly_calendar": false,
     "trends_alert": false,
     "community_digest": false,
-    "metrics_report": false
+    "metrics_report": false,
+    "patron_ig_analytics": false
   },
   "created": "[fecha ISO hoy]",
   "version": "1.0"
@@ -144,6 +146,9 @@ Invocar `/schedule` con:
 
 **Métricas Semanales** (si `modules.metrics_report == true`):
 > "Crear una rutina llamada 'Métricas Semanales F100K' que ejecute `/metricas-semanales-f100k` cada domingo a las [daily_time] [timezone]"
+
+**Análisis de Patrones IG** (si `modules.patron_ig_analytics == true`):
+> "Crear una rutina llamada 'Análisis Patrones IG F100K' que ejecute `/patron-ig-f100k` cada lunes a las [daily_time + 5 minutos] [timezone]"
 
 ---
 

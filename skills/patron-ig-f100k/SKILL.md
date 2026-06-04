@@ -221,7 +221,7 @@ Mostrar en terminal:
 
 ## NOTAS TÉCNICAS
 
-- **Rutina remota:** configurada en Autopilot F100K — corre cada lunes a las 08:05 AM Lima (13:05 UTC)
+- **Rutina remota:** `trig_01SgUSXxiGAm6jVNvm8knuQ1` — corre cada lunes a las 08:05 AM Lima (13:05 UTC) · https://claude.ai/code/routines/trig_01SgUSXxiGAm6jVNvm8knuQ1
 - **MCPs requeridos:** Apify (scraping IG) + Bash (Supadata via curl)
 - **Supadata key:** `sd_8ff1f1f233fc19cb14b5b86277ae2d6b`
 - **Memoria destino:** `/Users/kissita/.claude/projects/-Users-kissita/memory/patterns_ig_andrea.md`

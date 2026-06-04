@@ -109,39 +109,78 @@ Guardar en `winner`:
 
 ## FASE 4 — GENERAR GUION DE REACCIÓN
 
-### Paso 4 — Escribir el guion con la voz del usuario
+### Paso 4 — Escribir el guion con el sistema F100K
 
-Escribir un guion de reacción de 45-60 segundos (máximo 120 palabras) usando la siguiente estructura:
+**4A — Identificar el Pilar de Valor** (elegir UNO):
+
+| # | Pilar | Qué genera |
+|---|-------|------------|
+| 1 | Revelación (Insight) | Sensación de acceder a un secreto |
+| 3 | Validación Emocional | COMPARTIDOS — "eso me pasa a mí" |
+| 5 | Actualidad (Curiosidad) | Posicionamiento como fuente al día |
+| 7 | Disrupción (Anti-consejo) | DEBATE y autoridad superior |
+
+Para reaccionar a un viral, los pilares más útiles son: 5 (Actualidad), 1 (Revelación), 7 (Disrupción). Elegir el que mejor encaje con el ángulo de reacción.
+
+**4B — Elegir la Estructura según el pilar:**
+
+- **Estructura 15 — Vacío de Información** (Pilar 5): gancho que deja algo sin resolver → contexto → revelación → consecuencia para el creador
+- **Estructura 16 — El Roba Audiencia** (Pilar 1): usar la figura/viral como gancho → agregar perspectiva propia única → conectar con el nicho
+- **Estructura 19 — Desafío Contracorriente** (Pilar 7): afirmación contraintuitiva → evidencia del viral → reencuadre → reto implícito
+
+**4C — Sistema de Ganchos Triple** (los 3 alineados al mismo mensaje):
 
 ```
-[GANCHO VISUAL — 0-3s]
-Referencia directa al viral. Opciones:
-- "Acabo de ver esto y necesitaba compartirlo..."
-- "Esto que está viral ahora mismo en [red] me hizo pensar algo importante..."
-- "[Dato más impactante del viral] — y esto es lo que nadie está diciendo al respecto."
+GANCHO VERBAL (0-3s, máx 15 palabras):
+Referencia directa al viral con gatillo emocional activo.
+Opciones según pilar:
+- Curiosidad: "[Dato impactante del viral] — y esto cambia todo para los creadores."
+- Identificación: "¿Ya viste lo que está pasando con [tema]? A mí me pasó exactamente esto."
+- Sorpresa: "Esto que está viral ahora mismo confirma lo que llevo meses diciendo."
 
+GANCHO VISUAL (qué se MUESTRA en cámara):
+[Expresión de sorpresa genuina / señalar pantalla con el viral / mostrar dato en papel o pizarra]
+
+GANCHO TEXTUAL (qué se LEE en pantalla):
+[Número impactante del viral / Pregunta provocadora / Texto de alerta]
+
+→ Los 3 deben comunicar el MISMO mensaje. Si no están alineados, reescribir.
+```
+
+**4D — Cuerpo del guion** (8-45s):
+
+```
 [CONTEXTO — 3-8s]
 1-2 líneas: qué es el viral, de dónde viene, por qué está trending ahora.
 
 [PERSPECTIVA ÚNICA — 8-45s]
-3 puntos de vista propios. Estructura:
-Punto 1: "Lo que esto confirma sobre [tema del nicho] es..."
-Punto 2: "Lo que la mayoría está pasando por alto aquí es..."
-Punto 3: "Lo que yo haría diferente / lo que aprendí de esto es..."
+3 puntos siguiendo la estructura elegida en 4B.
 → Usar voz del usuario: [voice_profile]
 → Conectar con el nicho: [niche]
-→ Incluir marcas de acción donde aplique: [PAUSA], [SEÑALAR CÁMARA], [ZOOM IN], [MOSTRAR PANTALLA]
-
-[CTA — 45-55s]
-Pregunta de engagement que invite a comentar.
-Patrón CTA ganador F100K:
-"¿Tú qué opinas de esto? Comenta [PALABRA DE 1-2 SÍLABAS] y te cuento [promesa de valor extra]."
+→ Incluir marcas: [PAUSA], [SEÑALAR CÁMARA], [ZOOM IN], [MOSTRAR PANTALLA]
 ```
 
+**4E — CTA Optimizado** (45-55s) — Patrón F100K validado:
+
+```
+1. PRIMING TRIPLE: mencionar la palabra clave 3 veces ANTES de pedirla.
+   "Si tú [contexto con la palabra], si [contexto], si [contexto]..."
+
+2. RECURSO INVISIBLE: prometer algo que solo consiguen si comentan.
+   "Tengo [recurso/info] que no está publicado en ningún lado."
+
+3. VACÍO DE INFORMACIÓN: dejar claro que falta algo importante.
+   "Y lo más importante todavía no lo dije."
+
+4. CIERRE: "Comenta [PALABRA DE 1-2 SÍLABAS] y te cuento cómo puedes acceder a [beneficio específico]."
+```
+
+La PALABRA del CTA: 1-2 sílabas, relacionada al tema del viral.
+
 Reglas del guion:
-- Español neutro (no argentino, no regional)
+- Español neutro (no argentino, no regional) — tú/tienes, NUNCA vos/tenés
 - Sonar como lo escribió el usuario (respetar `voice_profile`)
-- Máximo 120 palabras
+- Máximo 120 palabras en el cuerpo
 - NO mencionar a ningún creador por nombre sin contexto
 - SÍ mencionar la fuente/plataforma (ej: "este video de TikTok", "este artículo de The Verge")
 

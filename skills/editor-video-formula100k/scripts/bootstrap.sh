@@ -47,11 +47,24 @@ echo "[1/2] Checking dependencies..."
 if ! command -v brew >/dev/null 2>&1; then
   echo -e "  ${RED}✗${NC} Homebrew"
   echo
-  echo -e "${YELLOW}Homebrew NO instalado.${NC} Es precondición para todo lo demás."
-  echo "  Instalación oficial:"
-  echo "    /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+  echo -e "${RED}════════════════════════════════════════════════════════════════${NC}"
+  echo -e "${RED}  HOMEBREW NO ESTÁ INSTALADO${NC}"
+  echo -e "${RED}════════════════════════════════════════════════════════════════${NC}"
   echo
-  echo "Vuelve a correr este script después de instalarlo."
+  echo -e "${YELLOW}Homebrew es la única precondición de esta skill.${NC}"
+  echo "Sin él no se puede instalar node, ffmpeg, yt-dlp ni uv."
+  echo
+  echo -e "${YELLOW}Pega esto en tu Terminal para instalarlo (toma ~3-5 min):${NC}"
+  echo
+  echo "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+  echo
+  echo "Cuando termine, Homebrew te dirá que corras dos comandos más"
+  echo "(empiezan con 'echo' y 'eval') para agregar brew a tu PATH — hazlo."
+  echo
+  echo -e "Después vuelve a correr ${YELLOW}/render <carpeta>${NC} o ${YELLOW}/edita <carpeta>${NC}"
+  echo "y la skill se auto-configura sola."
+  echo
+  echo -e "${RED}════════════════════════════════════════════════════════════════${NC}"
   exit 2
 fi
 echo -e "  ${GREEN}✓${NC} Homebrew"

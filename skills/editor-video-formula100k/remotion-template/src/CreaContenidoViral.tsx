@@ -81,6 +81,7 @@ type ResolvedOverlay = {
   width: number;
   start: number;
   end: number;
+  position?: 'top' | 'bottom';
 };
 
 type ResolvedBroll = {
@@ -119,6 +120,7 @@ function resolveOverlays(
         width: c.width ?? 420,
         start: t,
         end: t + (c.duration ?? DEFAULT_OVERLAY_DURATION),
+        position: c.position ?? 'bottom',
       };
     })
     .filter((x): x is ResolvedOverlay => x !== null);
@@ -128,7 +130,7 @@ function resolveBroll(
   cues: BrollCue[],
   transcript: TranscriptWord[]
 ): ResolvedBroll[] {
-  return cues
+  const resolved = cues
     .map((c): ResolvedBroll | null => {
       const t = findKeywordTime(transcript, c.keyword);
       if (t === null) return null;
@@ -139,7 +141,16 @@ function resolveBroll(
         style: c.style ?? 'monitor-photo',
       };
     })
-    .filter((x): x is ResolvedBroll => x !== null);
+    .filter((x): x is ResolvedBroll => x !== null)
+    .sort((a, b) => a.start - b.start);
+
+  // Clamp overlapping entries: each broll ends when the next one starts.
+  for (let i = 0; i < resolved.length - 1; i++) {
+    if (resolved[i].end > resolved[i + 1].start) {
+      resolved[i] = {...resolved[i], end: resolved[i + 1].start};
+    }
+  }
+  return resolved;
 }
 
 // Si un overlay choca con uno o más emphasis y queda visible menos de
@@ -284,7 +295,7 @@ const Header: React.FC<{line1: string; line2: string; hideAfter?: number}> = ({l
         margin: 0,
         fontFamily: INTER,
         fontWeight: 800,
-        fontSize: 92,
+        fontSize: 84,
         lineHeight: 1.06,
         color: '#FFFFFF',
         WebkitTextStroke: '6px #000000',
@@ -308,6 +319,7 @@ const BrollLayer: React.FC<{cue: ResolvedBroll; durationInFrames: number}> = ({
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const fadeIn = interpolate(frame, [0, 6], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -322,44 +334,73 @@ const BrollLayer: React.FC<{cue: ResolvedBroll; durationInFrames: number}> = ({
   const monitor = cue.style === 'monitor-photo';
   const isVideo = /\.(mp4|mov|webm|m4v)$/i.test(cue.src);
 
-  return (
-    <AbsoluteFill style={{opacity}}>
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          transform: monitor ? 'rotate(-1.2deg) scale(1.04)' : 'none',
-          overflow: 'hidden',
-        }}
-      >
-        {isVideo ? (
+  // Videos → fullscreen. Imágenes → en la parte inferior como overlay
+  // (las imágenes horizontales de B-roll quedan en la zona pecho/manos, no tapan la cara).
+  if (isVideo) {
+    return (
+      <AbsoluteFill style={{opacity}}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            transform: monitor ? 'rotate(-1.2deg) scale(1.04)' : 'none',
+            overflow: 'hidden',
+          }}
+        >
           <OffthreadVideo
             src={cue.src}
             muted
             style={{width: '100%', height: '100%', objectFit: 'cover'}}
           />
-        ) : (
-          <Img
-            src={cue.src}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-        )}
-        {monitor ? (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background:
-                'radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08), rgba(255,255,255,0) 60%)',
-              pointerEvents: 'none',
-            }}
-          />
-        ) : null}
+          {monitor ? (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08), rgba(255,255,255,0) 60%)',
+                pointerEvents: 'none',
+              }}
+            />
+          ) : null}
+        </div>
+      </AbsoluteFill>
+    );
+  }
+
+  // Imagen de B-roll → parte inferior, igual que OverlayLayer
+  const enterScale = spring({
+    frame,
+    fps,
+    config: {damping: 12, mass: 0.6},
+    from: 0.6,
+    to: 1.0,
+    durationInFrames: 10,
+  });
+  const floatY = Math.sin(frame / 10) * 4;
+  const imgWidth = cue.width ?? 900;
+
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 150,
+          left: '50%',
+          transform: `translate(-50%, 0) translateY(${floatY}px) scale(${enterScale})`,
+          opacity,
+        }}
+      >
+        <Img
+          src={cue.src}
+          style={{
+            width: imgWidth,
+            height: 'auto',
+            display: 'block',
+            borderRadius: 16,
+            filter: 'drop-shadow(0 14px 26px rgba(0,0,0,0.45))',
+          }}
+        />
       </div>
     </AbsoluteFill>
   );
@@ -400,6 +441,7 @@ const OverlayLayer: React.FC<{
   );
   const baseOpacity = Math.min(fadeIn, fadeOut);
   const opacity = emphasisActive ? 0 : baseOpacity;
+  const isTop = cue.position === 'top';
   const floatY = Math.sin(frame / 10) * 4;
 
   return (
@@ -407,21 +449,33 @@ const OverlayLayer: React.FC<{
       <div
         style={{
           position: 'absolute',
-          bottom: 180,
+          ...(isTop ? {top: 120} : {bottom: 150}),
           left: '50%',
-          transform: `translate(-50%, 0) translateY(${floatY}px) scale(${enterScale})`,
+          transform: `translate(-50%, 0) translateY(${isTop ? -floatY : floatY}px) scale(${enterScale})`,
           opacity,
         }}
       >
-        <Img
-          src={cue.src}
-          style={{
-            width: cue.width,
-            height: 'auto',
-            display: 'block',
-            filter: 'drop-shadow(0 14px 26px rgba(0,0,0,0.35))',
-          }}
-        />
+        {/\.(mp4|mov|webm|m4v)$/i.test(cue.src) ? (
+          <OffthreadVideo
+            src={cue.src}
+            style={{
+              width: cue.width,
+              height: 'auto',
+              display: 'block',
+              filter: 'drop-shadow(0 14px 26px rgba(0,0,0,0.35))',
+            }}
+          />
+        ) : (
+          <Img
+            src={cue.src}
+            style={{
+              width: cue.width,
+              height: 'auto',
+              display: 'block',
+              filter: 'drop-shadow(0 14px 26px rgba(0,0,0,0.35))',
+            }}
+          />
+        )}
       </div>
     </AbsoluteFill>
   );
@@ -574,7 +628,6 @@ export const CreaContenidoViral: React.FC<CreaContenidoViralProps> = ({
             layout="none"
           >
             <BrollLayer cue={cue} durationInFrames={dur} />
-            <Header line1={header.line1} line2={header.line2} hideAfter={header.hideAfter} />
           </Sequence>
         );
       })}

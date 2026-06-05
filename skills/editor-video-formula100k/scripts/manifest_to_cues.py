@@ -170,12 +170,16 @@ def parse_overlays(text: str) -> list[dict]:
         src = _strip_code(_cell(cells, 1))
         if not keyword or not src:
             continue
-        cues.append({
+        cue: dict = {
             'keyword': keyword,
             'src': src,
             'width': _to_int(_cell(cells, 2), DEFAULT_OVERLAY_WIDTH),
             'duration': _to_float(_cell(cells, 3), DEFAULT_OVERLAY_DURATION),
-        })
+        }
+        pos_raw = _cell(cells, 4).lower().strip()
+        if pos_raw in {'top', 'bottom'}:
+            cue['position'] = pos_raw
+        cues.append(cue)
     return cues
 
 

@@ -26,6 +26,7 @@ export type OverlayCue = {
   src: string;
   width?: number;
   duration?: number;
+  position?: 'top' | 'bottom'; // default 'bottom'
 };
 
 export type BrollStyle = 'monitor-photo' | 'clean';

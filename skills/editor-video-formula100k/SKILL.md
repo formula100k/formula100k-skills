@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll fullscreen. SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: genera motion graphics animados (badge deslizante, browser con pasos, typing effect, contador, kinetic type, etc.) con HyperFrames (HTML+GSAP, gratis, local) y los agrega al MANIFEST como overlays o B-roll animado. 8 estilos visuales + 11 técnicas disponibles. Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
+description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll videos fullscreen, B-roll imágenes en la parte inferior (igual que overlays, no tapan la cara). SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: genera motion graphics animados (badge deslizante, browser con pasos, typing effect, contador, kinetic type, etc.) con HyperFrames (HTML+GSAP, gratis, local) y los agrega al MANIFEST como overlays o B-roll animado. 8 estilos visuales + 11 técnicas disponibles. Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -13,7 +13,7 @@ El preset visual es **"Crea contenido viral"** — talking-head 9:16 a 30fps con
 - **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
 - Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
 - Overlays gráficos en el **tercio inferior** (muy por debajo del rostro, `bottom: 150`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, NUNCA tapan la cara, ni cuando Andrea se acerca a cámara)
-- B-roll fullscreen estilo `monitor-photo` (anclados a keywords)
+- B-roll **videos** fullscreen estilo `monitor-photo` / **imágenes** en el tercio inferior (`bottom: 150`), igual que overlays — nunca tapan la cara
 - **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
 - **Sin subtítulos** — la cara y los gráficos llevan todo el peso visual
 
@@ -255,7 +255,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 **Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`). Renderiza en el **tercio inferior** (`bottom: 150`) — MUY por debajo del rostro de Andrea, en la zona pecho/manos. Regla dura: los overlays NUNCA tapan la cara, ni siquiera cuando Andrea se acerca a cámara. Esto vale para todos los tipos (mascot pixel, screenshots, capturas UI tutorial). Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
 
-**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. Fullscreen sobre el video base con `object-fit: cover`. Estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8% para simular reflejo de pantalla; `clean` no agrega nada. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
+**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. **Videos (.mp4/.mov/.webm)** → fullscreen con `object-fit: cover`; el estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8%. **Imágenes (.png/.jpg/.gif)** → se renderizan en la parte inferior (`bottom: 150`), centradas, con width configurable (default 900px), igual que los overlays — nunca tapan la cara. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
 ### Sincronización por keyword
 
@@ -324,6 +324,32 @@ npx tsx scripts/render.ts \
   --cues "$DEST/cues.json" \
   --out "$DEST/BORRADOR_AUTO.mp4"
 ```
+
+---
+
+## GOTCHAS conocidos de `CreaContenidoViral.tsx` — NO repetir
+
+> **Historial:** bugs encontrados en producción (2026-06-05). Ambos ya corregidos en el TSX. Si en el futuro se refactoriza el template, respetar estas reglas.
+
+### ❌ NUNCA poner `<Header>` dentro de una `<Sequence>` de B-roll
+
+**Bug:** si agregas `<Header .../>` dentro de la Sequence de cada b-roll (para asegurar que el header sea visible encima de las imágenes), el header **reaparece en cada b-roll** aunque ya haya pasado el `hideAfter`. Causa: dentro de `<Sequence>`, `useCurrentFrame()` devuelve el frame **relativo** al inicio de la Sequence (empieza desde 0), no el frame global. Entonces `frame/fps = 0 < hideAfter=8` → siempre verdadero → header visible en cada imagen.
+
+**Fix correcto:** el `<Header>` existe UNA SOLA VEZ fuera de todas las Sequences (CAPA 1 en el JSX raíz). Ahí `useCurrentFrame()` sí devuelve el frame global y el `hideAfter` funciona correctamente.
+
+### ❌ NUNCA dejar que dos entradas de B-roll se solapen en tiempo
+
+**Bug:** si `broll[i].end > broll[i+1].start`, ambos `BrollLayer` se renderizan simultáneamente con sus imágenes en `bottom: 150` → se superponen visualmente.
+
+**Fix correcto:** `resolveBroll` ya incluye un paso de sort + clamp al final:
+```typescript
+for (let i = 0; i < resolved.length - 1; i++) {
+  if (resolved[i].end > resolved[i + 1].start) {
+    resolved[i] = {...resolved[i], end: resolved[i + 1].start};
+  }
+}
+```
+Al editar el TSX, asegurarse de que este clamp persista.
 
 ---
 

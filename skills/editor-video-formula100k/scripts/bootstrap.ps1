@@ -48,11 +48,25 @@ Write-Host "[1/2] Verificando dependencias..." -ForegroundColor Cyan
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     Say-Fail "winget (Windows Package Manager)"
     Write-Host ""
-    Write-Host "winget NO está disponible. Es precondición para instalar lo demás." -ForegroundColor Yellow
-    Write-Host "  En Windows 10/11 moderno viene preinstalado. Si te falta:"
-    Write-Host "    1) Abre Microsoft Store"
-    Write-Host "    2) Busca 'App Installer' (de Microsoft) y actualízalo"
-    Write-Host "    3) Reinicia PowerShell y vuelve a correr este script"
+    Write-Host "================================================================" -ForegroundColor Red
+    Write-Host "  WINGET NO ESTA DISPONIBLE" -ForegroundColor Red
+    Write-Host "================================================================" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "winget es la unica precondicion de esta skill en Windows." -ForegroundColor Yellow
+    Write-Host "Sin el no se puede instalar Node, Python, ffmpeg ni yt-dlp."
+    Write-Host ""
+    Write-Host "winget viene preinstalado en Windows 10 (build 1809+) y 11." -ForegroundColor Yellow
+    Write-Host "Si te falta:"
+    Write-Host ""
+    Write-Host "  1) Abre Microsoft Store"
+    Write-Host "  2) Busca 'App Installer' (de Microsoft) e instala/actualiza"
+    Write-Host "  3) Cierra esta ventana de PowerShell y abre una nueva"
+    Write-Host "  4) Vuelve a correr /render <carpeta> o /edita <carpeta>"
+    Write-Host ""
+    Write-Host "Alternativa manual (si Microsoft Store no funciona):" -ForegroundColor Yellow
+    Write-Host "  https://github.com/microsoft/winget-cli/releases/latest"
+    Write-Host ""
+    Write-Host "================================================================" -ForegroundColor Red
     exit 2
 }
 Say-OK "winget"

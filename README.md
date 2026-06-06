@@ -8,7 +8,7 @@ Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, 
 
 ## ¿Qué son las skills de FÓRMULA 100K?
 
-Son **44 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
+Son **46 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
 
 Cubren: guionización, calendarios de contenido e historias, audios de venta, VSL, construcción de ofertas, comunidades Skool, edición de video, miniaturas, carruseles, infografías reel, lead magnets y más.
 
@@ -44,7 +44,7 @@ Las skills se potencian con **MCPs** (conexiones a herramientas como generadores
 
 **Resumen del mínimo viable (gratis):** Playwright + Nanobanana + Tavily + Supadata. Con eso tienes el ~80% de las skills funcionando sin pagar nada.
 
-¡Listo! Reinicia Claude Code y ya tienes acceso a las 38 skills.
+¡Listo! Reinicia Claude Code y ya tienes acceso a las 46 skills.
 
 ---
 
@@ -129,6 +129,8 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `transcripcion-youtube-formula100k` — Transcribir videos de YouTube
 - `publicar-ig` — Publicar directo a Instagram desde Claude Code
 - `capturas-tutorial-formula100k` — Overlays UI tipo tutorial (terminal, callout, step, claude-input) renderizados HTML+CSS+Puppeteer
+- `motion-reels-f100k` — Motion graphics 9:16 para reels: pill labels flotantes, comparison cards BEFORE/NOW, UI cards, chapter cards — transcribe el video y sincroniza cada overlay al timestamp exacto
+- `motion-youtube-f100k` — Motion graphics 16:9 para YouTube: mismos 4 tipos de overlay optimizados para formato horizontal — transcribe con Supadata (URL) o Whisper (local)
 
 ---
 

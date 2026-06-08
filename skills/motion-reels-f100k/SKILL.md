@@ -1,12 +1,14 @@
 ---
 name: motion-reels-f100k
-description: "Agrega motion graphics estilo Softgirlnocode a un reel 9:16 (talking-head). Pipeline completo: recibe video local (.mov/.mp4) o URL de YouTube, transcribe word-level (Supadata si es YouTube, Whisper local si es archivo), muestra el transcript, pide creative direction al usuario (qué mostrar y cuándo), genera HTML/CSS/GSAP con HyperFrames para los 4 templates del estilo (pill labels flotantes, comparison card BEFORE/NOW, floating UI card, chapter/summary card), renderiza con npx hyperframes render → MP4 con alpha, y compone sobre el video original con ffmpeg. Output: video_final_motion.mp4 en la misma carpeta del video fuente. Activar cuando el usuario diga: 'agrega motion graphics a este reel', 'motion graphics 9:16', 'overlays animados reel', 'estilo softgirlnocode', 'agrégale animaciones al video', 'quiero motion graphics para este talking-head'."
+description: "Agrega motion graphics estilo Softgirlnocode a un reel 9:16 (talking-head). Pipeline completo: analiza un frame del video para detectar dónde está el sujeto y calcular zonas seguras de overlay, transcribe word-level (Supadata si es YouTube, Whisper local si es archivo), auto-clasifica el contenido del guión para proponer el tipo de overlay correcto (antes/ahora → comparison card, listas → chapter card, herramientas → UI card, identidad → pill labels), genera HTML/CSS/GSAP con HyperFrames posicionado en las zonas libres del frame con animaciones fluidas, renderiza con npx hyperframes render → MP4 con alpha, y compone sobre el video original con ffmpeg. Output: video_final_motion.mp4 en la misma carpeta del video fuente. Activar cuando el usuario diga: 'agrega motion graphics a este reel', 'motion graphics 9:16', 'overlays animados reel', 'estilo softgirlnocode', 'agrégale animaciones al video', 'quiero motion graphics para este talking-head'."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
 # Motion Reels F100K — Overlays Animados Estilo Softgirlnocode
 
 Pipeline completo para agregar motion graphics animados sobre un reel 9:16 de talking-head. La filosofía de Softgirlnocode: el texto que dices en cámara SE MATERIALIZA en pantalla como overlays flotantes, cards comparativas y resúmenes visuales — el video se vuelve su propio teleprompter visual.
+
+El pipeline detecta automáticamente dónde está el sujeto en el frame y coloca los overlays en las zonas libres para que nunca tapen la cara.
 
 ## Cuándo activar
 
@@ -18,59 +20,109 @@ Cuando el usuario:
 
 ## NO activar para
 
-- Videos horizontales 16:9 → usar `editor-video-formula100k` con HyperFrames
+- Videos horizontales 16:9 → usar `motion-youtube-f100k`
 - Carruseles → usar `carrusel-render-formula100k`
 - Stories fullscreen → usar `historias-a-imagenes-nanobanana`
 - Motion graphics sueltos sin video base → usar `graficos-de-video-formula100k`
 
-## Requisitos previos
+## Onboarding — Primera vez
 
 ```bash
-# Node >= 22
-node --version
-
-# HyperFrames CLI
-npx hyperframes --version
-
-# ffmpeg (macOS con Homebrew)
-brew install ffmpeg
-
-# Python + mlx-whisper (solo para archivos locales, Apple Silicon)
-brew install uv
-# uso: uvx --from mlx-whisper mlx_whisper ...
+node --version  # debe mostrar v22+
+# Si es menor: brew install node@22 && brew link node@22 --force
+npm install -g hyperframes
+hyperframes --version   # debe mostrar 0.6.x
+hyperframes doctor      # Chrome y FFmpeg deben aparecer con ✓
+# Si ffmpeg falta: brew install ffmpeg
 ```
 
 ---
 
-## Pipeline completo (7 pasos)
+## Pipeline completo (8 pasos)
 
 ### Paso 1 — Recibir el video fuente
 
-Preguntar al usuario si no lo especificó:
+Preguntar si no se especificó:
 
 ```
 AskUserQuestion:
   "¿Cuál es el video fuente?"
   Opciones:
   - Ruta local: /Users/.../mi_reel.mp4
-  - URL de YouTube: https://youtu.be/...
-  - URL de Instagram Reel: https://www.instagram.com/reel/...
+  - URL de YouTube/Instagram: https://...
 ```
 
-Detectar el tipo:
-- Si empieza con `http` → fuente remota (Supadata o yt-dlp para descarga)
-- Si es ruta local → archivo local (Whisper)
+Detectar tipo (http → remoto, ruta → local). Verificar:
 
 ```bash
-# Verificar que el archivo existe y es video
 file "$VIDEO_PATH"
 ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$VIDEO_PATH"
 ```
 
-Guardar:
-- `VIDEO_PATH` = ruta absoluta al archivo
-- `VIDEO_DIR` = carpeta del video (output irá aquí)
-- `VIDEO_NAME` = nombre sin extensión
+Guardar `VIDEO_PATH`, `VIDEO_DIR`, `VIDEO_NAME`.
+
+---
+
+### Paso 1.5 — Analizar posición del sujeto en el frame
+
+**Este paso determina las zonas seguras para los overlays y es obligatorio antes de generar cualquier HTML.**
+
+Extraer un frame representativo al 50% de duración:
+
+```bash
+DURATION=$(ffprobe -v error -show_entries format=duration \
+  -of default=nokey=1:noprint_wrappers=1 "$VIDEO_PATH")
+MIDPOINT=$(python3 -c "print(round($DURATION * 0.5, 2))")
+ffmpeg -ss $MIDPOINT -i "$VIDEO_PATH" -vframes 1 -q:v 2 /tmp/frame_sujeto.jpg 2>/dev/null
+echo "Frame extraído: /tmp/frame_sujeto.jpg"
+```
+
+Usar la herramienta `Read` en `/tmp/frame_sujeto.jpg` para ver la imagen y determinar visualmente:
+
+| Variable | Pregunta | Valores |
+|----------|----------|---------|
+| `SUBJECT_X` | ¿En qué tercio horizontal está el sujeto? | `left` / `center` / `right` |
+| `SUBJECT_Y` | ¿Qué zona vertical ocupa el sujeto? | `upper` (>60% del frame) / `full` (toda la altura) / `lower` (<40%) |
+
+**Mapa de zonas seguras para 1080×1920 según posición del sujeto:**
+
+```
+┌────────────────────────────────┐  y=0
+│  ████████ TOP ZONE ████████   │  y=0–180px    ← SIEMPRE segura (encima de la cabeza)
+├────────────────────────────────┤
+│  LEFT │   CARA / TORSO │ RIGHT│  y=180–1450px ← zona del cuerpo
+│  zone │   (no tapar)   │ zone │
+│ 0–200 │                │ 880+ │
+├────────────────────────────────┤
+│  ████████ BOTTOM ZONE ██████  │  y=1500–1760px ← segura (debajo del pecho)
+└────────────────────────────────┘  y=1920
+```
+
+**Valores CSS por zona (definir las 3 variables antes del Paso 5):**
+
+```
+SUBJECT_X=center, SUBJECT_Y=full (talking-head clásico):
+  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
+  SAFE_CARD_CSS  = "bottom: 160px; left: 56px; right: 56px;"
+  SAFE_FLOAT_CSS = "bottom: 160px; left: 56px; right: 56px;"
+
+SUBJECT_X=right, SUBJECT_Y=full (sujeto a la derecha):
+  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
+  SAFE_CARD_CSS  = "top: 50%; left: 40px; width: 460px; transform: translateY(-50%);"
+  SAFE_FLOAT_CSS = "top: 50%; left: 40px; width: 460px; transform: translateY(-50%);"
+
+SUBJECT_X=left, SUBJECT_Y=full (sujeto a la izquierda):
+  SAFE_PILL_CSS  = "top: 80px; right: 56px; align-items: flex-end;"
+  SAFE_CARD_CSS  = "top: 50%; right: 40px; width: 460px; transform: translateY(-50%);"
+  SAFE_FLOAT_CSS = "top: 50%; right: 40px; width: 460px; transform: translateY(-50%);"
+
+SUBJECT_Y=lower (sujeto en mitad inferior — inusual):
+  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
+  SAFE_CARD_CSS  = "top: 120px; left: 56px; right: 56px;"
+  SAFE_FLOAT_CSS = "top: 260px; left: 56px; right: 56px;"
+```
+
+Guardar como variables de texto para usarlas en el HTML del Paso 5.
 
 ---
 
@@ -79,13 +131,11 @@ Guardar:
 #### Fuente remota (YouTube / Instagram / TikTok) → Supadata API
 
 ```bash
-# Supadata devuelve timestamps word-level directamente
 curl -s "https://api.supadata.ai/v1/transcript?url=ENCODED_URL&lang=es" \
   -H "x-api-key: sd_8ff1f1f233fc19cb14b5b86277ae2d6b" \
   | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
-# Normalizar a formato interno [{text, start, end}, ...]
 words = []
 for seg in data.get('content', []):
     words.append({'text': seg['text'], 'start': seg['offset']/1000, 'end': (seg['offset']+seg['duration'])/1000})
@@ -93,19 +143,11 @@ print(json.dumps(words, ensure_ascii=False, indent=2))
 " > /tmp/motion_transcript.json
 ```
 
-Si Supadata no devuelve word-level (Instagram sin timestamps), descargar con yt-dlp y pasar a Whisper:
-
-```bash
-yt-dlp -x --audio-format mp3 -o /tmp/motion_audio "$URL"
-```
-
 #### Fuente local → mlx-whisper (Apple Silicon)
 
 ```bash
-# Extraer audio
 ffmpeg -i "$VIDEO_PATH" -vn -acodec mp3 -ar 16000 -ac 1 -y /tmp/motion_audio.mp3
 
-# Transcribir con timestamps word-level
 uvx --from mlx-whisper mlx_whisper /tmp/motion_audio.mp3 \
   --model mlx-community/whisper-large-v3-mlx \
   --language es \
@@ -113,7 +155,6 @@ uvx --from mlx-whisper mlx_whisper /tmp/motion_audio.mp3 \
   --output-format json \
   --output-dir /tmp
 
-# Normalizar JSON a formato interno
 python3 - << 'EOF'
 import json
 with open('/tmp/motion_audio.json') as f:
@@ -128,72 +169,69 @@ print(f"Transcripción: {len(words)} palabras")
 EOF
 ```
 
-Alternativa si `uvx` no está disponible: usar `npx hyperframes transcribe` (HyperFrames incluye Whisper):
-
+Alternativa si `uvx` no disponible:
 ```bash
 npx hyperframes transcribe /tmp/motion_audio.mp3 --model small --language es
-# Genera transcript.json en el mismo directorio
 ```
 
 ---
 
-### Paso 3 — Mostrar transcript y pedir creative direction
+### Paso 3 — Mostrar transcript y auto-clasificar contenido
 
-Leer `/tmp/motion_transcript.json`. Agrupar las palabras en líneas de ~8-12 palabras para legibilidad. Mostrar el transcript completo formateado con timestamps en bloques de 5-10 segundos:
+Leer `/tmp/motion_transcript.json`. Agrupar palabras en bloques de 5-10 segundos y mostrar:
 
 ```
 [00:00 - 00:05] "Hoy te voy a contar los 3 errores que yo..."
-[00:05 - 00:12] "...cometía cuando empecé a crear contenido en redes..."
-[00:12 - 00:20] "El primero es publicar sin estrategia..."
+[00:05 - 00:12] "...cometía cuando empecé a crear contenido..."
 ...
 ```
 
-Luego preguntar con `AskUserQuestion`:
+**Luego auto-clasificar cada bloque del transcript** detectando patrones de contenido:
+
+| Patrón en el texto | Tipo de overlay sugerido |
+|-------------------|--------------------------|
+| "antes/ahora", "era/ahora", "solía/hoy", "pasé de X a Y" | Comparison Card BEFORE/NOW |
+| "el primero/segundo", "paso 1/2/3", "número uno", lista implícita de 3+ items | Chapter Card con bullets |
+| Menciona herramientas: "Claude", "ChatGPT", "Canva", "Notion", apps por nombre | Floating UI Card |
+| "no soy", "nunca fui", "no uso", "sin saber", "desde cero" | Pill Labels (identidad) |
+| "soy", "logré", "ahora soy", "me convertí en" | Pill Labels (transformación) |
+| Números con K/M/%, métricas específicas (seguidores, ventas, alcance) | Comparison Card o Pill con stat |
+
+Generar un **motion board automático preliminar** como tabla y mostrar al usuario:
 
 ```
-"Perfecto, tengo la transcripción. Ahora necesito tu creative direction.
-¿Qué quieres que aparezca visualmente en el video?
-
-Tienes 4 estilos de overlay disponibles:
-1. PILL LABELS — tags flotantes oscuros con texto blanco (esquina superior izquierda)
-   Ejemplo: 'no soy diseñadora', 'era terrible en esto'
-   Ideal para: describir el estado anterior, labels de identidad, negaciones
-
-2. COMPARISON CARD — card BEFORE/NOW anclada al bottom del frame
-   Muestra: título del contraste + miniatura del antes + highlight naranja del ahora
-   Ideal para: mostrar transformación, antes/después, resultados
-
-3. FLOATING UI CARD — card con borde azul flotando en el centro
-   Muestra: mockup de interfaz / pantalla / herramienta con texto descriptivo
-   Ideal para: mostrar una herramienta, un proceso, una pantalla de app
-
-4. CHAPTER CARD — card blanca sobre fondo warm con lista de items
-   Muestra: bullet points de resumen / pasos / lo que vas a aprender
-   Ideal para: introducir secciones, listar beneficios, recap de puntos
-
-Para cada overlay que quieras, dime:
-- ¿Qué tipo (1/2/3/4)?
-- ¿En qué momento del video? (puedes decir un timestamp o citar las palabras exactas que dices)
-- ¿Qué texto va adentro?
-
-Ejemplo de creative direction:
-'En el segundo 3, cuando digo «no soy diseñadora», pon 3 pill labels: «no soy diseñadora», «no uso Figma», «empecé desde cero». Luego en el segundo 15, cuando digo «ahora mis reels llegan a 500K», pon una comparison card con BEFORE: 200 seguidores / NOW: 500K alcance. Al final en el segundo 45, pon un chapter card con los 3 pasos que expliqué.'
-"
+📊 AUTO-DETECCIÓN DEL GUIÓN:
+─────────────────────────────────────────────────────
+t=00:03  →  PILL LABELS    "no soy diseñadora / no uso Figma"
+             (detectado: identidad negativa en "no soy")
+t=00:15  →  COMPARISON     ANTES: 200 seguidores / AHORA: 500K alcance
+             (detectado: "pasé de 200 a 500K")
+t=00:42  →  CHAPTER CARD   "Los 3 pasos que usé"
+             (detectado: "el primero, el segundo, el tercero")
+─────────────────────────────────────────────────────
+Zonas de overlay: PILL → TOP (80px), CARDS → BOTTOM (160px)
+[basado en sujeto centrado detectado en Paso 1.5]
 ```
 
-Guardar la creative direction como `CREATIVE_DIRECTION` para el siguiente paso.
+Luego preguntar:
+
+```
+AskUserQuestion:
+  "¿El plan de overlays te encaja o quieres ajustar algo?
+   También puedes pedir tipos específicos o cambiar textos."
+  Opciones:
+  - "Generar tal cual"
+  - "Ajustar algunos overlays"
+  - "Cambiar todos — te doy la creative direction manual"
+```
+
+Si el usuario quiere creative direction manual, ofrecer los 4 tipos disponibles con descripción.
 
 ---
 
-### Paso 4 — Generar el Motion Board (mapa de overlays → timestamps)
+### Paso 4 — Generar el Motion Board definitivo
 
-Procesar la creative direction y el transcript para construir el motion board: lista ordenada de overlays con timestamps exactos.
-
-Para cada overlay mencionado:
-1. Si el usuario dio un timestamp exacto → usar ese directamente
-2. Si citó palabras del video → buscar en `/tmp/motion_transcript.json` la primera ocurrencia de esas palabras y usar ese `start`
-
-Generar `MOTION_BOARD` como JSON:
+Procesar la creative direction (auto-detectada + ajustes del usuario) y construir el motion board JSON:
 
 ```json
 [
@@ -201,7 +239,8 @@ Generar `MOTION_BOARD` como JSON:
     "type": "pill_labels",
     "start": 2.8,
     "duration": 3.5,
-    "labels": ["no soy diseñadora", "no uso Figma", "empecé desde cero"]
+    "labels": ["no soy diseñadora", "no uso Figma", "empecé desde cero"],
+    "position": "top"
   },
   {
     "type": "comparison_card",
@@ -209,117 +248,62 @@ Generar `MOTION_BOARD` como JSON:
     "duration": 5.0,
     "title": "Mi transformación",
     "before_text": "200 seguidores",
-    "before_label": "ANTES",
     "now_text": "500K alcance",
-    "now_label": "AHORA"
+    "position": "bottom"
   },
   {
     "type": "chapter_card",
     "start": 44.1,
     "duration": 6.0,
     "title": "Los 3 pasos que usé",
-    "items": ["Elegir una sola plataforma", "Publicar 30 días seguidos", "Usar IA para los guiones"]
+    "items": ["Elegir una sola plataforma", "Publicar 30 días seguidos", "Usar IA para los guiones"],
+    "position": "bottom"
   }
 ]
 ```
 
-Guardar en `/tmp/motion_board.json`.
-
-Mostrar el motion board al usuario en formato legible y confirmar antes de generar:
-
-```
-AskUserQuestion:
-  "Este es el mapa de overlays que voy a animar:
-  [mostrar motion board formateado]
-
-  ¿Generamos el HTML con estas animaciones o quieres ajustar algo?"
-  Opciones: "Generar tal cual" / "Ajustar"
-```
+Guardar en `/tmp/motion_board.json`. Confirmar si no se confirmó en Paso 3.
 
 ---
 
 ### Paso 5 — Generar HTML con HyperFrames
 
-Obtener la duración total del video:
-
+Obtener duración total:
 ```bash
 ffprobe -v error -show_entries format=duration \
   -of default=nokey=1:noprint_wrappers=1 "$VIDEO_PATH"
 ```
 
-Crear la carpeta del proyecto HyperFrames:
-
+Crear carpeta:
 ```bash
 MOTION_DIR="$VIDEO_DIR/motion_overlays"
 mkdir -p "$MOTION_DIR"
 ```
 
-Generar `$MOTION_DIR/index.html` a partir del motion board. Leer cada overlay del JSON y componer el HTML usando los 4 templates de referencia (sección abajo). Reglas de composición:
+Generar `$MOTION_DIR/index.html` usando los templates de referencia (sección abajo). Reglas:
 
-- El stage es 1080×1920 (9:16) sin video de fondo — solo los overlays sobre fondo transparente
-- Cada overlay tiene `data-start`, `data-duration`, `data-track-index` único
-- Usar tracks índice 10+ para no colisionar con posibles clips de video
-- Todos los overlays coexisten en la misma composición, sincronizados por timestamp
-
-Estructura general del index.html:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: transparent; overflow: hidden; }
-    /* Fuente Inter de Google Fonts — el compiler la embede */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-  </style>
-</head>
-<body>
-  <div id="stage"
-       data-composition-id="motion-overlays"
-       data-start="0"
-       data-width="1080"
-       data-height="1920">
-
-    <!-- OVERLAYS generados del motion board aquí -->
-    <!-- Ver templates de referencia abajo para cada tipo -->
-
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-    <script>
-      const tl = gsap.timeline({ paused: true });
-
-      // ANIMACIONES generadas del motion board aquí
-      // Ver sección de cada template para las animaciones
-
-      window.__timelines = window.__timelines || {};
-      window.__timelines["motion-overlays"] = tl;
-    </script>
-  </div>
-</body>
-</html>
-```
-
-Escribir el archivo HTML completo con todos los overlays del motion board usando los templates de referencia de la sección siguiente.
+- Stage: 1080×1920, fondo transparente
+- Cada overlay: `data-start`, `data-duration`, `data-track-index` único
+- Usar tracks 10+ para no colisionar
+- Aplicar `SAFE_PILL_CSS`, `SAFE_CARD_CSS`, `SAFE_FLOAT_CSS` del Paso 1.5 en lugar de posiciones hardcoded
+- Todos los overlays incluyen animación de entrada Y de salida (ver templates)
 
 ---
 
-### Paso 6 — Preview y render del HTML
+### Paso 6 — Preview y render
 
 ```bash
 cd "$MOTION_DIR"
+hyperframes preview  # opcional, para revisar en browser
 
-# Preview en browser (opcional, para iterar)
-npx hyperframes preview
+# Render WebM con alpha (fondo transparente, recomendado)
+hyperframes render --format webm --resolution portrait -o overlays.webm
 
-# Render → MP4 con alpha (fondo transparente)
-npx hyperframes render index.html --out overlays.mp4
+# Alternativa MP4 opaco
+hyperframes render --resolution portrait -o overlays.mp4
 ```
 
-Si el render falla, revisar:
-- `npx hyperframes lint` → errores de sintaxis
-- `npx hyperframes validate` → problemas de composición
-- Que `data-track-index` no se repita entre clips del mismo track
+Si el render falla: `hyperframes lint` → `hyperframes validate` para detectar errores.
 
 ---
 
@@ -328,69 +312,76 @@ Si el render falla, revisar:
 ```bash
 OUTPUT="$VIDEO_DIR/${VIDEO_NAME}_motion.mp4"
 
-ffmpeg \
-  -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.mp4" \
-  -filter_complex "[0:v][1:v]overlay=0:0:format=auto" \
-  -c:v libx264 -crf 18 -preset slow \
-  -c:a copy \
-  -y "$OUTPUT"
-
-echo "✓ Output: $OUTPUT"
-open "$VIDEO_DIR"
-```
-
-Si el video fuente no tiene audio separado del overlay (es un archivo local con audio embedido), el `-c:a copy` preserva el audio original intacto.
-
-Si el overlay `.mp4` tiene canal alpha (VP9/WebM del render), usar:
-
-```bash
+# Con alpha (WebM — recomendado)
 ffmpeg \
   -i "$VIDEO_PATH" \
   -i "$MOTION_DIR/overlays.webm" \
   -filter_complex "[0:v][1:v]overlay=0:0:format=auto[outv]" \
   -map "[outv]" -map 0:a? \
   -c:v libx264 -crf 18 -preset slow \
-  -c:a copy \
+  -c:a aac -b:a 192k \
+  -y "$OUTPUT"
+
+echo "✓ Output: $OUTPUT"
+open "$VIDEO_DIR"
+```
+
+Si el video fuente no es 1080×1920:
+```bash
+ffmpeg \
+  -i "$VIDEO_PATH" \
+  -i "$MOTION_DIR/overlays.webm" \
+  -filter_complex \
+    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[scaled];
+     [scaled][1:v]overlay=0:0:format=auto[outv]" \
+  -map "[outv]" -map 0:a? \
+  -c:v libx264 -crf 18 -preset slow \
+  -c:a aac -b:a 192k \
   -y "$OUTPUT"
 ```
 
-Confirmar al usuario con la ruta del output.
+---
+
+### Paso 8 — Entregar resultado
+
+```bash
+open "$VIDEO_DIR"
+```
+
+Mostrar al usuario: ruta del video final + tabla con overlays generados + timestamps.
 
 ---
 
-## Templates de referencia — Los 4 estilos Softgirlnocode
+## Templates de referencia — Los 4 estilos con animaciones fluidas
 
-Los templates van en el bloque del HTML generado. Cada uno incluye el HTML del elemento y el bloque GSAP de animación. Las posiciones son para stage 1080×1920.
+Las posiciones en CSS usan las variables definidas en Paso 1.5 (`SAFE_PILL_CSS`, `SAFE_CARD_CSS`, `SAFE_FLOAT_CSS`). Los valores entre `[[ ]]` deben reemplazarse con los valores reales.
+
+Todas las animaciones siguen la regla: entrada con `gsap.from()` + salida con `gsap.to()` antes del final del clip.
 
 ---
 
 ### Template 1 — Pill Labels Flotantes
 
-Tags oscuros con texto blanco, pill shape, esquina superior izquierda, fade-in con stagger.
-Aparecen en la zona superior del frame (top: 120-320px) sin tapar la cara del talking-head.
+Tags oscuros pill-shape con texto blanco. Se apilan verticalmente en la zona superior (o la zona segura detectada).
 
-**Cuándo usar:** describir el estado anterior, labels de identidad negativa/positiva, características del avatar.
+**Cuándo usar:** identidad negativa/positiva, características del avatar, estado anterior.
 
-**HTML (reemplazar `TRACK_IDX`, `START_S`, `DUR_S`, `LABEL_1..N`, `COMP_ID`):**
+**HTML (sustituir `COMP_ID`, `TRACK_IDX`, `START_S`, `DUR_S`, `SAFE_PILL_CSS`, `LABEL_N`):**
 
 ```html
-<!-- PILL LABELS: insertar dentro del div data-composition-id -->
 <div id="pills-COMP_ID"
      data-start="START_S"
      data-duration="DUR_S"
      data-track-index="TRACK_IDX"
      style="
        position: absolute;
-       top: 140px;
-       left: 56px;
+       SAFE_PILL_CSS
        display: flex;
        flex-direction: column;
        align-items: flex-start;
        gap: 16px;
-       opacity: 0;
      ">
-  <span class="pill" style="
+  <span class="pill-COMP_ID" style="
     background: #111111;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
@@ -402,9 +393,10 @@ Aparecen en la zona superior del frame (top: 120-320px) sin tapar la cara del ta
     white-space: nowrap;
     display: inline-block;
     letter-spacing: -0.5px;
+    opacity: 0;
   ">LABEL_1</span>
 
-  <span class="pill" style="
+  <span class="pill-COMP_ID" style="
     background: #111111;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
@@ -416,49 +408,56 @@ Aparecen en la zona superior del frame (top: 120-320px) sin tapar la cara del ta
     white-space: nowrap;
     display: inline-block;
     letter-spacing: -0.5px;
+    opacity: 0;
   ">LABEL_2</span>
 
-  <!-- Agregar más <span class="pill"> por cada label adicional -->
+  <!-- Agregar más <span class="pill-COMP_ID"> por cada label adicional -->
 </div>
 ```
 
-**GSAP (agregar al timeline, reemplazar `COMP_ID`, `START_S`):**
+**GSAP (cada pill entra con stagger, sale deslizándose hacia arriba):**
 
 ```js
-// Pill labels — fade in del wrapper + stagger de cada pill
-const pillsEl = document.getElementById("pills-COMP_ID");
-const pills = pillsEl ? pillsEl.querySelectorAll('.pill') : [];
-tl.to(pillsEl, { opacity: 1, duration: 0 }, START_S);
-tl.from(pills, {
-  y: 20,
+// Pill labels — entrada en stagger, salida hacia arriba
+const pills_COMP_ID = document.querySelectorAll('.pill-COMP_ID');
+
+// Entrada: cada pill sube desde abajo con spring
+tl.from(pills_COMP_ID, {
+  y: 28,
   opacity: 0,
-  duration: 0.45,
-  ease: "power3.out",
+  duration: 0.5,
+  ease: "back.out(1.3)",
   stagger: 0.18
 }, START_S + 0.08);
+
+// Salida: pills se van hacia arriba con fade (0.55s antes del final)
+tl.to(pills_COMP_ID, {
+  y: -20,
+  opacity: 0,
+  duration: 0.45,
+  ease: "power2.in",
+  stagger: 0.08
+}, START_S + DUR_S - 0.55);
 ```
 
 ---
 
 ### Template 2 — Comparison Card BEFORE/NOW
 
-Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 180px). Muestra el contraste antes/ahora con un highlight naranja en el lado "now".
+Card oscura que muestra el contraste antes/ahora. Se ancla en la zona segura inferior (o lateral si el sujeto lo ocupa).
 
 **Cuándo usar:** transformaciones, resultados, antes/después, prueba de cambio.
 
-**HTML:**
+**HTML (sustituir valores entre `[[...]]`):**
 
 ```html
-<!-- COMPARISON CARD: insertar dentro del div data-composition-id -->
 <div id="compcard-COMP_ID"
      data-start="START_S"
      data-duration="DUR_S"
      data-track-index="TRACK_IDX"
      style="
        position: absolute;
-       bottom: 200px;
-       left: 56px;
-       right: 56px;
+       SAFE_CARD_CSS
        background: #1a1a1a;
        border-radius: 24px;
        padding: 32px 36px;
@@ -466,7 +465,6 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
        flex-direction: column;
        gap: 20px;
        opacity: 0;
-       transform: translateY(40px);
      ">
   <!-- Título -->
   <p style="
@@ -481,7 +479,7 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
   <!-- Contenedor antes/ahora -->
   <div style="display: flex; gap: 16px;">
     <!-- BEFORE -->
-    <div style="
+    <div id="comp-before-COMP_ID" style="
       flex: 1;
       background: #2a2a2a;
       border-radius: 16px;
@@ -497,7 +495,7 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
         color: #555555;
         text-transform: uppercase;
         letter-spacing: 2px;
-      ">BEFORE</span>
+      ">ANTES</span>
       <span style="
         font-family: 'Inter', sans-serif;
         font-weight: 700;
@@ -507,8 +505,8 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
       ">BEFORE_TEXT</span>
     </div>
 
-    <!-- NOW (highlight naranja) -->
-    <div style="
+    <!-- AHORA (highlight naranja) -->
+    <div id="comp-now-COMP_ID" style="
       flex: 1;
       background: #f97316;
       border-radius: 16px;
@@ -524,7 +522,7 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
         color: rgba(0,0,0,0.5);
         text-transform: uppercase;
         letter-spacing: 2px;
-      ">NOW</span>
+      ">AHORA</span>
       <span style="
         font-family: 'Inter', sans-serif;
         font-weight: 700;
@@ -537,41 +535,59 @@ Card oscura anclada al bottom del frame. Aparece en el tercio inferior (bottom: 
 </div>
 ```
 
-**GSAP:**
+**GSAP (slide up al entrar, fade+slide down al salir, panels aparecen en stagger):**
 
 ```js
-// Comparison card — slide up + fade in
+// Comparison card — entrada deslizante, salida suave
 tl.to("#compcard-COMP_ID", {
   opacity: 1,
   y: 0,
   duration: 0.55,
   ease: "expo.out"
 }, START_S + 0.1);
+
+// Los paneles ANTES/AHORA aparecen en stagger tras la card
+tl.from(["#comp-before-COMP_ID", "#comp-now-COMP_ID"], {
+  opacity: 0,
+  x: -16,
+  duration: 0.4,
+  ease: "power2.out",
+  stagger: 0.18
+}, START_S + 0.4);
+
+// Salida: se va hacia abajo con fade (0.6s antes del final)
+tl.to("#compcard-COMP_ID", {
+  opacity: 0,
+  y: 24,
+  duration: 0.45,
+  ease: "power2.in"
+}, START_S + DUR_S - 0.55);
 ```
+
+Nota CSS: si `SAFE_CARD_CSS` usa `bottom: Npx`, el HTML ya estará posicionado. El tween de entrada debe ser `from: {y: 40}` (viene desde abajo) en lugar de `to: {y: 0}`. Ajustar según la zona:
+- Zona bottom → `gsap.from(el, {y: 40})` ← viene subiendo
+- Zona top → `gsap.from(el, {y: -40})` ← viene bajando
+- Zona lateral → `gsap.from(el, {x: -40})` ← viene de la izquierda
 
 ---
 
 ### Template 3 — Floating UI Card
 
-Card con borde azul highlight flotando en el centro del frame. Muestra un mockup de interfaz / pantalla de app con texto descriptivo. Posición central (top: 600-900px según duración del video).
+Card con borde azul que simula una interfaz / pantalla de app. Flota en la zona libre del frame.
 
-**Cuándo usar:** mostrar una herramienta, un proceso, una pantalla, un workflow de IA.
+**Cuándo usar:** mostrar una herramienta, un workflow de IA, una pantalla de app.
 
 **HTML:**
 
 ```html
-<!-- FLOATING UI CARD: insertar dentro del div data-composition-id -->
 <div id="uicard-COMP_ID"
      data-start="START_S"
      data-duration="DUR_S"
      data-track-index="TRACK_IDX"
      style="
        position: absolute;
-       top: 680px;
-       left: 56px;
-       right: 56px;
+       SAFE_FLOAT_CSS
        opacity: 0;
-       transform: scale(0.92) translateY(24px);
      ">
   <!-- Card principal con borde azul -->
   <div style="
@@ -581,7 +597,7 @@ Card con borde azul highlight flotando en el centro del frame. Muestra un mockup
     overflow: hidden;
     box-shadow: 0 0 40px rgba(59,130,246,0.25), 0 20px 60px rgba(0,0,0,0.5);
   ">
-    <!-- Header de la UI card (barra superior simulada) -->
+    <!-- Header de la UI card -->
     <div style="
       background: #1e2333;
       padding: 16px 24px;
@@ -604,7 +620,6 @@ Card con borde azul highlight flotando en el centro del frame. Muestra un mockup
 
     <!-- Contenido principal del mockup -->
     <div style="padding: 32px 28px;">
-      <!-- Fila de "código" o contenido simulado -->
       <div style="
         background: #1a1f2e;
         border-radius: 12px;
@@ -633,46 +648,51 @@ Card con borde azul highlight flotando en el centro del frame. Muestra un mockup
 </div>
 ```
 
-**GSAP:**
+**GSAP (spring scale al entrar, shrink+fade al salir):**
 
 ```js
-// Floating UI card — scale up + fade in
+// Floating UI card — spring scale al entrar
 tl.to("#uicard-COMP_ID", {
   opacity: 1,
   scale: 1,
-  y: 0,
-  duration: 0.6,
+  duration: 0.55,
   ease: "back.out(1.4)"
 }, START_S + 0.12);
+
+// Salida: encoge y se desvanece (0.55s antes del final)
+tl.to("#uicard-COMP_ID", {
+  opacity: 0,
+  scale: 0.92,
+  duration: 0.4,
+  ease: "power2.in"
+}, START_S + DUR_S - 0.55);
 ```
+
+CSS inicial del elemento: `opacity: 0; transform: scale(0.88);` para que el tween `to` parta desde ese estado.
 
 ---
 
 ### Template 4 — Chapter / Summary Card
 
-Card blanca sobre fondo warm (beige/crema). Lista de items con bullets. Se ancla en la zona central-inferior del frame, ideal para introducir secciones o recapitular puntos.
+Card blanca con lista de items. Se ancla en la zona segura del frame.
 
-**Cuándo usar:** listar lo que vas a enseñar, resumir los puntos clave, introducir el estructura del video.
+**Cuándo usar:** listar lo que vas a enseñar, resumir puntos clave, introducir la estructura del video.
 
 **HTML:**
 
 ```html
-<!-- CHAPTER CARD: insertar dentro del div data-composition-id -->
 <div id="chaptercard-COMP_ID"
      data-start="START_S"
      data-duration="DUR_S"
      data-track-index="TRACK_IDX"
      style="
        position: absolute;
-       top: 720px;
-       left: 56px;
-       right: 56px;
+       SAFE_CARD_CSS
        background: #faf7f2;
        border-radius: 28px;
        padding: 40px 40px 44px;
        box-shadow: 0 24px 64px rgba(0,0,0,0.35);
        opacity: 0;
-       transform: translateY(36px);
      ">
   <!-- Título de la card -->
   <p style="
@@ -686,7 +706,7 @@ Card blanca sobre fondo warm (beige/crema). Lista de items con bullets. Se ancla
 
   <!-- Lista de items -->
   <div style="display: flex; flex-direction: column; gap: 18px;">
-    <div class="chapter-item" style="display: flex; align-items: flex-start; gap: 16px;">
+    <div class="ch-item-COMP_ID" style="display: flex; align-items: flex-start; gap: 16px;">
       <span style="
         width: 36px; height: 36px; min-width: 36px;
         background: #1a1a1a;
@@ -706,7 +726,7 @@ Card blanca sobre fondo warm (beige/crema). Lista de items con bullets. Se ancla
       ">ITEM_1</span>
     </div>
 
-    <div class="chapter-item" style="display: flex; align-items: flex-start; gap: 16px;">
+    <div class="ch-item-COMP_ID" style="display: flex; align-items: flex-start; gap: 16px;">
       <span style="
         width: 36px; height: 36px; min-width: 36px;
         background: #1a1a1a;
@@ -726,45 +746,70 @@ Card blanca sobre fondo warm (beige/crema). Lista de items con bullets. Se ancla
       ">ITEM_2</span>
     </div>
 
-    <!-- Agregar más items con el mismo patrón, cambiando el número -->
+    <!-- Agregar más .ch-item-COMP_ID con el mismo patrón -->
   </div>
 </div>
 ```
 
-**GSAP:**
+**GSAP (slide + fade al entrar, stagger de items, fade+slide al salir):**
 
 ```js
-// Chapter card — slide up + fade, luego stagger en cada item
-const chapterItems = document.querySelectorAll("#chaptercard-COMP_ID .chapter-item");
+// Chapter card — entrada deslizante
 tl.to("#chaptercard-COMP_ID", {
   opacity: 1,
   y: 0,
-  duration: 0.5,
-  ease: "power3.out"
+  duration: 0.55,
+  ease: "expo.out"
 }, START_S + 0.1);
-tl.from(chapterItems, {
-  x: -20,
+
+// Items aparecen en stagger tras la card
+const chItems_COMP_ID = document.querySelectorAll('.ch-item-COMP_ID');
+tl.from(chItems_COMP_ID, {
+  x: -24,
   opacity: 0,
   duration: 0.4,
   ease: "power2.out",
   stagger: 0.15
-}, START_S + 0.35);
+}, START_S + 0.45);
+
+// Salida: fade + ligero deslizamiento (0.6s antes del final)
+tl.to("#chaptercard-COMP_ID", {
+  opacity: 0,
+  y: 20,
+  duration: 0.45,
+  ease: "power2.in"
+}, START_S + DUR_S - 0.6);
 ```
+
+CSS inicial: `opacity: 0; transform: translateY(36px);` para que entre desde abajo.
 
 ---
 
-## Generación automática del HTML completo
+## Reglas de animación — siempre aplicar
 
-Cuando se generan múltiples overlays del motion board, el agente construye UN solo archivo `index.html` con todos los elementos. Las reglas de asignación de `data-track-index`:
+1. **Entrada: `gsap.from()`** — animar DESDE el estado inicial HACIA la posición CSS.
+2. **Salida: `gsap.to()`** — animar HACIA invisible/fuera de frame. Colocar 0.5-0.6s antes del final del clip.
+3. **Eases por tipo:**
+   - Cards amplias → `expo.out` (entrada) + `power2.in` (salida)
+   - UI card flotante → `back.out(1.4)` (entrada con spring) + `power2.in` (salida)
+   - Pill labels → `back.out(1.3)` (entrada con spring pequeño) + `power2.in` (salida)
+4. **Stagger:** siempre staggar elementos múltiples — 0.15-0.18s entre pills, 0.12-0.15s entre items de lista.
+5. **Variedad de eases:** no repetir el mismo ease en todos los overlays del mismo video.
+6. **Offset de entrada:** primer tween a `START_S + 0.08` como mínimo, nunca exactamente en `START_S`.
 
-- Pill labels: track 10, 11, 12... (uno por aparición)
-- Comparison cards: track 20, 21, 22...
-- UI cards: track 30, 31, 32...
-- Chapter cards: track 40, 41, 42...
+---
 
-El timeline GSAP concatena todos los bloques de animación de cada overlay. El orden en el timeline es cronológico por `START_S`.
+## Generación del HTML completo
 
-### Ejemplo de HTML completo con 2 overlays
+Un solo archivo `index.html` con todos los overlays. Asignación de `data-track-index`:
+- Pill labels: 10, 11, 12...
+- Comparison cards: 20, 21, 22...
+- UI cards: 30, 31, 32...
+- Chapter cards: 40, 41, 42...
+
+El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`.
+
+### Estructura base
 
 ```html
 <!DOCTYPE html>
@@ -783,54 +828,13 @@ El timeline GSAP concatena todos los bloques de animación de cada overlay. El o
        data-width="1080"
        data-height="1920">
 
-    <!-- OVERLAY 1: Pill labels en t=2.8s -->
-    <div id="pills-01"
-         data-start="2.8"
-         data-duration="3.5"
-         data-track-index="10"
-         style="position:absolute;top:140px;left:56px;display:flex;flex-direction:column;align-items:flex-start;gap:16px;opacity:0;">
-      <span class="pill" style="background:#111;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:34px;padding:18px 36px;border-radius:999px;white-space:nowrap;">no soy diseñadora</span>
-      <span class="pill" style="background:#111;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:34px;padding:18px 36px;border-radius:999px;white-space:nowrap;">no uso Figma</span>
-      <span class="pill" style="background:#111;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:34px;padding:18px 36px;border-radius:999px;white-space:nowrap;">empecé desde cero</span>
-    </div>
+    <!-- OVERLAYS: pegar templates aquí con posiciones de SAFE_*_CSS -->
 
-    <!-- OVERLAY 2: Chapter card en t=14.2s -->
-    <div id="chaptercard-01"
-         data-start="14.2"
-         data-duration="6.0"
-         data-track-index="40"
-         style="position:absolute;top:720px;left:56px;right:56px;background:#faf7f2;border-radius:28px;padding:40px;box-shadow:0 24px 64px rgba(0,0,0,0.35);opacity:0;transform:translateY(36px);">
-      <p style="font-family:'Inter',sans-serif;font-weight:900;font-size:32px;color:#1a1a1a;margin-bottom:28px;">Los 3 pasos que usé</p>
-      <div style="display:flex;flex-direction:column;gap:18px;">
-        <div class="chapter-item" style="display:flex;align-items:flex-start;gap:16px;">
-          <span style="width:36px;height:36px;min-width:36px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff;">1</span>
-          <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:28px;color:#2d2d2d;line-height:1.3;padding-top:2px;">Elegir una sola plataforma</span>
-        </div>
-        <div class="chapter-item" style="display:flex;align-items:flex-start;gap:16px;">
-          <span style="width:36px;height:36px;min-width:36px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff;">2</span>
-          <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:28px;color:#2d2d2d;line-height:1.3;padding-top:2px;">Publicar 30 días seguidos</span>
-        </div>
-        <div class="chapter-item" style="display:flex;align-items:flex-start;gap:16px;">
-          <span style="width:36px;height:36px;min-width:36px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff;">3</span>
-          <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:28px;color:#2d2d2d;line-height:1.3;padding-top:2px;">Usar IA para los guiones</span>
-        </div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script>
       const tl = gsap.timeline({ paused: true });
 
-      // Overlay 1 — Pill labels t=2.8
-      const pills01 = document.getElementById("pills-01");
-      const pillItems01 = pills01 ? pills01.querySelectorAll('.pill') : [];
-      tl.to(pills01, { opacity: 1, duration: 0 }, 2.8);
-      tl.from(pillItems01, { y: 20, opacity: 0, duration: 0.45, ease: "power3.out", stagger: 0.18 }, 2.88);
-
-      // Overlay 2 — Chapter card t=14.2
-      const chapterItems01 = document.querySelectorAll("#chaptercard-01 .chapter-item");
-      tl.to("#chaptercard-01", { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 14.3);
-      tl.from(chapterItems01, { x: -20, opacity: 0, duration: 0.4, ease: "power2.out", stagger: 0.15 }, 14.65);
+      // ANIMACIONES: pegar bloques GSAP de cada template aquí en orden cronológico
 
       window.__timelines = window.__timelines || {};
       window.__timelines["motion-overlays"] = tl;
@@ -842,78 +846,22 @@ El timeline GSAP concatena todos los bloques de animación de cada overlay. El o
 
 ---
 
-## Composición final con ffmpeg — referencia completa
-
-### Caso estándar: video con audio, overlays opacos
-
-```bash
-ffmpeg \
-  -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.mp4" \
-  -filter_complex "[0:v][1:v]overlay=0:0:format=auto[outv]" \
-  -map "[outv]" \
-  -map "0:a?" \
-  -c:v libx264 -crf 18 -preset slow \
-  -c:a aac -b:a 192k \
-  -y "$OUTPUT"
-```
-
-### Caso con alpha channel (WebM del render HyperFrames)
-
-HyperFrames puede renderizar en WebM con canal alpha. En ese caso la composición respeta la transparencia del fondo del overlay:
-
-```bash
-ffmpeg \
-  -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.webm" \
-  -filter_complex "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[bg];[bg][1:v]overlay=0:0:format=auto[outv]" \
-  -map "[outv]" \
-  -map "0:a?" \
-  -c:v libx264 -crf 18 -preset slow \
-  -c:a aac -b:a 192k \
-  -y "$OUTPUT"
-```
-
-### Si el video fuente no es 1080×1920 (9:16)
-
-Escalar primero:
-
-```bash
-ffmpeg \
-  -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.mp4" \
-  -filter_complex \
-    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[scaled];
-     [scaled][1:v]overlay=0:0:format=auto[outv]" \
-  -map "[outv]" -map "0:a?" \
-  -c:v libx264 -crf 18 -preset slow \
-  -c:a aac -b:a 192k \
-  -y "$OUTPUT"
-```
-
----
-
 ## Iteración
 
-**Cambiar el texto de un overlay:**
-1. Editar el elemento HTML en `motion_overlays/index.html`
-2. Re-correr `npx hyperframes render`
-3. Re-correr el comando ffmpeg de composición
+**Cambiar texto o timing de un overlay:**
+1. Editar `motion_overlays/index.html`
+2. Re-render: `npx hyperframes render --format webm --resolution portrait -o overlays.webm`
+3. Re-componer con ffmpeg
 
-**Mover el timestamp de un overlay:**
-1. Cambiar `data-start` en el HTML del elemento
-2. Cambiar el tiempo correspondiente en el bloque GSAP del timeline
+**Mover un overlay a otra zona:**
+1. Cambiar el CSS `position` en el HTML del elemento
+2. Ajustar la dirección de la animación de entrada si es necesario (eje x vs y)
 3. Re-render y re-componer
 
 **Agregar un overlay nuevo:**
-1. Pegar el template HTML del tipo deseado con un nuevo `COMP_ID` y `data-track-index` único
-2. Agregar el bloque GSAP correspondiente al timeline
+1. Pegar el template con nuevo `COMP_ID` y `data-track-index` único
+2. Agregar bloque GSAP al timeline
 3. Re-render y re-componer
-
-**Preview rápido sin re-componer:**
-```bash
-cd "$MOTION_DIR" && npx hyperframes preview
-```
 
 ---
 
@@ -921,14 +869,15 @@ cd "$MOTION_DIR" && npx hyperframes preview
 
 | Error | Acción |
 |-------|--------|
-| Supadata devuelve 401 | Verificar API key en la URL: `sd_8ff1f1f233fc19cb14b5b86277ae2d6b` |
-| Supadata devuelve timestamps vacíos | El video puede ser privado. Descargar con yt-dlp y usar Whisper local |
+| Supadata devuelve 401 | Verificar API key: `sd_8ff1f1f233fc19cb14b5b86277ae2d6b` |
+| Supadata sin timestamps | Video privado → descargar con yt-dlp + Whisper local |
 | `uvx` no encontrado | `brew install uv` y reintentar |
-| Whisper produce alucinaciones | Re-correr con `--temperature 0.2` o usar modelo `medium` |
-| `npx hyperframes render` falla con timeline error | Verificar que todos los `window.__timelines["motion-overlays"]` están registrados y que ningún `data-track-index` se repite |
-| ffmpeg: "No such file" en overlays.mp4 | El render no completó. Verificar que `npx hyperframes render` terminó sin errores |
-| Video final con overlays desfasados | Verificar que los timestamps en `data-start` corresponden al video original (no al recortado si se cortó silencios antes) |
-| HyperFrames no disponible (Node < 22) | Actualizar Node: `brew install node@22 && brew link node@22` |
+| Whisper produce alucinaciones | Re-correr con `--temperature 0.2` o modelo `medium` |
+| `hyperframes render` falla | `hyperframes lint` + `hyperframes validate`; verificar que `window.__timelines["motion-overlays"]` está registrado y no hay `data-track-index` repetido |
+| ffmpeg: "No such file" en overlays | El render no completó → verificar que terminó sin errores |
+| Video final con overlays desfasados | Verificar timestamps en `data-start` vs duración del video original |
+| `hyperframes: command not found` | `npm install -g hyperframes` + `node --version >= 22` |
+| Frame de análisis (Paso 1.5) incompleto | Usar el frame en posición `0.33` del video como backup |
 
 ---
 
@@ -939,24 +888,25 @@ $VIDEO_DIR/
 ├── mi_reel.mp4                    ← video original (no se modifica)
 ├── mi_reel_motion.mp4             ← OUTPUT FINAL
 └── motion_overlays/
-    ├── index.html                 ← composición HyperFrames generada
-    └── overlays.mp4               ← overlays renderizados (fondo transparente)
+    ├── index.html                 ← composición HyperFrames con overlays
+    └── overlays.webm              ← overlays renderizados (alpha transparente)
 
 /tmp/
+├── frame_sujeto.jpg               ← frame para análisis de posición (temporal)
 ├── motion_audio.mp3               ← audio extraído (temporal)
 ├── motion_transcript.json         ← transcript word-level normalizado
-└── motion_board.json              ← mapa de overlays → timestamps
+└── motion_board.json              ← mapa de overlays → timestamps definitivo
 ```
 
 ---
 
 ## Diferencias con otras skills
 
-| Aspecto | motion-reels-f100k | editor-video-formula100k | graficos-de-video |
-|---------|-------------------|--------------------------|-------------------|
-| Input | Video hablado local o URL | Video + MANIFEST.md | Video local |
-| Output | Video final con overlays animados | BORRADOR_AUTO.mp4 | Imágenes PNG scrapbook |
-| Motion graphics | HTML/GSAP/HyperFrames | Remotion + HyperFrames opcional | Higgsfield static |
-| Corte de silencios | No (trabaja sobre el video original) | Sí (agresivo) | No |
-| Transcripción | Word-level para sincronía de overlays | Word-level para keyword matching | Por segmentos |
-| Estilo visual | Softgirlnocode — dark cards + pills + UI mockups | FÓRMULA 100K — header + énfasis + b-roll | Scrapbook crema F100K |
+| Aspecto | motion-reels-f100k | motion-youtube-f100k | graficos-de-video |
+|---------|-------------------|----------------------|-------------------|
+| Formato | 1080×1920 (9:16) | 1920×1080 (16:9) | Cualquiera (PNG) |
+| Detección de sujeto | ✅ Sí, frame análisis | ✅ Sí, frame análisis | ✗ No aplica |
+| Auto-clasificación guión | ✅ Sí | ✅ Sí | ✗ No aplica |
+| Output | Video MP4 final con overlays | Video MP4 final con overlays | PNGs estáticos |
+| Motion | HTML/GSAP/HyperFrames animado | HTML/GSAP/HyperFrames animado | Higgsfield estático |
+| Estilo visual | Softgirlnocode dark | Softgirlnocode dark | Scrapbook crema F100K |

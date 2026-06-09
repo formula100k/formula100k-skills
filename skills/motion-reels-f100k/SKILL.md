@@ -160,36 +160,40 @@ Usar la herramienta `Read` en `/tmp/frame_sujeto.jpg` para ver la imagen y deter
 
 ```
 ┌────────────────────────────────┐  y=0
-│  ████████ TOP ZONE ████████   │  y=0–180px    ← SIEMPRE segura (encima de la cabeza)
+│         (margen muerto)         │  y=0–200px    ← NO poner nada: se corta en el reproductor
+│  ████████ TOP ZONE ████████   │  y=200–420px  ← pills/kinetics AQUÍ (no más arriba)
 ├────────────────────────────────┤
-│  LEFT │   CARA / TORSO │ RIGHT│  y=180–1450px ← zona del cuerpo
+│  LEFT │   CARA / TORSO │ RIGHT│  y=420–1400px ← zona del cuerpo
 │  zone │   (no tapar)   │ zone │
 │ 0–200 │                │ 880+ │
 ├────────────────────────────────┤
-│  ████████ BOTTOM ZONE ██████  │  y=1500–1760px ← segura (debajo del pecho)
+│  ████████ BOTTOM ZONE ██████  │  y=1420–1670px ← cards AQUÍ (bottom:250px desde el fondo)
+│         (margen muerto)         │  y=1670–1920  ← NO poner nada: se corta
 └────────────────────────────────┘  y=1920
 ```
+
+> ⚠ LECCIÓN CONFIRMADA (run 2026-06): `top: 200px` y `bottom: 160px` quedaban DEMASIADO al borde y se cortaban en el reproductor. Valores seguros reales: **`top: 200px`** para pills/kinetics, **`bottom: 250px`** para cards.
 
 **Valores CSS por zona (definir las 3 variables antes del Paso 5):**
 
 ```
 SUBJECT_X=center, SUBJECT_Y=full (talking-head clásico):
-  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
-  SAFE_CARD_CSS  = "bottom: 160px; left: 56px; right: 56px;"
-  SAFE_FLOAT_CSS = "bottom: 160px; left: 56px; right: 56px;"
+  SAFE_PILL_CSS  = "top: 200px; left: 56px;"
+  SAFE_CARD_CSS  = "bottom: 250px; left: 56px; right: 56px;"
+  SAFE_FLOAT_CSS = "bottom: 250px; left: 56px; right: 56px;"
 
 SUBJECT_X=right, SUBJECT_Y=full (sujeto a la derecha):
-  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
+  SAFE_PILL_CSS  = "top: 200px; left: 56px;"
   SAFE_CARD_CSS  = "top: 50%; left: 40px; width: 460px; transform: translateY(-50%);"
   SAFE_FLOAT_CSS = "top: 50%; left: 40px; width: 460px; transform: translateY(-50%);"
 
 SUBJECT_X=left, SUBJECT_Y=full (sujeto a la izquierda):
-  SAFE_PILL_CSS  = "top: 80px; right: 56px; align-items: flex-end;"
+  SAFE_PILL_CSS  = "top: 200px; right: 56px; align-items: flex-end;"
   SAFE_CARD_CSS  = "top: 50%; right: 40px; width: 460px; transform: translateY(-50%);"
   SAFE_FLOAT_CSS = "top: 50%; right: 40px; width: 460px; transform: translateY(-50%);"
 
 SUBJECT_Y=lower (sujeto en mitad inferior — inusual):
-  SAFE_PILL_CSS  = "top: 80px; left: 56px;"
+  SAFE_PILL_CSS  = "top: 200px; left: 56px;"
   SAFE_CARD_CSS  = "top: 120px; left: 56px; right: 56px;"
   SAFE_FLOAT_CSS = "top: 260px; left: 56px; right: 56px;"
 ```
@@ -293,29 +297,39 @@ REGLA DE COBERTURA: En ningún segmento de 5 segundos puede haber 0 motion graph
 Si hay un gap > 5s sin overlay, agregar obligatoriamente un overlay de relleno.
 ```
 
-**Luego auto-clasificar cada bloque del transcript** detectando patrones de contenido:
+**Luego auto-clasificar cada bloque del transcript** detectando la INTENCIÓN del segmento. La tabla es GENEROSA a propósito: NO esperes la frase literal — los 6 templates están disponibles y hay que repartirlos, no defaultear a pills + UI card.
 
-| Patrón en el texto | Tipo de overlay sugerido |
-|-------------------|--------------------------|
-| "antes/ahora", "era/ahora", "solía/hoy", "pasé de X a Y" | Comparison Card BEFORE/NOW |
-| "el primero/segundo", "paso 1/2/3", "número uno", lista implícita de 3+ items | Chapter Card con bullets |
-| Menciona herramientas: "Claude", "ChatGPT", "Canva", "Notion", apps por nombre | Floating UI Card |
-| "no soy", "nunca fui", "no uso", "sin saber", "desde cero" | Pill Labels (identidad) |
-| "soy", "logré", "ahora soy", "me convertí en" | Pill Labels (transformación) |
-| Números con K/M/%, métricas específicas (seguidores, ventas, alcance) | Comparison Card o Pill con stat |
+| Intención del segmento | Template sugerido | Señales (no requieren literalidad) |
+|------------------------|-------------------|-------------------------------------|
+| **Contraste / cambio** entre dos estados | Comparison Card ANTES/AHORA | "antes/ahora", "era/ahora", "ya no… ahora", "pasé de X a Y", "el problema vs la solución", cualquier evolución o mejora implícita |
+| **Enumeración** de pasos, razones, errores, tips, beneficios | Chapter Card con bullets | "lo primero", "paso 1/2/3", "tres cosas", "primero… luego…", "hay que X y también Y", listas implícitas de 2+ ítems |
+| **Herramienta / app / pantalla** mencionada | Floating UI Card | "Claude", "ChatGPT", "Canva", "Notion", "esta app", "te muestro", cualquier software o interfaz |
+| **Frase punch / insight / definición / tesis** | Quote Pull | "la clave es", "lo que nadie te dice", "esto lo cambia todo", afirmaciones contundentes, definiciones, la idea central del reel |
+| **Concepto / palabra-fuerza** suelta o cambio de tema | Kinetic Word | un sustantivo o verbo central que merece énfasis ("constancia", "sistema", "gratis"), transiciones entre secciones |
+| **Identidad** negativa/positiva del avatar | Pill Labels | "no soy", "nunca fui", "no uso", "desde cero", "soy", "logré", "me convertí en", características personales |
+| **Dato / métrica** (número con K/M/%, $) | Comparison Card o Stat Pill | seguidores, ventas, alcance, ingresos, cualquier cifra concreta |
+
+> ⚠ **Anti-default:** Pill Labels y Floating UI Card son los que más se sobre-usan porque el contenido F100K casi siempre dice "yo no soy X… uso Claude/ChatGPT". NO los dejes dominar. Si un segmento encaja en pill PERO también tiene una enumeración, una cita fuerte o un contraste, prefiere el template menos usado hasta ese momento. Quote Pull y Kinetic Word son selecciones de PRIMERA CLASE, no relleno.
 
 Generar un **motion board automático preliminar** como tabla y mostrar al usuario:
 
 ```
-📊 AUTO-DETECCIÓN DEL GUIÓN:
+📊 AUTO-DETECCIÓN DEL GUIÓN (busca VARIEDAD, no repetir template):
 ─────────────────────────────────────────────────────
 t=00:03  →  PILL LABELS    "no soy diseñadora / no uso Figma"
              (detectado: identidad negativa en "no soy")
-t=00:15  →  COMPARISON     ANTES: 200 seguidores / AHORA: 500K alcance
+t=00:11  →  QUOTE PULL     "lo que nadie te dice es que el sistema importa más que el talento"
+             (detectado: frase punch / tesis del reel)
+t=00:18  →  COMPARISON     ANTES: 200 seguidores / AHORA: 500K alcance
              (detectado: "pasé de 200 a 500K")
+t=00:27  →  UI CARD        Claude — generando guión
+             (detectado: menciona herramienta)
+t=00:36  →  KINETIC WORD   "CONSTANCIA"
+             (detectado: palabra-fuerza / cambio de tema)
 t=00:42  →  CHAPTER CARD   "Los 3 pasos que usé"
-             (detectado: "el primero, el segundo, el tercero")
+             (detectado: enumeración "primero, segundo, tercero")
 ─────────────────────────────────────────────────────
+Mezcla: 6 overlays, 5 templates distintos ✅  (ninguno domina)
 Zonas de overlay: PILL → TOP (80px), CARDS → BOTTOM (160px)
 [basado en sujeto centrado detectado en Paso 1.5]
 ```
@@ -372,25 +386,55 @@ motion_board = [
     # ... más overlays del guión
 ]
 
-# VERIFICAR DENSIDAD — rellenar gaps > 5s
+# VERIFICAR DENSIDAD — rellenar gaps > 5s CON VARIEDAD (no solo kinetic word)
 gaps = check_density_gaps(motion_board, duration_s)
 if gaps:
-    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — agregando overlays de relleno:")
+    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — rellenando con VARIEDAD:")
+    rotation = ["kinetic_word", "ambient_pill", "quote_pull"]  # se turnan, no se repiten seguidas
+    last = None
     for gap in gaps:
-        # Encontrar texto del segmento en ese momento
-        seg_words = [w['text'] for w in words
-                     if w['start'] >= gap['start'] and w['start'] < gap['end']]
-        keyword = seg_words[0].strip() if seg_words else "IDEA"
-        print(f"  → t={gap['start']:.0f}s: kinetic word '{keyword}'")
-        motion_board.append({
-            "type": "kinetic_word",
-            "start": gap['start'] + 0.5,
-            "duration": 3.5,
-            "text": keyword.upper(),
-            "note": "relleno densidad"
-        })
+        seg = [w['text'] for w in words if gap['start'] <= w['start'] < gap['end']]
+        seg_text = " ".join(seg).strip()
+
+        if any(ch.isdigit() for ch in seg_text):      # hay un dato → stat pill
+            ftype = "stat_pill"
+        elif len(seg) >= 6:                            # frase completa → cita textual
+            ftype = "quote_pull"
+        else:                                          # rotar sin repetir el anterior
+            ftype = next(t for t in rotation if t != last)
+        last = ftype
+
+        if ftype == "stat_pill":
+            num = next((w for w in seg if any(ch.isdigit() for ch in w)), seg_text[:20])
+            payload = {"type": "stat_pill", "text": num}
+        elif ftype == "quote_pull":
+            payload = {"type": "quote_pull", "text": seg_text[:80]}
+        elif ftype == "ambient_pill":
+            payload = {"type": "pill_labels", "labels": [seg[0] if seg else "IDEA"]}
+        else:  # kinetic_word
+            payload = {"type": "kinetic_word", "text": (seg[0] if seg else "IDEA").upper()}
+
+        print(f"  → t={gap['start']:.0f}s: {ftype:12} '{seg_text[:30]}'")
+        motion_board.append({**payload, "start": gap['start'] + 0.5,
+                             "duration": 3.5, "note": f"relleno densidad ({ftype})"})
 
 motion_board.sort(key=lambda x: x['start'])
+
+# VERIFICAR DIVERSIDAD — ningún reel se apoya en 1-2 templates
+from collections import Counter
+mix = Counter(o['type'] for o in motion_board)
+distinct = len(mix)
+top_type, top_n = mix.most_common(1)[0]
+top_share = top_n / len(motion_board)
+min_distinct = 4 if duration_s > 45 else 3
+print(f"\n🎨 Mezcla de templates: {dict(mix)}")
+if distinct < min_distinct or top_share > 0.45:
+    print(f"⚠ POCA VARIEDAD: {distinct} templates distintos, '{top_type}' domina {top_share:.0%}")
+    print(f"  → Antes de confirmar: convierte la enumeración más clara en CHAPTER,")
+    print(f"    la frase más fuerte en QUOTE PULL, y el mayor contraste en COMPARISON.")
+    print(f"  → Objetivo: ≥{min_distinct} templates distintos y dominante ≤45%.")
+else:
+    print(f"✅ Diversidad OK: {distinct} templates distintos, dominante {top_share:.0%}")
 
 with open('/tmp/motion_board.json', 'w') as f:
     json.dump(motion_board, f, ensure_ascii=False, indent=2)
@@ -419,7 +463,7 @@ mkdir -p "$MOTION_DIR"
 
 Generar `$MOTION_DIR/index.html` usando los templates de referencia (sección abajo). Reglas:
 
-- Stage: 1080×1920, fondo transparente
+- Stage: 1080×1920, fondo `#FF00FF` (green screen para chromakey — NUNCA transparent)
 - Cada overlay: `data-start`, `data-duration`, `data-track-index` único
 - Usar tracks 10+ para no colisionar
 - Aplicar `SAFE_PILL_CSS`, `SAFE_CARD_CSS`, `SAFE_FLOAT_CSS` del Paso 1.5 en lugar de posiciones hardcoded
@@ -433,11 +477,10 @@ Generar `$MOTION_DIR/index.html` usando los templates de referencia (sección ab
 cd "$MOTION_DIR"
 hyperframes preview  # opcional, para revisar en browser
 
-# Render WebM con alpha (fondo transparente, recomendado)
-hyperframes render --format webm --resolution portrait -o overlays.webm
-
-# Alternativa MP4 opaco
-hyperframes render --resolution portrait -o overlays.mp4
+# Render MP4 (obligatorio — WebM VP9 sale como yuv420p SIN alpha real)
+# ⚠ --resolution portrait NO se puede combinar con --format mp4 cuando el stage ya define 1080×1920
+# ⚠ Omitir --resolution: la composición ya está en el tamaño correcto en data-width/data-height
+hyperframes render --format mp4 -o overlays.mp4
 ```
 
 Si el render falla: `hyperframes lint` → `hyperframes validate` para detectar errores.
@@ -449,14 +492,24 @@ Si el render falla: `hyperframes lint` → `hyperframes validate` para detectar 
 ```bash
 OUTPUT="$VIDEO_DIR/${VIDEO_NAME}_motion.mp4"
 
-# Con alpha (WebM — recomendado)
 ffmpeg \
   -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.webm" \
-  -filter_complex "[0:v][1:v]overlay=0:0:format=auto[outv]" \
-  -map "[outv]" -map 0:a? \
+  -i "$MOTION_DIR/overlays.mp4" \
+  -filter_complex \
+    "[0:v]fps=30,format=yuv420p[base];
+     [1:v]fps=30,format=yuv420p[ov];
+     [ov]colorkey=0xFF00FF:0.3:0.1[ov_key];
+     [base][ov_key]overlay=0:0:format=auto[outv]" \
+  # ⚠ fps=30,format=yuv420p ANTES del colorkey — evita mismatch fps y fuerza yuv420p
+  # ⚠ chroma MAGENTA #FF00FF (NO verde): el diseño usa teals/emeralds (#34d399, #28c840) que un chroma verde elimina por error
+  # ⚠ colorkey=RGB (NO chromakey=YCbCr) — colorkey limpia el magenta CSS sin residuo en bordes anti-aliased
+  # ⚠ 0.3:0.1 = similarity 30% + blend 10% — captura bordes anti-aliased del CSS sin comer el contenido
+  # ⚠ -map "0:1" explícito — NO usar -map 0:a ni -map "0:a?" (en zsh ? es glob y rompe)
+  # ⚠ -movflags +faststart OBLIGATORIO o el proceso puede colgarse con filter_complex complejo
+  -map "[outv]" -map "0:1" \
   -c:v libx264 -crf 18 -preset slow \
-  -c:a aac -b:a 192k \
+  -c:a copy \
+  -movflags +faststart \
   -y "$OUTPUT"
 
 echo "✓ Output: $OUTPUT"
@@ -467,13 +520,16 @@ Si el video fuente no es 1080×1920:
 ```bash
 ffmpeg \
   -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.webm" \
+  -i "$MOTION_DIR/overlays.mp4" \
   -filter_complex \
-    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[scaled];
-     [scaled][1:v]overlay=0:0:format=auto[outv]" \
-  -map "[outv]" -map 0:a? \
+    "[0:v]fps=30,format=yuv420p,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[base];
+     [1:v]fps=30,format=yuv420p[ov];
+     [ov]colorkey=0xFF00FF:0.3:0.1[ov_key];
+     [base][ov_key]overlay=0:0:format=auto[outv]" \
+  -map "[outv]" -map "0:1" \
   -c:v libx264 -crf 18 -preset slow \
-  -c:a aac -b:a 192k \
+  -c:a copy \
+  -movflags +faststart \
   -y "$OUTPUT"
 ```
 
@@ -1054,6 +1110,16 @@ Un solo archivo `index.html` con todos los overlays. Asignación de `data-track-
 - Kinetic words: 50, 51, 52...
 - Quote pulls: 60, 61, 62...
 
+**Mapa `type` → template HTML** (los tipos de relleno reusan templates existentes, no inventes HTML nuevo):
+| `type` del motion board | Template a usar (sección abajo) |
+|-------------------------|----------------------------------|
+| `pill_labels`, `ambient_pill`, `stat_pill` | Template 1 — Pill Labels (1 pill para stat/ambient) |
+| `comparison` | Template 2 — Comparison Card |
+| `ui_card` / floating UI | Template 3 — Floating UI Card |
+| `chapter` | Template 4 — Chapter Card |
+| `kinetic_word` | Template 5 — Kinetic Word |
+| `quote_pull` | Template 6 — Quote Pull |
+
 El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`.
 
 ### Estructura base
@@ -1065,7 +1131,7 @@ El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`
   <meta charset="UTF-8">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: transparent; overflow: hidden; }
+    body { background: #FF00FF; overflow: hidden; } /* ⚠ NUNCA transparent — usar #FF00FF (magenta) para chromakey posterior. NO usar verde: el diseño usa teals/emeralds (#34d399, #28c840) y un chroma verde se los come */
   </style>
 </head>
 <body>
@@ -1097,7 +1163,7 @@ El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`
 
 **Cambiar texto o timing de un overlay:**
 1. Editar `motion_overlays/index.html`
-2. Re-render: `npx hyperframes render --format webm --resolution portrait -o overlays.webm`
+2. Re-render: `npx hyperframes render --format mp4 --resolution portrait -o overlays.mp4`
 3. Re-componer con ffmpeg
 
 **Mover un overlay a otra zona:**
@@ -1125,6 +1191,14 @@ El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`
 | Video final con overlays desfasados | Verificar timestamps en `data-start` vs duración del video original |
 | `hyperframes: command not found` | `npm install -g hyperframes` + `node --version >= 22` |
 | Frame de análisis (Paso 1.5) incompleto | Usar el frame en posición `0.33` del video como backup |
+| `body { background: transparent }` | Cambiar a `#FF00FF` — HyperFrames WebM VP9 sale yuv420p SIN alpha real |
+| Texto verde/teal sale semitransparente o recortado | El chroma era verde y se comió el texto. Usar `#FF00FF` (magenta) — el diseño usa verdes (#34d399, #28c840, #065f46) que un chroma verde elimina |
+| `--format webm` en render | Usar `--format mp4` — VP9 siempre yuv420p, el "alpha" es negro, no transparente |
+| `--format mp4 --resolution portrait` | Omitir `--resolution`: si el stage ya define 1080×1920 con data-width/height no se puede combinar |
+| Residuo verde en bordes | Usar `colorkey` (RGB) NO `chromakey` (YCbCr). `colorkey=0xFF00FF:0.3:0.1` limpia anti-aliased CSS |
+| Video fuente queda negro tras overlay | Fuente y overlay deben tener el mismo fps. Agregar `fps=30,format=yuv420p` a AMBOS streams en filter_complex |
+| Process hangs con filter_complex | Agregar `-movflags +faststart` al comando ffmpeg |
+| `zsh: no matches found: 0:a?` | Usar `-map "0:1"` explícito — en zsh `?` es glob y rompe el comando |
 
 ---
 
@@ -1136,7 +1210,7 @@ $VIDEO_DIR/
 ├── mi_reel_motion.mp4             ← OUTPUT FINAL
 └── motion_overlays/
     ├── index.html                 ← composición HyperFrames con overlays
-    └── overlays.webm              ← overlays renderizados (alpha transparente)
+    └── overlays.mp4               ← overlays renderizados (magenta screen #FF00FF)
 
 /tmp/
 ├── frame_sujeto.jpg               ← frame para análisis de posición (temporal)

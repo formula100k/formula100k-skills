@@ -25,16 +25,88 @@ Cuando el usuario:
 - Stories fullscreen → usar `historias-a-imagenes-nanobanana`
 - Motion graphics sueltos sin video base → usar `graficos-de-video-formula100k`
 
-## Onboarding — Primera vez
+## Onboarding — Auto-install (ejecutar siempre al inicio)
+
+Antes de cualquier trabajo, verificar e instalar todo lo necesario:
 
 ```bash
-node --version  # debe mostrar v22+
-# Si es menor: brew install node@22 && brew link node@22 --force
-npm install -g hyperframes
-hyperframes --version   # debe mostrar 0.6.x
+# 1. Node.js v22+
+node --version 2>/dev/null | grep -qE "v2[2-9]|v[3-9][0-9]" || {
+  echo "⚠ Node.js v22+ requerido. Instalando..."
+  brew install node@22 && brew link node@22 --force
+}
+
+# 2. HyperFrames CLI
+command -v hyperframes &>/dev/null || {
+  echo "📦 Instalando HyperFrames CLI..."
+  npm install -g hyperframes
+}
+hyperframes --version   # debe mostrar 0.6.x+
+
+# 3. Paquetes del ecosistema @hyperframes
+node -e "require('@hyperframes/core')" 2>/dev/null || npm install @hyperframes/core
+node -e "require('@hyperframes/engine')" 2>/dev/null || npm install @hyperframes/engine
+node -e "require('@hyperframes/player')" 2>/dev/null || npm install @hyperframes/player
+node -e "require('@hyperframes/producer')" 2>/dev/null || npm install @hyperframes/producer
+# Studio (editor visual — opcional, solo si usuario pide editar visualmente):
+# npm install @hyperframes/studio
+
+# 4. Dependencias de sistema
 hyperframes doctor      # Chrome y FFmpeg deben aparecer con ✓
-# Si ffmpeg falta: brew install ffmpeg
+command -v ffmpeg &>/dev/null || brew install ffmpeg
+command -v yt-dlp &>/dev/null || brew install yt-dlp
 ```
+
+### Paquetes del ecosistema HyperFrames
+
+| Paquete | Propósito |
+|---------|-----------|
+| `hyperframes` (CLI) | Crear, preview, lint y render composiciones |
+| `@hyperframes/core` | Tipos, parsers HTML, linter, runtime — base de todo |
+| `@hyperframes/engine` | Captura frame-by-frame usando Chrome BeginFrame API |
+| `@hyperframes/player` | Web component para reproducir composiciones en web |
+| `@hyperframes/producer` | Pipeline completo HTML→video con encoding + mezcla de audio |
+| `@hyperframes/studio` | Editor visual con live preview y timeline (opcional) |
+
+---
+
+## Templates Oficiales HyperFrames
+
+Scaffoldear cualquier proyecto desde un template oficial con:
+
+```bash
+npx hyperframes init mi-proyecto --example NOMBRE_TEMPLATE
+# Con video fuente:
+npx hyperframes init mi-proyecto --example NOMBRE_TEMPLATE --video ./video.mp4
+```
+
+### Catálogo completo (9 templates)
+
+| Template | Formato | Estética | Mejor para |
+|----------|---------|----------|------------|
+| `warm-grain` | 16:9 | Crema + textura grain + color grading cálido | Lifestyle, branding, editorial |
+| `play-mode` | 16:9 | Animaciones elásticas energéticas, bold motion | Social media, lanzamientos |
+| `swiss-grid` | 16:9 | Grid estructurado estilo tipografía suiza | Corporativo, datos, técnico |
+| `kinetic-type` | 16:9 | Tipografía cinética, texto dramático | Promos, intros, title cards |
+| `decision-tree` | 16:9 | Flowchart animado con paths progresivos | Explainers, tutoriales |
+| `product-promo` | 16:9 | Multi-escena con SVG + logo animations | Demos de producto, showcases |
+| `nyt-graph` | 16:9 | Charts estilo editorial print (NYT) | Data stories, reportes |
+| `vignelli` | 9:16 ✅ | Tipografía bold con acentos rojos | Reels con headlines fuertes |
+| `blank` | 16:9 | Solo el scaffold — composición vacía | Control total, agente-generated |
+
+**Ejemplo para reel 9:16 (F100K):**
+```bash
+# Reel de transformación / lifestyle:
+npx hyperframes init "$MOTION_DIR" --example vignelli --video "$VIDEO_PATH"
+
+# Reel energético / lanzamiento:
+npx hyperframes init "$MOTION_DIR" --example play-mode --video "$VIDEO_PATH"
+
+# Reel educativo / tutorial:
+npx hyperframes init "$MOTION_DIR" --example blank --video "$VIDEO_PATH"
+```
+
+> Para reels 9:16, `vignelli` es el único template nativo en portrait. Los demás sirven como base estética pero requieren ajustar `data-width="1080" data-height="1920"` y recalcular posiciones. Si el usuario no especifica estética, usar `blank` y construir desde los templates de este skill.
 
 ---
 
@@ -186,6 +258,41 @@ Leer `/tmp/motion_transcript.json`. Agrupar palabras en bloques de 5-10 segundos
 ...
 ```
 
+### Regla de densidad obligatoria: 1 motion graphic cada 5 segundos
+
+**Esta regla NO es negociable.** Calcular el mínimo de overlays antes de clasificar:
+
+```python
+import json
+
+with open('/tmp/motion_transcript.json') as f:
+    words = json.load(f)
+
+# Duración total en segundos
+duration_s = max(w['end'] for w in words)
+
+# Mínimo requerido: 1 overlay por cada 5 segundos de video
+MIN_OVERLAYS = int(duration_s // 5)
+
+print(f"📹 Duración del reel: {duration_s:.0f}s")
+print(f"📊 Overlays mínimos requeridos: {MIN_OVERLAYS} (1 cada 5s)")
+print(f"   → Un reel de 60s necesita al menos 12 overlays activos")
+```
+
+Si el contenido natural genera menos overlays que `MIN_OVERLAYS`, **rellenar con overlays de densidad**:
+
+| Tipo de relleno | Cuándo usar | Duración típica |
+|----------------|-------------|-----------------|
+| **Kinetic word** — palabra clave del segmento en grande | Cualquier momento sin overlay | 3-4s |
+| **Stat pill** — número o dato mencionado | Cuando se dice un número | 4-5s |
+| **Ambient pill** — etiqueta contextual del tema | Durante explicaciones sin estructura | 4s |
+| **Quote pull** — frase textual del speaker en card | Durante citas o definiciones | 5-6s |
+
+```
+REGLA DE COBERTURA: En ningún segmento de 5 segundos puede haber 0 motion graphics activos.
+Si hay un gap > 5s sin overlay, agregar obligatoriamente un overlay de relleno.
+```
+
 **Luego auto-clasificar cada bloque del transcript** detectando patrones de contenido:
 
 | Patrón en el texto | Tipo de overlay sugerido |
@@ -231,38 +338,68 @@ Si el usuario quiere creative direction manual, ofrecer los 4 tipos disponibles 
 
 ### Paso 4 — Generar el Motion Board definitivo
 
-Procesar la creative direction (auto-detectada + ajustes del usuario) y construir el motion board JSON:
+Procesar la creative direction (auto-detectada + ajustes del usuario) y construir el motion board JSON. **Luego verificar densidad y rellenar gaps > 5s automáticamente:**
 
-```json
-[
-  {
-    "type": "pill_labels",
-    "start": 2.8,
-    "duration": 3.5,
-    "labels": ["no soy diseñadora", "no uso Figma", "empecé desde cero"],
-    "position": "top"
-  },
-  {
-    "type": "comparison_card",
-    "start": 14.2,
-    "duration": 5.0,
-    "title": "Mi transformación",
-    "before_text": "200 seguidores",
-    "now_text": "500K alcance",
-    "position": "bottom"
-  },
-  {
-    "type": "chapter_card",
-    "start": 44.1,
-    "duration": 6.0,
-    "title": "Los 3 pasos que usé",
-    "items": ["Elegir una sola plataforma", "Publicar 30 días seguidos", "Usar IA para los guiones"],
-    "position": "bottom"
-  }
+```python
+import json
+
+def check_density_gaps(motion_board, duration_s, window_s=5):
+    """Detecta ventanas de 5s sin cobertura de overlay."""
+    gaps = []
+    for w_start in range(0, int(duration_s), window_s):
+        w_end = w_start + window_s
+        covered = any(
+            o['start'] < w_end and (o['start'] + o['duration']) > w_start
+            for o in motion_board
+        )
+        if not covered:
+            gaps.append({'start': w_start, 'end': w_end})
+    return gaps
+
+with open('/tmp/motion_transcript.json') as f:
+    words = json.load(f)
+duration_s = max(w['end'] for w in words)
+
+# Motion board base (auto-clasificado + ajustes del usuario)
+motion_board = [
+    {
+        "type": "pill_labels",
+        "start": 2.8,
+        "duration": 3.5,
+        "labels": ["no soy diseñadora", "no uso Figma", "empecé desde cero"],
+        "position": "top"
+    },
+    # ... más overlays del guión
 ]
+
+# VERIFICAR DENSIDAD — rellenar gaps > 5s
+gaps = check_density_gaps(motion_board, duration_s)
+if gaps:
+    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — agregando overlays de relleno:")
+    for gap in gaps:
+        # Encontrar texto del segmento en ese momento
+        seg_words = [w['text'] for w in words
+                     if w['start'] >= gap['start'] and w['start'] < gap['end']]
+        keyword = seg_words[0].strip() if seg_words else "IDEA"
+        print(f"  → t={gap['start']:.0f}s: kinetic word '{keyword}'")
+        motion_board.append({
+            "type": "kinetic_word",
+            "start": gap['start'] + 0.5,
+            "duration": 3.5,
+            "text": keyword.upper(),
+            "note": "relleno densidad"
+        })
+
+motion_board.sort(key=lambda x: x['start'])
+
+with open('/tmp/motion_board.json', 'w') as f:
+    json.dump(motion_board, f, ensure_ascii=False, indent=2)
+
+print(f"\n✅ Motion board final: {len(motion_board)} overlays para {duration_s:.0f}s de reel")
+print(f"   Densidad: {len(motion_board)/(duration_s/5):.1f}x el mínimo requerido")
 ```
 
-Guardar en `/tmp/motion_board.json`. Confirmar si no se confirmó en Paso 3.
+Confirmar el motion board si no se hizo en Paso 3.
 
 ---
 
@@ -342,11 +479,20 @@ ffmpeg \
 
 ---
 
-### Paso 8 — Entregar resultado
+### Paso 8 — Verificar y entregar resultado
 
 ```bash
 open "$VIDEO_DIR"
 ```
+
+Checklist antes de entregar:
+- [ ] **Densidad OK** — ningún tramo de 5s sin motion graphic activo (verificado con `check_density_gaps` del Paso 4)
+- [ ] Pill labels no tapan la cara del speaker (verificado con zonas del Paso 1.5)
+- [ ] Cards están en zona segura detectada
+- [ ] UI cards tienen borde azul visible
+- [ ] Animaciones de entrada Y salida fluidas — no abruptas
+- [ ] Duración de cada overlay suficiente para leer el texto
+- [ ] Audio del video original intacto
 
 Mostrar al usuario: ruta del video final + tabla con overlays generados + timestamps.
 
@@ -785,6 +931,103 @@ CSS inicial: `opacity: 0; transform: translateY(36px);` para que entre desde aba
 
 ---
 
+---
+
+### Template 5 — Kinetic Word (relleno de densidad)
+
+Palabra clave grande con animación elástica. Usado automáticamente para cubrir gaps > 5s.
+
+**Cuándo usar:** relleno de densidad cuando no hay overlay natural, énfasis en conceptos clave.
+
+```html
+<div id="kw-COMP_ID"
+     data-start="START_S"
+     data-duration="DUR_S"
+     data-track-index="TRACK_IDX"
+     style="
+       position: absolute;
+       SAFE_PILL_CSS
+       opacity: 0;
+     ">
+  <span style="
+    font: 900 96px/1 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.7);
+    white-space: nowrap;
+  ">KEYWORD</span>
+</div>
+```
+
+```js
+// Kinetic word — elastic bounce entrada, scale out salida
+tl.from("#kw-COMP_ID", {
+  scale: 0.4,
+  opacity: 0,
+  duration: 0.5,
+  ease: "elastic.out(1.2, 0.5)"
+}, START_S + 0.05);
+
+tl.to("#kw-COMP_ID", {
+  scale: 1.15,
+  opacity: 0,
+  duration: 0.32,
+  ease: "power3.in"
+}, START_S + DUR_S - 0.4);
+```
+
+---
+
+### Template 6 — Quote Pull (cita textual)
+
+Frase del speaker enmarcada en card con borde ámbar. Zona segura inferior o lateral.
+
+**Cuándo usar:** durante definiciones, citas memorables, momentos de insight.
+
+```html
+<div id="quote-COMP_ID"
+     data-start="START_S"
+     data-duration="DUR_S"
+     data-track-index="TRACK_IDX"
+     style="
+       position: absolute;
+       SAFE_CARD_CSS
+       opacity: 0;
+     ">
+  <div style="
+    background: rgba(255,255,255,0.06);
+    border-left: 5px solid #f59e0b;
+    border-radius: 0 16px 16px 0;
+    padding: 24px 28px;
+    backdrop-filter: blur(14px);
+  ">
+    <p style="
+      color: #ffffff;
+      font: 500 italic 30px/1.5 'Inter', sans-serif;
+      margin: 0;
+    ">"QUOTE_TEXT"</p>
+  </div>
+</div>
+```
+
+```js
+// Quote pull — slide lateral + fade, salida fade suave
+tl.fromTo("#quote-COMP_ID",
+  { opacity: 0, y: 28 },
+  { opacity: 1, y: 0, duration: 0.55, ease: "expo.out" },
+  START_S + 0.1
+);
+
+tl.to("#quote-COMP_ID", {
+  opacity: 0,
+  duration: 0.45,
+  ease: "power1.in"
+}, START_S + DUR_S - 0.55);
+```
+
+---
+
 ## Reglas de animación — siempre aplicar
 
 1. **Entrada: `gsap.from()`** — animar DESDE el estado inicial HACIA la posición CSS.
@@ -793,6 +1036,8 @@ CSS inicial: `opacity: 0; transform: translateY(36px);` para que entre desde aba
    - Cards amplias → `expo.out` (entrada) + `power2.in` (salida)
    - UI card flotante → `back.out(1.4)` (entrada con spring) + `power2.in` (salida)
    - Pill labels → `back.out(1.3)` (entrada con spring pequeño) + `power2.in` (salida)
+   - Kinetic word → `elastic.out(1.2, 0.5)` (entrada rebote) + `power3.in` (salida rápida)
+   - Quote pull → `expo.out` con `fromTo` (entrada) + `power1.in` (salida suave)
 4. **Stagger:** siempre staggar elementos múltiples — 0.15-0.18s entre pills, 0.12-0.15s entre items de lista.
 5. **Variedad de eases:** no repetir el mismo ease en todos los overlays del mismo video.
 6. **Offset de entrada:** primer tween a `START_S + 0.08` como mínimo, nunca exactamente en `START_S`.
@@ -806,6 +1051,8 @@ Un solo archivo `index.html` con todos los overlays. Asignación de `data-track-
 - Comparison cards: 20, 21, 22...
 - UI cards: 30, 31, 32...
 - Chapter cards: 40, 41, 42...
+- Kinetic words: 50, 51, 52...
+- Quote pulls: 60, 61, 62...
 
 El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`.
 

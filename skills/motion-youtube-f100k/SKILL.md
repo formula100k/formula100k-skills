@@ -29,16 +29,88 @@ Formato: **1920×1080 (16:9)** a 30fps. Los overlays se posicionan en las zonas 
 
 ---
 
-## Onboarding — Primera vez
+## Onboarding — Auto-install (ejecutar siempre al inicio)
+
+Antes de cualquier trabajo, verificar e instalar todo lo necesario:
 
 ```bash
-node --version  # debe mostrar v22+
-# Si es menor: brew install node@22 && brew link node@22 --force
-npm install -g hyperframes
-hyperframes --version   # debe mostrar 0.6.x
+# 1. Node.js v22+
+node --version 2>/dev/null | grep -qE "v2[2-9]|v[3-9][0-9]" || {
+  echo "⚠ Node.js v22+ requerido. Instalando..."
+  brew install node@22 && brew link node@22 --force
+}
+
+# 2. HyperFrames CLI
+command -v hyperframes &>/dev/null || {
+  echo "📦 Instalando HyperFrames CLI..."
+  npm install -g hyperframes
+}
+hyperframes --version   # debe mostrar 0.6.x+
+
+# 3. Paquetes del ecosistema @hyperframes
+node -e "require('@hyperframes/core')" 2>/dev/null || npm install @hyperframes/core
+node -e "require('@hyperframes/engine')" 2>/dev/null || npm install @hyperframes/engine
+node -e "require('@hyperframes/player')" 2>/dev/null || npm install @hyperframes/player
+node -e "require('@hyperframes/producer')" 2>/dev/null || npm install @hyperframes/producer
+# Studio (editor visual — opcional, solo si usuario pide editar visualmente):
+# npm install @hyperframes/studio
+
+# 4. Dependencias de sistema
 hyperframes doctor      # Chrome y FFmpeg deben aparecer con ✓
-# Si ffmpeg falta: brew install ffmpeg
+command -v ffmpeg &>/dev/null || brew install ffmpeg
+command -v yt-dlp &>/dev/null || brew install yt-dlp
 ```
+
+### Paquetes del ecosistema HyperFrames
+
+| Paquete | Propósito |
+|---------|-----------|
+| `hyperframes` (CLI) | Crear, preview, lint y render composiciones |
+| `@hyperframes/core` | Tipos, parsers HTML, linter, runtime — base de todo |
+| `@hyperframes/engine` | Captura frame-by-frame usando Chrome BeginFrame API |
+| `@hyperframes/player` | Web component para reproducir composiciones en web |
+| `@hyperframes/producer` | Pipeline completo HTML→video con encoding + mezcla de audio |
+| `@hyperframes/studio` | Editor visual con live preview y timeline (opcional) |
+
+---
+
+## Templates Oficiales HyperFrames
+
+Scaffoldear cualquier proyecto desde un template oficial con:
+
+```bash
+npx hyperframes init mi-proyecto --example NOMBRE_TEMPLATE
+# Con video fuente:
+npx hyperframes init mi-proyecto --example NOMBRE_TEMPLATE --video ./video.mp4
+```
+
+### Catálogo completo (9 templates)
+
+| Template | Formato | Estética | Mejor para |
+|----------|---------|----------|------------|
+| `warm-grain` | 16:9 | Crema + textura grain + color grading cálido | Lifestyle, branding, editorial |
+| `play-mode` | 16:9 | Animaciones elásticas energéticas, bold motion | Social media, lanzamientos |
+| `swiss-grid` | 16:9 | Grid estructurado estilo tipografía suiza | Corporativo, datos, técnico |
+| `kinetic-type` | 16:9 | Tipografía cinética, texto dramático | Promos, intros, title cards |
+| `decision-tree` | 16:9 | Flowchart animado con paths progresivos | Explainers, tutoriales |
+| `product-promo` | 16:9 | Multi-escena con SVG + logo animations | Demos de producto, showcases |
+| `nyt-graph` | 16:9 | Charts estilo editorial print (NYT) | Data stories, reportes |
+| `vignelli` | 9:16 🔴 | Tipografía bold con acentos rojos | Headlines, anuncios verticales |
+| `blank` | 16:9 | Solo el scaffold — composición vacía | Control total, agente-generated |
+
+**Ejemplo para video de YouTube (F100K):**
+```bash
+# Para un video educativo/tutorial:
+npx hyperframes init "$DEST/overlays" --example swiss-grid --video "$VIDEO_SRC"
+
+# Para un video de lifestyle/marca personal:
+npx hyperframes init "$DEST/overlays" --example warm-grain --video "$VIDEO_SRC"
+
+# Para un reel de resultado (antes/después):
+npx hyperframes init "$DEST/overlays" --example play-mode --video "$VIDEO_SRC"
+```
+
+> Si el usuario no especifica preferencia estética, usar `blank` y construir los overlays desde los templates de este skill (Paso 5). Si especifica un mood, usar el template más cercano como base y sobreescribir con los overlays del motion board.
 
 ---
 
@@ -183,6 +255,42 @@ EOF
 
 Mostrar transcript formateado en bloques de 10-15 segundos.
 
+### Regla de densidad obligatoria: 1 motion graphic cada 5 segundos
+
+**Esta regla NO es negociable.** Calcular el mínimo de overlays antes de clasificar:
+
+```python
+import json
+
+with open('$DEST/transcript.json') as f:
+    transcript = json.load(f)
+
+# Duración total en segundos
+duration_ms = max(s['end_ms'] for s in transcript)
+duration_s = duration_ms / 1000
+
+# Mínimo requerido: 1 overlay por cada 5 segundos de video
+MIN_OVERLAYS = int(duration_s // 5)
+
+print(f"📹 Duración del video: {duration_s:.0f}s")
+print(f"📊 Overlays mínimos requeridos: {MIN_OVERLAYS} (1 cada 5s)")
+print(f"   → Distribución sugerida: 1 overlay activo en cada ventana de 5s")
+```
+
+Si el contenido natural genera menos overlays que `MIN_OVERLAYS`, **rellenar con overlays de densidad**:
+
+| Tipo de relleno | Cuándo usar | Duración típica |
+|----------------|-------------|-----------------|
+| **Kinetic word** — palabra clave del segmento en grande | Cualquier momento sin overlay | 3-4s |
+| **Stat pill** — número o dato mencionado | Cuando se dice un número | 4-5s |
+| **Ambient pill** — etiqueta contextual del tema | Durante explicaciones sin estructura | 4s |
+| **Quote pull** — frase textual del speaker en card | Durante citas o definiciones | 5-6s |
+
+```
+REGLA DE COBERTURA: En ningún segmento de 5 segundos puede haber 0 motion graphics activos.
+Si hay un gap > 5s sin overlay, agregar obligatoriamente un overlay de relleno.
+```
+
 **Luego auto-clasificar el contenido del guión** detectando patrones:
 
 | Patrón en el texto | Tipo de overlay sugerido |
@@ -224,7 +332,7 @@ Opciones: ["Generar tal cual", "Ajustar algunos", "Creative direction manual com
 
 ## Paso 4 — Generar Motion Board definitivo
 
-Crear `$DEST/motion_board.json` resolviendo cada overlay al timestamp correcto:
+Crear `$DEST/motion_board.json` resolviendo cada overlay al timestamp correcto y verificando densidad:
 
 ```python
 import json
@@ -236,15 +344,54 @@ def find_keyword_time(transcript, keyword):
             return seg['start_ms']
     return None
 
+def check_density_gaps(motion_board, duration_ms, window_ms=5000):
+    """Detecta ventanas de 5s sin cobertura de overlay."""
+    gaps = []
+    for window_start in range(0, int(duration_ms), window_ms):
+        window_end = window_start + window_ms
+        covered = any(
+            o['start_ms'] < window_end and (o['start_ms'] + o['duration_ms']) > window_start
+            for o in motion_board
+        )
+        if not covered:
+            gaps.append({'start_ms': window_start, 'end_ms': window_end})
+    return gaps
+
 with open('$DEST/transcript.json') as f:
     transcript = json.load(f)
+
+duration_ms = max(s['end_ms'] for s in transcript)
 
 # Motion board (definido por auto-clasificación + ajustes del usuario)
 motion_board = []
 # ... resolver timestamps para cada overlay
 
+# VERIFICAR DENSIDAD — rellenar gaps > 5s
+gaps = check_density_gaps(motion_board, duration_ms)
+if gaps:
+    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — agregando overlays de relleno:")
+    for gap in gaps:
+        gap_s = gap['start_ms'] / 1000
+        # Encontrar texto del segmento en ese momento para extraer keyword
+        seg_texts = [s['text'] for s in transcript
+                     if s['start_ms'] >= gap['start_ms'] and s['start_ms'] < gap['end_ms']]
+        keyword = seg_texts[0].split()[0] if seg_texts else "idea clave"
+        print(f"  → t={gap_s:.0f}s: kinetic word '{keyword}'")
+        motion_board.append({
+            'type': 'kinetic_word',
+            'start_ms': gap['start_ms'] + 500,
+            'duration_ms': 3500,
+            'text': keyword.upper(),
+            'note': 'relleno densidad'
+        })
+
+motion_board.sort(key=lambda x: x['start_ms'])
+
 with open('$DEST/motion_board.json', 'w') as f:
     json.dump(motion_board, f, indent=2, ensure_ascii=False)
+
+print(f"\n✅ Motion board final: {len(motion_board)} overlays para {duration_ms/1000:.0f}s de video")
+print(f"   Densidad: {len(motion_board)/(duration_ms/1000/5):.1f}x el mínimo requerido")
 ```
 
 ---
@@ -255,6 +402,10 @@ Generar `$DEST/overlays/index.html` con TODOS los overlays. Usar las variables `
 
 ### Estructura base
 
+> **GOTCHA — background obligatorio**: Usar `background: #00ff00` (NUNCA `transparent`).
+> HyperFrames fuerza transparencia al renderizar WebM → fondo negro en yuv420p → colorkey no funciona.
+> Renderizando como **MP4**, el renderer SÍ respeta el CSS body background → green screen limpio.
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -262,7 +413,7 @@ Generar `$DEST/overlays/index.html` con TODOS los overlays. Usar las variables `
 <meta charset="utf-8">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: transparent; width: 1920px; height: 1080px; overflow: hidden; }
+  body { background: #00ff00; width: 1920px; height: 1080px; overflow: hidden; }
   .clip { position: absolute; }
 </style>
 </head>
@@ -564,12 +715,100 @@ tl.to("#summary-{id}", {
 
 ---
 
+---
+
+### Template 5 — Kinetic Word (relleno de densidad)
+
+Palabra clave grande con animación elástica. Usado automáticamente para cubrir gaps > 5s.
+
+**Cuándo usar:** relleno de densidad cuando no hay overlay natural, énfasis en conceptos clave.
+
+```html
+<div id="kw-{id}" class="clip"
+     data-start="{start_s}" data-duration="{dur_s}" data-track-index="{track}"
+     style="position: absolute; SAFE_PILL_CSS; opacity: 0;">
+  <span style="
+    font: 900 72px/1 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.6);
+    white-space: nowrap;
+  ">{KEYWORD}</span>
+</div>
+```
+
+```js
+// Kinetic word — elastic bounce entrada, scale out salida
+tl.from("#kw-{id}", {
+  scale: 0.5,
+  opacity: 0,
+  duration: 0.45,
+  ease: "elastic.out(1.2, 0.5)"
+}, {start_s} + 0.05);
+
+tl.to("#kw-{id}", {
+  scale: 1.1,
+  opacity: 0,
+  duration: 0.3,
+  ease: "power3.in"
+}, {start_s} + {dur_s} - 0.4);
+```
+
+---
+
+### Template 6 — Quote Pull (cita textual)
+
+Frase del speaker enmarcada en card de cita.
+
+**Cuándo usar:** durante definiciones, citas memorables, momentos de insights.
+
+```html
+<div id="quote-{id}" class="clip"
+     data-start="{start_s}" data-duration="{dur_s}" data-track-index="{track}"
+     style="position: absolute; SAFE_CARD_CSS;
+            max-width: 620px; opacity: 0;">
+  <div style="
+    background: rgba(255,255,255,0.06);
+    border-left: 4px solid #f59e0b;
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    backdrop-filter: blur(12px);
+  ">
+    <p style="
+      color: #fff;
+      font: 500 italic 22px/1.5 'Inter', sans-serif;
+      margin: 0;
+    ">"<span id="quote-text-{id}">{QUOTE_TEXT}</span>"</p>
+  </div>
+</div>
+```
+
+```js
+// Quote pull — slide desde borde + fade, salida fade suave
+tl.fromTo("#quote-{id}",
+  { opacity: 0, x: 30 },
+  { opacity: 1, x: 0, duration: 0.55, ease: "expo.out" },
+  {start_s} + 0.1
+);
+
+tl.to("#quote-{id}", {
+  opacity: 0,
+  duration: 0.45,
+  ease: "power1.in"
+}, {start_s} + {dur_s} - 0.55);
+```
+
+---
+
 ## Asignación de data-track-index
 
 - Pill labels: 10, 11, 12...
 - Comparison cards: 20, 21, 22...
 - UI cards: 30, 31, 32...
 - Chapter cards: 40, 41, 42...
+- Kinetic words: 50, 51, 52...
+- Quote pulls: 60, 61, 62...
 
 ---
 
@@ -582,41 +821,67 @@ mkdir -p "$DEST/overlays"
 cd "$DEST/overlays"
 npx hyperframes preview   # verificar en browser
 
-# Render WebM con alpha (recomendado)
-hyperframes render --format webm --resolution landscape -o "$DEST/overlays/overlays.webm"
+# ⚠️ SIEMPRE renderizar como MP4 — WebM ignora el body background (fuerza transparente → negro)
+hyperframes render --format mp4 -o "$DEST/overlays/overlays.mp4"
+```
 
-# Alternativa sin alpha
-hyperframes render --resolution landscape -o "$DEST/overlays/overlays.mp4"
+Verificar que el green screen funciona antes de componer:
+```bash
+ffmpeg -ss 3 -i "$DEST/overlays/overlays.mp4" -vframes 1 /tmp/verify_gs.jpg -y
+# Abrir /tmp/verify_gs.jpg — debe mostrar fondo verde brillante con overlays encima
 ```
 
 ---
 
 ## Paso 7 — Composición final con ffmpeg
 
-### Con alpha (WebM transparente, recomendado):
+### Video fuente ya es 1920×1080 (horizontal):
 ```bash
-ffmpeg -i "$VIDEO_SRC" -i "$DEST/overlays/overlays.webm" \
-  -filter_complex "[0:v][1:v]overlay=0:0:format=auto" \
+ffmpeg -y -i "$VIDEO_SRC" -i "$DEST/overlays/overlays.mp4" \
+  -filter_complex "
+    [1:v]colorkey=0x00ff00:0.35:0.15[keyed];
+    [0:v][keyed]overlay=0:0:eof_action=pass[v]
+  " \
+  -map "[v]" -map 0:a \
   -c:v libx264 -crf 18 -preset fast \
   -c:a copy \
-  -movflags +faststart \
   "$OUTPUT"
 ```
 
-### Si el video fuente no es 1920×1080:
+### Video fuente es VERTICAL (9:16 → pillarbox 16:9):
+
+> **GOTCHA — pillarbox con video vertical**: Requiere `fps=30,format=yuv420p` ANTES de `split=2`.
+> Sin esta conversión explícita, HEVC 60fps en filter_complex produce fondo negro aunque los streams individuales funcionen.
+> También: **NO** usar `-movflags +faststart` (cuelga el proceso). **NO** usar `-r 30` al final (interfiere con filter timing).
+> Para MOV con streams de data/metadata: usar `-map 0:1` explícito en lugar de `-map 0:a`.
+
 ```bash
+# Detectar dimensiones del fuente
 VIDEO_W=$(ffprobe -v quiet -select_streams v:0 \
   -show_entries stream=width -of csv=p=0 "$VIDEO_SRC")
 VIDEO_H=$(ffprobe -v quiet -select_streams v:0 \
   -show_entries stream=height -of csv=p=0 "$VIDEO_SRC")
 
-ffmpeg -i "$VIDEO_SRC" -i "$DEST/overlays/overlays.webm" \
-  -filter_complex \
-    "[1:v]scale=${VIDEO_W}:${VIDEO_H}[ov]; [0:v][ov]overlay=0:0:format=auto" \
-  -c:v libx264 -crf 18 -preset fast \
-  -c:a copy \
+# Si VIDEO_W < VIDEO_H → fuente es vertical, aplicar pillarbox
+ffmpeg -y \
+  -i "$VIDEO_SRC" \
+  -i "$DEST/overlays/overlays.mp4" \
+  -filter_complex "
+    [0:0]fps=30,format=yuv420p,split=2[v1][v2];
+    [v1]scale=1920:-2,crop=1920:1080:0:(ih-1080)/2,gblur=sigma=15[bg];
+    [v2]scale=-2:1080[fg];
+    [bg][fg]overlay=(W-w)/2:0[composed];
+    [1:v]colorkey=0x00ff00:0.35:0.15[keyed];
+    [composed][keyed]overlay=0:0:eof_action=pass[v]
+  " \
+  -map "[v]" \
+  -map 0:1 \
+  -c:v libx264 -crf 20 -preset fast \
+  -c:a aac -b:a 192k \
   "$OUTPUT"
 ```
+
+El pillarbox blurrea el video de fondo a 1920px ancho (crop centro) y centra el video nítido al aspect ratio original. Como ambos son el mismo encuadre, el efecto es seamless.
 
 ---
 
@@ -627,6 +892,7 @@ open "$OUTPUT"
 ```
 
 Checklist:
+- [ ] **Densidad OK** — ningún tramo de 5s sin motion graphic activo (verificar con `check_density_gaps` del Paso 4)
 - [ ] Pill labels no tapan la cara del speaker (verificado con zonas del Paso 1.5)
 - [ ] Cards están en zona segura detectada
 - [ ] UI cards tienen borde azul visible
@@ -639,8 +905,8 @@ Checklist:
 ## Iteración rápida
 
 1. Editar `$DEST/overlays/index.html`
-2. Re-renderizar: `hyperframes render --format webm --resolution landscape -o $DEST/overlays/overlays.webm`
-3. Re-componer con ffmpeg
+2. Re-renderizar: `hyperframes render --format mp4 -o $DEST/overlays/overlays.mp4`
+3. Re-componer con ffmpeg (reutilizar el mismo comando del Paso 7)
 
 ---
 
@@ -651,9 +917,14 @@ Checklist:
 | `hyperframes: command not found` | No instalado o Node < 22 | `npm install -g hyperframes` |
 | Supadata retorna 404 | Video privado | Descarga local + Whisper |
 | Overlay no aparece en el tiempo correcto | Keyword no en transcript | Usar timestamp literal en segundos |
-| Video final sin audio | ffmpeg no copió el stream | Agregar `-c:a copy` al comando |
+| Video final sin audio | ffmpeg no copió el stream | Agregar `-map 0:1` (MOV) o `-map 0:a` (MP4/otros) |
 | GSAP no anima (overlay estático) | `window.__timelines` no configurado | Verificar bloque `window.__timelines` al final del script |
 | Frame de análisis vacío (URL) | yt-dlp sin thumbnail | Extraer thumbnail manualmente o usar frame 0.25 del video |
+| **Overlay fondo negro (no verde)** | WebM ignora CSS background | Renderizar como **MP4** (`--format mp4`), nunca WebM para green screen |
+| **Video final fondo negro** (overlays sí, video no) | filter_complex no puede leer HEVC 60fps sin conversión previa | Agregar `fps=30,format=yuv420p` ANTES del `split=2` en el filter_complex |
+| **ffmpeg se cuelga** sin progreso visible | `-movflags +faststart` con filter_complex complejo | Quitar `-movflags +faststart` |
+| `No decoder for none` en MOV | Stream de data/metadata sin codec | Usar `-map 0:1` explícito para audio en lugar de `-map 0:a` |
+| Pillarbox fondo negro después de `split=2` | Mismo stream usado dos veces sin split | Ya incluir `split=2[v1][v2]` — si aún negro, verificar `fps=30,format=yuv420p` previo |
 
 ---
 
@@ -666,12 +937,13 @@ $DEST/
 ├── transcript.txt          ← texto plano legible
 ├── motion_board.json       ← overlays con timestamps resueltos
 ├── overlays/
-│   ├── index.html          ← composición HyperFrames completa
-│   └── overlays.webm       ← render transparente de overlays
+│   ├── index.html          ← composición HyperFrames (body: #00ff00)
+│   └── overlays.mp4        ← render green screen (SIEMPRE MP4, no WebM)
 └── video_final_motion.mp4  ← OUTPUT FINAL
 
 /tmp/
-└── frame_sujeto.jpg        ← frame para análisis de posición (temporal)
+├── frame_sujeto.jpg        ← frame para análisis de posición (temporal)
+└── verify_gs.jpg           ← verificación green screen (debe ser verde, no negro)
 ```
 
 ---

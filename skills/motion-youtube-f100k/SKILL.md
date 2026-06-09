@@ -291,33 +291,41 @@ REGLA DE COBERTURA: En ningún segmento de 5 segundos puede haber 0 motion graph
 Si hay un gap > 5s sin overlay, agregar obligatoriamente un overlay de relleno.
 ```
 
-**Luego auto-clasificar el contenido del guión** detectando patrones:
+**Luego auto-clasificar el contenido del guión** detectando la INTENCIÓN del segmento. La tabla es GENEROSA a propósito: NO esperes la frase literal — los 6 templates están disponibles y hay que repartirlos, no defaultear a pills + UI card.
 
-| Patrón en el texto | Tipo de overlay sugerido |
-|-------------------|--------------------------|
-| "antes/ahora", "era/ahora", "solía/hoy", "pasé de X a Y" | Comparison Card BEFORE/NOW |
-| "el primero/segundo", "paso 1/2/3", "número uno", lista de 3+ items | Chapter Card con bullets |
-| Menciona herramientas: "Claude", "ChatGPT", "Canva", "Notion", apps | Floating UI Card |
-| "no soy", "nunca fui", "no uso", "desde cero", "sin saber" | Pill Labels (identidad) |
-| "soy", "logré", "ahora soy", "me convertí" | Pill Labels (transformación) |
-| Números con K/M/%, métricas de negocio | Comparison Card o Pill con stat |
+| Intención del segmento | Template sugerido | Señales (no requieren literalidad) |
+|------------------------|-------------------|-------------------------------------|
+| **Contraste / cambio** entre dos estados | Comparison Card ANTES/AHORA | "antes/ahora", "era/ahora", "ya no… ahora", "pasé de X a Y", "el problema vs la solución", cualquier evolución o mejora implícita |
+| **Enumeración** de pasos, razones, errores, tips, beneficios | Chapter Card con bullets | "lo primero", "paso 1/2/3", "tres cosas", "primero… luego…", "hay que X y también Y", listas implícitas de 2+ ítems |
+| **Herramienta / app / pantalla** mencionada | Floating UI Card | "Claude", "ChatGPT", "Canva", "Notion", "esta app", "te muestro", cualquier software o interfaz |
+| **Frase punch / insight / definición / tesis** | Quote Pull | "la clave es", "lo que nadie te dice", "esto lo cambia todo", afirmaciones contundentes, definiciones, la idea central del video |
+| **Concepto / palabra-fuerza** suelta o cambio de tema | Kinetic Word | un sustantivo o verbo central que merece énfasis ("constancia", "sistema", "gratis"), transiciones entre secciones |
+| **Identidad** negativa/positiva del avatar | Pill Labels | "no soy", "nunca fui", "no uso", "desde cero", "soy", "logré", "me convertí en", características personales |
+| **Dato / métrica** (número con K/M/%, $) | Comparison Card o Stat Pill | seguidores, ventas, alcance, ingresos, cualquier cifra concreta |
+
+> ⚠ **Anti-default:** Pill Labels y Floating UI Card son los que más se sobre-usan porque el contenido F100K casi siempre dice "yo no soy X… uso Claude/ChatGPT". NO los dejes dominar. Si un segmento encaja en pill PERO también tiene una enumeración, una cita fuerte o un contraste, prefiere el template menos usado hasta ese momento. Quote Pull y Kinetic Word son selecciones de PRIMERA CLASE, no relleno.
 
 Generar **motion board automático preliminar** y mostrarlo:
 
 ```
-📊 AUTO-DETECCIÓN DEL GUIÓN:
+📊 AUTO-DETECCIÓN DEL GUIÓN (busca VARIEDAD, no repetir template):
 ──────────────────────────────────────────────────────────────
 t=00:08  →  PILL LABELS    "sin código / sin equipo / desde cero"
-             (detectado: "desde cero, sin saber nada")
+             (detectado: identidad negativa en "desde cero")
 t=01:24  →  FLOATING UI    Claude Code — herramienta detectada
-             (detectado: "uso Claude Code para...")
+             (detectado: menciona herramienta)
 t=03:45  →  COMPARISON     ANTES: 3 horas / AHORA: 20 minutos
-             (detectado: "me tomaba 3 horas, ahora son 20 minutos")
+             (detectado: "me tomaba 3 horas, ahora 20 minutos")
+t=05:30  →  QUOTE PULL     "lo que nadie te dice es que el sistema gana al talento"
+             (detectado: frase punch / tesis del video)
+t=06:50  →  KINETIC WORD   "CONSTANCIA"
+             (detectado: palabra-fuerza / cambio de tema)
 t=08:10  →  CHAPTER CARD   "Los 4 pasos del sistema"
-             (detectado: "el primero... el segundo... el tercero... el cuarto")
+             (detectado: enumeración "primero... segundo... tercero...")
 ──────────────────────────────────────────────────────────────
-Zonas: PILLS → top-left (60px), CARDS → bottom-right (700px)
-[basado en sujeto centrado detectado en Paso 1.5]
+Mezcla: 6 overlays, 6 templates distintos ✅  (ninguno domina)
+Zonas: PILLS/KINETIC → top-left (60px), CARDS → lado libre opuesto al sujeto
+[basado en sujeto detectado en Paso 1.5]
 ```
 
 Luego preguntar con `AskUserQuestion`:
@@ -366,26 +374,58 @@ duration_ms = max(s['end_ms'] for s in transcript)
 motion_board = []
 # ... resolver timestamps para cada overlay
 
-# VERIFICAR DENSIDAD — rellenar gaps > 5s
+# VERIFICAR DENSIDAD — rellenar gaps > 5s CON VARIEDAD (no solo kinetic word)
 gaps = check_density_gaps(motion_board, duration_ms)
 if gaps:
-    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — agregando overlays de relleno:")
+    print(f"⚠ {len(gaps)} ventanas de 5s sin cobertura — rellenando con VARIEDAD:")
+    rotation = ["kinetic_word", "ambient_pill", "quote_pull"]  # se turnan, no se repiten seguidas
+    last = None
     for gap in gaps:
-        gap_s = gap['start_ms'] / 1000
-        # Encontrar texto del segmento en ese momento para extraer keyword
         seg_texts = [s['text'] for s in transcript
                      if s['start_ms'] >= gap['start_ms'] and s['start_ms'] < gap['end_ms']]
-        keyword = seg_texts[0].split()[0] if seg_texts else "idea clave"
-        print(f"  → t={gap_s:.0f}s: kinetic word '{keyword}'")
-        motion_board.append({
-            'type': 'kinetic_word',
-            'start_ms': gap['start_ms'] + 500,
-            'duration_ms': 3500,
-            'text': keyword.upper(),
-            'note': 'relleno densidad'
-        })
+        seg_text = " ".join(seg_texts).strip()
+        words = seg_text.split()
+
+        if any(ch.isdigit() for ch in seg_text):       # hay un dato → stat pill
+            ftype = "stat_pill"
+        elif len(words) >= 6:                           # frase completa → cita textual
+            ftype = "quote_pull"
+        else:                                           # rotar sin repetir el anterior
+            ftype = next(t for t in rotation if t != last)
+        last = ftype
+
+        if ftype == "stat_pill":
+            num = next((w for w in words if any(ch.isdigit() for ch in w)), seg_text[:20])
+            payload = {"type": "stat_pill", "text": num}
+        elif ftype == "quote_pull":
+            payload = {"type": "quote_pull", "text": seg_text[:80]}
+        elif ftype == "ambient_pill":
+            payload = {"type": "pill_labels", "labels": [words[0] if words else "IDEA"]}
+        else:  # kinetic_word
+            payload = {"type": "kinetic_word", "text": (words[0] if words else "IDEA").upper()}
+
+        print(f"  → t={gap['start_ms']/1000:.0f}s: {ftype:12} '{seg_text[:30]}'")
+        motion_board.append({**payload, "start_ms": gap['start_ms'] + 500,
+                             "duration_ms": 3500, "note": f"relleno densidad ({ftype})"})
 
 motion_board.sort(key=lambda x: x['start_ms'])
+
+# VERIFICAR DIVERSIDAD — ningún video se apoya en 1-2 templates
+from collections import Counter
+mix = Counter(o['type'] for o in motion_board)
+distinct = len(mix)
+top_type, top_n = mix.most_common(1)[0]
+top_share = top_n / len(motion_board)
+duration_s = duration_ms / 1000
+min_distinct = 4 if duration_s > 45 else 3
+print(f"\n🎨 Mezcla de templates: {dict(mix)}")
+if distinct < min_distinct or top_share > 0.45:
+    print(f"⚠ POCA VARIEDAD: {distinct} templates distintos, '{top_type}' domina {top_share:.0%}")
+    print(f"  → Antes de confirmar: convierte la enumeración más clara en CHAPTER,")
+    print(f"    la frase más fuerte en QUOTE PULL, y el mayor contraste en COMPARISON.")
+    print(f"  → Objetivo: ≥{min_distinct} templates distintos y dominante ≤45%.")
+else:
+    print(f"✅ Diversidad OK: {distinct} templates distintos, dominante {top_share:.0%}")
 
 with open('$DEST/motion_board.json', 'w') as f:
     json.dump(motion_board, f, indent=2, ensure_ascii=False)
@@ -809,6 +849,18 @@ tl.to("#quote-{id}", {
 - Chapter cards: 40, 41, 42...
 - Kinetic words: 50, 51, 52...
 - Quote pulls: 60, 61, 62...
+
+**Mapa `type` → template HTML** (los tipos de relleno reusan templates existentes, no inventes HTML nuevo):
+| `type` del motion board | Template a usar (sección arriba) |
+|-------------------------|----------------------------------|
+| `pill_labels`, `ambient_pill`, `stat_pill` | Template 1 — Pill Labels (1 pill para stat/ambient) |
+| `comparison` | Template 2 — Comparison Card |
+| `ui_card` / floating UI | Template 3 — Floating UI Card |
+| `chapter` | Template 4 — Chapter Summary Card |
+| `kinetic_word` | Template 5 — Kinetic Word |
+| `quote_pull` | Template 6 — Quote Pull |
+
+El timeline GSAP concatena todos los bloques en orden cronológico por `start_ms`.
 
 ---
 

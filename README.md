@@ -132,6 +132,10 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `motion-reels-f100k` — Motion graphics 9:16 para reels: pill labels flotantes, comparison cards BEFORE/NOW, UI cards, chapter cards — transcribe el video y sincroniza cada overlay al timestamp exacto
 - `motion-youtube-f100k` — Motion graphics 16:9 para YouTube: mismos 4 tipos de overlay optimizados para formato horizontal — transcribe con Supadata (URL) o Whisper (local)
 
+### Crear apps (sin ser programadora)
+- `constructor-miniapps-f100k` — Construye mini-apps reales y las despliega: extensiones de Chrome, scrapers, calculadoras, generadores, analizadores, quizzes capta-correos, dashboards y mini-SaaS de suscripción. Motor de las 20 plantillas del artifact "40 Trucos de Claude + 20 Mini-Apps"
+- `landing-producto-formula100k` — Landing de venta con mockups, copy, Stripe y deploy en Vercel
+
 ---
 
 ## 🤖 Autopilot F100K

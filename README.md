@@ -8,7 +8,7 @@ Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, 
 
 ## ¿Qué son las skills de FÓRMULA 100K?
 
-Son **46 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
+Son **57 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
 
 Cubren: guionización, calendarios de contenido e historias, audios de venta, VSL, construcción de ofertas, comunidades Skool, edición de video, miniaturas, carruseles, infografías reel, lead magnets y más.
 
@@ -44,7 +44,7 @@ Las skills se potencian con **MCPs** (conexiones a herramientas como generadores
 
 **Resumen del mínimo viable (gratis):** Playwright + Nanobanana + Tavily + Supadata. Con eso tienes el ~80% de las skills funcionando sin pagar nada.
 
-¡Listo! Reinicia Claude Code y ya tienes acceso a las 46 skills.
+¡Listo! Reinicia Claude Code y ya tienes acceso a las 57 skills.
 
 ---
 
@@ -123,6 +123,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `recursos-de-video-formula100k` — Caza B-roll real + IA para reels
 - `historias-a-imagenes-nanobanana` — Convertir guion de stories en PNGs
 - `carrusel-render-formula100k` — Renderizar guion de carrusel a slides PNG
+- `portada-video-carrusel-formula100k` — Portada en VIDEO para carruseles: anima la foto gancho (cinemagraph Higgsfield) y compone el título en HTML transparente → slide-01-ANIMADO.mp4
 - `miniatura-youtube-formula100k` — Miniaturas virales de YouTube
 - `infografia-reel-formula100k` — Infografías virales animadas en reel
 - `generador-artifact-educativo-formula100k` — Artifacts HTML educativos

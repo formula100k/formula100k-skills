@@ -1,19 +1,7 @@
 ---
 name: calendarizador-contenido-formula100k
 description: >
-  Skill para armar calendarios de contenido semanales (Lunes-Domingo) en formato CSV y XLSX usando la metodología
-  de FÓRMULA 100K. Usar SIEMPRE que Andrea pida "arma mi calendario", "calendariza estos guiones", "ordena estas ideas
-  en un calendario", "convierte esto en calendario semanal", "haz mi calendario en Excel", "calendario de la semana",
-  "organiza mis guiones por día", "calendariza este lote", "calendariza estos enlaces", "calendariza estos TikToks",
-  "calendariza estos reels de referencia", "calendariza estos carruseles", "haz un calendario de carruseles", o
-  cualquier variación que combine ideas/guiones/enlaces con intención de organizarlos por día de la semana. Maneja
-  3 modos de entrada: (1) guiones listos para organizar, (2) ideas sueltas que se desarrollan llamando a
-  guionizacion-formula100k o carrusel-viral-formula100k, (3) enlaces de video que se transcriben con
-  transcripcion-youtube-formula100k y se reescriben como referencia. Soporta DOS TIPOS DE PIEZA: REELS (default,
-  columnas DÍA · IDEA · GUION · CTA · FORMATO · REFERENCIA) y CARRUSELES (columnas DÍA · FECHA · # · IDEA ·
-  GUION SLIDE x SLIDE · CTA · FORMATO, con altura de fila dinámica para que el guion completo entre en la celda).
-  Distribución según el propósito del calendario (Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10,
-  Venta 20/50/30).
+  Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y XLSX con la metodología FÓRMULA 100K. Usar cuando Andrea pida "arma mi calendario", "calendariza estos guiones", "ordena estas ideas en un calendario", "convierte esto en calendario semanal", "haz mi calendario en Excel", "organiza mis guiones por día", "calendariza este lote/enlaces/TikToks/reels/carruseles", "haz un calendario de carruseles"; o cualquier variación que combine ideas/guiones/enlaces con organizarlos por día. 3 modos de entrada: (1) guiones listos; (2) ideas sueltas que desarrolla llamando a guionizacion-formula100k o carrusel-viral-formula100k; (3) enlaces de video que transcribe con transcripcion-youtube-formula100k y reescribe como referencia. 2 tipos de pieza: REELS (DÍA·IDEA·GUION·CTA·FORMATO·REFERENCIA) y CARRUSELES (DÍA·FECHA·#·IDEA·GUION SLIDE x SLIDE·CTA·FORMATO, altura de fila dinámica). Distribución por propósito: Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30.
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 

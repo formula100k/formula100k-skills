@@ -1,17 +1,7 @@
 ---
 name: infografia-reel-formula100k
 description: >
-  Skill para crear infografías virales animadas en formato reel (9:16) a partir de un tema, idea, URL de
-  artículo o URL de YouTube. Activar SIEMPRE que alguien pida: "haz una infografía", "convierte esto en
-  infografía", "crea un reel infográfico", "infografía animada", "reel tipo cross-section", "infografía
-  estilo riñón / piel / cuerpo", "convierte este artículo en infografía", "convierte este YouTube en
-  reel infográfico", "diséñame una infografía para [tema]", o cualquier variación que combine intención
-  educativa/divulgativa con formato reel visual denso. Usa el MCP de Higgsfield (mcp__higgsfield__*)
-  como motor único: nano_banana_2 para la imagen estática 4K con texto + seedance_2_0 / kling3_0 para
-  animarla. Soporta los 7 arquetipos visuales destilados de las referencias virales:
-  A1 cross-section + dosaje, A2 dualidad sucio/limpio + mini-trabajadores, A3 persona partida + bullets,
-  A4 grid comparativo, A5 stack de variantes, A6 dual character, A7 diorama 3D de objetos. Output siempre
-  reel .mp4 + imagen base .png en /Users/kissita/Documents/FORMULA100K/INFOGRAFIAS/.
+  Crea infografías virales animadas en formato reel (9:16) a partir de un tema, idea, URL de artículo o URL de YouTube. Activar cuando pidan: "haz una infografía", "convierte esto en infografía", "crea un reel infográfico", "infografía animada", "reel tipo cross-section", "infografía estilo riñón/piel/cuerpo", "convierte este artículo/YouTube en reel infográfico", "diséñame una infografía para [tema]"; o cualquier variación que combine intención educativa/divulgativa con formato reel visual denso. Usa el MCP de Higgsfield como motor único: nano_banana_2 para la imagen estática 4K con texto + seedance_2_0 / kling3_0 para animarla. Soporta 7 arquetipos visuales: A1 cross-section + dosaje, A2 dualidad sucio/limpio, A3 persona partida + bullets, A4 grid comparativo, A5 stack de variantes, A6 dual character, A7 diorama 3D. Output: reel .mp4 + imagen base .png en FORMULA100K/INFOGRAFIAS/.
 argument-hint: "<tema | URL artículo | URL YouTube | ruta .md de guion>"
 metadata:
   version: "1.0.0"

@@ -1,6 +1,7 @@
 ---
 name: portada-video-carrusel-formula100k
-description: Use SIEMPRE que alguien pida una portada animada o "tipo video" para un carrusel de Instagram, animar la foto gancho del carrusel, hacer un cinemagraph de portada, "la portada que se mueve / que se anima", "convierte mi portada en video", "el primer slide en video", o agregarle movimiento a la imagen gancho. Genera (o toma) la foto gancho con la cara del usuario en Higgsfield, la anima como cinemagraph con cámara fija, y compone el título en HTML transparente encima → slide-01-ANIMADO.mp4 listo para subir como primer elemento del carrusel. NO confundir con carrusel-render (slides PNG), carrusel-viral (guion) ni clonador-carrusel (clonar estilo de una captura): esta skill SOLO produce la portada en video.
+description: >
+  Use SIEMPRE que alguien pida una portada animada o tipo video para un carrusel de Instagram, animar la foto gancho del carrusel, hacer un cinemagraph de portada, "la portada que se mueve / que se anima", "convierte mi portada en video", "el primer slide en video", o agregarle movimiento a la imagen gancho. Genera (o toma) la foto gancho con la cara del usuario en Higgsfield, la anima como cinemagraph con cámara fija y compone el título en HTML transparente encima → slide-01-ANIMADO.mp4 listo para subir como primer elemento del carrusel. NO confundir con carrusel-render (slides PNG), carrusel-viral (guion) ni clonador-carrusel (clonar estilo de una captura): esta skill SOLO produce la portada en video.
 disable-model-invocation: true
 argument-hint: [carpeta del carrusel o foto gancho]
 ---

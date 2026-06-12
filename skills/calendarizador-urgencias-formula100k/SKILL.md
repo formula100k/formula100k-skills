@@ -1,22 +1,7 @@
 ---
 name: calendarizador-urgencias-formula100k
 description: >
-  Skill para construir el CALENDARIO DE RAZONES DE URGENCIA (mensual + pool semanal) de
-  cualquier producto/programa/servicio, aplicando la metodología de urgencia honesta de
-  FÓRMULA 100K (motor biológico, 5 gatillos de decisión, aversión a la pérdida) +
-  investigación web real con Tavily MCP para cazar las fechas estacionales y comerciales
-  reales del nicho del usuario. Activar SIEMPRE que Andrea, una clienta o una alumna pida:
-  "arma mi calendario de urgencias", "razones de urgencia para mi producto", "fechas de
-  venta de [nicho]", "cuándo activar urgencia este año", "calendario de gatillos para
-  vender", "calendario estacional de mi producto", "cuándo lanzar/cerrar/promocionar",
-  "calendario de FOMO", "razones para apurar la compra", o cualquier variación que
-  combine intención de organizar VENTA POR URGENCIA en función del año + activos del
-  producto. NO confundir con `calendarizador-contenido-formula100k` (eso son reels por
-  día) ni `calendarizador-historias-formula100k` (eso son stories de IG). Esta skill
-  responde "¿QUÉ RAZÓN DE URGENCIA uso este mes/semana?" y NO "qué publico hoy". Output:
-  archivo .md legible + .xlsx con 6 hojas (resumen, mensual 12 meses, pool semanal,
-  activos, reglas, pendientes) en `/FORMULA100K/DINÁMICAS DE URGENCIA/<slug>/` para
-  Andrea/clientas o `./calendarios-urgencia/<slug>/` para alumnas externas.
+  Construye el CALENDARIO DE RAZONES DE URGENCIA (mensual + pool semanal) de cualquier producto/programa/servicio, con la metodología de urgencia honesta de FÓRMULA 100K (motor biológico, 5 gatillos de decisión, aversión a la pérdida) + investigación web real con Tavily para cazar las fechas estacionales y comerciales del nicho. Activar cuando pidan: "arma mi calendario de urgencias", "razones de urgencia para mi producto", "fechas de venta de [nicho]", "cuándo activar urgencia este año", "calendario de gatillos para vender", "calendario estacional", "cuándo lanzar/cerrar/promocionar", "calendario de FOMO", "razones para apurar la compra". NO confundir con calendarizador-contenido (reels por día) ni calendarizador-historias (stories). Responde "¿QUÉ RAZÓN DE URGENCIA uso este mes/semana?", no "qué publico hoy". Output: .md + .xlsx con 6 hojas (resumen, mensual 12 meses, pool semanal, activos, reglas, pendientes).
 argument-hint: "[nombre del producto opcional]"
 metadata:
   version: "1.0.0"

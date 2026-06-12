@@ -1,17 +1,7 @@
 ---
 name: calendarizador-historias-formula100k
 description: >
-  Skill para armar calendarios SEMANALES de SECUENCIAS DE HISTORIAS de Instagram (Lunes-Domingo)
-  usando la metodología FÓRMULA 100K. Activar SIEMPRE que Andrea pida: "calendariza mis historias",
-  "arma mi semana de stories", "calendario de historias", "planifica mis historias de la semana",
-  "organiza mis stories por día", "calendario semanal de historias", "arma 7 secuencias de stories
-  para la semana", "planifica las historias de mi lanzamiento", o cualquier variación que combine
-  intención de organizar/planear con el formato historias de IG semanal. NO confundir con
-  `calendarizador-contenido-formula100k` (ese es para reels/videos/carruseles, este es ESPECÍFICAMENTE
-  para historias). Distribuye N secuencias por día según el modo (Lanzamiento/Nutrición/Mixto/Urgencia)
-  y llama internamente a `guionizacion-historias-formula100k` para desarrollar cada secuencia. Output:
-  calendario .md + .xlsx + N archivos .md individuales (uno por secuencia) en
-  /Users/kissita/Documents/FORMULA100K/HISTORIAS/calendarios/ y /HISTORIAS/guiones/.
+  Arma calendarios SEMANALES de SECUENCIAS DE HISTORIAS de Instagram (Lunes-Domingo) con la metodología FÓRMULA 100K. Activar cuando Andrea pida: "calendariza mis historias", "arma mi semana de stories", "calendario de historias", "planifica mis historias de la semana", "organiza mis stories por día", "arma 7 secuencias de stories para la semana", "planifica las historias de mi lanzamiento"; o cualquier variación que combine organizar/planear con el formato historias de IG semanal. NO confundir con calendarizador-contenido-formula100k (reels/videos/carruseles); esta es ESPECÍFICAMENTE para historias. Distribuye N secuencias por día según el modo (Lanzamiento/Nutrición/Mixto/Urgencia) y llama internamente a guionizacion-historias-formula100k para desarrollar cada secuencia. Output: calendario .md + .xlsx + N archivos .md individuales (uno por secuencia) en FORMULA100K/HISTORIAS/calendarios/ y /HISTORIAS/guiones/.
 argument-hint: "<modo: lanzamiento|nutricion|mixto|urgencia> [+ ideas/objetivos opcionales]"
 metadata:
   version: "1.0.0"

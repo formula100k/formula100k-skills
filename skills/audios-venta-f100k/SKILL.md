@@ -1,21 +1,23 @@
 ---
 name: audios-venta-f100k
 description: >
-  Escribe guiones de AUDIOS DE VENTA (notas de voz comerciales, audios de cierre en DM, voicenotes de objeción, audios de seguimiento, audios de aplicación a high ticket) para grabar en WhatsApp / Instagram DM / Telegram. Convierte una oferta ya construida en una secuencia hablada de 30-90 segundos que cierra la venta en privado. Activar cuando pidan "haz un audio de venta", "guion para nota de voz", "audio para cerrar en DM", "voicenote para vender", "audio de cierre", "audio de seguimiento", "audio para esa prospecta", "audio para responder objeción", "audio de aplicación", "audio de bienvenida a high ticket"; o cualquier variación que combine intención de vender + formato hablado privado 1-on-1. NO usar para guiones de video público (guionizacion-formula100k), VSL ni landing (vsl-expert-f100k), ni para construir la oferta (constructor-ofertas-f100k). Complementa a andrea-vendedora-instagram cuando se necesita audio en lugar de texto.
+  Escribe guiones de AUDIOS DE VENTA (notas de voz comerciales, audios de cierre en DM, voicenotes de objeción, audios de seguimiento, audios de aplicación a high ticket) para grabar en WhatsApp / Instagram DM / Telegram. Convierte una oferta ya construida en una secuencia hablada de máximo 50 segundos que cierra la venta en privado. Activar cuando pidan "haz un audio de venta", "guion para nota de voz", "audio para cerrar en DM", "voicenote para vender", "audio de cierre", "audio de seguimiento", "audio para esa prospecta", "audio para responder objeción", "audio de aplicación", "audio de bienvenida a high ticket"; o cualquier variación que combine intención de vender + formato hablado privado 1-on-1. NO usar para guiones de video público (guionizacion-formula100k), VSL ni landing (vsl-expert-f100k), ni para construir la oferta (constructor-ofertas-f100k). Complementa a andrea-vendedora-instagram cuando se necesita audio en lugar de texto.
 ---
 
 ## Qué hace esta skill
 
 Convierte una oferta + un contexto de conversación 1-on-1 en un guion de audio breve, cálido y persuasivo, listo para grabarse en WhatsApp / Instagram DM. Cubre 6 tipos de audio:
 
+> ⛔ **TOPE DURO: ningún audio puede pasar de 50 segundos.** Todos los rangos de abajo respetan ese máximo. Si un guion no entra en 50 s al leerlo en voz alta, hay que recortarlo — nunca entregarlo largo.
+
 | # | Tipo | Duración | Cuándo usarlo |
 |---|---|---|---|
-| 1 | **Audio de apertura caliente** | 30-45 s | Cuando una prospecta acaba de entrar al DM por un lead magnet o anuncio |
-| 2 | **Audio de cierre** | 60-90 s | Cuando ya hubo conversación, conoce la oferta y falta el empujón final |
-| 3 | **Audio de objeción** | 45-75 s | Para responder UNA objeción específica (precio, tiempo, "ya probé") |
-| 4 | **Audio de seguimiento** | 30-60 s | Para retomar conversaciones paradas hace 2-7 días sin presión |
-| 5 | **Audio de aplicación / agendar llamada** | 60-90 s | Para mover prospecta a aplicación de high ticket o llamada de calificación |
-| 6 | **Audio de bienvenida post-compra** | 45-60 s | Justo después de la compra, para retención inmediata y onboarding emocional |
+| 1 | **Audio de apertura caliente** | 30-40 s | Cuando una prospecta acaba de entrar al DM por un lead magnet o anuncio |
+| 2 | **Audio de cierre** | 45-50 s | Cuando ya hubo conversación, conoce la oferta y falta el empujón final |
+| 3 | **Audio de objeción** | 40-50 s | Para responder UNA objeción específica (precio, tiempo, "ya probé") |
+| 4 | **Audio de seguimiento** | 30-45 s | Para retomar conversaciones paradas hace 2-7 días sin presión |
+| 5 | **Audio de aplicación / agendar llamada** | 45-50 s | Para mover prospecta a aplicación de high ticket o llamada de calificación |
+| 6 | **Audio de bienvenida post-compra** | 40-50 s | Justo después de la compra, para retención inmediata y onboarding emocional |
 
 Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono cálido pero seguro. Conversacional. Como si Andrea estuviera grabando en el sofá, no en un estudio.
 
@@ -33,7 +35,7 @@ Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono 
 | Hook | Saludo + nombre + razón específica | Etiqueta + promesa pública |
 | Prueba social | 1 cliente muy parecido a ELLA | Múltiples casos diversos |
 | CTA | Pregunta abierta o acción concreta inmediata | Botón + urgencia |
-| Duración | 30-90 segundos | 5-60 minutos |
+| Duración | 30-50 segundos (tope 50 s) | 5-15 minutos |
 
 **Regla:** un audio de venta NUNCA es un VSL recortado. Tiene su propia gramática.
 
@@ -41,24 +43,24 @@ Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono 
 
 ## Anatomía de un audio de venta ganador (4 capas)
 
-Toda nota de voz comercial tiene siempre estas 4 capas, en este orden:
+Toda nota de voz comercial tiene siempre estas 4 capas, en este orden. El presupuesto de tiempo está calculado para que las 4 sumen ≤ 50 s:
 
-### Capa 1 — APERTURA PERSONAL (3-7 segundos)
+### Capa 1 — APERTURA PERSONAL (3-5 segundos)
 - Saludar por nombre propio
 - Mencionar UN detalle específico del contexto (algo que dijo en el chat, su perfil, su nicho)
 - Tono cálido, sonrisa audible
 
-### Capa 2 — PUENTE EMOCIONAL (10-20 segundos)
+### Capa 2 — PUENTE EMOCIONAL (8-13 segundos)
 - Espejar lo que está sintiendo / problema actual
 - Validar (sin condescendencia)
 - Una micro-historia o un caso de cliente con MUY parecido contexto
 
-### Capa 3 — OFERTA / CIERRE (15-40 segundos)
+### Capa 3 — OFERTA / CIERRE (12-24 segundos)
 - Lo que tienes para ella en concreto
 - Solo UN bono / UN punto de la oferta (no apilar 5)
 - Mencionar precio SOLO si ya hubo conversación previa o el audio es de cierre
 
-### Capa 4 — CTA EN PREGUNTA (5-10 segundos)
+### Capa 4 — CTA EN PREGUNTA (4-8 segundos)
 - NUNCA "compra ahora" en frío
 - Siempre pregunta abierta o acción mínima ("¿te parece si te paso el link?", "¿lo vemos en 15 min de llamada?")
 - Esperar respuesta antes del próximo audio
@@ -108,6 +110,7 @@ Cada plantilla incluye:
 
 ## Reglas absolutas
 
+- **TOPE DURO de 50 segundos** — ningún audio, de ningún tipo, puede pasar de 50 s. Si al leerlo en voz alta no entra, recortar la Capa 3 (un solo punto de oferta) hasta que entre. Como referencia: 50 s ≈ 120-130 palabras habladas con pausas.
 - **Brief completo siempre** — sin contexto específico, el audio suena genérico
 - **Una sola pregunta al final**
 - **Nunca apilar 5 bonos en un audio** — eso es para VSL

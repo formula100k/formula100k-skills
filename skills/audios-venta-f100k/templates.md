@@ -8,9 +8,13 @@ Convención de entonación:
 - `(sonrisa)` = sonreír al hablar (cambia el timbre)
 - `(bajar volumen)` = bajar la voz para confidencia
 
+> ⛔ **TOPE DURO: 50 segundos por audio.** Todos los guiones de abajo están escritos para entrar en ≤ 50 s leídos en voz alta con pausas (≈ 120-130 palabras). Si una variación lo alarga, recorta — nunca pases de 50 s.
+>
+> **Verifica antes de entregar:** cuenta las palabras del guion (≤ 130) o léelo en voz alta con cronómetro. Si pasa de 50 s, recorta primero la Capa 3 (deja UN solo punto de oferta), después el puente emocional.
+
 ---
 
-## 1. AUDIO DE APERTURA CALIENTE (30-45 s)
+## 1. AUDIO DE APERTURA CALIENTE (30-40 s)
 
 **Cuándo:** prospecta acaba de entrar al DM por un lead magnet, anuncio o referido. Es el primer audio.
 
@@ -36,23 +40,21 @@ Convención de entonación:
 
 ---
 
-## 2. AUDIO DE CIERRE (60-90 s)
+## 2. AUDIO DE CIERRE (45-50 s)
 
 **Cuándo:** ya hubo conversación previa, la prospecta conoce la oferta, está en el límite de comprar. Necesita el empujón final.
 
 ### Guion
 
-> Hola **[nombre]**, te mando esto rápido porque… te estoy viendo en la conversación y noto que estás muy cerca de dar el paso… pero algo te frena.
+> Hola **[nombre]**, te mando esto rápido… porque te noto muy cerca de dar el paso, pero algo te frena.
 >
-> Mira, voy a ser honesta contigo: lo que te estoy ofreciendo NO es para todo el mundo. Es para [avatar muy específico] que está dispuesta a [comportamiento clave].
+> Voy a ser honesta contigo: esto NO es para todo el mundo. Es para [avatar muy específico]… y si tú estás ahí, te va a cambiar [variable concreta] en [tiempo].
 >
-> Y si tú estás ahí, esto te va a cambiar [variable concreta] en [tiempo].
+> Tengo una clienta que empezó **exactamente** como tú… hoy [resultado medible].
 >
-> Tengo una clienta, **[nombre o "Mariana"]**, que [contexto idéntico al de la prospecta]. Hoy [resultado medible]. Y empezó **exactamente** como tú.
+> Y el precio, los **[$X]**, no es por el mes… es por **[periodo real]**.
 >
-> El precio que te dije, los **[$X]**, no es por el mes… es por **[periodo real]**. Y dentro tienes [el bono más fuerte de la oferta].
->
-> Te puedo abrir el acceso ahora mismo, o si tienes una duda específica, dímela y la resolvemos en este chat. ¿Qué necesitas para decidir?
+> Te abro el acceso ahora mismo, o si tienes una duda, dímela aquí. ¿Qué necesitas para decidir?
 
 ### Variaciones
 - **Si la objeción es precio:** después del "los $X no es por el mes" agregar "y si lo dividimos por [días/semanas], te sale [cifra mínima diaria]. Menos que [comparación tangible: un café, una sesión de spa]…"
@@ -67,7 +69,7 @@ Convención de entonación:
 
 ---
 
-## 3. AUDIO DE OBJECIÓN (45-75 s)
+## 3. AUDIO DE OBJECIÓN (40-50 s)
 
 **Cuándo:** la prospecta puso una objeción concreta (precio, tiempo, "ya probé", "no es para mí", "tengo que pensarlo"). Responder UNA objeción por audio.
 
@@ -107,7 +109,7 @@ Convención de entonación:
 
 ---
 
-## 4. AUDIO DE SEGUIMIENTO (30-60 s)
+## 4. AUDIO DE SEGUIMIENTO (30-45 s)
 
 **Cuándo:** conversación parada hace 2-14 días. La prospecta no respondió pero NO dijo "no".
 
@@ -134,7 +136,7 @@ Convención de entonación:
 
 ---
 
-## 5. AUDIO DE APLICACIÓN / AGENDAR LLAMADA (60-90 s)
+## 5. AUDIO DE APLICACIÓN / AGENDAR LLAMADA (45-50 s)
 
 **Cuándo:** producto es high ticket ($2K+) y el CTA es agendar llamada de calificación, no compra directa.
 
@@ -142,13 +144,13 @@ Convención de entonación:
 
 > **[nombre]**, escucha esto con calma.
 >
-> Por lo que me cuentas, **[contexto + diagnóstico de su situación en 1 frase]**. Y para lo que tú necesitas, ofrecerte algo por chat sería irresponsable de mi parte.
+> Por lo que me cuentas, **[diagnóstico de su situación en 1 frase]**… y para lo que tú necesitas, venderte algo por chat sería irresponsable de mi parte.
 >
-> Lo que hago es lo siguiente: agendamos una llamada de **[X] minutos**. No es una llamada de venta — es para que yo entienda exactamente dónde estás y, si lo que tengo es para ti, te explico cómo entramos. Si no es para ti, te lo digo directo y te recomiendo otra cosa.
+> Así que hagamos esto: una llamada de **[X] minutos**. No es de venta — es para entender dónde estás. Si lo que tengo es para ti, te explico cómo entramos; si no, te lo digo directo.
 >
-> Lo que está en juego para ti en esa llamada es [resultado concreto que ella mencionó querer].
+> Lo que está en juego ahí es [resultado concreto que ella quiere].
 >
-> Te paso el enlace para agendar… elige el horario que te quede mejor y nos vemos. ¿Te lo mando?
+> Te paso el enlace para agendar y eliges tu horario. ¿Te lo mando?
 
 ### Variaciones
 - **Si ya te dijo "no tengo tiempo para llamada":** "te entiendo, pero piénsalo así: la llamada es **gratis** y dura [X minutos]. Lo que decidas después es tuyo. Si en 20 minutos no sale algo concreto para ti, te juro que es la última vez que me escuchas."
@@ -161,7 +163,7 @@ Convención de entonación:
 
 ---
 
-## 6. AUDIO DE BIENVENIDA POST-COMPRA (45-60 s)
+## 6. AUDIO DE BIENVENIDA POST-COMPRA (40-50 s)
 
 **Cuándo:** justo después de la compra. Retención emocional inmediata. Reduce el remordimiento del comprador.
 
@@ -201,5 +203,5 @@ Convención de entonación:
 - [ ] Marcas de pausa, sonrisa y volumen incluidas
 - [ ] Variaciones por si la primera no funciona
 - [ ] Español neutro
-- [ ] Duración dentro del rango del tipo
+- [ ] Duración dentro del rango del tipo **y nunca más de 50 segundos** (leerlo en voz alta para confirmar)
 - [ ] Si es high ticket → CTA es llamada, NO compra directa

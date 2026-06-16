@@ -25,9 +25,13 @@ Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono 
 
 **Siempre preguntar primero qué tipo de producto/programa vende.** En función de la respuesta se elige una de estas 6 estructuras:
 
+> ⛔ **TOPE DURO: ninguna VSL puede pasar de 15 minutos.** Todas las duraciones de abajo respetan ese máximo. Si una estructura pide más tiempo, se comprime — nunca se entrega una VSL de más de 15 min.
+>
+> **Si la oferta parece pedir más de 15 min, comprime en este orden** (nunca recortes el CTA ni la garantía): (1) funde credenciales dentro de la historia de origen; (2) baja a 3 testimonios en vez de 5; (3) una sola pasada de agitación, no varias; (4) apila los bonos en lista rápida en vez de explicar cada uno. Referencia de ritmo: 15 min ≈ 2.000-2.250 palabras habladas a 140-150 ppm.
+
 ### A) Máquina de Conversión Total
 - **Para:** formación digital, marketing, coaching, programas de alto valor con explicación profunda
-- **Duración:** 25-45 min
+- **Duración:** 12-15 min
 - **Foco:** alto valor + autoridad + storytelling + apilamiento
 
 ### B) VSL Express
@@ -42,17 +46,17 @@ Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono 
 
 ### D) VSL VIP High Ticket
 - **Para:** productos y servicios de alto valor ($2K+)
-- **Duración:** 30-60 min
+- **Duración:** 12-15 min (comprimida — antes pedía más, ahora topada a 15)
 - **Foco:** califica al lead, repele al curioso, vende sesión 1:1 o aplicación
 
 ### E) VSL de Transformación Rápida
 - **Para:** programas de bienestar, desarrollo personal, salud, espiritualidad
-- **Duración:** 15-25 min
+- **Duración:** 12-15 min
 - **Foco:** transformación interna + identidad + comunidad
 
 ### F) VSL Skool (18 pasos)
 - **Para:** páginas tipo "About" o presentaciones de comunidades en Skool
-- **Duración:** 12-20 min
+- **Duración:** 12-15 min
 - **Foco:** comunidad + pertenencia + retención + vehículo único
 - **Nota:** si es Skool puro, derivar a [[creadora-comunidades-skool]]; esta estructura solo cuando se quiere VSL externo Skool-style
 
@@ -191,9 +195,10 @@ Cuando el pedido es de **ads/creativos**, usar el framework GOAT integrado. Deta
 
 ## Reglas absolutas
 
+- **TOPE DURO de 15 minutos** — ninguna VSL, de ninguna estructura, puede pasar de 15 min. Si la oferta parece pedir más, se comprime apilando bloques, no se alarga el video.
 - **Siempre brief completo antes de escribir** — sin oferta clara no hay VSL
 - **Siempre elegir 1 de las 6 estructuras** según el producto — no improvisar
-- **Siempre historia de origen** en VSLs largos (≥15 min)
+- **Siempre historia de origen** en VSLs largos (≥12 min)
 - **Siempre alinear con al menos 5 razones de compra** de las 10
 - **Siempre calibrar nivel de consciencia** del avatar antes del hook
 - **Siempre generar 10 bullets para títulos de landing** después del VSL

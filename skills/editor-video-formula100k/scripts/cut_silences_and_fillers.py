@@ -52,6 +52,16 @@ DEFAULT_MIN_SILENCE = 0.08  # seconds — gap larger than this is treated as sil
 DEFAULT_PAD = 0.06  # seconds — padding around each kept word; gives the tail of the word room to breathe so consonants/vowels no se cortan
 DEFAULT_DEDUPE_MAX_GAP = 1.2  # seconds — repeats farther apart than this aren't stutters
 MIN_SEGMENT = 0.08  # don't keep segments smaller than this
+
+
+def cut_output_path(dest, audio_only: bool) -> Path:
+    """Return the output path for the cut file.
+
+    audio_only=True  → _voz_cut.m4a  (faceless preset: voiceover, no video track)
+    audio_only=False → _source_cut.mov (talking-head preset: video+audio)
+    """
+    dest = Path(dest)
+    return dest / ("_voz_cut.m4a" if audio_only else "_source_cut.mov")
 # Fricatives have low amplitude tails so Whisper's word_end lands BEFORE the
 # sibilant. Without extra room they get clipped ("carísimas" → "carísima",
 # "diez" → "die", "francés" → "francé"). Extending only the end-pad of these
@@ -590,6 +600,29 @@ def cut_video(source: Path, segments: list[tuple[float, float]], out: Path) -> N
     subprocess.run(cmd, check=True, stderr=subprocess.PIPE)
 
 
+def cut_audio(source: Path, segments: list[tuple[float, float]], out: Path) -> None:
+    """Render the cut audio using ffmpeg with aselect filter only (no video track).
+
+    Used by --audio-only mode (faceless preset). Output is AAC in an .m4a container.
+    """
+    if not segments:
+        raise ValueError('No segments to keep')
+
+    # Build aselect expression: 'between(t,a,b)+between(t,c,d)+...'
+    sel = '+'.join(f'between(t,{s:.3f},{e:.3f})' for s, e in segments)
+    af = f"aselect='{sel}',asetpts=N/SR/TB"
+
+    cmd = [
+        'ffmpeg', '-y', '-i', str(source),
+        '-vn',  # no video
+        '-af', af,
+        '-c:a', 'aac', '-b:a', '192k',
+        '-movflags', '+faststart',
+        str(out),
+    ]
+    subprocess.run(cmd, check=True, stderr=subprocess.PIPE)
+
+
 def build_edl(segments: list[tuple[float, float]]) -> list[dict]:
     """Translate kept segments into an EDL mapping orig→new times."""
     edl: list[dict] = []
@@ -659,6 +692,9 @@ def main() -> int:
                     help='Skip word-level re-transcription of the cut video')
     ap.add_argument('--no-snap', action='store_true',
                     help='disable energy-based silence snapping (use fixed/fricative pad)')
+    ap.add_argument('--audio-only', action='store_true',
+                    help='Salida solo-audio (_voz_cut.m4a) para el preset faceless: '
+                         'corta silencios/muletillas del voiceover sin pista de video.')
     args = ap.parse_args()
 
     source = Path(args.source).expanduser().resolve()
@@ -756,9 +792,14 @@ def main() -> int:
               f'({", ".join(fillers[:8])}{"..." if len(fillers) > 8 else ""})',
               file=sys.stderr)
 
-        out_video = dest / '_source_cut.mov'
-        print(f'[4/5] Rendering cut video → {out_video.name}', file=sys.stderr)
-        cut_video(source, segments, out_video)
+        out_video = cut_output_path(dest, args.audio_only)
+        if args.audio_only:
+            print(f'[4/5] Rendering cut audio (audio-only) → {out_video.name}',
+                  file=sys.stderr)
+            cut_audio(source, segments, out_video)
+        else:
+            print(f'[4/5] Rendering cut video → {out_video.name}', file=sys.stderr)
+            cut_video(source, segments, out_video)
 
         edl = build_edl(segments)
         (dest / 'edl.json').write_text(json.dumps(edl, indent=2), encoding='utf-8')

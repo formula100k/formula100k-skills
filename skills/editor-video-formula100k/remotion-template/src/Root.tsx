@@ -1,13 +1,14 @@
 import React from 'react';
 import {Composition, getInputProps} from 'remotion';
 import {CreaContenidoViral} from './CreaContenidoViral';
+import {TutorialFaceless} from './TutorialFaceless';
 import {
   BadgeSlide,
   StatCounter,
   QuoteCard,
   ListReveal,
 } from './MotionGraphics';
-import type {CreaContenidoViralProps} from './types';
+import type {CreaContenidoViralProps, TutorialFacelessProps} from './types';
 import type {
   BadgeSlideProps,
   StatCounterProps,
@@ -18,6 +19,13 @@ import type {
 const FPS = 30;
 const WIDTH = 1080;
 const HEIGHT = 1920;
+
+const tutorialDefaults: TutorialFacelessProps = {
+  audioSrc: '', transcript: [], kineticCaptions: [],
+  hookCard: null, background: [], cards: [], broll: [], cta: null,
+  captionsConfig: {enabled: true, position: 'lower-third'},
+  width: WIDTH, height: HEIGHT, fps: FPS, durationInFrames: FPS,
+};
 
 const defaults: CreaContenidoViralProps = {
   videoSrc: '',
@@ -69,6 +77,9 @@ export const RemotionRoot: React.FC = () => {
   const input = getInputProps() as Partial<CreaContenidoViralProps>;
   const merged: CreaContenidoViralProps = {...defaults, ...input};
 
+  const tutorialInput = getInputProps() as Partial<TutorialFacelessProps>;
+  const tutorialMerged: TutorialFacelessProps = {...tutorialDefaults, ...tutorialInput};
+
   // Para las composiciones de motion graphics, leer props del input
   const mgInput = getInputProps() as Record<string, unknown>;
 
@@ -107,6 +118,17 @@ export const RemotionRoot: React.FC = () => {
         width={merged.width}
         height={merged.height}
         defaultProps={merged}
+      />
+
+      {/* ── Tutorial Faceless ── */}
+      <Composition
+        id="tutorial-faceless"
+        component={TutorialFaceless}
+        durationInFrames={tutorialMerged.durationInFrames}
+        fps={FPS}
+        width={WIDTH}
+        height={HEIGHT}
+        defaultProps={tutorialMerged}
       />
 
       {/* ── Motion Graphics nativos ── */}

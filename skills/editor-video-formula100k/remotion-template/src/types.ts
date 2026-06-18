@@ -3,7 +3,8 @@
 // ──────────────────────────────────────────────────────────────────────
 
 export type TranscriptWord = {
-  text: string;
+  word?: string;  // captions.json field name
+  text?: string;  // legacy alias
   start: number;
   end: number;
 };
@@ -57,6 +58,63 @@ export type CreaContenidoViralProps = {
   overlayCues: OverlayCue[];
   brollCues: BrollCue[];
   hookCue?: HookCue | null;
+  width: number;
+  height: number;
+  fps: number;
+  durationInFrames: number;
+};
+
+// ──────────────────────────────────────────────────────────────────────
+// TutorialFaceless — preset faceless (screen-rec + cards + captions cinéticos)
+// ──────────────────────────────────────────────────────────────────────
+
+export type KineticCaption = {
+  text: string;
+  start: number;  // segundos, absoluto sobre el audio cortado
+  end: number;
+};
+
+export type HookCardCue = {
+  src: string;
+  duration?: number;  // default 3.0
+};
+
+export type BackgroundCue = {
+  keyword: string;
+  src: string;
+  duration?: number;  // default 4.0
+  style?: 'monitor' | 'fullscreen';  // default 'fullscreen'
+};
+
+export type CardCue = {
+  keyword: string;
+  src: string;
+  width?: number;     // default 700
+  duration?: number;  // default 2.4
+  position?: 'center' | 'bottom' | 'top';  // default 'center'
+  rotation?: number;  // grados, default 0
+};
+
+export type CtaCue = {
+  src: string;
+  duration?: number;  // default 3.5
+};
+
+export type CaptionsConfig = {
+  enabled: boolean;
+  position: 'center' | 'lower-third';
+};
+
+export type TutorialFacelessProps = {
+  audioSrc: string;
+  transcript: TranscriptWord[];
+  kineticCaptions: KineticCaption[];
+  hookCard: HookCardCue | null;
+  background: BackgroundCue[];
+  cards: CardCue[];
+  broll: BrollCue[];
+  cta: CtaCue | null;
+  captionsConfig: CaptionsConfig;
   width: number;
   height: number;
   fps: number;

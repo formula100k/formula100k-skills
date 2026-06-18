@@ -8,7 +8,7 @@ Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, 
 
 ## ¿Qué son las skills de FÓRMULA 100K?
 
-Son **58 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
+Son **59 herramientas** que viven dentro de Claude Code y te permiten ejecutar la metodología F100K sin tener que recordar cada paso. Le pides algo en lenguaje natural ("crea un carrusel viral sobre X", "audita mi comunidad de Skool", "escribe un VSL para mi oferta", "diseña un lead magnet tangible") y la skill correspondiente se activa con todo el know-how de Andrea adentro.
 
 Cubren: guionización, calendarios de contenido e historias, audios de venta, VSL, construcción de ofertas, comunidades Skool, edición de video, miniaturas, carruseles, infografías reel, lead magnets y más.
 

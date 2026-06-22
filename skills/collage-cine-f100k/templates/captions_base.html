@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+  captions_base.html — Plantilla de captions manuscritos para collage-cine-f100k.
+  Fondo MAGENTA (#FF00FF) = chroma key (ffmpeg lo quita con colorkey).
+  Render:  npx hyperframes render --format mp4 --resolution portrait -o captions_overlay.mp4
+  Por bloque, duplicá el .caption y ajustá data-start / data-duration (segundos),
+  el texto cursivo crema y la <mark> verde con realce amarillo.
+  Fuentes manuscritas: Caveat / Gochi Hand / Shadows Into Light (Google Fonts).
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;width:1080px;height:1920px;background:#FF00FF;overflow:hidden;}
+  .stage{position:relative;width:1080px;height:1920px;font-family:'Caveat',cursive;}
+  .caption{
+    position:absolute;left:60px;right:60px;
+    text-align:center;color:#F4ECD8;            /* crema */
+    font-size:96px;line-height:1.05;font-weight:700;
+    text-shadow:0 3px 10px rgba(0,0,0,.55);
+    opacity:0;                                   /* HyperFrames anima con data-* */
+  }
+  /* posición típica: justo arriba de la división de paneles (~620px) */
+  .caption.mid{top:600px;}
+  mark{
+    background:linear-gradient(transparent 55%, #F2D23A 55%); /* realce amarillo */
+    color:#3CCB5A;                                /* verde manuscrito */
+    padding:0 6px;border-radius:4px;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" data-timeline="collage-captions">
+
+    <!-- BLOQUE 1 — ejemplo. data-start/data-duration en segundos, cronometrados al keyword -->
+    <div class="caption mid"
+         data-start="1.2" data-duration="3.0"
+         data-anim="handwrite" data-track-index="0">
+      it's time to build a <mark>second brain</mark>
+    </div>
+
+    <!-- BLOQUE 2 -->
+    <div class="caption mid"
+         data-start="9.0" data-duration="3.0"
+         data-anim="handwrite" data-track-index="1">
+      just <mark>capture</mark> everything
+    </div>
+
+    <!-- … un .caption por bloque … -->
+
+  </div>
+</body>
+</html>

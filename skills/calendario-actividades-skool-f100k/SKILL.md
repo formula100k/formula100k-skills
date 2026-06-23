@@ -1,0 +1,124 @@
+---
+name: calendario-actividades-skool-f100k
+description: >
+  Genera el CALENDARIO MENSUAL DE ACTIVIDADES de una comunidad Skool como IMAGEN final (PNG) lista para publicar, con el estilo premium de FÓRMULA 100K (estética alquimista) — sin Canva. Toma una rutina semanal recurrente + eventos puntuales con fecha + un tema de marca, calcula la grilla real del mes y la renderiza con HTML→Chrome→PNG. Multi-marca: sirve para la comunidad de Andrea Y para las comunidades Skool de sus clientas, con temas visuales intercambiables (alquimista, minimalista, oscuro neón) + generación de fondo a demanda con Higgsfield. Dos caminos: DESDE 0 (arma la rutina con la metodología F100K de anclas) o CLONAR el mes anterior y ajustar. Activar SIEMPRE que se pida "arma el calendario de actividades de mi comunidad/Skool", "hazme el calendario mensual de la comunidad", "el calendario de sesiones del mes", "calendario de eventos de Skool", "diséñame el calendario de actividades como el de F100K", "calendario de la comunidad de [clienta]", "actualiza el calendario de actividades a [mes]", o cualquier variación que combine una comunidad/Skool con el calendario VISUAL de sus sesiones/eventos del mes. NO confundir con calendario-semanal-f100k ni calendarizador-contenido-formula100k (esas son para CONTENIDO de redes), ni con calendarizador-historias/urgencias.
+---
+
+# Skill: Calendario de Actividades de Skool · FÓRMULA 100K
+
+Convierte la rutina de una comunidad Skool en el **calendario mensual visual** (PNG) que se publica dentro de la comunidad — el entregable de "Contenido Vivo": predictibilidad (rutina fija) + novedad (eventos del mes).
+
+Produce la **imagen final lista para publicar**, no un plan en texto. El motor es HTML → Chrome headless → PNG (mismo patrón que `carrusel-render-formula100k`).
+
+---
+
+## CUÁNDO USAR
+
+- "Arma / actualiza el calendario de actividades de mi comunidad (a [mes])"
+- "El calendario mensual de sesiones / eventos de Skool"
+- "Diséñame el calendario como el de FÓRMULA 100K"
+- "El calendario de la comunidad de [clienta]"
+
+**No** es para contenido de redes (eso es `calendarizador-contenido-formula100k` / `calendario-semanal-f100k`).
+
+---
+
+## CÓMO FUNCIONA (3 pasos)
+
+1. **Config** — un JSON por comunidad con: `comunidad`, `tema`, `mes`, `anio`, `rutinaSemanal`, `horarios`, `eventos`, `catalogoTipos`. Ver `plantillas/`.
+2. **Render** — `node render.js <config.json>` calcula la grilla real del mes y la dibuja sobre el fondo del tema.
+3. **Output** — PNG + HTML editable en `~/Documents/FORMULA100K/CALENDARIOS-ACTIVIDADES/`.
+
+### Primera vez
+```bash
+cd <skill>/calendario-actividades-skool-f100k
+npm install          # instala puppeteer-core (usa el Chrome de macOS, no descarga otro)
+```
+
+### Renderizar
+```bash
+node render.js plantillas/f100k.json                       # usa mes/anio/tema del config
+node render.js mi-comunidad.json --mes 7 --anio 2026       # sobrescribe mes/año
+node render.js mi-comunidad.json --tema oscuro-neon        # cambia de tema
+node render.js mi-comunidad.json --out /ruta/calendario.png --scale 2
+```
+
+---
+
+## LOS DOS CAMINOS
+
+### A) DESDE 0 (comunidad sin calendario)
+1. Pregunta: nombre de la comunidad, nicho, y cuánta energía/equipo tiene (cuántas sesiones por semana puede sostener).
+2. Copia `plantillas/blanco.json` y arma la rutina con la **metodología F100K de anclas**:
+   - **Siempre** dos anclas: un **Q&A en vivo** a media semana (ej. martes) y un cierre de **Wins** el viernes.
+   - Reparte el resto: lunes de metas, mini-clase/recurso, hot-seat/auditoría, reto relámpago.
+   - Empieza con **2–3 sesiones fijas**, no 7: mejor poco que SIEMPRE pasa, que mucho que se cancela.
+   - Eventos del mes: inicio de reto (S1), masterclass/invitado (S2), regalo del mes + cierre de reto (S4).
+3. Elige tema y renderiza.
+
+### B) CLONAR Y AJUSTAR (ya tiene calendario)
+1. Parte del config del mes anterior (o de `plantillas/f100k.json`).
+2. Cambia `mes`/`anio` y agrega/quita lo dinámico de este mes en `eventos` (nuevos retos, presenciales, lanzamientos, dinámicas nuevas).
+3. Re-renderiza. La rutina semanal se recalcula sola sobre las fechas del mes nuevo.
+
+---
+
+## MODELO DE DATOS (config)
+
+| Campo | Qué es |
+|---|---|
+| `comunidad` | Nombre que sale en el sidebar |
+| `mesLabel` | Etiqueta corta grande del sidebar (ej. `"MAY."`); opcional |
+| `tema` | Carpeta en `themes/` (`alquimista-f100k` \| `minimalista-claro` \| `oscuro-neon`) |
+| `mes` / `anio` | Mes (1–12) y año a renderizar |
+| `logo` | Ruta local a PNG/SVG del logo (opcional; si no, usa iniciales) |
+| `catalogoTipos` | Mapa `tipo → {bg, fg}` = color de cada chip de sesión |
+| `rutinaSemanal` | Llaves `0`–`6` (0=Domingo … 6=Sábado) → lista de sesiones fijas de ese día |
+| `horarios` | Llaves `0`–`6` → texto de horarios (sidebar "Recuerda los horarios") |
+| `eventos` | Fechas puntuales: `{fecha:"AAAA-MM-DD", titulo, icono, fechaLabel?, atento?}` |
+
+- Sesión: `{ "sesion": "Q&A en vivo", "tipo": "qa", "icono": "💬" }` — el color viene de `catalogoTipos[tipo]`.
+- Evento con `fechaLabel` y `atento:true` (default) sale como **píldora** en la grilla **y** en "Estáte atento a". Con `atento:false` solo sale como píldora en su día.
+
+---
+
+## TEMAS (plantillas visuales)
+
+Cada tema vive en `themes/<nombre>/` con `theme.json` (CSS vars + tipografía) y un `fondo.jpg` opcional:
+
+- **`alquimista-f100k`** — el flagship (fondo de laboratorio alquimista, azul profundo). El de la comunidad de Andrea.
+- **`minimalista-claro`** — fondo claro, sin imagen, 100% CSS. Marca sobria.
+- **`oscuro-neon`** — morado/neón, sin imagen, 100% CSS.
+
+### Fondo a demanda (marca propia de una clienta)
+Genera un fondo nuevo con Higgsfield (`generate_image`, `nano_banana_pro`, `aspect_ratio:"16:9"`) describiendo el nicho de la clienta. **Reglas del prompt:** centro despejado/oscuro para que la grilla se lea, detalle en los bordes, vignette, y **sin texto/números/UI**. Luego:
+```bash
+mkdir -p themes/<marca>/ && cp themes/alquimista-f100k/theme.json themes/<marca>/theme.json
+# descarga la imagen como themes/<marca>/fondo.jpg, ajusta colores en theme.json
+```
+Convierte el PNG descargado a JPEG (`sips -s format jpeg ...`) para que pese menos.
+
+---
+
+## VERIFICACIÓN
+
+Siempre **abre el PNG generado y revísalo** antes de entregar: que las fechas caigan en el día correcto, que los chips no se desborden, que el centro del fondo no tape el texto. Si el mes empieza en un día que deja muchas celdas vacías, está bien — así es el calendario real.
+
+---
+
+## ARCHIVOS
+
+```
+calendario-actividades-skool-f100k/
+├── SKILL.md            # esta guía
+├── template.html       # grilla + sidebar + chips sobre el fondo (vanilla JS)
+├── render.js           # config → grilla del mes → PNG (puppeteer-core)
+├── package.json
+├── themes/
+│   ├── alquimista-f100k/{theme.json, fondo.jpg}
+│   ├── minimalista-claro/theme.json
+│   └── oscuro-neon/theme.json
+└── plantillas/
+    ├── f100k.json      # config real de FÓRMULA 100K (ejemplo vivo + para clonar)
+    └── blanco.json     # starter para DESDE 0
+```

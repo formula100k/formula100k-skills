@@ -59,6 +59,7 @@ Una vez instaladas, Claude Code activa la skill correcta automáticamente cuando
 | "Calendariza mi semana de contenido" | `calendarizador-contenido-formula100k` |
 | "Escribe un VSL para esta oferta" | `vsl-expert-f100k` |
 | "Crea una infografía reel" | `infografia-reel-formula100k` |
+| "Hazme un reel faceless de X (sin mi cara)" | `reel-faceless-f100k` |
 
 No tienes que recordar nombres — solo dile lo que necesitas.
 
@@ -133,6 +134,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `capturas-tutorial-formula100k` — Overlays UI tipo tutorial (terminal, callout, step, claude-input) renderizados HTML+CSS+Puppeteer
 - `motion-reels-f100k` — Motion graphics 9:16 para reels: pill labels flotantes, comparison cards BEFORE/NOW, UI cards, chapter cards — transcribe el video y sincroniza cada overlay al timestamp exacto
 - `motion-youtube-f100k` — Motion graphics 16:9 para YouTube: mismos 4 tipos de overlay optimizados para formato horizontal — transcribe con Supadata (URL) o Whisper (local)
+- `reel-faceless-f100k` — Explainer faceless 9:16: Andrea graba la voz pero nunca sale en cámara. El Clip Director decide por gancho el visual de cada segmento (B-roll cinemático IA / card kinética / pixel-meme) y compone el reel completo. Su motor de clips también alimenta al editor de YouTube con B-roll de apoyo a medida del guion
 
 ### Crear apps (sin ser programadora)
 - `constructor-miniapps-f100k` — Construye mini-apps reales y las despliega: extensiones de Chrome, scrapers, calculadoras, generadores, analizadores, quizzes capta-correos, dashboards y mini-SaaS de suscripción. Motor de las 20 plantillas del artifact "40 Trucos de Claude + 20 Mini-Apps"

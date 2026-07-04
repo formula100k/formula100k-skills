@@ -165,6 +165,52 @@ Esta regla aplica incluso si:
 
 ---
 
+## Clips de apoyo generados (Clip Director) — opcional, antes del render
+
+Paso opcional para **generar B-roll a medida del guion** con IA (Higgsfield) e inyectarlo al
+MANIFEST, en vez de solo cazar recursos sueltos con `recursos-de-video-formula100k`. Usa el
+**Clip Director**, el mismo motor que `reel-faceless-f100k`.
+
+**Cuándo:** Andrea dice "genera clips de apoyo", "b-roll a medida del guion", "clips
+generados para este video", o tras transcribir un video **16:9** largo (YouTube) que necesita
+apoyo visual en conceptos/datos/ejemplos.
+
+**Cómo (auto-propone → Andrea aprueba):**
+
+1. **Transcript.** Requiere `captions.json` (ya lo produce el Paso 1 del pipeline). Si aún no
+   existe, correr primero el corte/transcripción, o usar el guion.
+2. **Invocar el Clip Director** siguiendo `../reel-faceless-f100k/reference/clip-director.md`
+   con `modo=support`, `formato=16:9`. El Director lee `captions.json`, detecta los momentos
+   que piden apoyo (concepto/dato/ejemplo → `visual_type`) y **auto-propone** un plan donde
+   cada segmento trae un `keyword` **verbatim** del transcript (8-15 palabras) como ancla.
+3. **Aprobación.** Mostrar la tabla propuesta y preguntar con `AskUserQuestion`:
+   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". Andrea puede agregar o
+   quitar marcas.
+4. **Generar.** Higgsfield `generate_video` con `aspect_ratio="16:9"` (lotes ≤8, poll
+   `job_status(sync:true)`, declinar presets, anti-NSFW — ver la receta `broll` del reference).
+   Descargar a `$DEST/IA/broll_generado/clipNN.mp4`:
+   `curl -L "<url>" -o "$DEST/IA/broll_generado/clipNN.mp4"`.
+5. **Inyectar al MANIFEST.** Añadir una fila por clip a la sección `## B-roll` del MANIFEST
+   (formato exacto en "Formato del MANIFEST.md" abajo):
+
+   ```markdown
+   ## B-roll
+   | Keyword                          | Archivo                          | Duración | Estilo        |
+   |----------------------------------|----------------------------------|----------|---------------|
+   | los tres errores que cometía     | IA/broll_generado/clip01.mp4     | 4s       | monitor-photo |
+   ```
+
+   Si la sección `## B-roll` no existe en el MANIFEST, crearla con ese encabezado. La keyword
+   debe existir en `captions.json` (el parser avisa con `[warn]` si no).
+6. **Render normal.** Continuar con el pipeline de abajo: `manifest_to_cues.py` resuelve las
+   keywords y el render coloca cada clip como B-roll fullscreen por su ventana y vuelve a la
+   cara de Andrea (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
+
+**Degradación:** si `mcp__higgsfield__balance` es 0, el Director degrada a cards/pixel o
+sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference §6). No falla.
+
+---
+
 ## Pipeline (un solo comando)
 
 **macOS:**

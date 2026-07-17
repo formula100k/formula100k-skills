@@ -21,12 +21,14 @@ montage_TOP.png/BOTTOM.png   mosaicos comparativos de los ganchos @1s
 anatomia/WINNERS_anatomy.png anatomía por segundos (frames 0/3/6/10s apilados)
 anatomia/LOSERS_anatomy.png
 layouts-editores/1..6.png    layouts de gancho Higgsfield (9:16, 2k) para editores
+carrier/blind_NN.png+.txt    frames barajados + mapping_SECRET.json (lectura ciega del carrier)
+carrier/carrier.json         carrier codificado × grupo + medianas (dato para el reporte y el HTML)
 REPORTE.md                   reporte markdown completo
 CALENDARIO_GUIONES.md        (opcional) semana de guiones con el criterio ganador
 index.html                   HTML interactivo single-file (auto-contenido, doble-click)
 ```
 
-El HTML tiene 7 tabs: **📐 Diagnóstico** · **📊 Los N reels** (sortable+filterable+modal) · **🎣 Comparación de ganchos** (textual/visual/verbal) · **⏱️ Anatomía por segundos** · **🧠 Patrones invisibles** (12) · **🎯 Comentarios vs vistas** (ángulos) · **✨ Ganchos perfectos + formato ganador**.
+El HTML tiene 8 tabs: **📐 Diagnóstico** · **📊 Los N reels** (sortable+filterable+modal) · **🎣 Comparación de ganchos** (textual/visual/verbal) · **🎡 Tu carrier** (lectura ciega: quién carga el gancho en tus ganadores vs flops) · **⏱️ Anatomía por segundos** · **🧠 Patrones invisibles** (12) · **🎯 Comentarios vs vistas** (ángulos) · **✨ Ganchos perfectos + formato ganador**.
 
 > **Modo Top-N vs Bottom-N (default):** para comparar "10 mejores vs 10 peores" hay que scrapear un pool amplio (~70 reels), ordenar por `videoPlayCount` y tomar los N de arriba y N de abajo. NO scrapear solo N: eso da los N más recientes, no los mejores/peores.
 
@@ -144,8 +146,11 @@ Leer los PNG con la tool `Read` para verlos. Usar el modelo multimodal para iden
 - **Composición**: ¿hay contraste visual / exageración / objeto desproporcionado?
 - **Texto en pantalla**: ¿qué dice? ¿abre loop o lo cierra?
 - **Sujeto principal**: ¿persona, objeto, paisaje?
+- **Carrier** (para PASO 6.5): ¿qué canal, si lo QUITAS, mata el gancho? → **visual** (algo que se muestra: objeto en mano, demo de pantalla, escena; engancha en mute y sin leer) · **textual** (un título grande que hay que LEER) · **verbal** (lo que DICE; cara hablando sin objeto ni título dominante). Un solo carrier por reel.
 
 Anotar todo. Esto es la materia prima para el análisis comparativo.
+
+> **⚠️ Codifica el carrier AQUÍ, antes de ver las métricas del PASO 6.** El error que hundió el estudio *1000 Ganchos* fue circularidad: clasificar mirando primero quién ganó. Para blindaje real, haz la lectura ciega del PASO 6.5 (frames barajados) en vez de anotar sobre los nombres `t01/b01`.
 
 ---
 
@@ -199,6 +204,38 @@ Tabla objetivo→formato→ejemplo→métrica: alcance frío+seguidores (tutoria
 
 ---
 
+## PASO 6.5 — Tu carrier (lectura ciega)
+
+Mide **quién carga el gancho** (visual / textual / verbal) en los reels de ESTA cuenta y si eso separa a sus ganadores de sus flops. Es el hallazgo que sobrevivió a la auditoría del estudio *1000 Ganchos* ([[feedback_1000_ganchos_data_fabricada]]): a nivel general el visual gana, **pero se INVIERTE por nicho** (en ventas/emprendimiento/mindset suele liderar el texto o lo hablado). Por eso NO se codifica una regla universal: se MIDE la de cada cuenta.
+
+**Método (anti-circularidad, obligatorio):** codifica el carrier SIN saber qué reel es top o bottom, y recién después cruza con el rendimiento.
+
+```python
+# En la carpeta de la auditoría. Baraja los frames a IDs ciegos, codifica, luego revela.
+import json, random, os, subprocess
+d=json.load(open('00_dataset.json')); reels={r['rank']:r for r in d['reels']}
+os.makedirs('carrier/blind',exist_ok=True); random.seed()
+order=list(reels.values()); random.shuffle(order); mapping={}
+for i,r in enumerate(order,1):
+    bid=f"blind_{i:02d}"; mapping[bid]=r['rank']
+    subprocess.run(["sips","-Z","520",f"hook_{r['rank']}.png","--out",f"carrier/blind/{bid}.png"],
+                   stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    tr=' '.join((r.get('transcript') or '').split()[:14])
+    open(f"carrier/blind/{bid}.txt","w").write("Primeras ~3s: "+tr)
+json.dump(mapping,open('carrier/mapping_SECRET.json','w'),ensure_ascii=False,indent=2)
+```
+
+1. Lee `carrier/blind/blind_01..NN.png` + su `.txt` con la tool `Read`. Asigna UN carrier por frame según la rúbrica del PASO 5 (qué canal, si lo quitas, mata el gancho). Marca confianza alta/media/baja. **No abras `mapping_SECRET.json` hasta terminar de codificar.**
+2. Revela: cruza tus códigos con `mapping_SECRET.json` + el grupo/plays de `00_dataset.json`. Calcula la **tabla carrier × grupo** (cuántos visual/textual/verbal en TOP vs BOTTOM) y la **mediana de plays por carrier**. Guarda todo en `carrier/carrier.json`.
+3. **Prueba de robustez:** reclasifica tus códigos de baja confianza al segundo candidato; si el veredicto se mantiene, es sólido. Repórtalo.
+
+**Cómo reportar (honesto, sin prescribir):**
+- Enuncia el dato de ESTA cuenta: "tus ganadores cargan el gancho por **X**; tus flops por **Y** (mediana de plays: visual … / textual … / verbal …)".
+- Con pocos reels (≈20) esto es **señal, no prueba**: da la dirección + la magnitud, y di explícitamente que no es significativo si n es chico (Fisher/Mann-Whitney si tienes scipy). NUNCA lo conviertas en "el visual gana" universal.
+- Si el carrier de los ganadores es **visual**, recomienda apoyarse en mostrar algo real (no atrezzo forzado). Si es **textual/verbal**, recomienda liderar con claim de texto o frase hablada y NO obligar a "mostrar" — encaja con que el visual se invierte en esos nichos.
+
+---
+
 ## PASO 7 — Generar layouts de gancho con Higgsfield (para editores)
 
 Aplicar la **fórmula ganadora** detectada. Diseñar 6 layouts que sirvan de referencia visual a los editores (dónde va el texto amarillo + número, el objeto en mano, el contacto visual, la evidencia externa). Categorías validadas:
@@ -246,6 +283,7 @@ Estructura: ver `references/reporte-md-template.md`.
 Secciones obligatorias:
 0. Titular con brecha top/bottom + panorama first-party (si lo hay) + descarte de excusas (duración/CTA/"no gusta")
 1. **Comparación de ganchos** — textual / visual / verbal (qué comparten los top + qué les falta a los bottom)
+1.5 **Tu carrier (lectura ciega)** — tabla carrier × grupo + mediana de plays por carrier + veredicto de ESTA cuenta (qué carga los ganadores), con la nota de "señal, no prueba" si n es chico
 2. **Anatomía por segundos** — dónde se cae cada video (beats 0/3/6/10s, ganadores vs perdedores)
 3. **Resumen SÍ vs NO + 12 patrones invisibles**
 4. **Ángulos** — qué dispara comentarios vs vistas vs seguidores vs guardados (tabla) + desconexión guardar↔seguir + jugada combinada
@@ -268,6 +306,7 @@ Single-file HTML auto-contenido (abre con doble-click). Ver plantilla completa e
   📐 Diagnóstico          → panorama first-party + descarte de excusas + embudo
   📊 Los N reels          → grid sortable+filterable + modal con transcript
   🎣 Comparación de ganchos → 3 cards (textual/visual/verbal) con columnas yes/no
+  🎡 Tu carrier            → tabla carrier × grupo (TOP/BOTTOM) + mediana de plays por carrier + veredicto de la cuenta + disclaimer "señal, no prueba" si n<25
   ⏱️ Anatomía por segundos → montajes WINNERS/LOSERS + beatmap 0/3/6/10s
   🧠 Patrones invisibles   → 12 pattern cards (marca los 2 de first-party)
   🎯 Comentarios vs vistas → tabla de ángulos + jugada combinada
@@ -325,6 +364,8 @@ La auditoría alimenta el resto del ecosistema. Si Andrea lo pide (o proactivame
 - **NO** scrapear solo N cuando piden "top N vs bottom N": eso da los N más RECIENTES. Scrapear ~70 y ordenar por playCount.
 - **NO** ignorar las estadísticas nativas si Andrea las pega: guardados/compartidos/seguidores/%no-seguidores NO vienen del scraper y cambian el análisis.
 - **SÍ** marcar el sesgo de recencia (reels <5 días en el bottom).
+- **NO** codificar el carrier (PASO 6.5) mirando primero quién es top/bottom — eso es la circularidad que hundió el estudio *1000 Ganchos*. Codifica a ciegas (frames barajados) y revela después.
+- **NO** reportar el carrier como regla universal ("el visual gana"). Se INVIERTE por nicho (ventas/mindset lideran texto/hablado): reporta SIEMPRE el dato de ESA cuenta, y con n chico dilo como "señal, no prueba".
 - **NO** poner emojis en lugares decorativos del HTML excepto en los tabs (donde sí ayudan a navegar) y en los overlays de las propuestas (son parte del lenguaje IG).
 - **SÍ** español neutro en TODO output (ver [[feedback_espanol_neutro]]) — "tu/tú", no "vos/tenés/podés".
 - **SÍ** verificar saldo Higgsfield ANTES de generar 6 imágenes.

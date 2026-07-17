@@ -55,6 +55,23 @@ Versión texto-plano del reporte, complementaria al `index.html` interactivo.
 
 ---
 
+## Tu carrier (lectura ciega) — quién carga el gancho
+
+> Codificado a ciegas (frames barajados) ANTES de ver el rendimiento, para no caer en la circularidad del estudio *1000 Ganchos*. El carrier general dice "visual > textual > verbal", pero **se invierte por nicho**: acá manda el dato de ESTA cuenta.
+
+| Carrier | En TOP | En BOTTOM | Mediana plays |
+|---------|-------:|----------:|--------------:|
+| **Visual** (algo que se muestra) | <n> | <n> | <mediana> |
+| **Textual** (título que se lee) | <n> | <n> | <mediana> |
+| **Verbal** (lo que dice) | <n> | <n> | <mediana> |
+
+**Veredicto de la cuenta**: los ganadores cargan el gancho por **<carrier>**; los flops por **<carrier>**.
+<Si visual gana → apoyarse en mostrar algo real, sin atrezzo forzado. Si textual/verbal → liderar con claim de texto o frase hablada, no obligar a "mostrar".>
+
+> **Señal, no prueba**: con <N> reels esto marca dirección + magnitud, no significancia (<Fisher p=… / Mann-Whitney p=… si se calculó>). Robustez: al reclasificar los códigos de baja confianza el veredicto <se mantuvo / cambió>.
+
+---
+
 ## Patrón ganador — Gancho verbal (primeras 10 palabras del audio)
 
 ### TOP 3 · arrancan con SITUACIÓN CONCRETA + tiempo o lugar específico

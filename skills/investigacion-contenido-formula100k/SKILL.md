@@ -1,7 +1,6 @@
 ---
 name: investigacion-contenido-formula100k
-description: >
-  Investigación de tendencias e ideas de contenido viral con la metodología FÓRMULA 100K. Usar cuando pidan: investigar tendencias, encontrar ideas, cazar temas virales, qué funciona en mi nicho, investigar competencia, ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, "buscar referencias virales por keyword", "cazar 1 ejemplo viral por cada item de un framework" (7 pilares, 33 estructuras, 10 ganchos); o "no sé de qué hablar", "quiero ideas para mis videos", "buscame referencias con [keyword]", "ejemplos virales de [pattern]". Stack permanente de 4 motores juntos: (1) agent-browser SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales; (2) Tavily (tendencias web y validación cruzada); (3) vidIQ (outliers de YouTube); (4) Supadata (landings sin login). agent-browser nunca es fallback: es fijo en el stack.
+description: "Investigación de tendencias e ideas de contenido viral con la metodología FORMULA 100K. Usar SIEMPRE que se pida investigar tendencias, encontrar ideas de contenido, cazar temas virales, qué funciona en mi nicho, investigar a la competencia, encontrar ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, buscar referencias virales por keyword, cazar 1 ejemplo viral por cada item de un framework (7 pilares, 33 estructuras, 10 ganchos), o 'no sé de qué hablar', 'quiero ideas para mis videos', 'buscame referencias con [keyword]'. Stack de 4 motores juntos: (1) agent-browser SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales; (2) Tavily MCP para tendencias web y validación cruzada; (3) vidIQ MCP para outliers reales de YouTube; (4) Supadata MCP para landings sin login. agent-browser nunca es fallback, es fijo en el stack."
 ---
 
 # Skill: Investigación de Contenido — Fórmula 100K
@@ -13,6 +12,22 @@ Esta skill convierte a Claude en un detective de contenido que caza tendencias e
 ## MENTALIDAD DEL INVESTIGADOR
 
 Al entrar a esta skill, Claude deja de ser consumidor de contenido y se convierte en estratega. Cada búsqueda tiene un objetivo: encontrar qué está funcionando ahora, qué preguntas tiene la audiencia, y qué ángulos tienen potencial viral.
+
+> **REGLA #1 — solo se reporta lo que se scrapeó de verdad.** Esta skill vive de datos REALES extraídos en vivo (agent-browser logueado, Apify, vidIQ, Tavily). Si una herramienta no corrió, la mentalidad correcta NO es "relleno con lo que sé": es DETENERSE y avisar. Ver **COMPUERTA DE VERIFICACIÓN** abajo. El peor resultado posible de esta skill es un reporte bonito con métricas/URLs inventadas que parece investigación pero no lo es.
+
+### COMPUERTA DE VERIFICACIÓN (bloqueante)
+
+Antes de entregar CUALQUIER referencia con métricas (views, likes) o URL:
+
+- ✅ El dato salió de un scrape REAL de esta sesión (agent-browser extrajo el DOM en vivo, o Apify devolvió un `runId`/`datasetId`, o vidIQ/Tavily respondieron). → puedes usarlo.
+- 🚩 La herramienta no corrió, la sesión estaba caducada (ver PASO 0 Preflight), agent-browser topó el muro de login / la página de error de detección CDP de IG, o el MCP no estaba conectado → **PROHIBIDO inventar la métrica o la URL.** Marca la fila `[NO VERIFICADO — scrape no corrió]` y DETENTE para avisar:
+  > "⚠️ No pude extraer datos en vivo (sesión caducada / herramienta sin conexión). No voy a rellenar métricas ni URLs de memoria. Arreglemos la conexión y reintento."
+
+Reglas duras:
+- **Followers ≠ views.** Nunca uses métricas de perfil (seguidores, likes acumulados) como sustituto de las views de un video específico. Si solo tienes datos de perfil, el video no se scrapeó.
+- **Cita la fuente real de cada métrica**, no una atribución vaga. Un número sin scrape detrás es un número inventado.
+- **Fallo de herramienta ≠ nicho sin viralidad.** Son diagnósticos distintos; nómbralos distinto.
+- Si el usuario ya trae URLs específicas, extrae las métricas de ESAS URLs (no busques por keyword otras distintas).
 
 ---
 
@@ -28,6 +43,49 @@ Cuatro motores trabajan SIEMPRE juntos, no se excluyen. Cada uno tiene su zona d
 | **Supadata MCP** | Landings, blogs, transcripts de YouTube cuando vidIQ no aplica | Complemento — NO competir con agent-browser para IG/TikTok logueado |
 
 **Regla de oro:** si la usuaria ya nombró cuentas referencia o el target es IG/TikTok, agent-browser entra SIEMPRE en el primer paso. No esperar a que otra herramienta falle.
+
+---
+
+## PASO 0 — PREFLIGHT: SALUD DE SESIONES (correr SIEMPRE antes de investigar)
+
+**Por qué existe este paso:** el síntoma #1 de "el agent-browser no funciona en TikTok" NO es un bug del navegador — es que la **sesión guardada caducó**. TikTok expira el login en pocos días; cuando eso pasa, agent-browser carga el muro de login o resultados a medias y parece que "no entra". Chequear la sesión ANTES ahorra el corte a mitad de investigación.
+
+**Chequeo de edad de sesiones (10 segundos, antes del Paso 1):**
+
+```bash
+# Las sesiones viven aquí. Mira la fecha de cada una.
+ls -lt ~/.agent-browser/sessions/
+```
+
+Regla de frescura por plataforma:
+
+| Sesión | Vive sana | Re-loguear si |
+|---|---|---|
+| `f100k_tiktok-default.json` | ~3-5 días | tiene **más de 4 días** o la última búsqueda topó login |
+| `f100k_ig-default.json` | ~7-14 días | tiene más de 10 días o IG pide re-verificación |
+
+**Si la sesión de TikTok está vieja → refrescarla (necesita que Andrea loguee una vez):**
+
+```bash
+# 1. Abre TikTok en ventana visible con el nombre de sesión correcto
+agent-browser --session-name f100k_tiktok --headed open https://www.tiktok.com
+
+# 2. PEDIRLE A ANDREA: "inicia sesión en la ventana que se abrió y avísame"
+#    (esperar confirmación humana — NO seguir hasta que confirme)
+
+# 3. Guardar la sesión fresca para que el login persista
+agent-browser --session-name f100k_tiktok save-session
+
+# 4. Verificar que quedó logueada
+agent-browser open https://www.tiktok.com/foryou
+agent-browser eval --stdin <<'EOF'
+(() => document.querySelector('[data-e2e="nav-profile"], [data-e2e="profile-icon"]') ? 'LOGUEADA ✅' : 'AÚN EN LOGIN WALL ⚠️')()
+EOF
+```
+
+**Detección de login wall a mitad de búsqueda** (si el Paso 1.6 devuelve 0 resultados): correr el `eval` de verificación de arriba. Si dice "login wall", volver al re-login. NO asumir que TikTok cambió el DOM antes de descartar sesión caducada.
+
+> **Nota — el error "Bun not found" NO es de esta skill ni del agent-browser.** Sale del plugin de memoria `claude-mem` (un Stop hook que necesita Bun). Es ruido inofensivo y no bloquea la investigación. Se arregla instalando Bun una sola vez: `brew install oven-sh/bun/bun`. Ver la guía HTML de arreglo si reaparece.
 
 ---
 
@@ -129,9 +187,10 @@ agent-browser close --all
 - ❌ Si necesitas comentarios o engagement breakdown (Apify TikTok scraper es mejor)
 - ❌ Si necesitas reels específicos de Instagram (IG bloquea más fuerte — agent-browser logueado con sesión real es obligatorio)
 
-**Si el atajo falla** (TikTok cambia el DOM o pone captcha bloqueante):
-1. Bajar a `apify/tiktok-scraper` con la keyword como query
-2. Si Apify tampoco aplica, pedir al usuario que loguee TikTok en la ventana headed y reintentar
+**Si el atajo falla** (0 resultados o captcha bloqueante):
+1. **Primero** sospechar sesión caducada → correr el chequeo del **Paso 0** y re-loguear TikTok. Es la causa más común.
+2. Si la sesión está fresca y aun así falla → bajar a `apify/tiktok-scraper` con la keyword como query
+3. Si Apify tampoco aplica, pedir a Andrea que loguee TikTok en la ventana headed y reintentar
 
 ### Paso 2 — Buscar tendencias con Tavily MCP
 Usar **tavily_search** para búsquedas rápidas y **tavily_research** para investigación profunda con síntesis. Usar **tavily_extract** para extraer contenido completo de una URL específica. Estrategias de búsqueda:
@@ -166,7 +225,7 @@ Por cada idea encontrada, evaluar:
 5. ¿Existe un ángulo propio que nadie está usando?
 
 ### Paso 4 — Entregar ideas procesadas
-No entregar solo links o datos crudos. Transformar cada hallazgo en:
+**Antes de entregar, pasa por la COMPUERTA DE VERIFICACIÓN** (arriba): toda métrica/URL debe venir de un scrape real de esta sesión, o va marcada `[NO VERIFICADO]`. No entregar solo links o datos crudos. Transformar cada hallazgo en:
 - **Idea de contenido** concreta y accionable
 - **Ángulo sugerido** (cómo diferenciarlo)
 - **Tipo de gancho verbal** recomendado (error, resultado, controversia, etc.)

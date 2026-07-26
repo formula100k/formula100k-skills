@@ -1,0 +1,12 @@
+{
+  "name": "analisis-video-viral-f100k",
+  "version": "1.0.0",
+  "description": "Ingeniería inversa de un video viral desde su URL: descarga el reel real, lo transcribe, extrae los frames y desglosa la estructura segundo a segundo — gancho, bloques con timestamps, estructura madre, pilar de valor, reparto del tiempo y plantilla lista para copiar.",
+  "author": {
+    "name": "Andrea Vega",
+    "email": "andrea@formula100k.app",
+    "url": "https://formula100k.app"
+  },
+  "homepage": "https://formula100k.app",
+  "license": "Proprietary"
+}

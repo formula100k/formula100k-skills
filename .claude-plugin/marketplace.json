@@ -15,6 +15,15 @@
       "category": "content-creation",
       "homepage": "https://formula100k.app",
       "keywords": ["formula100k", "contenido", "instagram", "tiktok", "skool", "venta", "comunidad"]
+    },
+    {
+      "name": "analisis-video-viral-f100k",
+      "source": "./plugins/analisis-video-viral-f100k",
+      "description": "Ingeniería inversa de un video viral desde su URL. Descarga el reel real, lo transcribe y desglosa su estructura segundo a segundo: gancho, bloques con timestamps, estructura madre, pilar de valor, reparto del tiempo, movimientos replicables y plantilla lista para copiar.",
+      "version": "1.0.0",
+      "category": "content-creation",
+      "homepage": "https://formula100k.app",
+      "keywords": ["formula100k", "viral", "analisis", "reel", "instagram", "tiktok", "estructura", "ingenieria-inversa"]
     }
   ]
 }

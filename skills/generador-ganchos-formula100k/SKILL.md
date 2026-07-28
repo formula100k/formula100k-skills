@@ -29,6 +29,7 @@ Lab pre-grabación: diseña N variantes de gancho (composición + texto), las pr
 
 **Material de referencia (cargar siempre):**
 - `criterios.md` — reglas de diversificación de variantes + composición visual + estructuras de texto
+- `moldes-gancho.md` — banco de 15 moldes de gancho textual (rotación, NO ranking) del estudio 1000 Ganchos
 - `output-template.md` — formato del reporte LAB con ranking y brief de ganadora
 
 **Frameworks heredados de FÓRMULA 100K:**
@@ -86,11 +87,15 @@ Carga `criterios.md` y sigue las reglas de diversificación. Cada variante DEBE 
    - **C — Resultado** ("Cómo pasé de 0 a Y en Z")
    - **D — Susurro** ("Hazlo así (nadie habla de esto)")
    - Diversificar estructuras entre variantes cuando sea posible
-4. **Gatillos activados** (3-5 de los 15) con justificación 1 línea cada uno
-5. **Hipótesis 1 línea** del por qué esta variante puede ganar
+4. **Molde de gancho** — carga `moldes-gancho.md` y asigna a cada variante un molde DISTINTO del banco de 15 (la forma sintáctica con la que abre la línea). El molde es ortogonal a la estructura de copy: se combinan (ej. molde 08 + estructura C).
+   - **Se elige por ajuste al tema, NUNCA por rendimiento.** El banco está ordenado por frecuencia de aparición, no por resultados: ningún molde rinde más que otro de forma defendible. Si razonas "este molde funciona mejor", estás inventando.
+   - No repetir molde entre variantes, ni con el video anterior del mismo usuario.
+   - Si el molde no cabe en 8 palabras, córtalo — el ≤ 8 manda.
+5. **Gatillos activados** (3-5 de los 15) con justificación 1 línea cada uno
+6. **Hipótesis 1 línea** del por qué esta variante puede ganar
 
 Comunicación al usuario en este paso:
-> "Diseñando 3 variantes diversificadas: F1+Curiosidad, F4+Dolor, F2+Susurro"
+> "Diseñando 3 variantes diversificadas: F1+Curiosidad+molde 03 (condicional), F4+Dolor+molde 14 (no es X es Y), F2+Susurro+molde 13 (instrucción-hábito)"
 
 ### Paso 4: Producir clip de test por variante
 
@@ -185,7 +190,8 @@ Termina con UNA acción concreta:
 - **NO ejecutes en serie las llamadas al Predictor.** Lanza las N en paralelo.
 - **NO bloquees todo el flujo si una variante falla.** Reintenta una vez; si falla de nuevo, entrega ranking parcial.
 - **NO sobreescribas el veredicto del Predictor con tu opinión.** Si la variante ganadora por score es la que "menos te gusta", entrega la ganadora igual con disclaimer si hace falta. Andrea decide al final.
-- **El nombre/handle de Andrea en cualquier overlay textual:** `@andraestratega` (NUNCA @andreavega.tv ni variantes) — referencia [[user_username_instagram]].
+- **El nombre/handle de Andrea en cualquier overlay textual:** `@andreaestratega` (NUNCA @andraestratega sin la "e", ni @andreavega.tv ni variantes) — referencia [[user_username_instagram]].
+- **NO rankees los moldes de gancho.** El banco de `moldes-gancho.md` está ordenado por frecuencia, no por rendimiento; ninguna familia sobrevive corrección por comparaciones múltiples. Elegir "el molde que más rinde" es inventar data.
 
 ## Casos especiales
 

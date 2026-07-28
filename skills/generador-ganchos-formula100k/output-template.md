@@ -29,6 +29,7 @@ El reporte se entrega DOS veces:
 ### Forma Visual
 - **Forma asignada:** [F1 / F2 / F3 / F4 / F5]
 - **Estructura de copy:** [A Curiosidad / B Dolor / C Resultado / D Susurro]
+- **Molde de gancho:** [nº y nombre del banco de 15 · elegido por ajuste al tema, no por rendimiento]
 
 ### Composición visual del primer cuadro
 - **Sujeto principal:** [descripción + gesto + expresión]
@@ -87,17 +88,17 @@ El reporte se entrega DOS veces:
 ### Edición post
 - **Overlay scrapbook:** [SÍ / NO] · [si SÍ: estilo crema con washi tape, caja blanca de énfasis al centro]
 - **Subtítulos:** [word-level abajo, fuente Inter Bold blanca sobre caja semi-transparente]
-- **Watermark:** @andraestratega en esquina inferior izquierda (zona segura)
+- **Watermark:** @andreaestratega en esquina inferior izquierda (zona segura)
 
 ---
 
 ## 📊 COMPARATIVA DE TODAS LAS VARIANTES
 
-| # | Forma | Estructura | Gancho textual | Score | Banda |
-|---|-------|-----------|----------------|-------|-------|
-| 1 | F[X] | [A/B/C/D] | "[texto]" | [XX.X] | [banda] |
-| 2 | F[X] | [A/B/C/D] | "[texto]" | [XX.X] | [banda] |
-| 3 | F[X] | [A/B/C/D] | "[texto]" | [XX.X] | [banda] |
+| # | Forma | Estructura | Molde | Gancho textual | Score | Banda |
+|---|-------|-----------|-------|----------------|-------|-------|
+| 1 | F[X] | [A/B/C/D] | [nº] | "[texto]" | [XX.X] | [banda] |
+| 2 | F[X] | [A/B/C/D] | [nº] | "[texto]" | [XX.X] | [banda] |
+| 3 | F[X] | [A/B/C/D] | [nº] | "[texto]" | [XX.X] | [banda] |
 
 ### Detalle por variante
 

@@ -1,7 +1,7 @@
 ---
 name: guionizacion-formula100k
 description: >
-  Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 33 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado.
+  Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 34 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado.
 ---
 
 # Skill: Guionización Fórmula 100K
@@ -77,6 +77,15 @@ Resumen del proceso:
 
 Este paso garantiza que el gancho no sea genérico sino basado en lo que ya probó funcionar con millones de vistas.
 
+### Paso 7 — Chequeo Neuro (OBLIGATORIO, automático)
+Antes de entregar el guion final, pásalo por el **Chequeo Neuro** (no le pide nada extra a la usuaria, es texto, no gasta créditos). Carga `references/rubrica-neuro.md` y corre sus 6 reglas sobre el guion recién escrito:
+
+1. Hook 0-3s manda · 2. Pico temprano · 3. Anti-Default-Mode · 4. Visual temprano · 5. Voz = ancla · 6. Sin valle en s1-2.
+
+Devuelve el bloque corto de salida (ver `rubrica-neuro.md`): veredicto por regla + **el arranque ya reescrito** para clavar los primeros 2s (resultado-primero / visual antes de s2). Si alguna regla sale BAJO, aplica su instrucción de reescritura sobre el guion antes de entregarlo.
+
+> Esto es una **predicción heurística sobre texto**, no la medición real. La medición real (correr `tribe v2` sobre el video grabado) vive en `remix-viral-formula100k`; ambas usan el mismo vocabulario.
+
 ---
 
 ## ORDEN DE ENTREGA AL ESCRIBIR EL GUION
@@ -85,7 +94,9 @@ Este paso garantiza que el gancho no sea genérico sino basado en lo que ya prob
 2. Indicar la estructura elegida + listar sus componentes
 3. Ejecutar verificación de viralidad (referencias reales) → ver `references/verificacion-viralidad.md`
 4. Desarrollar el sistema completo de ganchos (verbal, visual, textual) basado en referencia viral
-5. Entregar el guion completo paso a paso
+5. Si el formato es **hablando a cámara de autoridad**, escribir los dos beats post-gancho **en orden**: 🧷 **el primer** (1 línea, seg ~3, empieza con "pero", resta a la promesa) y después la **sobredimensión de valor** (2–4 líneas, seg ~5–12, prueba + promesa amplificada + filtro). Si es storytelling/POV/skit, marcar N/A los dos.
+6. Entregar el guion completo paso a paso
+7. Ejecutar el **Chequeo Neuro** (`references/rubrica-neuro.md`) y entregar el arranque ajustado
 
 ---
 
@@ -112,6 +123,101 @@ Elegir uno principal:
 - Estímulo núcleo claro (captura atención inmediata)
 - Contexto inmediato (se entiende rápido qué está pasando)
 - Baja carga cognitiva (fácil de procesar)
+
+---
+
+## LA ZONA POST-GANCHO — dos beats, en este orden
+
+Ambos son **Pasos del protocolo LA APUESTA**, el marco que une el valor con el gancho:
+`VALOR ESPERADO = (MAGNITUD × CREDIBILIDAD) ÷ COSTO`. La guía completa está en el Grimorio 100K
+(«LA APUESTA»). Todo lo que necesitas para aplicarlo está aquí abajo, self-contained.
+
+```
+seg 0-3    GANCHO                    → la promesa   (magnitud)
+seg 3-5    🧷 PRIMER                 → el límite    (credibilidad)   ← Paso 3.5
+seg 5-12   SOBREDIMENSIÓN DE VALOR   → prueba + promesa amplificada + filtro  ← Paso 7
+```
+
+**El orden no es negociable:** el primer RESTA y la sobredimensión SUMA. El primer te gana el
+derecho a amplificar. Amplificar sin haber puesto un límite es exactamente lo que hace sonar
+a vendehumos la sobredimensión.
+
+---
+
+## BEAT OBLIGATORIO 1 — 🧷 EL PRIMER (seg ~3)
+
+**UNA línea, justo después del gancho, que le quita algo a tu propia promesa.** Empieza con "pero".
+
+Es el antídoto del *cheque sin fondos* (promesa grande sin respaldo) **sin necesitar una prueba
+nueva**: convierte la limitación de la técnica en la señal cara. Paga un poco de magnitud para
+comprar credibilidad — y como se multiplican, el trato sale a favor.
+
+### Las 4 formas — elige QUÉ le quitas
+
+| Le quitas | Suena así |
+|---|---|
+| **Universalidad** | "Pero no le sirve a todo el mundo." |
+| **Consistencia** | "Pero no funciona siempre." |
+| **Facilidad** | "Pero me costó seis meses entenderlo." |
+| **Autoría** | "Pero no lo inventé yo." |
+
+> Ejemplo: *"Pero solo funciona si el tema ya le importa a tu audiencia."*
+
+### Las 2 formas de arruinarlo
+- **Falsa modestia** — el límite va sobre **la técnica**, NUNCA sobre quien habla. *"Pero no soy experta"* no cuenta y además destruye autoridad.
+- **Límite inventado** — tiene que ser verdad. Un límite falso es otro cheque sin fondos.
+
+**NUNCA va antes del gancho.** Si abres con la limitación, abriste con una excusa y no hay promesa
+que defender.
+
+*(Evidencia: Ein-Gar, Shiv & Tormala 2012 · Eisend 2006 — efecto real pero pequeño. Ver el
+framework, § EL PRIMER.)*
+
+---
+
+## BEAT OBLIGATORIO 2 — SOBREDIMENSIÓN DE VALOR (seg ~5 a ~12)
+
+> **Dependencia dura:** este beat solo se escribe bien si antes se resolvieron el premio (Paso 1),
+> la señal cara (Paso 3) y el primer (Paso 3.5). Sin eso se degrada solo a índice
+> ("te voy a explicar las 3 razones").
+
+Aplica a **formatos hablando a cámara de autoridad**: tutorial, desmitificación, análisis, curaduría,
+anti-consejo. En estos, el gancho NO va directo al contenido: entre el gancho y el cuerpo va un beat
+propio de 2–4 líneas cuya función es convertir la curiosidad en un **contrato de retención** —
+la persona decide conscientemente quedarse.
+
+**Posición:** inmediatamente después del primer, segundos ~5 a ~12.
+**Extensión:** 2–4 líneas. Nunca más del **12% de la duración total** del video.
+
+### Los 3 componentes (deben estar los 3)
+
+| Componente | Qué hace | Cómo suena |
+|---|---|---|
+| **Prueba** | Te gana el derecho a prometer: número, resultado o volumen de trabajo detrás | "Esto salió de analizar mis 40 videos que más rindieron" |
+| **Promesa amplificada** | Describe el ESTADO DEL ESPECTADOR después de ver, no el tema del video | "Cuando termines esto va a quedar dolorosamente claro por qué llevas 3 meses publicando sin que se mueva nada" |
+| **Filtro / autoselección** | Hace que la persona correcta levante la mano y se quede | "Esto te va a servir muchísimo si estás estancada" |
+
+### El criterio de evaluación (esto es lo que se puntúa)
+
+**La promesa nombra el ESTADO del espectador, no el CONTENIDO del video.**
+
+- ❌ "Te voy a explicar cómo funciona el algoritmo" → eso es índice, NO es sobredimensión
+- ✅ "Cuando termines este video vas a entender por qué llevas tres meses sin crecer"
+
+La promesa buena **diagnostica un dolor específico**, no anuncia un tema. Y ahí está la dependencia:
+este beat solo funciona si sabes exactamente qué le duele a esa persona. Sin claridad sobre el
+espectador, sale como hype vacío. Si no puedes nombrar el dolor concreto, no escribas el beat:
+resuelve primero a quién le hablas.
+
+### Antipatrones
+- **Promesa sin prueba** → suena a vendehumos y quema autoridad
+- **Más de 4 líneas** → se come el video y la gente se va antes del contenido
+- **Prometer algo que el video no entrega** → mata la retención del **siguiente** video, no de este
+- **Filtro demasiado amplio** ("esto le sirve a todo el mundo") → anula la autoselección
+
+### Dónde NO aplica
+Storytelling, POV, skit, confesión, diario, historia personal. En narrativa este beat rompe la
+ilusión y se siente a infomercial. En esos formatos, marcarlo como **N/A** y seguir.
 
 ---
 
@@ -159,7 +265,7 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | 24 | El Secreto Perdido | Historia oculta o poco conocida |
 | 25 | La Teoría del Loco | Idea absurda que termina siendo lógica |
 
-### ESTRUCTURAS MODERNAS / AVANZADAS (26-33)
+### ESTRUCTURAS MODERNAS / AVANZADAS (26-34)
 | # | Nombre | Objetivo principal |
 |---|--------|-------------------|
 | 26 | El Consejo de las Cosas | Conceptos personificados que hablan |
@@ -170,11 +276,7 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | 31 | El Golpe de Valor Gratis | Elevar valor percibido → revelar que es gratis |
 | 32 | Versus de Nivel Estratégico | Básico vs estratégico en situaciones reales |
 | 33 | Análisis de Caso Estratégico | Desmenuzar caso real → lección implícita |
-
-### ESTRUCTURAS DE SERIE / EDITORIAL (34+)
-| # | Nombre | Objetivo principal |
-|---|--------|-------------------|
-| 34 | Manifiesto de Serie | Video piloto que pre-vende una saga de contenidos vinculados |
+| 34 | La Escalera de Etapas (Autodiagnóstico) | Proceso en 5 etapas numeradas + "¿en qué etapa estás?" → comentarios masivos |
 
 ---
 
@@ -195,12 +297,12 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | Primeras ventas / conversión | 1, 2, 4, 5, 30, 31 |
 | Autoridad y posicionamiento | 1, 3, 7, 8, 33 |
 | Viralidad / alcance masivo | 14, 15, 16, 18, 19, 20 |
-| Engagement / comentarios | 8, 10, 11, 19, 30 |
+| Engagement / comentarios | 8, 10, 11, 19, 30, 34 |
+| Autodiagnóstico / etapas | 34, 28, 20 |
 | Storytelling emocional | 4, 12, 13, 21, 22, 23 |
 | Educación / valor | 9, 15, 17, 26, 27, 28 |
 | Comparación / debate | 10, 19, 29, 32 |
 | Misterio / intriga | 18, 24, 25, 33 |
-| Lanzamiento de serie / Episodio 0 | 34 |
 
 ---
 
@@ -273,3 +375,14 @@ en lugar del fallback de Google.
 
 > Para instrucciones completas de uso de cada MCP en la verificación, ver:
 > → `references/verificacion-viralidad.md`
+
+---
+
+## PASO FINAL — Handoff a calibración (SOLO si el guion es para Andrea)
+
+Si el guion que acabas de generar es para **Andrea (@andreaestratega)**, no lo des por terminado:
+corre inmediatamente la skill **`calibrador-guion-andrea`** sobre este guion. Ese pase lo re-ingenia
+contra la data medida de SU cuenta (gancho del segundo 1, tríada visual, CTA de sus reels top,
+matriz ángulo→métrica, kill-list) y entrega scorecard + diff anotado + guion final calibrado.
+
+Para cualquier otra clienta, este es el entregable final (no corras el calibrador).

@@ -61,7 +61,7 @@ Se activa cuando Andrea (o una alumna) pide:
 **Usuaria:** Andrea Vega o una alumna de FÓRMULA 100K. Audiencia: emprendedoras hispanas.
 
 **Material de referencia disponible:**
-- `frameworks.md` — Las 33 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
+- `frameworks.md` — Las 35 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
 - `ejemplos.md` — 3 ejemplos completos de diagnóstico (uno fuerte, uno débil, uno mixto)
 - Artifact educativo: `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-guionizacion.html`
 - Material original: `/Users/kissita/Downloads/FW GUIONES/R1-R5`
@@ -126,7 +126,7 @@ Si no usa ninguno claramente, márcalo como debilidad crítica. **Un guion sin p
 
 ### Paso 7: Detectar Estructura usada vs recomendada
 
-1. Compara el guion contra las 33 estructuras de `frameworks.md`
+1. Compara el guion contra las 35 estructuras de `frameworks.md`
 2. Identifica cuál está usando (puede ser híbrida)
 3. Evalúa si es la adecuada para el propósito detectado
 4. Si no lo es, recomienda 1-2 estructuras alternativas mejor alineadas

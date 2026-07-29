@@ -68,7 +68,7 @@ Si el hook falla, el ad muere. Por eso el 80% del trabajo creativo va en los pri
 
 | Skill | Para qué | Cuándo usar |
 |-------|----------|-------------|
-| **`guionizacion-formula100k`** | Contenido ORGÁNICO (reels, TikTok, YouTube Shorts) con las 33 estructuras de F100K | Cuando NO se va a pautar |
+| **`guionizacion-formula100k`** | Contenido ORGÁNICO (reels, TikTok, YouTube Shorts) con las 35 estructuras de F100K | Cuando NO se va a pautar |
 | **`investigacion-ads-formula100k`** | CAZAR 30-50 ads de la competencia en Meta Ads Library y TikTok Creative Center | Cuando se necesita inspiración/benchmark |
 | **`guionizacion-ads-formula100k` (esta)** | ESCRIBIR el guion del ad propio, modulado en H × M × C | Cuando ya hay claridad del brief y se va a pautar |
 | **`vsl-expert-f100k`** | VSL largo (5-15 min) para landings y embudos | Cuando es video de venta de página, no ad de feed |

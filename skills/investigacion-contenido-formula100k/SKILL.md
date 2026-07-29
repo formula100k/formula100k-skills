@@ -1,6 +1,6 @@
 ---
 name: investigacion-contenido-formula100k
-description: "Investigación de tendencias e ideas de contenido viral con la metodología FORMULA 100K. Usar SIEMPRE que se pida investigar tendencias, encontrar ideas de contenido, cazar temas virales, qué funciona en mi nicho, investigar a la competencia, encontrar ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, buscar referencias virales por keyword, cazar 1 ejemplo viral por cada item de un framework (7 pilares, 33 estructuras, 10 ganchos), o 'no sé de qué hablar', 'quiero ideas para mis videos', 'buscame referencias con [keyword]'. Stack de 4 motores juntos: (1) agent-browser SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales; (2) Tavily MCP para tendencias web y validación cruzada; (3) vidIQ MCP para outliers reales de YouTube; (4) Supadata MCP para landings sin login. agent-browser nunca es fallback, es fijo en el stack."
+description: "Investigación de tendencias e ideas de contenido viral con la metodología FORMULA 100K. Usar SIEMPRE que se pida investigar tendencias, encontrar ideas de contenido, cazar temas virales, qué funciona en mi nicho, investigar a la competencia, encontrar ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, buscar referencias virales por keyword, cazar 1 ejemplo viral por cada item de un framework (7 pilares, 35 estructuras, 10 ganchos), o 'no sé de qué hablar', 'quiero ideas para mis videos', 'buscame referencias con [keyword]'. Stack de 4 motores juntos: (1) agent-browser SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales; (2) Tavily MCP para tendencias web y validación cruzada; (3) vidIQ MCP para outliers reales de YouTube; (4) Supadata MCP para landings sin login. agent-browser nunca es fallback, es fijo en el stack."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -156,7 +156,7 @@ Output: markdown crudo, una sección por cuenta.
 
 ### Paso 1.6 — BÚSQUEDA POR KEYWORD PATTERN (cuando el usuario entrega una lista de palabras clave)
 
-**Activación:** cuando el usuario entrega 1+ palabras clave para investigar en TikTok (ej. "buscame referencias con 'lo que nunca te dijeron de' y 'deja de hacer esto'"), o cuando hay que cazar 1 ejemplo viral por cada item de un framework cerrado (los 7 pilares, las 33 estructuras, los 10 ganchos verbales, etc.).
+**Activación:** cuando el usuario entrega 1+ palabras clave para investigar en TikTok (ej. "buscame referencias con 'lo que nunca te dijeron de' y 'deja de hacer esto'"), o cuando hay que cazar 1 ejemplo viral por cada item de un framework cerrado (los 7 pilares, las 35 estructuras, los 10 ganchos verbales, etc.).
 
 **Por qué este paso existe:** TikTok pone un captcha slider en CADA búsqueda de visitante no logueado, lo que rompe el flow normal de agent-browser. Pero el truco es que los resultados YA están renderizados en el DOM detrás del overlay — el captcha solo bloquea la UI, no el HTML. Con un eval de JS extraemos URLs, handles, captions y views sin tocar el captcha.
 

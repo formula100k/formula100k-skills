@@ -1,7 +1,7 @@
 ---
 name: guionizacion-formula100k
 description: >
-  Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 34 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado.
+  Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 35 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado.
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -331,6 +331,7 @@ Para el detalle completo de cada estructura, leer: `references/estructuras.md`
 | 32 | Versus de Nivel Estratégico | Básico vs estratégico en situaciones reales |
 | 33 | Análisis de Caso Estratégico | Desmenuzar caso real → lección implícita |
 | 34 | La Escalera de Etapas (Autodiagnóstico) | Proceso en 5 etapas numeradas + "¿en qué etapa estás?" → comentarios masivos |
+| 35 | Manifiesto de Serie | Episodio 0 que vende la promesa de una serie → audiencia de retorno |
 
 ---
 

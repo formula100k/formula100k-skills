@@ -2723,7 +2723,100 @@ Lección estratégica
 
 ---
 
-# **🎬 Estructura 34: Manifiesto de Serie**
+# **🪜 Estructura 34: La Escalera de Etapas (Autodiagnóstico)**
+
+**Clasificación:** Progresión de deterioro/evolución por etapas numeradas + autodiagnóstico del espectador.
+
+**Objetivo principal:\
+** Describir un proceso (una relación, una cuenta, un negocio, un hábito, una salud, etc.) como una secuencia de **5 etapas numeradas y visibles en pantalla** que empeoran (o evolucionan) de forma progresiva, de modo que el espectador se ubique a sí mismo en una etapa y no pueda irse hasta saber su número. Cierra con pregunta-diagnóstico que dispara comentarios masivos.
+
+> **Origen / referencia viral:** @frans.guerrero "Las etapas de la comunicación en una relación" — 1.9M views, 166K likes, 55s (jun 2026). Mismo esqueleto usado por decenas de nichos: etapas de un burnout, de una cuenta muerta, de una deuda, de una amistad que se enfría.
+
+## **🧠 Psicología detrás**
+
+-   **Doble loop abierto en el gancho:** "¿cuáles son las etapas?" + "¿en cuál estoy YO?". Ninguno cierra hasta el final → retención forzada.
+
+-   **Autodiagnóstico:** el espectador se etiqueta a sí mismo mientras avanza. No es contenido que mira, es un test que hace.
+
+-   **Curva ascendente de tensión:** cada etapa está peor que la anterior → dopamina de anticipación ("esto se va a poner feo").
+
+-   **Quiebre invisible:** el problema real no es un drama, es algo silencioso y cotidiano → identificación ("esa soy yo") en vez de espectáculo.
+
+-   **Promesa de rescate:** el gancho promete que "todavía estás a tiempo", y esa promesa queda abierta todo el video reteniendo hasta la solución.
+
+## **📐 Estructura paso a paso (esqueleto de 8 piezas)**
+
+**1️⃣ Gancho in medias res + esperanza\
+** Nombra la etapa MÁS dolorosa (ej. "etapa 4") SIN explicarla + promete salvación.\
+"Si tu [X] está en la etapa 4, todavía [estás a tiempo / la puedes revivir]. Estas son las 5 etapas."
+
+**2️⃣ Etapa 1 — idílica\
+** "Todo bien, todo perfecto." Baja la guardia a propósito.
+
+**3️⃣ Etapa 2 — aún sano\
+** Aparece la primera fricción menor, pero se maneja bien.
+
+**4️⃣ Etapa 3 — EL QUIEBRE INVISIBLE (cae ~25% del video)\
+** Aquí empieza el deterioro real, pero silencioso. Frase clave:\
+"Y aquí es donde [muchos] empiezan a [fallar] sin darse cuenta."\
+→ Este es el corazón del video. El problema NO cae en el gancho; cae en la etapa 3.
+
+**5️⃣ Etapa 4 — acumulación / escalada\
+** "Se acumula." Otro problema y otro y otro. La tensión sube.
+
+**6️⃣ Etapa 5 — clímax / punto muerto\
+** El peor momento. La explosión o la muerte del sistema.
+
+**7️⃣ Zoom out: lección universal + frase-ancla\
+** "Estas suelen ser las etapas… " + una frase memorable, corta y repetible que resume la causa raíz.\
+Ref: "Lo que no se habla hoy suele crecer con el tiempo."
+
+**8️⃣ CTA de autodiagnóstico\
+** "¿En qué etapa estás ahora?" / "Comenta el número." → motor de comentarios.
+
+> **Variante con solución (recomendada para venta/valor):** entre la pieza 6 y 7 inserta la **RESURRECCIÓN** — paga la promesa del gancho revelando el sistema/solución concreto. Ahí va el producto, recurso o método. La frase-ancla se convierte en "no muere por X, muere por Y".
+
+## **🎬 Ejemplo aplicado (cuenta de Instagram)**
+
+**Gancho:** "Si tu cuenta de Instagram está en la etapa 4, todavía la puedes revivir. No la borres."\
+Etapa 1 — Luna de miel: publicas con emoción, cada post te da dopamina.\
+Etapa 2 — La meseta: unos reels pegan, otros no, pero creces de a poquito.\
+Etapa 3 — Te acomodas: encontraste "tu formato" y lo repites. **Aquí la cuenta empieza a morir sin que te des cuenta.**\
+Etapa 4 — Se acumula el silencio: cada reel rinde menos, el algoritmo deja de mostrarte.\
+Etapa 5 — La cuenta fantasma: "subo cuando tenga una mejor idea". Muere.\
+Resurrección: no murió por falta de contenido, murió por falta de variación → calendario de experimentación de formatos (30 días, formato nuevo cada 3, mides, doblas en el ganador).\
+Frase-ancla: "Una cuenta no muere por publicar poco. Muere por publicar siempre lo mismo."\
+CTA: "¿En qué etapa está tu cuenta? Comenta el número. 👇"
+
+## **🔍 Reglas de oro**
+
+1.  **El primer problema NO va en el gancho** — va en la etapa 3 (~25%). Etapas 1-2 son calma deliberada.
+
+2.  **Etapas numeradas y visibles** en pantalla (badges ETAPA 1→5) — son el ancla visual y el motor de retención.
+
+3.  **Cada etapa peor que la anterior** — curva monótona ascendente de tensión.
+
+4.  **El quiebre es invisible, no dramático** — cotidiano, silencioso, "eso me pasa".
+
+5.  **Cierra SIEMPRE con pregunta-diagnóstico numérica** — es lo que dispara los comentarios.
+
+6.  **Pilar de valor típico:** 💡 Revelación + 🎮 Desafío. Combínala con la Estructura 30 (Máquina de Comentarios) en el CTA.
+
+## **🧠 Patrón universal extraído**
+
+GANCHO in medias res (etapa dolorosa + esperanza) →\
+Etapa 1 idílica →\
+Etapa 2 aún sano →\
+Etapa 3 quiebre invisible (~25%) →\
+Etapa 4 acumulación →\
+Etapa 5 clímax/muerte →\
+[Resurrección opcional = solución] →\
+Lección + frase-ancla →\
+CTA "¿en qué etapa estás?"
+
+---
+
+# **🎬 Estructura 35: Manifiesto de Serie**
 
 **Clasificación:** Video piloto / Trailer editorial / Setup de saga\
 **Objetivo principal:\

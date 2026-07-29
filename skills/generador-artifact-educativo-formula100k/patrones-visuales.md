@@ -308,7 +308,7 @@ const handleCopy = (text) => {
 
 ## 16. Mini Curva de Retención (SVG inline)
 
-Para mostrar curvas pequeñas de retención/atención por estructura/concepto. Estrenado en `f100k-guionizacion.html` para visualizar la curva típica de cada una de las 33 estructuras de guion.
+Para mostrar curvas pequeñas de retención/atención por estructura/concepto. Estrenado en `f100k-guionizacion.html` para visualizar la curva típica de cada una de las 35 estructuras de guion.
 
 ```jsx
 function RetentionCurve({ values, color = "#db2777" }) {

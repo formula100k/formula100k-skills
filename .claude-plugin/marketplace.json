@@ -11,10 +11,18 @@
       "name": "formula100k",
       "source": "./",
       "description": "Suite completa de skills de FÓRMULA 100K para creadoras de contenido hispano: guionización, calendarios, audios de venta, VSL, ofertas, comunidades Skool, ediciones de video, miniaturas, carruseles, historias y más.",
-      "version": "1.12.0",
+      "version": "1.13.0",
       "category": "content-creation",
       "homepage": "https://formula100k.app",
-      "keywords": ["formula100k", "contenido", "instagram", "tiktok", "skool", "venta", "comunidad"]
+      "keywords": [
+        "formula100k",
+        "contenido",
+        "instagram",
+        "tiktok",
+        "skool",
+        "venta",
+        "comunidad"
+      ]
     },
     {
       "name": "analisis-video-viral-f100k",
@@ -23,7 +31,16 @@
       "version": "1.0.0",
       "category": "content-creation",
       "homepage": "https://formula100k.app",
-      "keywords": ["formula100k", "viral", "analisis", "reel", "instagram", "tiktok", "estructura", "ingenieria-inversa"]
+      "keywords": [
+        "formula100k",
+        "viral",
+        "analisis",
+        "reel",
+        "instagram",
+        "tiktok",
+        "estructura",
+        "ingenieria-inversa"
+      ]
     }
   ]
 }

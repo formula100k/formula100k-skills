@@ -4,6 +4,45 @@ description: Skill para diagnosticar y corregir guiones de video aplicando la me
 argument-hint: [pega el guion completo o ruta al archivo]
 ---
 
+## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
+
+Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
+formulación cosmética, nutrición, repostería, fisioterapia, finanzas o jabonería.
+Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del tema.
+
+**Antes de escribir nada:**
+
+1. Identifica el **RUBRO real** de la persona (léelo de su Segundo Cerebro, de su perfil o
+   pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
+2. Todos los ejemplos, analogías, comparaciones, objeciones, métricas y vocabulario salen
+   de **ESE** rubro.
+3. Si el rubro **no** es marketing, redes sociales, creación de contenido, ventas online o
+   negocios digitales → queda **PROHIBIDO** el vocabulario de ese mundo (reels, algoritmo,
+   embudo, lead magnet, engagement, "publicar sin vender", "clientes de alto ticket",
+   "escalar tu negocio", "posicionarte como referente"), salvo que la persona lo escriba primero.
+4. Si el rubro es **técnico, científico o de oficio**: NO borres el tecnicismo para
+   "simplificar". Úsalo y **tradúcelo en su primera mención**. El término preciso ES la
+   autoridad de esa creadora; quitarlo borra justo lo que la diferencia.
+5. Si no tienes datos suficientes del negocio, dilo y usa marcadores explícitos
+   (`[TU OFERTA]`, `[TU RESULTADO]`). **Nunca asumas que el rubro es marketing.**
+
+**El método viaja, el rubro no.** El mismo molde, vestido con rubros distintos:
+
+| Rubro | El mismo molde |
+|---|---|
+| Cocina | "Así es mi cena favorita para no dormir con el azúcar alta." |
+| Relaciones | "5 señales de que estás forzando una relación que ya no funciona." |
+| Finanzas | "La principal causa de un divorcio no es una infidelidad." |
+| Formulación cosmética | "El conservante decide si tu crema dura tres meses o te da una infección. No el aceite." |
+| Jabonería | "Si tu jabón se pone blando a los dos días, no fue el aceite. Fue la sosa." |
+| Fisioterapia | "Ese dolor de rodilla al bajar escaleras casi nunca nace en la rodilla." |
+| Repostería | "Tu bizcocho se hunde en el centro por la temperatura, no por la harina." |
+| Jardinería | "Tu planta no se está muriendo de sed. Se está ahogando." |
+
+Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
+
+---
+
 # Corrector de Guiones · FÓRMULA 100K
 
 Diagnostica y corrige guiones de video aplicando los frameworks completos de FÓRMULA 100K (Andrea Vega). Devuelve un diagnóstico estructurado + score por Escala Viral + reescritura corregida del guion.
@@ -22,7 +61,7 @@ Se activa cuando Andrea (o una alumna) pide:
 **Usuaria:** Andrea Vega o una alumna de FÓRMULA 100K. Audiencia: emprendedoras hispanas.
 
 **Material de referencia disponible:**
-- `frameworks.md` — Las 33 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
+- `frameworks.md` — Las 35 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
 - `ejemplos.md` — 3 ejemplos completos de diagnóstico (uno fuerte, uno débil, uno mixto)
 - Artifact educativo: `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-guionizacion.html`
 - Material original: `/Users/kissita/Downloads/FW GUIONES/R1-R5`
@@ -87,7 +126,7 @@ Si no usa ninguno claramente, márcalo como debilidad crítica. **Un guion sin p
 
 ### Paso 7: Detectar Estructura usada vs recomendada
 
-1. Compara el guion contra las 33 estructuras de `frameworks.md`
+1. Compara el guion contra las 35 estructuras de `frameworks.md`
 2. Identifica cuál está usando (puede ser híbrida)
 3. Evalúa si es la adecuada para el propósito detectado
 4. Si no lo es, recomienda 1-2 estructuras alternativas mejor alineadas

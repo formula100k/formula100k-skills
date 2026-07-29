@@ -4,6 +4,45 @@ description: >
   Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 34 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado.
 ---
 
+## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
+
+Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
+formulación cosmética, nutrición, repostería, fisioterapia, finanzas o jabonería.
+Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del tema.
+
+**Antes de escribir nada:**
+
+1. Identifica el **RUBRO real** de la persona (léelo de su Segundo Cerebro, de su perfil o
+   pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
+2. Todos los ejemplos, analogías, comparaciones, objeciones, métricas y vocabulario salen
+   de **ESE** rubro.
+3. Si el rubro **no** es marketing, redes sociales, creación de contenido, ventas online o
+   negocios digitales → queda **PROHIBIDO** el vocabulario de ese mundo (reels, algoritmo,
+   embudo, lead magnet, engagement, "publicar sin vender", "clientes de alto ticket",
+   "escalar tu negocio", "posicionarte como referente"), salvo que la persona lo escriba primero.
+4. Si el rubro es **técnico, científico o de oficio**: NO borres el tecnicismo para
+   "simplificar". Úsalo y **tradúcelo en su primera mención**. El término preciso ES la
+   autoridad de esa creadora; quitarlo borra justo lo que la diferencia.
+5. Si no tienes datos suficientes del negocio, dilo y usa marcadores explícitos
+   (`[TU OFERTA]`, `[TU RESULTADO]`). **Nunca asumas que el rubro es marketing.**
+
+**El método viaja, el rubro no.** El mismo molde, vestido con rubros distintos:
+
+| Rubro | El mismo molde |
+|---|---|
+| Cocina | "Así es mi cena favorita para no dormir con el azúcar alta." |
+| Relaciones | "5 señales de que estás forzando una relación que ya no funciona." |
+| Finanzas | "La principal causa de un divorcio no es una infidelidad." |
+| Formulación cosmética | "El conservante decide si tu crema dura tres meses o te da una infección. No el aceite." |
+| Jabonería | "Si tu jabón se pone blando a los dos días, no fue el aceite. Fue la sosa." |
+| Fisioterapia | "Ese dolor de rodilla al bajar escaleras casi nunca nace en la rodilla." |
+| Repostería | "Tu bizcocho se hunde en el centro por la temperatura, no por la harina." |
+| Jardinería | "Tu planta no se está muriendo de sed. Se está ahogando." |
+
+Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
+
+---
+
 # Skill: Guionización Fórmula 100K
 
 Esta skill contiene todos los frameworks de guionización de FORMULA 100K para crear videos virales con estructura estratégica.
@@ -18,15 +57,30 @@ Esta skill contiene todos los frameworks de guionización de FORMULA 100K para c
 3. ¿Qué valor final quieres aportar a tu audiencia?
 4. ¿Hay algún dato único o historia personal que quieras incluir?
 
+### Paso 1.5 — Fijar el rubro (OBLIGATORIO, antes de evaluar nada)
+
+Declara: **"Rubro: ___"**. Sácalo del Segundo Cerebro, del perfil o pregúntalo en una línea.
+Los criterios del Paso 2 se leen **dentro de ese rubro**, no en abstracto. Ver el
+🧭 ANCLAJE DE RUBRO al inicio de esta skill.
+
 ### Paso 2 — Evaluar si la idea es ganadora (9 criterios)
-1. ¿La entiende un niño de 10 años?
+
+> Estos criterios miden **claridad**, no falta de profundidad. Se evalúan contra
+> **el público de ESE rubro**, no contra el público general. Una formuladora cosmética
+> le habla a gente que ya sabe qué es un emulsionante: para ellos, eso *es* lenguaje claro.
+
+1. ¿La entiende alguien que recién empieza **en ese rubro**?
 2. ¿Genera controversia o invita al comentario?
 3. ¿Está inspirada en alguna referencia viral?
 4. ¿Alguien pagaría al menos $3 por este contenido?
-5. ¿50 de 100 personas se identificarían o conocen a alguien así?
-6. ¿Evita tecnicismos?
+5. ¿50 de 100 personas **de esa audiencia** se identificarían o conocen a alguien así?
+6. ¿Los tecnicismos que usa están **traducidos en su primera mención**?
+   ⚠️ El criterio NO es "evita tecnicismos". En rubros técnicos, científicos o de oficio
+   (formulación, salud, ingeniería, repostería, derecho) el término preciso **ES la autoridad**:
+   quitarlo borra la diferencia de quien habla y la deja sonando genérica. La regla es
+   **usarlo y traducirlo**: "el conservante —lo que evita que te crezcan hongos en la crema—".
 7. ¿Muestra una transformación clara de punto A a punto B?
-8. ¿Es alcanzable para el espectador promedio?
+8. ¿Es alcanzable para el espectador promedio **de ese rubro**?
 9. ¿Tiene un giro propio si parte de una idea conocida?
 
 ### Paso 3 — Identificar el Pilar de Valor (OBLIGATORIO)

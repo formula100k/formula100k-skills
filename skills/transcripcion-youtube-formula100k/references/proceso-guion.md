@@ -9,14 +9,15 @@ Para la versión completa, consultar la skill `guionizacion-formula100k`.
 
 Antes de escribir, confirmar que la idea derivada del video pasa estos filtros:
 
-1. ¿La entiende un niño de 10 años?
+1. ¿La entiende alguien que recién empieza en ESE rubro?
 2. ¿Genera controversia o invita al comentario?
 3. ¿Está inspirada en alguna referencia viral (el video fuente puede ser esa referencia)?
 4. ¿Alguien pagaría al menos $3 por este contenido?
 5. ¿50 de 100 personas se identificarían o conocen a alguien así?
-6. ¿Evita tecnicismos?
+6. ¿Los tecnicismos están traducidos en su primera mención? (NO es "evita tecnicismos": en rubros
+   técnicos o de oficio el término preciso ES la autoridad — úsalo y tradúcelo.)
 7. ¿Muestra una transformación clara de punto A a punto B?
-8. ¿Es alcanzable para el espectador promedio?
+8. ¿Es alcanzable para el espectador promedio de ese rubro?
 9. ¿Tiene un giro propio (no es una copia del video original)?
 
 Si falla más de 3 criterios → ajustar el ángulo antes de escribir.

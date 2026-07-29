@@ -5,6 +5,45 @@ description: >
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 
+## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
+
+Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
+formulación cosmética, nutrición, repostería, fisioterapia, finanzas o jabonería.
+Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del tema.
+
+**Antes de escribir nada:**
+
+1. Identifica el **RUBRO real** de la persona (léelo de su Segundo Cerebro, de su perfil o
+   pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
+2. Todos los ejemplos, analogías, comparaciones, objeciones, métricas y vocabulario salen
+   de **ESE** rubro.
+3. Si el rubro **no** es marketing, redes sociales, creación de contenido, ventas online o
+   negocios digitales → queda **PROHIBIDO** el vocabulario de ese mundo (reels, algoritmo,
+   embudo, lead magnet, engagement, "publicar sin vender", "clientes de alto ticket",
+   "escalar tu negocio", "posicionarte como referente"), salvo que la persona lo escriba primero.
+4. Si el rubro es **técnico, científico o de oficio**: NO borres el tecnicismo para
+   "simplificar". Úsalo y **tradúcelo en su primera mención**. El término preciso ES la
+   autoridad de esa creadora; quitarlo borra justo lo que la diferencia.
+5. Si no tienes datos suficientes del negocio, dilo y usa marcadores explícitos
+   (`[TU OFERTA]`, `[TU RESULTADO]`). **Nunca asumas que el rubro es marketing.**
+
+**El método viaja, el rubro no.** El mismo molde, vestido con rubros distintos:
+
+| Rubro | El mismo molde |
+|---|---|
+| Cocina | "Así es mi cena favorita para no dormir con el azúcar alta." |
+| Relaciones | "5 señales de que estás forzando una relación que ya no funciona." |
+| Finanzas | "La principal causa de un divorcio no es una infidelidad." |
+| Formulación cosmética | "El conservante decide si tu crema dura tres meses o te da una infección. No el aceite." |
+| Jabonería | "Si tu jabón se pone blando a los dos días, no fue el aceite. Fue la sosa." |
+| Fisioterapia | "Ese dolor de rodilla al bajar escaleras casi nunca nace en la rodilla." |
+| Repostería | "Tu bizcocho se hunde en el centro por la temperatura, no por la harina." |
+| Jardinería | "Tu planta no se está muriendo de sed. Se está ahogando." |
+
+Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
+
+---
+
 # Skill: Calendarizador de Contenido FÓRMULA 100K
 
 Convierte guiones, ideas sueltas o enlaces de referencia en un **calendario semanal Lunes-Domingo** listo para producir, exportado a CSV y XLSX.

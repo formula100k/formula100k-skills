@@ -1,12 +1,51 @@
 ---
 name: adaptador-formatos-f100k
-description: Toma un video/post viral de CUALQUIER nicho (incluso uno random y ajeno) — por enlace de Instagram, TikTok o YouTube — DECODIFICA su formato/mecánica viral (no su tema) y lo ADAPTA al nicho de FÓRMULA 100K (creadores de contenido, negocios digitales, IA, comunidades, monetización), proponiendo 2-3 ángulos listos para guionizar. Activar SIEMPRE que alguien diga "adapta este formato a lo nuestro", "roba el formato de este reel", "este video random me gustó, sirve para mi nicho?", "convierte este viral en algo mío", "decodifica este formato", "qué formato tiene este video y cómo lo uso", "hazme algo como este pero de mi tema", o cualquier variación que combine un ENLACE de video viral (de tema ajeno o no) con la intención de reutilizar su ESTRUCTURA/MECÁNICA. NO confundir con investigacion-contenido-formula100k (caza referencias por keyword) ni con remix-viral-formula100k (relanza contenido PROPIO). Esta skill parte de UN video ajeno y extrae su esqueleto viral para trasplantarlo.
+description: Toma un video/post viral de CUALQUIER nicho (incluso uno random y ajeno) — por enlace de Instagram, TikTok o YouTube — DECODIFICA su formato/mecánica viral (no su tema) y lo ADAPTA al RUBRO DE QUIEN LO PIDE (cualquiera: se lee del Segundo Cerebro o se pregunta), proponiendo 2-3 ángulos listos para guionizar. Activar SIEMPRE que alguien diga "adapta este formato a lo nuestro", "roba el formato de este reel", "este video random me gustó, sirve para mi nicho?", "convierte este viral en algo mío", "decodifica este formato", "qué formato tiene este video y cómo lo uso", "hazme algo como este pero de mi tema", o cualquier variación que combine un ENLACE de video viral (de tema ajeno o no) con la intención de reutilizar su ESTRUCTURA/MECÁNICA. NO confundir con investigacion-contenido-formula100k (caza referencias por keyword) ni con remix-viral-formula100k (relanza contenido PROPIO). Esta skill parte de UN video ajeno y extrae su esqueleto viral para trasplantarlo.
 argument-hint: [URL del video viral] (+ tema/ángulo opcional)
+---
+
+## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
+
+Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
+formulación cosmética, nutrición, repostería, fisioterapia, finanzas o jabonería.
+Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del tema.
+
+**Antes de escribir nada:**
+
+1. Identifica el **RUBRO real** de la persona (léelo de su Segundo Cerebro, de su perfil o
+   pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
+2. Todos los ejemplos, analogías, comparaciones, objeciones, métricas y vocabulario salen
+   de **ESE** rubro.
+3. Si el rubro **no** es marketing, redes sociales, creación de contenido, ventas online o
+   negocios digitales → queda **PROHIBIDO** el vocabulario de ese mundo (reels, algoritmo,
+   embudo, lead magnet, engagement, "publicar sin vender", "clientes de alto ticket",
+   "escalar tu negocio", "posicionarte como referente"), salvo que la persona lo escriba primero.
+4. Si el rubro es **técnico, científico o de oficio**: NO borres el tecnicismo para
+   "simplificar". Úsalo y **tradúcelo en su primera mención**. El término preciso ES la
+   autoridad de esa creadora; quitarlo borra justo lo que la diferencia.
+5. Si no tienes datos suficientes del negocio, dilo y usa marcadores explícitos
+   (`[TU OFERTA]`, `[TU RESULTADO]`). **Nunca asumas que el rubro es marketing.**
+
+**El método viaja, el rubro no.** El mismo molde, vestido con rubros distintos:
+
+| Rubro | El mismo molde |
+|---|---|
+| Cocina | "Así es mi cena favorita para no dormir con el azúcar alta." |
+| Relaciones | "5 señales de que estás forzando una relación que ya no funciona." |
+| Finanzas | "La principal causa de un divorcio no es una infidelidad." |
+| Formulación cosmética | "El conservante decide si tu crema dura tres meses o te da una infección. No el aceite." |
+| Jabonería | "Si tu jabón se pone blando a los dos días, no fue el aceite. Fue la sosa." |
+| Fisioterapia | "Ese dolor de rodilla al bajar escaleras casi nunca nace en la rodilla." |
+| Repostería | "Tu bizcocho se hunde en el centro por la temperatura, no por la harina." |
+| Jardinería | "Tu planta no se está muriendo de sed. Se está ahogando." |
+
+Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
+
 ---
 
 ## Qué hace esta skill
 
-El insight central: **un formato viral es independiente de su tema.** Un reel sobre películas animadas, gatos o autos puede esconder una mecánica (reto de niveles, plot twist, versus, máquina de comentarios) que funciona igual de bien en el nicho de Andrea. Esta skill separa el **esqueleto** (la mecánica que genera el engagement) de la **carne** (el tema random) y trasplanta el esqueleto a FÓRMULA 100K.
+El insight central: **un formato viral es independiente de su tema.** Un reel sobre películas animadas, gatos o autos puede esconder una mecánica (reto de niveles, plot twist, versus, máquina de comentarios) que funciona igual de bien en CUALQUIER rubro. Esta skill separa el **esqueleto** (la mecánica que genera el engagement) de la **carne** (el tema random) y trasplanta el esqueleto al rubro de quien lo pide.
 
 Salida: la **decodificación del formato** + **2-3 ángulos** adaptados al nicho, listos para que el usuario elija uno y se desarrolle el guion completo.
 
@@ -59,12 +98,12 @@ Esto garantiza que el ángulo adaptado herede una estructura ya probada, no solo
 
 ### Paso 4 — Proponer 2-3 ángulos adaptados
 
-Cada ángulo = **misma mecánica del Paso 2** + **tema del nicho F100K**. Para cada uno entregar:
+Cada ángulo = **misma mecánica del Paso 2** + **tema del RUBRO de quien lo pide** (el que declaraste en el anclaje). Para cada uno entregar:
 - **Título/promesa** del ángulo
 - **Gancho** reescrito (manteniendo el patrón viral del original)
-- **Cómo se ejecuta la mecánica** con contenido del nicho (los "niveles", el "versus", el "giro", etc.)
+- **Cómo se ejecuta la mecánica** con contenido de ESE rubro (los "niveles", el "versus", el "giro", etc.)
 - **CTA de engagement** que replica el disparador del original
-- 1 frase de **por qué funciona** / cómo posiciona a Andrea
+- 1 frase de **por qué funciona** / cómo posiciona a quien lo publica
 
 Marcar una **recomendación** (la que mejor conserve el espíritu del original + mejor calce con el diferenciador de Andrea: IA + ecosistema).
 
@@ -106,4 +145,4 @@ C) ...
 - **NO copiar el tema** del original (eso sería off-niche). Solo se trasplanta el esqueleto.
 - No es `investigacion-contenido-formula100k` (esa caza referencias por keyword dentro del nicho) ni `remix-viral-formula100k` (esa relanza contenido propio de Andrea).
 - Cerrar el navegador al terminar (`agent-browser close`) y borrar capturas temporales.
-- Mantener la voz F100K: directa, "tú", sin tecnicismos.
+- Mantener la voz F100K: directa, "tú". Los tecnicismos del rubro NO se eliminan: se usan y se traducen en su primera mención.

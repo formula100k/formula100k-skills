@@ -23,7 +23,7 @@ Formato: **1920×1080 (16:9)** a 30fps. Los overlays se posicionan en las zonas 
 ## NO activar para
 
 - Videos 9:16 (reels/shorts) → usar `motion-reels-f100k`
-- Edición de silencios/muletillas → usar `editor-video-formula100k`
+- Edición SOLO de silencios/muletillas, sin overlays → usar `editor-video-formula100k` (esta skill ya recorta automáticamente en el Paso 0 cuando la fuente es una grabación cruda local)
 - Carruseles estáticos → `carrusel-render-formula100k`
 - Solo transcripción → `transcripcion-youtube-formula100k`
 
@@ -133,6 +133,56 @@ Definir variables:
 
 ---
 
+## Paso 0 — Recorte de silencios y equivocaciones (PRIMERO, antes de animar)
+
+**Por qué va antes que todo:** los overlays se cronometran sobre el transcript y se incrustan sobre el video. Si cortaras silencios/equivocaciones DESPUÉS de animar, los cortes caerían encima de las animaciones y las romperían. Por eso el recorte ocurre AQUÍ: el resto del pipeline trabaja siempre sobre el video ya limpio, y nada se vuelve a cortar.
+
+Aplica solo a **archivos locales** (grabaciones crudas). Si la fuente es una **URL de YouTube**, **saltar este paso** — no se recorta un video ya publicado; ir directo al Paso 1.5.
+
+Preguntar una sola vez:
+
+```
+AskUserQuestion:
+  "¿El video es una grabación cruda o ya está editado?"
+  Opciones:
+  - "Grabación cruda — recortar silencios/muletillas/repeticiones (recomendado)"
+  - "Ya está editado — no tocar el audio"
+```
+
+Si elige **"ya está editado"** o la fuente es una URL → saltar al Paso 1.5 con `VIDEO_SRC` intacto.
+
+Si elige **"grabación cruda"** (archivo local):
+
+```bash
+# Localizar el script de corte (vive en la skill editor-video-formula100k)
+CUT_SCRIPT=$(find "$HOME/.claude" -name cut_silences_and_fillers.py -path '*editor-video*' 2>/dev/null | head -1)
+[ -z "$CUT_SCRIPT" ] && echo "⚠ No se encontró cut_silences_and_fillers.py — instala/clona la skill editor-video-formula100k"
+
+# numpy habilita el 'silence-snapping': cada corte cae en un silencio real,
+# nunca a media palabra. Sin numpy el script hace fallback con padding fijo.
+python3 -c "import numpy" 2>/dev/null || pip3 install --quiet numpy 2>/dev/null || true
+
+mkdir -p "$DEST"
+# Corta silencios >~0.20s, muletillas (eh/em/uhh), repeticiones ("que que")
+# y reinicios de frase (Andrea se traba y reempieza → conserva el último intento).
+# Produce, dentro de DEST:
+#   _source_cut.mov  ← video ya limpio
+#   captions.json    ← palabras word-level YA sobre la línea de tiempo cortada
+#   edl.json         ← mapa orig→cortado
+python3 "$CUT_SCRIPT" "$VIDEO_SRC" "$DEST"
+
+# 🔑 A partir de aquí la fuente ES el cortado. TODO el pipeline lo usa.
+VIDEO_SRC="$DEST/_source_cut.mov"
+echo "✅ Fuente recortada: $VIDEO_SRC"
+ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$VIDEO_SRC"
+```
+
+> El corte ya transcribió word-level y dejó `captions.json` sobre la línea cortada. En el **Paso 2 reutiliza ese archivo** en lugar de volver a transcribir — más rápido y con sincronía garantizada.
+
+**Ajustes finos opcionales** (flags extra a `$CUT_SCRIPT`): `--min-silence 0.15` (más respiración), `--pad 0.09` (si se cortan colas de palabras), `--no-phrase-dedupe` (conservar todos los intentos). Ver `editor-video-formula100k` para el detalle del algoritmo.
+
+---
+
 ## Paso 1.5 — Analizar posición del sujeto en el frame
 
 **Determina las zonas seguras del frame. Obligatorio antes de generar HTML.**
@@ -224,7 +274,25 @@ print(text)
 " | tee "$DEST/transcript.txt"
 ```
 
-### Si es archivo local (Whisper):
+### Si corriste el Paso 0 → REUTILIZAR `captions.json` (no re-transcribir):
+
+Si el Paso 0 dejó `captions.json`, ya tienes los timestamps word-level sobre la línea cortada. Conviértelos a `transcript.json` y **salta el Whisper de abajo**:
+
+```bash
+if [ -f "$DEST/captions.json" ]; then
+  python3 - << EOF
+import json
+words = json.load(open("$DEST/captions.json"))
+segments = [{'text': w['word'].strip(), 'start_ms': int(w['start']*1000), 'end_ms': int(w['end']*1000)} for w in words]
+json.dump(segments, open("$DEST/transcript.json", 'w'), indent=2, ensure_ascii=False)
+print(f"♻️  Reusando captions.json del corte: {len(segments)} palabras (sin re-transcribir)")
+EOF
+fi
+```
+
+### Si es archivo local SIN Paso 0 (Whisper):
+
+> Solo si **no** existe `$DEST/captions.json`. Si ya lo reutilizaste arriba, omite este bloque.
 
 ```bash
 ffmpeg -i "$VIDEO_SRC" -vn -acodec mp3 -ar 16000 -ac 1 -y /tmp/motion_audio.mp3

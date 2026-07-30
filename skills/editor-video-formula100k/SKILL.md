@@ -1,7 +1,6 @@
 ---
 name: editor-video-formula100k
-description: >
-  Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone el preset "Crea contenido viral": talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores que no tapan la cara, B-roll videos fullscreen y B-roll imágenes en la parte inferior. SIN subtítulos. Sincroniza por keyword sobre el transcript, así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). EXTRA: genera motion graphics animados (badge deslizante, browser con pasos, typing, contador, kinetic type) con HyperFrames y los agrega al MANIFEST. Activar cuando Andrea diga "edita este video", "auto-edita", "monta el video", "renderiza", "/render <carpeta>", "/edita <carpeta>", "genera un motion graphic", "overlay animado", o combine una carpeta con MANIFEST.md. Output: $DEST/BORRADOR_AUTO.mp4. macOS y Windows.
+description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones con precisión (transcribe word-level), y compone el preset visual 'Crea contenido viral' — talking-head 9:16, header con trazo negro (gancho primeros 8s), caja blanca de énfasis, overlays inferiores para no tapar la cara, B-roll videos fullscreen, B-roll imágenes en la parte inferior (igual que overlays, no tapan la cara). SIN subtítulos. Sincroniza por keyword sobre el transcript (no por timestamp), así sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: genera motion graphics animados (badge deslizante, browser con pasos, typing effect, contador, kinetic type, etc.) con HyperFrames (HTML+GSAP, gratis, local) y los agrega al MANIFEST como overlays o B-roll animado. 8 estilos visuales + 11 técnicas disponibles. Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md y la intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); la primera vez instala node, ffmpeg, yt-dlp, whisper y Remotion vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -165,52 +164,6 @@ Esta regla aplica incluso si:
 
 ---
 
-## Clips de apoyo generados (Clip Director) — opcional, antes del render
-
-Paso opcional para **generar B-roll a medida del guion** con IA (Higgsfield) e inyectarlo al
-MANIFEST, en vez de solo cazar recursos sueltos con `recursos-de-video-formula100k`. Usa el
-**Clip Director**, el mismo motor que `reel-faceless-f100k`.
-
-**Cuándo:** Andrea dice "genera clips de apoyo", "b-roll a medida del guion", "clips
-generados para este video", o tras transcribir un video **16:9** largo (YouTube) que necesita
-apoyo visual en conceptos/datos/ejemplos.
-
-**Cómo (auto-propone → Andrea aprueba):**
-
-1. **Transcript.** Requiere `captions.json` (ya lo produce el Paso 1 del pipeline). Si aún no
-   existe, correr primero el corte/transcripción, o usar el guion.
-2. **Invocar el Clip Director** siguiendo `../reel-faceless-f100k/reference/clip-director.md`
-   con `modo=support`, `formato=16:9`. El Director lee `captions.json`, detecta los momentos
-   que piden apoyo (concepto/dato/ejemplo → `visual_type`) y **auto-propone** un plan donde
-   cada segmento trae un `keyword` **verbatim** del transcript (8-15 palabras) como ancla.
-3. **Aprobación.** Mostrar la tabla propuesta y preguntar con `AskUserQuestion`:
-   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". Andrea puede agregar o
-   quitar marcas.
-4. **Generar.** Higgsfield `generate_video` con `aspect_ratio="16:9"` (lotes ≤8, poll
-   `job_status(sync:true)`, declinar presets, anti-NSFW — ver la receta `broll` del reference).
-   Descargar a `$DEST/IA/broll_generado/clipNN.mp4`:
-   `curl -L "<url>" -o "$DEST/IA/broll_generado/clipNN.mp4"`.
-5. **Inyectar al MANIFEST.** Añadir una fila por clip a la sección `## B-roll` del MANIFEST
-   (formato exacto en "Formato del MANIFEST.md" abajo):
-
-   ```markdown
-   ## B-roll
-   | Keyword                          | Archivo                          | Duración | Estilo        |
-   |----------------------------------|----------------------------------|----------|---------------|
-   | los tres errores que cometía     | IA/broll_generado/clip01.mp4     | 4s       | monitor-photo |
-   ```
-
-   Si la sección `## B-roll` no existe en el MANIFEST, crearla con ese encabezado. La keyword
-   debe existir en `captions.json` (el parser avisa con `[warn]` si no).
-6. **Render normal.** Continuar con el pipeline de abajo: `manifest_to_cues.py` resuelve las
-   keywords y el render coloca cada clip como B-roll fullscreen por su ventana y vuelve a la
-   cara de Andrea (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
-
-**Degradación:** si `mcp__higgsfield__balance` es 0, el Director degrada a cards/pixel o
-sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference §6). No falla.
-
----
-
 ## Pipeline (un solo comando)
 
 **macOS:**
@@ -226,10 +179,62 @@ powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-form
 Lo que hace el wrapper internamente (idéntico en ambas plataformas — la lógica vive en `render.py`):
 
 1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
-   - `_source_cut.mov` — video cortado **agresivamente**: silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola (consonantes/vocales finales tienen aire para terminar).
-   - Tunables vía flags: `--min-silence 0.08`, `--pad 0.06`, `--no-dedupe`, `--dedupe-max-gap 1.2`.
+   - `_source_cut.mov` — video cortado **agresivamente** en dos capas: primero un **pase semántico con Claude** (ver abajo) que entiende el transcript y borra tomas falladas/equivocaciones/repeticiones reformuladas; luego el motor local que limpia silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola.
+   - Tunables vía flags: `--min-silence 0.08`, `--pad 0.06`, `--no-dedupe`, `--dedupe-max-gap 1.2`, `--no-semantic`, `--semantic-model`, `--guion`, `--semantic-max-drop`.
    - `edl.json` — mapping orig→nuevo tiempo. Lo usa el remap de captions, no es debug.
    - `captions.json` — word-timestamps del transcript original **remapeados** al timeline del corte vía `edl.json`. No se re-transcribe el video cortado (eso introducía alucinaciones de Whisper y drift fonético tipo "reels"→"reales"). Una sola transcripción = fuente de verdad.
+
+### Corte por comprensión (pase semántico con Claude)
+
+El motor local solo compara **strings**: borra muletillas, palabras idénticas pegadas y reinicios de frase que se PARECEN. No entiende lo que dices, así que dejaba pasar el caso real: te equivocas y reformulas la idea con **otras palabras**, o repites con una respiración en medio. El pase semántico arregla justo eso.
+
+**Cómo funciona:** antes del corte local, el transcript indexado palabra-por-palabra (con su guion opcional como referencia) se manda a Claude, que razona como editor humano — *"arrancó mal aquí, lo volvió a decir bien allá → me quedo con la buena"* — y devuelve los rangos de índices a borrar. Se eliminan esas palabras y el resto del pipeline (silencios, EDL, captions, render) sigue igual.
+
+**Requisito:** exportar la API key de Anthropic antes del render:
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+Sin key, el pase se salta **automáticamente** y corre solo el motor local (con un aviso). Nunca rompe el render.
+
+**Guion opcional (máxima precisión):** si dejas un `guion.txt` en la carpeta `$DEST` (o pasas `--guion ruta.txt`), Claude lo usa como norte de lo que querías decir. No es obligatorio — sin guion igual limpia bien.
+
+**Seguridad (no sobre-borra):** si Claude propone borrar más del 40% del video (`--semantic-max-drop`), se descarta su sugerencia y corre solo el motor local. Una toma buena jamás se pierde por error del modelo. El llamado se hace por HTTP nativo (sin SDK), así que no agrega dependencias.
+
+**Flags:** `--no-semantic` (desactiva el pase), `--semantic-model claude-haiku-4-5` (más barato/rápido; default `claude-opus-4-8` por calidad), `--guion ruta.txt`, `--semantic-max-drop 0.4`.
+
+### Director de conceptos (ilustrar lo que se explica) — OPCIONAL
+
+Un segundo pase de Claude que NO corta: lee el transcript y detecta **momentos de concepto nuevo** (una skill, una herramienta, un sistema, una metáfora, un "modo") que se entenderían mejor con un apoyo visual, y propone cómo ilustrarlos. **Híbrido:**
+- **`card`** — concepto simple/numérico → una infografía/tarjeta HTML (gratis, instantánea).
+- **`imagen`** — concepto rico o "visualizable" (ej. *representar una skill* como una escena/objeto) → imagen generada con Higgsfield **nano_banana**.
+
+**Activar cuando** Andrea diga "ilustra los conceptos", "agrégale visuales a lo que explico", "representa la skill que menciono", o como paso extra antes del render. Flujo:
+
+```bash
+# 1. Proponer (corre sobre el captions.json del corte ya hecho; necesita ANTHROPIC_API_KEY)
+[ -z "$ANTHROPIC_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && source "$HOME/.config/f100k/secrets.env"
+python3 "$HOME/.claude/skills/editor-video-formula100k/scripts/concept_director.py" \
+  "$DEST/captions.json" --out "$DEST/concept_proposals.json" --max 4
+```
+
+`concept_proposals.json` = lista de `{keyword, concepto, tipo, prompt_visual, t_hint}`. El `keyword` ya viene **anclado** (verificado contra el transcript), así sobrevive a re-cortes.
+
+2. **CHECKPOINT humano (antes de gastar créditos):** mostrar las propuestas con `AskUserQuestion`. Andrea aprueba, edita el `prompt_visual`, cambia `tipo`, o descarta. **No se genera ninguna imagen sin su OK.**
+
+3. **Generar el visual de cada propuesta aprobada:**
+   - `tipo: card` → generar la infografía con la skill `graficos-de-video-formula100k` (o una card HTML) → guardar en `$DEST/IA/concepto_<slug>.png`.
+   - `tipo: imagen` → generar con el **MCP de Higgsfield** (`mcp__higgsfield__generate_image`, modelo `nano_banana`) usando `prompt_visual` (9:16 o 1:1) → descargar a `$DEST/IA/concepto_<slug>.png`. Si **no hay créditos** Higgsfield, **degradar a `card`** automáticamente (avisar) — el reel no se queda sin el apoyo visual.
+
+4. **Agregar filas al MANIFEST** ancladas por keyword (respetan las reglas: nunca tapan la cara):
+   ```markdown
+   ## Overlays
+   | Keyword  | Archivo                      | Ancho | Duración | Posición |
+   |----------|------------------------------|-------|----------|----------|
+   | council  | IA/concepto_council.png      | 900   | 2.6      | bottom   |
+   ```
+   (Para un apoyo más protagonista usar `## B-roll` con el mismo archivo y `Estilo = monitor-photo`.)
+
+**Flag/guardarraíles:** `--max N` (tope de conceptos, default 4, para no saturar). Sin `ANTHROPIC_API_KEY` el pase escribe `[]` y se salta (no bloquea). El video original nunca se toca; los conceptos son overlays sobre el corte.
 
 2. **MANIFEST.md → cues.json** (`manifest_to_cues.py`) — parsea las secciones Header, Énfasis, Overlays, B-roll del MANIFEST y emite `cues.json`. Si `captions.json` existe, avisa con `[warn]` si alguna keyword no aparece en el transcript.
 
@@ -279,11 +284,11 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 ## Overlays
 
-| Keyword     | Archivo                                       | Ancho | Duración |
-|-------------|-----------------------------------------------|-------|----------|
-| deteniendo  | `IA/T1_G1_perfeccion_tachada_0000-0012.png`   | 480   | 2.4      |
-| Japer       | `IA/T2_G1_yappermethod_ideas_0012-0027.png`   | 480   | 2.4      |
-| Cloud       | `IA/T3_G1_auto_edicion_claude_0027-0042.png`  | 480   | 2.4      |
+| Keyword     | Archivo                                       | Ancho | Duración | Posición |
+|-------------|-----------------------------------------------|-------|----------|----------|
+| deteniendo  | `IA/T1_G1_perfeccion_tachada_0000-0012.png`   | 480   | 2.4      | bottom   |
+| Japer       | `IA/T2_G1_yappermethod_ideas_0012-0027.png`   | 480   | 2.4      | bottom   |
+| Cloud       | `IA/T3_G1_auto_edicion_claude_0027-0042.png`  | 480   | 2.4      | top      |
 
 ## B-roll
 
@@ -294,13 +299,18 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 ### Reglas por sección
 
-**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de Andrea limpia. Inter 800 92px, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
+**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de Andrea limpia. **Anton (pack F100K, `F100K Display`) 92px en MAYÚSCULAS**, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
 
 **Gancho visual** — Imagen tipo sticker (UN solo archivo) que aparece en los primeros segundos en una esquina superior. Columnas: `Archivo | Posición | Inicio | Duración | Ancho | Rotación`. Defaults: `Posición=right`, `Inicio=0.3s`, `Duración=2.2s`, `Ancho=360px`, `Rotación=3°`. Anclado a `top: 340px` para no chocar con el header. Spring drop desde fuera del frame + wobble sutil + fade out. NO cubre la cara centrada (zona segura x≥640 si position=right).
 
 **Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece en la parte inferior del frame (`bottom: 220`), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente para no superponerse.
 
-**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración`. Defaults: `Ancho = 420px`, `Duración = 2.0s`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`). Renderiza en el **tercio inferior** (`bottom: 150`) — MUY por debajo del rostro de Andrea, en la zona pecho/manos. Regla dura: los overlays NUNCA tapan la cara, ni siquiera cuando Andrea se acerca a cámara. Esto vale para todos los tipos (mascot pixel, screenshots, capturas UI tutorial). Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
+**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración | Posición`. Defaults: `Ancho = 420px`, `Duración = 2.0s`, `Posición = bottom`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`).
+
+- **`Posición: bottom` (default)** — Renderiza en el **tercio inferior** (`bottom: 150`), zona pecho/manos. MUY por debajo del rostro.
+- **`Posición: top`** — Renderiza en la **zona superior al ras del cabello** (`bottom: 1100` ≈ 820px desde arriba en 1920px). El BORDE INFERIOR del overlay toca el hairline de Andrea — nunca flotando en el espacio vacío arriba. Usar para UI tutorial, terminal, callouts que se ubican encima de la cabeza.
+
+Regla dura: los overlays NUNCA tapan la cara, independientemente de la posición. Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
 
 **B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. **Videos (.mp4/.mov/.webm)** → fullscreen con `object-fit: cover`; el estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8%. **Imágenes (.png/.jpg/.gif)** → se renderizan en la parte inferior (`bottom: 150`), centradas, con width configurable (default 900px), igual que los overlays — nunca tapan la cara. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
@@ -326,6 +336,52 @@ t_end   = t_start + duration
 
 - **Desactivados.** El preset no quema subtítulos sobre el video — la cara de Andrea + el header + los énfasis llevan el peso textual.
 - Si el usuario quiere subtítulos, los agrega en CapCut/Premiere encima del `BORRADOR_AUTO.mp4`.
+
+---
+
+## Clips de apoyo generados (Clip Director) — opcional, antes del render
+
+Paso opcional para **generar B-roll a medida del guion** con IA (Higgsfield) e inyectarlo al
+MANIFEST, en vez de solo cazar recursos sueltos con `recursos-de-video-formula100k`. Usa el
+**Clip Director**, el mismo motor que `reel-faceless-f100k`.
+
+**Cuándo:** Andrea dice "genera clips de apoyo", "b-roll a medida del guion", "clips
+generados para este video", o tras transcribir un video **16:9** largo (YouTube) que necesita
+apoyo visual en conceptos/datos/ejemplos.
+
+**Cómo (auto-propone → Andrea aprueba):**
+
+1. **Transcript.** Requiere `captions.json` (ya lo produce el Paso 1 del pipeline). Si aún no
+   existe, correr primero el corte/transcripción, o usar el guion.
+2. **Invocar el Clip Director** siguiendo `../reel-faceless-f100k/reference/clip-director.md`
+   con `modo=support`, `formato=16:9`. El Director lee `captions.json`, detecta los momentos
+   que piden apoyo (concepto/dato/ejemplo → `visual_type`) y **auto-propone** un plan donde
+   cada segmento trae un `keyword` **verbatim** del transcript (8-15 palabras) como ancla.
+3. **Aprobación.** Mostrar la tabla propuesta y preguntar con `AskUserQuestion`:
+   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". Andrea puede agregar o
+   quitar marcas.
+4. **Generar.** Higgsfield `generate_video` con `aspect_ratio="16:9"` (lotes ≤8, poll
+   `job_status(sync:true)`, declinar presets, anti-NSFW — ver la receta `broll` del reference).
+   Descargar a `$DEST/IA/broll_generado/clipNN.mp4`:
+   `curl -L "<url>" -o "$DEST/IA/broll_generado/clipNN.mp4"`.
+5. **Inyectar al MANIFEST.** Añadir una fila por clip a la sección `## B-roll` del MANIFEST
+   (formato exacto en "Formato del MANIFEST.md" abajo):
+
+   ```markdown
+   ## B-roll
+   | Keyword                          | Archivo                          | Duración | Estilo        |
+   |----------------------------------|----------------------------------|----------|---------------|
+   | los tres errores que cometía     | IA/broll_generado/clip01.mp4     | 4s       | monitor-photo |
+   ```
+
+   Si la sección `## B-roll` no existe en el MANIFEST, crearla con ese encabezado. La keyword
+   debe existir en `captions.json` (el parser avisa con `[warn]` si no).
+6. **Render normal.** Continuar con el pipeline de abajo: `manifest_to_cues.py` resuelve las
+   keywords y el render coloca cada clip como B-roll fullscreen por su ventana y vuelve a la
+   cara de Andrea (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
+
+**Degradación:** si `mcp__higgsfield__balance` es 0, el Director degrada a cards/pixel o
+sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference §6). No falla.
 
 ---
 
@@ -409,6 +465,9 @@ Al editar el TSX, asegurarse de que este clamp persista.
 | (Mac) `bootstrap.sh` falla al instalar Remotion (npm cache corrupto) | El script usa `--cache=/tmp/npm-cache-<user>`. Si persiste: `sudo chown -R 501:20 ~/.npm` o borrar `~/.npm` |
 | (Win) `node` o `python` no se reconocen después de bootstrap | Cerrar PowerShell y abrir una ventana nueva para que el PATH se actualice |
 | `manifest_to_cues.py` reporta keywords sin match | La keyword no aparece en `captions.json`. Editar el MANIFEST con una palabra que sí esté en el transcript |
+| `semantic OFF: falta ANTHROPIC_API_KEY` | El pase por comprensión se saltó. Exportar `ANTHROPIC_API_KEY` y re-correr (borrando antes `_source_cut.mov` y `captions.json`) para activar el corte semántico |
+| `semantic: la llamada a Claude falló` | Red caída o key inválida. El render sigue con el motor local. Verificar conexión / key y re-cortar si querés el pase semántico |
+| `semantic: Claude propuso borrar >40%` | Sugerencia descartada por el guard de seguridad. Si el video de verdad tiene mucho descarte, subir `--semantic-max-drop` (ej. `0.6`) y re-cortar |
 | Remotion falla con "Can only download URLs starting with http:// or https://" | El path del asset salió de `public/`. Verificar que `WEB/`/`IA/` y `_source_cut.mov` estén linkeados/copiados al template (lo hace `render.py`) |
 | Carpeta destino sin `MANIFEST.md` | Necesita correr antes `recursos-de-video-formula100k` o armar el MANIFEST a mano |
 

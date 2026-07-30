@@ -12,6 +12,7 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {loadFont} from '@remotion/google-fonts/Inter';
+import {loadFont as loadAnton} from '@remotion/google-fonts/Anton';
 import type {
   BrollCue,
   CreaContenidoViralProps,
@@ -26,7 +27,14 @@ const {fontFamily: INTER} = loadFont('normal', {
   subsets: ['latin'],
 });
 
-const MIN_OVERLAY_VISIBLE_SECONDS = 1.8;
+// Pack F100K — display de impacto para el HEADER (gancho), igual que el resto de
+// skills de edición (motion-reels/reel-memes usan 'F100K Display' = Anton).
+const {fontFamily: ANTON} = loadAnton('normal', {
+  weights: ['400'],
+  subsets: ['latin'],
+});
+
+const MIN_OVERLAY_VISIBLE_SECONDS = 1.2;
 const DEFAULT_OVERLAY_DURATION = 3.0;
 const DEFAULT_BROLL_DURATION = 3.5;
 
@@ -53,14 +61,35 @@ const resolveSrc = (src: string): string => {
   return staticFile(src.replace(/^\/+/, ''));
 };
 
+function getWordText(w: TranscriptWord): string {
+  return w.word ?? w.text ?? '';
+}
+
 function findKeywordTime(
   transcript: TranscriptWord[],
   keyword: string
 ): number | null {
   const target = normalize(keyword);
   if (!target) return null;
-  for (const w of transcript) {
-    if (normalize(w.text).includes(target)) return w.start;
+  const targetWords = target.split(/\s+/).filter(Boolean);
+  if (targetWords.length === 1) {
+    // Single word — fast path: check each word
+    for (const w of transcript) {
+      if (normalize(getWordText(w)).includes(target)) return w.start;
+    }
+  } else {
+    // Multi-word phrase — build sliding window over transcript
+    for (let i = 0; i <= transcript.length - targetWords.length; i++) {
+      const phrase = transcript
+        .slice(i, i + targetWords.length + 1)
+        .map(w => normalize(getWordText(w)))
+        .join(' ');
+      if (phrase.includes(target)) return transcript[i].start;
+    }
+    // Fallback: match just the first word of the keyword
+    for (const w of transcript) {
+      if (normalize(getWordText(w)).includes(targetWords[0])) return w.start;
+    }
   }
   return null;
 }
@@ -288,22 +317,24 @@ const Header: React.FC<{line1: string; line2: string; hideAfter?: number}> = ({l
       alignItems: 'center',
       paddingTop: 280,
       pointerEvents: 'none',
+      zIndex: 100,
     }}
   >
     <h1
       style={{
         margin: 0,
-        fontFamily: INTER,
-        fontWeight: 800,
-        fontSize: 84,
-        lineHeight: 1.06,
+        fontFamily: ANTON,
+        fontWeight: 400,
+        fontSize: 92,
+        lineHeight: 1.02,
         color: '#FFFFFF',
         WebkitTextStroke: '6px #000000',
         paintOrder: 'stroke fill',
         textShadow: '0 4px 14px rgba(0,0,0,0.45)',
-        letterSpacing: -0.5,
+        letterSpacing: 0.5,
+        textTransform: 'uppercase',
         textAlign: 'center',
-        maxWidth: '90%',
+        maxWidth: '92%',
       }}
     >
       {line1}
@@ -449,7 +480,7 @@ const OverlayLayer: React.FC<{
       <div
         style={{
           position: 'absolute',
-          ...(isTop ? {top: 120} : {bottom: 150}),
+          ...(isTop ? {bottom: 1100} : {bottom: 150}),
           left: '50%',
           transform: `translate(-50%, 0) translateY(${isTop ? -floatY : floatY}px) scale(${enterScale})`,
           opacity,

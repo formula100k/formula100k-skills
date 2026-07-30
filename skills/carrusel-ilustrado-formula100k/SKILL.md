@@ -1,13 +1,14 @@
 ---
 name: carrusel-ilustrado-formula100k
 description: >
-  Skill para crear carruseles de Instagram con ilustraciones minimalistas estilo Xiaohei (hand-drawn, figura negra sólida, fondo blanco puro). Activar SIEMPRE que alguien diga: "carrusel ilustrado", "carrusel estilo Xiaohei", "ilustraciones minimalistas para carrusel", "carrusel con dibujos", "carrusel con ilustraciones", "slides ilustrados", o cualquier variación que implique generar un carrusel con ilustraciones de personaje hand-drawn en lugar de fotografías o diseño tipográfico. Esta skill selecciona el tipo de ilustración más adecuado para cada slide (de 8 tipos disponibles), construye el prompt para Higgsfield nano_banana_2, genera todas las imágenes en paralelo, y entrega el layout guide para armar el carrusel final en Canva.
-argument-hint: "[tema o guion del carrusel] [contexto: educativo / venta / storytelling]"
+  Skill para crear carruseles de Instagram RENDERIZADOS COMPLETAMENTE (PNG finales listos para publicar, sin Canva). Ilustraciones minimalistas estilo Xiaohei (hand-drawn, figura negra sólida, fondo blanco puro) generadas con Higgsfield + slides HTML renderizados con Chrome headless. Puede mezclar slides de ilustración y slides con mockups de UI. Activar SIEMPRE que alguien diga: "carrusel ilustrado", "carrusel estilo Xiaohei", "ilustraciones minimalistas para carrusel", "carrusel con dibujos", "carrusel con ilustraciones", "slides ilustrados", o cualquier variación que implique generar un carrusel con ilustraciones de personaje hand-drawn.
+argument-hint: "[tema o guion del carrusel] [contexto: educativo / venta / storytelling] [mockups: sí/no]"
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   modelo: "nano_banana_2"
   formato: "4:5 — 1080×1350px"
   estilo: "Xiaohei hand-drawn · fondo blanco · acentos naranja F100K"
+  render: "HTML + Chrome headless — PNG finales sin Canva"
 ---
 
 # Skill: Carrusel Ilustrado — Fórmula 100K
@@ -25,7 +26,9 @@ Genera carruseles de Instagram (5-8 slides) con ilustraciones estilo Xiaohei: fi
 - "slides ilustrados sobre [concepto]"
 - Cualquier carrusel donde el concepto sea abstracto y necesite visualización conceptual
 
-**No usar esta skill cuando:** el carrusel necesita fotografías fotorrealistas de personas, mockups de UI, o diseño tipográfico puro sin ilustración. En esos casos → `higgsfield-carrusel-generador` o `carrusel-render-formula100k`.
+**No usar esta skill cuando:** el carrusel necesita fotografías fotorrealistas de personas reales o diseño tipográfico puro sin ilustración. En esos casos → `higgsfield-carrusel-generador`.
+
+**Sí soporta mockups de UI:** si el carrusel mezcla ilustraciones + pantallas de una app, generar los mockups como HTML + screenshot y combinarlos con las ilustraciones en el PASO 6.
 
 ---
 
@@ -50,10 +53,12 @@ Cada slide del carrusel recibe exactamente uno de estos tipos. La asignación se
 
 ### PASO 0 — Recibir el tema o guion
 
-Si el usuario solo da un tema sin desglose de slides:
-→ Preguntar: ¿Es educativo, de venta o storytelling? ¿Hay un hook/CTA concreto?
+**⚠️ OBLIGATORIO: El guion debe venir de `carrusel-viral-formula100k` antes de ejecutar esta skill.**
 
-Si ya hay un guion o lista de puntos:
+Si el usuario solo da un tema sin guion slide-por-slide:
+→ Invocar la skill `carrusel-viral-formula100k` para desarrollar el gancho con referencias virales reales y generar el guion completo. No continuar hasta tener el texto exacto de cada slide.
+
+Si ya hay un guion completo (texto de cada slide definido):
 → Continuar al PASO 1 directamente.
 
 ---
@@ -227,40 +232,178 @@ Si alguna imagen no refleja el estilo Xiaohei correctamente (fondos de color, so
 
 ---
 
-### PASO 6 — Construir el Layout Guide para Canva
+### PASO 6 — Renderizar slides completos (HTML + Chrome headless)
 
-Entregar un documento de instrucciones para armar el carrusel en Canva:
+**NO usar Canva. Renderizar directamente como PNG finales.**
 
-```markdown
-## Layout Guide — Carrusel Ilustrado: [TEMA]
-Formato: 1080×1350px (4:5) · Fondo: #FFFFFF · Fuente: Inter o Poppins
+Para cada slide, crear un archivo `render-NN.html` (1080×1350px) y capturarlo con Chrome headless.
+
+#### 6a — Mockups de UI (si el carrusel los incluye)
+
+Si algún slide muestra una pantalla de app, generarla primero como HTML independiente:
+
+```html
+<!-- mockup-[nombre].html — 1080×1350px, no necesita ser 4:5 exacto -->
+<!DOCTYPE html>
+<html><head>
+<style>
+  body { width:1080px; height:1350px; background:#F8F8F8; font-family:'Inter',system-ui; overflow:hidden; display:flex; }
+  /* sidebar oscuro + main blanco + cards con datos reales */
+</style></head><body>
+  <!-- sidebar nav + contenido principal con KPIs, cards, listas, pipeline -->
+</body></html>
+```
+
+Capturar con Chrome headless:
+```bash
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$CHROME" --headless=new --no-sandbox --disable-gpu \
+  --window-size=1080,1350 \
+  --screenshot="$DIR/mockup-[nombre].png" \
+  "file://$DIR/mockup-[nombre].html" 2>/dev/null
+```
+
+#### 6b — Template HTML para slides de ilustración
+
+```html
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-ui,sans-serif;
+       overflow:hidden; display:flex; flex-direction:column; align-items:center;
+       justify-content:center; padding:60px; }
+
+/* ELEMENTOS FIJOS */
+.brand { position:absolute; top:44px; left:52px; font-size:24px; font-weight:900;
+         color:#F59E0B; letter-spacing:-0.5px; }
+.slide-num { position:absolute; top:44px; right:52px; font-size:24px; font-weight:700;
+             color:#D1D5DB; letter-spacing:2px; }
+
+/* TIPOGRAFÍA */
+.eyebrow { font-size:28px; font-weight:700; color:#F59E0B; letter-spacing:4px;
+           text-transform:uppercase; margin-bottom:16px;
+           display:flex; align-items:center; gap:10px; align-self:flex-start; }
+.eyebrow::before { content:''; width:28px; height:4px; background:#F59E0B;
+                   border-radius:4px; display:block; }
+.lead { font-size:52px; font-weight:500; color:#9CA3AF; text-align:center; margin-bottom:32px; }
+.headline { font-size:88px; font-weight:900; color:#111827; text-align:center;
+            line-height:1.0; margin-bottom:20px; }
+.headline span { position:relative; display:inline-block; }
+.headline span::after { content:''; position:absolute; bottom:-6px; left:0; right:0;
+                         height:8px; background:#F59E0B; border-radius:4px; z-index:-1; }
+.headline em { font-style:normal; color:#F59E0B; }
+.subtext { font-size:44px; font-weight:400; color:#9CA3AF; text-align:center; line-height:1.4; }
+
+/* ILUSTRACIÓN */
+.illustration { width:660px; height:660px; object-fit:contain; margin-bottom:40px; }
+.illustration.sm { width:560px; height:560px; }
+
+/* INDICADOR DE SLIDES (paginación) */
+.dot-row { display:flex; gap:10px; justify-content:center; margin-top:44px; }
+.dot { width:10px; height:10px; border-radius:50%; background:#E5E7EB; }
+.dot.active { background:#F59E0B; width:28px; border-radius:10px; }
+
+/* BROWSER FRAME (para slides con mockups) */
+.browser { margin-top:32px; width:960px; border-radius:16px; overflow:hidden;
+           box-shadow:0 24px 80px rgba(0,0,0,0.15); border:1px solid #E5E7EB; }
+.browser-bar { background:#F3F4F6; padding:12px 18px; display:flex; align-items:center;
+               gap:8px; border-bottom:1px solid #E5E7EB; }
+.browser-dot { width:12px; height:12px; border-radius:50%; }
+.browser-url { flex:1; background:#fff; border-radius:6px; padding:6px 14px;
+               font-size:13px; color:#9CA3AF; margin:0 12px; font-family:monospace;
+               border:1px solid #E5E7EB; }
+.browser-img { width:100%; display:block; height:680px; object-fit:cover; object-position:top; }
+</style></head><body>
+
+<div class="brand">NOMBRE·APP</div>
+<div class="slide-num">01 / 07</div>
+
+<!-- SLIDE DE ILUSTRACIÓN (ejemplo: hook) -->
+<div class="lead">¿Texto introductorio...?</div>
+<img class="illustration" src="slide-01-role-status.png">
+<div class="headline">Titular<br><span>principal</span></div>
+<div class="subtext">Subtexto de apoyo</div>
+
+<!-- SLIDE CON MOCKUP (ejemplo: feature) -->
+<!--
+<div style="width:100%">
+  <div class="eyebrow">MÓDULO 01</div>
+  <div class="headline" style="text-align:left;font-size:72px;">Headline del feature.</div>
+  <div class="subtext" style="text-align:left;font-size:28px;">Descripción breve.</div>
+</div>
+<div class="browser">
+  <div class="browser-bar">
+    <div class="browser-dot" style="background:#FF5F57;"></div>
+    <div class="browser-dot" style="background:#FEBC2E;"></div>
+    <div class="browser-dot" style="background:#28C840;"></div>
+    <div class="browser-url">app.dominio.com/feature</div>
+  </div>
+  <img class="browser-img" src="mockup-feature.png">
+</div>
+-->
+
+<div class="dot-row">
+  <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+  <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+</div>
+
+</body></html>
+```
+
+#### 6c — Slide CTA (fondo oscuro)
+
+```html
+<!-- Slide final CTA — fondo #111827 -->
+<body style="background:#111827;">
+  <div class="brand">NOMBRE·APP</div>
+  <div class="slide-num" style="color:#374151;">07 / 07</div>
+  <img class="illustration sm" src="slide-07-role-status-cta.png">
+  <div class="headline" style="color:#fff;">Título<br>CTA.</div>
+  <div class="url" style="font-size:36px;font-weight:700;color:#F59E0B;text-align:center;">app.dominio.com</div>
+  <div class="subtext" style="font-size:24px;">Texto secundario o acceso</div>
+</body>
+```
+
+#### 6d — Capturar TODOS los renders en paralelo
+
+```bash
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+DIR="[RUTA_SALIDA]"
+
+for i in 01 02 03 04 05 06 07; do
+  "$CHROME" --headless=new --no-sandbox --disable-gpu \
+    --window-size=1080,1350 \
+    --screenshot="$DIR/CARRUSEL-$i.png" \
+    "file://$DIR/render-$i.html" 2>/dev/null &
+done
+wait
+ls -lh "$DIR"/CARRUSEL-*.png
+```
+
+#### 6e — Verificar renders
+
+Leer cada `CARRUSEL-NN.png` con el tool Read para confirmar que la imagen, tipografía y composición son correctas. Si algún slide tiene problemas → editar el HTML y re-capturar solo ese slide.
 
 ---
 
-### SLIDE 1 — [Propósito: Hook]
-Imagen: slide-01-[tipo].png
-Posición de imagen: centrada, ocupa 55-65% del alto del slide
-Texto superior (si aplica): [texto corto, Inter Bold 48-56px, negro #1A1A1A]
-Texto inferior: [titular principal, Inter Black 72-80px, negro #1A1A1A]
-Subtexto (si aplica): [Inter Regular 32px, gris #666666]
-Acento: línea o caja naranja #F59E0B detrás del texto clave
+### SISTEMA DE DISEÑO (todos los renders)
 
-### SLIDE 2 — [Propósito]
-...
-
-### SLIDE [N] — CTA
-Imagen: slide-0N-[tipo].png
-Texto: [CTA directo, máximo 2 líneas]
-Elemento visual: flecha naranja apuntando al CTA
-```
-
-**Reglas de texto para todos los slides:**
-- Título principal: Inter Black o Poppins ExtraBold, 64-80px
-- Cuerpo: Inter Regular, 32-40px, máximo 3 líneas por slide
-- Color de texto: #1A1A1A (casi negro) sobre fondo blanco
-- Acento naranja (#F59E0B): SOLO para destacar 1 palabra clave o el CTA
-- Espacio entre ilustración y texto: mínimo 40px
-- Márgenes laterales: 60px cada lado
+| Elemento | Valor |
+|----------|-------|
+| Canvas | 1080×1350px (4:5) |
+| Font | Inter Black 900 para headline, 700 para eyebrow, 400 para subtext |
+| Headline | 88px (reducir a 72px si el texto es largo) |
+| Lead (intro superior) | 52px, #9CA3AF |
+| Eyebrow | 28px, #F59E0B, letter-spacing 4px, uppercase |
+| Subtext | 44px, #9CA3AF |
+| Acento principal | #F59E0B |
+| Texto principal | #111827 |
+| Brand fijo | top-left, 24px, #F59E0B |
+| Slide num | top-right, 24px, #D1D5DB |
+| Padding | 60px todos los lados |
+| Dot-row paginación | siempre al fondo del slide, dot activo = pill naranja |
 
 ---
 
@@ -276,7 +419,7 @@ Mantener en TODOS los slides:
 - **Tono**: excéntrico y profesional — NUNCA kawaii, NUNCA cute, NUNCA infantil
 - **Espacio blanco**: abundante — el sujeto ocupa máximo 55% del frame
 - **Color de acento**: naranja #F59E0B (F100K) — máximo 2 elementos por slide
-- **Texto en imagen**: NINGUNO — todo el texto va en Canva sobre la imagen
+- **Texto en imagen**: NINGUNO — la ilustración va limpia; todo el texto lo pone el HTML del slide en el PASO 6 (esta skill no usa Canva)
 
 ---
 
@@ -284,15 +427,29 @@ Mantener en TODOS los slides:
 
 ```
 /Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug]/
-├── slide-01-role-status.png
+│
+│  ── ASSETS FUENTE ──
+├── slide-01-role-status.png          ← ilustraciones Higgsfield
 ├── slide-02-before-after.png
-├── slide-03-workflow.png
-├── slide-04-method-layering.png
-├── slide-05-system-locale.png
-├── slide-06-concept-metaphor.png
-├── layout-guide.md
-└── prompts-usados.md   ← guardar todos los prompts para referencia
+├── slide-03-system-locale.png
+├── ...
+│
+│  ── MOCKUPS (si aplica) ──
+├── mockup-[nombre].html              ← HTML de pantallas de app
+├── mockup-[nombre].png               ← screenshot del mockup
+│
+│  ── RENDERS FINALES (publicar estos) ──
+├── render-01.html                    ← HTML de cada slide compuesto
+├── render-02.html
+├── ...
+├── CARRUSEL-01.png                   ← PNG final listo para Instagram
+├── CARRUSEL-02.png
+├── CARRUSEL-03.png
+├── ...
+└── CARRUSEL-07.png
 ```
+
+**Los archivos `CARRUSEL-NN.png` son el entregable final. Verificar cada uno con Read antes de reportar como completo.**
 
 ---
 

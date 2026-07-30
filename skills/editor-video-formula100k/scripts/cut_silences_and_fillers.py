@@ -22,6 +22,12 @@ Outputs (inside dest_folder):
 Strategy:
   1. Extract mono 16kHz audio
   2. Transcribe with whisper --word-timestamps True  (single source of truth)
+  2b. SEMANTIC pass (optional, needs ANTHROPIC_API_KEY): Claude reads the indexed
+      transcript and deletes whole discarded takes — misspeaks the speaker
+      reformulated with different words, false starts, wandering. This is the
+      layer that "understands" speech; the lexical steps below only match strings.
+      Skipped gracefully when no key is set. An over-delete guard (40% cap) means
+      a bad suggestion can never gut the video.
   3. Drop consecutive repeated words (stutters), keeping the LAST attempt
   4. Drop phrase restarts (Andrea stumbles + retries)
   5. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
@@ -41,11 +47,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
 import tempfile
 import unicodedata
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 DEFAULT_MIN_SILENCE = 0.08  # seconds — gap larger than this is treated as silence and cut
@@ -316,6 +325,295 @@ def remove_phrase_restarts(
     ]
     kept_words = [w for i, p in enumerate(phrases) if i not in kill for w in p]
     return kept_words, removed_texts
+
+
+# ── Semantic cleanup (Claude) ────────────────────────────────────────────
+# The lexical layers above (stutter dedupe, phrase-restart, fillers) only catch
+# repetitions that LOOK alike as strings. They miss the real failure mode:
+# Andrea misspeaks, then re-says the idea with DIFFERENT words — or repeats a
+# word with a breath in between, or wanders off and comes back. To "understand"
+# the transcript we hand it to Claude, which reasons like a human editor:
+# "she botched this take and nailed it here → keep the good one". Claude returns
+# word-index ranges to delete; the existing keep-segment/EDL machinery does the
+# rest. Fully optional: no ANTHROPIC_API_KEY → this layer is skipped and the
+# local engine runs alone. An over-delete guard means a bad model suggestion can
+# never silently gut the video.
+
+DEFAULT_SEMANTIC_MODEL = 'claude-opus-4-8'  # highest quality; override per-render
+DEFAULT_SEMANTIC_MAX_DROP = 0.40  # never delete more than this fraction of words
+ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
+ANTHROPIC_VERSION = '2023-06-01'
+
+# ── Pase semántico: dos niveles de agresividad ──────────────────────────────
+# 'conservador' (default histórico): quita SOLO tomas falladas literales —
+#   arranques en falso, tartamudeos, reformulaciones, auto-correcciones. Deja el
+#   mensaje intacto. Para video grabado limpio (sin restarts) casi no corta → el
+#   reel queda largo y "flojo".
+# 'ajustado': lo anterior + relleno de arranque/carraspeo verbal, divagaciones y
+#   apartes tangenciales, y re-enunciados redundantes que NO hacen avanzar el
+#   mensaje. Protege gancho, pasos, datos, ejemplos que cargan info y el CTA.
+#   Corte notablemente más apretado (≈2-3× más palabras) sin mutilar el mensaje.
+SEMANTIC_SYSTEM_CONSERVADOR = (
+    "Eres un editor de video profesional que limpia transcripciones de reels "
+    "hablados (español). Recibes el transcript palabra por palabra, cada una con "
+    "su índice [n]. La persona graba de corrido SIN guion fijo: arranca frases en "
+    "falso, se traba, se equivoca y repite la idea con OTRAS palabras, divaga y "
+    "vuelve, o repite una palabra. Tu trabajo: marcar SOLO los índices de palabras "
+    "que pertenecen a tomas DESCARTADAS, para quedarte con la toma final limpia y "
+    "el mensaje intacto.\n\n"
+    "Reglas duras:\n"
+    "- Si dijo algo mal y lo reformuló después, BORRA el intento fallado y CONSERVA "
+    "el último (el bueno), aunque usen palabras distintas.\n"
+    "- Borra repeticiones, arranques en falso, muletillas largas y auto-correcciones "
+    "('no, perdón', 'a ver', 'espérate', 'me equivoqué', 'lo digo de nuevo').\n"
+    "- NUNCA borres contenido bueno solo porque suene redundante de forma intencional "
+    "(énfasis, listas, 'muy muy importante'). Ante la duda, CONSERVA.\n"
+    "- No reordenes ni reescribas: solo eliges qué índices quitar.\n"
+    "- Responde EXCLUSIVAMENTE un objeto JSON, sin texto extra, con esta forma:\n"
+    '  {"drop": [{"start": <idx>, "end": <idx>, "reason": "<motivo corto>"}]}\n'
+    "  donde start..end es un rango INCLUSIVO de índices a borrar. Si no hay nada "
+    'que borrar, responde {"drop": []}.'
+)
+
+SEMANTIC_SYSTEM_AJUSTADO = (
+    "Eres un editor de reels viral (español). Recibes el transcript palabra por "
+    "palabra, cada una con su índice [n]. La persona graba de corrido SIN guion. "
+    "Tu trabajo: dejar el corte FINAL apretado y dinámico para retención, quitando "
+    "todo lo que NO hace avanzar el mensaje.\n\n"
+    "BORRA (marca sus índices):\n"
+    "1. Tomas falladas: arranques en falso, frases reformuladas (deja la última "
+    "buena), tartamudeos, repeticiones de palabra, auto-correcciones ('a ver', "
+    "'perdón', 'me equivoqué').\n"
+    "2. Relleno de arranque / carraspeo verbal: preámbulos que no dicen nada ('en "
+    "donde te explico', 'lo que les quería decir es que', 'básicamente') cuando la "
+    "idea real viene justo después.\n"
+    "3. Divagaciones y apartes tangenciales: anécdotas/ejemplos secundarios que se "
+    "desvían del punto y vuelven, auto-referencias ('yo tengo un video hablando de "
+    "eso'), si quitarlos NO rompe el hilo.\n"
+    "4. Re-enunciados redundantes: cuando repite la misma idea con otras palabras "
+    "sin agregar info.\n\n"
+    "PROTEGE SIEMPRE (NO borrar):\n"
+    "- El gancho/primera afirmación fuerte, los pasos concretos, los datos, nombres "
+    "y ejemplos que SÍ cargan el mensaje, y el CTA final completo.\n"
+    "- No reordenes ni reescribas; solo eliges índices a quitar. El hilo debe quedar "
+    "coherente al unir.\n\n"
+    "Apunta a un corte notablemente más apretado que el mínimo, pero NUNCA mutiles "
+    "el mensaje. Responde EXCLUSIVAMENTE un objeto JSON, sin texto extra, con esta "
+    'forma:\n  {"drop": [{"start": <idx>, "end": <idx>, "reason": "<motivo corto>"}]}\n'
+    "  donde start..end es un rango INCLUSIVO de índices a borrar. Si no hay nada "
+    'que borrar, responde {"drop": []}.'
+)
+
+SEMANTIC_SYSTEMS = {
+    'conservador': SEMANTIC_SYSTEM_CONSERVADOR,
+    'ajustado': SEMANTIC_SYSTEM_AJUSTADO,
+}
+DEFAULT_SEMANTIC_LEVEL = 'conservador'
+# Back-compat alias (some callers/tests import SEMANTIC_SYSTEM directly).
+SEMANTIC_SYSTEM = SEMANTIC_SYSTEM_CONSERVADOR
+
+
+def build_semantic_prompt(words: list[dict], guion: str | None = None) -> str:
+    """Render the indexed transcript (+ optional guion) into the user message."""
+    lines = [f'[{i}] {w["word"].strip()}' for i, w in enumerate(words)]
+    parts = []
+    if guion:
+        parts.append(
+            'GUION DE REFERENCIA (lo que la persona QUERÍA decir; úsalo como norte '
+            'para distinguir la toma buena de la fallada, pero la verdad es el '
+            'transcript, no el guion):\n' + guion.strip() + '\n'
+        )
+    parts.append('TRANSCRIPT INDEXADO:\n' + '\n'.join(lines))
+    parts.append(
+        '\nDevuelve SOLO el JSON con los rangos de índices a borrar '
+        '(formato {"drop":[{"start","end","reason"}]}).'
+    )
+    return '\n'.join(parts)
+
+
+def _extract_json_object(text: str) -> str | None:
+    """Pull the first balanced {...} JSON object out of a possibly-noisy reply."""
+    if not text:
+        return None
+    start = text.find('{')
+    if start == -1:
+        return None
+    depth = 0
+    in_str = False
+    esc = False
+    for i in range(start, len(text)):
+        c = text[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif c == '\\':
+                esc = True
+            elif c == '"':
+                in_str = False
+        else:
+            if c == '"':
+                in_str = True
+            elif c == '{':
+                depth += 1
+            elif c == '}':
+                depth -= 1
+                if depth == 0:
+                    return text[start:i + 1]
+    return None
+
+
+def parse_semantic_response(text: str, n_words: int) -> list[tuple[int, int, str]]:
+    """Parse Claude's reply into validated (start, end, reason) index ranges.
+
+    Tolerant of code fences and surrounding prose. Indices are coerced to int,
+    swapped if inverted, clamped to [0, n_words-1], and ranges fully outside the
+    transcript are dropped. Any parsing error yields an empty list (→ the local
+    engine runs unaffected).
+    """
+    blob = _extract_json_object(text)
+    if not blob:
+        return []
+    try:
+        data = json.loads(blob)
+    except (ValueError, TypeError):
+        return []
+    raw = data.get('drop') if isinstance(data, dict) else None
+    if not isinstance(raw, list):
+        return []
+    out: list[tuple[int, int, str]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        try:
+            s = int(item['start'])
+            e = int(item['end'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if s > e:
+            s, e = e, s
+        if e < 0 or s > n_words - 1:  # fully outside
+            continue
+        s = max(0, s)
+        e = min(n_words - 1, e)
+        reason = str(item.get('reason', '')).strip()
+        out.append((s, e, reason))
+    return out
+
+
+def apply_drops(
+    words: list[dict],
+    ranges: list[tuple[int, int, str]],
+    max_drop_ratio: float = DEFAULT_SEMANTIC_MAX_DROP,
+) -> tuple[list[dict], list[str], bool]:
+    """Remove the words inside `ranges`, guarding against over-deletion.
+
+    Returns (kept_words, removed_snippets, aborted). If the union of ranges would
+    delete more than `max_drop_ratio` of the words, NOTHING is removed and
+    aborted=True — a runaway model suggestion can never gut the video.
+    """
+    if not words or not ranges:
+        return words, [], False
+    drop_idx: set[int] = set()
+    for s, e, _ in ranges:
+        drop_idx.update(range(s, e + 1))
+    drop_idx = {i for i in drop_idx if 0 <= i < len(words)}
+    if not drop_idx:
+        return words, [], False
+    if len(drop_idx) / len(words) > max_drop_ratio:
+        return words, [], True
+    removed: list[str] = []
+    for s, e, reason in ranges:
+        snippet = ' '.join(words[i]['word'].strip() for i in range(s, e + 1)
+                           if 0 <= i < len(words))
+        tag = f' [{reason}]' if reason else ''
+        removed.append(snippet + tag)
+    kept = [w for i, w in enumerate(words) if i not in drop_idx]
+    return kept, removed, False
+
+
+def _ssl_context():
+    """Build an SSL context that verifies certs even on python.org builds.
+
+    The macOS python.org installer ships without CA certs wired into OpenSSL
+    (default cafile is None → every HTTPS call dies with CERTIFICATE_VERIFY_FAILED
+    unless the user ran "Install Certificates.command"). We fall back to the
+    `certifi` bundle so the API call works out of the box on a fresh machine.
+    """
+    import ssl
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        return ssl.create_default_context()
+
+
+def call_claude(prompt: str, api_key: str, model: str, timeout: float = 90.0,
+                max_tokens: int = 4096, system: str | None = None) -> str | None:
+    """POST to the Anthropic Messages API via stdlib urllib. None on any failure.
+
+    No SDK dependency — keeps the skill installable with just Python + ffmpeg.
+    `system` selects the semantic prompt; defaults to the conservative one.
+    """
+    body = json.dumps({
+        'model': model,
+        'max_tokens': max_tokens,
+        'system': system or SEMANTIC_SYSTEM,
+        'messages': [{'role': 'user', 'content': prompt}],
+    }).encode('utf-8')
+    req = urllib.request.Request(
+        ANTHROPIC_API_URL, data=body, method='POST',
+        headers={
+            'x-api-key': api_key,
+            'anthropic-version': ANTHROPIC_VERSION,
+            'content-type': 'application/json',
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout, context=_ssl_context()) as resp:
+            payload = json.loads(resp.read().decode('utf-8'))
+    except (urllib.error.URLError, TimeoutError, ValueError, OSError):
+        return None
+    try:
+        blocks = payload.get('content', [])
+        return ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text')
+    except (AttributeError, TypeError):
+        return None
+
+
+def semantic_clean(
+    words: list[dict],
+    api_key: str | None,
+    model: str = DEFAULT_SEMANTIC_MODEL,
+    guion: str | None = None,
+    max_drop_ratio: float = DEFAULT_SEMANTIC_MAX_DROP,
+    level: str = DEFAULT_SEMANTIC_LEVEL,
+) -> tuple[list[dict], list[str], str]:
+    """Drop discarded takes from `words` using Claude. Always safe.
+
+    `level` ∈ {'conservador','ajustado'} picks the system prompt: 'conservador'
+    removes only literal failed takes; 'ajustado' also trims wind-up/tangents/
+    redundant re-statements for a tighter reel (message + CTA protected).
+
+    Returns (words, removed_snippets, status). status ∈
+    {'ok', 'no_key', 'api_fail', 'aborted_overbudget', 'nothing'}. On anything
+    other than 'ok'/'nothing' the original word list is returned untouched.
+    """
+    if not api_key:
+        return words, [], 'no_key'
+    if len(words) < 4:
+        return words, [], 'nothing'
+    system = SEMANTIC_SYSTEMS.get(level, SEMANTIC_SYSTEM_CONSERVADOR)
+    prompt = build_semantic_prompt(words, guion)
+    reply = call_claude(prompt, api_key, model, system=system)
+    if reply is None:
+        return words, [], 'api_fail'
+    ranges = parse_semantic_response(reply, len(words))
+    if not ranges:
+        return words, [], 'nothing'
+    kept, removed, aborted = apply_drops(words, ranges, max_drop_ratio)
+    if aborted:
+        return words, [], 'aborted_overbudget'
+    return kept, removed, 'ok'
 
 
 def run(cmd: list[str]) -> str:
@@ -692,6 +990,23 @@ def main() -> int:
                     help='Skip word-level re-transcription of the cut video')
     ap.add_argument('--no-snap', action='store_true',
                     help='disable energy-based silence snapping (use fixed/fricative pad)')
+    ap.add_argument('--no-semantic', action='store_true',
+                    help='disable the Claude semantic pass (keep only the local '
+                         'string-matching engine)')
+    ap.add_argument('--semantic-model', default=DEFAULT_SEMANTIC_MODEL,
+                    help=f'Claude model for the semantic pass (default {DEFAULT_SEMANTIC_MODEL})')
+    ap.add_argument('--semantic-level', choices=tuple(SEMANTIC_SYSTEMS),
+                    default=DEFAULT_SEMANTIC_LEVEL,
+                    help="agresividad del pase semántico: 'conservador' (default; "
+                         "solo tomas falladas literales) o 'ajustado' (también recorta "
+                         "preámbulos, divagaciones y re-enunciados redundantes para un "
+                         "reel más apretado; protege gancho/pasos/CTA)")
+    ap.add_argument('--guion', default=None,
+                    help='ruta a un guion .txt opcional; le da a Claude el norte de '
+                         'lo que querías decir (si no se pasa, busca $DEST/guion.txt)')
+    ap.add_argument('--semantic-max-drop', type=float, default=DEFAULT_SEMANTIC_MAX_DROP,
+                    help=f'fracción máxima de palabras que el pase semántico puede '
+                         f'borrar antes de abortar por seguridad (default {DEFAULT_SEMANTIC_MAX_DROP})')
     ap.add_argument('--audio-only', action='store_true',
                     help='Salida solo-audio (_voz_cut.m4a) para el preset faceless: '
                          'corta silencios/muletillas del voiceover sin pista de video.')
@@ -735,6 +1050,47 @@ def main() -> int:
                 print(f'        ... ({len(hallucinations) - 5} more)', file=sys.stderr)
             print(f'      (remap-via-EDL contains the damage; '
                   f'inspect captions.json if quality is off)', file=sys.stderr)
+
+        # ── Semantic pass (Claude) — runs on the RAW transcript so it has full
+        # context; the local layers below then polish whatever it leaves behind.
+        if not args.no_semantic:
+            api_key = os.environ.get('ANTHROPIC_API_KEY')
+            guion_text = None
+            guion_path = Path(args.guion).expanduser() if args.guion else (dest / 'guion.txt')
+            if guion_path.is_file():
+                guion_text = guion_path.read_text(encoding='utf-8')
+                print(f'      semantic: usando guion {guion_path.name} como referencia',
+                      file=sys.stderr)
+            n_before = len(words)
+            words, sem_removed, status = semantic_clean(
+                words, api_key, model=args.semantic_model,
+                guion=guion_text, max_drop_ratio=args.semantic_max_drop,
+                level=args.semantic_level,
+            )
+            if status == 'ok':
+                pct = (n_before - len(words)) / n_before * 100 if n_before else 0
+                print(f'      semantic ({args.semantic_model} · {args.semantic_level}): '
+                      f'{n_before - len(words)} palabras de tomas descartadas borradas '
+                      f'({len(sem_removed)} tramos, {pct:.0f}%)', file=sys.stderr)
+                for snip in sem_removed[:10]:
+                    s = snip if len(snip) <= 80 else snip[:77] + '...'
+                    print(f'        − {s}', file=sys.stderr)
+                if len(sem_removed) > 10:
+                    print(f'        ... ({len(sem_removed) - 10} más)', file=sys.stderr)
+            elif status == 'no_key':
+                print('      ⚠ semantic OFF: falta ANTHROPIC_API_KEY '
+                      '(corre solo el motor local). Exporta la key para activar '
+                      'el corte por comprensión.', file=sys.stderr)
+            elif status == 'api_fail':
+                print('      ⚠ semantic: la llamada a Claude falló — sigo con el '
+                      'motor local.', file=sys.stderr)
+            elif status == 'aborted_overbudget':
+                print(f'      ⚠ semantic: Claude propuso borrar >'
+                      f'{args.semantic_max_drop:.0%} del video — descartado por '
+                      f'seguridad, sigo con el motor local.', file=sys.stderr)
+            else:  # 'nothing'
+                print('      semantic: sin tomas descartadas que borrar',
+                      file=sys.stderr)
 
         if args.no_dedupe:
             stutters: list[str] = []

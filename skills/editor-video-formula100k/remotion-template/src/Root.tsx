@@ -2,6 +2,8 @@ import React from 'react';
 import {Composition, getInputProps} from 'remotion';
 import {CreaContenidoViral} from './CreaContenidoViral';
 import {TutorialFaceless} from './TutorialFaceless';
+import {NewsHorizontal} from './NewsHorizontal';
+import type {NewsHorizontalProps} from './NewsHorizontal';
 import {
   BadgeSlide,
   StatCounter,
@@ -73,9 +75,25 @@ const listDefaults: ListRevealProps = {
   accentColor: '#F59E0B',
 };
 
+const newsDefaults: NewsHorizontalProps = {
+  videoSrc: '',
+  transcript: [],
+  brand: 'F100K NEWS',
+  ticker: [],
+  chyrons: [],
+  cards: [],
+  width: 1920,
+  height: 1080,
+  fps: FPS,
+  durationInFrames: FPS,
+};
+
 export const RemotionRoot: React.FC = () => {
   const input = getInputProps() as Partial<CreaContenidoViralProps>;
   const merged: CreaContenidoViralProps = {...defaults, ...input};
+
+  const newsInput = getInputProps() as Partial<NewsHorizontalProps>;
+  const newsMerged: NewsHorizontalProps = {...newsDefaults, ...newsInput};
 
   const tutorialInput = getInputProps() as Partial<TutorialFacelessProps>;
   const tutorialMerged: TutorialFacelessProps = {...tutorialDefaults, ...tutorialInput};
@@ -118,6 +136,17 @@ export const RemotionRoot: React.FC = () => {
         width={merged.width}
         height={merged.height}
         defaultProps={merged}
+      />
+
+      {/* ── FÓRMULA 100K NEWS — horizontal 1920×1080 ── */}
+      <Composition
+        id="news-horizontal"
+        component={NewsHorizontal}
+        durationInFrames={Math.max(1, newsMerged.durationInFrames)}
+        fps={newsMerged.fps}
+        width={1920}
+        height={1080}
+        defaultProps={newsMerged}
       />
 
       {/* ── Tutorial Faceless ── */}

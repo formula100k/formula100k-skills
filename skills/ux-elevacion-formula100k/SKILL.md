@@ -2,11 +2,13 @@
 name: ux-elevacion-formula100k
 description: >
   Skill de elevación de UI/UX para el stack F100K (Next.js 16, Tailwind CSS, shadcn/ui).
-  Activa cuando alguien dice /polish, /craft, /animate, /typeset, /audit-ux, o frases como
-  "mejora el diseño de este componente", "este UI se ve muy AI-looking", "anima esta
-  interacción", "el spacing se ve raro", "el diseño se ve genérico", "añade microinteracciones".
-  Combina los principios de Emil Kowalski (animaciones físicas), Paul Bakaus / Impeccable
-  (7 dominios de calidad UI) y las anti-slop rules de diseño de alto nivel.
+  Activa cuando alguien dice /polish, /craft, /animate, /typeset, /audit-ux, /landing, o frases
+  como "mejora el diseño", "este UI se ve muy AI-looking", "anima esta interacción", "el spacing
+  se ve raro", "el diseño se ve genérico", "añade microinteracciones", "quiero que se vea
+  profesional", "agrega animaciones", "construye una landing", "hazlo hiper profesional",
+  "necesito scroll animations", "agrega glow/glass/depth", "quiero un hero impactante".
+  Combina principios de Emil Kowalski (animaciones físicas), Paul Bakaus / Impeccable (7 dominios),
+  anti-slop rules, y patterns avanzados de landings: scroll reveal, bento grid, profundidad visual.
 allowed-tools: Bash, Read, Write, Edit
 ---
 
@@ -25,6 +27,7 @@ sugerencias: son invariantes que separan UI mediocre de UI que comunica confianz
 - `/animate` — agregar o mejorar animaciones en un componente existente
 - `/typeset` — auditar y corregir la tipografía
 - `/audit-ux` — auditoría completa de la UI actual (todos los dominios)
+- `/landing` — checklist completo de alto impacto para landing pages
 
 ### Frases naturales (activación implícita)
 - "mejora el diseño de este componente"
@@ -34,6 +37,121 @@ sugerencias: son invariantes que separan UI mediocre de UI que comunica confianz
 - "la tipografía no está bien" / "los textos no tienen jerarquía"
 - "algo en este diseño se siente mal"
 - "revisa antes de hacer el PR"
+- "quiero que se vea hiper profesional" / "que impresione"
+- "agrega scroll animations" / "que los elementos entren al hacer scroll"
+- "agrega glow" / "quiero profundidad visual" / "hazlo menos plano"
+- "necesito un hero impactante" / "construye la landing"
+- "agrega contadores animados" / "que los números aparezcan con animación"
+
+---
+
+## Guía para alumnas — Cómo pedir sin saber diseño
+
+Si no sabes los términos técnicos, usa esta sección. Describe lo que sientes y encuentra
+el prompt exacto que debes escribirle a Claude.
+
+### "Se ve feo / genérico / parece hecho por IA"
+
+```
+"Mejora el diseño de esta página. Se ve muy genérico, como un template de IA.
+Quiero que se vea profesional y con personalidad propia."
+```
+
+### "Se ve muy simple / le falta algo / muy plano"
+
+```
+"Esta página se ve muy plana. Agrega profundidad visual: sombras, capas,
+efectos de fondo. Que se sienta que hay dimensión, no todo al mismo nivel."
+```
+
+### "No se ve moderno / parece de hace 10 años"
+
+```
+"Moderniza el diseño. Quiero que se vea como una app/landing de 2025:
+oscura, con bordes sutiles, tipografía grande y animaciones suaves."
+```
+
+### "Los botones / elementos no se sienten bien"
+
+```
+"Mejora los botones y elementos interactivos. Que cuando haga hover o clic
+se sientan responsivos y con vida, no estáticos."
+```
+
+### "Quiero que impresione desde el primer segundo"
+
+```
+"Rediseña el hero (la primera pantalla que ve el usuario). Quiero que impresione
+inmediatamente: headline poderoso, fondo con profundidad, animaciones de entrada.
+Que en 3 segundos quede claro qué es y por qué me importa."
+```
+
+### "Los textos no se ven bien / no hay jerarquía"
+
+```
+"El texto no tiene jerarquía visual. El título debería verse como título,
+el subtítulo como subtítulo, y el cuerpo como cuerpo. Corrígelo con
+tamaños, pesos y espaciados correctos."
+```
+
+### "Quiero agregar animaciones pero no sé cuáles"
+
+```
+"Agrega animaciones profesionales a esta página/componente. Que los elementos
+entren suavemente al hacer scroll, que los botones respondan al toque,
+y que las transiciones se sientan físicas y naturales."
+```
+
+### "Quiero que los elementos aparezcan mientras hago scroll"
+
+```
+"Agrega scroll animations: que cada sección y sus elementos aparezcan
+con una animación suave cuando el usuario llega a esa parte de la página.
+Efecto de fade+slide hacia arriba, escalonado entre elementos."
+```
+
+### "Quiero mostrar mis números / stats de forma llamativa"
+
+```
+"Crea una sección de estadísticas con contadores animados. Que los números
+cuenten desde 0 hasta el valor real cuando el usuario llega a esa sección.
+Usar: [tus números reales aquí]"
+```
+
+### "Quiero una sección que muestre mis features de forma visual"
+
+```
+"Crea una sección de features en formato bento grid: cards de distintos
+tamaños que muestren cada función del producto con un visual dentro.
+Estilo oscuro, bordes sutiles, hover effect."
+```
+
+### "Quiero agregar testimonios / reviews de mis clientes"
+
+```
+"Diseña una sección de testimonios profesional. Cards con el texto del
+testimonio, foto, nombre y cargo. Estilo oscuro, sobrio, que transmita
+confianza. Los testimonios son: [pega tus testimonios reales]"
+```
+
+### "La paleta de colores se ve mal / no combina"
+
+```
+"La paleta de colores no funciona. Quiero un sistema coherente:
+un color de acento principal [di qué color quieres], neutros oscuros para
+el fondo, y blancos/grises para el texto. Aplícalo a todo el componente."
+```
+
+### Plantilla universal — cuando no sabes qué decir exactamente
+
+Si no encuentras tu caso arriba, usa esta plantilla y rellena los espacios:
+
+```
+"Este [componente/página/sección] se ve [problema que percibes].
+Quiero que [resultado que buscas].
+El estilo debe ser [oscuro/claro/moderno/profesional/minimalista].
+La paleta de colores es [colores principales que ya tienes]."
+```
 
 ---
 
@@ -603,3 +721,520 @@ Copy claro, accionable, sin jerga. Los labels de botones deben describir accione
 ### `/polish` = los 7 dominios en una sola pasada
 Cuando ejecutas `/polish`, estás ejecutando los 7 dominios de forma simultánea sobre un
 componente específico. El output es un reporte accionable con diffs, no sugerencias vagas.
+
+---
+
+## Comando `/landing` — Landings de Alto Impacto
+
+Para cuando construyes una landing page de producto, programa, o servicio. Este nivel está
+por encima del `/craft` estándar: aquí el objetivo es impresión inmediata y conversión.
+
+### Anatomía del Hero Perfecto
+
+El hero debe resolver 3 preguntas en ≤3 segundos: ¿Qué es? ¿Para quién? ¿Por qué ahora?
+
+```tsx
+// Estructura canónica de hero
+<section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-32 overflow-hidden">
+
+  {/* 1. Fondo con profundidad — NO un color plano */}
+  <HeroBackground />  {/* ver sección Profundidad Visual */}
+
+  {/* 2. Pill badge — novedad / credibilidad */}
+  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-white/70 backdrop-blur-sm">
+    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+    <span>Nuevo — Versión 2.0 disponible</span>
+  </div>
+
+  {/* 3. Headline — máximo 8 palabras, font extrabold, tracking tight */}
+  <h1 className="max-w-4xl text-center text-5xl font-extrabold leading-[1.05] tracking-[-0.04em] text-white md:text-7xl">
+    La única plataforma que{" "}
+    <span className="gradient-text">convierte seguidores en ventas</span>
+  </h1>
+
+  {/* 4. Subheadline — 1-2 líneas, NO repite el headline */}
+  <p className="mt-6 max-w-2xl text-center text-lg text-white/60 leading-relaxed">
+    Breve descripción del mecanismo único. Cómo funciona, no qué hace.
+  </p>
+
+  {/* 5. CTAs — primario + secundario, nunca 3 */}
+  <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
+    <PrimaryButton>Comenzar gratis — sin tarjeta</PrimaryButton>
+    <GhostButton>Ver demo en 2 min →</GhostButton>
+  </div>
+
+  {/* 6. Trust signal inline — debajo de CTAs */}
+  <p className="mt-4 text-sm text-white/40">
+    +2,400 emprendedores ya generan ventas con esto
+  </p>
+
+  {/* 7. Mockup del producto — siempre visible above the fold */}
+  <HeroMockup className="mt-20" />
+
+</section>
+```
+
+### Reglas de jerarquía en hero
+
+| Elemento | Tamaño | Peso | Opacidad texto |
+|----------|--------|------|----------------|
+| Pill badge | 14px | 400 | 70% |
+| Headline | 56–72px | 800 | 100% |
+| Subheadline | 18px | 400 | 60% |
+| CTA primario | 16px | 600 | 100% (bg sólido) |
+| CTA secundario | 16px | 500 | 70% |
+| Trust signal | 14px | 400 | 40% |
+
+❌ Nunca headline de más de 2 líneas en desktop.
+❌ Nunca 3 CTAs — el usuario tiene que elegir y no elige.
+❌ Nunca subheadline que repita las mismas palabras del headline.
+
+---
+
+## Profundidad Visual — Glow, Glass y Sombras Avanzadas
+
+### Glow effects correctos (no excess)
+
+El glow sirve para anclar elementos flotantes y crear profundidad. Mal usado es la señal
+#1 de diseño AI-generated.
+
+```tsx
+// ✅ BIEN — glow como luz de fondo, no como borde
+<div className="relative">
+  {/* Glow blob detrás del elemento principal */}
+  <div
+    className="absolute inset-0 -z-10 blur-[120px] opacity-30"
+    style={{ background: "radial-gradient(ellipse at center, #6366f1 0%, transparent 70%)" }}
+  />
+  <HeroContent />
+</div>
+
+// ✅ BIEN — glow en botón primario (solo el primario)
+<button className="relative bg-indigo-600 hover:bg-indigo-500 transition-colors">
+  <span className="absolute inset-0 rounded-[inherit] shadow-[0_0_20px_rgba(99,102,241,0.5)] opacity-0 transition-opacity hover:opacity-100" />
+  Comenzar
+</button>
+
+// ❌ MAL — glow en todos los elementos (pierden significado)
+// ❌ MAL — glow con blur muy pequeño (<40px) — queda como halo feo
+// ❌ MAL — glow de color diferente al acento de la paleta
+```
+
+### Gradient text — solo para headlines
+
+```tsx
+// globals.css
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Variante con acento de color
+.gradient-text-accent {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ❌ NUNCA gradient text en body, labels, o más de 1 elemento por sección
+// ❌ NUNCA gradient con más de 3 stops de colores distintos (se ve karate-chop)
+```
+
+### Glassmorphism correcto
+
+```tsx
+// ✅ Glass auténtico: necesita fondo con contenido detrás para funcionar
+<div
+  className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6"
+  // backdrop-blur SOLO funciona si hay elementos visuales detrás del glass
+  // Si el fondo es un color plano, es mentira glass — usar bg-white/10 sin blur
+>
+  <CardContent />
+</div>
+
+// ❌ MAL — glass sobre fondo plano negro sin contenido detrás
+// ❌ MAL — backdrop-blur muy alto (>20px) enlentece móvil — usar backdrop-blur-sm en mobile
+// ❌ MAL — border blanco muy opaco (border-white/30) se ve plástico
+```
+
+### Dark surface hierarchy — 5 niveles
+
+Nunca diseñar en dark mode con un solo `bg-black`. La profundidad viene de capas:
+
+```tsx
+// tokens CSS en globals.css
+:root {
+  --surface-0: #000000;     // Fondo base — lo más profundo
+  --surface-1: #0A0A10;     // Contenedores principales (sidebar, panels)
+  --surface-2: #0E0E18;     // Cards, secciones
+  --surface-3: #141422;     // Cards hover, elementos elevados
+  --surface-4: #1A1A2E;     // Tooltips, dropdowns
+  --surface-border: rgba(255,255,255,0.06); // Borde entre superficies
+}
+
+// Uso:
+// bg-[var(--surface-0)] — fondo de página
+// bg-[var(--surface-1)] — nav, sidebar
+// bg-[var(--surface-2)] — cards
+// bg-[var(--surface-3)] — card en hover state
+// Los bordes entre capas: border-white/[0.06]
+```
+
+### Spotlight / beam effect (efecto de cono de luz)
+
+```tsx
+// Efecto beam de luz en hero — se mueve con el mouse o es estático
+// Versión estática (sin JS):
+<div className="absolute inset-0 overflow-hidden">
+  <div
+    className="absolute -top-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[600px] opacity-20"
+    style={{
+      background: "conic-gradient(from 270deg at 50% 0%, transparent 0deg, #6366f1 90deg, transparent 180deg)",
+      filter: "blur(60px)",
+    }}
+  />
+</div>
+
+// Grid de puntos (dot pattern) de fondo:
+<div
+  className="absolute inset-0 opacity-[0.15]"
+  style={{
+    backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)",
+    backgroundSize: "32px 32px",
+  }}
+/>
+```
+
+---
+
+## Scroll Animations — Reveal al hacer scroll
+
+Estas animaciones SOLO se usan en landings y páginas de marketing. NUNCA en app UIs o dashboards.
+
+### Setup con Framer Motion `useInView`
+
+```tsx
+// Componente reutilizable para cualquier elemento con reveal
+"use client"
+import { motion, useInView } from "framer-motion"
+import { useRef } from "react"
+
+function FadeIn({
+  children,
+  delay = 0,
+  direction = "up", // "up" | "down" | "left" | "right" | "none"
+  className,
+}: {
+  children: React.ReactNode
+  delay?: number
+  direction?: "up" | "down" | "left" | "right" | "none"
+  className?: string
+}) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-80px" })
+
+  const directionOffset = {
+    up: { y: 24 },
+    down: { y: -24 },
+    left: { x: 24 },
+    right: { x: -24 },
+    none: {},
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, ...directionOffset[direction] }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        delay,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
+```
+
+### Patrón: Sección con stagger al entrar en viewport
+
+```tsx
+// Features section — cada card entra con delay incremental
+<div className="grid grid-cols-3 gap-6">
+  {features.map((feature, i) => (
+    <FadeIn key={feature.id} delay={i * 0.08} direction="up">
+      <FeatureCard {...feature} />
+    </FadeIn>
+  ))}
+</div>
+
+// Regla: delay máximo 0.08 * n — nunca acumular más de 0.5s de total
+// Si hay más de 6 items, eliminar el delay (stagger de >6 items es tortura)
+```
+
+### Patrón: Contador animado al entrar en viewport
+
+```tsx
+"use client"
+import { useEffect, useRef } from "react"
+import { useInView, useMotionValue, useSpring } from "framer-motion"
+
+function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const motionValue = useMotionValue(0)
+  const spring = useSpring(motionValue, { duration: 1500, bounce: 0 })
+  const isInView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (isInView) motionValue.set(target)
+  }, [isInView, motionValue, target])
+
+  useEffect(() => {
+    spring.on("change", (v) => {
+      if (ref.current) ref.current.textContent = `${Math.round(v).toLocaleString()}${suffix}`
+    })
+  }, [spring, suffix])
+
+  return <span ref={ref}>0{suffix}</span>
+}
+
+// Uso en Stats section:
+<AnimatedCounter target={2400} suffix="+" />  // → "+2,400"
+<AnimatedCounter target={98} suffix="%" />     // → "98%"
+```
+
+### Patrón: Text reveal por palabras (headline de impact)
+
+```tsx
+function WordReveal({ text, delay = 0 }: { text: string; delay?: number }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
+  const words = text.split(" ")
+
+  return (
+    <span ref={ref} className="inline">
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            delay: delay + i * 0.05,
+          }}
+        >
+          {word}&nbsp;
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+// ⚠️ Solo para headlines de hero o secciones de impacto. Nunca en body text.
+```
+
+---
+
+## Bento Grid — Layouts Heterogéneos
+
+El bento grid (grid de cards de distintos tamaños) es el pattern más efectivo para mostrar
+features de producto. Funciona porque rompe la monotonía del grid uniforme.
+
+### Estructura base
+
+```tsx
+// grid de 12 columnas — las cards ocupan distintos spans
+<div className="grid grid-cols-12 gap-4 auto-rows-[180px]">
+
+  {/* Card grande — feature principal */}
+  <BentoCard className="col-span-7 row-span-2">
+    <MainFeatureVisual />
+  </BentoCard>
+
+  {/* Card alta — métrica o stat */}
+  <BentoCard className="col-span-5 row-span-2">
+    <StatsVisual />
+  </BentoCard>
+
+  {/* Cards pequeñas — features secundarias */}
+  <BentoCard className="col-span-4">
+    <MiniFeature1 />
+  </BentoCard>
+  <BentoCard className="col-span-4">
+    <MiniFeature2 />
+  </BentoCard>
+  <BentoCard className="col-span-4">
+    <MiniFeature3 />
+  </BentoCard>
+
+</div>
+
+// BentoCard base component:
+function BentoCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn(
+      "group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[var(--surface-2)] p-6",
+      "transition-all duration-300 hover:border-white/[0.12] hover:bg-[var(--surface-3)]",
+      className
+    )}>
+      {/* Gradient spot en hover */}
+      <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: "radial-gradient(ellipse at 80% 0%, rgba(99,102,241,0.08) 0%, transparent 60%)" }}
+      />
+      {children}
+    </div>
+  )
+}
+```
+
+### Reglas del bento
+
+- La card más grande debe ocupar ≥50% del ancho del grid.
+- Máximo 3 tamaños distintos de card (grande, mediana, pequeña).
+- Cada card debe tener un visual único — no solo texto.
+- El hover de card = border más visible + subtle glow desde una esquina.
+- En mobile: todas las cards pasan a `col-span-12` (full width).
+
+---
+
+## Social Proof — Trust Signals que Convierten
+
+### Anatomía de trust signals efectivos
+
+```tsx
+// 1. Avatar stack — muestra personas reales, no íconos
+<div className="flex items-center gap-3">
+  <div className="flex -space-x-2">
+    {avatars.map((src, i) => (
+      <img
+        key={i}
+        src={src}
+        className="h-8 w-8 rounded-full border-2 border-[var(--surface-0)] object-cover"
+        alt=""
+      />
+    ))}
+  </div>
+  <div>
+    <div className="flex">
+      {[...Array(5)].map((_, i) => (
+        <StarIcon key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+      ))}
+    </div>
+    <p className="text-xs text-white/50">+2,400 ya dentro</p>
+  </div>
+</div>
+
+// 2. Logo bar — clientes o apariciones en medios
+// Regla: logos en grayscale opacity-40, en hover opacity-70
+// Nunca logos a color en esta sección — crea ruido visual
+<div className="flex items-center gap-8 opacity-40">
+  {logos.map(logo => (
+    <img key={logo} src={logo} className="h-6 object-contain grayscale" alt="" />
+  ))}
+</div>
+
+// 3. Testimonial card — 1 real vence a 10 genéricos
+<blockquote className="rounded-2xl border border-white/[0.06] bg-[var(--surface-2)] p-6">
+  <p className="text-white/80 leading-relaxed">
+    "{texto genuino del usuario, con detalles específicos, no genérico}"
+  </p>
+  <footer className="mt-4 flex items-center gap-3">
+    <img src={avatar} className="h-10 w-10 rounded-full object-cover" />
+    <div>
+      <p className="text-sm font-semibold text-white">{nombre}</p>
+      <p className="text-xs text-white/50">{cargo}, {empresa}</p>
+    </div>
+  </footer>
+</blockquote>
+```
+
+### Reglas de trust signals
+
+- Los números deben ser específicos: "2,437 usuarios" vence a "miles de usuarios".
+- Nunca inventar métricas — usar las reales aunque sean menores.
+- Los testimoniales deben mencionar un resultado concreto, no una emoción genérica.
+- Los logos van siempre en grayscale — a color compiten con el acento de la paleta.
+
+---
+
+## Botones de Alto Impacto
+
+El botón primario de una landing es el elemento más importante del diseño. Merece atención.
+
+```tsx
+// Botón primario de landing — no es el shadcn/ui Button por default
+function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 40 }}
+      className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl
+                 bg-indigo-600 px-8 py-3.5 text-base font-semibold text-white
+                 shadow-[0_0_0_1px_rgba(99,102,241,0.3),0_4px_15px_rgba(99,102,241,0.4)]
+                 transition-all duration-200
+                 hover:bg-indigo-500
+                 hover:shadow-[0_0_0_1px_rgba(99,102,241,0.5),0_8px_25px_rgba(99,102,241,0.5)]"
+    >
+      {/* Shimmer interno en hover */}
+      <span
+        className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent
+                   transition-transform duration-500 group-hover:translate-x-[100%]"
+      />
+      {children}
+      <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </motion.button>
+  )
+}
+
+// El shimmer sweep solo en hover, nunca loop infinito.
+// El shadow doble (ring + blur) da profundidad sin exagerar.
+// La flecha que se mueve 2px en hover es suficiente — no 8px.
+```
+
+---
+
+## Checklist `/landing` — Pre-deploy
+
+Antes de declarar terminada una landing, verificar:
+
+**Above the fold (sin scroll)**
+- [ ] El headline responde ¿Qué es? ¿Para quién? en ≤8 palabras
+- [ ] Hay un único CTA primario visible
+- [ ] El mockup del producto es visible sin scroll en desktop
+- [ ] El badge/pill de credibilidad está presente
+- [ ] El fondo tiene profundidad (no color plano)
+
+**Animaciones**
+- [ ] El hero carga sin animaciones bloqueantes (content visible inmediato)
+- [ ] Los elementos de hero tienen entrada con spring (no ease-in)
+- [ ] Las secciones de features revelan al hacer scroll (no al cargar todo)
+- [ ] Los contadores animados solo corren cuando son visibles
+- [ ] El botón primario tiene feedback de press (scale 0.97)
+
+**Profundidad visual**
+- [ ] Hay al menos 3 niveles de surface color distintos
+- [ ] El glow existe solo en 1-2 elementos, no en todo
+- [ ] El gradient text está en ≤1 elemento por sección
+- [ ] Los bordes de cards son `border-white/[0.06]` o más sutiles
+
+**Trust signals**
+- [ ] Hay números específicos (no "muchos usuarios")
+- [ ] Al menos 1 testimonial con nombre real + resultado concreto
+- [ ] Los logos están en grayscale
+
+**Performance**
+- [ ] Las imágenes tienen `loading="lazy"` excepto el hero fold
+- [ ] El video de demo tiene `autoPlay muted loop playsInline`
+- [ ] No hay `backdrop-blur` en elementos que se mueven o que son muchos
+- [ ] El `blur-[120px]` de glows está en elementos estáticos, no animados

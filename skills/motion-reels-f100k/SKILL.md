@@ -135,6 +135,60 @@ Guardar `VIDEO_PATH`, `VIDEO_DIR`, `VIDEO_NAME`.
 
 ---
 
+### Paso 0 — Recorte de silencios y equivocaciones (PRIMERO, antes de animar)
+
+**Por qué va antes que todo:** los overlays se cronometran sobre el transcript y se incrustan sobre el video. Si cortaras silencios/equivocaciones DESPUÉS de animar, los cortes caerían encima de las animaciones y las romperían. Por eso el recorte ocurre AQUÍ: el resto del pipeline trabaja siempre sobre el video ya limpio, y nada se vuelve a cortar.
+
+Aplica solo a **fuentes locales** (grabaciones crudas). Para URLs remotas (YouTube/IG/TikTok), **saltar este paso** — no se recorta un video ya publicado; ir directo al Paso 1.5.
+
+Preguntar una sola vez:
+
+```
+AskUserQuestion:
+  "¿El video es una grabación cruda o ya está editado?"
+  Opciones:
+  - "Grabación cruda — recortar silencios/muletillas/repeticiones (recomendado)"
+  - "Ya está editado — no tocar el audio"
+```
+
+Si elige **"ya está editado"** o la fuente es remota → saltar al Paso 1.5 con `VIDEO_PATH` intacto.
+
+Si elige **"grabación cruda"**:
+
+```bash
+# Localizar el script de corte (vive en la skill editor-video-formula100k)
+CUT_SCRIPT=$(find "$HOME/.claude" -name cut_silences_and_fillers.py -path '*editor-video*' 2>/dev/null | head -1)
+[ -z "$CUT_SCRIPT" ] && echo "⚠ No se encontró cut_silences_and_fillers.py — instala/clona la skill editor-video-formula100k"
+
+# numpy habilita el 'silence-snapping': cada corte cae en un silencio real,
+# nunca a media palabra. Sin numpy el script hace fallback con padding fijo.
+python3 -c "import numpy" 2>/dev/null || pip3 install --quiet numpy 2>/dev/null || true
+
+# Corta silencios >~0.20s, muletillas (eh/em/uhh), repeticiones ("que que")
+# y reinicios de frase (Andrea se traba y reempieza → conserva el último intento).
+# Produce, dentro de VIDEO_DIR:
+#   _source_cut.mov  ← video ya limpio
+#   captions.json    ← palabras word-level YA sobre la línea de tiempo cortada
+#   edl.json         ← mapa orig→cortado
+python3 "$CUT_SCRIPT" "$VIDEO_PATH" "$VIDEO_DIR"
+
+# 🔑 A partir de aquí el video fuente ES el cortado. TODO el pipeline lo usa.
+VIDEO_PATH="$VIDEO_DIR/_source_cut.mov"
+echo "✅ Fuente recortada: $VIDEO_PATH"
+ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$VIDEO_PATH"
+```
+
+> El corte ya transcribió word-level y dejó `captions.json` sobre la línea cortada. En el **Paso 2 reutiliza ese archivo** en lugar de volver a transcribir — más rápido y con sincronía garantizada.
+
+**Ajustes finos opcionales** (pasar como flags extra a `$CUT_SCRIPT`):
+- `--min-silence 0.15` → más respiración entre frases (default 0.08, agresivo)
+- `--pad 0.09` → si sientes que se cortan las colas de las palabras
+- `--no-phrase-dedupe` → conservar todos los intentos de frase (no colapsar reinicios)
+
+Si tras revisar el corte algo quedó mal (se comió una palabra o dejó un silencio), re-correr el Paso 0 con estos flags; ver `editor-video-formula100k` para el detalle del algoritmo.
+
+---
+
 ### Paso 1.5 — Analizar posición del sujeto en el frame
 
 **Este paso determina las zonas seguras para los overlays y es obligatorio antes de generar cualquier HTML.**
@@ -219,7 +273,27 @@ print(json.dumps(words, ensure_ascii=False, indent=2))
 " > /tmp/motion_transcript.json
 ```
 
-#### Fuente local → mlx-whisper (Apple Silicon)
+#### Si corriste el Paso 0 → REUTILIZAR `captions.json` (no re-transcribir)
+
+Si el Paso 0 generó `captions.json`, ya tienes los timestamps word-level sobre la línea cortada. Conviértelos al formato del motion board y **salta el Whisper de abajo**:
+
+```bash
+if [ -f "$VIDEO_DIR/captions.json" ]; then
+  python3 - << EOF
+import json
+words = json.load(open("$VIDEO_DIR/captions.json"))
+out = [{'text': w['word'].strip(), 'start': w['start'], 'end': w['end']} for w in words]
+json.dump(out, open('/tmp/motion_transcript.json','w'), ensure_ascii=False, indent=2)
+print(f"♻️  Reusando captions.json del corte: {len(out)} palabras (sin re-transcribir)")
+EOF
+else
+  echo "No hay captions.json (fuente sin Paso 0) → transcribir con Whisper abajo"
+fi
+```
+
+#### Fuente local sin Paso 0 → mlx-whisper (Apple Silicon)
+
+> Solo si **no** existe `captions.json`. Si ya lo reutilizaste arriba, omite este bloque.
 
 ```bash
 ffmpeg -i "$VIDEO_PATH" -vn -acodec mp3 -ar 16000 -ac 1 -y /tmp/motion_audio.mp3
@@ -463,7 +537,17 @@ mkdir -p "$MOTION_DIR"
 
 Generar `$MOTION_DIR/index.html` usando los templates de referencia (sección abajo). Reglas:
 
-- Stage: 1080×1920, fondo `#FF00FF` (green screen para chromakey — NUNCA transparent)
+- **Stage: 1080×1920, `background:transparent`** → se renderiza con **alfa real** (ProRes 4444), NO chroma magenta. (Antes se usaba `#FF00FF` + `colorkey`, pero el anti-aliasing dejaba halo rosa en letras/sombras/bordes. La vía alfa lo elimina.)
+- **Pack tipográfico F100K:** cargar el pack del motor en el `<head>` y usar las familias canónicas (no `'Inter'` suelto sin cargar, que cae a la fuente del sistema):
+  ```bash
+  # generar el pack si falta (idempotente) y copiarlo DENTRO de la composición:
+  [ -f "$HOME/.claude/skills/motion-reels-f100k/fonts/fonts.css" ] || \
+    python3 "$HOME/.claude/skills/motion-reels-f100k/scripts/build_font_pack.py"
+  mkdir -p "$MOTION_DIR/fonts" && cp "$HOME/.claude/skills/motion-reels-f100k/fonts/"*.woff2 \
+    "$HOME/.claude/skills/motion-reels-f100k/fonts/fonts.css" "$MOTION_DIR/fonts/"
+  ```
+  En el `<head>` del index.html: `<link rel="stylesheet" href="fonts/fonts.css">`. Familias: `'F100K Display'` (Anton, titulares/kinetic), `'F100K Sans'` (Inter, pills/cards), `'F100K Serif'` (Fraunces italic, citas/concepto).
+- **Kinetic captions (frase sync a la voz):** para texto que debe "aparecer según se dice", usar el componente compartido `scripts/kinetic_captions.py` (`build_kinetic(words, cid, top, accent_idx)`), que revela palabra por palabra en su timestamp. Reemplaza al viejo "kinetic word" de una sola palabra cuando hay una frase.
 - Cada overlay: `data-start`, `data-duration`, `data-track-index` único
 - Usar tracks 10+ para no colisionar
 - Aplicar `SAFE_PILL_CSS`, `SAFE_CARD_CSS`, `SAFE_FLOAT_CSS` del Paso 1.5 en lugar de posiciones hardcoded
@@ -477,10 +561,10 @@ Generar `$MOTION_DIR/index.html` usando los templates de referencia (sección ab
 cd "$MOTION_DIR"
 hyperframes preview  # opcional, para revisar en browser
 
-# Render MP4 (obligatorio — WebM VP9 sale como yuv420p SIN alpha real)
-# ⚠ --resolution portrait NO se puede combinar con --format mp4 cuando el stage ya define 1080×1920
+# Render MOV con ALFA REAL (ProRes 4444 yuva444p12le). Reemplaza al viejo mp4+chroma.
+# HyperFrames v0.7+ exporta mov/webm CON transparencia (verificado: yuva444p12le).
 # ⚠ Omitir --resolution: la composición ya está en el tamaño correcto en data-width/data-height
-hyperframes render --format mp4 -o overlays.mp4
+hyperframes render --format mov -o overlays.mov
 ```
 
 Si el render falla: `hyperframes lint` → `hyperframes validate` para detectar errores.
@@ -494,16 +578,13 @@ OUTPUT="$VIDEO_DIR/${VIDEO_NAME}_motion.mp4"
 
 ffmpeg \
   -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.mp4" \
+  -i "$MOTION_DIR/overlays.mov" \
   -filter_complex \
-    "[0:v]fps=30,format=yuv420p[base];
-     [1:v]fps=30,format=yuv420p[ov];
-     [ov]colorkey=0xFF00FF:0.3:0.1[ov_key];
-     [base][ov_key]overlay=0:0:format=auto[outv]" \
-  # ⚠ fps=30,format=yuv420p ANTES del colorkey — evita mismatch fps y fuerza yuv420p
-  # ⚠ chroma MAGENTA #FF00FF (NO verde): el diseño usa teals/emeralds (#34d399, #28c840) que un chroma verde elimina por error
-  # ⚠ colorkey=RGB (NO chromakey=YCbCr) — colorkey limpia el magenta CSS sin residuo en bordes anti-aliased
-  # ⚠ 0.3:0.1 = similarity 30% + blend 10% — captura bordes anti-aliased del CSS sin comer el contenido
+    "[0:v]fps=30[base];
+     [1:v]fps=30[ov];
+     [base][ov]overlay=0:0:format=auto,format=yuv420p[outv]" \
+  # ⚠ overlays.mov ya trae ALFA real (ProRes 4444) → overlay DIRECTO, SIN colorkey (cero halo magenta)
+  # ⚠ format=yuv420p al FINAL (tras el overlay) para compatibilidad de reproducción
   # ⚠ -map "0:1" explícito — NO usar -map 0:a ni -map "0:a?" (en zsh ? es glob y rompe)
   # ⚠ -movflags +faststart OBLIGATORIO o el proceso puede colgarse con filter_complex complejo
   -map "[outv]" -map "0:1" \
@@ -520,18 +601,18 @@ Si el video fuente no es 1080×1920:
 ```bash
 ffmpeg \
   -i "$VIDEO_PATH" \
-  -i "$MOTION_DIR/overlays.mp4" \
+  -i "$MOTION_DIR/overlays.mov" \
   -filter_complex \
-    "[0:v]fps=30,format=yuv420p,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[base];
-     [1:v]fps=30,format=yuv420p[ov];
-     [ov]colorkey=0xFF00FF:0.3:0.1[ov_key];
-     [base][ov_key]overlay=0:0:format=auto[outv]" \
+    "[0:v]fps=30,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[base];
+     [1:v]fps=30[ov];
+     [base][ov]overlay=0:0:format=auto,format=yuv420p[outv]" \
   -map "[outv]" -map "0:1" \
   -c:v libx264 -crf 18 -preset slow \
   -c:a copy \
   -movflags +faststart \
   -y "$OUTPUT"
 ```
+> **Fallback de alfa:** si en algún equipo `mov` no diera alfa, usar `--format webm` (VP9 alfa). Como ÚLTIMO recurso, volver al viejo chroma (`background:#FF00FF` + `colorkey=0xFF00FF:0.3:0.1`), asumiendo el halo. La vía alfa es la default.
 
 ---
 

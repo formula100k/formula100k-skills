@@ -1,20 +1,32 @@
 ---
 name: miniatura-youtube-formula100k
 description: >
-  Skill especializada en generar miniaturas y portadas virales para YouTube usando NanoBanana y las fotos del usuario. Usar SIEMPRE que alguien pida: crear una miniatura de YouTube, generar una portada para video, diseñar thumbnail, hacer la imagen de mi video de YouTube, analizar miniaturas de la competencia, optimizar mi miniatura, crear variaciones de thumbnail. Basada en la metodología de FORMULA 100K con análisis de competencia real.
+  Skill especializada en generar miniaturas y portadas virales para YouTube usando las fotos del usuario. Usar SIEMPRE que alguien pida: crear una miniatura de YouTube, generar una portada para video, diseñar thumbnail, hacer la imagen de mi video de YouTube, analizar miniaturas de la competencia, optimizar mi miniatura, crear variaciones de thumbnail. Modo estrella CLONAR ESTILO: replica el estilo de UNA captura de referencia (la miniatura de otra persona) poniendo la cara del usuario y manda a generar a Higgsfield (nano_banana_pro) — activarlo cuando digan 'quiero esta miniatura con mi cara', 'clona este estilo', 'réplica esta portada usando mi foto' o adjunten una referencia + una selfie. Basada en la metodología de FORMULA 100K con análisis de competencia real.
 argument-hint: "<palabra clave o tema del video>"
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
   author: AndreaEstratega
 ---
 
 # Skill: Miniatura YouTube FORMULA 100K
 
-Genera miniaturas optimizadas para YouTube usando tus fotos + NanoBanana, con análisis de la competencia. Metodología basada en FORMULA 100K: menos es más, CTR primero.
+Genera miniaturas optimizadas para YouTube usando tus fotos, con análisis de la competencia. Metodología basada en FORMULA 100K: menos es más, CTR primero. Motor de imagen principal: **Higgsfield (nano_banana_pro)** vía MCP.
 
 ---
 
-## PROCESO OBLIGATORIO
+## ELEGIR EL MODO (primero que todo)
+
+| Modo | Cuándo | Motor |
+|------|--------|-------|
+| **🅐 CLONAR ESTILO** (estrella) | El usuario adjunta **una captura de referencia + su selfie** y quiere "esta miniatura con mi cara" / "clona este estilo" / "mándalo a Higgsfield" | Higgsfield `nano_banana_pro` |
+| **🅑 DESDE CERO** | No hay referencia; se diseña la miniatura con la metodología FORMULA 100K (fondo negro + amarillo u otro estilo de la tabla) | Higgsfield `nano_banana_pro` |
+
+- **Modo 🅐** → leer `references/clonar-estilo-higgsfield.md` y seguir ese pipeline (subir selfie + referencia, etiquetar FIRST/SECOND image, generar 4 variaciones, descargar, recomendar). El texto/logo se montan en Canva al final. Puedes saltarte el Paso 2 de investigación si la referencia ya es el estilo elegido.
+- **Modo 🅑** → seguir el PROCESO OBLIGATORIO completo de abajo.
+
+---
+
+## PROCESO OBLIGATORIO (Modo 🅑 — desde cero)
 
 ### PASO 1 — Recolectar inputs del usuario
 
@@ -81,48 +93,32 @@ Basado en la investigación, armar el **Brief Visual** siguiendo la metodología
 
 ---
 
-### PASO 4 — Generar con NanoBanana
+### PASO 4 — Generar con Higgsfield (nano_banana_pro)
 
-**Leer `references/banana-thumbnail-config.md` antes de generar.**
+Motor principal: **MCP de Higgsfield**, modelo `nano_banana_pro`, `resolution:"2k"`, `aspect_ratio:"16:9"`, `count:4`. Flujo completo de subida + generación + descarga en `references/clonar-estilo-higgsfield.md` (sirve para ambos modos).
 
-Configurar siempre para YouTube:
-```
-Aspect ratio: 16:9
-Resolution: 2K (imageSize: 2K)
-Model: gemini-3.1-flash-image-preview
-```
+**Resumen del flujo:**
+1. Subir la(s) foto(s): local → `media_upload` (presigned URL) + `curl PUT` + `media_confirm`; Apps UI → `media_upload_widget`.
+2. `generate_image` con `model:"nano_banana_pro"`, `medias[]` (selfie primero), prompt en inglés modo instrucción.
+3. `job_status(jobId, sync:true)` por cada job → tomar `results.rawUrl` → `curl` a la carpeta de entrega → `Read` para evaluar.
 
-**Si el usuario tiene foto propia (PNG con fondo removido):**
-Usar `gemini_edit_image` pasando la foto y el siguiente prompt mejorado:
+**Modo 🅑 (desde cero) — prompt base con foto del usuario:**
 
 ```
-PROMPT BASE (adaptar al caso):
-[Nombre/descripción de la persona] centered on pure solid black background,
-confident [smiling/surprised/determined] facial expression looking directly at camera.
-Yellow bold text banner "[PALABRAS EN MAYÚSCULAS]" prominently placed [above/below] 
-the person in thick sans-serif font. [Íconos opcionales: Instagram icon, TikTok icon,
-arrow emoji, checkmark]. Negative space preserved — clean, uncluttered composition.
-High-contrast YouTube thumbnail, 1280x720 format. Professional photography quality.
-MUST have solid black background with NO gradients.
+[descripción de la persona / o "use the EXACT face and identity of the woman
+in the FIRST reference image"], confident [smiling/surprised/determined]
+expression looking directly at camera, on a [pure solid black background /
+estilo elegido]. Negative space preserved — clean, uncluttered composition.
+MUST NOT INCLUDE: no text, no captions, no logos (el texto se pone en Canva).
+High-contrast YouTube thumbnail, photorealistic, professional quality, 16:9.
 ```
 
-**Si NO tiene foto o quiere generar una:**
-Usar `gemini_generate_image` con descripción detallada de la persona:
+**Modo 🅐 (clonar estilo):** usar la plantilla `FIRST/SECOND reference image` de `references/clonar-estilo-higgsfield.md`.
 
-```
-PROMPT BASE:
-Hispanic woman in her [edad] with [descripción física], confident smile, 
-looking directly at camera, wearing [ropa de marca/professional], 
-centered on pure solid black background. Yellow bold text banner 
-"[PALABRAS]" prominently placed at bottom in thick sans-serif font. 
-Professional studio photography with dramatic front lighting.
-YouTube thumbnail 16:9 format, clean composition, high contrast.
-```
+**Generar 4 variaciones** (count:4 en una sola corrida) para tener opciones de iteración.
 
-**Generar 3 variaciones obligatorias:**
-- **Variación A**: Texto arriba, persona centrada
-- **Variación B**: Texto abajo, persona ligeramente a la izquierda con espacio a la derecha
-- **Variación C**: Texto lateral, persona con expresión diferente o elemento adicional (ícono, flecha)
+> El **texto del cartel, logos y burbujas** se montan SIEMPRE después en Canva, no en la generación. Imagen limpia = más nítida y editable.
+> (Histórico: la v1 usaba la API de Gemini `gemini_edit_image`/`gemini_generate_image` con fondo quemado y texto incluido — quedó deprecado en favor de Higgsfield.)
 
 ---
 
@@ -149,14 +145,15 @@ which magick || which convert || echo "Instala: brew install imagemagick"
 
 Después de generar, siempre entregar:
 
-1. **Las 3 imágenes generadas** con sus rutas
-2. **Recomendación de cuál usar primero** (y por qué según la investigación de competencia)
-3. **Estrategia de iteración CTR:**
+1. **Las 4 imágenes generadas** con sus rutas (carpeta de entrega: `/Users/kissita/Documents/FORMULA100K/MINIATURAS/AAAA-MM-DD_<slug>/`)
+2. **Recomendación de cuál usar primero** (parecido + nitidez + composición + "set" del fondo)
+3. **Recordar montar el texto/logo/burbuja en Canva** sobre la ganadora (la generación va limpia a propósito)
+4. **Estrategia de iteración CTR:**
    - Si CTR < 4% en las primeras 2 horas → cambiar el TÍTULO primero
-   - Si CTR sigue bajo tras otras 2 horas → cambiar a Variación B de miniatura
+   - Si CTR sigue bajo tras otras 2 horas → cambiar a otra variación de miniatura
    - Máximo 3-4 cambios de miniatura por video
-4. **Palabras de alto impacto** sugeridas para el cartel si aún no está optimizado
-5. **Próxima acción**: ¿Quieres que genere también el título optimizado?
+5. **Palabras de alto impacto** sugeridas para el cartel si aún no está optimizado
+6. **Próxima acción**: ¿Quieres que genere también el título optimizado?
 
 ---
 
@@ -179,7 +176,9 @@ Cuando el usuario no especifica estilo, aplicar el **Estilo FORMULA 100K**:
 - NUNCA generar miniaturas con más de 7 palabras de texto visible
 - NUNCA sobrecargar con múltiples elementos visuales (máx 3 elementos: persona + texto + 1 ícono)
 - NUNCA repetir el mismo mensaje que el título del video en la miniatura
-- SIEMPRE hacer 3 variaciones para tener opciones de iteración
+- SIEMPRE hacer 4 variaciones (count:4) para tener opciones de iteración
+- NUNCA quemar el texto/logo/burbuja en la generación de Higgsfield — van en Canva al final (imagen limpia = más nítida)
+- En modo CLONAR: selfie SIEMPRE primero en medias[], etiquetar FIRST/SECOND image, incluir `MUST NOT INCLUDE` y `Do not alter her facial features`
 - Si el usuario no tiene fotos, generar con descripción detallada pero AVISAR que usar foto real propia convierte más
 - Si la generación falla por filtros de seguridad, simplificar la descripción y reintentar
 
@@ -188,6 +187,7 @@ Cuando el usuario no especifica estilo, aplicar el **Estilo FORMULA 100K**:
 ## REFERENCIAS
 
 Cargar bajo demanda — NO cargar todas al inicio:
+- `references/clonar-estilo-higgsfield.md` — **Modo CLONAR ESTILO**: pipeline completo Higgsfield (subir selfie+referencia, plantilla de prompt FIRST/SECOND image, generar, descargar). Leer SIEMPRE en modo 🅐.
 - `references/metodologia-miniaturas.md` — Checklist completo + teoría CTR de FORMULA 100K
 - `references/estilos-plantillas.md` — 9 estilos de miniatura con prompts base
-- `references/banana-thumbnail-config.md` — Configuración específica de NanoBanana para thumbnails
+- `references/banana-thumbnail-config.md` — (histórico) Config de la API de Gemini NanoBanana, deprecado en favor de Higgsfield

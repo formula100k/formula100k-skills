@@ -121,8 +121,10 @@ def write_xlsx_reels(path: Path, filas: list[dict], modo: str) -> bool:
     for i, w in enumerate(widths, start=1):
         ws.column_dimensions[get_column_letter(i)].width = w
 
-    for row_idx in range(2, len(filas) + 2):
-        ws.row_dimensions[row_idx].height = 90
+    for row_idx, row in enumerate(filas, start=2):
+        guion = row.get("guion", "")
+        line_count = guion.count("\n") + 1
+        ws.row_dimensions[row_idx].height = max(min(line_count * 15, 460), 90)
 
     ws.freeze_panes = "A2"
     wb.save(path)

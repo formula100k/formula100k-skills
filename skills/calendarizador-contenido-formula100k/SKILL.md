@@ -1,7 +1,6 @@
 ---
 name: calendarizador-contenido-formula100k
-description: >
-  Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y XLSX con la metodología FÓRMULA 100K. Usar cuando Andrea pida "arma mi calendario", "calendariza estos guiones", "ordena estas ideas en un calendario", "convierte esto en calendario semanal", "haz mi calendario en Excel", "organiza mis guiones por día", "calendariza este lote/enlaces/TikToks/reels/carruseles", "haz un calendario de carruseles"; o cualquier variación que combine ideas/guiones/enlaces con organizarlos por día. 3 modos de entrada: (1) guiones listos; (2) ideas sueltas que desarrolla llamando a guionizacion-formula100k o carrusel-viral-formula100k; (3) enlaces de video que transcribe con transcripcion-youtube-formula100k y reescribe como referencia. 2 tipos de pieza: REELS (DÍA·IDEA·GUION·CTA·FORMATO·REFERENCIA) y CARRUSELES (DÍA·FECHA·#·IDEA·GUION SLIDE x SLIDE·CTA·FORMATO, altura de fila dinámica). Distribución por propósito: Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30.
+description: "Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y XLSX con la metodología FÓRMULA 100K. Usar SIEMPRE que Andrea pida 'arma mi calendario', 'calendariza estos guiones', 'ordena estas ideas en un calendario', 'convierte esto en calendario semanal', 'haz mi calendario en Excel', 'organiza mis guiones por día', 'calendariza este lote/enlaces/TikToks/reels/carruseles'. 3 modos de entrada: (1) guiones listos; (2) ideas sueltas que desarrolla llamando a guionizacion-formula100k o carrusel-viral-formula100k; (3) enlaces de video que transcribe con transcripcion-youtube-formula100k y reescribe como referencia. 2 tipos de pieza: REELS (DÍA-IDEA-GUION-CTA-FORMATO-REFERENCIA) y CARRUSELES (DÍA-FECHA-#-IDEA-GUION SLIDE x SLIDE-CTA-FORMATO con altura de fila dinámica). Distribución según propósito: Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30. NO confundir con calendarizador-historias (stories) ni calendarizador-urgencias."
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 
@@ -127,7 +126,10 @@ Inspecciona lo que pegó el usuario y clasifica:
 | Bloques largos con "Hook:", "Gancho:", "Cuerpo:", "CTA:", o párrafos completos de 80+ palabras por idea | **Modo A · Guiones listos** |
 | Líneas cortas (5-30 palabras) que describen un tema o concepto, sin estructura de guion | **Modo B · Ideas sueltas** |
 | URLs de TikTok, Instagram Reels, YouTube Shorts/Long | **Modo C · Enlaces de referencia** |
+| **SOLO nicho/avatar/brief de cliente** (sin guiones, sin ideas, sin URLs) — ej. "calendariza para mi clienta que es nutricionista de SII" | **Modo D · Investigación viral por keyword** ⭐ |
 | Mezcla de varios | **Modo Híbrido** — procesa cada bloque según su tipo |
+
+> ⚠️ **Modo D es el default cuando solo tienes el brief del cliente.** NO inventes ideas genéricas del nicho. Primero caza referencias virales reales en TikTok/IG por keyword. El calendario debe basarse en lo que ya está funcionando, no en lo que tú asumes que funciona.
 
 ### PASO 2 · Preguntar propósito del calendario
 
@@ -189,6 +191,47 @@ Cargar la tabla de slots desde [references/slots-por-modo.md](references/slots-p
 2. **Reescribir la idea con voz de Andrea** aplicando frameworks F100K (no copiar)
 3. Pasar el guion reescrito por `guionizacion-formula100k` para validar estructura y CTA
 4. Guardar la URL original en la columna REFERENCIA
+
+#### MODO D · Investigación viral por keyword ⭐
+
+**Usar SIEMPRE que solo tengas el brief del cliente (nicho + avatar) y NO tengas guiones, ideas ni URLs.** Es el modo más común para clientes nuevos de Andrea.
+
+Pipeline:
+
+1. **Extraer 4-6 keywords del nicho** desde el brief del cliente. Combinar:
+   - Keyword del problema central (ej. "colon irritable", "ansiedad laboral", "primera casa")
+   - Keyword del avatar (ej. "mujer profesional", "emprendedora")
+   - Keyword de la solución/método (ej. "FODMAP", "IA productividad", "venta crypto")
+   - Keyword de objeciones comunes (ej. "no funciona", "estafa", "mito")
+
+2. **Invocar `analizador-referencias-virales-f100k`** con las keywords del paso 1:
+   - Input: keywords extraídas + plataforma "Ambas" + contexto del nicho del cliente
+   - La skill busca en TikTok + IG (Apify), transcribe con Supadata, identifica gancho verbal/textual/visual por video, y devuelve tabla enriquecida con `formato_inferido` por video
+   - Costo aprox: **$0.80-$1.20 por calendario** (Apify TikTok + IG + transcripciones)
+   - Si el nicho tiene mucho YouTube (negocios, finanzas, salud): complementar con vidIQ MCP para outliers
+
+3. **Si la skill devuelve <7 refs** con +20K views → avisar al usuario que el nicho es chico y usar las mejores disponibles. NO inventar ideas genéricas.
+
+4. **Mapear cada viral a un slot del calendario** usando el `formato_inferido` que la skill ya detectó:
+   - `Pizarra / Valor` → slots de Valor
+   - `POV / Viral` → slots de Viral
+   - `Testimonio / Venta` → slots de Venta
+   - Si más de un viral compite por el mismo slot, elegir el de más views
+
+5. **Reescribir cada idea con voz del cliente** aplicando frameworks F100K:
+   - NO copiar el guion del viral, solo el ÁNGULO y el HOOK
+   - Adaptar al avatar específico del cliente (ej. el viral habla a público general → reescribir para "mujer profesional con SII")
+   - Aplicar las 35 estructuras de `guionizacion-formula100k` para mantener calidad de hook + cuerpo + CTA
+   - Si el cliente escribe en voseo (Ricardo Shiva, argentinos), adaptar. Default = español neutro tú.
+
+6. **Llenar la columna REFERENCIA con la URL real del viral** + las métricas (ej. `https://www.tiktok.com/@dra/video/123 (458K views)`)
+
+**Reglas clave del Modo D:**
+- ❌ NUNCA inventar ideas del nicho desde tu conocimiento general. Si no hay refs reales, AVISAR al usuario que el nicho no tiene viralidad medible aún.
+- ❌ NUNCA copiar guiones verbatim del viral. Inspirarse en ángulo + hook, reescribir.
+- ✅ La columna REFERENCIA SIEMPRE lleva la URL real + views (nunca "Original" en Modo D).
+- ✅ Mezclar refs de TikTok + IG + YouTube para evitar dependencia de un solo algoritmo.
+- ✅ Si el cliente tiene cuenta de IG/TikTok pre-existente, primero analizar SUS top reels con `analizador-perfiles-formula100k` y solo después complementar con búsqueda de refs externas.
 
 #### MODO Híbrido
 

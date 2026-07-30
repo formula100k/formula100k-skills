@@ -85,10 +85,10 @@ command -v hyperframes &>/dev/null || npm install -g hyperframes
 hyperframes --version   # 0.7.x+
 
 # Ubicar esta skill: cambia si se instaló suelta o vía el plugin F100K.
-SKILL_DIR=$(ls -d ~/.claude/skills/trial-reels-lab-f100k \
-  ~/.claude/plugins/*/formula100k/*/skills/trial-reels-lab-f100k \
-  ~/.claude/plugins/cache/*/*/skills/trial-reels-lab-f100k 2>/dev/null | head -1)
-echo "$SKILL_DIR"
+# Se usa find y NO globs: en zsh (shell por defecto de macOS) un patrón sin
+# coincidencias aborta el comando y SKILL_DIR quedaría vacío.
+SKILL_DIR=$(find ~/.claude/skills ~/.claude/plugins -maxdepth 6 -type d -name trial-reels-lab-f100k 2>/dev/null | head -1)
+echo "$SKILL_DIR"   # si sale vacío, la skill no está instalada donde se espera
 ```
 
 En todos los comandos de abajo, `$SKILL_DIR` es esa ruta. Whisper solo hace falta en MODO VIDEO; el script lo resuelve solo vía `uvx mlx-whisper`.

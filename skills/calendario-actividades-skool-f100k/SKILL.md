@@ -44,20 +44,30 @@ node render.js mi-comunidad.json --out /ruta/calendario.png --scale 2
 
 ---
 
+## CARGA EL CALENDARIO DE DINÁMICAS — no te quedes corto
+
+**Antes de armar cualquier rutina, lee `referencias/dinamicas-y-eventos.md`.** Tiene el catálogo canónico F100K: **6 categorías · 28 dinámicas**, el **ritmo de 7 días con copy listo**, el **arco mensual de 4 semanas** (Fundamentos → Ejecución → Optimización → Celebración+Reto), el **mapa de frecuencias** y las **reglas de oro**.
+
+Un calendario pobre (2–3 chips sueltos) NO es el entregable. Un calendario vivo **mezcla categorías**: rituales (lunes de metas, viernes de wins, check-in), participación (hot seat, pregunta del día, encuestas), gamificación (reto relámpago, leaderboard, rachas), co-creación (votaciones, construyamos juntas, caso de estudio), reconocimiento (alumna del mes, muro de la fama, shout-outs) y eventos en vivo (Q&A, co-working, masterclass, ceremonia de cierre).
+
+- **Rutina semanal** = el esqueleto que se repite (ritmo de 7 días). Llénala de verdad.
+- **Eventos del mes** = el arco de 4 semanas (inicio de reto S1, masterclass S2, reto relámpago/co-creación S3, regalo + cierre de reto + alumna del mes S4).
+- **Adapta el copy y los nombres al nicho** de la clienta (el hot seat es auditoría de perfil, revisión de rutina, auditoría de oferta…).
+
 ## LOS DOS CAMINOS
 
 ### A) DESDE 0 (comunidad sin calendario)
-1. Pregunta: nombre de la comunidad, nicho, y cuánta energía/equipo tiene (cuántas sesiones por semana puede sostener).
-2. Copia `plantillas/blanco.json` y arma la rutina con la **metodología F100K de anclas**:
-   - **Siempre** dos anclas: un **Q&A en vivo** a media semana (ej. martes) y un cierre de **Wins** el viernes.
-   - Reparte el resto: lunes de metas, mini-clase/recurso, hot-seat/auditoría, reto relámpago.
-   - Empieza con **2–3 sesiones fijas**, no 7: mejor poco que SIEMPRE pasa, que mucho que se cancela.
-   - Eventos del mes: inicio de reto (S1), masterclass/invitado (S2), regalo del mes + cierre de reto (S4).
+1. Pregunta: nombre de la comunidad, nicho, y cuánta energía/equipo tiene (cuántas sesiones EN VIVO por semana puede sostener — los rituales en post fijado cuestan poco y sí pueden ser diarios).
+2. Parte de `plantillas/dinamicas-genericas.json` (config "cargado" con el ritmo de 7 días + arco mensual completo) y **recorta** según la energía real, en vez de partir de `blanco.json` y quedarte corto.
+   - **Siempre** conserva las dos anclas: un **Q&A en vivo** a media semana y un cierre de **Wins** el viernes.
+   - Reparte el resto del ritmo de 7 días (lunes de metas, recurso/mini-clase, hot-seat, reto relámpago sábado, domingo de planeación).
+   - Lo "en vivo" es lo caro: empieza con **2–3 eventos vivos/semana**; los rituales async pueden ser más.
+   - Eventos del mes según el arco: inicio de reto (S1), masterclass/invitado (S2), reto relámpago + co-creación (S3), regalo del mes + cierre de reto + alumna del mes (S4).
 3. Elige tema y renderiza.
 
 ### B) CLONAR Y AJUSTAR (ya tiene calendario)
-1. Parte del config del mes anterior (o de `plantillas/f100k.json`).
-2. Cambia `mes`/`anio` y agrega/quita lo dinámico de este mes en `eventos` (nuevos retos, presenciales, lanzamientos, dinámicas nuevas).
+1. Parte del config del mes anterior (o de `plantillas/f100k.json` / `plantillas/dinamicas-genericas.json`).
+2. Cambia `mes`/`anio` y **rota lo dinámico** de este mes en `eventos`: nuevo reto y tema mensual, masterclass distinta, nueva dinámica de co-creación, presenciales, lanzamientos. No repitas el mismo mes calcado — el arco de 4 semanas se mantiene, el contenido cambia.
 3. Re-renderiza. La rutina semanal se recalcula sola sobre las fechas del mes nuevo.
 
 ---
@@ -113,11 +123,14 @@ calendario-actividades-skool-f100k/
 ├── template.html       # grilla + sidebar + chips sobre el fondo (vanilla JS)
 ├── render.js           # config → grilla del mes → PNG (puppeteer-core)
 ├── package.json
+├── referencias/
+│   └── dinamicas-y-eventos.md   # ⭐ catálogo F100K: 28 dinámicas + ritmo 7 días + arco mensual (LÉELO antes de armar)
 ├── themes/
 │   ├── alquimista-f100k/{theme.json, fondo.jpg}
 │   ├── minimalista-claro/theme.json
 │   └── oscuro-neon/theme.json
 └── plantillas/
-    ├── f100k.json      # config real de FÓRMULA 100K (ejemplo vivo + para clonar)
-    └── blanco.json     # starter para DESDE 0
+    ├── f100k.json               # config real de FÓRMULA 100K (ejemplo vivo + para clonar)
+    ├── dinamicas-genericas.json # ⭐ plantilla ROBUSTA: ritmo 7 días + arco de 4 semanas, lista para clonar/recortar
+    └── blanco.json              # starter mínimo para DESDE 0
 ```

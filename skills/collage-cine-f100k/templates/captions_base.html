@@ -4,7 +4,8 @@
   Fondo MAGENTA (#FF00FF) = chroma key (ffmpeg lo quita con colorkey).
   Render:  npx hyperframes render --format mp4 --resolution portrait -o captions_overlay.mp4
   Por bloque, duplicá el .caption y ajustá data-start / data-duration (segundos),
-  el texto cursivo crema y la <mark> verde con realce amarillo.
+  el texto cursivo crema y la <mark> (highlighter amarillo sólido + tinta oscura, LEGIBLE).
+  PROHIBIDO: verde fosforescente sobre amarillo — no se lee (ver feedback piloto 22-jun).
   Fuentes manuscritas: Caveat / Gochi Hand / Shadows Into Light (Google Fonts).
 -->
 <html>
@@ -23,10 +24,15 @@
   }
   /* posición típica: justo arriba de la división de paneles (~620px) */
   .caption.mid{top:600px;}
+  /* REALCE LEGIBLE — highlighter amarillo SÓLIDO + tinta OSCURA.
+     NUNCA verde fosforescente sobre amarillo (verde sobre amarillo = ilegible).
+     El amarillo cubre toda la palabra (no media línea) y el texto va oscuro,
+     como un resaltador real: máximo contraste sobre cualquier escena. */
   mark{
-    background:linear-gradient(transparent 55%, #F2D23A 55%); /* realce amarillo */
-    color:#3CCB5A;                                /* verde manuscrito */
-    padding:0 6px;border-radius:4px;
+    background:#F2D23A;                           /* highlighter amarillo sólido */
+    color:#16240A;                                /* tinta verde-muy-oscura/casi negra, LEGIBLE */
+    padding:2px 12px;border-radius:6px;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;
   }
 </style>
 </head>

@@ -31,8 +31,15 @@ El `export.js` busca elementos `.slide` y exporta uno por PNG. Cada `.slide` deb
   }
 
   /* === reproducir aquí el LAYOUT del referente === */
-  .titulo{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;}
-  .cuerpo{font-size:30px;line-height:1.5;max-width:80%;}
+  /* --fs-max/--fs-min los lee el auto-ajuste de abajo. NO poner overflow:hidden en .titulo */
+  .titulo{
+    font-family:'Playfair Display',serif;font-weight:800;
+    font-size:104px;--fs-max:104px;--fs-min:56px;
+    line-height:1.06;                 /* 1.02 corta las colas de p/g/j/y */
+    padding-bottom:.12em;             /* espacio para descendentes */
+    text-wrap:balance;                /* reparte las líneas parejas */
+  }
+  .cuerpo{font-size:30px;--fs-max:30px;--fs-min:22px;line-height:1.5;max-width:80%;}
   .tag{font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
 
   /* foto del usuario (si el estilo la pide) */
@@ -58,12 +65,41 @@ El `export.js` busca elementos `.slide` y exporta uno por PNG. Cada `.slide` deb
 
   <!-- SLIDE 2..N — repetir variando layout según el ADN -->
 
+<!-- ===== AUTO-AJUSTE: pegar SIEMPRE antes de </body> =====
+     Reduce la fuente hasta que el texto quepa en su slide.
+     Sin esto, un titular de 3 líneas se corta por el overflow:hidden del .slide. -->
+<script>
+document.fonts.ready.then(() => {
+  document.querySelectorAll('.slide').forEach(slide => {
+    slide.querySelectorAll('.titulo, .cuerpo').forEach(el => {
+      const cs   = getComputedStyle(el);
+      const max  = parseFloat(cs.getPropertyValue('--fs-max')) || parseFloat(cs.fontSize);
+      const min  = parseFloat(cs.getPropertyValue('--fs-min')) || max * 0.55;
+      let fs = max;
+      el.style.fontSize = fs + 'px';
+      // encoge de 2 en 2 px mientras el contenido se salga del slide
+      const cabe = () => el.scrollWidth <= el.clientWidth + 1 &&
+                         slide.scrollHeight <= slide.clientHeight + 1;
+      while (!cabe() && fs > min) { fs -= 2; el.style.fontSize = fs + 'px'; }
+      if (!cabe()) {
+        el.dataset.desborde = 'true';   // llegó al mínimo y AÚN no cabe
+        console.warn('TEXTO DEMASIADO LARGO, acórtalo:', el.textContent.trim().slice(0, 60));
+      }
+    });
+  });
+});
+</script>
+
 </body>
 </html>
 ```
 
 ## Notas
 
+- **El bloque `<script>` de auto-ajuste es OBLIGATORIO** en todo HTML de carrusel. `export.js` espera a `document.fonts.ready` + 1.5s, así que el reajuste ya ocurrió cuando se toma el PNG.
+- **El auto-ajuste no salva un titular malo.** Es una red de seguridad, no un permiso para escribir largo. Límite de portada: **2 líneas, ~35 caracteres**. Si aparece `TEXTO DEMASIADO LARGO` en consola o `data-desborde="true"` en un elemento, hay que **acortar el copy**, no bajar más la fuente.
+- Nunca poner `overflow:hidden` ni `height` fijo en `.titulo` / `.cuerpo`: eso recorta el texto en vez de dejar que el auto-ajuste lo detecte.
+- `line-height` mínimo `1.06` + `padding-bottom:.12em` en titulares. Con `1.02` se cortan las colas de **p, g, j, y** aunque el texto sí quepa.
 - Para 1:1 usar `width:1080px;height:1080px`; para 9:16 `1080x1920`. Pasar los mismos valores a `export.js` con `--width/--height`.
 - Rutas de foto SIEMPRE absolutas con `file://`.
 - Mantener la MISMA familia tipográfica y márgenes en todos los slides.

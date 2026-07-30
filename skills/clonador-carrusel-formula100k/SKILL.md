@@ -1,19 +1,20 @@
 ---
 name: clonador-carrusel-formula100k
 description: >
-  Skill ESPEJO de FÓRMULA 100K. Toma una CAPTURA DE PANTALLA del carrusel de cualquier referente,
-  extrae el "ADN de estilo" (layout, tipografía, paleta, patrón de gancho, arquitectura de slides),
-  lo MEJORA con los principios de viralidad y legibilidad de F100K, y RENDERIZA un carrusel completo
+  Skill ESPEJO de FÓRMULA 100K. Toma una CAPTURA DE PANTALLA **o un ENLACE de Instagram/TikTok** del carrusel
+  de cualquier referente, extrae el "ADN de estilo" (layout, tipografía, paleta, patrón de gancho, arquitectura
+  de slides), lo MEJORA con los principios de viralidad y legibilidad de F100K, y RENDERIZA un carrusel completo
   en PNGs finales con TU tema y TU marca en ese estilo clonado-mejorado. Activar SIEMPRE que alguien diga:
   "clona este carrusel", "copia el estilo de este carrusel", "hazme un carrusel como este", "imita a este referente",
-  "tengo una captura de un carrusel que me gustó", "replica este estilo", "skill espejo", "carrusel espejo",
-  o cualquier variación que combine una imagen/captura de un carrusel de referencia con la intención de
+  "tengo una captura de un carrusel que me gustó", "clona este carrusel desde este link", "replica este post de instagram",
+  "replica este estilo", "skill espejo", "carrusel espejo",
+  o cualquier variación que combine una imagen/captura O un enlace de un carrusel de referencia con la intención de
   reproducir y mejorar su estilo para contenido propio. NO usar para escribir un guion desde cero sin
   referencia visual (eso es carrusel-viral-formula100k) ni para renderizar el estilo scrapbook de Andrea
   sin referencia (eso es carrusel-render-formula100k).
-argument-hint: "<captura(s) del carrusel referente> + <tu tema> + <tu marca/fotos opcional>"
+argument-hint: "<captura(s) O enlace IG/TikTok del carrusel referente> + <tu tema> + <tu marca/fotos opcional>"
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   origen: "Clase de Carruseles · 11 junio 2026 · exclusiva del día"
   formato: "4:5 — 1080×1350px (configurable)"
   render: "HTML + Chrome headless (export.js) — PNG finales sin Canva"
@@ -34,8 +35,9 @@ Esta skill convierte una **captura de pantalla** de un carrusel ajeno en un carr
 - "Clona este carrusel / copia este estilo / hazme uno como este"
 - "Vi este carrusel de [referente] y me encantó cómo se ve"
 - "Tengo una captura de pantalla de un carrusel, replícalo para mi tema"
+- **"Clona este carrusel desde este enlace de Instagram/TikTok"** → la skill baja sola las imágenes (ver PASO 0)
 - "Skill espejo" / "carrusel espejo"
-- Cualquier captura de un carrusel + intención de reproducir su look para contenido propio
+- Cualquier captura **o enlace** de un carrusel + intención de reproducir su look para contenido propio
 
 **No activar cuando:**
 - No hay imagen de referencia → usar `carrusel-viral-formula100k` (guion) + `carrusel-render-formula100k` (estilo Andrea).
@@ -46,15 +48,33 @@ Esta skill convierte una **captura de pantalla** de un carrusel ajeno en un carr
 
 ## FLUJO COMPLETO (7 pasos)
 
-### PASO 0 — Recibir la(s) captura(s)
+### PASO 0 — Recibir la referencia (captura **o** enlace)
 
-Pedir al usuario:
+La referencia puede llegar de **dos formas**. Detectar cuál es antes de pedir nada:
 
-> "Pásame **1 o más capturas** del carrusel que quieres clonar (idealmente la portada + 1 slide interno + el slide de cierre, así leo el sistema completo). Y dime: ¿sobre **qué tema** quieres TU carrusel y para **qué marca/cuenta**? Si quieres que aparezcas tú, súbeme 1-2 fotos."
+**A) Captura(s) de pantalla** (path local o adjunto):
+> "Pásame **1 o más capturas** del carrusel que quieres clonar (idealmente la portada + 1 slide interno + el slide de cierre, así leo el sistema completo)."
 
-> ⚠️ En clientes Apps/MCP que no leen adjuntos locales, pedir que arrastren la imagen o den el path. Las capturas se leen con la herramienta Read (visión).
+**B) Enlace de Instagram / TikTok** (empieza con `instagram.com/p/`, `instagram.com/reel/`, `tiktok.com/...`):
+> "Perfecto, pásame el link del post y yo bajo las slides."
 
-Leer cada captura con **Read** (es una imagen → se procesa visualmente). No continuar sin haber "visto" al menos la portada.
+En ambos casos, pedir también:
+> "¿Sobre **qué tema** quieres TU carrusel y para **qué marca/cuenta**? Si quieres que aparezcas tú, súbeme 1-2 fotos."
+
+#### PASO 0.5 — Si es un ENLACE: descargar las slides automáticamente
+
+> Este es el paso que evita el error clásico: el usuario manda un **link** en vez de una captura. La skill NO debe pedirle que haga capturas a mano — las baja sola.
+
+Seguir la receta de **`references/descargar-referencia.md`**. En resumen:
+1. **Instagram por defecto = Apify directo** (patrón F100K `feedback_ig_apify_default`). Usar el actor `apify/instagram-scraper` con `directUrls: [<link>]` y `resultsType: "details"`; de la respuesta extraer las URLs de imagen del carrusel (`images[]` o `childPosts[].displayUrl`).
+2. **TikTok** → actor de scraping de TikTok slideshow / fotos (ver reference); si es video, avisar que el clonador es para carruseles de imágenes.
+3. Descargar cada imagen a una carpeta temporal del scratchpad (`curl -L -o slide-XX.jpg <url>`), **en orden**.
+4. Si Apify falla o no hay red → **fallback**: `agent-browser` logueado abre el post y captura cada slide (patrón `feedback_ig_apify_default` dice Apify primero, pero agent-browser queda como respaldo).
+5. Confirmar al usuario: "Bajé N slides del post de @referente, ya las estoy leyendo."
+
+**Luego, tanto para A como para B:** leer cada imagen con **Read** (visión). No continuar sin haber "visto" al menos la portada.
+
+> ⚠️ En clientes Apps/MCP que no leen adjuntos locales, pedir que arrastren la imagen o den el path — pero si es un enlace, este paso 0.5 lo resuelve sin adjuntos.
 
 ---
 
@@ -130,6 +150,7 @@ Reglas técnicas de render (igual que el resto de skills de carrusel):
 - Aplicar la capa de mejora del PASO 2 (jerarquía, 1 idea/slide, contraste).
 - **Fotos del usuario:** insertar con `object-fit: cover` en el contenedor que el estilo pida (cutout, polaroid, círculo, fondo). Rutas locales con `file://` absoluto.
 - Numeración y handle según el estilo del referente (o el patrón F100K si el referente no los tiene).
+- **Anti-texto-cortado (obligatorio):** pegar el bloque `<script>` de auto-ajuste antes de `</body>`, usar `line-height` ≥ 1.06 + `padding-bottom:.12em` en titulares, y NUNCA poner `overflow:hidden` ni `height` fijo en el contenedor del texto. Titular de portada: máximo 2 líneas / ~35 caracteres.
 
 Ver plantilla base en `references/plantilla-html.md`.
 
@@ -162,7 +183,8 @@ node export.js /ruta/al/carrusel-espejo.html --width 1080 --height 1350 --scale 
 
 1. **Clonar estilo, NUNCA contenido.** El texto siempre es nuevo y del usuario.
 2. **Siempre mejorar el gancho y la legibilidad** — jamás reproducir un mal hook solo por fidelidad.
-3. **Leer la captura de verdad** (visión) antes de afirmar nada del estilo. No inventar la paleta: aproximar HEX desde lo que se ve.
+3. **Leer la referencia de verdad** (visión) antes de afirmar nada del estilo. No inventar la paleta: aproximar HEX desde lo que se ve.
+3b. **Si llega un ENLACE, NO pedir capturas a mano** — bajar las slides con `references/descargar-referencia.md` (Apify primero para IG). Este es el fix del error clásico de mandar link en vez de captura.
 4. **Español neutro** en todo texto entregado (tú, no vos).
 5. **Formato fijo** al ratio del referente; PNG a scale 2.
 6. **Si no hay Chrome**, decirlo y entregar el HTML para que el usuario lo abra/exporte manual.

@@ -156,7 +156,7 @@ Terminar con:
 
 ## ÍNDICE DE ESTRUCTURAS (referencia rápida)
 
-Para descripción completa de cada estructura, ver la skill `guionizacion-formula100k` o su archivo `references/estructuras.md`.
+Para descripción completa de cada estructura, ver `../guionizacion-formula100k/references/estructuras.md` (vive en esa skill, no en esta).
 
 | Objetivo | Estructuras recomendadas |
 |----------|------------------------|

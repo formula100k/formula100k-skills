@@ -32,6 +32,12 @@ Cada artifact tiene una paleta única para identificarse visualmente. Esta es la
 | 24 | `f100k-agent-browser-vs-playwright.html` | slate-800 → slate-700 → zinc-600 (Grafito) | slate-700 | `#1e293b → #334155 → #52525b` (dual accent: orange-600 / blue-600) |
 | 25 | `f100k-oferta-resumen.html` | slate-900 → violet-700 → fuchsia-500 (Plata Cósmica) | violet-600 | `#0f172a → #6d28d9 → #d946ef` — IA + autoridad + magnetismo, para piezas premium de venta |
 | 26 | `f100k-roadmap-producto.html` | emerald-500 → teal-400 → cyan-400 (Jardín Vital) | emerald-600 | `#10b981 → #2dd4bf → #22d3ee` — verde/agua = crecimiento progresivo, construcción y vida (metáfora del roadmap como camino que florece) |
+| 27 | `cheatsheet-instalar-skills.html` | amber-600 → yellow-500 → orange-400 (Oro Pergamino) | amber-600 | `#d97706 → #eab308 → #fb923c` — paleta crema/dorada de marca F100K, calidez educativa tipo Khan Academy |
+| 28 | `f100k-skills-catalogo.html` | fuchsia-500 → violet-500 → cyan-400 (Holográfico) | violet-600 | `#d946ef → #8b5cf6 → #22d3ee` — vibra de toolkit tech premium, refleja la diversidad de skills (creativo + estratégico + visual) en un ecosistema unificado |
+| 29 | `f100k-evaluador-ganchos.html` | indigo-700 → blue-600 → cyan-400 (Diagnóstico) | indigo-600 | `#4338ca → #2563eb → #22d3ee` — azul/cian = escanear/medir/diagnosticar, encaja con la idea de pasar el gancho por un predictor de viralidad |
+| 30 | `f100k-editor-motion-graphics.html` | gray-900 → slate-800 → orange-600 (Nitro Cine) | orange-600 | `#111827 → #1e293b → #ea580c` — negro estudio + naranja de fuego = energía de producción de video, urgencia creativa, la llama del editor |
+| 31 | `f100k-miniapps-setup.html` | zinc-900 → stone-800 → stone-700 (Carbón) | emerald-600 | `#18181b → #292524 → #44403c` — header gris carbón "bajo el capó" (setup técnico) + acento esmeralda = "instalado / listo / verde para arrancar" |
+| 32 | `f100k-kit-del-metodo.html` | indigo-900 → blue-700 → cyan-600 (Plano) | blue-700 | `#312e81 → #1d4ed8 → #0891b2` — azul plano/blueprint = método y arquitectura de una app (idea→brief→PRD→spec→plan); herramienta rellenable, no formato Guía/Flashcards/Examen |
 
 ## Paletas DISPONIBLES
 
@@ -96,3 +102,7 @@ Documéntala aquí con:
 - Gradient HEX completo
 - Accent color
 - Razón de la elección (ej: "rojo para urgencia", "verde para crecimiento")
+| 32 | `f100k-1000-ganchos-piloto.html` | indigo-950 → violet-700 → amber-500 (Señal Ámbar) | amber-500 | `#1e1b4b → #6d28d9 → #f59e0b` — ámbar como "señal/outlier" sobre fondo analítico profundo; explorador de datos (no guía/flashcards), 3 vistas: Panorama · Fichas · Hallazgos |
+| 33 | `f100k-1000-ganchos-guia.html` | violet-black → violet-600 → rose-400 (Outlier Nocturno) | violet-600 + rose-400 (spike) | `#1a0b2e → #6d28d9 → #fb7185` — hermana del piloto (#32 Señal Ámbar) pero edición definitiva: rosa = el spike de viralidad/outlier sobre fondo analítico profundo; 4 vistas (Guía 6 sub-tabs · Explorador · Flashcards · Examen) + doble capa Alumnas/Técnico |
+| 35 | `f100k-crea-tu-aplicacion.html` | indigo-950 → blue-700 → cyan-600 (Plano Ampliado) | blue-700 + acentos por sección | `#1e1b4b → #1d4ed8 → #0891b2` — evolución de #32 (`f100k-kit-del-metodo.html`, ahora redirección). Mantiene el azul plano/blueprint del método y agrega un acento por sección: indigo (teoría de buena app), esmeralda (onboarding), ámbar (dashboard), violeta (mockups), slate (plantillas). 10 pestañas agrupadas: Método · Teoría · Diseño · Tu paquete · Extra. Estrena el patrón de mockups de UI 100% CSS (marcos de teléfono y navegador con pantallas falsas para comparar "así no / así sí") |
+| 34 | `f100k-mapa-comunidad.html` | blue-900 → teal-700 → amber-500 (Brújula · Dos Caminos) | dual: cyan-600 (Pasivo) / orange-600 (Activo) | `#0c4a6e → #0e7490 → #f59e0b` — azul frío = camino Pasivo (a tu ritmo), ámbar = camino Activo (con retos); el gradiente = los dos mundos que se encuentran. NO es guía/flashcards/examen: es un MAPA (2 vistas: El Mapa · ¿Cuál camino es tuyo? con quiz de 5 preguntas) |

@@ -1,55 +1,43 @@
 # Perfil Visual de Marca — FÓRMULA 100K (Andrea Vega)
 
+> ⚠️ **ESTILO PREDETERMINADO (desde jul-2026): EDITORIAL OSCURO.** El scrapbook crema quedó como ALTERNATIVO (usar solo si Andrea lo pide: "scrapbook / estilo diario / crema").
+
 ## Identidad Visual
-- Nombre de marca: FÓRMULA 100K · @andreavega.tv
-- Estilo general: scrapbook / collage handcrafted con toque editorial cálido
-- Tono visual: cercano, tactil, hecho-a-mano, femenino-estratégico, con mezcla de "diario personal" + "estudio de marca"
+- Nombre de marca: FÓRMULA 100K · @andreaestratega
+- Estilo general (default): **editorial / magazine premium tech, cinematográfico, oscuro elegante**
+- Tono visual: aspiracional, premium, confiable; foto real full-bleed + serif itálica; prueba real con capturas
+- Referencia canónica: `/Users/kissita/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel "Mi stack de IA")
 
-## Paleta de Colores
-- Color primario (fondo crema base): `#F5EFE3` — fondo principal de slides
-- Color secundario (negro suave): `#1A1A1A` — texto principal, botones, acentos pesados
-- Color de énfasis (amarillo mantequilla): `#FCE96B` — washi tape, pill buttons, highlights, post-its
-- Color complementario (rosa pastel): `#F4C7C7` — washi tape, stickers, post-its alternativos
-- Color complementario (lila pastel): `#D9CCEC` — washi tape, contraste secundario
-- Color complementario (verde menta): `#C9E4D6` — chips/badges (ej: "IA"), washi
-- Color de texto principal: `#1A1A1A`
-- Color de texto secundario / handwritten: `#3A3A3A`
+## Paleta de Colores (Editorial Oscuro)
+- Fondo base: `#050509` (casi negro) · cajas/ventanas `#0b0b10`
+- Texto principal: `#FFFFFF` · cuerpo off-white `#f4f1ea` · subtítulo serif `#efe7d8`
+- Color de énfasis: dorado `#F0B24A` (palabras clave, comillas, borde caja CTA)
+- Acento CTA: morado 💜 `#B06CFF`
+- Verde prueba (badge "CAPTURA REAL"): `#7fe3ad`
+- Chrome ventana Mac: barra `#16161d`, dots `#ff5f57 #febc2e #28c840`
 
-## Tipografía
-- Fuente de títulos: **Caveat** (handwritten script) — tamaño Slide 1: 110-130px
-- Fuente de cuerpo: **Poppins** o **Inter** (sans-serif geométrica) — tamaño slides interiores: 44-54px
-- Fuente sub-énfasis (mayúsculas pequeñas, tipo pill button): Poppins SemiBold uppercase 28-32px
-- Estilo tipográfico: mezcla — títulos en Caveat lowercase + cuerpo Poppins Medium/SemiBold + acentos en CAPS pequeñas
-- Convención: las palabras "marca" del título en Caveat (ej: "Yapper Method"), las descripciones en Poppins
+## Tipografía (Editorial Oscuro — sin fuentes externas)
+- **Sans pesada:** `-apple-system, 'Helvetica Neue', Helvetica, Arial` — weight 800, letter-spacing −2 a −5px, 78-128px. Para líneas fuertes del titular y CTA.
+- **Serif editorial:** `Georgia, 'Times New Roman', serif` — italic 500 (conector), italic 800 (destacado), 400 (cuerpo/número). Descripción 44px, subtítulos 44-58px.
+- **Firma del estilo:** MEZCLAR sans-pesada + serif-itálica dentro del mismo titular.
+- Eyebrow: sans 700, 23px, letter-spacing 5px, UPPERCASE, blanco 72%. Handle: sans 600, arriba-der.
 
-## Layout Base
-- Orientación preferida: texto centrado o izquierda con margen amplio
-- Fondo slides interiores: crema sólido `#F5EFE3` con textura sutil de papel
-- Uso de imágenes: sí — screenshots de app dentro de mockup iPhone, polaroids con foto, capturas pantallazo
-- Elementos decorativos fijos (firma de marca):
-  - **Washi tape** rayado diagonal amarillo/rosa/lila/menta cruzando esquinas o pegando elementos
-  - **Post-its** amarillos con notas handwritten
-  - **Polaroids** con foto de Andrea (marco blanco grueso bottom)
-  - **Stickers**: estrellitas, corazoncitos, círculos pastel pequeños
-  - **Cuaderno negro speckled** (📓 emoji o asset real)
-  - **Marcadores de check ✓ y X** en círculos amarillos
-  - **Pill buttons amarillos** con borde negro fino para tags ("banco F100K", "mis ideas")
-  - **Botones negros redondeados** para CTAs principales
-  - **Flechas amarillas o negras** dibujadas a mano
-  - **Líneas punteadas** (dashed border) para inputs/cajas
+## Layout Base (Editorial Oscuro)
+- Orientación: titular a la izquierda en portada; contenido centrado en interiores
+- Fondo: foto REAL de Andrea full-bleed (nítida en portada/CTA; blur(22px) brightness(.7) en interiores) + overlay oscuro degradado
+- Uso de imágenes: foto real de Andrea SIEMPRE (`ANDREA ADN` / `ANDREA SELFIES`); capturas reales enmarcadas en ventana Mac
+- Elementos: eyebrow tracked, handle, número "#N" serif, íconos squircle (border-radius 24%), flecha SVG dibujada a mano, badge "CAPTURA REAL", caja glass oscura para CTA
+- NO usar: crema, washi tape, post-its, stickers-decoración (eso es solo el estilo alternativo scrapbook)
 
-## Jerarquía Visual
-- Estructura del Slide 1 (gancho): imagen flat-lay/polaroid/mockup en 60% + título Caveat handwritten en franja inferior con washi tape arriba
-- Elemento de énfasis para palabras clave: subrayado handwritten amarillo, círculo dibujado a mano, palabra entre comillas "tipográficas", o highlight amarillo `#FCE96B`
-- CTA visual: botón negro redondeado pill con texto blanco + emoji 👉 o ✨
+## Jerarquía Visual (Editorial Oscuro)
+- Slide 1 (gancho): foto full-bleed + titular mixto (sans 800 / serif italic) a la izquierda + eyebrow/handle
+- Énfasis palabra clave: color dorado `#F0B24A` (y comillas para keywords del CTA)
+- CTA visual: titular grande + subline serif con keyword dorada + caja glass oscura con borde dorado + 💜
 
-## Slide-final / CTA pattern
-- Caja con dashed border crema oscuro
-- Washi tape lila arriba al centro
-- Pregunta handwritten Caveat: "¿te gustó esta app?"
-- Subtítulo bold Poppins
-- Botón negro pill con CTA + emoji
-- Footer mini: "FÓRMULA 100K · NOMBRE PIEZA · V1"
+## Prompt de Diseño (Editorial Oscuro)
+"Carrusel Instagram FÓRMULA 100K (Andrea Vega), estilo editorial premium tech oscuro: fondo casi negro `#050509` con foto real de Andrea full-bleed cinematográfica + overlay oscuro degradado; interiores con la foto desenfocada. Titulares MEZCLANDO Helvetica/-apple-system 800 (letter-spacing negativo) con Georgia serif itálica blanca; cuerpo Georgia serif 44px off-white centrado. Eyebrow UPPERCASE tracked arriba-izq, @andreaestratega arriba-der. Palabras clave en dorado `#F0B24A`. Capturas de pantalla REALES enmarcadas en ventana de Mac (barra + 3 dots) con sombra + flecha a mano + badge verde 'CAPTURA REAL'. CTA con caja glass oscura de borde dorado y 💜. Estilo: cinematográfico, magazine, premium, alto contraste. SIN crema, SIN washi tape, SIN stickers."
 
-## Prompt de Diseño Canva
-"Carrusel Instagram FÓRMULA 100K (Andrea Vega): fondo crema cálido `#F5EFE3` con textura sutil de papel, títulos en Caveat handwritten lowercase 110px color negro `#1A1A1A`, cuerpo en Poppins Medium 48px negro, palabras clave subrayadas con marcador amarillo `#FCE96B` o resaltadas con highlight amarillo. Layout texto centrado o izquierda con margen amplio. Elementos decorativos fijos: washi tape rayado diagonal amarillo/rosa/lila cruzando esquinas, post-its amarillos handwritten, polaroids blancas con foto de Andrea, stickers de estrellitas y corazones pastel pequeños, pill buttons amarillos con borde negro fino, botones negros pill redondeados para CTAs. Estilo: scrapbook tactil, editorial cálido, femenino-estratégico, dreamy."
+---
+
+## ESTILO ALTERNATIVO — Scrapbook (solo si lo pide)
+Crema `#F5EFE3` + Caveat/Poppins + washi tape amarillo/rosa/lila + post-its + stickers + polaroids. Tono handcrafted, diario personal. Detalle completo en el brandkit de la skill `carrusel-render-formula100k` (bloque "ESTILO ALTERNATIVO — Scrapbook").

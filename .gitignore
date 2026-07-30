@@ -32,3 +32,9 @@ yarn-error.log*
 # Python caches
 __pycache__/
 *.pyc
+
+# Virtualenvs de skills (no se distribuyen; la alumna las crea al usar la skill)
+track-env/
+**/track-env/
+.venv/
+**/.venv/

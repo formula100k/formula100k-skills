@@ -411,6 +411,42 @@ Para mostrar un proceso secuencial de N pasos con flechas conectoras. Estrenado 
 </div>
 ```
 
+## 19. Mockup de Chat Claude (captura falsa, 100% CSS)
+
+Para mostrar EJEMPLOS visuales de uso de Claude/IA sin usar capturas reales ni stock. Estrenado en la serie `f100k-claude-*` (lead magnet "Domina Claude"). Simula la ventana de claude.ai con prompt→respuesta. Ideal para enseñar "prompt vago vs prompt con contexto", selector de modelo, pegar archivos, etc.
+
+```jsx
+function Win({ title = "claude.ai", children, accent = "#c2410c" }) {
+  return (
+    <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white">
+      <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 border-b border-gray-200">
+        <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+        <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+        <span className="ml-2 text-[11px] font-semibold text-gray-400 flex items-center gap-1">
+          <span className="w-3.5 h-3.5 rounded-full inline-flex items-center justify-center text-white text-[8px] font-black" style={{background:accent}}>✦</span>
+          {title}
+        </span>
+      </div>
+      <div className="p-3 bg-gray-50">{children}</div>
+    </div>
+  );
+}
+function UserMsg({ children }) {
+  return <div className="flex justify-end mb-2"><div className="bg-gray-200 text-gray-800 text-xs rounded-2xl rounded-br-sm px-3 py-2 max-w-[85%] leading-relaxed">{children}</div></div>;
+}
+function ClaudeMsg({ children, accent = "#c2410c" }) {
+  return (
+    <div className="flex justify-start mb-2 gap-2">
+      <span className="w-5 h-5 rounded-full flex-shrink-0 inline-flex items-center justify-center text-white text-[9px] font-black mt-0.5" style={{background:accent}}>✦</span>
+      <div className="bg-white border border-gray-200 text-gray-700 text-xs rounded-2xl rounded-tl-sm px-3 py-2 max-w-[85%] leading-relaxed">{children}</div>
+    </div>
+  );
+}
+```
+
+Regla: el `accent` debe ser el accent de la paleta del artifact. Úsalo para ejemplos lado-a-lado (grid md:grid-cols-2) mostrando antes/después.
+
 ## Cuando agregues un patrón nuevo
 
 Documéntalo aquí con:
@@ -418,3 +454,47 @@ Documéntalo aquí con:
 - Cuándo usarlo
 - Código JSX completo
 - Artifact donde se usó por primera vez
+
+## 20. Mockups de UI 100% CSS (teléfono y navegador con pantallas falsas)
+
+Para enseñar criterio de diseño **comparando pantallas** ("así no / así sí") sin usar capturas reales ni stock. Estrenado en `f100k-crea-tu-aplicacion.html` (onboarding malo vs. bueno, estado vacío mudo vs. que enseña, dashboard de 12 métricas vs. regla 1-3-5). Ventajas: el archivo sigue autocontenido, se ve nítido al grabar video y se imprime bien.
+
+```css
+.phone { width: 208px; border: 7px solid #1e293b; border-radius: 26px; overflow: hidden; background: #fff; box-shadow: 0 10px 25px -10px rgba(0,0,0,.35); }
+.phone-bar { height: 18px; background: #1e293b; }
+```
+
+```jsx
+function Phone({ children, label, tone }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="phone">
+        <div className="phone-bar" />
+        <div className={`h-[330px] overflow-hidden ${tone || "bg-white"}`}>{children}</div>
+      </div>
+      {label && <div className="text-[11px] font-bold text-gray-500 mt-2 text-center max-w-[210px] leading-tight">{label}</div>}
+    </div>
+  );
+}
+function Browser({ children, label, title }) { /* barra con 3 semáforos + título, ver artifact */ }
+const Ln = ({ w="w-full", h="h-2", c="bg-slate-200" }) => <div className={`${h} ${w} ${c} rounded-full`} />;
+
+function GoodBad({ badLabel, goodLabel, bad, good }) {
+  return (
+    <div className="grid md:grid-cols-2 gap-4">
+      <div className="bg-rose-50 border-2 border-rose-200 rounded-2xl p-4">
+        <div className="text-xs font-black text-rose-600 uppercase tracking-wider mb-3">✗ {badLabel}</div>{bad}
+      </div>
+      <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4">
+        <div className="text-xs font-black text-emerald-700 uppercase tracking-wider mb-3">✓ {goodLabel}</div>{good}
+      </div>
+    </div>
+  );
+}
+```
+
+Reglas de las pantallas falsas:
+- Tamaños de texto entre `text-[7px]` y `text-[13px]`: a esa escala el mockup se lee como interfaz real, no como texto encogido.
+- Usa `Ln` (barras grises) solo para texto de relleno; los textos que enseñan algo van escritos de verdad en español.
+- Una torta ilegible se hace con `conic-gradient` inline; barras con divs de `height:%`. Nada de librerías de gráficos.
+- Siempre etiqueta cada teléfono con el `label`: el mockup sin leyenda no enseña.

@@ -144,24 +144,45 @@ Comenta "[PALABRA]" y te cuento cómo puedes acceder a [beneficio]
 
 ---
 
-## PASO 4 — GUARDAR LOS 3 GUIONES EN YAPPER
+## PASO 4 — GUARDAR LOS 3 GUIONES EN YAPPER (verificar SIEMPRE)
 
-Para cada guion, hacer un POST a la API de Yapper:
+**Credenciales — nunca escribirlas en este archivo.** El token y el email salen del entorno:
+
+```bash
+[ -f "$HOME/.config/f100k/secrets.env" ] && set -a && . "$HOME/.config/f100k/secrets.env" && set +a
+YAPPER_EMAIL="${YAPPER_EMAIL:-$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('~/.f100k-radar/config.json')))['email'])" 2>/dev/null)}"
+[ -z "$YAPPER_TOKEN" ] && { echo "Falta YAPPER_TOKEN en ~/.config/f100k/secrets.env — no se puede guardar en Yapper"; }
+```
+
+Si `YAPPER_TOKEN` no está, **decirlo y seguir** con el resto del módulo (el draft de Gmail sí se puede crear); no inventar que se guardó.
+
+Para cada guion, escribir el payload en `/tmp/yapper_guion_N.json` (evita escaping del shell) y hacer el POST:
 
 ```
-POST https://yapper-method.vercel.app/api/scripts
+POST https://yapper.formula100k.app/api/scripts
 Headers:
   Content-Type: application/json
-  Authorization: Bearer 28dfbc5c3c26d85aadd1a473e9448da056cb2ca114978ddde58f5bd406380273
+  Authorization: Bearer $YAPPER_TOKEN
 Body:
-  user_email: andreavegabocanegra@gmail.com
+  user_email: $YAPPER_EMAIL
   title: [TÍTULO del guion]
   body: [TEXTO COMPLETO incluyendo ganchos y CTA]
   source: claude
   origin_url: null
 ```
 
-Usar Bash con curl para los 3 POSTs. Mostrar los IDs retornados.
+```bash
+curl -sS -L -w "\nHTTP_STATUS:%{http_code}\n" -X POST "https://yapper.formula100k.app/api/scripts" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $YAPPER_TOKEN" \
+  --data @/tmp/yapper_guion_N.json
+```
+
+**Verificación obligatoria** (esto es lo que falló silenciosamente de jun-24 a jul-23 de 2026):
+- El dominio correcto es `yapper.formula100k.app`. El viejo `yapper-method.vercel.app` responde **308** y el guion NO se guarda.
+- Solo cuenta como guardado si `HTTP_STATUS` es **201** y la respuesta trae `{"script":{"id":...}}`.
+- 401 = llave rotada · 3xx = URL equivocada · 400 = payload mal armado.
+- Si falla, reintentar UNA vez; si vuelve a fallar, reportarlo como FALLIDO con su código HTTP. NUNCA decir "guardado" sin el 201.
 
 ---
 
@@ -170,7 +191,7 @@ Usar Bash con curl para los 3 POSTs. Mostrar los IDs retornados.
 Obtener la fecha actual: `date '+%d %b %Y'`
 
 Crear draft con:
-- **To:** andreavegabocanegra@gmail.com
+- **To:** `$YAPPER_EMAIL` (de `~/.f100k-radar/config.json`; si no hay config, preguntar)
 - **Subject:** 🎬 Autopilot Guiones — [fecha de hoy]
 - **Body:**
 
@@ -213,7 +234,7 @@ GANCHO TEXTUAL: [texto pantalla]
 [CTA completo con priming triple]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-También los guardé en tu Yapper: https://yapper-method.vercel.app/app
+También los guardé en tu Yapper: https://yapper.formula100k.app/app
 
 Generado por Autopilot F100K ⚡
 ```
@@ -227,7 +248,7 @@ Generado por Autopilot F100K ⚡
 ✅ Guiones escritos: [título | pilar | estructura para cada uno]
 ✅ CTAs generados: [palabra de cada uno]
 ✅ Guardados en Yapper: [IDs]
-✅ Draft de Gmail creado para andreavegabocanegra@gmail.com
+✅ Draft de Gmail creado para $YAPPER_EMAIL
 ```
 
 ---

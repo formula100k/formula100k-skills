@@ -130,6 +130,8 @@ Escribes **1 meat principal por guion** — completo, fluido y listo para grabar
 
 **Demostración obligatoria:** El meat de cada guion debe incluir al menos una indicación visual de pantalla real — screen recording, captura de dashboard, número en pantalla. "Decir" no reemplaza "mostrar".
 
+**Profundidad de cada elemento:** plantillas, ejemplos F100K, reparto en el tiempo y errores comunes en `references/meat-4-bloques.md`.
+
 ### PASO 4 — Construir el CTA (5%)
 
 > ⚠️ DISTINCIÓN CRÍTICA — ads pagados vs. contenido orgánico:

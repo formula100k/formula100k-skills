@@ -198,7 +198,7 @@ Antes de hacer cualquier investigación, extrae los siguientes elementos del inp
 1. **Tema central** — ¿de qué trata exactamente?
 2. **Audiencia objetivo** — ¿a quién le habla? (creadores, emprendedores, coaches, etc.)
 3. **Mensaje clave** — ¿cuál es la única cosa que el lector debe recordar?
-4. **Tipo de carrusel más adecuado** — seleccionar según la guía en `references/tipos_carrusel.md`
+4. **Tipo de carrusel más adecuado** — se confirma en el PASO 3, con los patrones que devuelva la investigación del PASO 2 (no antes: el tipo lo decide lo que ya está funcionando en el nicho, no una preferencia previa)
 5. **Potencial de gancho** — ¿hay curiosity gap, dato sorprendente, promesa concreta o controversia?
 
 ---
@@ -263,7 +263,7 @@ Compara la idea del usuario con los patrones encontrados:
 ## PASO 3 — Seleccionar tipo y estructura de carrusel
 
 Con el análisis del PASO 1 y los patrones del PASO 2, confirma:
-1. **Tipo de carrusel** (leer `references/tipos_carrusel.md` para estructura de cada tipo)
+1. **Tipo de carrusel** — derivarlo de los carruseles virales analizados en el PASO 2: qué arquitectura de slides repiten los que funcionaron en este nicho. Si el PASO 2 no arrojó referencias suficientes, decirlo y elegir la arquitectura más simple (gancho → 3-5 puntos → cierre con CTA) en vez de asumir un tipo
 2. **Número de slides** (mínimo 5, máximo 10 para primera publicación)
 3. **CTA final** — específico y accionable ("Comenta X", "Guarda esto", "Envía a alguien que...")
 
@@ -754,4 +754,4 @@ Antes de entregar, verifica:
 - **Si el input es un guion de reel:** identifica el gancho verbal del reel (los primeros 3 segundos) y conviértelo en gancho visual del Slide 1. El resto del guion se distribuye en slides interiores.
 - **El calendario (PASO 9) es automático** — se entrega siempre después del guion, sin que el usuario lo pida. Es parte del entregable estándar.
 - **El Perfil Visual (PASO 0) se verifica en cada sesión.** Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
-- **Leer siempre** `references/design_profile.md`, `references/guia_diseno.md` y `references/tipos_carrusel.md` al inicio de cada sesión.
+- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (es el único archivo de referencia de esta skill; el sistema visual vive ahí).

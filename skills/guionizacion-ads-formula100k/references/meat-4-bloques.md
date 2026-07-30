@@ -1,15 +1,19 @@
-# EL MEAT — 4 BLOQUES DEL 15%
+# EL MEAT — LOS 4 ELEMENTOS
 
 El meat es el cuerpo del ad. Su función NO es "explicar el producto" — es **demostrar que cumples la promesa del hook**.
 
-Estructura obligatoria — 4 bloques en este orden:
+> ⚠️ **Cómo se usa este archivo.** El `SKILL.md` escribe **1 meat principal por guion**: completo, fluido y listo para grabar tal cual. Estos 4 elementos NO son 4 opciones modulares para combinar ni 4 cajas separadas que se pegan — son las cuatro cosas que ese único meat continuo tiene que lograr, en este orden. Acá está la profundidad de cada uno: plantillas y ejemplos. La forma final es una narrativa donde cada oración gana la siguiente.
 
-1. **Agitación** (5-8s) — Profundizar el dolor
-2. **Descalificación** (5-8s) — Eliminar soluciones falsas
-3. **Vehículo Único** (8-12s) — Revelar tu mecanismo con NOMBRE
-4. **Prueba Tangible** (5-8s) — Caso/captura/número real
+Orden y peso dentro del meat:
 
-Para ads cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
+1. **Agitación** (~25%) — Profundizar el dolor
+2. **Descalificación** (~20%) — Eliminar soluciones falsas
+3. **Vehículo Único** (~35%) — Revelar tu mecanismo con NOMBRE
+4. **Prueba Tangible** (~20%) — Caso/captura/número real
+
+**Los pesos son del meat, no del ad.** Un ad de 60s necesita al menos 40s de meat escrito (≈10s / 8s / 14s / 8s); uno de 30s, al menos 20s (≈5s / 4s / 7s / 4s). Si el meat sale corto, se profundiza el vehículo único — nunca se recorta el meat para acortar el ad.
+
+Para ads muy cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
 
 ---
 
@@ -36,7 +40,7 @@ Para ads cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
 
 - "Cada lanzamiento que haces sin vehículo único te cuesta entre $3.000 y $8.000 en ads quemadas, dos semanas de tu vida y la confianza de tu lista — que se acaba quemando contigo."
 
-**Duración:** 5-8 segundos. Si te pasas, el viewer se cansa antes del payoff.
+**Peso:** ~25% del meat (≈10s en un meat de 40s). Si te pasas, el viewer se cansa antes del payoff.
 
 ---
 
@@ -63,7 +67,7 @@ Para ads cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
 
 - "Probablemente probaste ChatGPT para guiones (sale genérico), probaste cursos de copy (mucha teoría, poca venta), y probaste asesorías 1-on-1 (carísimas y dependes de la persona). Todo eso falla porque ninguno te da el SISTEMA — solo tácticas sueltas."
 
-**Duración:** 5-8 segundos.
+**Peso:** ~20% del meat (≈8s en un meat de 40s).
 
 ---
 
@@ -91,7 +95,7 @@ Para ads cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
 
 - "La diferencia es El ADN F100K: en lugar de enseñarte a 'crear contenido', te enseña a estructurar cada video como una unidad que VENDE. Tienes apps, frameworks y skills — las tres capas que necesitas para escalar sin quemarte."
 
-**Duración:** 8-12 segundos. Es el bloque más largo. No tengas miedo de invertir tiempo aquí.
+**Peso:** ~35% del meat (≈14s en un meat de 40s). Es el elemento más largo. No tengas miedo de invertir tiempo aquí.
 
 ---
 
@@ -119,11 +123,11 @@ Para ads cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+4.
 
 - "Esto es captura real de mi grupo: 12 alumnas cerraron sus primeros 5 clientes high ticket este mes. Y todas tienen menos de 10K seguidores."
 
-**Duración:** 5-8 segundos. Visual fuerte y específico.
+**Peso:** ~20% del meat (≈8s en un meat de 40s). Visual fuerte y específico.
 
 ---
 
-## ENSAMBLE — CÓMO COMBINAR LOS 4 BLOQUES
+## REPARTO EN EL TIEMPO — LOS 4 ELEMENTOS DENTRO DE UN MEAT CONTINUO
 
 ### Ad de 30 segundos
 - 0:00-0:03 → Hook

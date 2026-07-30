@@ -422,10 +422,17 @@ def section_6_modulos(doc, b):
         if m.get("temas"):
             add_heading(doc, "Temas", level=3)
             add_numbered_list(doc, m["temas"])
+        if m.get("hook"):
+            add_paragraph(doc, f"Por qué importa · {m['hook']}", bold=False)
         if m.get("resultado"):
             add_paragraph(doc, f"Resultado esperado · {m['resultado']}")
         if m.get("entregable"):
             add_paragraph(doc, f"Entregable de la miembro · {m['entregable']}")
+        if m.get("estado"):
+            add_paragraph(doc, f"Estado · {m['estado']}", bold=False)
+        if m.get("titulos_alternativos"):
+            add_heading(doc, "Opciones de título alternativas", level=3)
+            add_numbered_list(doc, m["titulos_alternativos"])
 
 
 def section_7_videos(doc, b):

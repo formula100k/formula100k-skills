@@ -157,10 +157,33 @@ Guardar el siguiente JSON en `~/.f100k-radar/config.json` usando la herramienta 
     "metrics_report": false,
     "patron_ig_analytics": false
   },
+  "radar_enfoque": "reaccionar-a-HECHOS-no-a-creadores",
+  "radar_sources": {
+    "ai_launches": [
+      "lanzamiento inteligencia artificial [nicho]",
+      "nuevo modelo IA OpenAI Google Anthropic Meta",
+      "nueva herramienta IA [nicho]",
+      "actualización IA redes sociales"
+    ],
+    "brand_marketing": [
+      "campaña marketing viral marca grande",
+      "caso de marketing empresa",
+      "jugada marketing marca redes sociales",
+      "estrategia contenido marca viral"
+    ],
+    "faceless_virals": [
+      "tendencia viral formato redes",
+      "formato viral instagram tiktok",
+      "[kw1] tendencia"
+    ]
+  },
+  "radar_exclusion": "DESCARTAR cualquier viral que sea un creador del MISMO nicho ([nicho]) dando tips o educando — reaccionar a eso le entrega tu audiencia a un competidor. Solo se permite reaccionar a un creador de OTRO rubro y como CONTRASTE, nunca como autoridad a seguir.",
   "created": "[fecha ISO hoy]",
-  "version": "1.0"
+  "version": "1.1"
 }
 ```
+
+> ⚠️ `radar_sources` y `radar_exclusion` los consume `radar-virales-f100k` en su FASE 2. Sustituir `[nicho]` por el nicho real de Q1 y `[kw1]` por su primera keyword: el filtro de exclusión debe nombrar **el rubro de quien corre el radar**, no "marketing y creación de contenido". Una nutricionista excluye nutricionistas.
 
 ### Paso 2 — Confirmar al usuario
 

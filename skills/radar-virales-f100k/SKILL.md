@@ -1,7 +1,7 @@
 ---
 name: radar-virales-f100k
 description: >
-  Módulo del Autopilot F100K que corre diariamente: caza el viral más relevante del día en TikTok y noticias/YouTube de IA y del nicho del usuario, elige 1 ganador con scoring, genera un guion de reacción listo para grabar con la voz del usuario, y envía todo por email. Usar cuando alguien diga: "corre mi radar", "qué hay viral hoy", "dame el viral del día", "ejecutar radar diario", "qué puedo reaccionar hoy", o cuando el schedule automático lo invoque. Requiere config en ~/.f100k-radar/config.json — si no existe, instruir a correr /rutina-maestra-formula100k primero.
+  Módulo del Autopilot F100K que corre diariamente: caza el HECHO más reaccionable del día —un lanzamiento de IA, una movida de marketing de una marca grande, o un formato viral SIN cara— evitando a propósito reaccionar a creadores del mismo nicho (eso le entrega la audiencia a un competidor). Elige 1 ganador con scoring + filtro de exclusión, genera un guion de reacción listo para grabar con la voz del usuario donde ÉL es el intérprete del hecho, y envía todo por email. Usar cuando alguien diga: "corre mi radar", "qué hay viral hoy", "dame el viral del día", "ejecutar radar diario", "qué puedo reaccionar hoy", o cuando el schedule automático lo invoque. Requiere config en ~/.f100k-radar/config.json — si no existe, instruir a correr /rutina-maestra-formula100k primero.
 ---
 
 # Skill: Radar Diario de Virales — Autopilot F100K
@@ -26,16 +26,49 @@ Extraer y guardar en memoria de trabajo:
 - `keywords` → array de keywords de búsqueda
 - `email` → destino del digest
 - `voice_profile` → perfil de voz
+- `radar_sources` → las 3 listas de queries de la FASE 2 (`ai_launches`, `brand_marketing`, `faceless_virals`)
+- `radar_exclusion` → el filtro que descarta creadores del mismo nicho
+
+**Si `radar_sources` o `radar_exclusion` no están en el config** (configs creados antes de la v1.1 del radar), NO detenerse: derivarlos en el momento a partir de `niche` y `keywords`, y avisar al usuario en una línea que se usaron valores derivados y que puede fijarlos corriendo `/rutina-maestra-formula100k` de nuevo.
+
+- `ai_launches` → "lanzamiento inteligencia artificial [niche]", "nuevo modelo IA OpenAI Google Anthropic Meta", "nueva herramienta IA [niche]"
+- `brand_marketing` → "campaña marketing viral marca grande", "caso de marketing empresa", "jugada marketing marca redes sociales"
+- `faceless_virals` → "tendencia viral formato redes", "formato viral instagram tiktok", + 1 query armada con las `keywords` del usuario
+- `radar_exclusion` → "DESCARTAR cualquier viral que sea un creador del MISMO nicho ([niche]) dando tips o educando — reaccionar a eso le entrega tu audiencia a un competidor. Solo se permite reaccionar a un creador de OTRO rubro y como CONTRASTE, nunca como autoridad a seguir."
+
+⚠️ El nicho de la exclusión es el del **usuario que corre el radar**, no "marketing y creación de contenido". Una alumna nutricionista debe excluir nutricionistas, no marketers.
 
 ---
 
-## FASE 2 — CAZA DE VIRALES
+## FASE 2 — CAZA DE HECHOS (no de creadores)
 
-### Paso 2A — TikTok via Apify
+> **PRINCIPIO RECTOR DEL RADAR (v1.1):** reaccionamos a **HECHOS, no a creadores.**
+> Reaccionar a otro creador de tu nicho dándote tips le entrega tu audiencia (lo descubren y lo siguen, y te posiciona como comentarista de un par). En cambio, cuando el "personaje" del viral es una entidad sin cara —un lanzamiento de IA, una movida de una marca grande, un formato viral genérico— **no hay nadie a quién irse a seguir, y TÚ eres la intérprete.** El hecho es el gancho; tu opinión es el producto.
+>
+> Por eso este radar NO busca TikToks por keywords de nicho (eso trae competidores). Busca en **3 carriles de hechos**.
 
-Usar `mcp__apify__call-actor` con el actor `clockworks/tiktok-scraper`:
+### Carril A — Lanzamientos de IA (Tavily)
 
-Para cada keyword en `config.keywords`, lanzar una búsqueda:
+Para cada query en `config.radar_sources.ai_launches`, lanzar `mcp__claude_ai_Tavily__tavily_search`:
+```json
+{
+  "query": "[query] últimas 48 horas",
+  "search_depth": "advanced",
+  "max_results": 5
+}
+```
+Busca: nuevos modelos, features, herramientas o cambios de IA que afecten cómo se crea contenido que vende.
+Conservar: URL, título, snippet, fuente, fecha. → lista `ai_candidates`.
+
+### Carril B — Movidas de marketing de marcas grandes (Tavily)
+
+Para cada query en `config.radar_sources.brand_marketing`, lanzar `mcp__claude_ai_Tavily__tavily_search` (igual estructura).
+Busca: campañas, casos o jugadas de marketing de empresas grandes (Coca-Cola, Nike, Duolingo, McDonald's, Netflix, etc.) que se puedan diseccionar con tu lente de venta.
+Conservar igual. → lista `brand_candidates`.
+
+### Carril C — Virales SIN cara/competidor (TikTok via Apify, filtrado duro)
+
+Usar `mcp__apify__call-actor` con `clockworks/tiktok-scraper`. Para cada keyword en `config.radar_sources.faceless_virals`:
 ```json
 {
   "searchQueries": ["[keyword]"],
@@ -44,143 +77,88 @@ Para cada keyword en `config.keywords`, lanzar una búsqueda:
   "shouldDownloadCovers": false
 }
 ```
+`waitSecs: 45`. Filtrar:
+- Publicados en las últimas 48h (`createTime`)
+- Views mínimo 100,000 (bajar a 50,000 si nada supera el umbral)
+- **DESCARTAR DE ENTRADA** todo video que sea un creador educando/dando tips de marketing, creación de contenido, IA para creadores o monetización (aplicar `config.radar_exclusion`). Lo que queda son tendencias/formatos donde el protagonista NO es un competidor a seguir.
 
-Usar `waitSecs: 45` para esperar resultados.
+Conservar: URL, caption, views, likes, shares, autor, fecha. → lista `faceless_candidates`.
 
-Filtrar resultados:
-- Publicados en las últimas 48 horas (campo `createTime`)
-- Views mínimo: 100,000 (bajar a 50,000 si ninguno supera el umbral)
-- Conservar por cada resultado: URL, caption/texto, views, likes, shares, autor, fecha
+> **Nota:** Carril C es el de mayor riesgo de colar un competidor. Ante la duda sobre un candidato de TikTok, descártalo. Es preferible un día con ganador de Carril A o B que reaccionar a un par.
 
-Consolidar todos en lista `tiktok_candidates`.
-
-### Paso 2B — Noticias y YouTube via Tavily
-
-Lanzar 2 búsquedas con `mcp__claude_ai_Tavily__tavily_search`:
-
-**Búsqueda 1 — nicho general:**
-```json
-{
-  "query": "[niche] tendencia viral hoy",
-  "search_depth": "advanced",
-  "max_results": 5
-}
-```
-
-**Búsqueda 2 — IA y herramientas** (ejecutar siempre, es nicho universal en el ecosistema F100K):
-```json
-{
-  "query": "nueva herramienta inteligencia artificial creadores contenido lanzamiento",
-  "search_depth": "advanced",
-  "max_results": 5
-}
-```
-
-Conservar por cada resultado: URL, título, snippet, fuente, fecha publicación.
-Consolidar en lista `news_candidates`.
+Consolidar `ai_candidates` + `brand_candidates` + `faceless_candidates` en `all_candidates`.
 
 ---
 
 ## FASE 3 — ELEGIR EL GANADOR DEL DÍA
 
-### Paso 3 — Scoring y selección
+### Paso 3A — FILTRO DE EXCLUSIÓN (eliminatorio, antes de puntuar)
 
-Evaluar TODOS los candidatos (TikTok + noticias) contra estos criterios:
+Recorrer `all_candidates` y **eliminar** todo candidato que active `config.radar_exclusion`:
+- ❌ Creador del MISMO nicho (marketing, creación de contenido, IA para creadores, monetización, redes) dando tips o educando → **fuera.** Reaccionar a esto le entrega tu audiencia a un competidor.
+- ✅ Se conserva: lanzamientos/noticias de IA, movidas de marcas grandes, formatos virales sin cara, o creadores de OTRO rubro usables como contraste (ej. un chef, un atleta) — nunca como autoridad a seguir.
+
+Si tras el filtro quedan 0 candidatos → ampliar Carril A/B con una query extra de IA/marca antes de rendirse. El radar diario casi siempre debe tener ganador de hecho/noticia.
+
+### Paso 3B — Scoring y selección
+
+Evaluar los candidatos sobrevivientes contra estos criterios:
 
 | Criterio | Peso | Cómo evaluar |
 |----------|------|--------------|
-| Relevancia al nicho (`config.niche`) | 40% | ¿Conecta directamente con lo que el usuario enseña/vende? |
-| Potencial de reacción | 30% | ¿El usuario puede agregar perspectiva única y diferente? ¿Genera opinión? |
-| Viralidad actual | 20% | Views/likes para TikTok · autoridad del medio para noticias |
-| Frescura | 10% | ¿Publicado en las últimas 24h? (+bonus de 1 punto) |
+| Sin-competidor / autoridad propia | 35% | ¿El protagonista es un HECHO (IA, marca, formato) y no un creador a seguir? ¿Andrea queda como la intérprete, no como comentarista de un par? Máximo si no hay nadie a quién irse a seguir. |
+| Potencial de reacción / opinión | 30% | ¿Puede agregar una lectura que nadie está dando? ¿Genera debate? |
+| Aplicabilidad a "crear contenido que vende" | 20% | ¿Se puede aterrizar en qué significa esto para que su audiencia venda con contenido? (ángulo F100K) |
+| Frescura + viralidad | 15% | Publicado en últimas 24-48h · views/autoridad del medio |
 
 Asignar puntuación del 1-10 a cada candidato y elegir el TOP 1.
 
-Regla de desempate: si hay empate, preferir el que tenga mayor potencial de reacción (criterio 2).
+Regla de desempate: preferir el de mayor puntaje en "Sin-competidor / autoridad propia" (criterio 1). Entre dos hechos igual de fuertes, gana el de Carril A (IA) o B (marca) sobre Carril C (TikTok).
 
 Guardar en `winner`:
 - título o caption (primeras 80 chars)
 - URL
 - métricas clave (views/fuente)
-- tipo: "tiktok" o "noticia"
-- razón de selección (1 línea)
+- tipo: "lanzamiento-ia" | "movida-marca" | "viral-sin-cara"
+- razón de selección (1 línea — por qué deja a Andrea como intérprete del hecho, no como comentarista de un par)
 
 ---
 
 ## FASE 4 — GENERAR GUION DE REACCIÓN
 
-### Paso 4 — Escribir el guion con el sistema F100K
+### Paso 4 — Escribir el guion con la voz del usuario
 
-**4A — Identificar el Pilar de Valor** (elegir UNO):
-
-| # | Pilar | Qué genera |
-|---|-------|------------|
-| 1 | Revelación (Insight) | Sensación de acceder a un secreto |
-| 3 | Validación Emocional | COMPARTIDOS — "eso me pasa a mí" |
-| 5 | Actualidad (Curiosidad) | Posicionamiento como fuente al día |
-| 7 | Disrupción (Anti-consejo) | DEBATE y autoridad superior |
-
-Para reaccionar a un viral, los pilares más útiles son: 5 (Actualidad), 1 (Revelación), 7 (Disrupción). Elegir el que mejor encaje con el ángulo de reacción.
-
-**4B — Elegir la Estructura según el pilar:**
-
-- **Estructura 15 — Vacío de Información** (Pilar 5): gancho que deja algo sin resolver → contexto → revelación → consecuencia para el creador
-- **Estructura 16 — El Roba Audiencia** (Pilar 1): usar la figura/viral como gancho → agregar perspectiva propia única → conectar con el nicho
-- **Estructura 19 — Desafío Contracorriente** (Pilar 7): afirmación contraintuitiva → evidencia del viral → reencuadre → reto implícito
-
-**4C — Sistema de Ganchos Triple** (los 3 alineados al mismo mensaje):
+Escribir un guion de reacción de 45-60 segundos (máximo 120 palabras) usando la siguiente estructura:
 
 ```
-GANCHO VERBAL (0-3s, máx 15 palabras):
-Referencia directa al viral con gatillo emocional activo.
-Opciones según pilar:
-- Curiosidad: "[Dato impactante del viral] — y esto cambia todo para los creadores."
-- Identificación: "¿Ya viste lo que está pasando con [tema]? A mí me pasó exactamente esto."
-- Sorpresa: "Esto que está viral ahora mismo confirma lo que llevo meses diciendo."
+[GANCHO VISUAL — 0-3s]
+Referencia directa al viral. Opciones:
+- "Acabo de ver esto y necesitaba compartirlo..."
+- "Esto que está viral ahora mismo en [red] me hizo pensar algo importante..."
+- "[Dato más impactante del viral] — y esto es lo que nadie está diciendo al respecto."
 
-GANCHO VISUAL (qué se MUESTRA en cámara):
-[Expresión de sorpresa genuina / señalar pantalla con el viral / mostrar dato en papel o pizarra]
-
-GANCHO TEXTUAL (qué se LEE en pantalla):
-[Número impactante del viral / Pregunta provocadora / Texto de alerta]
-
-→ Los 3 deben comunicar el MISMO mensaje. Si no están alineados, reescribir.
-```
-
-**4D — Cuerpo del guion** (8-45s):
-
-```
 [CONTEXTO — 3-8s]
 1-2 líneas: qué es el viral, de dónde viene, por qué está trending ahora.
 
 [PERSPECTIVA ÚNICA — 8-45s]
-3 puntos siguiendo la estructura elegida en 4B.
+3 puntos de vista propios. Estructura:
+Punto 1: "Lo que esto confirma sobre [tema del nicho] es..."
+Punto 2: "Lo que la mayoría está pasando por alto aquí es..."
+Punto 3: "Lo que yo haría diferente / lo que aprendí de esto es..."
 → Usar voz del usuario: [voice_profile]
 → Conectar con el nicho: [niche]
-→ Incluir marcas: [PAUSA], [SEÑALAR CÁMARA], [ZOOM IN], [MOSTRAR PANTALLA]
+→ Incluir marcas de acción donde aplique: [PAUSA], [SEÑALAR CÁMARA], [ZOOM IN], [MOSTRAR PANTALLA]
+
+[CTA — 45-55s]
+Pregunta de engagement que invite a comentar.
+Patrón CTA ganador F100K:
+"¿Tú qué opinas de esto? Comenta [PALABRA DE 1-2 SÍLABAS] y te cuento [promesa de valor extra]."
 ```
-
-**4E — CTA Optimizado** (45-55s) — Patrón F100K validado:
-
-```
-1. PRIMING TRIPLE: mencionar la palabra clave 3 veces ANTES de pedirla.
-   "Si tú [contexto con la palabra], si [contexto], si [contexto]..."
-
-2. RECURSO INVISIBLE: prometer algo que solo consiguen si comentan.
-   "Tengo [recurso/info] que no está publicado en ningún lado."
-
-3. VACÍO DE INFORMACIÓN: dejar claro que falta algo importante.
-   "Y lo más importante todavía no lo dije."
-
-4. CIERRE: "Comenta [PALABRA DE 1-2 SÍLABAS] y te cuento cómo puedes acceder a [beneficio específico]."
-```
-
-La PALABRA del CTA: 1-2 sílabas, relacionada al tema del viral.
 
 Reglas del guion:
-- Español neutro (no argentino, no regional) — tú/tienes, NUNCA vos/tenés
+- Español neutro (no argentino, no regional)
 - Sonar como lo escribió el usuario (respetar `voice_profile`)
-- Máximo 120 palabras en el cuerpo
+- Máximo 120 palabras
 - NO mencionar a ningún creador por nombre sin contexto
 - SÍ mencionar la fuente/plataforma (ej: "este video de TikTok", "este artículo de The Verge")
 

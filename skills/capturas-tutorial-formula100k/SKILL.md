@@ -18,6 +18,7 @@ Skill que genera **capturas UI tipo tutorial** con la estética F100K: terminale
 - "Callout warning de [advertencia]"
 - "Tarjeta del atajo Cmd+V"
 - "Comparison antes/después para mi carrusel"
+- "Simula el input de Claude invocando esta skill"
 - "Overlays UI para mi video tutorial"
 - "Convierte este guion paso-a-paso en imágenes"
 - Cuando `recursos-de-video-formula100k` detecta modo tutorial y delega aquí

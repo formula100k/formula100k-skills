@@ -145,6 +145,14 @@ Asigna un score (0-100%) a cada uno de los 4 niveles:
 
 El score debe ser justificado con citas del guion.
 
+### Paso 9.5: Lectura Neuro (predicha)
+
+Carga `rubrica-neuro.md` (en la raíz de esta skill) y corre sus **6 reglas** sobre el guion, como capa adicional del diagnóstico (mismo vocabulario que la medición real de `tribe v2`):
+
+1. Hook 0-3s manda · 2. Pico temprano · 3. Anti-Default-Mode · 4. Visual temprano · 5. Voz = ancla · 6. Sin valle en s1-2.
+
+Da un veredicto ALTO/MEDIO/BAJO por regla con cita del guion, y úsalo para reforzar las correcciones del Paso 10 (sobre todo el arranque). Es **predicción heurística sobre texto**, no la medición real (esa vive en `remix-viral-formula100k`).
+
 ### Paso 10: Versión corregida
 
 Reescribe el guion aplicando las correcciones. **Mantén la voz/intención original** — no lo conviertas en otro guion. Solo arregla lo que está roto.
@@ -225,6 +233,18 @@ Sigue este template EXACTO. No improvises secciones.
 
 ### Nivel 4 — Edición: X/100
 - [Solo evaluable si hay video. Si solo es guion: "No evaluable — solo guion".]
+
+---
+
+## 🧠 Lectura Neuro (predicha)
+
+[De `rubrica-neuro.md` — predicción heurística sobre texto, NO medición real]
+
+- **Hook 0-3s:** ALTO/MEDIO/BAJO — [cita + por qué]
+- **Pico estimado:** temprano / medio / tardío — [dónde está el "wow"]
+- **Riesgo mente-dispersa (DMN):** bajo / medio / alto — [tramos planos]
+- **Visual temprano:** sí/no · **Voz/ritmo:** ok/flojo · **Valle s1-2:** no/sí
+- ➜ **Arranque ajustado:** "[reescritura de los primeros 2-3s]"
 
 ---
 

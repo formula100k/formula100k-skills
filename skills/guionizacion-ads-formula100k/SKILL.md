@@ -115,18 +115,20 @@ Por cada hook entregas:
 
 ### PASO 3 — Construir el MEAT (15%)
 
-El meat son 4 bloques. Generas las 4 opciones de cada bloque para combinar. Ver `references/meat-4-bloques.md` para profundidad.
+Escribes **1 meat principal por guion** — completo, fluido y listo para grabar tal cual. No fragmentos modulares ni variantes por bloque. El meat integra los 4 elementos en una narrativa continua:
 
-| Bloque | Función | Duración aprox. |
-|--------|---------|-----------------|
-| A) Agitación | Profundizar el dolor — con detalle vivido, no genérico | 8-15s |
-| B) Descalificación | Eliminar soluciones falsas — nombrar cada una que han intentado | 8-15s |
-| C) Vehículo único | Revelar tu mecanismo con nombre + demostración o descripción concreta | 15-25s |
-| D) Prueba tangible | Caso real o captura o número verificable — el más específico posible | 10-15s |
+| Elemento | Función | Peso dentro del meat |
+|----------|---------|----------------------|
+| Agitación | Profundizar el dolor con detalle vivido, no genérico | ~25% |
+| Descalificación | Nombrar soluciones que ya intentaron y por qué fallaron | ~20% |
+| Vehículo único | Revelar el mecanismo con nombre + demostración concreta | ~35% |
+| Prueba tangible | Caso real con nombre, resultado y tiempo específicos | ~20% |
 
-**Regla de longitud del meat:** Un ad de 60 segundos necesita al menos 35-45 segundos de meat. Un ad de 30 segundos al menos 18-22s. Meats cortos (menos de 15s total) no construyen suficiente confianza para que el CTA convierta. Si el meat se ve corto al escribirlo, desarrolla más el bloque C (vehículo único) y el bloque D (prueba). Nunca recortes el meat para "hacer el ad más corto" — recorta el hook o el CTA.
+**Cómo escribir el meat en 1 bloque:** Empieza con el dolor más vívido del avatar (no genérico — escena real), transiciona a por qué las alternativas no resuelven el problema raíz, revela el mecanismo propio con detalle suficiente para que el espectador entienda CÓMO funciona, y cierra con el caso más concreto disponible. Cada oración debe ganar la siguiente.
 
-**Demostración obligatoria:** Al menos uno de los 3 meats de cada concepto debe incluir un screen recording real o una descripción visual detallada de cómo funciona la app/skill/sistema. "Decir" no reemplaza "mostrar".
+**Regla de longitud:** Un ad de 60s necesita al menos 40s de meat escrito. Un ad de 30s al menos 20s. Si el meat resulta corto, profundiza el vehículo único con más detalle de implementación — nunca recortes el meat para "hacer el ad más corto".
+
+**Demostración obligatoria:** El meat de cada guion debe incluir al menos una indicación visual de pantalla real — screen recording, captura de dashboard, número en pantalla. "Decir" no reemplaza "mostrar".
 
 ### PASO 4 — Construir el CTA (5%)
 

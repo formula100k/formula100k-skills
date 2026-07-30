@@ -105,7 +105,7 @@ Cada ángulo = **misma mecánica del Paso 2** + **tema del RUBRO de quien lo pid
 - **CTA de engagement** que replica el disparador del original
 - 1 frase de **por qué funciona** / cómo posiciona a quien lo publica
 
-Marcar una **recomendación** (la que mejor conserve el espíritu del original + mejor calce con el diferenciador de Andrea: IA + ecosistema).
+Marcar una **recomendación** (la que mejor conserve el espíritu del original + mejor calce con el diferenciador de quien lo publica, según su Segundo Cerebro).
 
 ### Paso 5 — Handoff al guion completo
 
@@ -143,6 +143,6 @@ C) ...
 - **El tema del original es irrelevante; la mecánica lo es todo.** Nunca descartar una referencia por ser "de otro nicho" — ese es justo el punto de esta skill.
 - **NO inventar el formato.** Confirmar con caption + frame + comentarios reales (memoria: "NUNCA inventar data"). Si no se puede ver/confirmar, preguntar.
 - **NO copiar el tema** del original (eso sería off-niche). Solo se trasplanta el esqueleto.
-- No es `investigacion-contenido-formula100k` (esa caza referencias por keyword dentro del nicho) ni `remix-viral-formula100k` (esa relanza contenido propio de Andrea).
+- No es `investigacion-contenido-formula100k` (esa caza referencias por keyword dentro del nicho) ni `remix-viral-formula100k` (esa relanza contenido propio de la creadora).
 - Cerrar el navegador al terminar (`agent-browser close`) y borrar capturas temporales.
 - Mantener la voz F100K: directa, "tú". Los tecnicismos del rubro NO se eliminan: se usan y se traducen en su primera mención.

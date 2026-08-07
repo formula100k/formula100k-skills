@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=864" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Caveat NO se auto-resuelve en el render: va empaquetada.
+         Ruta RELATIVA A LA RAIZ del proyecto (../ es error de lint y
+         file:// absoluto lo bloquea Chrome headless). */
+      @font-face {
+        font-family: "Caveat";
+        src: url("assets/fonts/Caveat-700-latin.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 864px;
+        overflow: hidden;
+        background: transparent; /* alfa real: nada de chroma */
+      }
+
+      #root {
+        --ink: #221c13;
+        --ink-soft: #6a5c46;
+        --accent: #ea580c;
+
+        /* variables que consumen los componentes del kit */
+        --hw-ink: var(--ink);
+        --hw-accent: var(--accent);
+        --hw-accent-warm: var(--accent);
+        --hw-font-print: "Caveat", cursive;
+        --hw-co-ink: var(--ink);
+        --hw-co-accent: var(--accent);
+        --hw-box-ink: var(--ink);
+        --hw-arrow-color: var(--ink);
+        --hw-mark-color: var(--accent);
+
+        position: relative;
+        width: 1080px;
+        height: 864px;
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+      }
+
+      /* ---------- la hoja ---------- */
+      #paper {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        right: 14px;
+        bottom: 14px;
+        border-radius: 22px;
+        overflow: hidden;
+        opacity: 0;
+        background: radial-gradient(120% 105% at 18% -5%, #fdf9ef 0%, #f5eede 52%, #ece1c9 100%);
+        box-shadow:
+          0 18px 46px rgba(40, 30, 15, 0.3),
+          inset 0 0 110px rgba(150, 125, 80, 0.12);
+      }
+      #dots {
+        position: absolute;
+        inset: -40px;
+        opacity: 0.34;
+        background-image: radial-gradient(rgba(120, 100, 65, 0.55) 1.4px, transparent 1.5px);
+        background-size: 36px 36px;
+      }
+      #grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.35;
+        background-image:
+          repeating-linear-gradient(48deg, rgba(140, 115, 70, 0.05) 0 1px, transparent 1px 3px),
+          repeating-linear-gradient(-42deg, rgba(90, 70, 40, 0.04) 0 1px, transparent 1px 4px);
+      }
+      /* borde dibujado a mano, encima de la hoja y fijo en cuadro */
+      #edge {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        width: 1052px;
+        height: 836px;
+        pointer-events: none;
+        overflow: visible;
+      }
+      #edge path {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+
+      /* ---------- camara y mundo ---------- */
+      #cam {
+        position: absolute;
+        inset: 0;
+      }
+      #world {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 2400px;
+        height: 2000px;
+        margin-left: -1200px;
+        margin-top: -1000px;
+        transform: scale(0.432);
+        transform-origin: 50% 50%;
+      }
+
+      /* ---------- tinta ---------- */
+      .t {
+        position: absolute;
+        white-space: nowrap;
+        color: var(--ink);
+        opacity: 0;
+        line-height: 1;
+      }
+      .soft {
+        color: var(--ink-soft);
+      }
+      .accent {
+        color: var(--accent);
+      }
+      .flipY {
+        transform: scaleY(-1);
+      }
+      .flipX {
+        transform: scaleX(-1);
+      }
+
+      /* ---------- componentes del kit (CSS copiado del registro) ---------- */
+      .hw-callout {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hw-callout svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hw-callout path {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      /* TODOS los paths nacen invisibles: con stroke-linecap round un path
+         "sin dibujar" (dashoffset = length) igual pinta un punto de tinta
+         desde el frame 0, y se ve como una mota suelta en la hoja. */
+      .hw-callout .hw-co-outline {
+        stroke: var(--hw-co-ink);
+        stroke-width: var(--hw-co-w, 6);
+        opacity: 0;
+      }
+      .hw-callout .hw-co-scribble {
+        stroke: var(--hw-co-accent);
+        stroke-width: 3;
+        opacity: 0;
+      }
+      .hw-callout .hw-co-connector {
+        stroke: var(--hw-co-ink);
+        stroke-width: 4;
+        opacity: 0;
+      }
+      .hw-callout .hw-co-label {
+        position: absolute;
+        font-family: var(--hw-font-print);
+        font-weight: 700;
+        font-size: 54px;
+        color: var(--hw-co-ink);
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      .hw-box {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hw-box svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hw-box path {
+        fill: none;
+        stroke: var(--hw-box-ink);
+        stroke-width: var(--hw-box-w, 6);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+      .hw-box .hw-bx-label {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-family: var(--hw-font-print);
+        font-weight: 700;
+        font-size: 52px;
+        color: var(--hw-box-ink);
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      .hw-mark {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hw-mark svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hw-mark path {
+        fill: none;
+        stroke: var(--hw-mark-color);
+        stroke-width: var(--hw-mark-w, 7);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+
+      .hw-arrow {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hw-arrow svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hw-arrow path {
+        fill: none;
+        stroke: var(--hw-arrow-color);
+        stroke-width: var(--hw-arrow-w, 6);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+
+      .yt-circle {
+        position: absolute;
+        pointer-events: none;
+      }
+      .yt-circle svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .yt-circle ellipse {
+        fill: none;
+        stroke: var(--yt-ptr-color, #e62e2e);
+        stroke-width: 6;
+        stroke-linecap: round;
+        transform: rotate(-6deg);
+        transform-origin: 50% 50%;
+        opacity: 0;
+      }
+
+      .yt-hl {
+        --yt-hl-x: 50%;
+        --yt-hl-y: 50%;
+        --yt-hl-rx: 22%;
+        --yt-hl-ry: 26%;
+        /* sobre papel crema, 0.34 ensucia toda la hoja: se lee como viñeta
+           sucia, no como foco. Medido: 0.15 baja el papel de 246 a 215 (-13%),
+           todavia se nota gris. 0.10 marca el foco sin ensuciar el resto. */
+        --yt-hl-dim: 0.1;
+
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: rgba(38, 26, 8, var(--yt-hl-dim));
+        -webkit-mask-image: radial-gradient(
+          ellipse var(--yt-hl-rx) var(--yt-hl-ry) at var(--yt-hl-x) var(--yt-hl-y),
+          transparent 0%,
+          transparent 52%,
+          black 88%
+        );
+        mask-image: radial-gradient(
+          ellipse var(--yt-hl-rx) var(--yt-hl-ry) at var(--yt-hl-x) var(--yt-hl-y),
+          transparent 0%,
+          transparent 52%,
+          black 88%
+        );
+      }
+
+      .yt-cm-defocus {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        -webkit-mask-image: radial-gradient(
+          ellipse 62% 58% at 50% 50%,
+          transparent 58%,
+          rgba(0, 0, 0, 0.85) 92%
+        );
+        mask-image: radial-gradient(
+          ellipse 62% 58% at 50% 50%,
+          transparent 58%,
+          rgba(0, 0, 0, 0.85) 92%
+        );
+      }
+
+      .zone {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="138.85"
+      data-width="1080"
+      data-height="864"
+    >
+      <div id="paper">
+        <div id="dots"></div>
+        <div id="grain"></div>
+        <div id="cam">
+          <div id="world">
+            <div class="zone" id="zA"></div>
+            <div class="zone" id="zB"></div>
+            <div class="zone" id="zC"></div>
+            <div class="zone" id="zD"></div>
+          </div>
+        </div>
+        <div class="yt-cm-defocus" id="defocus"></div>
+        <div class="yt-hl" id="hl"></div>
+      </div>
+      <!-- La `d` estatica es el rectangulo base; el script la reemplaza por la
+           version con temblor a mano. Tiene que existir en el HTML: sin ella
+           getTotalLength() devuelve 0 y el draw-on del borde no ocurre. -->
+      <svg id="edge" viewBox="0 0 1052 836">
+        <path
+          id="edge-p"
+          d="M 26 0 L 1016 0 Q 1042 0 1042 26 L 1042 800 Q 1042 826 1016 826 L 26 826 Q 0 826 0 800 L 0 26 Q 0 0 26 0"
+        ></path>
+      </svg>
+
+      <div
+        id="drv"
+        class="clip"
+        data-start="0"
+        data-duration="138.85"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        /* ════════ helpers del kit (hw-boil / hw-* / yt-*) ════════ */
+        window.hwOnUpdate = function (tl, fn) {
+          if (!tl.__hwRenders) {
+            tl.__hwRenders = [];
+            tl.eventCallback("onUpdate", function () {
+              for (var i = 0; i < tl.__hwRenders.length; i++) tl.__hwRenders[i]();
+            });
+          }
+          tl.__hwRenders.push(fn);
+          fn();
+        };
+        window.hwHash = function (n, seed) {
+          var x = Math.sin(n * 127.1 + (seed || 1) * 311.7) * 43758.5453;
+          return (x - Math.floor(x)) * 2 - 1;
+        };
+        window.hwBoil = function (tl, target, opts) {
+          opts = opts || {};
+          var amp = opts.amp !== undefined ? opts.amp : 1.6;
+          var rot = opts.rot !== undefined ? opts.rot : 0.5;
+          var fps = opts.fps || 30;
+          var drop = opts.frameDrop || 3;
+          var seed = opts.seed || 1;
+          var els = gsap.utils.toArray(target);
+          window.hwOnUpdate(tl, function () {
+            var step = Math.floor((tl.time() * fps) / drop);
+            for (var i = 0; i < els.length; i++) {
+              gsap.set(els[i], {
+                x: window.hwHash(step * 3 + i * 97, seed) * amp,
+                y: window.hwHash(step * 3 + 1 + i * 97, seed) * amp,
+                rotation: (opts.baseRot || 0) + window.hwHash(step * 3 + 2 + i * 97, seed) * rot,
+              });
+            }
+          });
+        };
+        window.hwWobbleEllipse = function (cx, cy, rx, ry, seed, wobblePct) {
+          wobblePct = wobblePct === undefined ? 3 : wobblePct;
+          var N = 14,
+            pts = [];
+          for (var i = 0; i < N; i++) {
+            var a = (i / N) * Math.PI * 2;
+            var wr = 1 + window.hwHash(i * 13 + 5, seed) * (wobblePct / 100);
+            pts.push([cx + Math.cos(a) * rx * wr, cy + Math.sin(a) * ry * wr]);
+          }
+          var mx = (pts[0][0] + pts[N - 1][0]) / 2,
+            my = (pts[0][1] + pts[N - 1][1]) / 2;
+          var d = "M" + mx.toFixed(1) + " " + my.toFixed(1);
+          for (var j = 0; j < N; j++) {
+            var p = pts[j],
+              q = pts[(j + 1) % N];
+            d +=
+              " Q" + p[0].toFixed(1) + " " + p[1].toFixed(1) + " " +
+              ((p[0] + q[0]) / 2).toFixed(1) + " " + ((p[1] + q[1]) / 2).toFixed(1);
+          }
+          return d;
+        };
+        window.hwWobbleRect = function (w, h, r, seed, amp) {
+          amp = amp === undefined ? 3.5 : amp;
+          function wob(n) {
+            return window.hwHash(n, seed) * amp;
+          }
+          var d = "M " + (r + wob(1)) + " " + wob(2);
+          d += " L " + (w / 2 + wob(3)) + " " + wob(4);
+          d += " L " + (w - r + wob(5)) + " " + wob(6);
+          d += " Q " + (w + wob(7)) + " " + wob(8) + " " + (w + wob(9)) + " " + (r + wob(10));
+          d += " L " + (w + wob(11)) + " " + (h / 2 + wob(12));
+          d += " L " + (w + wob(13)) + " " + (h - r + wob(14));
+          d +=
+            " Q " + (w + wob(15)) + " " + (h + wob(16)) + " " + (w - r + wob(17)) + " " +
+            (h + wob(18));
+          d += " L " + (w / 2 + wob(19)) + " " + (h + wob(20));
+          d += " L " + (r + wob(21)) + " " + (h + wob(22));
+          d += " Q " + wob(23) + " " + (h + wob(24)) + " " + wob(25) + " " + (h - r + wob(26));
+          d += " L " + wob(27) + " " + (h / 2 + wob(28));
+          d += " L " + wob(29) + " " + (r + wob(30));
+          d += " Q " + wob(31) + " " + wob(32) + " " + (r + wob(33)) + " " + wob(34);
+          return d;
+        };
+        window.hwArrowPath = function (w, h, curve, seed) {
+          seed = seed || 1;
+          var bend = curve === "swoop" ? 0.55 : curve === "gentle" ? 0.28 : 0.06;
+          function wob(v, n, range) {
+            return v + window.hwHash(n, seed) * range;
+          }
+          var x0 = wob(4, 1, 3),
+            y0 = wob(h * 0.72, 2, 4),
+            x1 = wob(w - 10, 3, 4),
+            y1 = wob(h * 0.3, 4, 4);
+          var cx1 = wob(w * 0.35, 5, 10),
+            cy1 = wob(h * (0.72 + bend * 0.5), 6, 8);
+          var cx2 = wob(w * 0.7, 7, 10),
+            cy2 = wob(h * (0.3 + bend), 8, 8);
+          var ang = Math.atan2(y1 - cy2, x1 - cx2);
+          function head(da, len) {
+            var a = ang + Math.PI + da;
+            return (
+              "M " + x1.toFixed(1) + " " + y1.toFixed(1) + " l " +
+              (Math.cos(a) * len).toFixed(1) + " " + (Math.sin(a) * len).toFixed(1)
+            );
+          }
+          return (
+            "M " + x0.toFixed(1) + " " + y0.toFixed(1) + " C " + cx1.toFixed(1) + " " +
+            cy1.toFixed(1) + ", " + cx2.toFixed(1) + " " + cy2.toFixed(1) + ", " +
+            x1.toFixed(1) + " " + y1.toFixed(1) + " " + head(0.5, wob(34, 9, 6)) + " " +
+            head(-0.5, wob(34, 10, 6))
+          );
+        };
+        window.hwMarkPath = function (w, h, style, seed) {
+          seed = seed || 1;
+          function wob(n, range) {
+            return window.hwHash(n, seed) * (range === undefined ? 5 : range);
+          }
+          var mid = h / 2;
+          if (style === "bracket") {
+            return (
+              "M " + (w * 0.9 + wob(1, 3)) + " " + (2 + wob(2, 3)) + " Q " + wob(3, 4) + " " +
+              (2 + wob(4)) + " " + (4 + wob(5, 3)) + " " + (h * 0.5 + wob(6)) + " Q " + wob(7, 4) +
+              " " + (h - 2 + wob(8)) + " " + (w * 0.9 + wob(9, 3)) + " " + (h - 2 + wob(10, 3))
+            );
+          }
+          if (style === "strike") {
+            return (
+              "M " + (2 + wob(1, 3)) + " " + (mid + wob(2)) + " L " + (w - 4 + wob(3, 3)) + " " +
+              (mid - 3 + wob(4)) + " M " + (w - 10 + wob(5, 4)) + " " + (mid + 7 + wob(6)) +
+              " L " + (8 + wob(7, 4)) + " " + (mid + 3 + wob(8))
+            );
+          }
+          var segs = Math.max(5, Math.round(w / 95));
+          var d = "M 2 " + (mid + wob(0, 4));
+          for (var i = 1; i <= segs; i++) {
+            var x = (w / segs) * i;
+            d +=
+              " Q " + (x - w / segs / 2 + wob(i * 4 + 1, 9)) + " " +
+              (mid + (i % 2 ? -1 : 1) * (9 + wob(i * 4 + 2, 4))) + " " + x.toFixed(1) + " " +
+              (mid + wob(i * 4 + 3, 4));
+          }
+          return d;
+        };
+        window.hwCalloutBuild = function (target, opts) {
+          opts = opts || {};
+          var seed = opts.seed || 1;
+          var el = document.querySelector(target);
+          var svg = el.querySelector("svg");
+          var vb = svg.getAttribute("viewBox").split(" ");
+          var W = parseFloat(vb[2]),
+            H = parseFloat(vb[3]);
+          var cx = W / 2,
+            cy = H / 2,
+            rx = W * 0.42,
+            ry = H * 0.36;
+          el.querySelector(".hw-co-outline").setAttribute(
+            "d",
+            window.hwWobbleEllipse(cx, cy, rx, ry, seed, 4),
+          );
+          var scr = el.querySelector(".hw-co-scribble");
+          if (opts.scribble === false) {
+            scr.style.display = "none";
+          } else {
+            var d = "",
+              rows = 11;
+            for (var i = 0; i < rows; i++) {
+              var t = (i + 0.5) / rows;
+              var yy = cy - ry + t * ry * 2;
+              var half = Math.sqrt(Math.max(0.05, 1 - Math.pow((yy - cy) / ry, 2)));
+              var xw = rx * half * 0.86;
+              var xa = cx - xw + window.hwHash(i * 7 + 2, seed) * 8;
+              var xb = cx + xw + window.hwHash(i * 7 + 3, seed) * 8;
+              d += (i === 0 ? "M " : " L ") + (i % 2 ? xa : xb).toFixed(1) + " " + yy.toFixed(1);
+              d += " L " + (i % 2 ? xb : xa).toFixed(1) + " " +
+                (yy + window.hwHash(i * 7 + 4, seed) * 4).toFixed(1);
+            }
+            scr.setAttribute("d", d);
+          }
+          var conn = el.querySelector(".hw-co-connector");
+          var label = el.querySelector(".hw-co-label");
+          if (opts.connector === false || !opts.label) {
+            conn.style.display = "none";
+            label.style.display = "none";
+          } else {
+            var at = opts.labelAt || "right";
+            var sx = at === "left" ? cx - rx : at === "below" ? cx : cx + rx;
+            var sy = at === "below" ? cy + ry : cy + ry * 0.35;
+            var ex = at === "left" ? sx - 70 : at === "below" ? sx + 40 : sx + 70;
+            var ey = sy + 55;
+            conn.setAttribute(
+              "d",
+              "M " + sx.toFixed(1) + " " + sy.toFixed(1) + " Q " +
+                ((sx + ex) / 2 + window.hwHash(21, seed) * 14).toFixed(1) + " " +
+                (sy + 46).toFixed(1) + " " + ex.toFixed(1) + " " + ey.toFixed(1),
+            );
+            label.style.left = (at === "left" ? ex - 180 : ex + 12) + "px";
+            label.style.top = ey - 24 + "px";
+            if (opts.labelSize) label.style.fontSize = opts.labelSize + "px";
+          }
+          label.textContent = opts.label || "";
+        };
+        /* Los paths NACEN invisibles y se encienden en el frame exacto en que
+           empiezan a dibujarse: con stroke-linecap round, un path "vacio"
+           pinta igual un punto del color de la tinta desde el frame 0. */
+        window.hwCalloutOn = function (tl, target, at) {
+          var el = document.querySelector(target);
+          var t = at;
+          ["outline", "scribble", "connector"].forEach(function (k) {
+            var p = el.querySelector(".hw-co-" + k);
+            if (!p || p.style.display === "none") return;
+            var len = p.getTotalLength();
+            gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+            var dur = k === "scribble" ? 0.55 : k === "connector" ? 0.35 : 0.7;
+            tl.set(p, { opacity: k === "scribble" ? 0.42 : 1 }, t);
+            tl.to(p, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, t);
+            t += dur * 0.85;
+          });
+          var label = el.querySelector(".hw-co-label");
+          if (label.style.display !== "none") {
+            gsap.set(label, { scale: 0.8, transformOrigin: "0% 50%" });
+            tl.to(label, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, t);
+          }
+        };
+        window.hwBoxBuild = function (target, opts) {
+          opts = opts || {};
+          var el = document.querySelector(target);
+          var svg = el.querySelector("svg");
+          var vb = svg.getAttribute("viewBox").split(" ");
+          var W = parseFloat(vb[2]),
+            H = parseFloat(vb[3]);
+          el.querySelector("path").setAttribute(
+            "d",
+            window.hwWobbleRect(W, H, Math.min(26, W * 0.1), opts.seed || 1),
+          );
+          var label = el.querySelector(".hw-bx-label");
+          label.textContent = opts.label || "";
+          if (opts.size) label.style.fontSize = opts.size + "px";
+          if (opts.labelPos === "above") {
+            label.style.top = "-64px";
+          } else {
+            label.style.top = "50%";
+            label.style.transform = "translateY(-50%)";
+          }
+        };
+        window.hwBoxOn = function (tl, target, at) {
+          var p = document.querySelector(target + " path");
+          var len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          tl.set(p, { opacity: 1 }, at);
+          tl.to(p, { strokeDashoffset: 0, duration: 0.75, ease: "power2.inOut" }, at);
+          tl.to(
+            document.querySelector(target + " .hw-bx-label"),
+            { opacity: 1, duration: 0.4, ease: "power2.out" },
+            at + 0.5,
+          );
+        };
+        window.hwMarkOn = function (tl, target, at, dur) {
+          var p = document.querySelector(target + " path");
+          var len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          tl.set(p, { opacity: 1 }, at);
+          tl.to(
+            p,
+            { strokeDashoffset: 0, duration: dur === undefined ? 0.55 : dur, ease: "power2.inOut" },
+            at,
+          );
+        };
+        window.hwArrowOn = function (tl, target, at, dur) {
+          var p = document.querySelector(target + " path");
+          var len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          tl.set(p, { opacity: 1 }, at);
+          tl.to(
+            p,
+            { strokeDashoffset: 0, duration: dur === undefined ? 0.7 : dur, ease: "power2.inOut" },
+            at,
+          );
+        };
+        window.ytCameraMove = function (tl, target, at, opts) {
+          opts = opts || {};
+          var dur = opts.dur === undefined ? 1.2 : opts.dur;
+          gsap.set(target, {
+            transformPerspective: 1200,
+            transformOrigin: opts.origin || "50% 50%",
+          });
+          tl.to(
+            target,
+            {
+              scale: 1 + (opts.zoom === undefined ? 0.11 : opts.zoom),
+              x: opts.slideX || 0,
+              y: opts.slideY || 0,
+              rotationX: opts.tilt || 0,
+              rotationY: opts.pan || 0,
+              rotation: opts.roll || 0,
+              duration: dur,
+              ease: opts.ease || "power2.inOut",
+            },
+            at,
+          );
+        };
+        window.ytDefocusPulse = function (tl, target, at, dur) {
+          dur = dur === undefined ? 1.2 : dur;
+          tl.to(target, { opacity: 1, duration: dur * 0.45, ease: "power2.out" }, at);
+          tl.to(target, { opacity: 0, duration: dur * 0.55, ease: "power2.in" }, at + dur * 0.45);
+        };
+        window.ytHighlightIn = function (tl, target, at, opts) {
+          opts = opts || {};
+          gsap.set(target, {
+            "--yt-hl-x": opts.x !== undefined ? opts.x : "50%",
+            "--yt-hl-y": opts.y !== undefined ? opts.y : "50%",
+            "--yt-hl-rx": opts.rx !== undefined ? opts.rx : "22%",
+            "--yt-hl-ry": opts.ry !== undefined ? opts.ry : "26%",
+          });
+          tl.to(target, { opacity: 1, duration: 0.5, ease: "power2.out" }, at);
+        };
+        window.ytHighlightOut = function (tl, target, at) {
+          tl.to(target, { opacity: 0, duration: 0.4, ease: "power2.in" }, at);
+        };
+        window.ytCircleOn = function (tl, target, at, dur) {
+          var e = document.querySelector(target + " ellipse");
+          var len = e.getTotalLength();
+          gsap.set(e, { strokeDasharray: len, strokeDashoffset: len });
+          tl.set(e, { opacity: 1 }, at);
+          tl.to(
+            e,
+            { strokeDashoffset: 0, duration: dur === undefined ? 0.7 : dur, ease: "power2.inOut" },
+            at,
+          );
+        };
+
+        /* ════════ el mundo ════════ */
+        var W = 2400,
+          H = 2000,
+          FW = 1080,
+          FH = 864,
+          S = 0.432;
+
+        var boilTargets = [];
+
+        function el(zone, tag, cls, css) {
+          var d = document.createElement(tag);
+          if (cls) d.className = cls;
+          for (var k in css) d.style[k] = css[k];
+          document.getElementById(zone).appendChild(d);
+          return d;
+        }
+        function txt(zone, id, s, x, y, size, cls) {
+          var d = el(zone, "div", "t " + (cls || ""), {
+            left: x + "px",
+            top: y + "px",
+            fontSize: size + "px",
+          });
+          d.id = id;
+          d.textContent = s;
+          return d;
+        }
+        function box(zone, id, x, y, w, h, label, size, seed) {
+          var d = el(zone, "div", "hw-box", {
+            left: x + "px", top: y + "px", width: w + "px", height: h + "px",
+          });
+          d.id = id;
+          d.innerHTML =
+            '<svg viewBox="0 0 ' + w + " " + h + '"><path></path></svg>' +
+            '<div class="hw-bx-label"></div>';
+          window.hwBoxBuild("#" + id, { seed: seed || 3, label: label, size: size || 44 });
+          boilTargets.push("#" + id);
+          return d;
+        }
+        function mark(zone, id, x, y, w, h, style, seed, color) {
+          var d = el(zone, "div", "hw-mark", {
+            left: x + "px", top: y + "px", width: w + "px", height: h + "px",
+          });
+          d.id = id;
+          if (color) d.style.setProperty("--hw-mark-color", color);
+          d.innerHTML = '<svg viewBox="0 0 ' + w + " " + h + '"><path></path></svg>';
+          d.querySelector("path").setAttribute("d", window.hwMarkPath(w, h, style, seed || 4));
+          boilTargets.push("#" + id);
+          return d;
+        }
+        function arrow(zone, id, x, y, w, h, curve, seed, flip) {
+          var outer = el(zone, "div", flip === "y" ? "flipY" : flip === "x" ? "flipX" : "", {
+            position: "absolute", left: x + "px", top: y + "px", width: w + "px", height: h + "px",
+          });
+          var d = document.createElement("div");
+          d.className = "hw-arrow";
+          d.id = id;
+          d.style.left = "0px";
+          d.style.top = "0px";
+          d.style.width = w + "px";
+          d.style.height = h + "px";
+          d.innerHTML = '<svg viewBox="0 0 ' + w + " " + h + '"><path></path></svg>';
+          d.querySelector("path").setAttribute("d", window.hwArrowPath(w, h, curve, seed || 7));
+          outer.appendChild(d);
+          boilTargets.push("#" + id);
+          return d;
+        }
+        function callout(zone, id, x, y, w, h, opts) {
+          var d = el(zone, "div", "hw-callout", {
+            left: x + "px", top: y + "px", width: w + "px", height: h + "px",
+          });
+          d.id = id;
+          d.innerHTML =
+            '<svg viewBox="0 0 ' + w + " " + h + '">' +
+            '<path class="hw-co-scribble"></path>' +
+            '<path class="hw-co-outline"></path>' +
+            '<path class="hw-co-connector"></path></svg>' +
+            '<div class="hw-co-label"></div>';
+          window.hwCalloutBuild("#" + id, opts);
+          boilTargets.push("#" + id);
+          return d;
+        }
+        function ptr(zone, id, x, y, w, h) {
+          var d = el(zone, "div", "yt-circle", {
+            left: x + "px", top: y + "px", width: w + "px", height: h + "px",
+          });
+          d.id = id;
+          d.style.setProperty("--yt-ptr-color", "#ea580c");
+          d.innerHTML =
+            '<svg viewBox="0 0 ' + w + " " + h + '"><ellipse cx="' + w / 2 + '" cy="' + h / 2 +
+            '" rx="' + (w / 2 - 8) + '" ry="' + (h / 2 - 8) + '"></ellipse></svg>';
+          boilTargets.push("#" + id);
+          return d;
+        }
+
+        function group(parent, id) {
+          var d = document.createElement("div");
+          d.className = "zone";
+          d.id = id;
+          document.getElementById(parent).appendChild(d);
+          return d;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           CONTENIDO — AQUI VA TU PIZARRA
+           Coordenadas en el LIENZO (2400x2000), no en el cuadro.
+           Reparte los beats en cuadrantes de ~1120x940; cada cuadrante
+           entra entero en el cuadro a zoom ~2.2 sin cortar nada.
+
+             Q1 x 60..1180   y 40..1010      Q2 x 1220..2340  y 40..1010
+             Q3 x 60..1180   y 1050..1960    Q4 x 1220..2340  y 1050..1960
+
+           Agrupa con group() lo que quieras atenuar por separado: si
+           atenuas un cuadrante entero, apagas tambien lo que aun no ha
+           salido en el.
+           ══════════════════════════════════════════════════════════════ */
+
+        group("zA", "gTitulo");
+
+        /* --- ejemplo: sustituye todo esto --- */
+        txt("gTitulo", "e-pre", "LLEGAR A", 100, 74, 52, "soft");
+        txt("gTitulo", "e-num", "10.000", 96, 128, 168);
+        mark("gTitulo", "e-u", 96, 320, 330, 34, "underline", 4, "#ea580c");
+
+        txt("zA", "e-no", "más trends", 120, 420, 54);
+        mark("zA", "e-tachon", 108, 428, 260, 46, "strike", 10, "#c0392b");
+
+        box("zB", "e-caja", 1290, 182, 900, 98, "el PROBLEMA que resuelves", 46, 21);
+        arrow("zB", "e-flecha", 1650, 300, 170, 60, "gentle", 8, "y");
+        callout("zB", "e-circulo", 1290, 380, 300, 220,
+                { seed: 6, scribble: true, connector: false });
+        ptr("zC", "e-puntero", 100, 1156, 600, 128);
+        /* borde de la hoja */
+        document.querySelector("#edge-p").setAttribute("d", window.hwWobbleRect(1042, 826, 26, 3, 4));
+
+        /* ════════ linea de tiempo ════════ */
+        var tl = gsap.timeline({ paused: true });
+
+        function camXY(wx, wy, Z) {
+          var fx = FW / 2 + (wx - W / 2) * S;
+          var fy = FH / 2 + (wy - H / 2) * S;
+          return { x: -(fx - FW / 2) * Z, y: -(fy - FH / 2) * Z };
+        }
+        function cam(at, wx, wy, Z, dur, defocus) {
+          var p = camXY(wx, wy, Z);
+          dur = dur === undefined ? 1.1 : dur;
+          window.ytCameraMove(tl, "#cam", at, {
+            zoom: Z - 1, slideX: p.x, slideY: p.y, dur: dur, ease: "power2.inOut",
+          });
+          if (defocus !== false) window.ytDefocusPulse(tl, "#defocus", at, dur);
+        }
+        function show(sel, at, dur) {
+          tl.to(sel, { opacity: 1, duration: dur === undefined ? 0.38 : dur, ease: "power2.out" }, at);
+        }
+
+        /* Atenuar lo ya explicado. Nunca por debajo de ~0.3: mas abajo el
+           trazo negro sobre crema desaparece y el mapa deja de leerse. */
+        function settle(sel, at) {
+          tl.to(sel, { opacity: 0.32, duration: 1.1, ease: "power1.inOut" }, at);
+        }
+
+        /* posicion inicial de camara: el titular de Q1 */
+        (function () {
+          var p = camXY(540, 300, 2.6);
+          gsap.set("#cam", {
+            transformPerspective: 1200, transformOrigin: "50% 50%",
+            scale: 2.6, x: p.x, y: p.y,
+          });
+        })();
+
+        /* --- la hoja entra y el borde se dibuja --- */
+        tl.to("#paper", { opacity: 1, duration: 0.35, ease: "power2.out" }, 0);
+        (function () {
+          var p = document.getElementById("edge-p");
+          var len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          tl.set(p, { opacity: 0.55 }, 0.1);
+          tl.to(p, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut" }, 0.1);
+        })();
+
+        /* ══════════════════════════════════════════════════════════════
+           LINEA DE TIEMPO — cada trazo clavado a su palabra.
+           Saca los segundos de audio.json (word_timestamps), no de los
+           segmentos: 300 ms tarde ya se nota.
+
+             show(sel, t)                 texto que aparece
+             hwMarkOn(tl, sel, t, dur)    subrayado / tachon / corchete
+             hwBoxOn(tl, sel, t)          caja + etiqueta
+             hwArrowOn(tl, sel, t, dur)   flecha
+             hwCalloutOn(tl, sel, t)      elipse + rayado + conector
+             ytCircleOn(tl, sel, t, dur)  elipse puntero
+             cam(t, x, y, Z, dur, defoc)  centra (x,y) del lienzo a zoom Z
+             settle(sel, t)               atenua al 32% lo ya explicado
+
+           TECHO DE ZOOM: si un grupo mide N px de lienzo, cortarlo empieza
+           por encima de Z = 1080 / (0.432 * N). Una rejilla de 952 px no
+           admite mas de Z 2.5. Calcula el techo ANTES de elegir el zoom.
+           ══════════════════════════════════════════════════════════════ */
+
+        /* --- ejemplo: sustituye todo esto --- */
+        show("#e-pre", 0.35);
+        show("#e-num", 1.3, 0.3);
+        window.hwMarkOn(tl, "#e-u", 3.95, 0.5);
+
+        cam(4.9, 430, 500, 2.7, 1.0);
+        settle("#gTitulo", 4.9);
+        show("#e-no", 5.5);
+        window.hwMarkOn(tl, "#e-tachon", 6.1, 0.5);
+
+        cam(31.8, 1740, 320, 2.35, 1.3);
+        window.hwBoxOn(tl, "#e-caja", 38.0);
+        window.hwArrowOn(tl, "#e-flecha", 44.7, 0.6);
+        window.hwCalloutOn(tl, "#e-circulo", 48.0);
+        window.ytCircleOn(tl, "#e-puntero", 73.7, 0.6);
+
+        /* cierre: abrir a mapa completo. Z 0.92 y no 1.0 — a escala 1 el
+           lienzo mide exactamente el alto del cuadro y la hoja tiene 14 px
+           de margen, asi que las ultimas lineas quedan cortadas. */
+        cam(135.7, 1200, 1010, 0.92, 1.8);
+        ["#gTitulo", "#zB", "#zC"].forEach(function (z) {
+          tl.to(z, { opacity: 1, duration: 1.3, ease: "power1.inOut" }, 135.7);
+        });
+        tl.to("#paper", { opacity: 0, duration: 0.5, ease: "power2.in" }, 138.2);
+        tl.to("#edge-p", { opacity: 0, duration: 0.5, ease: "power2.in" }, 138.2);
+
+        /* --- el boil: lo dibujado a mano nunca se queda quieto --- */
+        window.hwBoil(tl, boilTargets, { amp: 1.5, rot: 0.35, frameDrop: 3, seed: 4 });
+        window.hwBoil(tl, ["#a-num", "#a-x10", "#d-big"], {
+          amp: 1.1, rot: 0.22, frameDrop: 4, seed: 9,
+        });
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

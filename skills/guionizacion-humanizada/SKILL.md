@@ -47,11 +47,11 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona dueña de la cuenta** — tú, o la clienta para la que estás escribiendo —, basándose en el análisis real de SUS contenidos más exitosos. El objetivo es que los guiones y escritos suenen como esa persona, no como una IA tratando de sonar como ella.
 
-> ⚠️ **La voz es la del usuario, nunca la de otra creadora.** El archivo
-> `references/ejemplo-voice-guide.md` que viene con la skill es SOLO una muestra de cómo se
-> ve un Voice Guide bien hecho (está construido sobre una cuenta pública, a modo de ejemplo).
-> **Nunca escribas en esa voz.** Sirve para entender el formato; el contenido sale del
-> análisis del perfil del usuario.
+> ⚠️ **La voz es la del usuario, nunca la de otra creadora.** Si esta skill trae un archivo
+> `references/ejemplo-voice-guide.md`, es SOLO una muestra de cómo se ve un Voice Guide bien
+> hecho (construido sobre una cuenta pública, a modo de ejemplo). **Nunca escribas en esa voz.**
+> Sirve para entender el formato; el contenido sale del análisis del perfil del usuario.
+> Si el archivo no está, no lo busques: pasa directo al PASO 1.
 
 ---
 

@@ -1,6 +1,6 @@
 # Anuncios GOAT — Framework Hormozi integrado
 
-Referencia destilada del artifact `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-anuncios-goat.html`. Úsalo para producir creativos de tráfico frío (Meta, TikTok, YouTube Shorts) — diferente del VSL largo de landing.
+Referencia destilada del artifact `~/Documents/FORMULA100K/ARTIFACTS/f100k-anuncios-goat.html`. Úsalo para producir creativos de tráfico frío (Meta, TikTok, YouTube Shorts) — diferente del VSL largo de landing.
 
 ---
 

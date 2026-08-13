@@ -78,7 +78,7 @@ Tarda 10-20 segundos para 5 reels.
 
 ### Gotcha conocido
 
-- El transcriber automático **confunde "Claude" con "Cloud" / "Clouds"**. Corregir manualmente en el reporte final cuando el perfil sea de Andrea o cualquier persona que hable de Claude/IA.
+- El transcriber automático **confunde "Claude" con "Cloud" / "Clouds"**. Corregir manualmente en el reporte final cuando el perfil sea del usuario o cualquier persona que hable de Claude/IA.
 - Si el actor no encuentra `videoViewCount` para un reel reciente (<24h), usar `videoPlayCount` como proxy (suele ser 3-4x más alto que views).
 - `isPinned: true` puede inflar el `commentsCount` artificialmente (un reel pinned acumula durante meses). Marcar en el reporte si entró al top por estar pinned.
 

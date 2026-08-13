@@ -8,11 +8,11 @@ Tres capas, en orden de autoridad. Cuando se contradicen, **gana la de arriba**.
 
 Lo que ganó **en esta cuenta** vence a cualquier estudio general.
 
-**Si usas esta skill en tu propia cuenta:** la Capa 1 son *tus* datos, no los de Andrea. Antes de escribir las variantes, mira tus 5 reels con más alcance y tus 5 peores de los últimos 30 días y contesta: ¿qué carga el gancho en los buenos —texto, imagen o lo que dices—? ¿Abren declarando o preguntando? ¿Sale objeto en mano? Eso manda sobre todo lo demás. Si no tienes historial suficiente, salta a la Capa 2 y **dilo** — es justamente lo que los trial reels vienen a resolver.
+**Si usas esta skill en tu propia cuenta:** la Capa 1 son *tus* datos, no los del usuario. Antes de escribir las variantes, mira tus 5 reels con más alcance y tus 5 peores de los últimos 30 días y contesta: ¿qué carga el gancho en los buenos —texto, imagen o lo que dices—? ¿Abren declarando o preguntando? ¿Sale objeto en mano? Eso manda sobre todo lo demás. Si no tienes historial suficiente, salta a la Capa 2 y **dilo** — es justamente lo que los trial reels vienen a resolver.
 
-**Para la cuenta de Andrea:** buscar en Google Drive con el MCP el doc más reciente `name contains 'Patrones IG @andreaestratega'` (el Autopilot crea uno cada lunes ~08:05). Leer patrones VIRALES (repetir) y NEGATIVOS (evitar). Si el MCP de Drive no está disponible, **decirlo en voz alta** y seguir con la Capa 2 — no inventar patrones de cuenta.
+**Para la cuenta del usuario:** buscar en Google Drive con el MCP el doc más reciente `name contains 'Patrones IG @<handle-del-usuario>'` (el Autopilot crea uno cada lunes ~08:05). Leer patrones VIRALES (repetir) y NEGATIVOS (evitar). Si el MCP de Drive no está disponible, **decirlo en voz alta** y seguir con la Capa 2 — no inventar patrones de cuenta.
 
-**Lo ya establecido de @andreaestratega (auditoría de 70 reels, 3-jul-2026)** — sirve de ejemplo de cómo se ve una Capa 1 bien hecha:
+**Ejemplo de una Capa 1 ya construida (auditoría real de 70 reels de una cuenta de nicho marketing)** — sirve de ejemplo de cómo se ve una Capa 1 bien hecha:
 
 - La brecha entre su mejor reel (483K vistas) y el peor (2.229) es **217×**, y no la explica la duración, ni el CTA, ni que el contenido "no guste" — los peores tienen *más* likes por vista. La explica el gancho y su ejecución en el segundo 1.
 - **Textual:** promesa + NÚMERO desde el frame 0, que cambia cada 2-3s. Nunca texto-etiqueta ("Lista de formatos").
@@ -28,7 +28,7 @@ Lo que ganó **en esta cuenta** vence a cualquier estudio general.
 
 Observación honesta de los primeros 3 segundos de 300 virales en español, hecha sobre **frames reales** (no reconstruida).
 
-El dataset crudo es de la cuenta de Andrea y vive en su máquina:
+El dataset crudo es de la cuenta del usuario y vive en su máquina:
 
 ```
 ~/Documents/FORMULA100K/1000-GANCHOS/data/fichas_observadas/fichas300.json

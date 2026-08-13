@@ -82,7 +82,7 @@ Reglas para que cada slide se sienta diferente y no parezca plantilla.
 - Lista de 3-4 puntos con flechas →
 - CTA en bloque rojo sólido con "Comenta '100K' y te enseño cómo 🚀" (peso 800, rotación -1°)
 - Frase tipo nota: "📌 Guárdalo para cuando..." (Caveat 42px, rotación -2°)
-- Handle abajo izquierda completo: "@andreaestratega · Fórmula 100K"
+- Handle abajo izquierda completo: "@tuhandle · Fórmula 100K"
 - 2-3 stickers (📌 🤫 🔥)
 - 2 tapes superiores
 

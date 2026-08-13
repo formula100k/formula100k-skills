@@ -45,22 +45,22 @@ Slide tipo "ÚLTIMAS HORAS — Solo HOY" con fondo rojo o negro:
 Slide 1 tipo "Ella es Brenda 👇" + foto circular de Brenda:
 
 → **Banana** (`gemini_edit_image`)
-→ Foto base: foto de Andrea (paisaje)
+→ Foto base: foto del usuario (paisaje)
 → Pasar también la foto del cliente como segunda referencia
 → Prompt: "place a circular photo of [cliente] (provided as reference) in the center, with white border like a polaroid"
 
 ### Slide con motion / video clip
 
-Si Andrea quiere que ese slide se grabe como video, no como imagen estática:
+Si el usuario quiere que ese slide se grabe como video, no como imagen estática:
 
 → **NO generar con esta skill**
-→ La skill avisa: "Este slide es un video grabado por Andrea (formato F2/F5). No se genera con IA. Solo necesita texto y cajas, que pueden añadirse en la app de IG."
+→ La skill avisa: "Este slide es un video grabado por el usuario (formato F2/F5). No se genera con IA. Solo necesita texto y cajas, que pueden añadirse en la app de IG."
 
 ---
 
 ## MODO `--motor=both` (A/B testing)
 
-Cuando Andrea quiere ver ambas versiones para elegir:
+Cuando el usuario quiere ver ambas versiones para elegir:
 
 1. Ejecuta Banana → guarda `slide_N_banana.png`
 2. Ejecuta Higgsfield → guarda `slide_N_higgsfield.png`
@@ -117,7 +117,7 @@ mcp__higgsfield__generate_image(params={
 ```
 
 **⚠️ Reglas obligatorias:**
-- **`model` siempre `nano_banana_2`** — es el último Nano Banana de Google (Pro), el único con text-rendering confiable. Nunca downgrade a otros modelos para stories de Andrea.
+- **`model` siempre `nano_banana_2`** — es el último Nano Banana de Google (Pro), el único con text-rendering confiable. Nunca downgrade a otros modelos para stories del usuario.
 - **`resolution` mínimo `"2k"`** — en `"1k"` el modelo a veces duplica palabras/líneas en cajas de texto. Subir a `"2k"` (o `"4k"` si el slide tiene tabla densa o mockup con mucho texto) elimina ese artefacto.
 - **`aspect_ratio: "9:16"`** explícito siempre.
 
@@ -136,15 +136,15 @@ Descarga la URL y guarda como `slide_N_higgsfield.png`.
 
 ## ⚠️ COSAS A NO HACER
 
-- **NO usar Higgsfield Soul de Andrea** para generar su cara → está deprecado, deriva la cara (ver memoria de Andrea: `feedback_avatar_imagen.md`)
-- **NO usar Banana solo (`generate_image`) para slides con cara de Andrea** → genera caras random, no Andrea
+- **NO usar Higgsfield Soul del usuario** para generar su cara → está deprecado, deriva la cara (ver memoria del usuario: `feedback_avatar_imagen.md`)
+- **NO usar Banana solo (`generate_image`) para slides con cara del usuario** → genera caras random, no la de otra persona
 - **NO mezclar motores en una sola secuencia** sin avisar al usuario (genera disparidad visual)
 - **NO usar Higgsfield para texto largo** → su modelo no renderiza texto bien todavía
 - **NO olvidar verificar el aspect ratio 9:16** explícitamente en el prompt
 
 ---
 
-## COSTOS APROXIMADOS (referencia para Andrea)
+## COSTOS APROXIMADOS (referencia para el usuario)
 
 | Motor | Costo por imagen | Velocidad |
 |---|---|---|
@@ -152,9 +152,9 @@ Descarga la URL y guarda como `slide_N_higgsfield.png`.
 | Banana (Gemini 2.5 Pro) | ~$0.05-0.10 | 15-30 segundos |
 | Higgsfield | ~créditos según plan | 30-90 segundos |
 
-**Tip de optimización:** una secuencia de 5 slides con Banana cuesta ~$0.10-0.50. Con Higgsfield, depende del plan de Andrea.
+**Tip de optimización:** una secuencia de 5 slides con Banana cuesta ~$0.10-0.50. Con Higgsfield, depende del plan del usuario.
 
-Antes de generar, confirmar con Andrea si quiere:
+Antes de generar, confirmar con el usuario si quiere:
 - "Modo económico" → Banana para todo
 - "Modo premium" → Higgsfield para slides cinematográficos, Banana para resto
 - "A/B test" → Both
@@ -171,4 +171,4 @@ Para slide 100% sin foto (mockup puro) → Banana
 Para urgencia con fondo plano → Banana
 ```
 
-Es decir: **Banana en 90% de los casos**. Higgsfield solo si Andrea pide explícitamente "más cinematográfico" o usa estructura #16.
+Es decir: **Banana en 90% de los casos**. Higgsfield solo si el usuario pide explícitamente "más cinematográfico" o usa estructura #16.

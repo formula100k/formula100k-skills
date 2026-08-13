@@ -36,7 +36,7 @@ El algoritmo de Meta y TikTok premia el engagement temprano (primeros 3 segundos
 | **Variantes** | Diseñado para producir 30-150 con H×M×C | Espontáneo, depende de tendencias |
 | **Optimización** | Conversión bajo fricción | Distribución y viralidad |
 
-**Frase clave para Andrea y sus alumnas:**
+**Frase clave para el usuario y sus alumnas:**
 > "Un ad de 3 segundos requiere un hook de impacto inmediato. Un reel de 30 segundos puede construir lentamente. Confundir los dos formatos es la razón principal por la que la mayoría quema presupuesto en ads."
 
 ### Anatomía de un ad ganador (Framework GOAT — Hormozi)
@@ -106,7 +106,7 @@ Cuatro motores trabajan juntos, no se excluyen. La regla es la misma que en `inv
 | **vidIQ MCP** | YouTube ads (in-stream, bumper) — outliers de creators que monetizan con ads | Solo si se piden ads de YouTube específicamente |
 | **Tavily MCP** | Landings de los ads (página de aterrizaje), ofertas verbatim, precios, garantías | Cuando se quiere ver no solo el creativo sino la oferta completa |
 
-**Regla de oro:** la Biblioteca de Anuncios de Meta y el TikTok Creative Center cierran cada vez más data al visitante anónimo. Con sesión logueada de Andrea (agent-browser), se ve TODO: anuncios activos, fechas, plataformas, variantes, demografía mostrada.
+**Regla de oro:** la Biblioteca de Anuncios de Meta y el TikTok Creative Center cierran cada vez más data al visitante anónimo. Con sesión logueada del usuario (agent-browser), se ve TODO: anuncios activos, fechas, plataformas, variantes, demografía mostrada.
 
 ---
 
@@ -134,7 +134,7 @@ Cuatro motores trabajan juntos, no se excluyen. La regla es la misma que en `inv
 ```
 [agent-browser]
 
-Abre Chrome con la sesión existente de Andrea (Facebook logueado).
+Abre Chrome con la sesión existente del usuario (Facebook logueado).
 
 TAREA — Meta Ads Library para cada competidor [Marca1, Marca2, ...]:
 
@@ -154,12 +154,12 @@ TAREA — Meta Ads Library para cada competidor [Marca1, Marca2, ...]:
    - URL del video o imagen (para descargar)
    - Número de variantes activas del mismo ad (si la library muestra "ver más anuncios")
 
-5. Descarga los .mp4 / .jpg de cada creativo a /Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_[marca]/
+5. Descarga los .mp4 / .jpg de cada creativo a ~/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_[marca]/
 
 OUTPUT: markdown crudo, una sección por marca. No analices — yo lo proceso en el paso 3.
 ```
 
-**Cuando NO hay sesión logueada en el Chrome de Andrea:**
+**Cuando NO hay sesión logueada en el Chrome del usuario:**
 - Caer a Apify (`apify/facebook-ads-library-scraper`) con la query de marca o keyword
 
 **Por qué la fecha de inicio importa más que cualquier otra métrica:**
@@ -183,7 +183,7 @@ Abre Chrome (TikTok Business Center logueado si tiene acceso, o público).
 
 TAREA A — Top Ads por industria:
 1. Visita https://ads.tiktok.com/business/creativecenter/topads/pc/en
-2. Filtra por: Industria = [nicho de Andrea], Región = LATAM/Spain/US, Period = Last 30 days
+2. Filtra por: Industria = [nicho del usuario], Región = LATAM/Spain/US, Period = Last 30 days
 3. Ordena por CTR (Click-Through Rate) descendente — los Top 1-20% son los creativos ganadores
 4. Extrae los top 20-30 ads con:
    - URL del ad en Creative Center
@@ -200,7 +200,7 @@ Para cada keyword:
 1. Visita https://ads.tiktok.com/business/creativecenter/inspiration/popular/pc/en?keyword=[keyword]
 2. Top 10 ads con métricas
 
-5. Descarga los .mp4 a /Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_tiktok_topads/
+5. Descarga los .mp4 a ~/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_tiktok_topads/
 
 OUTPUT: markdown crudo, una sección por industria/keyword.
 ```
@@ -232,7 +232,7 @@ Si después de cazar el ad se quiere ver la oferta completa (precio, garantía, 
 1. `tavily_extract` con la URL de destino del ad
 2. Sacar: titular principal, sub-headline, bullet points, precio, garantía, bonos, CTA de página
 
-Esto se usa cuando Andrea quiere comparar **oferta completa de competidor** vs. la suya, no solo el creativo.
+Esto se usa cuando el usuario quiere comparar **oferta completa de competidor** vs. la suya, no solo el creativo.
 
 ---
 
@@ -275,7 +275,7 @@ Por **cada uno de los 30-50 ads** investigados, generar una ficha estandarizada:
 
 ## CLUSTERING — DE 30-50 ADS A LOS PATRONES GANADORES
 
-Después de fichar cada ad, agruparlos en **clusters** para encontrar los patrones repetidos. Esto es lo que va a usar Andrea (o sus alumnas) para construir SUS propios ads.
+Después de fichar cada ad, agruparlos en **clusters** para encontrar los patrones repetidos. Esto es lo que van a usar el usuario o sus alumnas para construir SUS propios ads.
 
 ### 4 ejes de clustering
 
@@ -322,7 +322,7 @@ Después de fichar cada ad, agruparlos en **clusters** para encontrar los patron
 
 ## GENERACIÓN DE 30-50 IDEAS DE ADS PROPIOS (FASE CREATIVA)
 
-Una vez detectados los patrones, generar las **30-50 ideas propias** para Andrea. NO copiar el texto de competidores, sí adoptar la estructura validada.
+Una vez detectados los patrones, generar las **30-50 ideas propias** para el usuario. NO copiar el texto de competidores, sí adoptar la estructura validada.
 
 ### Plantilla por idea
 
@@ -435,13 +435,13 @@ Cuando el usuario elige X ideas y dice "guionízame estas", entrar en modo guion
 Todo lo que esta skill produce va a:
 
 ```
-/Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/
+~/Documents/FORMULA100K/ADS-REFERENCIAS/
   └── YYYY-MM-DD_[proyecto]/
        ├── 01_referencias_meta/        (mp4/jpg descargados de Meta Ads Library)
        ├── 02_referencias_tiktok/      (mp4 descargados de TikTok Creative Center)
        ├── 03_fichas_GOAT.md           (desglose de los 30-50 ads)
        ├── 04_clusters_patrones.md     (patrones ganadores detectados)
-       ├── 05_ideas_propias.md         (30-50 ideas para Andrea)
+       ├── 05_ideas_propias.md         (30-50 ideas para el usuario)
        └── 06_guiones/                 (un .md por ad guionizado con H×M×C)
 ```
 
@@ -462,7 +462,7 @@ Esta skill se queda en: **investigar → desglosar → idear → (opcionalmente)
 
 ## CITAS DOCTRINALES PARA USAR EN OUTPUT AL USUARIO
 
-Cuando Andrea o una alumna pregunte el "por qué" durante la investigación, usar estas frases verbatim:
+Cuando el usuario o una alumna pregunte el "por qué" durante la investigación, usar estas frases verbatim:
 
 - "La creatividad es el 80% del éxito en publicidad pagada."
 - "Las vistas no venden, los comentarios sí."

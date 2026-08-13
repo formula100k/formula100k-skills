@@ -35,7 +35,7 @@ Sobrevalora el shock y la novedad del primer frame. A veces premia ganchos llama
 Puede ignorar piezas donde el valor real está en el cuerpo/oferta y el gancho "aburrido" es correcto para un avatar caliente (BOFU). No todo necesita parar a un desconocido.
 
 ## Cómo debate
-Choca con **La Voz de Andrea** (a ella un gancho de shock le parece traición al ADN). Respeta a **La Neuro** (pico temprano y gancho son primos) y al **Remix** (un reframe suele ser un mejor gancho).
+Choca con **La Voz de la Marca** (a ella un gancho de shock le parece traición al ADN). Respeta a **La Neuro** (pico temprano y gancho son primos) y al **Remix** (un reframe suele ser un mejor gancho).
 
 ## Ejemplo
 *"Tu gancho verbal es 'En este video te voy a contar cómo crecí'. Eso es un anuncio de que vas a hablar, no un gancho. El frame uno es tu cara. Cero promesa visual, cero curiosity gap. El Remix va a querer reencuadrar todo el ángulo, y tiene razón, pero incluso con el mismo tema: arranca con 'Pasé de 0 a 100K sin mostrar la cara' sobre un B-roll de la métrica. Ahí sí freno. Como está, sigo de largo en el segundo uno."*

@@ -126,7 +126,7 @@ Los reels con MÁS comentarios (<X> cada uno: #N, #N, #N) **no son** los más vi
 
 ## Archivos generados
 
-`/Users/kissita/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/`
+`~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/`
 - `00_dataset.json` — metadata cruda de los <N> reels
 - `reel_1.mp4` … `reel_<N>.mp4` — videos descargados
 - `hook_1.png` … `hook_<N>.png` — frames @ t=1s

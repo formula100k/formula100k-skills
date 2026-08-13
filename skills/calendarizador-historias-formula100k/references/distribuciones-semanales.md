@@ -1,6 +1,6 @@
 # DISTRIBUCIONES SEMANALES — Los 4 modos de calendario
 
-Cada modo tiene un objetivo distinto. Andrea elige uno según el momento del mes/lanzamiento.
+Cada modo tiene un objetivo distinto. El usuario elige uno según el momento del mes/lanzamiento.
 
 ---
 
@@ -85,7 +85,7 @@ Cada modo tiene un objetivo distinto. Andrea elige uno según el momento del mes
 | Domingo | 💛 Libre | 8pm | Cierre suave del fin de semana |
 
 **Total secuencias:** 14
-**Foco narrativo:** posicionar a Andrea como autoridad + persona real, sin vender.
+**Foco narrativo:** posicionar al usuario como autoridad + persona real, sin vender.
 
 ---
 
@@ -144,7 +144,7 @@ Cada modo tiene un objetivo distinto. Andrea elige uno según el momento del mes
 
 Si el usuario da una idea que choca con la categoría asignada en su slot:
 
-Ejemplo: Andrea da "vender el GPT con regalo gratis" pero el slot es "Libre".
+Ejemplo: El usuario da "vender el GPT con regalo gratis" pero el slot es "Libre".
 
 → Resolver:
 1. **Reasignar** la idea a un slot compatible (Lead Magnet)

@@ -144,7 +144,7 @@ Si falla alguna validación, ajustar automáticamente:
 
 Antes de generar la imagen, guardar el brief como YAML en:
 ```
-/Users/kissita/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/brief.yaml
+~/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/brief.yaml
 ```
 
 Esto permite:

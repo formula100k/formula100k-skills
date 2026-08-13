@@ -29,7 +29,7 @@ Input JSON (carruseles):
     "modo": "crecimiento",
     "fecha_inicio": "2026-05-18",
     "titulo": "CALENDARIO DE CARRUSELES — SEMANA 18 MAYO 2026",
-    "subtitulo": "Andrea Vega · FÓRMULA 100K · @andraestratega",
+    "subtitulo": "[TU NOMBRE] · [TU MARCA] · @tuhandle",
     "filas": [
       {"dia":"LUN","fecha":"18 MAY 2026","numero":"01","idea":"...","guion":"SLIDE 1 — ...\n\n...","cta":"MÁQUINA","formato":"Carrusel · 7 slides","semana":"S1"},
       ...

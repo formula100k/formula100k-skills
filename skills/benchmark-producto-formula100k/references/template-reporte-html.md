@@ -293,7 +293,7 @@ PEQUEÑA             │                   GRANDE
 ```html
 <footer class="border-t border-cream-200 pt-8 mt-16 text-sm text-gray-500 text-center">
   <p>Benchmark generado el [FECHA] · Metodología F100K · 10 dimensiones</p>
-  <p class="mt-2 font-hand text-lg text-accent-yellow">FÓRMULA 100K · @andraestratega</p>
+  <p class="mt-2 font-hand text-lg text-accent-yellow">[TU MARCA] · @tuhandle</p>
 </footer>
 ```
 
@@ -310,4 +310,4 @@ PEQUEÑA             │                   GRANDE
 7. **Cada oportunidad lleva chips de impacto/esfuerzo/plazo.** Sin chips, no es accionable.
 8. **Cifras y nombres propios SIEMPRE entre `<strong>`** en párrafos descriptivos.
 9. **Citar fuentes en el apéndice** con `<a>` clickeables (las URLs reales scrapadas).
-10. **Footer obligatorio** con firma Caveat F100K + handle @andraestratega.
+10. **Footer obligatorio** con firma Caveat F100K + el handle del usuario.

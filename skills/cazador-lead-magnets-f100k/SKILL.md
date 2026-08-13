@@ -315,10 +315,10 @@ Entregar:
 ## Output
 
 Guardar siempre en:
-`/Users/kissita/Documents/FORMULA100K/LEAD_MAGNETS/YYYY-MM-DD_<slug-del-lead-magnet>.md`
+`~/Documents/FORMULA100K/LEAD_MAGNETS/YYYY-MM-DD_<slug-del-lead-magnet>.md`
 
 Si el lead magnet es para un cliente, usar:
-`/Users/kissita/Documents/FORMULA100K/CLIENTES/<nombre>/lead-magnet_<slug>.md`
+`~/Documents/FORMULA100K/CLIENTES/<nombre>/lead-magnet_<slug>.md`
 
 ---
 

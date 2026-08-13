@@ -56,7 +56,7 @@ Reglas universales que se aplican a TODOS los arquetipos y se inyectan en los pr
 ## REGLAS DE COPY
 
 ### Idioma
-- **Andrea escribe en español NEUTRO** (de la memoria del sistema).
+- **El usuario escribe en español NEUTRO** (de la memoria del sistema).
 - Reemplazos obligatorios si el input es argentino:
   - `vos` → `tú`
   - `tenés` → `tienes`

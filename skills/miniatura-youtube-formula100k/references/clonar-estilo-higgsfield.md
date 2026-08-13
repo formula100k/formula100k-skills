@@ -2,7 +2,7 @@
 
 Replica el estilo de UNA captura de referencia (miniatura/portada de otra persona) poniendo la CARA del usuario, y manda a generar a Higgsfield vía MCP. Este es el modo que mejor convierte: copia composición + estética probada y solo cambia la identidad.
 
-> Aprendido en producción el 2026-06-28 (caso "my secret Reels formula" → Andrea en oficina futurista). Las 4 variaciones salieron con identidad clavada, flash disposable, fecha en esquina y SIN texto.
+> Aprendido en producción el 2026-06-28 (caso "my secret Reels formula" → la creadora en oficina futurista). Las 4 variaciones salieron con identidad clavada, flash disposable, fecha en esquina y SIN texto.
 
 ---
 
@@ -19,9 +19,9 @@ Activar SIEMPRE que el usuario diga algo como:
 
 ## IDENTIDAD FINA (si los rasgos no salen parecidos)
 
-Si con UNA selfie la cara no sale 100% parecida, subir la fidelidad así (fórmula probada para la cara de Andrea):
+Si con UNA selfie la cara no sale 100% parecida, subir la fidelidad así (fórmula probada):
 
-1. **Usar 3 selfies frontales y nítidas** como identidad (no una sola; evitar perfil/mucho maquillaje). Idealmente una **con los mismos lentes** que la miniatura. Carpeta default: `/Users/kissita/Documents/ANDREA SELFIES`. Tip: arma un contact sheet con HTML+Chrome para escoger rápido.
+1. **Usar 3 selfies frontales y nítidas** como identidad (no una sola; evitar perfil/mucho maquillaje). Idealmente una **con los mismos lentes** que la miniatura. Carpeta del usuario si la tiene configurada (p. ej. `~/Documents/MIS SELFIES`); si no, pídele las 3 fotos. Tip: arma un contact sheet con HTML+Chrome para escoger rápido.
 2. **resolution: "4k"** (mejora bastante la fidelidad facial vs 2k).
 3. **Prefijo de énfasis de identidad** al inicio del prompt:
    `"This is a photo of the SAME real woman shown in the FIRST THREE reference photos. Preserve her EXACT identity and facial structure with maximum fidelity — same face shape, eyes, eyebrows, nose, lips, cheeks, glasses. Do NOT invent a different face."`
@@ -51,14 +51,14 @@ El error #1 es pasar la referencia y la selfie sin decir **qué tomar de cada un
 
 ---
 
-## ESTILO FIRMA DE ANDREA ESTRATEGA (default de su canal de YouTube)
+## ESTILO FIRMA F100K (default del canal de YouTube)
 
-Para miniaturas del canal de Andrea, el default NO es overlay HTML — es **TODO horneado en Higgsfield** (nano_banana_pro/2k renderiza texto corto en español perfecto: tildes, ¿?, %, splits). Su firma validada:
-1. Andrea **recortada, plano medio, GESTICULANDO** (mano abierta presentando, señala, sostiene celular). Cara real con sus 3 selfies + énfasis de identidad.
+Para miniaturas del canal del usuario, el default NO es overlay HTML — es **TODO horneado en Higgsfield** (nano_banana_pro/2k renderiza texto corto en español perfecto: tildes, ¿?, %, splits). Su firma validada:
+1. El usuario **recortada, plano medio, GESTICULANDO** (mano abierta presentando, señala, sostiene celular). Cara real con sus 3 selfies + énfasis de identidad.
 2. **Fondo con contexto oscurecido + viñeta**, NUNCA vacío negro plano. Su favorito: **"pizarra científica"** = tablero oscuro con diagramas blancos dibujados a mano (curva de tensión/story-arc, cerebros, embudos, nodos, flechas, ecuaciones abstractas). Difuminado para que cara y texto resalten.
 3. **Lockup de texto horneado:** palabra(s) en BLANCO arriba (contorno negro fino) + **caja AMARILLA #FFD21E con texto NEGRO y sombra dura** abajo. Fuente condensada pesada (estilo Anton).
 4. Apoyos: flecha verde +$, lápiz/ícono, logos IG/TikTok glossy, gráficas verde-bueno/rojo-malo.
-Frase clave en el prompt: `"In the SIGNATURE high-CTR YouTube thumbnail style of creator 'Andrea Estratega'"`. Mantener el texto CORTO (1 palabra blanca + 3-4 palabras en la caja). Ver [[project-miniaturas-youtube]].
+Frase clave en el prompt: `"In the SIGNATURE high-CTR YouTube thumbnail style of FÓRMULA 100K"`. Mantener el texto CORTO (1 palabra blanca + 3-4 palabras en la caja). Ver [[project-miniaturas-youtube]].
 
 > Si la usuaria dice "no me gusta, es con pizarra científica / mi estilo": NO uses overlay HTML naranja tipo tutorial — hornea el lockup en Higgsfield con la firma de arriba.
 
@@ -146,7 +146,7 @@ High-contrast, sharp subject, photorealistic, professional thumbnail quality, 16
   (imagen ~10-20s; si in_progress trae poll_after_seconds, esperar y reintentar)
 - Tomar results.rawUrl de cada uno
 - curl -s -o var_X.png "<rawUrl>"   → guardar en
-  /Users/kissita/Documents/FORMULA100K/MINIATURAS/AAAA-MM-DD_<slug>/
+  ~/Documents/FORMULA100K/MINIATURAS/AAAA-MM-DD_<slug>/
 - Read cada PNG para evaluar parecido y elegir la ganadora
 ```
 

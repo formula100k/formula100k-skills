@@ -1,6 +1,6 @@
 ---
 name: analizador-perfiles-formula100k
-description: "Analiza perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que se pida analizar un perfil, revisar métricas, identificar qué videos funcionan/repetir/dejar de hacer, qué genera seguidores o ventas, auditar una cuenta, diagnosticar por qué no crece, o cualquier análisis de contenido en redes. Stack de captura: agent-browser SIEMPRE primero — entra logueado con la sesión real de Andrea y extrae reels/posts/carruseles/stories con caption verbatim + views + métricas que solo se ven con login (insights, vistas exactas). Supadata MCP como complemento para transcripts públicos y landings sin login; agent-browser no es fallback, es el motor principal porque IG/TikTok cierran el acceso público. Modo opcional de auditoría profunda con Apify (instagram-reel-scraper) si el usuario lo pide en el paso 1: descarga N reels con transcripciones de audio y extrae patrones de CTA ganadores. Basada en la metodología F100K para leer métricas como experto."
+description: "Analiza perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que se pida analizar un perfil, revisar métricas, identificar qué videos funcionan/repetir/dejar de hacer, qué genera seguidores o ventas, auditar una cuenta, diagnosticar por qué no crece, o cualquier análisis de contenido en redes. Stack de captura: agent-browser SIEMPRE primero — entra logueado con la sesión real del usuario y extrae reels/posts/carruseles/stories con caption verbatim + views + métricas que solo se ven con login (insights, vistas exactas). Supadata MCP como complemento para transcripts públicos y landings sin login; agent-browser no es fallback, es el motor principal porque IG/TikTok cierran el acceso público. Modo opcional de auditoría profunda con Apify (instagram-reel-scraper) si el usuario lo pide en el paso 1: descarga N reels con transcripciones de audio y extrae patrones de CTA ganadores. Basada en la metodología F100K para leer métricas como experto."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -75,7 +75,7 @@ Lanzar agent-browser con sesión real logueada para extraer lo que ningún API p
 ```
 [agent-browser]
 
-Abre Chrome con sesión existente (IG/TikTok logueados como Andrea).
+Abre Chrome con sesión existente (IG/TikTok logueados con la cuenta del usuario).
 
 Para el perfil @[usuario]:
 1. Visita instagram.com/[usuario]/reels/ (o tiktok.com/@[usuario])
@@ -86,7 +86,7 @@ Para el perfil @[usuario]:
    - Likes + comentarios + compartidos (si visibles)
    - Formato del primer frame (rostro/texto grande/split/B-roll/etc.)
    - Tipo (reel, carrusel, post estático)
-3. Si Andrea es dueña del perfil → entrar a Reels Insights y sacar:
+3. Si el usuario es dueña del perfil → entrar a Reels Insights y sacar:
    - Retención promedio
    - Alcance no-seguidores
    - Guardados, compartidos

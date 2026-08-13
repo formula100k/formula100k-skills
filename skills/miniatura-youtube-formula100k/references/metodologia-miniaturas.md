@@ -36,7 +36,7 @@ Si estás por debajo de 4% en las primeras 2 horas, actúa.
 Los creadores que sobrecargan su miniatura (7+ palabras, múltiples dibujos, muchos elementos) obtienen peores CTR que los que mantienen composición limpia.
 
 **Ejemplos que funcionan:**
-- Solo "DOMINA" en cartel amarillo + foto de Andrea sonriendo sobre fondo negro
+- Solo "DOMINA" en cartel amarillo + foto del usuario sonriendo sobre fondo negro
 - "SECRETO VIRAL" + persona señalando algo fuera de frame
 
 **Lo que NO funciona:**
@@ -59,7 +59,7 @@ Los mejores creadores cambian su miniatura hasta 3-5 veces en las primeras 12 ho
 
 ## Palabras de Alto Impacto por Nicho
 
-### Redes sociales / Marketing digital (Andrea's nicho):
+### Redes sociales / Marketing digital (the creator's nicho):
 - DOMINA, ALGORITMO, VIRAL, SECRETO, ESTRATEGIA
 - MILLÓN, CRECER, MONETIZA, FÓRMULA
 
@@ -77,7 +77,7 @@ Los mejores creadores cambian su miniatura hasta 3-5 veces en las primeras 12 ho
 
 ---
 
-## Estructura de Miniatura que Funciona para Andrea
+## Estructura de Miniatura que Funciona para el usuario
 
 Basada en los videos que más han funcionado en el canal:
 
@@ -87,7 +87,7 @@ Basada en los videos que más han funcionado en el canal:
 │      [CARTEL AMARILLO]              │
 │      "DOMINA" / "VIRAL"             │
 │                                     │
-│         [FOTO ANDREA]               │
+│         [FOTO DEL USUARIO]               │
 │       sonrisa de confianza          │
 │       fondo negro sólido            │
 │                                     │
@@ -95,7 +95,7 @@ Basada en los videos que más han funcionado en el canal:
 └─────────────────────────────────────┘
 ```
 
-**Elementos fijos del estilo de Andrea:**
+**Elementos fijos del estilo del usuario:**
 - Fondo: negro sólido
 - Texto: amarillo vibrante, bold, sans-serif
 - Expresión: sonrisa de dominio/confianza

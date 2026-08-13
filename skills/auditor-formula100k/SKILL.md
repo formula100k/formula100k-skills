@@ -45,7 +45,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Auditor FÓRMULA 100K
 
-Skill que ejecuta auditorías profesionales de Andrea Vega para clientes de F100K en 2 dominios: **comunidades de Skool** y **estrategia de contenido**. Aplica el Framework Maestro de 5 fases con voz F100K (directa, polarizadora, español neutro).
+Skill que ejecuta auditorías profesionales con la metodología de Andrea Vega (F100K) para tus clientes en 2 dominios: **comunidades de Skool** y **estrategia de contenido**. Aplica el Framework Maestro de 5 fases con voz F100K (directa, polarizadora, español neutro).
 
 ---
 
@@ -228,7 +228,7 @@ Convertir las recomendaciones en cronograma:
 
 | Plazo | Acciones | Resultado esperado | Responsable |
 |---|---|---|---|
-| **7 días (Quick Wins)** | 3 acciones máx | Mover métrica X | Cliente / Andrea |
+| **7 días (Quick Wins)** | 3 acciones máx | Mover métrica X | Cliente / tú |
 | **30 días** | 4–6 acciones | Mover métrica Y | Cliente / Equipo |
 | **90 días** | 1–3 proyectos grandes | Reposicionamiento | Cliente |
 
@@ -272,7 +272,7 @@ Generar 3 archivos en la carpeta del cliente.
 ### Crear carpeta destino
 
 ```bash
-mkdir -p "/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]"
+mkdir -p "~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]"
 ```
 
 Reemplazar `[CLIENTE]` con el nombre del cliente en kebab-case (ej. `barbara-organiza-y-vende`, `florencia-interview-lab`).
@@ -280,15 +280,15 @@ Reemplazar `[CLIENTE]` con el nombre del cliente en kebab-case (ej. `barbara-org
 ### Archivos a generar
 
 1. **Documento principal**
-   - Ruta: `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/[modo]-auditoria-[YYYY-MM-DD].md`
+   - Ruta: `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/[modo]-auditoria-[YYYY-MM-DD].md`
    - Estructura completa: ver `references/templates.md` → "Plantilla A · Documento Principal"
 
 2. **Scorecard CSV**
-   - Ruta: `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/scorecard.csv`
+   - Ruta: `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/scorecard.csv`
    - Estructura: ver `references/templates.md` → "Plantilla B · Scorecard CSV"
 
 3. **Resumen ejecutivo (1 página)**
-   - Ruta: `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/resumen-ejecutivo.md`
+   - Ruta: `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/resumen-ejecutivo.md`
    - Estructura: ver `references/templates.md` → "Plantilla C · Resumen Ejecutivo"
 
 ### Confirmación al usuario
@@ -301,7 +301,7 @@ Mostrar las 3 rutas creadas y un breve resumen del score global.
 
 Crear o actualizar archivo de memoria del proyecto:
 
-**Ruta:** `/Users/kissita/.claude/projects/-Users-kissita/memory/project_[CLIENTE]_auditoria.md`
+**Ruta:** `~/.claude/projects/<tu-proyecto>/memory/project_[CLIENTE]_auditoria.md`
 
 **Formato:**
 
@@ -380,7 +380,7 @@ Agregar entrada al índice si no existe:
 Antes del Paso 1, leer la memoria:
 
 ```
-Read /Users/kissita/.claude/projects/-Users-kissita/memory/project_[CLIENTE]_auditoria.md
+Read ~/.claude/projects/<tu-proyecto>/memory/project_[CLIENTE]_auditoria.md
 ```
 
 Si existe:

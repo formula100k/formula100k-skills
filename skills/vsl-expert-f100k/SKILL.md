@@ -249,6 +249,6 @@ Cuando el pedido es de **ads/creativos**, usar el framework GOAT integrado. Deta
 
 ## Output
 
-Guardar siempre en `/Users/kissita/Documents/FORMULA100K/VSL/YYYY-MM-DD_<slug>.md`. Si es para cliente, en `/Users/kissita/Documents/FORMULA100K/CLIENTES/<nombre>/vsl.md`.
+Guardar siempre en `~/Documents/FORMULA100K/VSL/YYYY-MM-DD_<slug>.md`. Si es para cliente, en `~/Documents/FORMULA100K/CLIENTES/<nombre>/vsl.md`.
 
 Cuando el VSL esté listo, ofrecer la skill [[audios-venta-f100k]] para hacer los audios de cierre del DM que retomen las mismas razones de compra.

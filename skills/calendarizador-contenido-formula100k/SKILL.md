@@ -1,6 +1,6 @@
 ---
 name: calendarizador-contenido-formula100k
-description: "Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y XLSX con la metodología FÓRMULA 100K. Usar SIEMPRE que Andrea pida 'arma mi calendario', 'calendariza estos guiones', 'ordena estas ideas en un calendario', 'convierte esto en calendario semanal', 'haz mi calendario en Excel', 'organiza mis guiones por día', 'calendariza este lote/enlaces/TikToks/reels/carruseles'. 3 modos de entrada: (1) guiones listos; (2) ideas sueltas que desarrolla llamando a guionizacion-formula100k o carrusel-viral-formula100k; (3) enlaces de video que transcribe con transcripcion-youtube-formula100k y reescribe como referencia. 2 tipos de pieza: REELS (DÍA-IDEA-GUION-CTA-FORMATO-REFERENCIA) y CARRUSELES (DÍA-FECHA-#-IDEA-GUION SLIDE x SLIDE-CTA-FORMATO con altura de fila dinámica). Distribución según propósito: Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30. NO confundir con calendarizador-historias (stories) ni calendarizador-urgencias."
+description: "Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y XLSX con la metodología FÓRMULA 100K. Usar SIEMPRE que el usuario pida 'arma mi calendario', 'calendariza estos guiones', 'ordena estas ideas en un calendario', 'convierte esto en calendario semanal', 'haz mi calendario en Excel', 'organiza mis guiones por día', 'calendariza este lote/enlaces/TikToks/reels/carruseles'. 3 modos de entrada: (1) guiones listos; (2) ideas sueltas que desarrolla llamando a guionizacion-formula100k o carrusel-viral-formula100k; (3) enlaces de video que transcribe con transcripcion-youtube-formula100k y reescribe como referencia. 2 tipos de pieza: REELS (DÍA-IDEA-GUION-CTA-FORMATO-REFERENCIA) y CARRUSELES (DÍA-FECHA-#-IDEA-GUION SLIDE x SLIDE-CTA-FORMATO con altura de fila dinámica). Distribución según propósito: Experimentación 70/30/0, Crecimiento 40/50/10, Nutrición 20/70/10, Venta 20/50/30. NO confundir con calendarizador-historias (stories) ni calendarizador-urgencias."
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 
@@ -81,8 +81,8 @@ Distribución de los 7 días según el **propósito del calendario** (los 4 modo
 ## OUTPUTS
 
 Carpeta de salida según tipo de pieza:
-- **REELS:** `/Users/kissita/Documents/FORMULA100K/CALENDARIOS/`
-- **CARRUSELES:** `/Users/kissita/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/`
+- **REELS:** `~/Documents/FORMULA100K/CALENDARIOS/`
+- **CARRUSELES:** `~/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/`
 
 Genera **3 archivos** por sesión:
 1. `calendario_[modo]_[YYYY-MM-DD].csv` — CSV separado por comas, encoding UTF-8 (solo modo reels)
@@ -105,7 +105,7 @@ Señales para detectar tipo CARRUSELES:
 - Usuario menciona explícitamente "carrusel", "carruseles", "slides", "diapositivas"
 - Input incluye estructura "SLIDE 1 / SLIDE 2 / …" o "Slide 1: … Slide 2: …"
 - Usuario pasa archivos `.md` generados por la skill `carrusel-viral-formula100k`
-- Carpeta de origen es `/Users/kissita/Documents/FORMULA100K/CARRUSELES/`
+- Carpeta de origen es `~/Documents/FORMULA100K/CARRUSELES/`
 
 Si no hay señales explícitas → asumir **REELS**.
 
@@ -188,13 +188,13 @@ Cargar la tabla de slots desde [references/slots-por-modo.md](references/slots-p
 1. Para cada URL:
    - Llamar a `transcripcion-youtube-formula100k` para YouTube, o usar Supadata/yt-transcript-mcp si es TikTok/Reels
    - Extraer la transcripción y los puntos clave
-2. **Reescribir la idea con voz de Andrea** aplicando frameworks F100K (no copiar)
+2. **Reescribir la idea con voz del usuario** aplicando frameworks F100K (no copiar)
 3. Pasar el guion reescrito por `guionizacion-formula100k` para validar estructura y CTA
 4. Guardar la URL original en la columna REFERENCIA
 
 #### MODO D · Investigación viral por keyword ⭐
 
-**Usar SIEMPRE que solo tengas el brief del cliente (nicho + avatar) y NO tengas guiones, ideas ni URLs.** Es el modo más común para clientes nuevos de Andrea.
+**Usar SIEMPRE que solo tengas el brief del cliente (nicho + avatar) y NO tengas guiones, ideas ni URLs.** Es el modo más común para clientes nuevos del usuario.
 
 Pipeline:
 
@@ -253,19 +253,19 @@ Ejecutar el script Python `generate_calendar.py` (ubicado en `references/generat
 
 **Modo REELS:**
 ```bash
-python3 /Users/kissita/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+python3 ~/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
   --tipo-pieza "reels" \
   --modo "[modo]" \
-  --output-dir "/Users/kissita/Documents/FORMULA100K/CALENDARIOS/" \
+  --output-dir "~/Documents/FORMULA100K/CALENDARIOS/" \
   --data-json '<JSON_DATA>'
 ```
 
 **Modo CARRUSELES:**
 ```bash
-python3 /Users/kissita/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+python3 ~/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
   --tipo-pieza "carruseles" \
   --modo "[modo]" \
-  --output-dir "/Users/kissita/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/" \
+  --output-dir "~/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/" \
   --output-name "00_CALENDARIO_CARRUSELES" \
   --data-json '<JSON_DATA>'
 ```
@@ -290,7 +290,7 @@ JSON para CARRUSELES (más campos por fila):
   "modo": "crecimiento",
   "fecha_inicio": "2026-05-18",
   "titulo": "CALENDARIO DE CARRUSELES — SEMANA 18 MAYO 2026",
-  "subtitulo": "Andrea Vega · FÓRMULA 100K · @andraestratega",
+  "subtitulo": "[TU NOMBRE] · [TU MARCA] · @tuhandle",
   "filas": [
     {
       "dia": "LUN",
@@ -333,8 +333,8 @@ Imprimir tabla markdown con los 7 días. Truncar GUION a primeras 80 caracteres 
 | Lunes | ... | ... | ... | ... | ... |
 | ... | | | | | |
 
-📁 CSV: /Users/kissita/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].csv
-📊 XLSX: /Users/kissita/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].xlsx
+📁 CSV: ~/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].csv
+📊 XLSX: ~/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].xlsx
 
 📌 Distribución real: X viral / Y valor / Z venta
 ✅ Listo para producir

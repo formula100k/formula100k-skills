@@ -45,9 +45,9 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Benchmark de Producto · FÓRMULA 100K
 
-Skill que ejecuta benchmarks profesionales del mercado para Andrea Vega y sus clientes de F100K. Orquesta múltiples MCPs para mapear competidores, identificar patrones del mercado y devolver oportunidades estratégicas accionables.
+Skill que ejecuta benchmarks profesionales del mercado para el usuario y sus clientes de F100K. Orquesta múltiples MCPs para mapear competidores, identificar patrones del mercado y devolver oportunidades estratégicas accionables.
 
-**Entregable garantizado:** un reporte **HTML autocontenido navegable** de 15-30 páginas (el documento maestro y entregable principal) + matriz `.csv` + resumen ejecutivo `.md` de 1 página + fichas/oportunidades `.md` para edición rápida, todo guardado en `/Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`.
+**Entregable garantizado:** un reporte **HTML autocontenido navegable** de 15-30 páginas (el documento maestro y entregable principal) + matriz `.csv` + resumen ejecutivo `.md` de 1 página + fichas/oportunidades `.md` para edición rápida, todo guardado en `~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`.
 
 > ⚠️ **REPORTE PRINCIPAL = HTML.** El reporte maestro (`01-REPORTE-COMPLETO.html`) DEBE entregarse como archivo HTML autocontenido con Tailwind CDN + estética F100K (paleta crema, Caveat para titulares, post-its y washi tape), navegable con tabla de contenidos sticky. No generar el reporte completo en .md — sólo los archivos secundarios (`00-RESUMEN-EJECUTIVO.md`, `03-FICHAS-COMPETIDORES.md`, `04-OPORTUNIDADES.md`) son markdown. Ver `references/template-reporte-html.md` para el esqueleto exacto.
 
@@ -253,7 +253,7 @@ agent-browser captura lo que Apify y Supadata no ven, especialmente:
 
 Guardar el raw scraped de cada competidor en:
 ```
-/Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw/{competidor}.md
+~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw/{competidor}.md
 ```
 
 ---
@@ -350,7 +350,7 @@ El reporte principal SIEMPRE se entrega como **HTML autocontenido** (single file
 
 ### Por qué HTML y no Markdown
 
-- Andrea y sus clientes lo revisan en navegador (doble-click → se abre)
+- El usuario y sus clientes lo revisan en navegador (doble-click → se abre)
 - Permite tablas comparativas con scoring visual, barras de progreso, cards de fichas, navegación sticky
 - Renderiza estética F100K (paleta crema, Caveat para titulares, post-its, washi tape, chips)
 - Es portable: un solo archivo se manda por email/WhatsApp y abre en cualquier laptop
@@ -368,7 +368,7 @@ El reporte principal SIEMPRE se entrega como **HTML autocontenido** (single file
 9. **Plan 30/60/90** (3 columnas con chips de color por fase)
 10. **Fichas individuales** (1 card por competidor + barras de miembros)
 11. **Apéndice** (fuentes, notas metodológicas, archivos relacionados, próximos pasos)
-12. **Footer** con firma Caveat "FÓRMULA 100K · @andraestratega"
+12. **Footer** con firma Caveat "[TU MARCA] · @tuhandle"
 
 ### Convenciones visuales (NO improvisar)
 
@@ -385,7 +385,7 @@ El reporte principal SIEMPRE se entrega como **HTML autocontenido** (single file
 
 ### Archivos a entregar
 
-Guardar en `/Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`:
+Guardar en `~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`:
 
 1. `00-RESUMEN-EJECUTIVO.md` (1 página, lectura de 3 min — markdown)
 2. **`01-REPORTE-COMPLETO.html`** ⭐ (el documento maestro, autocontenido)
@@ -401,20 +401,20 @@ Guardar en `/Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`:
 Después de generar los archivos en `/FORMULA100K/BENCHMARKS/`, **SIEMPRE** copiar los `.md` + `.csv` + `raw/` (todo MENOS el `.html`) a:
 
 ```
-/Users/kissita/Documents/SEGUNDO CEREBRO ANDREA/BENCHMARKS/YYYY-MM-DD_nicho/
+~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/
 ```
 
 Comando:
 ```bash
-mkdir -p "/Users/kissita/Documents/SEGUNDO CEREBRO ANDREA/BENCHMARKS/YYYY-MM-DD_nicho" && \
-cp /Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.md \
-   /Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.csv \
-   "/Users/kissita/Documents/SEGUNDO CEREBRO ANDREA/BENCHMARKS/YYYY-MM-DD_nicho/" && \
-cp -r /Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw \
-   "/Users/kissita/Documents/SEGUNDO CEREBRO ANDREA/BENCHMARKS/YYYY-MM-DD_nicho/"
+mkdir -p "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho" && \
+cp ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.md \
+   ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.csv \
+   "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/" && \
+cp -r ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw \
+   "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/"
 ```
 
-Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md` viven en el Segundo Cerebro para que Andrea pueda buscar/leer/citarlos como notas y para que skills futuras puedan consumirlos como input.
+Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md` viven en el Segundo Cerebro para que el usuario pueda buscar/leer/citarlos como notas y para que skills futuras puedan consumirlos como input.
 
 ---
 
@@ -424,7 +424,7 @@ Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md`
 2. **NO mezclar nichos**. Si Tavily devuelve resultados de otro vertical, descartarlos en validación con el usuario.
 3. **NO sesgar hacia "todos son malos"**. El cliente necesita ver lo que la competencia hace BIEN para aprender, no solo lo que hace mal.
 4. **NO dar oportunidades genéricas** tipo "diferenciarse mejor". Cada oportunidad debe ser concreta y citable a un gap específico.
-5. **NO escribir en voseo argentino**. Andrea usa español neutro: tú/tienes/puedes (ver feedback_espanol_neutro en memoria).
+5. **NO escribir en voseo argentino**. El usuario usa español neutro: tú/tienes/puedes (ver feedback_espanol_neutro en memoria).
 6. **NO hacer benchmark si Apify no está activo Y el nicho lo requiere** (ej: SaaS con reviews en G2). Confirmar con el usuario que está OK con benchmark parcial.
 
 ---
@@ -435,7 +435,7 @@ Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md`
 - **Profesional**: no usar "spoiler" ni jerga viral
 - **Cuantitativa cuando se pueda**: "7 de 10 competidores usan Skool" en lugar de "muchos"
 - **Citar fuentes**: cada afirmación importante debe poder rastrearse a un competidor específico o a una sección del scrape
-- **Sin tecnicismos innecesarios**: la audiencia es Andrea + sus clientes, no equipos de marketing enterprise
+- **Sin tecnicismos innecesarios**: la audiencia es el usuario + sus clientes, no equipos de marketing enterprise
 
 ---
 
@@ -453,10 +453,10 @@ Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md`
 ## ✅ AL TERMINAR
 
 1. Confirmar que los 7 archivos están en la carpeta destino (incluyendo `01-REPORTE-COMPLETO.html`)
-2. Reportar a Andrea:
+2. Reportar al usuario:
    - Cuántos competidores se analizaron
    - Top 3 hallazgos del resumen ejecutivo
    - Top 3 oportunidades
    - Ruta absoluta de la carpeta
    - Próximo paso sugerido (ej: "¿Construimos la oferta con `constructor-ofertas-f100k` aplicando la oportunidad #1?")
-3. **Abrir el reporte HTML automáticamente** en el navegador del usuario: `open /Users/kissita/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html`
+3. **Abrir el reporte HTML automáticamente** en el navegador del usuario: `open ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html`

@@ -1,6 +1,6 @@
 ---
 name: carrusel-noticiero
-description: Use when Andrea asks to build a "carrusel noticiero", "carrusel de noticia", "carrusel newsjacking", "convierte esta noticia de IA en carrusel", "el carrusel de la noticia de hoy", or wants to turn an AI/tech news item into an Instagram carousel with an animated news-style cover. Produces the 8-slide news narrative (QUÉ PASÓ → MOTIVO → EL DATO → Y A TI QUÉ → 3 JUGADAS → REGLA DE ORO → CTA) translated for creators with the F100K angle, renders finished PNGs from a swappable HTML body theme (scrapbook = default), and builds the signature animated cover (Higgsfield image → video → transparent overlay → ffmpeg composite). Do NOT use for generic viral carousels (carrusel-viral-formula100k) or plain scrapbook rendering of an existing script (carrusel-render-formula100k).
+description: Use when the user asks to build a "carrusel noticiero", "carrusel de noticia", "carrusel newsjacking", "convierte esta noticia de IA en carrusel", "el carrusel de la noticia de hoy", or wants to turn an AI/tech news item into an Instagram carousel with an animated news-style cover. Produces the 8-slide news narrative (QUÉ PASÓ → MOTIVO → EL DATO → Y A TI QUÉ → 3 JUGADAS → REGLA DE ORO → CTA) translated for creators with the F100K angle, renders finished PNGs from a swappable HTML body theme (scrapbook = default), and builds the signature animated cover (Higgsfield image → video → transparent overlay → ffmpeg composite). Do NOT use for generic viral carousels (carrusel-viral-formula100k) or plain scrapbook rendering of an existing script (carrusel-render-formula100k).
 argument-hint: [tema o enlace de la noticia de IA]
 disable-model-invocation: true
 ---
@@ -22,18 +22,18 @@ Entrega en una sola carpeta:
 
 ## Inputs
 
-- **Argumento / lo que da Andrea:** el tema o un enlace de la noticia de IA (`$ARGUMENTS`). Andrea siempre provee la noticia; la skill NO la inventa. Si el input es un enlace, léelo/transcríbelo primero para tener los hechos reales.
+- **Argumento / lo que dal usuario:** el tema o un enlace de la noticia de IA (`$ARGUMENTS`). El usuario siempre provee la noticia; la skill NO la inventa. Si el input es un enlace, léelo/transcríbelo primero para tener los hechos reales.
 - **NUNCA inventar datos** (fechas, cifras, nombres de modelos, quién ordenó qué). Si un hecho no está confirmado en la fuente, no lo afirmes o dilo como pregunta/rumor. Ver memoria `feedback_no_inventar_data`.
 
 ## Output
 
-- Carpeta: `/Users/kissita/Documents/FORMULA100K/CARRUSELES/CARRUSELES DIARIOS/YYYY-MM-DD-<slug>/`
+- Carpeta: `~/Documents/FORMULA100K/CARRUSELES/CARRUSELES DIARIOS/YYYY-MM-DD-<slug>/`
 - `<slug>` = 2-4 palabras kebab de la noticia (ej. `ia-newsjacking`, `gpt6-lanzamiento`).
 
 ## Dependencias
 
 - **Render de PNG:** `export.js` (Puppeteer/Chrome headless) en esta carpeta. Requiere Google Chrome instalado. Primera corrida: `npm install --prefix ~/.claude/skills/carrusel-noticiero` (instala `puppeteer-core`). Si `carrusel-render-formula100k` ya tiene `node_modules`, se puede reusar su `export.js`.
-- **Portada animada:** MCP de **Higgsfield** (`generate_image` con `nano_banana_2`, luego `generate_video` con `seedance`/`kling`) + **ffmpeg** (composición). Ambos ya disponibles en el entorno de Andrea.
+- **Portada animada:** MCP de **Higgsfield** (`generate_image` con `nano_banana_2`, luego `generate_video` con `seedance`/`kling`) + **ffmpeg** (composición). Ambos ya disponibles en el entorno del usuario.
 - **Fuentes:** Google Fonts vía CDN (Anton, Caveat, Poppins). El `export.js` espera `document.fonts.ready`.
 
 ---
@@ -56,7 +56,7 @@ Cada slide tiene un rol narrativo. El copy es corto, en **español neutro** (mem
 **Reglas de copy:**
 - Gancho verbal en portada de intriga/contraste ("Apagaron la IA más potente… y ya volvió").
 - Traduce, no reportes: cada slide dice qué significa para la creadora, no repite el titular.
-- CTA fijo: `Comenta "100K" y te enseño cómo 🚀`. Handle: `@andreaestratega`.
+- CTA fijo: `Comenta "100K" y te enseño cómo 🚀`. Handle: el del usuario (pregúntaselo si no lo sabes).
 - Números de slide `X / 8` y handle en cada slide (el tema los incluye).
 
 ---
@@ -65,12 +65,12 @@ Cada slide tiene un rol narrativo. El copy es corto, en **español neutro** (mem
 
 ### 1. Fija hechos y escribe el copy
 - Lee la noticia (si es enlace, transcríbela/léela). Extrae hechos verificables: qué, cuándo, quién, cifra.
-- Redacta el copy de los 8 slides siguiendo la tabla de arriba. Muéstraselo a Andrea si pide revisar; si no, sigue.
+- Redacta el copy de los 8 slides siguiendo la tabla de arriba. Muéstraselo al usuario si pide revisar; si no, sigue.
 - Define `<slug>` y crea la carpeta de salida.
 
 ### 2. Construye el cuerpo (slides 2-8) desde el tema
 - Lee el tema activo (default `themes/scrapbook.md`). Contiene el `<style>` completo probado + el esqueleto de los 8 slides.
-- Copia el template a `carrusel.html` en la carpeta de salida y **reemplaza solo el copy** (titulares, párrafos, post-its, lista, CTA) con lo escrito en el paso 1. NO toques el CSS salvo que Andrea pida cambiar de estilo.
+- Copia el template a `carrusel.html` en la carpeta de salida y **reemplaza solo el copy** (titulares, párrafos, post-its, lista, CTA) con lo escrito en el paso 1. NO toques el CSS salvo que el usuario pida cambiar de estilo.
 - Para cambiar de estilo: usa otro archivo de `themes/` (o crea uno con `themes/_template.md`) — misma estructura, distinto CSS.
 
 ### 3. Construye la portada estática (slide 1)
@@ -91,7 +91,7 @@ node ~/.claude/skills/carrusel-noticiero/export.js "<carpeta>/cover_slide.html" 
 ```
 Renombra el PNG del cover a `slide-01.png` y asegúrate de que `carrusel.html` empiece en el slide 2 (o produce los 8 juntos y reemplaza el 1 por el cover noticiero). Verifica que existan `slide-01.png … slide-08.png`.
 
-### 6. Entrega y (si Andrea lo pide) publica
+### 6. Entrega y (si el usuario lo pide) publica
 - Reporta la ruta de la carpeta con los 8 PNG + el `.mp4` animado.
 - **Publicar la SKILL** (no el carrusel) al repo/marketplace: ver `reference.md` sección "Publicar la skill".
 

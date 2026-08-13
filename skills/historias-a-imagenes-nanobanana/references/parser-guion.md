@@ -71,8 +71,8 @@ Buscar el bloque:
 ```yaml
 slides_count: 5
 fotos_necesarias_de_carpeta:
-  - slide_1: "Andrea caminando en escenario amplio, plano general"
-  - slide_2: "Andrea en escritorio con laptop"
+  - slide_1: "la creadora caminando en escenario amplio, plano general"
+  - slide_2: "la creadora en escritorio con laptop"
   ...
 elementos_a_generar:
   - slide_2: "captura de calendario lleno de sesiones"
@@ -87,8 +87,8 @@ Parsear el bloque YAML interno. Resultado:
 {
   "slides_count": 5,
   "fotos_necesarias_de_carpeta": {
-    "slide_1": "Andrea caminando en escenario amplio, plano general",
-    "slide_2": "Andrea en escritorio con laptop",
+    "slide_1": "la creadora caminando en escenario amplio, plano general",
+    "slide_2": "la creadora en escritorio con laptop",
     ...
   },
   "elementos_a_generar": {
@@ -138,7 +138,7 @@ Para que si el usuario pide "regenera solo el slide 3", no haya que parsear todo
 
 ## EJEMPLO REAL DE PARSER
 
-Input: `/Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/2026-05-06_lead-magnet_gpt-primer-segundo.md`
+Input: `~/Documents/FORMULA100K/HISTORIAS/guiones/2026-05-06_lead-magnet_gpt-primer-segundo.md`
 
 Output esperado:
 

@@ -1,6 +1,6 @@
 # PROMPT BUILDER — Cómo construir el prompt para cada slide
 
-Esta es la fórmula exacta para que el motor (Banana o Higgsfield) genere un slide con el look IG-Andrea.
+Esta es la fórmula exacta para que el motor (Banana o Higgsfield) genere un slide con el look IG de la marca.
 
 ---
 
@@ -23,7 +23,7 @@ A 1080x1920 vertical Instagram Story image (9:16 aspect ratio).
 
 [SUBJECT]
 {Si hay foto base: "Use the provided reference photo as the background scene.
-The subject is Andrea Vega, a young Latina content creator.
+The subject is the creator (use the user's reference selfie — never another person's face).
 Preserve her exact face and outfit from the reference photo."}
 {Si NO hay foto base: "Generate a [describe la escena: ej. close-up of an OpenAI ChatGPT
 custom GPT interface on a clean white background]"}
@@ -117,7 +117,7 @@ Do NOT include:
   ASSET that will be uploaded TO Instagram as a story — Instagram itself will add
   its own UI on top at display time. So the image MUST NOT contain ANY of the
   following rendered as part of the picture:
-    · profile-picture circle, username header (e.g. "Andrea Vega · 27m"), or "See translation" link
+    · profile-picture circle, username header (e.g. "@tuhandle · 27m"), or "See translation" link
     · 3-dots menu, X close button, or progress bars at the top
     · "Send Message" reply input bar at the bottom
     · heart, paper-plane, or DM icons
@@ -140,7 +140,7 @@ UI when posting the story.
 
 **Frase del slide:** "Algo me sorprendió hoy…"
 **Formato:** 🎥 F2 Video Tercera Persona
-**Capa visual:** Andrea caminando frente al Buda en Japón
+**Capa visual:** la creadora caminando frente al Buda en Japón
 **Briefing:** Fondo: viaje, plano general; Cajas: blanca arriba; Highlight: "sorprendió" en amarillo
 
 **Prompt construido:**
@@ -149,7 +149,7 @@ UI when posting the story.
 A 1080x1920 vertical Instagram Story image (9:16 aspect ratio).
 
 SUBJECT: Use the provided reference photo as the background. The subject is
-Andrea Vega, a young Latina woman walking in front of a giant green Buddha
+the creator (from the reference selfie), walking in front of a giant green Buddha
 statue in Japan. Preserve her exact face and outfit from the reference.
 
 STYLE — INSTAGRAM STORIES NATIVE: The image must look like a screenshot taken
@@ -159,7 +159,7 @@ corners and solid color backgrounds.
 
 COMPOSITION:
 
-1. BACKGROUND: full-frame photo of Andrea walking toward the Buddha statue,
+1. BACKGROUND: full-frame photo of the creator walking toward the Buddha statue,
    bright daylight, blue sky.
 
 2. PRIMARY TEXT BOX:
@@ -192,7 +192,7 @@ no AI artifacts, no morphed face, no stock photo replacement.
 ```
 A 1080x1920 vertical Instagram Story image (9:16 aspect ratio).
 
-SUBJECT: Use the reference photo as background (Andrea standing on Japanese
+SUBJECT: Use the reference photo as background (el usuario standing on Japanese
 seaside rocks, cloudy sky). Generate a realistic mockup of an OpenAI ChatGPT
 custom GPT interface as a floating screenshot.
 
@@ -201,7 +201,7 @@ rounded corners, no shadows on boxes.
 
 COMPOSITION:
 
-1. BACKGROUND: Andrea on rocks, ocean behind her.
+1. BACKGROUND: El usuario on rocks, ocean behind her.
 
 2. TEXT BOX (top):
    - Position: top-center
@@ -214,7 +214,7 @@ COMPOSITION:
    - Realistic mockup of ChatGPT custom GPT interface
    - GPT icon (small avatar)
    - GPT name: "Experto en Gancho Visual"
-   - GPT author: "Por Andrea Vega"
+   - GPT author: "Por [TU NOMBRE]"
    - Description: "Especialista en análisis y diseño visual del primer segundo en videos 9:16"
    - White UI, blue accent (ChatGPT blue)
    - Rounded corners 16px, subtle drop shadow, slight 2° rotation
@@ -249,7 +249,7 @@ NEGATIVE: ningún (lista del template).
 - Sube la foto base con `mcp__higgsfield__media_upload`
 - Pasa el asset_id como `reference_assets`
 - Usa `aspect_ratio: "9:16"` explícito
-- Si Andrea tiene un Higgsfield Soul de su cara, NO lo uses — está deprecado (ver memoria de Andrea)
+- Si el usuario tiene un Higgsfield Soul de su cara, NO lo uses — está deprecado (ver memoria del usuario)
 
 ### Si el motor es BOTH:
 
@@ -270,4 +270,4 @@ Si la primera generación no quedó bien:
 4. **Highlight no se ve:** especificar "the entire word 'X' has a yellow background highlight, like a marker pen"
 5. **Estilo no IG:** agregar al prompt "this is for Instagram, NOT TikTok or other platform"
 
-Andrea tiene un alto estándar visual. Si la primera generación no es 9/10, regenera.
+El usuario tiene un alto estándar visual. Si la primera generación no es 9/10, regenera.

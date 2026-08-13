@@ -109,9 +109,9 @@ Atajos textuales que saltan la pregunta:
 
 ### Paso 3 — Obtener foto de referencia de la presentadora
 
-**Para Andrea (usuaria activa):** saltar la pregunta y usar automáticamente `/Users/kissita/Documents/ANDREA SELFIES`. Leer 3-4 archivos con `Read` y elegir el que tenga: cara frontal/3-cuartos clara, buena iluminación, sin objetos tapando el rostro, expresión neutra o natural. Priorizar fotos con fondo limpio.
+**Si el usuario ya tiene su carpeta de selfies configurada** (por ejemplo `~/Documents/MIS SELFIES`, o la que haya indicado en sesiones anteriores) y esa carpeta existe: saltar la pregunta y usarla. Leer 3-4 archivos con `Read` y elegir el que tenga: cara frontal/3-cuartos clara, buena iluminación, sin objetos tapando el rostro, expresión neutra o natural. Priorizar fotos con fondo limpio.
 
-**Para otras usuarias:** preguntar:
+**Si no hay carpeta conocida:** preguntar:
 
 ```
 AskUserQuestion:
@@ -255,7 +255,7 @@ Mostrar a la usuaria la tabla completa de escenas antes de ejecutar:
 ```
 | # | Bloque | Frase trigger | Concepto visual | Tipo | Género |
 |---|--------|--------------|-----------------|------|--------|
-| 1 | Gancho | "Hay dos tipos..." | Andrea se divide en dos | avatar | action |
+| 1 | Gancho | "Hay dos tipos..." | la creadora se divide en dos | avatar | action |
 ...
 ```
 
@@ -387,6 +387,6 @@ Al final del catálogo, incluir:
 ## Notas para reutilización
 
 - El `media_id` de la foto de referencia es **permanente** en la cuenta de Higgsfield. Si la usuaria tiene un media_id previo guardado en memoria, no hace falta re-subirla.
-- Para Andrea: media_id conocido de sesiones anteriores → verificar con `mcp__higgsfield__show_medias` antes de re-subir.
+- Paral usuario: media_id conocido de sesiones anteriores → verificar con `mcp__higgsfield__show_medias` antes de re-subir.
 - Los clips generados duran ~30 días en los servidores de Higgsfield. Para uso a largo plazo, descargar con: `curl -L "<url>" -o "escena_01.mp4"`
 - Si se necesita descargar todos los clips en lote: `for url in <url1> <url2>...; do curl -L "$url" -o "$(echo $url | grep -o 'hf_[^.]*').mp4"; done`

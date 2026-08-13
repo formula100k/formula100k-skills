@@ -6,7 +6,7 @@
 
 ## PLANTILLA A · DOCUMENTO PRINCIPAL
 
-**Ruta:** `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/[modo]-auditoria-[YYYY-MM-DD].md`
+**Ruta:** `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/[modo]-auditoria-[YYYY-MM-DD].md`
 
 ```markdown
 # AUDITORÍA [SKOOL | CONTENIDO] · [NOMBRE CLIENTE]
@@ -140,7 +140,7 @@ ESF. BAJO ─────────────┼─────────�
 
 | Plazo | Acciones | Resultado esperado | Responsable |
 |---|---|---|---|
-| **7 días (Quick Wins)** | [Rec #N, #N, #N — máx 3] | [métrica que se mueve] | [Cliente / Andrea] |
+| **7 días (Quick Wins)** | [Rec #N, #N, #N — máx 3] | [métrica que se mueve] | [Cliente / tú] |
 | **30 días** | [Rec #N — 4 a 6 acciones] | [...] | [...] |
 | **90 días** | [Rec #N — 1 a 3 proyectos] | Reposicionamiento [...] | [...] |
 
@@ -176,7 +176,7 @@ Estos son los 3 pasos para esta semana. Si solo haces estos 3, el siguiente trim
 
 ## PLANTILLA B · SCORECARD CSV
 
-**Ruta:** `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/scorecard.csv`
+**Ruta:** `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/scorecard.csv`
 
 ### Modo Skool (12 filas)
 
@@ -224,7 +224,7 @@ SCORE GLOBAL,X/50,,,
 
 ## PLANTILLA C · RESUMEN EJECUTIVO
 
-**Ruta:** `/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/resumen-ejecutivo.md`
+**Ruta:** `~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]/resumen-ejecutivo.md`
 
 > Una sola página. Sirve para que el cliente lo comparta con su equipo sin abrir el documento completo.
 
@@ -288,7 +288,7 @@ SCORE GLOBAL,X/50,,,
 
 1. **Crear la carpeta del cliente antes** de escribir cualquier archivo:
    ```bash
-   mkdir -p "/Users/kissita/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]"
+   mkdir -p "~/Documents/FORMULA100K/AUDITORIAS/clientes/[CLIENTE]"
    ```
 
 2. **Nombre del cliente en kebab-case:** `barbara-organiza-y-vende`, `florencia-interview-lab`, `sol-traverso`. Sin espacios, sin tildes, sin mayúsculas.

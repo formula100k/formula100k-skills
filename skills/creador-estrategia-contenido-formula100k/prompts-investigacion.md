@@ -24,7 +24,7 @@ Solo si la alumna pasó 1+ cuenta IG/TikTok como referencia. Prompt reutilizable
 ```
 [agent-browser]
 
-Abre Chrome con sesión existente (IG y TikTok logueados como Andrea).
+Abre Chrome con sesión existente (IG y TikTok logueados con la cuenta del usuario).
 
 TAREA A — Para cada cuenta [@h1, @h2, @h3]:
   1. Visita instagram.com/[handle]/reels/

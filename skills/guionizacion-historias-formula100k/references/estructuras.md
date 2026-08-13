@@ -347,7 +347,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 ---
 
-# CABALLOS DE BATALLA (los más usados según patrón Andrea)
+# CABALLOS DE BATALLA (los más usados según patrón F100K)
 
 Si dudas entre estructuras, prefiere estas 6:
 

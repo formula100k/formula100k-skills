@@ -7,7 +7,7 @@ Algoritmo para que la skill seleccione automáticamente la foto base correcta de
 ## INPUT DEL MATCHER
 
 Para cada slide:
-- **Descripción de foto necesaria** del bloque ⚙️ del guion (ej: "Andrea caminando en escenario amplio")
+- **Descripción de foto necesaria** del bloque ⚙️ del guion (ej: "la creadora caminando en escenario amplio")
 - **Lista de archivos** de la carpeta de fotos del usuario
 
 ## OUTPUT
@@ -22,7 +22,7 @@ Para cada slide:
 
 ### Etapa 1 — Match por nombre de archivo
 
-Si los archivos están bien nombrados (Andrea organiza con tags), buscar match exacto:
+Si los archivos están bien nombrados (el usuario organiza con tags), buscar match exacto:
 
 | Descripción del slide | Tags a buscar en filename |
 |---|---|
@@ -39,7 +39,7 @@ Si encuentra match → Score 0.9, retornar.
 
 ### Etapa 2 — Match por características inferidas
 
-Si Andrea no tagea por nombre, usar heurística:
+Si el usuario no tagea por nombre, usar heurística:
 
 1. **Por fecha de creación:** si la descripción dice "Japón" y hay un cluster de fotos de fechas similares (ej. todas en abril), priorizarlas
 2. **Por carpeta:** si las fotos están organizadas en subcarpetas (ej. `/playa/`, `/escritorio/`), usar el nombre de la carpeta como tag
@@ -54,7 +54,7 @@ Si el match es ambiguo (varios candidatos con scores parecidos) o no hay match (
 Mostrar 3 candidatos al usuario y pedir elección:
 
 ```
-"Para el slide 1 ('Andrea caminando en escenario amplio') tengo estos 3 candidatos:
+"Para el slide 1 ('la creadora caminando en escenario amplio') tengo estos 3 candidatos:
 
 1. /Users/.../fotos/playa-japon-2026-04.jpg (Score 0.65)
 2. /Users/.../fotos/calle-tokio.jpg (Score 0.58)
@@ -73,7 +73,7 @@ Si una secuencia tiene 5 slides y los slides 1, 3, 5 piden "playa", la skill deb
 2. Cachear la elección
 3. Reutilizar la misma foto para los 3 slides
 
-Esto crea **continuidad visual** (igual que Andrea en sus secuencias reales — usa el mismo escenario para 2-3 slides).
+Esto crea **continuidad visual** (igual que el usuario en sus secuencias reales — usa el mismo escenario para 2-3 slides).
 
 Cache se guarda en variables de sesión, NO en disco.
 
@@ -84,7 +84,7 @@ Cache se guarda en variables de sesión, NO en disco.
 Cuando hay múltiples fotos posibles, preferir:
 
 1. **Plano general** sobre primer plano (más espacio para texto/cajas)
-2. **Andrea no centrada** (deja espacio a un lado para mockup/captura)
+2. **la creadora no centrada** (deja espacio a un lado para mockup/captura)
 3. **Buena iluminación** (clara, natural)
 4. **Fondo limpio** sin gente alrededor (si la hay, está borrosa)
 5. **Aspect ratio cercano a 9:16** (si la foto es muy horizontal, marcar como menos ideal)
@@ -106,7 +106,7 @@ magick convert input.heic output.jpg
 
 ## EJEMPLO COMPLETO
 
-**Carpeta del usuario:** `/Users/kissita/Pictures/marca-personal/`
+**Carpeta del usuario:** `~/Pictures/marca-personal/`
 
 **Contenido:**
 ```
@@ -122,12 +122,12 @@ metro-estacion.jpg
 escritorio-noche.jpg
 ```
 
-**Guion del slide 1 dice:** "Andrea caminando frente al Buda en Japón, plano general"
+**Guion del slide 1 dice:** "la creadora caminando frente al Buda en Japón, plano general"
 
 **Resultado del matcher:**
 ```
 {
-  "path": "/Users/kissita/Pictures/marca-personal/buda-templo-1.jpg",
+  "path": "~/Pictures/marca-personal/buda-templo-1.jpg",
   "score": 0.92,
   "razon": "Match por filename 'buda-templo-1' → exact tag match"
 }
@@ -138,13 +138,13 @@ escritorio-noche.jpg
 **Resultado:**
 ```
 {
-  "path": "/Users/kissita/Pictures/marca-personal/escritorio-laptop.jpg",
+  "path": "~/Pictures/marca-personal/escritorio-laptop.jpg",
   "score": 0.88,
   "razon": "Match por filename 'escritorio-laptop' → tag escritorio"
 }
 ```
 
-**Guion del slide 5 (CTA) dice:** "Andrea con escenario bonito tipo playa o parque"
+**Guion del slide 5 (CTA) dice:** "la creadora con escenario bonito tipo playa o parque"
 
 **Resultado:**
 ```
@@ -172,4 +172,4 @@ Si el usuario dio una carpeta pero no tiene fotos compatibles:
    c. Generar las fotos desde cero con Higgsfield (sin foto base — riesgo: cara distinta)
    d. Saltarse este slide y dejarlo para después
 
-Nunca proceder sin foto base si el slide la requiere — el output sería una persona random generada por IA, no Andrea.
+Nunca proceder sin foto base si el slide la requiere — el output sería una persona random generada por IA, no la de otra persona.

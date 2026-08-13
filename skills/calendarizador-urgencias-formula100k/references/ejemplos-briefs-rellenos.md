@@ -20,7 +20,7 @@
 - Avatar: Mujer 25-45, creadora de contenido o emprendedora, ya intentó vender online sin un sistema, busca facturar de forma estable con su marca personal
 
 **C. Activos seleccionados**
-- ✅ Sesiones en vivo recurrentes (Andrea + equipo, semanales)
+- ✅ Sesiones en vivo recurrentes (el usuario + equipo, semanales)
 - ✅ Cohortes con onboarding sincronizado (día 1 de cada mes)
 - ✅ Comunidad activa (Skool, 1600+ miembras)
 - ✅ Drops de módulos nuevos

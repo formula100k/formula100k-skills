@@ -151,7 +151,7 @@ Ver estructura detallada en [propuesta-integral.md](propuesta-integral.md).
 3. Volcar el brief consolidado a un archivo `brief.json` siguiendo el schema de [`brief.example.json`](brief.example.json) (el ejemplo está poblado con datos reales de Poder Inversionista — usarlo como referencia de estructura).
 4. Ejecutar:
    ```bash
-   python3 /Users/kissita/.claude/skills/creadora-comunidades-skool/build_docx.py /ruta/a/brief.json
+   python3 ~/.claude/skills/creadora-comunidades-skool/build_docx.py /ruta/a/brief.json
    ```
 5. El script aplica automáticamente todas las reglas de formato del memory `feedback-docx-formato`:
    - Sin tabla de contenidos.
@@ -163,7 +163,7 @@ Ver estructura detallada en [propuesta-integral.md](propuesta-integral.md).
 
 **Output por defecto:** `/Users/<usuario>/Downloads/<CLIENTE> - Propuesta Skool FINAL.docx`. Para forzar otra ruta: `--out /ruta/custom.docx`.
 
-**Dependencias:** `python-docx` y `emoji` (ya instaladas en el entorno de Andrea). Si una alumna corre la skill y faltan, instalar con `pip install python-docx emoji`.
+**Dependencias:** `python-docx` y `emoji` (ya instaladas en el entorno del usuario). Si una alumna corre la skill y faltan, instalar con `pip install python-docx emoji`.
 
 **Notas de uso:**
 - El schema de `brief.json` lleva 16 claves principales (`cliente`, `tagline`, `subtitle`, `s1_resumen`, `s2_brief`, ..., `s16_roadmap`). Cualquier sección omitida no aparece en el .docx — útil para entregas parciales.

@@ -56,7 +56,7 @@ ya existen y al final maqueta el HTML.
 
 ## Contexto crítico
 
-- **Usuaria:** Andrea Vega o sus alumnas (audiencia hispana, español neutro — NO voseo).
+- **Usuario:** creador/a de contenido hispano (audiencia hispana, español neutro — NO voseo).
 - **Reglas de la casa (innegociables):**
   - Referencias virales SIEMPRE reales: URL + reproducciones reales, NUNCA "Original".
   - NUNCA inventar métricas, fechas ni conteos. Si falta un dato real, preguntar.

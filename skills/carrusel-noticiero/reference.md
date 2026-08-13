@@ -60,7 +60,7 @@ En Instagram: sube el `.mp4` como slide 1 y los PNG 2-8. (IG acepta video + imá
 El repo `~/Documents/formula100k-skills` **es** el marketplace de plugins cuyo homepage es
 formula100k.app. Publicar la skill ahí = ponerla a disposición de las alumnas en formula100k.app.
 
-Solo cuando Andrea lo pida:
+Solo cuando el usuario lo pida:
 
 1. Copia la skill al repo (sin `node_modules`):
    ```
@@ -82,4 +82,4 @@ Solo cuando Andrea lo pida:
 4. Las alumnas la reciben al actualizar el plugin (`/plugin` → update `formula100k@formula100k`).
 
 > Nota: no está en repo git el directorio de trabajo `~` — solo el repo de skills lo está.
-> Nunca hagas push sin que Andrea lo pida.
+> Nunca hagas push sin que el usuario lo pida.

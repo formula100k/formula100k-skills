@@ -1,11 +1,11 @@
 ---
 name: graficos-de-video-formula100k
-description: Skill que convierte un video grabado por Andrea en una serie de gráficos scrapbook listos para superponerse sobre la toma. Pipeline completo, transcribe el audio con timestamps, identifica momentos visuales clave, propone gráficos con la estética FÓRMULA 100K (paleta crema, washi tape, post-its, Caveat + Poppins) y los genera en paralelo con Higgsfield nano_banana_2. Activar SIEMPRE que Andrea pase un archivo de video (.mov/.mp4) y diga "transcribe y hazme gráficos", "saca timestamps y genera scrapbook para este reel", "haz los b-roll de este video", "convierte este video en gráficos", "acompáñame esta toma con scrapbook", o cualquier variación que combine un video grabado con la intención de generar overlays visuales. Output va a /Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/.
+description: Skill que convierte un video grabado por el usuario en una serie de gráficos scrapbook listos para superponerse sobre la toma. Pipeline completo, transcribe el audio con timestamps, identifica momentos visuales clave, propone gráficos con la estética FÓRMULA 100K (paleta crema, washi tape, post-its, Caveat + Poppins) y los genera en paralelo con Higgsfield nano_banana_2. Activar SIEMPRE que el usuario pase un archivo de video (.mov/.mp4) y diga "transcribe y hazme gráficos", "saca timestamps y genera scrapbook para este reel", "haz los b-roll de este video", "convierte este video en gráficos", "acompáñame esta toma con scrapbook", o cualquier variación que combine un video grabado con la intención de generar overlays visuales. Output va a ~/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/.
 ---
 
 # Gráficos de Video — FÓRMULA 100K
 
-Pipeline automatizado para convertir un video grabado por Andrea en una serie de gráficos scrapbook listos para superponer sobre la toma.
+Pipeline automatizado para convertir un video grabado por el usuario en una serie de gráficos scrapbook listos para superponer sobre la toma.
 
 ## Cuándo activar
 
@@ -86,7 +86,7 @@ AskUserQuestion:
     → Modificar antes de generar
 ```
 
-**Memoria persistente:** Andrea ya estableció (ver `feedback_aspect_ratio_graficos_video.md`) que para overlays sobre toma usa 1:1 o 16:9. NO ofrecer 9:16 salvo que pida explícitamente full-screen.
+**Regla establecida:** para overlays sobre toma se usa 1:1 o 16:9. NO ofrecer 9:16 salvo que el usuario pida explícitamente full-screen. Si en sesiones anteriores el usuario fijó otra preferencia, respétala.
 
 ### Paso 6 — Construir prompts con brandkit FÓRMULA 100K
 
@@ -101,7 +101,7 @@ text "[TEXTO EN ESPAÑOL NEUTRO]"].
 [ACCENTS: washi tape (color), hand-drawn arrows in marker, small stickers, slight shadows under
 each layered element].
 Composition: layered scrapbook style, paper texture, slight tape edges, soft shadows.
-Andrea Vega FORMULA 100K aesthetic — cream palette with [accent colors] accents, handwritten Caveat
+FORMULA 100K scrapbook aesthetic — cream palette with [accent colors] accents, handwritten Caveat
 + bold Poppins typography mix. Bold readable text. High quality print-ready scrapbook page.
 ```
 
@@ -142,7 +142,7 @@ Captura el `rawUrl` de cada `results`.
 **Crear carpeta destino** (convención obligatoria, ver `feedback_recursos_videos.md`):
 
 ```bash
-DEST="/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
+DEST="~/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
 mkdir -p "$DEST"
 ```
 
@@ -195,7 +195,7 @@ NO regenerar todos cuando solo se pide cambiar uno.
 
 ## Atajo conversacional
 
-Si Andrea solo dice "/graficos-video <ruta>" o "transcribe y arma gráficos para este: <ruta>", asume:
+Si el usuario solo dice "/graficos-video <ruta>" o "transcribe y arma gráficos para este: <ruta>", asume:
 - Aspect ratio: 1:1
 - Estilo: scrapbook FÓRMULA 100K estándar
 - Cantidad: la que el contenido sugiera (4-8)

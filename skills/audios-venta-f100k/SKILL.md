@@ -1,6 +1,6 @@
 ---
 name: audios-venta-f100k
-description: "Escribe guiones de AUDIOS DE VENTA (notas de voz comerciales, audios de cierre en DM, voicenotes de objeción, audios de seguimiento, audios de aplicación a high ticket) para grabar en WhatsApp / Instagram DM / Telegram. Convierte una oferta ya construida en una secuencia hablada de máximo 50 segundos que cierra la venta en privado. Activar SIEMPRE que se pida 'haz un audio de venta', 'guion para nota de voz', 'audio para cerrar en DM', 'voicenote para vender', 'audio de cierre', 'audio de seguimiento', 'audio para esa prospecta', 'audio para responder objeción', 'audio de aplicación', 'audio para que compre', 'guion de audio de IG', 'audio de bienvenida a high ticket', o cualquier variación que combine vender + formato hablado privado 1-on-1. NO usar para guiones de video público (guionizacion-formula100k), VSL ni landing (vsl-expert-f100k), ni construir la oferta (constructor-ofertas-f100k). Complementa a andrea-vendedora-instagram cuando se necesita audio en vez de texto."
+description: "Escribe guiones de AUDIOS DE VENTA (notas de voz comerciales, audios de cierre en DM, voicenotes de objeción, audios de seguimiento, audios de aplicación a high ticket) para grabar en WhatsApp / Instagram DM / Telegram. Convierte una oferta ya construida en una secuencia hablada de máximo 50 segundos que cierra la venta en privado. Activar SIEMPRE que se pida 'haz un audio de venta', 'guion para nota de voz', 'audio para cerrar en DM', 'voicenote para vender', 'audio de cierre', 'audio de seguimiento', 'audio para esa prospecta', 'audio para responder objeción', 'audio de aplicación', 'audio para que compre', 'guion de audio de IG', 'audio de bienvenida a high ticket', o cualquier variación que combine vender + formato hablado privado 1-on-1. NO usar para guiones de video público (guionizacion-formula100k), VSL ni landing (vsl-expert-f100k), ni construir la oferta (constructor-ofertas-f100k)."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -57,7 +57,7 @@ Convierte una oferta + un contexto de conversación 1-on-1 en un guion de audio 
 | 5 | **Audio de aplicación / agendar llamada** | 45-50 s | Para mover prospecta a aplicación de high ticket o llamada de calificación |
 | 6 | **Audio de bienvenida post-compra** | 40-50 s | Justo después de la compra, para retención inmediata y onboarding emocional |
 
-Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono cálido pero seguro. Conversacional. Como si Andrea estuviera grabando en el sofá, no en un estudio.
+Trabaja en español neutro (NO argentino — [[feedback_espanol_neutro]]). Tono cálido pero seguro. Conversacional. Como si el usuario estuviera grabando en el sofá, no en un estudio.
 
 **Pre-requisito:** una oferta clara. Si no existe, derivar primero a [[constructor-ofertas-f100k]].
 
@@ -157,13 +157,13 @@ Cada plantilla incluye:
 - **Español neutro siempre** — ver [[feedback_espanol_neutro]]
 - **Si la conversación está muerta hace +14 días**, no usar "audio de seguimiento" — proponer reabrir con texto primero, audio después
 - **Si la prospecta es high ticket ($2K+)**, el CTA SIEMPRE es agendar llamada — nunca pagar por DM
-- **Nunca grabar el audio**, solo entregar el GUION (Andrea / el usuario lo graba)
+- **Nunca grabar el audio**, solo entregar el GUION (el usuario / el usuario lo graba)
 
 ---
 
 ## Output
 
-Guardar siempre en `/Users/kissita/Documents/FORMULA100K/AUDIOS-VENTA/YYYY-MM-DD_<tipo>_<nombre-prospecta>.md`. Si es para un cliente, en `/Users/kissita/Documents/FORMULA100K/CLIENTES/<nombre>/audios-venta/`.
+Guardar siempre en `~/Documents/FORMULA100K/AUDIOS-VENTA/YYYY-MM-DD_<tipo>_<nombre-prospecta>.md`. Si es para un cliente, en `~/Documents/FORMULA100K/CLIENTES/<nombre>/audios-venta/`.
 
 Formato del archivo:
 - Tipo de audio
@@ -173,4 +173,4 @@ Formato del archivo:
 - 1-2 variaciones por si la primera no cuaja
 - Notas de entrega (pausas, sonrisa, ritmo)
 
-Si después del audio la prospecta avanza, ofrecer pasar a [[andrea-vendedora-instagram]] para continuar la conversación en DM o a [[creadora-comunidades-skool]] si el destino es onboarding a Skool.
+Si después del audio la prospecta avanza, ofrecer continuar la conversación en DM, o pasar a [[creadora-comunidades-skool]] si el destino es onboarding a Skool.

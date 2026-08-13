@@ -1,6 +1,6 @@
 ---
 name: tutorial-viral-f100k
-description: "Orquesta el pipeline completo de tutorial viral faceless (sin cara) de FÓRMULA 100K: de una idea o guion a un BORRADOR_AUTO.mp4 listo para retoque. 5 fases con un solo checkpoint humano: guion con marcas (Fase 1) → BRIEF_GRABACION.md + pausa mientras Andrea graba voz y pantallas (Fase 2) → generación de recursos IA/web (Fase 3) → render con composición tutorial-faceless (Fase 4) → entrega de BORRADOR_AUTO.mp4 + MANIFEST.md (Fase 5). Captions cinéticos automáticos desde transcript word-level; voz es REAL (no TTS); pantallas son grabaciones reales de Andrea. Activar cuando el usuario diga: 'tutorial viral', 'explicación viral faceless', 'video sin cara', 'hazme un tutorial de X', 'video tipo screen recording con captions', '/tutorial <tema>', '/tutorial-render <carpeta>'. NO usar para talking-head reels (usa editor-video-formula100k), carruseles, stories ni miniaturas."
+description: "Orquesta el pipeline completo de tutorial viral faceless (sin cara) de FÓRMULA 100K: de una idea o guion a un BORRADOR_AUTO.mp4 listo para retoque. 5 fases con un solo checkpoint humano: guion con marcas (Fase 1) → BRIEF_GRABACION.md + pausa mientras el usuario graba voz y pantallas (Fase 2) → generación de recursos IA/web (Fase 3) → render con composición tutorial-faceless (Fase 4) → entrega de BORRADOR_AUTO.mp4 + MANIFEST.md (Fase 5). Captions cinéticos automáticos desde transcript word-level; voz es REAL (no TTS); pantallas son grabaciones reales del usuario. Activar cuando el usuario diga: 'tutorial viral', 'explicación viral faceless', 'video sin cara', 'hazme un tutorial de X', 'video tipo screen recording con captions', '/tutorial <tema>', '/tutorial-render <carpeta>'. NO usar para talking-head reels (usa editor-video-formula100k), carruseles, stories ni miniaturas."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill
 ---
 
@@ -45,7 +45,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Tutorial Viral Faceless — FÓRMULA 100K
 
-Pipeline de extremo a extremo para producir tutoriales cortos virales **sin cara** (faceless): screen recording + cards generadas por IA + captions cinéticos automáticos + voz real de Andrea. De una idea a un `BORRADOR_AUTO.mp4` listo para retoque en CapCut/Premiere.
+Pipeline de extremo a extremo para producir tutoriales cortos virales **sin cara** (faceless): screen recording + cards generadas por IA + captions cinéticos automáticos + voz real del usuario. De una idea a un `BORRADOR_AUTO.mp4` listo para retoque en CapCut/Premiere.
 
 La referencia que originó este diseño: reel de Ramiro Cubria (IG `DZslxK-Hy_x`) — tutorial faceless con screen-recording, captions cinéticos y cards pop-in.
 
@@ -61,7 +61,7 @@ Cuando el usuario:
 
 ## NO activar para
 
-- **Talking-head reels** (Andrea con su cara) → `editor-video-formula100k`
+- **Talking-head reels** (el usuario con su cara) → `editor-video-formula100k`
 - **Carruseles** → `carrusel-render-formula100k`
 - **Stories** → `historias-a-imagenes-nanobanana`
 - **Miniaturas YouTube** → `miniatura-youtube-formula100k`
@@ -81,12 +81,12 @@ Cuando el usuario:
 Todas las carpetas del proyecto viven en:
 
 ```
-/Users/kissita/Documents/FORMULA100K/TUTORIALES/<fecha>_<slug>/
+~/Documents/FORMULA100K/TUTORIALES/<fecha>_<slug>/
 ```
 
 Ejemplos:
-- `/Users/kissita/Documents/FORMULA100K/TUTORIALES/2026-06-18_como-usar-claude-code/`
-- `/Users/kissita/Documents/FORMULA100K/TUTORIALES/2026-06-20_automatiza-con-ia/`
+- `~/Documents/FORMULA100K/TUTORIALES/2026-06-18_como-usar-claude-code/`
+- `~/Documents/FORMULA100K/TUTORIALES/2026-06-20_automatiza-con-ia/`
 
 La skill crea la carpeta si no existe. El slug se genera del tema (minúsculas, guiones, sin tildes).
 
@@ -115,11 +115,11 @@ El guion lleva **marcas inline** que definen qué hace cada capa:
 
 | Marca | Significado | Responsable |
 |-------|-------------|-------------|
-| `[PANTALLA: descripción]` | Captura o grabación de pantalla específica | Andrea graba |
+| `[PANTALLA: descripción]` | Captura o grabación de pantalla específica | el usuario graba |
 | `[CARD: idea/concepto]` | Tarjeta visual, mockup o ilustración | Skill genera |
 | `[CTA: texto]` | Tarjeta final de llamada a la acción | Skill genera |
 
-Si Andrea trae un guion propio, la skill lo normaliza a este formato antes de continuar.
+Si el usuario trae un guion propio, la skill lo normaliza a este formato antes de continuar.
 
 **Guardar como:** `$DEST/GUION.md`
 
@@ -136,7 +136,7 @@ La skill:
 
 Luego espera con `AskUserQuestion`: "¿Ya pegaste los archivos en `$DEST/USER/`? Cuando estén listos seguimos con la Fase 3."
 
-Andrea entrega:
+El usuario entrega:
 - `$DEST/USER/voz.m4a` (o `.wav`, `.mp3`) — su voz leyendo el guion completo de corrido
 - `$DEST/USER/pantalla_01.mov`, `pantalla_02.mov`, … — grabaciones de pantalla mudas numeradas
 
@@ -169,7 +169,7 @@ Cada pantalla numerada incluye: qué mostrar, duración aproximada, y a qué lí
 
 ### Fase 3 — Generación de recursos
 
-Con el GUION.md en mano (antes de que Andrea grabe), la skill genera todos los assets IA:
+Con el GUION.md en mano (antes de que el usuario grabe), la skill genera todos los assets IA:
 
 | Recurso | Herramienta | Destino |
 |---------|-------------|---------|
@@ -178,7 +178,7 @@ Con el GUION.md en mano (antes de que Andrea grabe), la skill genera todos los a
 | Ilustraciones y B-roll generado | Higgsfield (Seedance 2.0) | `$DEST/IA/` |
 | Recursos web (B-roll de apoyo) | búsqueda web + descarga | `$DEST/WEB/` |
 
-La skill puede arrancar Fase 3 en paralelo mientras Andrea graba (si el usuario lo indica). Por defecto espera la confirmación del checkpoint.
+La skill puede arrancar Fase 3 en paralelo mientras el usuario graba (si el usuario lo indica). Por defecto espera la confirmación del checkpoint.
 
 ---
 
@@ -188,7 +188,7 @@ Una vez que `$DEST/USER/voz.*` existe:
 
 **Comando único:**
 ```bash
-python3 /Users/kissita/.claude/skills/tutorial-viral-f100k/scripts/render_tutorial.py "$DEST" "$DEST/USER/voz.<ext>"
+python3 ~/.claude/skills/tutorial-viral-f100k/scripts/render_tutorial.py "$DEST" "$DEST/USER/voz.<ext>"
 ```
 
 Reemplazar `<ext>` con la extensión real del archivo (`m4a`, `wav`, `mp3`).
@@ -295,7 +295,7 @@ Extiende el parser keyword-based existente (`manifest_to_cues.py`). Esqueleto m�
 | `## Énfasis` | Caja blanca en zona inferior | **No aplica** (las cards toman el centro) |
 | `## Overlays` | Tercio inferior, no tapa la cara | `## Cards` — pueden ir al centro |
 | `## Subtítulos` | Desactivados | **Activados automáticamente** del transcript |
-| `## Fondo` | No existe (es el video de Andrea) | Segmentos de screen recording o cards fullscreen |
+| `## Fondo` | No existe (es el video del usuario) | Segmentos de screen recording o cards fullscreen |
 | `## Tarjeta gancho` | Sticker esquina superior | Card de apertura fullscreen (2–4s) |
 | `## CTA` | No existe como sección propia | Tarjeta final dedicada |
 
@@ -306,9 +306,9 @@ Extiende el parser keyword-based existente (`manifest_to_cues.py`). Esqueleto m�
 ```
 $DEST/
 ├── GUION.md                   ← guion con marcas [PANTALLA]/[CARD]/[CTA]
-├── BRIEF_GRABACION.md         ← instrucciones de grabación para Andrea
+├── BRIEF_GRABACION.md         ← instrucciones de grabación para el usuario
 ├── MANIFEST.md                ← cues faceless (consumido por el render)
-├── USER/                      ← archivos que entrega Andrea
+├── USER/                      ← archivos que entregal usuario
 │   ├── voz.m4a
 │   └── pantalla_01.mov ...
 ├── IA/                        ← cards, mockups, ilustraciones generadas
@@ -327,12 +327,12 @@ Esta skill **reutiliza el motor de `editor-video-formula100k`** (Node/ffmpeg/Whi
 
 Si es la primera vez en esta máquina:
 ```bash
-bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
+bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
 ```
 
 Solo verificar sin instalar:
 ```bash
-bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
+bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
 ```
 
 Requiere **Homebrew** instalado previamente en macOS. Si no lo tienes:
@@ -346,7 +346,7 @@ Requiere **Homebrew** instalado previamente en macOS. Si no lo tienes:
 
 **Cambiar un cue del MANIFEST:**
 1. Editar la fila en `$DEST/MANIFEST.md` (keyword, archivo, duración, posición)
-2. Re-correr: `python3 /Users/kissita/.claude/skills/tutorial-viral-f100k/scripts/render_tutorial.py "$DEST" "$DEST/USER/voz.<ext>"`
+2. Re-correr: `python3 ~/.claude/skills/tutorial-viral-f100k/scripts/render_tutorial.py "$DEST" "$DEST/USER/voz.<ext>"`
    El corte se saltea si `_voz_cut.m4a` ya existe.
 
 **Re-grabar solo la voz** (sin re-grabar las pantallas):
@@ -360,7 +360,7 @@ Requiere **Homebrew** instalado previamente en macOS. Si no lo tienes:
 
 **Atajo conversacional de re-render:**
 ```
-/tutorial-render /Users/kissita/Documents/FORMULA100K/TUTORIALES/2026-06-18_mi-tutorial/
+/tutorial-render ~/Documents/FORMULA100K/TUTORIALES/2026-06-18_mi-tutorial/
 ```
 
 ---

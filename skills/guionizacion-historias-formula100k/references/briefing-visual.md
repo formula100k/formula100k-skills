@@ -1,7 +1,7 @@
 # BRIEFING VISUAL — PALETA Y REGLAS DE DISEÑO
 
 Reglas extraídas del análisis de 11 secuencias reales de Andrea Vega (FÓRMULA 100K).
-Estas son las reglas que debe seguir el diseño visual de cada slide para que sienta "del estilo Andrea".
+Estas son las reglas que debe seguir el diseño visual de cada slide para que sienta "del estilo de la marca".
 
 ---
 
@@ -100,7 +100,7 @@ Flechas amarillas dibujadas, X rojas, ✓ verdes, subrayados. Son los que hacen 
 
 ## TIPOGRAFÍA NATIVA DE INSTAGRAM
 
-Las stories de Andrea NO usan fuentes externas. Solo las **fuentes nativas de IG** disponibles en el editor:
+Las stories del usuario NO usan fuentes externas. Solo las **fuentes nativas de IG** disponibles en el editor:
 
 | Fuente IG | Cuándo usar |
 |---|---|
@@ -137,7 +137,7 @@ Cada slide en el output debe tener un briefing con esta estructura:
 
 ### Caso: "Comenta GPT y te llega en 1 minuto"
 ```
-- Fondo: foto de Andrea de pie en una playa de rocas, cielo nublado, mirando hacia el mar
+- Fondo: foto del usuario de pie en una playa de rocas, cielo nublado, mirando hacia el mar
 - Capa 1: caja blanca centrada arriba con "Comenta 'GPT'" (la palabra GPT en azul)
 - Capa 2: caja negra debajo con "y te llega en 1 minuto, te lo voy a regalar así que comenta" (palabras 1 minuto y regalar resaltadas en verde y amarillo)
 - Elementos: emoji 🎁 grande sobre la caja, emoji 😉 con manita 👇 al pie

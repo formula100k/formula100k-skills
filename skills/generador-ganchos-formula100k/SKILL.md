@@ -49,21 +49,21 @@ Lab pre-grabación: diseña N variantes de gancho (composición + texto), las pr
 
 ## Cuándo se activa
 
-- Andrea tiene un guion listo y quiere optimizar el primer segundo antes de grabar
-- Andrea encuentra un reel viral y quiere 3 versiones adaptadas a su nicho/estilo
+- El usuario tiene un guion listo y quiere optimizar el primer segundo antes de grabar
+- El usuario encuentra un reel viral y quiere 3 versiones adaptadas a su nicho/estilo
 - Una alumna no sabe qué hook usar para un video que va a grabar hoy
 - Se quiere comparar 2-4 hipótesis de Forma Visual para el mismo contenido
 
 ## Relación con otras skills
 
 - **Entrada típica:** output de [[guionizacion-formula100k]] (guion completo)
-- **Salida típica:** brief que Andrea graba; opcionalmente el video final se pasa por [[evaluador-ganchos-formula100k]] para validar post-grabación
+- **Salida típica:** brief que el usuario graba; opcionalmente el video final se pasa por [[evaluador-ganchos-formula100k]] para validar post-grabación
 - **NO confundir con** [[evaluador-ganchos-formula100k]] — esa juzga un gancho YA grabado; esta GENERA opciones nuevas
 - **NO confundir con** [[carrusel-viral-formula100k]] — esa es para slides estáticos de carrusel
 
 ## Contexto crítico
 
-**Usuaria:** Andrea Vega (FÓRMULA 100K) o sus alumnas. Audiencia hispana. Español neutro obligatorio (NO voseo: usa "tú", "tienes", "puedes", "haz" — nunca "vos", "tenés", "podés", "hacé").
+**Usuario:** creador/a de contenido hispano (tú o tu clienta). Audiencia hispana. Español neutro obligatorio (NO voseo: usa "tú", "tienes", "puedes", "haz" — nunca "vos", "tenés", "podés", "hacé").
 
 **Material de referencia (cargar siempre):**
 - `criterios.md` — reglas de diversificación de variantes + composición visual + estructuras de texto
@@ -79,7 +79,7 @@ Lab pre-grabación: diseña N variantes de gancho (composición + texto), las pr
 
 Si necesitas detalles de un framework, consulta `~/.claude/skills/evaluador-ganchos-formula100k/criterios.md`.
 
-**Output siempre va a:** `/Users/kissita/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_tema/`
+**Output siempre va a:** `~/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_tema/`
 
 ## Flujo paso a paso
 
@@ -145,7 +145,7 @@ Usa `mcp__higgsfield__generate_image` con `nano_banana_2`:
 - Prompt: descripción detallada de la composición visual (Paso 3.2) + texto del gancho integrado en pantalla + estilo "Instagram reel first frame, 9:16, high contrast"
 - Aspecto: 9:16 (vertical reel)
 - Calidad: 2K mínimo
-- Si Andrea está en una variante con su rostro, considera usar referencia de [[feedback_avatar_imagen]] (banana skill / sus fotos), no Higgsfield Soul
+- Si el usuario está en una variante con su rostro, considera usar referencia de [[feedback_avatar_imagen]] (banana skill / sus fotos), no Higgsfield Soul
 
 **4.2 — Animar imagen a clip de 3s**
 
@@ -210,7 +210,7 @@ Sigue EXACTAMENTE `output-template.md`. El reporte debe incluir:
 - `variant-1.mp4` ... `variant-N.mp4` → clips de test (descarga desde Higgsfield)
 - `predictor-jobs.json` → mapping de variante → job_id del predictor (para reabrir dashboards después)
 
-Carpeta destino: `/Users/kissita/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_<slug-del-tema>/`
+Carpeta destino: `~/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_<slug-del-tema>/`
 
 ### Paso 8: Cerrar con call-to-action
 
@@ -221,14 +221,14 @@ Termina con UNA acción concreta:
 
 - **NO uses voseo argentino.** Español neutro siempre. Aplica al texto del gancho Y a la conversación con el usuario.
 - **NO repitas la misma Forma Visual en dos variantes** salvo que el usuario lo pida explícitamente. El valor de testear N variantes es cubrir hipótesis distintas.
-- **NO uses imágenes de bancos de stock** (Shutterstock, Getty, Unsplash, Pexels, Pixabay, etc.) — referencia [[feedback_no_stock_imagenes]]. La imagen base se genera con Nanobanana o sale de las fotos reales de Andrea.
+- **NO uses imágenes de bancos de stock** (Shutterstock, Getty, Unsplash, Pexels, Pixabay, etc.) — referencia [[feedback_no_stock_imagenes]]. La imagen base se genera con Nanobanana o sale de las fotos reales del usuario.
 - **NO inventes los scores del Predictor.** Si una corrida falla, dilo. No rellenes con números.
 - **NO entregues una sola variante.** Mínimo 2. Si solo hay presupuesto/tiempo para 1, esto no es el lab — usa la skill `evaluador-ganchos-formula100k` directamente.
-- **NO uses Higgsfield Soul de Andrea** para generar su cara — referencia [[feedback_avatar_imagen]]. Si una variante necesita el rostro de Andrea, generar con la skill `banana` usando sus fotos reales como referencia y subir el resultado a Higgsfield para animar.
+- **NO uses Higgsfield Soul del usuario** para generar su cara — referencia [[feedback_avatar_imagen]]. Si una variante necesita el rostro del usuario, generar con la skill `banana` usando sus fotos reales como referencia y subir el resultado a Higgsfield para animar.
 - **NO ejecutes en serie las llamadas al Predictor.** Lanza las N en paralelo.
 - **NO bloquees todo el flujo si una variante falla.** Reintenta una vez; si falla de nuevo, entrega ranking parcial.
-- **NO sobreescribas el veredicto del Predictor con tu opinión.** Si la variante ganadora por score es la que "menos te gusta", entrega la ganadora igual con disclaimer si hace falta. Andrea decide al final.
-- **El nombre/handle de Andrea en cualquier overlay textual:** `@andreaestratega` (NUNCA @andraestratega sin la "e", ni @andreavega.tv ni variantes) — referencia [[user_username_instagram]].
+- **NO sobreescribas el veredicto del Predictor con tu opinión.** Si la variante ganadora por score es la que "menos te gusta", entrega la ganadora igual con disclaimer si hace falta. El usuario decide al final.
+- **El nombre/handle del usuario en cualquier overlay textual:** el handle EXACTO que dio el usuario. Nunca lo inventes ni lo deduzcas del nombre: pregúntalo una vez y reúsalo.
 - **NO rankees los moldes de gancho.** El banco de `moldes-gancho.md` está ordenado por frecuencia, no por rendimiento; ninguna familia sobrevive corrección por comparaciones múltiples. Elegir "el molde que más rinde" es inventar data.
 
 ## Casos especiales
@@ -236,7 +236,7 @@ Termina con UNA acción concreta:
 - **Guion muy largo (>1 página):** extrae solo la promesa central y la primera frase del guion para usar como base; no necesitas leer todo el guion para diseñar el gancho.
 - **Referencia viral en idioma distinto al español:** tradúcela mentalmente al español neutro y diseña los textos en español. El video AI puede ser en cualquier idioma pero el texto en pantalla debe ser español neutro.
 - **Tema sensible (salud, finanzas, legal):** las variantes deben evitar promesas absolutas. El gancho puede generar curiosidad sin prometer resultados exactos.
-- **Andrea pide una variante específica además de las AI:** acéptala como variante adicional. Genera su clip, pásalo por el predictor, inclúyela en el ranking.
+- **el usuario pide una variante específica además de las AI:** acéptala como variante adicional. Genera su clip, pásalo por el predictor, inclúyela en el ranking.
 
 ## Comunicación durante el proceso
 

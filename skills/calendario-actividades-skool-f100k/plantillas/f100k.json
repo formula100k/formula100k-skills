@@ -32,7 +32,7 @@
     "1": [
       { "sesion": "Socio 100K", "tipo": "socio" },
       { "sesion": "Onboarding con Luis", "tipo": "onboarding" },
-      { "sesion": "Q&A con Andrea y Cheva", "tipo": "qa" }
+      { "sesion": "Q&A con el usuario y Cheva", "tipo": "qa" }
     ],
     "2": [
       { "sesion": "Diseño con IA", "tipo": "diseno" },

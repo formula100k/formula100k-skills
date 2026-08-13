@@ -5,7 +5,7 @@ Caveat + Poppins, post-its, washi tape y stickers emoji. Es el brandkit de Andre
 
 **Cómo usarlo:** copia el bloque HTML completo de abajo a `<carpeta>/carrusel.html`, y reemplaza
 SOLO el copy marcado con `‹…›`. NO toques el `<style>` (está probado). Cada slide ya trae su
-`num` (X / 8), `handle` (@andreaestratega), tapes, stickers y post-its posicionados.
+`num` (X / 8), `handle` (@tuhandle), tapes, stickers y post-its posicionados.
 
 La portada (slide 1) NO va aquí — se arma con `cover/cover-news.html`. Este archivo cubre slides 2-8.
 
@@ -163,7 +163,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   </div>
   <div class="postit s2-postit">‹dato<br>en post-it ✅›</div>
   <div class="num">2 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S3 — EL MOTIVO -->
@@ -180,7 +180,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   </div>
   <div class="postit s3-postit">‹remate<br>en post-it 😵›</div>
   <div class="num">3 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S4 — EL DATO QUE ASUSTA -->
@@ -195,7 +195,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   <div class="s4-title">‹es <span class="red">lo hero›</span></div>
   <div class="s4-sub">~ ‹subtítulo que resume el insight› ~</div>
   <div class="num">4 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S5 — ¿Y A TI QUÉ? -->
@@ -212,7 +212,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   </div>
   <div class="postit s5-postit">‹analogía<br>en post-it 🌊›</div>
   <div class="num">5 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S6 — CÓMO APROVECHARLO -->
@@ -229,7 +229,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
     <div class="item"><span class="n">3</span><span class="bold">‹Jugada 3.›</span> ‹Explicación con <span class="hl">término</span>.›</div>
   </div>
   <div class="num">6 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S7 — LA REGLA DE ORO -->
@@ -244,7 +244,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   <div class="s7hero-title">‹Muévete<br><span class="red">ahora›</span></div>
   <div class="s7hero-sub">~ ‹remate de urgencia› ~</div>
   <div class="num">7 / 8</div>
-  <div class="handle">@andreaestratega</div>
+  <div class="handle">@tuhandle</div>
 </div>
 
 <!-- S8 — CIERRE CTA -->
@@ -268,7 +268,7 @@ Roles de slide (deben respetarse aunque cambies el tema): 2=QUÉ PASÓ · 3=EL M
   <div class="s8-cta">Comenta <strong>"100K"</strong> y te enseño cómo 🚀</div>
   <div class="s8-save">📌 <span class="pin">Guárdalo</span> para tu<br>próxima ola de contenido</div>
   <div class="num">8 / 8</div>
-  <div class="handle">@andreaestratega · Fórmula 100K</div>
+  <div class="handle">@tuhandle · Fórmula 100K</div>
 </div>
 
 </body>

@@ -1,6 +1,6 @@
 # FORMATO DE OUTPUT — PLANTILLA EXACTA
 
-Toda entrega de la skill `guionizacion-ads-formula100k` sigue esta estructura. Pega esto en el `.md` que guardas en `/Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/`.
+Toda entrega de la skill `guionizacion-ads-formula100k` sigue esta estructura. Pega esto en el `.md` que guardas en `~/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/`.
 
 ---
 
@@ -83,7 +83,7 @@ Toda entrega de la skill `guionizacion-ads-formula100k` sigue esta estructura. P
 
 | Tiempo | Tipo | Texto a decir | Visual / B-roll |
 |--------|------|---------------|------------------|
-| 0:00-0:03 | HOOK | [texto narrativa] | [Andrea en plano cerrado, expresión inquieta] |
+| 0:00-0:03 | HOOK | [texto narrativa] | [la creadora en plano cerrado, expresión inquieta] |
 | 0:03-0:11 | AGITACIÓN | [texto] | [B-roll del dolor — celular sin notificaciones, métricas planas] |
 | 0:11-0:19 | DESCALIFICACIÓN | [texto] | [Tachones rojos sobre soluciones falsas en pantalla] |
 | 0:19-0:25 | VEHÍCULO ÚNICO | [texto] | [Logo del producto + nombre en pantalla grande] |
@@ -159,7 +159,7 @@ Toda entrega de la skill `guionizacion-ads-formula100k` sigue esta estructura. P
 Para ver un caso real ya completado, consulta:
 
 ```
-/Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/EJEMPLO_F100K_LZ_MAYO_2026.md
+~/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/EJEMPLO_F100K_LZ_MAYO_2026.md
 ```
 
 (Si no existe, este archivo se crea la primera vez que se ejecute la skill con la oferta F100K.)

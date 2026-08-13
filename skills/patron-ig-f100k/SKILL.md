@@ -1,7 +1,7 @@
 ---
 name: patron-ig-f100k
 description: >
-  Módulo del Autopilot F100K que corre cada lunes a las 8:05 AM Lima: descarga los videos de @andreaestratega publicados en los últimos 7 días vía Apify, transcribe el audio de cada video con Supadata, calcula mediana de views/likes/comentarios, clasifica videos como virales (>1.5x mediana) o negativos (<0.7x), extrae patrones de qué funcionó y qué no, y actualiza el archivo de memoria patterns_ig_andrea.md para que guionización aprenda semana a semana. Usar cuando alguien diga: "analiza mis patrones de la semana", "qué patrones detectaste", "actualiza mi memoria de patrones IG", "ejecutar análisis de patrones IG", "qué me funcionó esta semana", o cuando el schedule automático lo invoque.
+  Módulo del Autopilot F100K que corre cada lunes a las 8:05 AM Lima: descarga los videos de la cuenta de Instagram del usuario publicados en los últimos 7 días vía Apify, transcribe el audio de cada video con Supadata, calcula mediana de views/likes/comentarios, clasifica videos como virales (>1.5x mediana) o negativos (<0.7x), extrae patrones de qué funcionó y qué no, y actualiza el archivo de memoria patterns_ig_<handle>.md para que guionización aprenda semana a semana. Usar cuando alguien diga: "analiza mis patrones de la semana", "qué patrones detectaste", "actualiza mi memoria de patrones IG", "ejecutar análisis de patrones IG", "qué me funcionó esta semana", o cuando el schedule automático lo invoque.
 ---
 
 # Skill: Análisis de Patrones IG — Autopilot F100K
@@ -16,7 +16,7 @@ Cada lunes este módulo entra a Instagram, descarga tus videos de la semana, los
 cat ~/.f100k-radar/config.json
 ```
 
-Extraer: `ig_handle` (default: `andreaestratega`), `email`.
+Extraer: `ig_handle` (PREGUNTAR al usuario si no lo dio; no asumir ninguno), `email`.
 
 Si el archivo no existe → detener y decir:
 > "No encontré tu configuración del Autopilot. Corre `/rutina-maestra-formula100k` primero."
@@ -139,7 +139,7 @@ Si solo hay 1 video en alguna categoría → indicarlo como "muestra pequeña (1
 ## PASO 6 — LEER HISTORIAL EXISTENTE
 
 ```bash
-cat /Users/kissita/.claude/projects/-Users-kissita/memory/patterns_ig_andrea.md 2>/dev/null
+cat ~/.claude/projects/<tu-proyecto>/memory/patterns_ig_<handle>.md 2>/dev/null
 ```
 
 Extraer la sección `## Historial semanal` completa para preservarla en el archivo actualizado.
@@ -149,19 +149,19 @@ Extraer la sección `## Historial semanal` completa para preservarla en el archi
 ## PASO 7 — ESCRIBIR ARCHIVO DE MEMORIA
 
 Usar la herramienta **Write** en:
-`/Users/kissita/.claude/projects/-Users-kissita/memory/patterns_ig_andrea.md`
+`~/.claude/projects/<tu-proyecto>/memory/patterns_ig_<handle>.md`
 
 Con esta estructura exacta:
 
 ```markdown
 ---
-name: patterns-ig-andrea
-description: Patrones virales y negativos de @andreaestratega en Instagram — actualizado automáticamente cada lunes por el Autopilot F100K. Leer ANTES de escribir cualquier guión para Andrea.
+name: patterns-ig-<handle>
+description: Patrones virales y negativos de @<handle> en Instagram — actualizado automáticamente cada lunes por el Autopilot F100K. Leer ANTES de escribir cualquier guión para esa cuenta.
 metadata:
   type: feedback
 ---
 
-# Patrones IG @andreaestratega
+# Patrones IG @<handle>
 
 **Última actualización:** [FECHA DE HOY]
 **Videos analizados:** [N] reels · Semana del [LUNES] al [DOMINGO]
@@ -213,7 +213,7 @@ Mostrar en terminal:
 ```
 ✅ Análisis de patrones IG completado
 📊 [N] videos analizados · [N_viral] virales · [N_negativo] negativos · [N_neutral] neutrales
-📝 Memoria actualizada: patterns_ig_andrea.md
+📝 Memoria actualizada: patterns_ig_<handle>.md
 🔁 Próxima ejecución: lunes que viene a las 08:05 Lima
 ```
 
@@ -224,6 +224,6 @@ Mostrar en terminal:
 - **Rutina remota:** `trig_01SgUSXxiGAm6jVNvm8knuQ1` — corre cada lunes a las 08:05 AM Lima (13:05 UTC) · https://claude.ai/code/routines/trig_01SgUSXxiGAm6jVNvm8knuQ1
 - **MCPs requeridos:** Apify (scraping IG) + Bash (Supadata via curl)
 - **Supadata key:** `sd_8ff1f1f233fc19cb14b5b86277ae2d6b`
-- **Memoria destino:** `/Users/kissita/.claude/projects/-Users-kissita/memory/patterns_ig_andrea.md`
+- **Memoria destino:** `~/.claude/projects/<tu-proyecto>/memory/patterns_ig_<handle>.md`
 - **Config:** `~/.f100k-radar/config.json` — campo `ig_handle`
 - **Costo estimado:** ~$0.50 por ejecución (Apify scraping + ~10 llamadas Supadata)

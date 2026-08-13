@@ -103,13 +103,13 @@ Regla de frescura por plataforma:
 | `f100k_tiktok-default.json` | ~3-5 días | tiene **más de 4 días** o la última búsqueda topó login |
 | `f100k_ig-default.json` | ~7-14 días | tiene más de 10 días o IG pide re-verificación |
 
-**Si la sesión de TikTok está vieja → refrescarla (necesita que Andrea loguee una vez):**
+**Si la sesión de TikTok está vieja → refrescarla (necesita que el usuario loguee una vez):**
 
 ```bash
 # 1. Abre TikTok en ventana visible con el nombre de sesión correcto
 agent-browser --session-name f100k_tiktok --headed open https://www.tiktok.com
 
-# 2. PEDIRLE A ANDREA: "inicia sesión en la ventana que se abrió y avísame"
+# 2. PEDIRLE AL USUARIO: "inicia sesión en la ventana que se abrió y avísame"
 #    (esperar confirmación humana — NO seguir hasta que confirme)
 
 # 3. Guardar la sesión fresca para que el login persista
@@ -140,7 +140,7 @@ Antes de buscar, preguntar si no está claro:
 ### Paso 1.5 — agent-browser PRIMERO si hay cuentas referencia
 
 Si la usuaria nombró cuentas IG/TikTok (suyas o competencia), arrancar SIEMPRE con agent-browser antes de Tavily/vidIQ. agent-browser:
-- Entra logueado con la sesión de Andrea (más data que cualquier API)
+- Entra logueado con la sesión del usuario (más data que cualquier API)
 - Extrae los reels top de cada cuenta con caption + views + formato del primer frame
 - Saca ganchos verbatim de la pestaña Reels
 - Mina hashtags y exploración por tema dentro de IG/TikTok
@@ -211,7 +211,7 @@ agent-browser close --all
 **Cómo elegir el ganador por keyword (decisión rápida en 3 criterios):**
 1. **Match al pattern**: que el caption empiece literal o muy cerca del pattern (no solo lo mencione)
 2. **Vistas**: ≥50K idealmente; si nada llega a 50K, tomar el de más vistas
-3. **Nicho-fit**: que el creador no sea de un nicho hostil al avatar (ej. para Andrea evitar gaming hardcore o nichos masculinos muy específicos si el video es para mujeres emprendedoras)
+3. **Nicho-fit**: que el creador no sea de un nicho hostil al avatar (ej. para el usuario evitar gaming hardcore o nichos masculinos muy específicos si el video es para mujeres emprendedoras)
 
 **Output esperado de esta búsqueda:**
 
@@ -229,7 +229,7 @@ agent-browser close --all
 **Si el atajo falla** (0 resultados o captcha bloqueante):
 1. **Primero** sospechar sesión caducada → correr el chequeo del **Paso 0** y re-loguear TikTok. Es la causa más común.
 2. Si la sesión está fresca y aun así falla → bajar a `apify/tiktok-scraper` con la keyword como query
-3. Si Apify tampoco aplica, pedir a Andrea que loguee TikTok en la ventana headed y reintentar
+3. Si Apify tampoco aplica, pedir al usuario que loguee TikTok en la ventana headed y reintentar
 
 ### Paso 2 — Buscar tendencias con Tavily MCP
 Usar **tavily_search** para búsquedas rápidas y **tavily_research** para investigación profunda con síntesis. Usar **tavily_extract** para extraer contenido completo de una URL específica. Estrategias de búsqueda:
@@ -283,14 +283,14 @@ Por cada idea encontrada, evaluar:
 | **tavily_extract** | Extraer contenido completo de una URL específica (ej. un artículo viral, una página de competidor) |
 | **tavily_crawl** | Rastrear un sitio completo (ej. el blog de un referente para ver sus temas) |
 
-**Flujo recomendado (cuando Andrea quiere OUTLIERS YouTube → REELS):**
+**Flujo recomendado (cuando el usuario quiere OUTLIERS YouTube → REELS):**
 1. `mcp__vidiq__outlier_detection` con keyword del nicho → top 10 outliers
 2. Para los top 5: en paralelo `video_transcript` + `video_comments`
 3. Aplicar tabla de traducción YouTube → Reel (sección vidIQ)
 4. Entregar cada outlier convertido en el formato de output estándar + extensión vidIQ
 5. (Opcional) `tavily_search` complementario para validar tendencia web del tema
 
-**Flujo recomendado (cuando Andrea quiere INVESTIGACIÓN GENERAL):**
+**Flujo recomendado (cuando el usuario quiere INVESTIGACIÓN GENERAL):**
 1. `tavily_search` → ideas rápidas y panorama general
 2. `tavily_research` → profundizar en el tema más prometedor
 3. `tavily_extract` → analizar una pieza de contenido viral específica
@@ -302,7 +302,7 @@ Por cada idea encontrada, evaluar:
 
 ### 0. AGENT-BROWSER — motor permanente del stack (NUEVO, ARRANCA AQUÍ)
 
-**Por qué entra primero:** las APIs/MCPs (Supadata, Tavily, vidIQ) chocan con login walls de IG y TikTok. agent-browser usa la sesión real de Chrome de Andrea — ve TODO lo que ella ve cuando está logueada. Es la fuente más rica para data viral en vivo de Instagram y TikTok.
+**Por qué entra primero:** las APIs/MCPs (Supadata, Tavily, vidIQ) chocan con login walls de IG y TikTok. agent-browser usa la sesión real de Chrome del usuario — ve TODO lo que ella ve cuando está logueada. Es la fuente más rica para data viral en vivo de Instagram y TikTok.
 
 **Qué extrae que ninguna otra herramienta puede:**
 - Reels top de un perfil con caption verbatim + views + thumbnail
@@ -325,7 +325,7 @@ Por cada idea encontrada, evaluar:
 ```
 [agent-browser]
 
-Abre Chrome con la sesión existente de Andrea (IG y TikTok logueados).
+Abre Chrome con la sesión existente del usuario (IG y TikTok logueados).
 
 TAREA A — IG. Para cada cuenta [@h1, @h2, ...]:
   1. Visita instagram.com/[handle]/reels/
@@ -400,10 +400,10 @@ OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. No analizar �
 
 ### 4. vidIQ MCP — Outliers de YouTube → Reels virales
 
-> **Requisito previo:** el MCP de vidIQ necesita autenticación. Si al llamar una tool sale error de auth, decirle a Andrea: "corre `/mcp` y autentica vidiq". Sin auth, ninguna tool funciona.
+> **Requisito previo:** el MCP de vidIQ necesita autenticación. Si al llamar una tool sale error de auth, decirle al usuario: "corre `/mcp` y autentica vidiq". Sin auth, ninguna tool funciona.
 
 **Para qué sirve (en el contexto F100K):**
-- Cazar videos de YouTube que están explotando (outliers) en cualquier nicho — incluso nichos que Andrea no ha tocado
+- Cazar videos de YouTube que están explotando (outliers) en cualquier nicho — incluso nichos que el usuario no ha tocado
 - Convertir esos outliers en ideas de reel/TikTok/short adaptadas a su voz
 - Validar que un tema NO solo es trending en web (Tavily) sino que YA genera views reales en video
 - Sacar transcripts de los outliers para identificar la frase exacta que enganchó
@@ -413,16 +413,16 @@ OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. No analizar �
 
 | Tool | Cuándo usarla en F100K |
 |------|------------------------|
-| `outlier_detection` | **Primera llamada siempre.** Pasa keyword del nicho de Andrea → devuelve videos que rompieron el promedio del canal |
+| `outlier_detection` | **Primera llamada siempre.** Pasa keyword del nicho del usuario → devuelve videos que rompieron el promedio del canal |
 | `trending_videos` | Validar qué categoría/región está caliente AHORA antes de elegir nicho |
 | `breakout_channels` | Encontrar creadores emergentes en el nicho — son fuente de formatos frescos |
-| `keyword_research` | Cuando Andrea no tiene claro el keyword exacto → encontrar los términos con menos competencia |
+| `keyword_research` | Cuando el usuario no tiene claro el keyword exacto → encontrar los términos con menos competencia |
 | `video_transcript` | Para cada outlier top, sacar transcript → identificar el "momento ajá" que detonó las views |
 | `video_comments` | Minar comentarios del outlier → revelan qué dolor/pregunta resonó (= el ángulo del reel) |
 
 **Flujo de conversión OUTLIER YOUTUBE → REEL F100K:**
 
-1. **Keywords del nicho** (preguntar a Andrea si no está claro). Ejemplos para su mundo: "vender curso digital", "comunidad Skool", "creadora de contenido sin mostrar cara", "monetizar Instagram mujer", "high ticket coaching", "marca personal IA".
+1. **Keywords del nicho** (preguntar al usuario si no está claro). Ejemplos para su mundo: "vender curso digital", "comunidad Skool", "creadora de contenido sin mostrar cara", "monetizar Instagram mujer", "high ticket coaching", "marca personal IA".
 2. **Llamar `outlier_detection`** con esas keywords → quedarse con los top 5-10 outliers (mejor multiplicador de views vs promedio).
 3. **Para cada outlier seleccionado**, ejecutar en paralelo:
    - `video_transcript` → texto completo
@@ -444,7 +444,7 @@ OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. No analizar �
 
 **Cómo elegir qué outlier convertir (criterios F100K):**
 
-- ✅ Aplica si: el dolor del video es transferible al avatar de Andrea (creadora hispana, vende online, quiere libertad)
+- ✅ Aplica si: el dolor del video es transferible al avatar del usuario (creadora hispana, vende online, quiere libertad)
 - ✅ Aplica si: el "momento ajá" del transcript se puede extraer en <60 segundos
 - ✅ Aplica si: los comentarios revelan pregunta repetida (= la pregunta es el reel)
 - ❌ NO aplica si: el outlier requiere contexto largo para que tenga sentido

@@ -119,7 +119,7 @@ Esta skill orquesta varias herramientas externas. Cuando alguna falla, NO aborta
 
 **No inventar datos cuando una herramienta falla.** Es mejor un reporte con menos data y nota honesta que un reporte completo con datos fabricados.
 
-Cada limitación se documenta en la sección "Limitaciones de este reporte" del apéndice, así Andrea/el cliente sabe qué tan robusto es el análisis y dónde habría que profundizar manualmente.
+Cada limitación se documenta en la sección "Limitaciones de este reporte" del apéndice, así el usuario/el cliente sabe qué tan robusto es el análisis y dónde habría que profundizar manualmente.
 
 ---
 

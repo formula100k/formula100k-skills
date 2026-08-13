@@ -45,30 +45,40 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Guionización Humanizada
 
-Esta skill adapta cualquier texto al tono, voz y estilo genuino de Andrea Estratega, basándose en el análisis real de sus contenidos más exitosos. El objetivo es que los guiones y escritos suenen como ella — no como una IA tratando de sonar como ella.
+Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona dueña de la cuenta** — tú, o la clienta para la que estás escribiendo —, basándose en el análisis real de SUS contenidos más exitosos. El objetivo es que los guiones y escritos suenen como esa persona, no como una IA tratando de sonar como ella.
+
+> ⚠️ **La voz es la del usuario, nunca la de otra creadora.** El archivo
+> `references/ejemplo-voice-guide.md` que viene con la skill es SOLO una muestra de cómo se
+> ve un Voice Guide bien hecho (está construido sobre una cuenta pública, a modo de ejemplo).
+> **Nunca escribas en esa voz.** Sirve para entender el formato; el contenido sale del
+> análisis del perfil del usuario.
 
 ---
 
-## PASO 0 — Verificar si el Voice Guide existe
+## PASO 0 — Verificar si el Voice Guide del usuario existe
 
-Antes de hacer cualquier cosa, revisa si el archivo `references/Voice_Guide.md` existe Y tiene contenido de análisis (no solo el placeholder vacío).
+Antes de hacer cualquier cosa, revisa si existe `references/Voice_Guide.md` (el del usuario)
+Y tiene contenido de análisis real.
 
 ```
 Ruta: <directorio de esta skill>/references/Voice_Guide.md
 ```
 
-**Si el archivo NO existe o está vacío/es el placeholder → ir al PASO 1 (Análisis de Instagram).**
-**Si ya tiene el análisis completo → saltar directamente al PASO 2 (Humanización).**
+**Si el archivo NO existe o está vacío → ir al PASO 1 (Análisis de Instagram).**
+**Si ya tiene el análisis completo → confirmar de quién es (el encabezado lleva el @) y, si es del usuario, saltar al PASO 2 (Humanización).**
 
 ---
 
 ## PASO 1 — Análisis de Instagram (solo la primera vez)
 
-Este paso se corre UNA SOLA VEZ para generar el Voice Guide. Avísale al usuario que vas a analizar su perfil de Instagram antes de humanizar el texto.
+Este paso se corre UNA SOLA VEZ por persona para generar su Voice Guide. Avísale al usuario que vas a analizar su perfil de Instagram antes de humanizar el texto.
+
+**Primero pregúntale su @ de Instagram** (o el de la clienta para la que escribes) si no lo dijo
+ya en el mensaje. No lo asumas ni lo saques de ninguna otra skill: sin handle no hay Voice Guide.
 
 ### 1.1 — Navegar al perfil y recolectar posts
 
-1. Abre el navegador y navega a: `https://www.instagram.com/andreaestratega/`
+1. Abre el navegador y navega a: `https://www.instagram.com/<HANDLE-DEL-USUARIO>/`
 2. Espera a que cargue el perfil completamente
 3. Toma un screenshot para confirmar que cargó bien
 4. Desplázate hacia abajo para cargar al menos 15-20 posts
@@ -96,9 +106,9 @@ Abre los **6-8 posts que tengan más engagement** (los que más likes y comentar
 Con todo lo que analizaste, crea el archivo `references/Voice_Guide.md` con esta estructura:
 
 ```markdown
-# Voice Guide — Andrea Estratega
+# Voice Guide — [NOMBRE DEL USUARIO]
 *Generado el: [fecha]*
-*Basado en análisis de: [cantidad] posts de @andreaestratega*
+*Basado en análisis de: [cantidad] posts de @[handle-del-usuario]*
 
 ## Tono general
 [Describe el tono en 2-3 oraciones: ¿cálido? ¿directo? ¿mezcla de qué?]
@@ -154,7 +164,7 @@ Antes de reescribir, identifica qué señales de IA tiene el texto original:
 
 Reescribe el texto aplicando lo que encontraste en el Voice Guide:
 
-1. **Ritmo y longitud**: Ajusta las oraciones al patrón real de Andrea (si ella escribe corto y directo, haz lo mismo)
+1. **Ritmo y longitud**: Ajusta las oraciones al patrón real del usuario (si esa persona escribe corto y directo, haz lo mismo)
 2. **Vocabulario propio**: Reemplaza palabras genéricas con las que ella usa realmente
 3. **Aperturas y cierres**: Usa los patrones reales de cómo ella empieza y termina
 4. **Emojis**: Solo los que usa ella, donde los pone ella, con la frecuencia que los usa
@@ -176,7 +186,7 @@ Independientemente del Voice Guide, todo texto humanizado debe:
 
 Antes de entregar, pasa el texto por este checklist mental:
 
-- [ ] ¿Podría Andrea haber escrito esto sin que nadie lo note?
+- [ ] ¿Podría el usuario haber escrito esto sin que nadie lo note?
 - [ ] ¿Hay alguna oración que suene a manual corporativo? → Reescribir
 - [ ] ¿El ritmo sube y baja o va parejo? → Si va parejo, romperlo
 - [ ] ¿Hay alguna frase de relleno que se podría cortar sin perder nada? → Cortar
@@ -190,7 +200,7 @@ Antes de entregar, pasa el texto por este checklist mental:
 ### Para humanización de texto existente:
 Entrega el texto reescrito directamente, sin explicar cada cambio. Si quieres, agrega una línea al final tipo: *"Humanicé X, Y y Z para que suene más tuyo."* — pero mantén el texto como protagonista.
 
-### Para crear contenido nuevo en voz de Andrea:
+### Para crear contenido nuevo en la voz del usuario:
 Escribe el contenido directamente en su voz sin advertencias de que "intentaste capturar su estilo". Si lo hiciste bien, se nota solo.
 
 ### Si el Voice Guide no existe y no se pudo analizar Instagram:

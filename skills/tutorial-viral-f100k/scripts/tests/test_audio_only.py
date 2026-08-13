@@ -1,7 +1,7 @@
 # scripts/tests/test_audio_only.py
 import sys
 from pathlib import Path
-ENGINE = Path("/Users/kissita/.claude/skills/editor-video-formula100k/scripts")
+ENGINE = Path("$HOME/.claude/skills/editor-video-formula100k/scripts")
 sys.path.insert(0, str(ENGINE))
 from cut_silences_and_fillers import cut_output_path
 

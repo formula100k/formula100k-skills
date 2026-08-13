@@ -1,6 +1,6 @@
 ---
 name: reel-faceless-f100k
-description: "Convierte un tema en un Reel 9:16 faceless (30-90s) donde Andrea GRABA la voz pero nunca sale en cámara. Pipeline: guion con gancho + retención + español neutro + cierre F100K → Andrea graba la voz leyendo el teleprompter → transcripción word-level (Whisper local) → Clip Director decide por gancho el visual de cada segmento (B-roll cinemático IA / card kinética / pixel-meme, mezcla obligatoria) → genera con Higgsfield y HyperFrames → compone visuales fullscreen + texto kinético de énfasis + la voz de Andrea + música/SFX. Salida: REEL_FACELESS.mp4. Activar cuando Andrea diga 'hazme un reel faceless de X', 'video faceless sin mi cara', 'explainer faceless', 'convierte este tema en video sin grabarme en cámara', 'reel solo con mi voz'. NO usar para talking-head con su cara (editor-video/motion-reels), VSL (broll-vsl) ni carruseles."
+description: "Convierte un tema en un Reel 9:16 faceless (30-90s) donde el usuario GRABA la voz pero nunca sale en cámara. Pipeline: guion con gancho + retención + español neutro + cierre F100K → el usuario graba la voz leyendo el teleprompter → transcripción word-level (Whisper local) → Clip Director decide por gancho el visual de cada segmento (B-roll cinemático IA / card kinética / pixel-meme, mezcla obligatoria) → genera con Higgsfield y HyperFrames → compone visuales fullscreen + texto kinético de énfasis + la voz del usuario + música/SFX. Salida: REEL_FACELESS.mp4. Activar cuando el usuario diga 'hazme un reel faceless de X', 'video faceless sin mi cara', 'explainer faceless', 'convierte este tema en video sin grabarme en cámara', 'reel solo con mi voz'. NO usar para talking-head con su cara (editor-video/motion-reels), VSL (broll-vsl) ni carruseles."
 argument-hint: "<tema | ruta-guion.md> [--duracion=30..90] [--estetica=cyberpunk|calido|minimalista]"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, mcp__higgsfield__generate_video, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__media_upload, mcp__higgsfield__media_confirm, mcp__higgsfield__balance
 metadata:
@@ -9,20 +9,20 @@ metadata:
   output: "REEL_FACELESS.mp4"
 ---
 
-# Reel Faceless F100K — Explainer 9:16 con voz de Andrea, sin cámara
+# Reel Faceless F100K — Explainer 9:16 con voz del usuario, sin cámara
 
-Convierte un tema en un Reel vertical faceless: Andrea **graba la voz** pero **nunca sale en
+Convierte un tema en un Reel vertical faceless: El usuario **graba la voz** pero **nunca sale en
 cámara**. El video se construye 100% con visuales generados por IA — B-roll cinemático, cards
 kinéticas y pixel-memes — que el **Clip Director** elige por gancho y sincroniza sobre su voz.
 
 El principio (igual que el "Higgsfield Explainer" pero con ADN F100K): escala el contenido de
-Andrea sin depender de su cara. El diferencial no es generar (eso ya se domina) sino **dirigir**.
+El usuario sin depender de su cara. El diferencial no es generar (eso ya se domina) sino **dirigir**.
 
 ---
 
 ## Cuándo activar
 
-- Andrea dice "hazme un reel faceless de X", "video sin mi cara", "explainer faceless",
+- El usuario dice "hazme un reel faceless de X", "video sin mi cara", "explainer faceless",
   "convierte este tema en video sin grabarme", "reel solo con mi voz".
 - Tiene un tema (o un guion ya escrito) y quiere el video terminado sin ponerse frente a cámara.
 
@@ -65,7 +65,7 @@ mcp__higgsfield__balance()
 ```
 
 Si el balance es 0 o insuficiente → activar **degradación** (ver `reference/clip-director.md`
-§6): todos los `broll`/`pixel` caen a `card` (HyperFrames, local, gratis). Avisar a Andrea.
+§6): todos los `broll`/`pixel` caen a `card` (HyperFrames, local, gratis). Avisar al usuario.
 
 ---
 
@@ -90,12 +90,12 @@ Escribir el guion siguiendo el ADN de `guionizacion-formula100k`:
 
 Guardar:
 - `$DEST/guion.md` — guion completo con marcas de estructura.
-- `$DEST/teleprompter.txt` — SOLO lo que Andrea dirá, limpio, para leer de corrido.
+- `$DEST/teleprompter.txt` — SOLO lo que el usuario dirá, limpio, para leer de corrido.
 
-Mostrar el guion y confirmar el gancho con Andrea antes de que grabe (el gancho carga el 80%
+Mostrar el guion y confirmar el gancho con el usuario antes de que grabe (el gancho carga el 80%
 de la retención).
 
-### Paso 2 — Andrea graba la voz
+### Paso 2 — El usuario graba la voz
 
 Pedirle que grabe leyendo `teleprompter.txt` y guarde el audio como `$DEST/voz.mp3` (o pasar
 la ruta si ya lo grabó). Verificar:
@@ -104,7 +104,7 @@ la ruta si ya lo grabó). Verificar:
 ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrappers=1 "$DEST/voz.mp3"
 ```
 
-> Nunca generar la voz con IA ni clon. Andrea graba — esa es la regla de esta skill.
+> Nunca generar la voz con IA ni clon. El usuario graba — esa es la regla de esta skill.
 
 ### Paso 3 — Transcripción word-level (Whisper local)
 
@@ -136,7 +136,7 @@ Seguir `reference/clip-director.md` al pie:
 1. Segmentar `transcript.json` en bloques de 3-6 s.
 2. **Clasificar** cada bloque por gancho → `visual_type` (`broll`/`card`/`pixel`), respetando
    la **regla de mezcla** (≥2 tipos distintos, ninguno >60%).
-3. Mostrar el plan como tabla y confirmar con Andrea (o ajustar):
+3. Mostrar el plan como tabla y confirmar con el usuario (o ajustar):
 
 ```
 t=00:00–00:04  broll   "concepto: el error que todas cometen"   [cinemático]
@@ -181,7 +181,7 @@ Checklist:
 - [ ] Mezcla de `visual_type` respeta la regla (≥2 tipos, ninguno >60%).
 - [ ] Gancho visual fuerte en los primeros 3 s.
 - [ ] Texto kinético son palabras-fuerza, NO subtítulos.
-- [ ] La voz de Andrea se oye clara sobre la música.
+- [ ] La voz del usuario se oye clara sobre la música.
 - [ ] Cierre vende F100K.
 
 Mostrar ruta final + tabla del plan.
@@ -211,8 +211,8 @@ Mostrar ruta final + tabla del plan.
 ```
 $DEST/                                  (FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_slug/)
 ├── guion.md               ← guion completo con estructura
-├── teleprompter.txt       ← solo lo que Andrea dice
-├── voz.mp3                ← voz grabada por Andrea (input)
+├── teleprompter.txt       ← solo lo que el usuario dice
+├── voz.mp3                ← voz grabada por el usuario (input)
 ├── musica.mp3            ← (opcional) música de fondo
 ├── transcript.json        ← word-level normalizado
 ├── plan.json              ← Clip Director: segmentos + visual_type + asset_path
@@ -221,7 +221,7 @@ $DEST/                                  (FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_
 │   ├── seg0.mp4           ← B-roll / card / pixel por segmento
 │   ├── seg1.mp4
 │   └── ...
-└── REEL_FACELESS.mp4      ← OUTPUT FINAL (1080×1920, voz de Andrea)
+└── REEL_FACELESS.mp4      ← OUTPUT FINAL (1080×1920, voz del usuario)
 ```
 
 ---
@@ -230,8 +230,8 @@ $DEST/                                  (FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_
 
 | Aspecto | reel-faceless-f100k | motion-reels-f100k | broll-vsl-formula100k |
 |---------|--------------------|--------------------|-----------------------|
-| Cara de Andrea | ✗ Nunca (faceless) | ✅ Talking-head | ✅ 80% avatar |
+| Cara del usuario | ✗ Nunca (faceless) | ✅ Talking-head | ✅ 80% avatar |
 | Video base | Ninguno (se genera todo) | Video grabado | Ninguno (solo clips) |
-| Voz | Grabada por Andrea | Del video grabado | N/A (solo B-roll) |
+| Voz | Grabada por el usuario | Del video grabado | N/A (solo B-roll) |
 | Salida | Reel 9:16 completo | Reel 9:16 + overlays | Catálogo de clips 16:9 |
 | Motor de clips | **Clip Director** (compartido) | HyperFrames overlays | Higgsfield 80/20 |

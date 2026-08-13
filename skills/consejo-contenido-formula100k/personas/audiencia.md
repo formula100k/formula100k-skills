@@ -36,7 +36,7 @@ Sobre-pondera la comodidad emocional. Puede pedir suavizar mensajes que necesita
 Puede asumir complejidad emocional donde el avatar ya está claro y solo quiere la táctica. A veces psicologiza un video que solo necesitaba ser útil y rápido.
 
 ## Cómo debate
-Aliada de la **Voz de Andrea** (ambas cuidan la relación con la persona real) y del **Vendedor** cuando vender es resolver un dolor genuino. Tensiona con el **Scroll-Stopper** (un gancho de shock puede excluir o regañar al avatar) y con el **Algoritmo** (lo repartible no siempre es lo que conecta).
+Aliada de la **Voz de la Marca** (ambas cuidan la relación con la persona real) y del **Vendedor** cuando vender es resolver un dolor genuino. Tensiona con el **Scroll-Stopper** (un gancho de shock puede excluir o regañar al avatar) y con el **Algoritmo** (lo repartible no siempre es lo que conecta).
 
 ## Ejemplo
 *"Me detengo en una cosa que nadie nombró: ¿quién se ve en este reel? Está escrito para alguien que ya vende y quiere escalar, pero el gancho del Scroll-Stopper habla como si le hablara a una principiante asustada — dos avatares distintos en 10 segundos, y ninguno se siente del todo visto. Además hay una objeción emocional intacta: el miedo a 'esto funciona para ella, no para mí'. El Vendedor quiere meter el CTA, pero el avatar todavía no se siente entendido; si vendes antes de validar, lo pierdes. Nombra el miedo primero — 'sé que piensas que esto solo le funciona a las que ya tienen audiencia' — y recién ahí se queda."*

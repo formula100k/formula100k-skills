@@ -1,6 +1,6 @@
 # Patrones para integrar fotos reales del usuario
 
-Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brandkit scrapbook.
+Cómo incluir fotos personales (el usuario u otra) en los slides sin romper el brandkit scrapbook.
 
 > **Regla maestra:** la foto es UN elemento más del collage, no el protagonista que aplasta todo. Sigue conviviendo con post-its, washi tape, stickers y doodles.
 
@@ -10,13 +10,15 @@ Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brand
 
 | Carpeta | Cuándo usar |
 |---|---|
-| `/Users/kissita/Documents/ANDREA ADN` | 3 fotos curadas, default si Andrea no especifica. Tags conocidos. Más rápido. |
-| `/Users/kissita/Documents/ANDREA SELFIES` | 45+ fotos sin tags. Variedad de poses/contextos. Usar cuando haga falta variedad. |
+| `~/Documents/MI ADN VISUAL` | 3-5 fotos curadas del usuario, default si no especifica otra. Tags conocidos. Más rápido. |
+| `~/Documents/MIS SELFIES` | Pool grande sin tags. Variedad de poses/contextos. Usar cuando haga falta variedad. |
+
+> Si ninguna de las dos carpetas existe en la máquina del usuario, **pregúntale dónde tiene sus fotos**. No inventes rutas.
 
 **Antes de usar una foto:**
 1. `Read` la foto para verificar qué muestra (cara, pose, fondo, vestuario)
 2. Elegir la que mejor calce con el tono del slide
-3. Copiar la foto a la carpeta de output con nombre simple (`andrea.jpg`, `slide-3-foto.jpg`) → el `<img>` usa ruta relativa
+3. Copiar la foto a la carpeta de output con nombre simple (`foto.jpg`, `slide-3-foto.jpg`) → el `<img>` usa ruta relativa
 
 ---
 
@@ -28,7 +30,7 @@ Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brand
 
 ```html
 <div class="polaroid">
-  <img src="andrea.jpg" alt="">
+  <img src="foto.jpg" alt="">
   <div class="caption">~ creadora indie ~</div>
 </div>
 <!-- washi tape encima del polaroid (fuera del div para z-index limpio) -->
@@ -84,7 +86,7 @@ Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brand
 
 ```html
 <div class="slide hero">
-  <div class="hero-bg" style="background-image: url('andrea.jpg');"></div>
+  <div class="hero-bg" style="background-image: url('foto.jpg');"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title">Mis top 5 películas <span class="red">de terror</span></h1>
@@ -128,7 +130,7 @@ Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brand
 
 ```html
 <div class="cutout">
-  <img src="andrea.jpg" alt="">
+  <img src="foto.jpg" alt="">
 </div>
 ```
 
@@ -213,7 +215,7 @@ Cómo incluir fotos personales (Andrea u otra) en los slides sin romper el brand
 
 ## CÓMO ELEGIR LA FOTO CORRECTA
 
-Cuando Andrea pasa una carpeta, NO leer las 45 fotos. Estrategia:
+Cuando el usuario pasa una carpeta, NO leer las 45 fotos. Estrategia:
 
 1. Listar la carpeta y elegir 4-6 candidatas por **fecha modificada reciente** o **tamaño grande** (proxy de calidad)
 2. Hacer `Read` solo de esas candidatas
@@ -222,7 +224,7 @@ Cuando Andrea pasa una carpeta, NO leer las 45 fotos. Estrategia:
    - **Para hero** → vertical, persona centrada, espacio negativo arriba/abajo para texto
    - **Para cutout** → cualquier selfie con cara despejada
    - **Para strip** → varias fotos del mismo "set" (mismo outfit/lugar) si están disponibles
-4. Si ninguna calza, pedirle a Andrea más fotos o sugerir generar una nueva con la skill `banana`
+4. Si ninguna calza, pedirle al usuario más fotos o sugerir generar una nueva con la skill `banana`
 
 ---
 

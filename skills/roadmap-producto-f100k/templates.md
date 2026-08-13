@@ -211,7 +211,7 @@ Al final del archivo, incluir SIEMPRE este bloque adaptado al tipo de producto d
 
 ---
 
-## EJEMPLO REAL — Roadmap F100K (la propia comunidad de Andrea, 2 caras)
+## EJEMPLO REAL — Roadmap F100K (la propia comunidad del usuario, 2 caras)
 
 ### Diagnóstico
 - **Punto A:** Creadora hispana con conocimiento pero sin sistema, vendiendo barato o sin vender
@@ -227,13 +227,13 @@ Al final del archivo, incluir SIEMPRE este bloque adaptado al tipo de producto d
 | **3. Monetización** | Semanas 7-9 | Activar canales de venta orgánica | Primera venta del ciclo + scripts validados |
 | **4. Lanzamiento** | Semanas 10-12 | Lanzamiento formal + escala con anuncios | $10K MRR + caso de éxito publicado |
 
-### Cara 2 — Plan de producción de Andrea (el creador)
+### Cara 2 — Plan de producción del usuario (el creador)
 
 | Fase | Materiales a producir | Sesiones a planear | Sistemas a montar | Métrica "listo" |
 |---|---|---|---|---|
 | **1. Oferta** | Manual "TAB Oferta" + plantillas M-A-G-I-C + workbook avatar | 3 sesiones en vivo (vehículo único, M-A-G-I-C, bonos+garantía) | Skool TAB Oferta poblado + leaderboard configurado | TAB Oferta cierra cuando hay 3 ejemplos publicados de alumnas |
-| **2. Contenido** | Manual TAB Contenido + 33 estructuras de guion + plantilla de batch | 3 sesiones (3 pilares, gancho viral, batch de grabación) | Skill `guionizacion-formula100k` activa + ejemplos en foro | Cuando el batch de Andrea propio tiene 30 reels publicados como evidencia |
-| **3. Monetización** | Manual TAB Monetización + plantillas DM + 6 templates audio venta | 2 sesiones (DM scripts, audios de cierre) | `andrea-vendedora-instagram` + `audios-venta-f100k` skills disponibles | Cuando 5 alumnas hicieron primera venta documentada |
+| **2. Contenido** | Manual TAB Contenido + 33 estructuras de guion + plantilla de batch | 3 sesiones (3 pilares, gancho viral, batch de grabación) | Skill `guionizacion-formula100k` activa + ejemplos en foro | Cuando el batch del usuario propio tiene 30 reels publicados como evidencia |
+| **3. Monetización** | Manual TAB Monetización + plantillas DM + 6 templates audio venta | 2 sesiones (DM scripts, audios de cierre) | `audios-venta-f100k` skill disponible | Cuando 5 alumnas hicieron primera venta documentada |
 | **4. Lanzamiento** | Manual TAB Lanzamiento + estructuras VSL + ejemplos de landing | 2 sesiones (VSL en vivo, ads GOAT) | `vsl-expert-f100k` + Stripe + dominio listos | Cuando hay 1 caso de alumna que llegó a $10K MRR con el sistema completo |
 
 ### Orden de montaje
@@ -247,7 +247,7 @@ TAB Oferta [base] ──> TAB Contenido ──> TAB Monetización ──> TAB La
 - ✅ 4 fases progresivas alineadas en ambas caras
 - ✅ 12 semanas = 90 días exactos
 - ✅ Cada fase del cliente tiene su contraparte de producción
-- ✅ Andrea sabe exactamente qué tiene que existir antes de vender cada fase
+- ✅ El usuario sabe exactamente qué tiene que existir antes de vender cada fase
 
 ---
 

@@ -93,7 +93,7 @@ Al terminar, muestra al usuario: ruta del archivo, cómo subirlo a su destino, y
 ---
 
 ## Notas y guardarraíles
-- **Cierre F100K**: si el producto es de Andrea/F100K, todo artifact/LM puentea a la membresía cuando aplique — pero una landing de venta de UN producto NO debe distraer con otro pitch; el único objetivo es el checkout.
+- **Cierre F100K**: si el producto es del usuario/F100K, todo artifact/LM puentea a la membresía cuando aplique — pero una landing de venta de UN producto NO debe distraer con otro pitch; el único objetivo es el checkout.
 - **No confundir** con `landing-producto-formula100k` (Next.js + Stripe + deploy, estilo SaaS oscuro). Esta skill = HTML único, tripwire, GHL-first, mockups IA.
 - **No** simular order bump/upsell en HTML estático — se configuran en la pasarela.
 - **No** generar logos de marcas registradas con IA.

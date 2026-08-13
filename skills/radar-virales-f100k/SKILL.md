@@ -106,7 +106,7 @@ Evaluar los candidatos sobrevivientes contra estos criterios:
 
 | Criterio | Peso | Cómo evaluar |
 |----------|------|--------------|
-| Sin-competidor / autoridad propia | 35% | ¿El protagonista es un HECHO (IA, marca, formato) y no un creador a seguir? ¿Andrea queda como la intérprete, no como comentarista de un par? Máximo si no hay nadie a quién irse a seguir. |
+| Sin-competidor / autoridad propia | 35% | ¿El protagonista es un HECHO (IA, marca, formato) y no un creador a seguir? ¿el usuario queda como intérprete, no como comentarista de un par? Máximo si no hay nadie a quién irse a seguir. |
 | Potencial de reacción / opinión | 30% | ¿Puede agregar una lectura que nadie está dando? ¿Genera debate? |
 | Aplicabilidad a "crear contenido que vende" | 20% | ¿Se puede aterrizar en qué significa esto para que su audiencia venda con contenido? (ángulo F100K) |
 | Frescura + viralidad | 15% | Publicado en últimas 24-48h · views/autoridad del medio |
@@ -120,7 +120,7 @@ Guardar en `winner`:
 - URL
 - métricas clave (views/fuente)
 - tipo: "lanzamiento-ia" | "movida-marca" | "viral-sin-cara"
-- razón de selección (1 línea — por qué deja a Andrea como intérprete del hecho, no como comentarista de un par)
+- razón de selección (1 línea — por qué deja al usuario como intérprete del hecho, no como comentarista de un par)
 
 ---
 

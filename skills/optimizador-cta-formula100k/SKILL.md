@@ -214,7 +214,7 @@ La palabra del comentario debe ser:
 
 ## REGLAS DE ADAPTACIÓN AL NICHO
 
-El tema del video de Andrea puede variar (redes sociales, ingresos digitales, crecimiento, marketing, mentalidad). Adaptar el CTA a:
+El tema del video del usuario puede variar (redes sociales, ingresos digitales, crecimiento, marketing, mentalidad). Adaptar el CTA a:
 - El recurso específico que tenga sentido para ese tema
 - El resultado deseado que mueva a esa audiencia
 - El dolor o obstáculo que esa audiencia ya siente

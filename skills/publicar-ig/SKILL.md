@@ -2,7 +2,7 @@
 name: publicar-ig
 description: >
   Skill para publicar fotos, carruseles o reels en Instagram directamente desde Claude Code
-  usando Zapier MCP (Instagram for Business). Activar SIEMPRE que Andrea pida: "publica esto
+  usando Zapier MCP (Instagram for Business). Activar SIEMPRE que el usuario pida: "publica esto
   en Instagram", "/publicar-ig", "sube este carrusel a IG", "publica este reel", "manda esto
   a Instagram", "haz el post en IG", "publica el render que acabamos de hacer", o cualquier
   variación que combine un archivo/carpeta de imagen o video con la intención de publicarlo
@@ -30,30 +30,30 @@ Pipeline de un comando: archivo local → repo público GitHub → URL raw → Z
    mcp__Zapier-MCP__list_enabled_zapier_actions(app="Instagram for Business")
    ```
    Debe incluir `publish_media_v2` (fotos) y/o `publish_video` (reels). Si falta alguna,
-   abortar y pedirle a Andrea que la habilite en https://mcp.zapier.com.
+   abortar y pedirle al usuario que la habilite en https://mcp.zapier.com.
 
 2. **Verificar que el asset repo existe localmente:**
-   - Path esperado: `/Users/kissita/Documents/FORMULA100K/.ig-assets-repo/`
-   - Si no existe: `gh repo clone Kissicore/formula100k-ig-assets /Users/kissita/Documents/FORMULA100K/.ig-assets-repo`
+   - Path esperado: `~/Documents/FORMULA100K/.ig-assets-repo/`
+   - Si no existe: `gh repo clone <TU-USUARIO-GITHUB>/ig-assets ~/Documents/FORMULA100K/.ig-assets-repo`
    - Si el repo no existe en GitHub: crearlo con
      `gh repo create formula100k-ig-assets --public --add-readme` y luego clonar.
 
 3. **Resolver `instagramPageId`:**
-   - Buscar en `/Users/kissita/.claude/projects/-Users-kissita/memory/reference_instagram_page_id.md`
+   - Buscar en `~/.claude/projects/<tu-proyecto>/memory/reference_instagram_page_id.md`
    - Si NO existe: NO pasar `instagramPageId` en la primera llamada — Zapier resolverá la cuenta
-     automáticamente si Andrea solo tiene una conectada. Si la respuesta de Zapier indica que
-     hay múltiples cuentas o que el campo es ambiguo, mostrar las opciones a Andrea, pedirle
+     automáticamente si el usuario solo tiene una conectada. Si la respuesta de Zapier indica que
+     hay múltiples cuentas o que el campo es ambiguo, mostrar las opciones al usuario, pedirle
      que elija, y guardar la elegida en memoria con la siguiente plantilla:
 
      ```markdown
      ---
-     name: Instagram Page ID de Andrea (FÓRMULA 100K)
+     name: Instagram Page ID del usuario (FÓRMULA 100K)
      description: ID de la cuenta Instagram for Business conectada a Zapier — usar siempre como instagramPageId al publicar
      type: reference
      ---
 
      instagramPageId: <valor>
-     Cuenta: @andreaestratega (o el username que confirme)
+     Cuenta: la que el usuario confirme (nunca asumir un @)
      Fecha de captura: <YYYY-MM-DD>
      ```
 
@@ -63,7 +63,7 @@ Pipeline de un comando: archivo local → repo público GitHub → URL raw → Z
 
 ## Resolución de input
 
-Andrea puede pasar:
+El usuario puede pasar:
 
 | Input | Interpretación |
 |---|---|
@@ -71,10 +71,10 @@ Andrea puede pasar:
 | Ruta absoluta a archivo (`.png`,`.jpg`,`.gif`,`.bmp`) | Foto única → publish_media_v2 |
 | Ruta absoluta a archivo (`.mp4`,`.mov`,`.webm`,`.mkv`,...) | Video/Reel → publish_video |
 | Ruta absoluta a carpeta | Carrusel: lee todos los `.png/.jpg/.gif/.bmp` ordenados alfabéticamente (slide-1, slide-2,...) y arma carrusel de 1-10 |
-| Ruta relativa | Resolver contra `/Users/kissita/Documents/FORMULA100K/` |
+| Ruta relativa | Resolver contra `~/Documents/FORMULA100K/` |
 | Mezcla foto + video en carpeta | ABORTAR — Instagram no soporta carruseles mixtos vía Zapier |
 
-Más de 10 imágenes en una carpeta: ABORTAR y pedir a Andrea que elija o divida.
+Más de 10 imágenes en una carpeta: ABORTAR y pedir al usuario que elija o divida.
 
 ---
 
@@ -106,13 +106,13 @@ Más de 10 imágenes en una carpeta: ABORTAR y pedir a Andrea que elija o divida
 
 Patrón:
 ```
-https://raw.githubusercontent.com/Kissicore/formula100k-ig-assets/main/posts/YYYY-MM-DD-<slug>/<archivo>
+https://raw.githubusercontent.com/<TU-USUARIO-GITHUB>/ig-assets/main/posts/YYYY-MM-DD-<slug>/<archivo>
 ```
 
 Verificar que al menos una URL responde 200 con `curl -I` antes de seguir. Si responde 404,
 esperar 5s más y reintentar 1 vez. Si sigue fallando, abortar y reportar.
 
-### Paso 4 — Confirmación con Andrea
+### Paso 4 — Confirmación con el usuario
 
 Mostrar preview compacto:
 
@@ -174,15 +174,15 @@ Si éxito:
 ✅ Publicado en Instagram
 URL: https://www.instagram.com/p/XXXX
 Caption: <primeros 80 chars>...
-Assets: https://github.com/Kissicore/formula100k-ig-assets/tree/main/posts/<fecha>-<slug>
+Assets: https://github.com/<TU-USUARIO-GITHUB>/ig-assets/tree/main/posts/<fecha>-<slug>
 ```
 
 Si falla:
 - Mostrar el error textual de Zapier sin maquillar.
 - Errores comunes y qué hacer:
-  - "Account not Business" → Andrea debe convertir su cuenta y vincularla a Facebook Page.
+  - "Account not Business" → el usuario debe convertir su cuenta y vincularla a Facebook Page.
   - "Media URL invalid" → revisar que las URLs sean accesibles (probar con `curl -I`).
-  - "instagramPageId required and ambiguous" → pedirle a Andrea que elija de la lista que devolvió Zapier y guardar en memoria.
+  - "instagramPageId required and ambiguous" → pedirle al usuario que elija de la lista que devolvió Zapier y guardar en memoria.
   - "Caption too long" → mostrar conteo y pedir versión recortada.
 - NO reintentar automáticamente. Reportar y esperar instrucciones.
 
@@ -193,30 +193,30 @@ Si falla:
 - **Idioma:** español neutro (NO argentino). Aplicar feedback registrado en memoria
   (`feedback_espanol_neutro.md`): vos→tú, tenés→tienes, copiá→copia, acá→aquí, etc.
 - **Máximo 2,200 caracteres.** Si excede, mostrar conteo y pedir versión recortada.
-- **Si Andrea no pasó caption:** ofrecer 3 opciones:
+- **Si el usuario no pasó caption:** ofrecer 3 opciones:
   1. Generar uno basado en el contenido (si es output de otra skill como
      `carrusel-render-formula100k` o `infografia-reel-formula100k`, leer el caption
      sugerido del .md adjunto).
-  2. Que Andrea escriba uno.
+  2. Que el usuario escriba uno.
   3. Publicar sin caption (vacío).
 
 ---
 
 ## Casos compuestos comunes
 
-### Andrea acaba de generar un carrusel con `carrusel-render-formula100k`
+### El usuario acaba de generar un carrusel con `carrusel-render-formula100k`
 
-Esa skill deja los slides en `/FORMULA100K/CARRUSELES/<tema>/`. Andrea puede decir
+Esa skill deja los slides en `/FORMULA100K/CARRUSELES/<tema>/`. El usuario puede decir
 "publícalo" y resolvemos:
 - Carpeta: la última modificada en `/FORMULA100K/CARRUSELES/`
 - Caption: leer `caption.md` o `README.md` dentro de esa carpeta si existe
 - Si no existe caption.md, ofrecer las 3 opciones de arriba
 
-### Andrea acaba de generar un reel con `infografia-reel-formula100k`
+### El usuario acaba de generar un reel con `infografia-reel-formula100k`
 
 Esa skill deja un `.mp4` en `/FORMULA100K/INFOGRAFIAS/`. Mismo flujo, modo video.
 
-### Andrea pasa una URL de YouTube o de algo descargable
+### El usuario pasa una URL de YouTube o de algo descargable
 
 NO descargamos automáticamente. Decirle: "Esto es una URL de YouTube, no de imagen.
 Si quieres publicar el video, primero descárgalo o pásame la ruta local del .mp4".
@@ -233,5 +233,5 @@ Si quieres publicar el video, primero descárgalo o pásame la ruta local del .m
 4. **Nunca publicar contenido que esté en `/FORMULA100K/PRIVADO/` o cualquier subcarpeta
    con `.private`** — abortar y avisar.
 5. **Span de tiempo entre commit y publicación de Zapier:** mínimo 3s para que GitHub propague.
-6. **Cuenta target:** usar siempre la cuenta guardada en memoria. Si Andrea quiere publicar
+6. **Cuenta target:** usar siempre la cuenta guardada en memoria. Si el usuario quiere publicar
    en otra cuenta (ej: comunidad o cliente), debe pasarla explícitamente con `--cuenta=`.

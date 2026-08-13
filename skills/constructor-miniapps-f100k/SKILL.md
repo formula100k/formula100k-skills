@@ -51,7 +51,7 @@ Estas reglas vienen de errores reales ya resueltos. Aplícalas siempre en proyec
 - **Pin de Next.js a `16.1.7`.** Next `16.2.0` rompe el build en Vercel (`TypeError path undefined` en modifyConfig); local pasa, Vercel no. No uses `latest`.
 - **`eslint: "^9"`** en devDependencies.
 - **`.gitignore` ANTES del primer commit** (incluye `node_modules`, `.next`, `.env*`). Nunca commitees `node_modules`.
-- **Email de commit correcto para Vercel:** usa `161402298+Kissicore@users.noreply.github.com`. Un email no asociado al usuario de GitHub deja el deploy en estado BLOCKED.
+- **Email de commit correcto para Vercel:** usa el noreply de TU cuenta de GitHub (`<id>+<usuario>@users.noreply.github.com`, lo ves en Settings → Emails). Un email no asociado al usuario de GitHub deja el deploy en estado BLOCKED.
 - **API keys SIEMPRE en variables de entorno del servidor** (route handlers / server actions). Jamás en el cliente ni en el bundle. En Vercel se configuran en Project → Settings → Environment Variables.
 - **Supabase + RLS:** las server actions usan el cliente RLS-aware (anon). Toda tabla que se mute necesita una policy permisiva o el insert/upsert **falla en silencio**. Define las policies en el mismo `schema.sql`.
 - **Docs actualizados:** cuando uses una librería o API que cambia rápido (Stripe, Supabase, Next), trae la doc real con **Context7 MCP** antes de programar — no inventes código viejo.

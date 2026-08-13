@@ -10,7 +10,7 @@ description: >
   "replica este estilo", "skill espejo", "carrusel espejo",
   o cualquier variación que combine una imagen/captura O un enlace de un carrusel de referencia con la intención de
   reproducir y mejorar su estilo para contenido propio. NO usar para escribir un guion desde cero sin
-  referencia visual (eso es carrusel-viral-formula100k) ni para renderizar el estilo scrapbook de Andrea
+  referencia visual (eso es carrusel-viral-formula100k) ni para renderizar el estilo scrapbook del usuario
   sin referencia (eso es carrusel-render-formula100k).
 argument-hint: "<captura(s) O enlace IG/TikTok del carrusel referente> + <tu tema> + <tu marca/fotos opcional>"
 metadata:
@@ -40,8 +40,8 @@ Esta skill convierte una **captura de pantalla** de un carrusel ajeno en un carr
 - Cualquier captura **o enlace** de un carrusel + intención de reproducir su look para contenido propio
 
 **No activar cuando:**
-- No hay imagen de referencia → usar `carrusel-viral-formula100k` (guion) + `carrusel-render-formula100k` (estilo Andrea).
-- Quieren el estilo scrapbook de Andrea sin referencia → `carrusel-render-formula100k`.
+- No hay imagen de referencia → usar `carrusel-viral-formula100k` (guion) + `carrusel-render-formula100k` (estilo F100K).
+- Quieren el estilo scrapbook del usuario sin referencia → `carrusel-render-formula100k`.
 - Quieren ilustraciones Xiaohei → `carrusel-ilustrado-formula100k`.
 
 ---
@@ -159,7 +159,7 @@ Ver plantilla base en `references/plantilla-html.md`.
 ### PASO 6 — Renderizar a PNG
 
 ```bash
-cd /Users/kissita/.claude/skills/clonador-carrusel-formula100k
+cd ~/.claude/skills/clonador-carrusel-formula100k
 node export.js /ruta/al/carrusel-espejo.html --width 1080 --height 1350 --scale 2
 ```
 
@@ -167,7 +167,7 @@ node export.js /ruta/al/carrusel-espejo.html --width 1080 --height 1350 --scale 
 - El motor usa el Chrome instalado del sistema (no descarga nada).
 - Verificar que el nº de PNGs = nº de slides. Abrir/mostrar al usuario.
 
-**Output recomendado:** `/Users/kissita/Documents/FORMULA100K/CARRUSELES ESPEJO/YYYY-MM-DD_tema/`
+**Output recomendado:** `~/Documents/FORMULA100K/CARRUSELES ESPEJO/YYYY-MM-DD_tema/`
 
 ---
 
@@ -188,4 +188,4 @@ node export.js /ruta/al/carrusel-espejo.html --width 1080 --height 1350 --scale 
 4. **Español neutro** en todo texto entregado (tú, no vos).
 5. **Formato fijo** al ratio del referente; PNG a scale 2.
 6. **Si no hay Chrome**, decirlo y entregar el HTML para que el usuario lo abra/exporte manual.
-7. Si el usuario quiere el estilo scrapbook de Andrea en vez del clonado → derivar a `carrusel-render-formula100k`.
+7. Si el usuario quiere el estilo scrapbook del usuario en vez del clonado → derivar a `carrusel-render-formula100k`.

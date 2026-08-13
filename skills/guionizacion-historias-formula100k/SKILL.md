@@ -2,7 +2,7 @@
 name: guionizacion-historias-formula100k
 description: >
   Skill para crear guiones de SECUENCIAS DE HISTORIAS de Instagram (3-6 stories) usando la metodología
-  FÓRMULA 100K. Activar cuando Andrea o un usuario pida: "guioniza una historia", "arma una secuencia
+  FÓRMULA 100K. Activar cuando el usuario o un usuario pida: "guioniza una historia", "arma una secuencia
   de stories para vender X", "estructura mis historias", "necesito un guion de stories", "haz una
   secuencia de historias para mi lanzamiento", "escribe stories para [oferta]", "diseña la secuencia
   de historias del jueves", o cualquier variación que combine intención de vender/comunicar con el
@@ -10,7 +10,7 @@ description: >
   Lead Magnet/Libre/Encuestas), estructura de guion (1 de 24 disponibles), copy slide-by-slide,
   formato audiovisual por slide (🎥/📸 con uno de los 15 formatos), y briefing visual de diseño
   (paleta, capas, capturas, emojis). Guarda el output en
-  /Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/ como .md listo para ser tomado por la
+  ~/Documents/FORMULA100K/HISTORIAS/guiones/ como .md listo para ser tomado por la
   skill historias-a-imagenes-nanobanana.
 argument-hint: "<idea, oferta o objetivo de la secuencia>"
 metadata:
@@ -79,7 +79,7 @@ No es opcional: la skill depende de estos referenciales para la calidad del outp
 
 ## QUÉ HACE
 
-Toma como input la idea/oferta/objetivo de Andrea y devuelve un **archivo .md** con:
+Toma como input la idea/oferta/objetivo del usuario y devuelve un **archivo .md** con:
 
 - **Metadata:** título, categoría, estructura, objetivo, palabra clave del CTA
 - **Tabla slide-by-slide** con 6 columnas: `#`, `Frase principal`, `Capa visual`, `Formato (🎥/📸)`, `Qué grabar/buscar`, `Briefing de diseño`
@@ -120,7 +120,7 @@ Lee `references/categorias.md`. Decide cuál encaja:
 | 💛 LIBRE/Lifestyle | Recuperar bajada de vistas, humanizar, día a día |
 | 📊 ENCUESTAS | Activar interacción, calentar antes de venta, leer audiencia |
 
-Si Andrea ya te dijo la categoría, respétala. Si no, dedúcela del objetivo.
+Si el usuario ya te dijo la categoría, respétala. Si no, dedúcela del objetivo.
 
 ### Paso 2 — Elegir la ESTRUCTURA (de 24)
 
@@ -132,7 +132,7 @@ Lee `references/estructuras.md`. Cada estructura tiene:
 - 5-6 historias de ejemplo aplicado
 
 Reglas para elegir:
-- Si Andrea ya te dijo la estructura → úsala
+- Si el usuario ya te dijo la estructura → úsala
 - Si la oferta es **un caso de cliente** → estructura #14 Mini Documental
 - Si quieres **anunciar algo nuevo** → #10 Soltamos la bomba
 - Si tienes un **dato sorprendente** → #9 Algo me ha sorprendido
@@ -154,7 +154,7 @@ Si dudas entre 2, elige la más usada en el patrón observado en sus 11 ejemplos
 | Urgencia | 3-4 |
 | Mini documental | 4-5 |
 
-Mínimo 3, máximo 6. Si Andrea pide otro número, respétalo.
+Mínimo 3, máximo 6. Si el usuario pide otro número, respétalo.
 
 ### Paso 4 — Asignar FORMATO por slide
 
@@ -174,7 +174,7 @@ Para cada slide produce 6 datos:
 2. **Frase principal** (la caja blanca/negra/amarilla del slide — máx 12 palabras)
 3. **Capa visual** (qué captura/mockup/elemento va sobre el fondo — describe en 1 línea)
 4. **Formato** (🎥 [F1-F15] o 📸 [F1-F15])
-5. **Qué grabar/buscar** (instrucción concreta para Andrea: "graba caminando frente al Buda" o "captura de tu calendario lleno")
+5. **Qué grabar/buscar** (instrucción concreta para el usuario: "graba caminando frente al Buda" o "captura de tu calendario lleno")
 6. **Briefing de diseño** (cajas de qué color, dónde, qué emoji, qué flecha — usa `references/briefing-visual.md`)
 
 Reglas de copy:
@@ -189,14 +189,14 @@ Reglas de copy:
 Al final del archivo, agrega una sección con:
 - **Mood general** (ej: "viaje + autoridad + cercanía")
 - **Paleta** (qué cajas vas a usar más: blancas/negras/amarillas/verdes/rojas)
-- **Capturas/mockups a preparar** (lista de los assets que Andrea necesita tener listos)
+- **Capturas/mockups a preparar** (lista de los assets que el usuario necesita tener listos)
 - **Sesiones de grabación recomendadas** (ej: "1 sesión de 4 clips en escenario A + 1 sesión de 2 clips en escenario B")
 
 ---
 
 ## OUTPUT
 
-Guarda en: `/Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/`
+Guarda en: `~/Documents/FORMULA100K/HISTORIAS/guiones/`
 
 Nombre del archivo:
 ```
@@ -219,7 +219,7 @@ Después de guardar, muestra al usuario:
 
 ## ⚠️ ESPAÑOL NEUTRO OBLIGATORIO
 
-Andrea escribe en **español neutro**, NO argentino. Todo el output (frases de slides, briefings, notas de producción, variantes A/B) debe usar:
+El usuario escribe en **español neutro**, NO argentino. Todo el output (frases de slides, briefings, notas de producción, variantes A/B) debe usar:
 
 | ❌ Argentino | ✓ Neutro |
 |---|---|
@@ -237,7 +237,7 @@ Andrea escribe en **español neutro**, NO argentino. Todo el output (frases de s
 
 Antes de guardar el .md, hacer un escaneo final buscando: "vos", "tenés", "podés", "querés", "acá", "decime", "dale", "che", "laburo". Si aparece, reemplazar.
 
-**Razón:** la audiencia de Andrea es panhispana (México, Colombia, España, USA Latino, Argentina). El voseo excluye a la mayoría.
+**Razón:** la audiencia del usuario es panhispana (México, Colombia, España, USA Latino, Argentina). El voseo excluye a la mayoría.
 
 ---
 
@@ -245,7 +245,7 @@ Antes de guardar el .md, hacer un escaneo final buscando: "vos", "tenés", "pod�
 
 - No generar más de una secuencia por invocación (eso lo hace `calendarizador-historias-formula100k`).
 - No diseñar las imágenes (eso lo hace `historias-a-imagenes-nanobanana`).
-- No copiar literal el copy del PDF de estructuras: usa los patrones, pero el copy debe ser específico al objetivo de Andrea.
+- No copiar literal el copy del PDF de estructuras: usa los patrones, pero el copy debe ser específico al objetivo del usuario.
 - No usar emojis decorativos en el copy de los slides excepto los que indiquen función (⚠️ alerta, 🎁 regalo, ✅/❌ comparativa, 💰 dinero, 🤖 producto IA).
 - No proponer formatos genéricos como "fondo plano con texto" en el slide 1 — el slide 1 SIEMPRE tiene movimiento o escenario real.
 - No dejar el último slide sin palabra clave + acción concreta + (si aplica) consecuencia.

@@ -1,6 +1,6 @@
 ---
 name: constructor-ofertas-f100k
-description: Skill especializada en construir OFERTAS IRRESISTIBLES, LEAD MAGNETS e INFOPRODUCTOS LOW-TICKET aplicando la Ecuación de Valor (Hormozi), la fórmula M-A-G-I-C para nombres, bonificaciones apiladas y garantías. Activar SIEMPRE que Andrea o un usuario pida "haz mi oferta más irresistible", "diseña mi oferta", "construye una oferta para X", "crea un lead magnet", "necesito un infoproducto low-ticket", "qué bonos pongo", "cómo apilo bonos", "qué garantía uso", "qué precio le pongo", "cómo justifico el precio", "estructura mi oferta para Skool", "estructura mi oferta para venta", "haz un name para mi programa", "MAGIC para mi oferta", "cómo escalo el valor percibido", o cualquier variación que combine intención de vender con la necesidad de estructurar la oferta. NO usar para escribir el VSL/landing/email — para eso está `vsl-expert-f100k`. NO usar para audios de venta — para eso está `audios-venta-f100k`. Sí se complementa con esas dos: primero se construye la oferta aquí, después se vende allá.
+description: Skill especializada en construir OFERTAS IRRESISTIBLES, LEAD MAGNETS e INFOPRODUCTOS LOW-TICKET aplicando la Ecuación de Valor (Hormozi), la fórmula M-A-G-I-C para nombres, bonificaciones apiladas y garantías. Activar SIEMPRE que el usuario o un usuario pida "haz mi oferta más irresistible", "diseña mi oferta", "construye una oferta para X", "crea un lead magnet", "necesito un infoproducto low-ticket", "qué bonos pongo", "cómo apilo bonos", "qué garantía uso", "qué precio le pongo", "cómo justifico el precio", "estructura mi oferta para Skool", "estructura mi oferta para venta", "haz un name para mi programa", "MAGIC para mi oferta", "cómo escalo el valor percibido", o cualquier variación que combine intención de vender con la necesidad de estructurar la oferta. NO usar para escribir el VSL/landing/email — para eso está `vsl-expert-f100k`. NO usar para audios de venta — para eso está `audios-venta-f100k`. Sí se complementa con esas dos: primero se construye la oferta aquí, después se vende allá.
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -226,6 +226,6 @@ Las plantillas completas de entrega están en [templates.md](templates.md):
 
 ## Output
 
-Guardar siempre en `/Users/kissita/Documents/FORMULA100K/OFERTAS/YYYY-MM-DD_<slug-de-oferta>.md`. Si la oferta es para un cliente, usar `/Users/kissita/Documents/FORMULA100K/CLIENTES/<nombre>/oferta.md`.
+Guardar siempre en `~/Documents/FORMULA100K/OFERTAS/YYYY-MM-DD_<slug-de-oferta>.md`. Si la oferta es para un cliente, usar `~/Documents/FORMULA100K/CLIENTES/<nombre>/oferta.md`.
 
 Después de entregar la oferta, ofrecer pasar a [[vsl-expert-f100k]] para escribir el VSL/landing, o a [[audios-venta-f100k]] para los audios de cierre.

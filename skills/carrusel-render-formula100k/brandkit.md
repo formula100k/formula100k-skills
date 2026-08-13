@@ -3,7 +3,7 @@
 > Esta es la **fuente de verdad** del estilo visual de los carruseles. Cualquier cambio aquí se aplica a todos los renders futuros.
 
 > ⚠️ **ESTILO PREDETERMINADO (desde jul-2026): EDITORIAL OSCURO.**
-> El estilo **scrapbook** crema pasó a ser ALTERNATIVO — usarlo SOLO si Andrea lo pide explícitamente ("hazlo en scrapbook / estilo diario / crema"). Por defecto, todo carrusel se renderiza en **Editorial Oscuro**. Ver más abajo el bloque "ESTILO ALTERNATIVO — Scrapbook".
+> El estilo **scrapbook** crema pasó a ser ALTERNATIVO — usarlo SOLO si el usuario lo pide explícitamente ("hazlo en scrapbook / estilo diario / crema"). Por defecto, todo carrusel se renderiza en **Editorial Oscuro**. Ver más abajo el bloque "ESTILO ALTERNATIVO — Scrapbook".
 
 ---
 
@@ -15,7 +15,7 @@
 **Sensación:** portada de revista, creadora tech aspiracional, oscuro elegante, prueba real
 **Por qué funciona:** contraste altísimo (blanco sobre casi-negro) frena el scroll; la foto real full-bleed + serif itálica se lee premium y confiable; las capturas reales dan autoridad.
 
-**Referencia canónica:** `/Users/kissita/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel "Mi stack de IA"). Su `build.js` es el motor exacto reproducible; `slide-01/02/08.png` muestran el look.
+**Referencia canónica:** `~/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel "Mi stack de IA"). Su `build.js` es el motor exacto reproducible; `slide-01/02/08.png` muestran el look.
 
 ---
 
@@ -74,7 +74,7 @@ Todo texto sobre foto lleva `text-shadow: 0 3px 18px rgba(0,0,0,.8)` para legibi
 
 ## FONDOS Y OVERLAYS — EDITORIAL OSCURO
 
-**Foto:** SIEMPRE foto REAL de Andrea (carpetas `ANDREA ADN` / `ANDREA SELFIES`, ver `references/fotos-reales.md`). Cinematográfica, fondo con contexto (ciudad, estudio). Nunca stock.
+**Foto:** SIEMPRE foto REAL del usuario (carpetas `MI ADN VISUAL` / `MIS SELFIES`, ver `references/fotos-reales.md`). Cinematográfica, fondo con contexto (ciudad, estudio). Nunca stock.
 
 - **Portada / CTA (foto nítida full-bleed):**
   ```
@@ -123,26 +123,26 @@ Todo texto sobre foto lleva `text-shadow: 0 3px 18px rgba(0,0,0,.8)` para legibi
 3. Mezcla obligatoria sans-pesada + serif-itálica en el titular de portada/CTA.
 4. Toda captura de pantalla va enmarcada en ventana Mac + badge "CAPTURA REAL". Las capturas son REALES, nunca inventadas.
 5. Acento dorado `#F0B24A` para la keyword del CTA.
-6. Handle @andreaestratega arriba-der (portada/CTA) o donde calce; eyebrow del tema arriba-izq.
+6. Handle del usuario (`@tuhandle`) arriba-der (portada/CTA) o donde calce; eyebrow del tema arriba-izq.
 7. Cero elementos scrapbook (washi, post-its, stickers-decoración, crema).
 
 ---
 
 ## IDENTIDAD (común a ambos estilos)
-- **Handle Instagram:** `@andreaestratega`
+- **Handle Instagram:** el del usuario — pregúntaselo la primera vez y reúsalo (`@tuhandle` es solo placeholder)
 - **Comunidad:** Fórmula 100K
 - **CTA estándar:** "Comenta **[PALABRA]** y te envío/enseño…" → siempre cierra vendiendo F100K
-- **Fotos reales:** `/Users/kissita/Documents/ANDREA ADN` (curadas) · `/Users/kissita/Documents/ANDREA SELFIES` (pool)
+- **Fotos reales:** `~/Documents/MI ADN VISUAL` (curadas) · `~/Documents/MIS SELFIES` (pool)
 
 ---
 ---
 
 # ═══════════════════════════════════════
-# ESTILO ALTERNATIVO — SCRAPBOOK (solo si Andrea lo pide)
+# ESTILO ALTERNATIVO — SCRAPBOOK (solo si el usuario lo pide)
 # ═══════════════════════════════════════
 
 **Estilo:** Scrapbook / collage / álbum personal · cuaderno de creadora
-**Cuándo:** SOLO cuando Andrea diga explícitamente "scrapbook", "estilo diario", "crema", "collage".
+**Cuándo:** SOLO cuando el usuario diga explícitamente "scrapbook", "estilo diario", "crema", "collage".
 
 ## Paleta scrapbook
 - Crema fondo `#F5EFE0` · Crema oscuro `#EDE4CE` · Tinta `#2B2218`

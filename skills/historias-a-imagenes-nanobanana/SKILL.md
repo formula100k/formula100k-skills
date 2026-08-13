@@ -2,7 +2,7 @@
 name: historias-a-imagenes-nanobanana
 description: >
   Skill que convierte un guion de secuencia de historias (output de guionizacion-historias-formula100k)
-  en imágenes terminadas listas para subir a Instagram Stories. Activar SIEMPRE que Andrea o un usuario
+  en imágenes terminadas listas para subir a Instagram Stories. Activar SIEMPRE que el usuario o un usuario
   pida: "renderiza este guion de historias", "convierte este guion en imágenes", "diséñame las stories
   de [archivo]", "pasa este guion a imágenes con nanobanana", "genera las historias diseñadas",
   "exporta este guion a PNG", "haz las imágenes de mi secuencia de stories", o cualquier variación
@@ -10,7 +10,7 @@ description: >
   `banana` (Nanobanana / Gemini) Y el MCP de Higgsfield (mcp__higgsfield__*) como motores. Se conecta
   con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente
   la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas
-  redondeadas, paleta de Andrea, capas de capturas/mockups, flechas amarillas, X/✓).
+  redondeadas, paleta del usuario, capas de capturas/mockups, flechas amarillas, X/✓).
 argument-hint: "<ruta al .md del guion> [--motor=banana|higgsfield|both] [--fotos=<carpeta>]"
 metadata:
   version: "1.0.0"
@@ -21,7 +21,7 @@ metadata:
 # Skill: Historias a Imágenes (Nanobanana + Higgsfield)
 
 Toma un guion de stories generado por `guionizacion-historias-formula100k` y produce imágenes PNG
-listas para subir a Instagram Stories, imitando el estilo nativo de IG y el look de Andrea.
+listas para subir a Instagram Stories, imitando el estilo nativo de IG y el look del usuario.
 
 ---
 
@@ -51,7 +51,7 @@ No es opcional.
 
 El usuario te dará alguna combinación de:
 
-1. **Ruta al .md** del guion: `/Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/[archivo].md`
+1. **Ruta al .md** del guion: `~/Documents/FORMULA100K/HISTORIAS/guiones/[archivo].md`
 2. **Pegado del contenido** del guion directamente
 3. **Carpeta de fotos** (opcional la primera vez, después se guarda como preset): `--fotos=<ruta>` o pregunta interactiva
 4. **Motor preferido** (opcional): `--motor=banana` | `--motor=higgsfield` | `--motor=both` (default: auto)
@@ -64,7 +64,7 @@ Guarda el preset en: `~/.claude/skills/historias-a-imagenes-nanobanana/preset.js
 
 ```json
 {
-  "fotos_folder": "/Users/kissita/.../fotos-marca",
+  "fotos_folder": "~/.../fotos-marca",
   "default_motor": "banana",
   "last_used": "2026-05-06"
 }
@@ -100,13 +100,13 @@ Lee `references/motor-selection.md`. Lógica simple:
 
 | Slide tiene... | Motor preferido |
 |---|---|
-| Foto de Andrea como fondo + overlay de texto/cajas | **Banana (gemini_edit_image)** |
-| Slide 1 con escenario complejo cinematográfico | **Higgsfield** (si Andrea quiere "wow") o Banana |
+| Foto del usuario como fondo + overlay de texto/cajas | **Banana (gemini_edit_image)** |
+| Slide 1 con escenario complejo cinematográfico | **Higgsfield** (si el usuario quiere "wow") o Banana |
 | Slide CTA con escenario bonito + cara | **Banana** (sobre foto real) |
 | Mockup puro (dashboard, GPT, captura sintética) | **Banana** (genera desde cero) |
 | Composición compleja con consistencia de cara | **Higgsfield** (si tiene Soul/character) |
 
-**Default:** si Andrea no especifica `--motor`, usa Banana para todos los slides excepto si la skill detecta que el slide 1 necesita una escena cinematográfica que Higgsfield haría mejor.
+**Default:** si el usuario no especifica `--motor`, usa Banana para todos los slides excepto si la skill detecta que el slide 1 necesita una escena cinematográfica que Higgsfield haría mejor.
 
 ### Paso 4 — Para cada slide: matchear foto
 
@@ -129,7 +129,7 @@ Aplica `references/prompt-builder.md`. Cada prompt tiene 3 capas:
 
 **Capa A — La foto base (si aplica):**
 ```
-"Use this photo as background: [foto-de-andrea-en-playa.jpg]"
+"Use this photo as background: [foto-del-usuario-en-playa.jpg]"
 ```
 
 **Capa B — Estilo Instagram Stories nativo:**
@@ -192,7 +192,7 @@ Captura el output path y muévelo a la carpeta destino.
 
 Carpeta destino:
 ```
-/Users/kissita/Documents/FORMULA100K/HISTORIAS/imagenes/[nombre-del-guion-sin-md]/
+~/Documents/FORMULA100K/HISTORIAS/imagenes/[nombre-del-guion-sin-md]/
 ├── slide_1.png
 ├── slide_2.png
 ├── slide_3.png
@@ -224,7 +224,7 @@ Después mostrar al usuario:
 
 ## CASOS ESPECIALES
 
-### Slide 100% mockup (sin foto de Andrea)
+### Slide 100% mockup (sin foto del usuario)
 
 Ejemplo: slide 4 que muestra solo un mockup del GPT.
 
@@ -239,7 +239,7 @@ Ejemplo: slide 4 que muestra solo un mockup del GPT.
 
 ### Slide con captura real (dashboard, DM, calendario)
 
-Si el guion menciona una captura específica que Andrea ya tiene en su carpeta:
+Si el guion menciona una captura específica que el usuario ya tiene en su carpeta:
 - Buscar archivos tipo `dashboard*.png`, `dm-*.jpg`, `calendario_*.png`
 - Usarla como capa adicional sobre la foto base
 
@@ -281,9 +281,9 @@ acá→aquí, laburo→trabajo, plata→dinero, che/dale→(omitir).
 ## NO HACER
 
 - No generar el guion (eso lo hace `guionizacion-historias-formula100k`).
-- No subir las imágenes a Instagram (Andrea las sube manual).
+- No subir las imágenes a Instagram (el usuario las sube manual).
 - No usar fonts externas que no sean nativas de IG.
-- No inventar capturas de dashboard que Andrea no tenga; pedirlas explícitamente.
+- No inventar capturas de dashboard que el usuario no tenga; pedirlas explícitamente.
 - No olvidar el aspect ratio 9:16 (1080x1920).
 - No olvidar guardar el preset de carpeta de fotos en la primera invocación.
 - No usar `mcp__higgsfield__generate_video` — solo imagen.

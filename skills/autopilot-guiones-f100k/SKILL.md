@@ -25,7 +25,7 @@ Usa Tavily para buscar las 5 noticias más importantes de hoy:
 Criterios en orden de importancia:
 1. ¿Afecta directamente a creadores que usan Claude, Higgsfield, Canva, CapCut, etc.?
 2. ¿Tiene un dato numérico sorprendente o un cambio de paradigma claro?
-3. ¿Andrea puede conectarlo con su experiencia personal o con lo que enseña en F100K?
+3. ¿el usuario puede conectarlo con su experiencia personal o con lo que enseña en F100K?
 4. ¿Es noticia del día (no de hace una semana)?
 
 ---
@@ -196,7 +196,7 @@ Crear draft con:
 - **Body:**
 
 ```
-Hola Andrea,
+Holal usuario,
 
 Aquí están los 3 guiones del día, listos para grabar. Cada uno usa una estructura distinta del sistema F100K.
 

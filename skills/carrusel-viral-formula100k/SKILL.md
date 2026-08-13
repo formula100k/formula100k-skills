@@ -399,7 +399,7 @@ gemini_generate_image(prompt="[prompt de 5.1]", imageSize="2K")
 #### Opción B — Script directo via bash (fallback principal)
 
 ```bash
-API_KEY=$(python3 -c "import json; d=json.load(open('/Users/kissita/.claude/settings.json')); print(d['mcpServers']['nanobanana']['env']['GOOGLE_AI_API_KEY'])")
+API_KEY=$(python3 -c "import json; d=json.load(open('~/.claude/settings.json')); print(d['mcpServers']['nanobanana']['env']['GOOGLE_AI_API_KEY'])")
 
 GOOGLE_AI_API_KEY="$API_KEY" python3 ~/.claude/skills/banana/scripts/generate.py \
   --prompt "[prompt de 5.1]" \
@@ -413,7 +413,7 @@ La imagen se guarda en `~/Documents/nanobanana_generated/`.
 #### Opción C — curl directo (si hay error SSL de Python)
 
 ```bash
-API_KEY=$(python3 -c "import json; d=json.load(open('/Users/kissita/.claude/settings.json')); print(d['mcpServers']['nanobanana']['env']['GOOGLE_AI_API_KEY'])")
+API_KEY=$(python3 -c "import json; d=json.load(open('~/.claude/settings.json')); print(d['mcpServers']['nanobanana']['env']['GOOGLE_AI_API_KEY'])")
 
 curl -s -X POST \
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=$API_KEY" \
@@ -433,7 +433,7 @@ import json, base64
 with open(\'/tmp/gemini_hook_response.json\') as f: data = json.load(f)
 for part in data[\'candidates\'][0][\'content\'][\'parts\']:
     if \'inlineData\' in part:
-        with open(\'/Users/kissita/Documents/nanobanana_generated/hook_carrusel.png\', \'wb\') as f:
+        with open(\'~/Documents/nanobanana_generated/hook_carrusel.png\', \'wb\') as f:
             f.write(base64.b64decode(part[\'inlineData\'][\'data\']))
         print(\'Guardada: ~/Documents/nanobanana_generated/hook_carrusel.png\')
 "

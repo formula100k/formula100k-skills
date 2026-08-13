@@ -1,6 +1,6 @@
 ---
 name: collage-cine-f100k
-description: "Convierte un video grabado por Andrea en un reel estilo COLLAGE CINEMATOGRÁFICO (estética @andrewcodesmith): el talking-head se compone en paneles apilados sobre ESCENAS temáticas generadas (grafo de Obsidian, sala de control retro), con captions MANUSCRITOS (cursiva crema + palabra clave verde subrayada en amarillo) y grano de película vintage encima. Es el look 'second brain / sci-fi analógico': desaturado verdoso, paneles horizontales, sujeto recortado metido en escenas. Activar SIEMPRE que Andrea pase un .mov/.mp4 y diga 'hazme el estilo collage cinematográfico', 'estilo andrewcodesmith', 'mete mi cara en escenas temáticas', 'el look del second brain', 'collage cine', 'paneles apilados con escenas', 'captions a mano + grano vintage', o combine un video grabado con la intención de ese look compositeado-cinematográfico. NO confundir con editor-video-formula100k (talking-head normal) ni motion-takeover-f100k."
+description: "Convierte un video grabado por el usuario en un reel estilo COLLAGE CINEMATOGRÁFICO (estética @andrewcodesmith): el talking-head se compone en paneles apilados sobre ESCENAS temáticas generadas (grafo de Obsidian, sala de control retro), con captions MANUSCRITOS (cursiva crema + palabra clave verde subrayada en amarillo) y grano de película vintage encima. Es el look 'second brain / sci-fi analógico': desaturado verdoso, paneles horizontales, sujeto recortado metido en escenas. Activar SIEMPRE que el usuario pase un .mov/.mp4 y diga 'hazme el estilo collage cinematográfico', 'estilo andrewcodesmith', 'mete mi cara en escenas temáticas', 'el look del second brain', 'collage cine', 'paneles apilados con escenas', 'captions a mano + grano vintage', o combine un video grabado con la intención de ese look compositeado-cinematográfico. NO confundir con editor-video-formula100k (talking-head normal) ni motion-takeover-f100k."
 disable-model-invocation: true
 argument-hint: "[ruta del video .mov/.mp4]"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__remove_background, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__higgsfield__balance
@@ -12,7 +12,7 @@ delegates-to:
 
 # Collage Cinematográfico — FÓRMULA 100K
 
-Pipeline para convertir una grabación de Andrea en un reel con la estética **collage cinematográfico** de @andrewcodesmith: el talking-head no vive solo en pantalla, sino **compuesto en paneles** sobre **escenas temáticas generadas**, con **captions manuscritos** y **grano de película** encima.
+Pipeline para convertir una grabación del usuario en un reel con la estética **collage cinematográfico** de @andrewcodesmith: el talking-head no vive solo en pantalla, sino **compuesto en paneles** sobre **escenas temáticas generadas**, con **captions manuscritos** y **grano de película** encima.
 
 Esta skill **es un director**: orquesta motores ya probados (corte de `editor-video`, Higgsfield para escenas/cutout, HyperFrames para captions+grano, ffmpeg para paneles). No reinventa ningún motor.
 
@@ -22,9 +22,9 @@ Output final: `$DEST/BORRADOR_COLLAGE.mp4` listo para retoque fino.
 
 Referencia decodificada del reel viral "Build a second brain w Claude + Obsidian" (21K likes / 17K comentarios, @andrewcodesmith):
 
-1. **Sujeto recortado (cutout)** — Andrea se separa del fondo y se mete DENTRO de las escenas. El cutout se hace con **HyperFrames `remove-background` (LOCAL, GRATIS, sin créditos Higgsfield)** — modelo `u2net_human_seg` específico para personas, así que **NO hace falta greenscreen**: segmenta a Andrea sobre cualquier fondo de cuarto. Funciona sobre la **imagen** (PNG) y sobre el **video completo** (`.webm` con alpha). Tras recortar, SIEMPRE pasar `trim_cutout.py` para **ajustar al ras del sujeto** (recorta el margen transparente sobrante; sin esto queda "demasiado espacio alrededor de la persona" — bug del piloto). Dos modos:
-   - **Cutout/Collage (recomendado)** → Andrea recortada se compone DENTRO del collage (sobre las escenas/cards). Ya no requiere greenscreen.
-   - **Paneles (fallback rápido)** → no se recorta a Andrea; se la enmarca en una **banda** (panel inferior) y la escena/collage ocupa el **panel superior**. Útil si el cutout sale sucio por iluminación pobre.
+1. **Sujeto recortado (cutout)** — El usuario se separa del fondo y se mete DENTRO de las escenas. El cutout se hace con **HyperFrames `remove-background` (LOCAL, GRATIS, sin créditos Higgsfield)** — modelo `u2net_human_seg` específico para personas, así que **NO hace falta greenscreen**: segmenta al usuario sobre cualquier fondo de cuarto. Funciona sobre la **imagen** (PNG) y sobre el **video completo** (`.webm` con alpha). Tras recortar, SIEMPRE pasar `trim_cutout.py` para **ajustar al ras del sujeto** (recorta el margen transparente sobrante; sin esto queda "demasiado espacio alrededor de la persona" — bug del piloto). Dos modos:
+   - **Cutout/Collage (recomendado)** → la persona recortada se compone DENTRO del collage (sobre las escenas/cards). Ya no requiere greenscreen.
+   - **Paneles (fallback rápido)** → no se recorta al usuario; se la enmarca en una **banda** (panel inferior) y la escena/collage ocupa el **panel superior**. Útil si el cutout sale sucio por iluminación pobre.
 2. **Paneles horizontales apilados** — la pantalla 9:16 se parte en bandas: escena temática arriba / talking-head abajo (o fondo temático detrás del talking-head). NO un solo plano.
 3. **Captions manuscritos** — tipografía **cursiva crema** para la frase ("it's time to build a second brain") + **palabra clave resaltada con highlighter amarillo sólido y tinta OSCURA** ("second brain"). NO son subtítulos automáticos ni el header con trazo negro de editor-video. ⚠ **LEGIBILIDAD (bug del piloto):** PROHIBIDO verde fosforescente (`#3CCB5A`) sobre amarillo — verde sobre amarillo NO se lee. El realce es amarillo `#F2D23A` **sólido cubriendo toda la palabra** + texto oscuro `#16240A` (casi negro). El resto de la frase, crema sobre la escena.
 4. **Color grade vintage** — desaturado, virado **verdoso/sepia**, con **grano de película** (film grain) sobre todo el frame. Es lo que une las capas y las hace ver "de una sola pieza".
@@ -34,7 +34,7 @@ Referencia decodificada del reel viral "Build a second brain w Claude + Obsidian
 
 ## Cuándo activar / NO activar
 
-Activar cuando se cumplan AMBAS: (1) hay un video local `.mov/.mp4/.m4v/.mkv`; (2) Andrea pide ESTE look (collage cinematográfico / andrewcodesmith / escenas temáticas / second brain / paneles + captions a mano + grano).
+Activar cuando se cumplan AMBAS: (1) hay un video local `.mov/.mp4/.m4v/.mkv`; (2) el usuario pide ESTE look (collage cinematográfico / andrewcodesmith / escenas temáticas / second brain / paneles + captions a mano + grano).
 
 NO activar para:
 - Overlays animados estilo softgirlnocode → `motion-reels-f100k`.
@@ -44,8 +44,8 @@ NO activar para:
 
 ## Guardrails (leer antes de generar nada)
 
-- **Costo Higgsfield:** cada imagen generada = 1 crédito. Un **collage rico** necesita VARIAS imágenes por bloque (escena base + 2-4 props/cards), no 1 sola — por eso el piloto con 6 imágenes quedó pobre. Default: **escena base + 2-3 props por bloque** (≈ 12-20 imágenes en un reel de 5-6 bloques). Correr `mcp__higgsfield__balance`, **mostrar el presupuesto y el nº total a Andrea** antes de generar, y generar en tandas. Si el saldo no alcanza, reusar props entre bloques y avisar.
-- **Cutout = GRATIS y local:** el recorte de Andrea NO usa Higgsfield ni greenscreen — es `npx hyperframes remove-background` (modelo humano `u2net_human_seg`). No prometer ni gastar créditos en cutout. Si el cutout sale sucio (pelo/bordes) por iluminación pobre, caer a modo Paneles.
+- **Costo Higgsfield:** cada imagen generada = 1 crédito. Un **collage rico** necesita VARIAS imágenes por bloque (escena base + 2-4 props/cards), no 1 sola — por eso el piloto con 6 imágenes quedó pobre. Default: **escena base + 2-3 props por bloque** (≈ 12-20 imágenes en un reel de 5-6 bloques). Correr `mcp__higgsfield__balance`, **mostrar el presupuesto y el nº total al usuario** antes de generar, y generar en tandas. Si el saldo no alcanza, reusar props entre bloques y avisar.
+- **Cutout = GRATIS y local:** el recorte del usuario NO usa Higgsfield ni greenscreen — es `npx hyperframes remove-background` (modelo humano `u2net_human_seg`). No prometer ni gastar créditos en cutout. Si el cutout sale sucio (pelo/bordes) por iluminación pobre, caer a modo Paneles.
 - **Validación visual obligatoria:** cada escena generada se inspecciona con `Read` sobre el `rawUrl` del job. Si la escena no ilustra el bloque del guion → regenerar (máx 3 intentos) o usar una escena más neutra. `nano_banana_2` a veces deriva del prompt.
 - **NO stock, NO placeholder:** mismas reglas que `recursos-de-video` (nada de shutterstock/picsum/etc.).
 - **Grano sutil:** opacidad del grain 6-12%. Pasado de ahí ensucia y baja retención. El grade verdoso no debe matar tonos de piel — clamp en piel.
@@ -63,7 +63,7 @@ MID=$(python3 -c "import subprocess,sys;d=float(subprocess.check_output(['ffprob
 ffmpeg -ss $MID -i "$VIDEO_PATH" -vframes 1 -q:v 2 -y /tmp/cc_bg.jpg 2>/dev/null
 ```
 
-`Read` el frame: el cutout local funciona sobre cualquier fondo, así que el modo **Cutout/Collage es el default**. Solo caé a **Paneles** si el sujeto está mal separado del fondo (contraluz, fondo del mismo tono que la ropa/pelo) — eso ensucia el recorte. Confirmar el modo con Andrea vía `AskUserQuestion` (mostrar el frame y el modo recomendado). Si >5 min, avisar antes de seguir.
+`Read` el frame: el cutout local funciona sobre cualquier fondo, así que el modo **Cutout/Collage es el default**. Solo caé a **Paneles** si el sujeto está mal separado del fondo (contraluz, fondo del mismo tono que la ropa/pelo) — eso ensucia el recorte. Confirmar el modo con el usuario vía `AskUserQuestion` (mostrar el frame y el modo recomendado). Si >5 min, avisar antes de seguir.
 
 Definir `DEST`:
 ```
@@ -90,7 +90,7 @@ Leer `captions.json` y partir el transcript en **4-6 bloques semánticos** (cada
 - `caption_frase` — la frase manuscrita cursiva (3-7 palabras, del audio o reformulada).
 - `caption_keyword` — la palabra que va resaltada (highlighter amarillo + tinta oscura) dentro de la frase.
 
-Mostrar el board de bloques + el **nº total de imágenes y el costo** a Andrea con `AskUserQuestion` antes de generar (controla costo y dirección).
+Mostrar el board de bloques + el **nº total de imágenes y el costo** al usuario con `AskUserQuestion` antes de generar (controla costo y dirección).
 
 ### Paso 3.5 — Captions: delegar ganchos a guionizacion-formula100k (opcional)
 
@@ -98,7 +98,7 @@ Para que las `caption_frase` peguen, invocar `guionizacion-formula100k` con el t
 
 ### Paso 4 — Generar las imágenes del collage (Higgsfield)
 
-`mcp__higgsfield__balance` → confirmar nº TOTAL de imágenes + costo con Andrea (recordá: escena base + 2-3 props por bloque, no 1 sola). Generar con `nano_banana_2`, **9:16** (NUNCA auto=16:9):
+`mcp__higgsfield__balance` → confirmar nº TOTAL de imágenes + costo con el usuario (recordá: escena base + 2-3 props por bloque, no 1 sola). Generar con `nano_banana_2`, **9:16** (NUNCA auto=16:9):
 
 - **Escenas base** (1 por bloque) — prompt con el ADN cinematográfico:
   ```
@@ -116,13 +116,13 @@ Para que las `caption_frase` peguen, invocar `guionizacion-formula100k` con el t
   Recortar con `npx hyperframes remove-background props/x.png -o props/x.png` (deja el prop con alpha) → `$DEST/props/`.
 - `Read` cada `rawUrl` y validar contra `tema_visual`/`prop` (máx 3 regeneraciones). `nano_banana_2` a veces deriva del prompt.
 
-### Paso 4.5 — Cutout de Andrea + recorte al ras (LOCAL, gratis)
+### Paso 4.5 — Cutout del usuario + recorte al ras (LOCAL, gratis)
 
 ```bash
-# recortar a Andrea del video completo (sin greenscreen, modelo humano)
-npx hyperframes remove-background "$DEST/_source_cut.mov" -o "$DEST/andrea.webm" --quality balanced
+# recortar al usuario del video completo (sin greenscreen, modelo humano)
+npx hyperframes remove-background "$DEST/_source_cut.mov" -o "$DEST/sujeto.webm" --quality balanced
 # ajustar al RAS del sujeto (quita el margen transparente sobrante; arregla "demasiado espacio")
-python3 ~/.claude/skills/collage-cine-f100k/scripts/trim_cutout.py vid "$DEST/andrea.webm" "$DEST/andrea_trim.webm"
+python3 ~/.claude/skills/collage-cine-f100k/scripts/trim_cutout.py vid "$DEST/sujeto.webm" "$DEST/sujeto_trim.webm"
 ```
 Si el cutout sale sucio (pelo/bordes) → caer a modo Paneles (sin cutout). Para props PNG el mismo script en modo `img`.
 
@@ -135,7 +135,7 @@ python3 ~/.claude/skills/collage-cine-f100k/scripts/build_collage_backdrop.py "$
 `collage_blocks.json` = una entrada por bloque (ver cabecera del script: `pieces` con `fill`/`card`, `cx/cy/w/rot/polaroid`, `subject_zone`). Esto produce `$DEST/collage/bloque_<n>.png`.
 
 **(b) Componer** — dos caminos según el modo:
-- **Cutout/Collage:** sobre cada `collage/bloque_<n>.png` se superpone el cutout `andrea_trim.webm` (escalado a la `subject_zone`) con ffmpeg, + grade+grano sobre TODO el frame.
+- **Cutout/Collage:** sobre cada `collage/bloque_<n>.png` se superpone el cutout `sujeto_trim.webm` (escalado a la `subject_zone`) con ffmpeg, + grade+grano sobre TODO el frame.
 - **Paneles (fallback):** usar el compositor de bandas (escena/collage arriba, talking-head abajo):
   ```bash
   python3 ~/.claude/skills/collage-cine-f100k/scripts/compose_blocks.py "$DEST" "$DEST/blocks.json"
@@ -177,7 +177,7 @@ Extraer 3 keyframes del `BORRADOR_COLLAGE.mp4` (25/50/75%) con ffmpeg y `Read` c
 
 ### Paso 8 — Escribir MANIFEST_COLLAGE.md + entregar
 
-Escribir `$DEST/MANIFEST_COLLAGE.md` con: video fuente, modo (Pro/Paneles), bloques (keyword, tema_visual, caption_frase/keyword), rutas de escenas, y los comandos exactos para re-render. Reportar a Andrea la ruta del `BORRADOR_COLLAGE.mp4` y un resumen de qué validar en CapCut.
+Escribir `$DEST/MANIFEST_COLLAGE.md` con: video fuente, modo (Pro/Paneles), bloques (keyword, tema_visual, caption_frase/keyword), rutas de escenas, y los comandos exactos para re-render. Reportar al usuario la ruta del `BORRADOR_COLLAGE.mp4` y un resumen de qué validar en CapCut.
 
 ## Notas
 

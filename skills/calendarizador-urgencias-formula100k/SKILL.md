@@ -1,6 +1,6 @@
 ---
 name: calendarizador-urgencias-formula100k
-description: "Construye el CALENDARIO DE RAZONES DE URGENCIA (mensual + pool semanal) de cualquier producto/programa/servicio con la metodología de urgencia honesta de FÓRMULA 100K (motor biológico, 5 gatillos de decisión, aversión a la pérdida) + investigación web real con Tavily MCP para cazar fechas estacionales y comerciales del nicho. Activar SIEMPRE que Andrea, una clienta o alumna pida 'arma mi calendario de urgencias', 'razones de urgencia para mi producto', 'fechas de venta de [nicho]', 'cuándo activar urgencia este año', 'calendario de gatillos', 'dame razones de urgencia honestas', 'qué urgencia uso este mes', o cualquier variación que combine urgencia/escasez con planear cuándo activarla. NO confundir con calendarizador-contenido-formula100k (reels/carruseles) ni calendarizador-historias-formula100k (stories). Entrega calendario mensual + pool de razones reutilizables alineadas a fechas reales."
+description: "Construye el CALENDARIO DE RAZONES DE URGENCIA (mensual + pool semanal) de cualquier producto/programa/servicio con la metodología de urgencia honesta de FÓRMULA 100K (motor biológico, 5 gatillos de decisión, aversión a la pérdida) + investigación web real con Tavily MCP para cazar fechas estacionales y comerciales del nicho. Activar SIEMPRE que el usuario, una clienta o alumna pida 'arma mi calendario de urgencias', 'razones de urgencia para mi producto', 'fechas de venta de [nicho]', 'cuándo activar urgencia este año', 'calendario de gatillos', 'dame razones de urgencia honestas', 'qué urgencia uso este mes', o cualquier variación que combine urgencia/escasez con planear cuándo activarla. NO confundir con calendarizador-contenido-formula100k (reels/carruseles) ni calendarizador-historias-formula100k (stories). Entrega calendario mensual + pool de razones reutilizables alineadas a fechas reales."
 argument-hint: "[nombre del producto opcional]"
 metadata:
   version: "1.0.0"
@@ -269,7 +269,7 @@ Cada razón debe tener: cuándo activarla, copy modelo, qué gatillo activa.
 **5b.** Ejecuta `scripts/build_xlsx.py` con el JSON intermedio que armaste:
 
 ```bash
-python3 /Users/kissita/.claude/skills/calendarizador-urgencias-formula100k/scripts/build_xlsx.py \
+python3 ~/.claude/skills/calendarizador-urgencias-formula100k/scripts/build_xlsx.py \
   --json /tmp/urgencias-<slug>.json \
   --out "<OUTPUT_DIR>/calendario-urgencias-<slug>.xlsx"
 ```
@@ -280,13 +280,10 @@ para F100K, pero parametrizado).
 
 ### Paso 6 — Output PATH (smart routing)
 ```
-Si el usuario es Andrea (cwd = /Users/kissita/...) Y el producto es F100K o cliente conocido:
-  → /Users/kissita/Documents/FORMULA100K/DINÁMICAS DE URGENCIA/<slug>/
+Si existe la carpeta ~/Documents/FORMULA100K/ (el usuario ya trabaja con esa estructura):
+  → ~/Documents/FORMULA100K/DINÁMICAS DE URGENCIA/<slug>/
 
-Si el usuario es Andrea Y el producto es nuevo:
-  → /Users/kissita/Documents/FORMULA100K/DINÁMICAS DE URGENCIA/<slug>/
-
-Si el usuario es una ALUMNA (otro cwd / otra máquina):
+Si no existe:
   → ./calendarios-urgencia/<slug>/
   (relativo a cwd)
 ```

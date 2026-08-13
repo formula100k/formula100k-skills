@@ -59,7 +59,7 @@ Triggers naturales:
 
 ## Contexto crítico
 
-**Usuaria:** Andrea Vega o sus alumnas. Audiencia hispana, español neutro obligatorio (NO voseo).
+**Usuario:** creador/a de contenido hispano (tú o tu clienta). Audiencia hispana, español neutro obligatorio (NO voseo).
 
 **Material de referencia (cargar al inicio):**
 - `frameworks.md` — niveles consciencia, propósitos, formatos por energía, matriz V/V/V
@@ -68,10 +68,10 @@ Triggers naturales:
 - `output-template.md` — formato de la estrategia final
 
 **Artifacts de referencia:**
-- `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-estrategia-contenido.html` — framework completo de estrategia (Protocolo, 3 Pilares, 40 Formatos, Matriz, Calendario)
-- `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-ganchos.html` — para sugerir ganchos en el output
-- `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-niveles-energia.html` — para clasificar formatos
-- `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-niveles-consciencia.html` — para mapear ideas
+- `~/Documents/FORMULA100K/ARTIFACTS/f100k-estrategia-contenido.html` — framework completo de estrategia (Protocolo, 3 Pilares, 40 Formatos, Matriz, Calendario)
+- `~/Documents/FORMULA100K/ARTIFACTS/f100k-ganchos.html` — para sugerir ganchos en el output
+- `~/Documents/FORMULA100K/ARTIFACTS/f100k-niveles-energia.html` — para clasificar formatos
+- `~/Documents/FORMULA100K/ARTIFACTS/f100k-niveles-consciencia.html` — para mapear ideas
 
 ## Flujo conversacional · 8 bloques
 
@@ -192,7 +192,7 @@ Para las 3 ideas con MAYOR potencial viral, genera ganchos completos siguiendo e
 ### BLOQUE 8: GUARDAR ESTRATEGIA
 
 1. Pregunta a la alumna: "¿Cuál es tu nombre o handle de Instagram para guardar este archivo?"
-2. Genera el archivo en: `/Users/kissita/Documents/FORMULA100K/ESTRATEGIAS/{nombre-kebab-case}-estrategia.md`
+2. Genera el archivo en: `~/Documents/FORMULA100K/ESTRATEGIAS/{nombre-kebab-case}-estrategia.md`
 3. Usa el formato exacto de `output-template.md`
 4. Confirma a la alumna la ruta + un resumen ejecutivo de 3-4 líneas
 

@@ -1,6 +1,6 @@
 ---
 name: calendarizador-historias-formula100k
-description: "Arma calendarios SEMANALES de SECUENCIAS DE HISTORIAS de Instagram (Lunes-Domingo) con la metodología FÓRMULA 100K. Activar SIEMPRE que Andrea pida 'calendariza mis historias', 'arma mi semana de stories', 'calendario de historias', 'planifica mis historias de la semana', 'organiza mis stories por día', 'calendario semanal de historias', 'arma 7 secuencias de stories para la semana', 'planifica las historias de mi lanzamiento', o cualquier variación que combine organizar/planear con el formato historias de IG semanal. NO confundir con calendarizador-contenido-formula100k (reels/videos/carruseles) ni calendarizador-urgencias-formula100k. Distribuye las secuencias por día según energía y propósito, lista para producir con guionizacion-historias-formula100k."
+description: "Arma calendarios SEMANALES de SECUENCIAS DE HISTORIAS de Instagram (Lunes-Domingo) con la metodología FÓRMULA 100K. Activar SIEMPRE que el usuario pida 'calendariza mis historias', 'arma mi semana de stories', 'calendario de historias', 'planifica mis historias de la semana', 'organiza mis stories por día', 'calendario semanal de historias', 'arma 7 secuencias de stories para la semana', 'planifica las historias de mi lanzamiento', o cualquier variación que combine organizar/planear con el formato historias de IG semanal. NO confundir con calendarizador-contenido-formula100k (reels/videos/carruseles) ni calendarizador-urgencias-formula100k. Distribuye las secuencias por día según energía y propósito, lista para producir con guionizacion-historias-formula100k."
 argument-hint: "<modo: lanzamiento|nutricion|mixto|urgencia> [+ ideas/objetivos opcionales]"
 metadata:
   version: "1.0.0"
@@ -64,18 +64,18 @@ Y también los referenciales de la Skill A (categorías, estructuras, formatos, 
 
 ## QUÉ HACE
 
-Toma las ideas/objetivos de Andrea para la semana + un MODO de calendario, y entrega:
+Toma las ideas/objetivos del usuario para la semana + un MODO de calendario, y entrega:
 
 1. **Tabla maestra** Lun-Dom con cada secuencia asignada a un día y franja horaria
 2. **N archivos .md individuales** (uno por secuencia, generados por Skill A)
 3. **Archivo maestro .md** con toda la planificación y enlaces a los guiones individuales
-4. **Archivo maestro .xlsx** con la misma info para Andrea/equipo
+4. **Archivo maestro .xlsx** con la misma info para el usuario/equipo
 
 ---
 
 ## INPUT
 
-Andrea da alguna combinación de:
+El usuario da alguna combinación de:
 
 1. **Modo del calendario** (uno de los 4):
    - `lanzamiento` → semana de venta dura
@@ -100,7 +100,7 @@ Andrea da alguna combinación de:
 
 5. **Oferta principal a vender en la semana** (opcional)
 
-Si Andrea NO da ideas, la skill las **genera ella misma** basándose en el modo + oferta:
+Si el usuario NO da ideas, la skill las **genera ella misma** basándose en el modo + oferta:
 - Lanzamiento → ideas tipo: caso de éxito, urgencia, prueba social, demo
 - Nutrición → ideas tipo: educación, lead magnet, encuestas, lifestyle
 - Etc.
@@ -155,7 +155,7 @@ Lee `references/distribuciones-semanales.md`. Aplicar el modo elegido:
 
 ### Paso 2 — Asignar ideas a slots
 
-Si Andrea dio ideas, asignarlas al slot que mejor encaje:
+Si el usuario dio ideas, asignarlas al slot que mejor encaje:
 - Caso de éxito → slot de One-Shot o Lead Magnet
 - Lanzamiento de producto → slot de One-Shot (announcement)
 - Regalo gratis → slot de Lead Magnet (idealmente jueves)
@@ -196,7 +196,7 @@ Crear el archivo de calendario en MD y XLSX.
 | Lunes | 6pm | 💛 Libre | #18 Diario Personal | Cierre del día | DIARIO | 3 | ./guiones/2026-05-06_libre_cierre-dia.md |
 | Martes | 10am | ... | ... | ... | ... | ... | ... |
 
-**Hora sugerida** según el patrón de Andrea:
+**Hora sugerida** según el patrón del usuario:
 - 10am: primera secuencia del día (audience matutina)
 - 1pm: secuencia de lunch break
 - 6pm: prime time evening (la más fuerte)
@@ -208,7 +208,7 @@ Crear el archivo de calendario en MD y XLSX.
 
 Ruta:
 ```
-/Users/kissita/Documents/FORMULA100K/HISTORIAS/calendarios/calendario-historias_[modo]_[YYYY-MM-DD].md
+~/Documents/FORMULA100K/HISTORIAS/calendarios/calendario-historias_[modo]_[YYYY-MM-DD].md
 ```
 
 Estructura del archivo:
@@ -260,7 +260,7 @@ total_slides: 28
 
 #### Output 2: Calendario maestro .xlsx
 
-Mismo contenido, en Excel para que Andrea lo comparta con su equipo.
+Mismo contenido, en Excel para que el usuario lo comparta con su equipo.
 
 Para generar XLSX: usa `openpyxl` o `pandas.DataFrame.to_excel`. Si no están disponibles, generar como CSV y avisar.
 
@@ -268,7 +268,7 @@ Para generar XLSX: usa `openpyxl` o `pandas.DataFrame.to_excel`. Si no están di
 
 Cada guion ya está guardado por la Skill A en:
 ```
-/Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/
+~/Documents/FORMULA100K/HISTORIAS/guiones/
 ```
 
 Listar al usuario los nombres de archivos generados.
@@ -311,7 +311,7 @@ acá→aquí, laburo→trabajo, plata→dinero.
 
 - No desarrollar los guiones tú directamente — siempre usar `guionizacion-historias-formula100k` para coherencia.
 - No mezclar este calendario con `calendarizador-contenido-formula100k` (son tablas distintas).
-- No proponer más de 2 secuencias por día (Andrea satura a su audiencia si excede esto).
-- No olvidar la sesión de **producción consolidada** — Andrea necesita saber cuántas sesiones de grabación tiene que hacer.
+- No proponer más de 2 secuencias por día (el usuario satura a su audiencia si excede esto).
+- No olvidar la sesión de **producción consolidada** — El usuario necesita saber cuántas sesiones de grabación tiene que hacer.
 - No saltar el paso 5.4 (resumen al usuario).
 - **No usar voseo ni argentinismos** en ningún output escrito (calendario, resumen, prompts a Skill A).

@@ -82,7 +82,7 @@ Objetivo: transacción directa.
 
 ---
 
-## CTAs ESPECIALES PARA F100K (referencia personal de Andrea)
+## CTAs ESPECIALES PARA F100K (referencia personal del usuario)
 
 Cuando se trata de la oferta de FÓRMULA 100K específicamente:
 

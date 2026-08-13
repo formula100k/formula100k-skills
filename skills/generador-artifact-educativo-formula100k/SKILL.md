@@ -1,6 +1,6 @@
 ---
 name: generador-artifact-educativo-formula100k
-description: Use when Andrea asks to create an educational artifact, miniapp, interactive resource, or visual guide for any tab/concept of FÓRMULA 100K (her Skool community). Triggers on phrases like "crea un artifact", "miniapp educativa", "recurso para mis alumnas", "artifact del tab X", "guía interactiva", "construye un artifact sobre [tema]", "armemos un artifact de [concepto]". Generates a single self-contained HTML file with React + Tailwind + Babel via CDN that works by double-clicking — no server, no build, no Claude subscription needed. Output goes to /Users/kissita/Documents/FORMULA100K/ARTIFACTS/.
+description: Use when the user asks to create an educational artifact, miniapp, interactive resource, or visual guide for any tab/concept of FÓRMULA 100K (her Skool community). Triggers on phrases like "crea un artifact", "miniapp educativa", "recurso para mis alumnas", "artifact del tab X", "guía interactiva", "construye un artifact sobre [tema]", "armemos un artifact de [concepto]". Generates a single self-contained HTML file with React + Tailwind + Babel via CDN that works by double-clicking — no server, no build, no Claude subscription needed. Output goes to ~/Documents/FORMULA100K/ARTIFACTS/.
 ---
 
 # Generador de Artifacts Educativos · FÓRMULA 100K
@@ -9,7 +9,7 @@ Genera artifacts educativos consistentes con los 7 ya creados para la comunidad 
 
 ## Cuándo usar esta skill
 
-Se activa cuando Andrea pide:
+Se activa cuando el usuario pide:
 - "Crea un artifact sobre [tema]"
 - "Armemos una miniapp para el tab [X]"
 - "Recurso interactivo para mis alumnas sobre [concepto]"
@@ -18,11 +18,11 @@ Se activa cuando Andrea pide:
 
 ## Contexto crítico antes de empezar
 
-**Usuaria:** Andrea Vega, fundadora de FÓRMULA 100K (comunidad Skool). Audiencia: emprendedoras hispanas, creadoras de contenido.
+**Usuario:** creador/a de contenido con comunidad propia. Audiencia: emprendedoras hispanas, creadoras de contenido.
 
 **Restricción técnica:** Los artifacts deben funcionar SIN suscripción paga de Claude. Por eso son HTML standalone, no artifacts de claude.ai.
 
-**Carpeta destino:** `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/`
+**Carpeta destino:** `~/Documents/FORMULA100K/ARTIFACTS/`
 
 **Naming convention:** `f100k-{tema-en-kebab-case}.html` (ej: `f100k-lead-magnet.html`)
 
@@ -36,7 +36,7 @@ Se activa cuando Andrea pide:
 
 ### Paso 1: Recibir y leer el material fuente
 
-Andrea proporcionará un archivo (.txt, .docx, link) con el contenido educativo. Si es .docx, conviértelo con:
+El usuario proporcionará un archivo (.txt, .docx, link) con el contenido educativo. Si es .docx, conviértelo con:
 ```bash
 textutil -convert txt -stdout "ruta/al/archivo.docx"
 ```
@@ -107,7 +107,7 @@ Usa `template.html` como base. Personaliza:
 
 ### Paso 7: REVISIÓN OBLIGATORIA de español neutro
 
-**Antes de guardar el archivo**, escanea TODO el contenido en busca de voseo argentino. Esta es la regla más importante de la skill — Andrea ya lo corrigió una vez.
+**Antes de guardar el archivo**, escanea TODO el contenido en busca de voseo argentino. Esta es la regla más importante de la skill — El usuario ya lo corrigió una vez.
 
 PROHIBIDO (voseo argentino):
 - vos, sos, tenés, sabés, podés, debés, querés, vivís
@@ -134,13 +134,13 @@ grep -n "vos\|sos\|tenés\|sabés\|podés\|debés\|aplicás\|Pintá\|Mostrá\|Of
 
 ```bash
 # Guardar en la carpeta correcta
-# Ruta: /Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-{tema}.html
+# Ruta: ~/Documents/FORMULA100K/ARTIFACTS/f100k-{tema}.html
 
 # Abrir en navegador para validar visualmente
-open "/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-{tema}.html"
+open "~/Documents/FORMULA100K/ARTIFACTS/f100k-{tema}.html"
 ```
 
-### Paso 9: Reportar a Andrea
+### Paso 9: Reportar al usuario
 
 Al terminar, reporta:
 1. Confirmar que el archivo está en la carpeta correcta
@@ -163,7 +163,7 @@ Estas referencias mantienen coherencia conceptual del universo F100K.
 ## Reglas anti-error
 
 - **NO inventar contenido** — si el material fuente no cubre algo, pide aclaración antes de fabricar
-- **NO traducir directamente** — adaptar al lenguaje de Andrea (directo, profesional, sin tecnicismos innecesarios)
+- **NO traducir directamente** — adaptar al lenguaje del usuario (directo, profesional, sin tecnicismos innecesarios)
 - **NO usar emojis decorativos** — solo emojis con función (📋 Guía, 🎯 CTA, ⚠ Warning)
 - **NO repetir paletas** — cada artifact tiene identidad visual propia
 - **NO superar 1500 líneas** en el HTML — si el contenido es muy denso, dividir en sub-tabs

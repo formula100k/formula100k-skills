@@ -2,7 +2,7 @@
 
 Este es el formato consolidado que se entrega al cliente cuando contrata el armado de su comunidad Skool. NO es un chat ni una serie de outputs sueltos — es UN documento .docx con 16 secciones que viven juntas.
 
-Referencia validada: `/Users/kissita/Downloads/PODER INVERSIONISTA -Propuesta FINAL.docx`.
+Referencia validada: `~/Downloads/PODER INVERSIONISTA -Propuesta FINAL.docx`.
 
 ---
 

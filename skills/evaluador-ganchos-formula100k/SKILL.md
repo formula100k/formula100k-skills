@@ -49,20 +49,20 @@ Diagnostica una captura del primer segundo de un video aplicando los frameworks 
 
 ## Cuándo se activa esta skill
 
-- Andrea sube una captura de su primer segundo y pide evaluación
+- El usuario sube una captura de su primer segundo y pide evaluación
 - Una alumna quiere saber si su gancho funciona antes de publicar
 - Necesitan auditar el primer segundo de un competidor
 - Quieren comparar dos versiones de gancho
 
 ## Contexto crítico
 
-**Usuaria:** Andrea Vega (FÓRMULA 100K) o sus alumnas. Audiencia hispana, español neutro obligatorio (NO voseo).
+**Usuario:** creador/a de contenido hispano (tú o tu clienta). Audiencia hispana, español neutro obligatorio (NO voseo).
 
 **Material de referencia (cargar en orden):**
 - `criterios.md` — la rúbrica completa de evaluación con todos los frameworks
 - `output-template.md` — el formato exacto del diagnóstico
 
-**Artifact educativo:** `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-ganchos.html` — contiene la metodología visual completa que esta skill operacionaliza.
+**Artifact educativo:** `~/Documents/FORMULA100K/ARTIFACTS/f100k-ganchos.html` — contiene la metodología visual completa que esta skill operacionaliza.
 
 ## Flujo paso a paso
 
@@ -80,7 +80,7 @@ Si NO hay imagen ni video adjunto, pide material antes de continuar:
 Si hay imagen pero falta contexto, haz UNA pregunta clave (no más):
 > "¿De qué trata el video y para quién es? Eso me ayuda a evaluar si tu gancho comunica la promesa correcta."
 
-Si Andrea aporta el contexto en el mensaje inicial, no preguntes nada — procede a evaluar.
+Si el usuario aporta el contexto en el mensaje inicial, no preguntes nada — procede a evaluar.
 
 **Si el input es un VIDEO (no solo screenshot):** habilita el Paso 7 (Virality Predictor). El análisis manual sigue siendo obligatorio sobre el primer cuadro — toma un frame del segundo 1 (manual o con ffmpeg) y aplica los criterios. Luego, en paralelo o al final, lanza el predictor para complementar.
 
@@ -215,8 +215,8 @@ Este paso **complementa** el diagnóstico manual; no lo reemplaza. La rúbrica F
 ## Reglas anti-error
 
 - **NO inventes elementos** que no estén en la imagen. Si no ves el texto claramente, dilo.
-- **NO uses voseo argentino** — Andrea ya corrigió esto en otras skills. Usa "tú", "tienes", "puedes", "haz" — NUNCA "vos", "tenés", "podés", "hacé".
-- **NO seas complaciente** — si el gancho está mal, ponle puntaje bajo. Andrea valora la honestidad.
+- **NO uses voseo argentino** — El usuario ya corrigió esto en otras skills. Usa "tú", "tienes", "puedes", "haz" — NUNCA "vos", "tenés", "podés", "hacé".
+- **NO seas complaciente** — si el gancho está mal, ponle puntaje bajo. El usuario valora la honestidad.
 - **NO recomiendes cosas genéricas** ("mejora la calidad", "ponle más onda"). Sé técnico: "elimina la planta del fondo derecho", "reduce el texto de 12 a 6 palabras", "cambia la fuente Arial por una bold tipo Inter".
 - **NO uses el bot de ganchos visuales** — esta skill ES el reemplazo manual del bot.
 - **NO evalúes audio** — solo lo visual. Si la usuaria menciona audio, recuerda que evaluamos solo el primer cuadro.

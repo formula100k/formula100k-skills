@@ -264,6 +264,6 @@ const proposals = [
 ## Referencia ejecutada
 
 Para el HTML canónico completo (1177 líneas) que esta plantilla resume, ver:
-`/Users/kissita/Documents/FORMULA100K/FORMULA100K AUDITORIAS/cambamberaporelmundo_2026-05-23/index.html`
+`~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/cambamberaporelmundo_2026-05-23/index.html`
 
 Esa es la implementación de referencia — clonar su estructura cambiando solo los datos hardcoded en el `<script>` al final.

@@ -202,7 +202,7 @@ Después de tener las 2 caras del roadmap, **NO TERMINAR ahí**. Construir el Pl
 23. Generar `01-PLAN-MAESTRO.md` (consolidado: implementación + servicio + oferta + proyección + riesgos)
 24. Correr `pandoc 01-PLAN-MAESTRO.md -o 01-PLAN-MAESTRO.docx --from markdown --to docx --toc --toc-depth=2 --metadata title="<Producto> — Plan Maestro"`
 25. Generar `02-PRESENTACION-IMPACTO.html` autocontenido siguiendo la convención visual definida arriba (paleta oscura del producto, gradientes, números enormes, secciones con respiro)
-26. Espejar `.md` + `.docx` a `/SEGUNDO CEREBRO ANDREA/ROADMAPS/<carpeta>/`
+26. Espejar `.md` + `.docx` a `/SEGUNDO CEREBRO/ROADMAPS/<carpeta>/`
 27. Abrir el `.docx` y el `.html` con `open`
 
 ### Enlace con otras skills (al final)
@@ -244,7 +244,7 @@ Las plantillas completas por tipo de producto (digital, comunidad, servicio, fí
 El output es un **paquete entregable de 4 archivos en una carpeta dedicada**, no un solo `.md`. Esto permite usar cada formato según el contexto: editar en Markdown, compartir en Word, presentar en navegador.
 
 ```
-/Users/kissita/Documents/FORMULA100K/ROADMAPS/YYYY-MM-DD_<slug>-paquete-entregable/
+~/Documents/FORMULA100K/ROADMAPS/YYYY-MM-DD_<slug>-paquete-entregable/
 ├── 00-ROADMAP-ORIGINAL.md          ← Backward Design + Cara A + Cara B (técnico, fuente)
 ├── 01-PLAN-MAESTRO.md              ← Plan de implementación + Entrega de servicio + Stack de oferta (fuente .md del .docx)
 ├── 01-PLAN-MAESTRO.docx            ← Word generado con pandoc desde el .md anterior
@@ -255,7 +255,7 @@ El output es un **paquete entregable de 4 archivos en una carpeta dedicada**, no
 
 | Archivo | Uso | Audiencia |
 |---|---|---|
-| `00-ROADMAP-ORIGINAL.md` | Documento técnico de trabajo. Backward Design, fases, dependencias. | Equipo interno (Andrea + dev + Cheva) |
+| `00-ROADMAP-ORIGINAL.md` | Documento técnico de trabajo. Backward Design, fases, dependencias. | Equipo interno (el usuario + dev + Cheva) |
 | `01-PLAN-MAESTRO.md/.docx` | Plan ejecutivo consolidado. Implementación + servicio + oferta + proyección + riesgos. | Stakeholders, inversores, partners. Para mandar por mail o imprimir. |
 | `02-PRESENTACION-IMPACTO.html` | Deck visual de pitch. Hero por sección, métricas grandes, paleta del producto, comparativa visual contra competencia. | Venta · presentación pública · landing previa |
 
@@ -277,7 +277,7 @@ El output es un **paquete entregable de 4 archivos en una carpeta dedicada**, no
      --metadata title="<Producto> — Plan Maestro"
    ```
 4. **Diseñar** `02-PRESENTACION-IMPACTO.html` siguiendo la convención visual ↓
-5. **Espejar** los `.md` + `.docx` (no el `.html`) a `/Users/kissita/Documents/SEGUNDO CEREBRO ANDREA/ROADMAPS/<carpeta>/`
+5. **Espejar** los `.md` + `.docx` (no el `.html`) a `~/Documents/SEGUNDO CEREBRO/ROADMAPS/<carpeta>/`
 6. **Abrir automáticamente** el `.docx` y el `.html` al terminar
 
 ### Convención visual del HTML de impacto

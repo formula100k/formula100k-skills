@@ -34,7 +34,7 @@ Skill que genera **capturas UI tipo tutorial** con la estética F100K: terminale
 
 ## Regla de modo PURO
 
-Cuando Andrea pide "capturas-tutorial" / "modo UI" / "solo estilo tutorial" para un video, asumir **modo PURO**: TODOS los overlays del reel son de los 8 tipos de esta skill (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`). NO mezclar con pixel-mascot IA, NO complementar con WEB, NO generar `HOOK_*.png`. Si un cue del transcript no es léxicamente "tutorial" (ej: una frase de storytelling, una declaración, un CTA), convertirlo al tipo más cercano — típicamente `callout` variant `info` para declaraciones/facts o `callout` variant `success` para CTAs/cierres. Razón: la consistencia visual completa del estilo capturas-tutorial es lo que Andrea valida; el cambio de capa entre captura UI y mascot pixel rompe el flow del viewer ([[feedback_modo_ui_puro]]).
+Cuando el usuario pide "capturas-tutorial" / "modo UI" / "solo estilo tutorial" para un video, asumir **modo PURO**: TODOS los overlays del reel son de los 8 tipos de esta skill (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`). NO mezclar con pixel-mascot IA, NO complementar con WEB, NO generar `HOOK_*.png`. Si un cue del transcript no es léxicamente "tutorial" (ej: una frase de storytelling, una declaración, un CTA), convertirlo al tipo más cercano — típicamente `callout` variant `info` para declaraciones/facts o `callout` variant `success` para CTAs/cierres. Razón: la consistencia visual completa del estilo capturas-tutorial es lo que el usuario valida; el cambio de capa entre captura UI y mascot pixel rompe el flow del viewer ([[feedback_modo_ui_puro]]).
 
 ## Catálogo de tipos (9)
 
@@ -52,7 +52,7 @@ Cuando Andrea pide "capturas-tutorial" / "modo UI" / "solo estilo tutorial" para
 
 ### Regla canónica de `claude-input`
 
-Cuando el guion/transcript mencione UNA skill, slash command, prompt, o cualquier interacción de "escribirle/decirle a Claude algo", **el visual SIEMPRE debe ser un `claude-input` — no un callout**. Razón: la simulación de UI (popup + caja de input con cursor) comunica "skill" / "prompt" sin necesidad de un párrafo de texto, queda más vertical que un callout, y mantiene consistencia con el resto del flow Claude del video. Validado con Andrea en r08 de `2026-05-22_claude_basura_guiones` (callout horizontal → claude-input vertical, ratio 4.7:1 → 1.5:1, paragraph → 0 párrafos).
+Cuando el guion/transcript mencione UNA skill, slash command, prompt, o cualquier interacción de "escribirle/decirle a Claude algo", **el visual SIEMPRE debe ser un `claude-input` — no un callout**. Razón: la simulación de UI (popup + caja de input con cursor) comunica "skill" / "prompt" sin necesidad de un párrafo de texto, queda más vertical que un callout, y mantiene consistencia con el resto del flow Claude del video. Validado con el usuario en r08 de `2026-05-22_claude_basura_guiones` (callout horizontal → claude-input vertical, ratio 4.7:1 → 1.5:1, paragraph → 0 párrafos).
 
 **Defaults del template** (si no se especifican en `data`):
 - `popup_header`: `"Skills disponibles"`
@@ -99,7 +99,7 @@ bash ~/.claude/skills/capturas-tutorial-formula100k/scripts/install.sh
 
 Instala puppeteer + js-yaml en `node_modules/` local de la skill. Solo corre completo la primera vez.
 
-**Paso 2.** Preguntar a Andrea el contenido. Si no es obvio, usar `AskUserQuestion` para confirmar:
+**Paso 2.** Preguntar al usuario el contenido. Si no es obvio, usar `AskUserQuestion` para confirmar:
 - ¿Qué tipo? (step / terminal / callout / etc.)
 - ¿Contenido literal? (comando exacto, texto del paso, etc.)
 - ¿Fondo crema o transparente?
@@ -137,7 +137,7 @@ node render.mjs --type keys --out atajo_cmdv.png \
 
 # Screenshot enmarcado
 node render.mjs --type screenshot --out captura_exito.png \
-  --data '{"frame":"mac","title":"Terminal","image":"/Users/kissita/Desktop/captura.png","caption":"Cuando termina vas a ver Claude Code successfully installed"}'
+  --data '{"frame":"mac","title":"Terminal","image":"~/Desktop/captura.png","caption":"Cuando termina vas a ver Claude Code successfully installed"}'
 
 # Comparison antes/después
 node render.mjs --type comparison --out compare.png \
@@ -202,8 +202,8 @@ recursos:
 
 ```bash
 node ~/.claude/skills/capturas-tutorial-formula100k/scripts/render.mjs \
-  --manifest /Users/kissita/Documents/FORMULA100K/RECURSOS\ VIDEOS/2026-05-22_claude-install/MANIFEST_UI.yml \
-  --out /Users/kissita/Documents/FORMULA100K/RECURSOS\ VIDEOS/2026-05-22_claude-install/USER/
+  --manifest ~/Documents/FORMULA100K/RECURSOS\ VIDEOS/2026-05-22_claude-install/MANIFEST_UI.yml \
+  --out ~/Documents/FORMULA100K/RECURSOS\ VIDEOS/2026-05-22_claude-install/USER/
 ```
 
 **IMPORTANTE — destino:** los PNGs van a `USER/`, **NO** a una subcarpeta `UI/`. Razón: `editor-video-formula100k` solo lee tres carpetas (`IA/`, `USER/`, `WEB/`) y consolida todos los overlays en UNA sola tabla `## Overlays` del MANIFEST.md principal. Las capturas tutorial conviven con los screenshots manuales del usuario en `USER/` — el editor las distingue por el prefijo del filename (`r<NN>_<tipo>_*` viene de batch UI; `T<N>_*` viene de captura manual).
@@ -235,7 +235,7 @@ Extraer: número de orden (si no es explícito, contador incremental) + la frase
 - `"ejecuta"` · `"corre esto"` · `"corre el comando"`
 - `"en la terminal,?"` · `"abre la terminal y"`
 - `"escribe (esto|este comando)"`
-- **Señal fuerte**: si el video muestra terminal real en pantalla, considerar OCR del frame para capturar el comando literal. Si Andrea dicta el comando, capturar verbatim limpiando muletillas.
+- **Señal fuerte**: si el video muestra terminal real en pantalla, considerar OCR del frame para capturar el comando literal. Si el usuario dicta el comando, capturar verbatim limpiando muletillas.
 
 Extraer: `command` = el comando exacto. Si la URL/dominio aparece, conservar.
 
@@ -287,7 +287,7 @@ Extraer: lista de teclas en orden de la frase.
 - `"ve a"` · `"entra a"` · `"abre (el navegador|chrome|safari) en"`
 - Cualquier URL `https?://\S+` mencionada en el audio.
 
-Extraer: URL completa. Si Andrea dice solo el dominio (`"entra a formula100k.app"`), reconstruir.
+Extraer: URL completa. Si el usuario dice solo el dominio (`"entra a formula100k.app"`), reconstruir.
 
 ### `comparison`
 - `"esto (NO|sí)"` con contraste · `"antes,? \w+ → ahora,?"` · `"no hagas X, haz Y"` · `"el error es,? .* lo correcto es"`
@@ -319,17 +319,17 @@ Cada tipo tiene una posición y un tamaño sugeridos cuando se usa como overlay 
 
 Estos defaults se incluyen en el MANIFEST.md como sugerencia. El editor-video los respeta salvo que el usuario los override.
 
-**Por qué estos anchos:** sobre talking-head 9:16, los PNGs vienen ya recortados al bbox real del contenido (script aplica `sharp.trim() + extend(40px)`). Si el manifest pide 640, el overlay ocupa ~60% del canvas — texto se vuelve marginalmente legible en móvil. 940-980 es el sweet spot donde el contenido lee bien sin chocar con el header y sin tapar la cara de Andrea.
+**Por qué estos anchos:** sobre talking-head 9:16, los PNGs vienen ya recortados al bbox real del contenido (script aplica `sharp.trim() + extend(40px)`). Si el manifest pide 640, el overlay ocupa ~60% del canvas — texto se vuelve marginalmente legible en móvil. 940-980 es el sweet spot donde el contenido lee bien sin chocar con el header y sin tapar la cara del usuario.
 
 ---
 
 ## Reglas obligatorias
 
-1. **NO 9:16 para overlays**: por preferencia de Andrea ([[feedback_aspect_ratio_graficos_video]]). Default: 16:9 o 1:1.
+1. **NO 9:16 para overlays**: por preferencia del usuario ([[feedback_aspect_ratio_graficos_video]]). Default: 16:9 o 1:1.
 2. **NO emojis decorativos** dentro de los textos salvo que el contenido los requiera (ej: el ícono del callout sí, un 🔥 al final de un body NO).
-3. **NO inventar comandos / URLs / nombres de archivo**: si Andrea dice "el comando de install", pedirle el comando exacto antes de renderizar.
+3. **NO inventar comandos / URLs / nombres de archivo**: si el usuario dice "el comando de install", pedirle el comando exacto antes de renderizar.
 4. **Markdown ligero solamente**: `**bold**` y `` `code` ``. Cualquier otro HTML se escapa.
-5. **PNG transparente por default** (Andrea decide en edición). Si pide explícitamente con fondo crema, usar `--bg cream`.
+5. **PNG transparente por default** (el usuario decide en edición). Si pide explícitamente con fondo crema, usar `--bg cream`.
 6. **Validar visual con Read después de renderizar**: confirmar que el texto no quedó clipeado, que el comando se ve completo, que las teclas no se desbordan.
 
 ## Errores y fallbacks
@@ -359,5 +359,5 @@ Estos defaults se incluyen en el MANIFEST.md como sugerencia. El editor-video lo
 ## Roadmap (futuro, no implementado)
 
 - Animación: terminal con efecto "typing" del comando (APNG / WebM con alpha)
-- OCR auto del frame del video cuando muestra terminal real → genera el `terminal.png` sin que Andrea dicte
+- OCR auto del frame del video cuando muestra terminal real → genera el `terminal.png` sin que el usuario dicte
 - Variantes adicionales: `progress-bar`, `file-tree`, `diff-block`

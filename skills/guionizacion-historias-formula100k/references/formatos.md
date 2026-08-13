@@ -127,7 +127,7 @@ Cada slide debe tener un formato definido. Estos 15 son los más efectivos segú
 
 # REGLAS DE ASIGNACIÓN DE FORMATO POR SLIDE
 
-Basadas en patrones observados en 11 secuencias reales de Andrea:
+Basadas en patrones observados en 11 secuencias reales del usuario:
 
 | Posición del slide | Formato preferido | Por qué |
 |---|---|---|

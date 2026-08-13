@@ -108,7 +108,7 @@ Solo pregunta UNA cosa al final de cada bloque:
 ### Pregunta 8.1 — Identificador de archivo
 > "Para guardar tu estrategia, ¿cuál es tu nombre o handle de Instagram? Lo uso como nombre de archivo."
 
-Convierte a kebab-case: "Andrea Vega" → "andrea-vega", "@maria_marketing" → "maria-marketing".
+Convierte a kebab-case: "María Pérez" → "maria-perez", "@maria_marketing" → "maria-marketing".
 
 ---
 

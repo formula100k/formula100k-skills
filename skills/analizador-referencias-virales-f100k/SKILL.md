@@ -258,7 +258,7 @@ Debajo de la tabla:
 ### Guardado en Obsidian (siempre, aunque el usuario no lo pida)
 
 ```
-/Users/kissita/Documents/Vault-F100K/03-INVESTIGACION/refs-virales-[keyword-slug]-[YYYY-MM-DD].md
+~/Documents/Vault-F100K/03-INVESTIGACION/refs-virales-[keyword-slug]-[YYYY-MM-DD].md
 ```
 
 Formato del archivo:

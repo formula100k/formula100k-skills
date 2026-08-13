@@ -4,7 +4,7 @@
 
 ---
 
-### 1. ESTILO FORMULA 100K (DEFAULT — Andrea Estratega)
+### 1. ESTILO FORMULA 100K (DEFAULT)
 **Cuándo usar:** Redes sociales, marketing digital, crecimiento personal, emprendimiento
 **Patrón:** Fondo negro + persona centrada + cartel amarillo + íconos de plataformas
 

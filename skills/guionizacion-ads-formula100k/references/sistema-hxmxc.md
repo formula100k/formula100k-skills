@@ -147,7 +147,7 @@ Cuando entregues 30+ variantes, formato:
 
 Después de 30 días, los 3 mejores ads se convierten en "ads base". Sobre esos generas la **segunda generación**:
 
-- **Misma base + variación de audio:** mismo guion, voces distintas (Andrea en cámara vs Andrea en voiceover sobre B-roll)
+- **Misma base + variación de audio:** mismo guion, voces distintas (el usuario en cámara vs el usuario en voiceover sobre B-roll)
 - **Misma base + variación de visual:** mismo guion, encuadres distintos
 - **Misma base + variación de texto en pantalla:** mismo audio, captions distintos en formato
 

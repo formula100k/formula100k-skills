@@ -160,7 +160,7 @@ Cómo aplicarla: [3-4 pasos concretos]
 
 ## Notas sobre el tono del diagnóstico
 
-- **Honesto pero respetuoso** — Andrea valora la verdad técnica, no el ego boost
+- **Honesto pero respetuoso** — El usuario valora la verdad técnica, no el ego boost
 - **Específico** — siempre referencia elementos concretos de la imagen ("el texto azul que dice X", "la planta del fondo derecho")
 - **Accionable** — cada recomendación implementable hoy
 - **Sin tecnicismos sin explicar** — si usas "saliencia" o "jerarquía", explica brevemente

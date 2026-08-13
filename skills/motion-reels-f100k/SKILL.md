@@ -165,7 +165,7 @@ CUT_SCRIPT=$(find "$HOME/.claude" -name cut_silences_and_fillers.py -path '*edit
 python3 -c "import numpy" 2>/dev/null || pip3 install --quiet numpy 2>/dev/null || true
 
 # Corta silencios >~0.20s, muletillas (eh/em/uhh), repeticiones ("que que")
-# y reinicios de frase (Andrea se traba y reempieza → conserva el último intento).
+# y reinicios de frase (el usuario se traba y reempieza → conserva el último intento).
 # Produce, dentro de VIDEO_DIR:
 #   _source_cut.mov  ← video ya limpio
 #   captions.json    ← palabras word-level YA sobre la línea de tiempo cortada

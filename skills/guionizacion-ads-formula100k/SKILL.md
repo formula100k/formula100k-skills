@@ -214,7 +214,7 @@ Entregas en tabla:
 
 9. **Español NEUTRO siempre.** Prohibido vos/tenés/copiá/acá. Usa tú/tienes/copia/aquí. (Ver memoria `feedback_espanol_neutro.md`).
 
-10. **El vehículo único de la marca SIEMPRE aparece explícito en el meat.** Si Andrea pide un ad para F100K, el vehículo único es "creación de contenido orientada a venta" (no productividad/gestión — ver memoria `feedback_f100k_angulo_creacion_para_vender.md`).
+10. **El vehículo único de la marca SIEMPRE aparece explícito en el meat.** Si el usuario pide un ad para F100K, el vehículo único es "creación de contenido orientada a venta" (no productividad/gestión — ver memoria `feedback_f100k_angulo_creacion_para_vender.md`).
 
 11. **NUNCA uses "Comenta [PALABRA]" como CTA en un ad pagado.** Ese patrón es exclusivo de contenido orgánico. En ads pagados el CTA siempre empieza con "Dale click al botón de aquí abajo para…" seguido de una de las 2 plantillas (ingreso directo o VSL intermedio). Mezclar los dos formatos quiebra el flujo del ad y confunde al espectador.
 
@@ -241,7 +241,7 @@ Entregas en tabla:
 Guarda el output como `.md` en:
 
 ```
-/Users/kissita/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/YYYY-MM-DD_[nombre-campaña].md
+~/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/YYYY-MM-DD_[nombre-campaña].md
 ```
 
 Si la carpeta `guiones-propios/` no existe, créala.

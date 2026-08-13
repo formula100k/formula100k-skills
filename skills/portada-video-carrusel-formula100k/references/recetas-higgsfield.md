@@ -24,7 +24,7 @@ Pasos previos para las selfies locales (cliente CLI, sin widget):
 2. `curl -X PUT -H "Content-Type: image/jpeg" --data-binary @archivo.jpg '<upload_url>'`
 3. `media_confirm` con `type:"image"` y `media_ids:[...]`.
 
-Carpeta default de selfies de Andrea: `/Users/kissita/Documents/ANDREA SELFIES`.
+Carpeta de selfies del usuario, si la tiene configurada: `~/Documents/MIS SELFIES`. Si no existe, pregúntale la ruta.
 
 > **DEJA CIELO/ESPACIO LIBRE ARRIBA.** El título va en el tercio superior; si la foto llena
 > todo el cuadro, el texto pierde legibilidad.

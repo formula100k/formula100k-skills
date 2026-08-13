@@ -89,7 +89,7 @@ Para ads muy cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+
 
 `[NOMBRE] no es un curso. No es una asesoría. Es [categoría nueva] que [resultado específico] en [tiempo concreto].`
 
-**Ejemplos F100K (con vehículo único de Andrea):**
+**Ejemplos F100K (con vehículo único del usuario):**
 
 - "Por eso construí FÓRMULA 100K — la única comunidad para creadoras que vende creando contenido orientado a venta, no a vanidad. Adentro tienes acceso a YapperMethod (genera guiones en 30 segundos con tu voz), el calendario plug-and-play, y las 33 estructuras virales que usé para llegar a $100K/mes sin equipo."
 

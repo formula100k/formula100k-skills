@@ -50,7 +50,7 @@ Skill que toma una cuenta de Instagram, mira los últimos N reels reales, mide q
 
 ## Output esperado
 
-Carpeta `/Users/kissita/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/` con:
+Carpeta `~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/` con:
 
 ```
 00_dataset.json              metadata cruda + stats first-party + carruseles
@@ -80,7 +80,7 @@ Preguntar SOLO si falta:
 2. **¿Comparación top vs bottom?** (default: TOP 10 vs BOTTOM 10 → scrapear ~70 para tener pool). Si piden "los últimos N" sin comparar, scrapear N.
 3. ¿Algún ángulo específico? (gancho verbal / visual / temática) — si no responde, cubrir los tres.
 
-**Estadísticas nativas de IG (oro puro):** si Andrea pega los datos de "Estadísticas de contenido" (guardados, compartidos, seguidores nuevos, % de alcance de no-seguidores, vistas totales de la cuenta), **integralos** — el reel-scraper NO trae guardados/compartidos/seguidores ni el % de no-seguidores, y esos números cambian el análisis (revelan el motor de "alcance silencioso por DM" de los carruseles y la desconexión guardar↔seguir). También pueden mencionar **carruseles top** que el reel-scraper no captura: agregarlos como data manual en `00_dataset.json` (campo `carousels`).
+**Estadísticas nativas de IG (oro puro):** si el usuario pega los datos de "Estadísticas de contenido" (guardados, compartidos, seguidores nuevos, % de alcance de no-seguidores, vistas totales de la cuenta), **integralos** — el reel-scraper NO trae guardados/compartidos/seguidores ni el % de no-seguidores, y esos números cambian el análisis (revelan el motor de "alcance silencioso por DM" de los carruseles y la desconexión guardar↔seguir). También pueden mencionar **carruseles top** que el reel-scraper no captura: agregarlos como data manual en `00_dataset.json` (campo `carousels`).
 
 Convertir fecha relativa de hoy a `YYYY-MM-DD` para el nombre de la carpeta.
 
@@ -127,7 +127,7 @@ Ordenar por `videoPlayCount` desc → TOP N (arriba) + BOTTOM N (abajo).
 
 ## PASO 3 — Guardar dataset y descargar los N videos
 
-Crear carpeta: `/Users/kissita/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/`
+Crear carpeta: `~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/`
 
 Guardar `00_dataset.json` con un subset legible:
 ```json
@@ -215,7 +215,7 @@ Para cada BOTTOM, deconstruir los errores específicos:
 4. ¿La duración + gancho débil hunden retención?
 5. ¿El audio empieza con el tema EQUIVOCADO (la conclusión emocional antes del conflicto)?
 
-Identificar los **12 patrones invisibles** (los 2 últimos SOLO si hay stats first-party). Patrones validados en la auditoría de @andreaestratega (ver [[feedback_criterio_ganchos_andrea]]):
+Identificar los **12 patrones invisibles** (los 2 últimos SOLO si hay stats first-party). Patrones validados en auditorías reales de cuentas F100K:
 1. Noticia/evento con fecha > tutorial de función ("Claude puede…")
 2. Deseo del espectador > capacidad de la herramienta
 3. Hablar de TI ("si tú…") > hablar de MIS/YO ("mis ganchos")
@@ -287,7 +287,7 @@ Aplicar la **fórmula ganadora** detectada. Diseñar 6 layouts que sirvan de ref
 
 Para cada layout definir: texto del overlay (amarillo bold), primeras 10 palabras del audio, 3 razones mapeadas a los 12 patrones.
 
-**Si es la cuenta de Andrea (auditoría propia):** los layouts pueden mostrar una creadora genérica de marca (pelo lacio castaño, ladrillo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
+**Si es la cuenta del usuario (auditoría propia):** los layouts pueden mostrar una creadora genérica de marca (pelo lacio castaño, ladrillo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
 
 Verificar saldo:
 ```
@@ -366,7 +366,7 @@ Las imágenes se referencian con paths relativos (`hook_1.png`, `propuestas/p1.p
 
 Al terminar, abrir el archivo:
 ```bash
-open "/Users/kissita/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<fecha>/index.html"
+open "~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<fecha>/index.html"
 ```
 
 ---
@@ -386,10 +386,10 @@ Ofrecer: "¿Quieres más variantes de un gancho, layouts para editores, o el cal
 
 ## PASO 11 — Encadenamiento opcional (si lo piden)
 
-La auditoría alimenta el resto del ecosistema. Si Andrea lo pide (o proactivamente al final):
+La auditoría alimenta el resto del ecosistema. Si el usuario lo pide (o proactivamente al final):
 - **Calendario de guiones** (`CALENDARIO_GUIONES.md`): una semana de guiones que cumplan SOLO el criterio ganador (cada uno con gancho textual/visual/verbal + guion teleprompter con re-hooks por segundo + CTA + nota de producción). Aplicar la jugada combinada carrusel→reel.
-- **Memoria**: guardar el criterio ganador como memoria `feedback` + puntero en `MEMORY.md` (ver [[feedback_criterio_ganchos_andrea]]).
-- **Segundo Cerebro**: copiar REPORTE.md + index.html + hooks + anatomía + calendario a `/Documents/OFICIAL SECOND BRAIND ANDREA 11 JUNIO/outputs/<fecha>_auditoria-ganchos-cuenta/`.
+- **Memoria**: guardar el criterio ganador como memoria `feedback` + puntero en `MEMORY.md`.
+- **Segundo Cerebro**: copiar REPORTE.md + index.html + hooks + anatomía + calendario a `~/Documents/SEGUNDO CEREBRO/outputs/<fecha>_auditoria-ganchos-cuenta/`.
 - **Yapper**: subir cada guion con `mcp__yapper__save_yapper_script` (cuenta principal, `scheduled_date`, `entry_type` script/carousel).
 
 ---
@@ -399,9 +399,9 @@ La auditoría alimenta el resto del ecosistema. Si Andrea lo pide (o proactivame
 - **NO** confundir `videoViewCount` con `videoPlayCount`. Usar SIEMPRE `playCount` para ordenar (es lo que IG muestra públicamente).
 - **NO** saltarse el ffmpeg con `-ss 1` — el frame 0 suele ser negro o thumbnail genérico.
 - **NO** usar nano_banana al 1k para los mockups — texto sale ilegible. SIEMPRE 2k mínimo (4k si el saldo lo permite). Ver [[feedback_avatar_imagen]].
-- **NO** generar mockups con la cara EXACTA de nadie. Si auditas OTRA cuenta, layouts genéricos del estilo de esa cuenta. Si es la propia cuenta de Andrea, layouts de una creadora genérica de marca como referencia para editores (no su cara real).
+- **NO** generar mockups con la cara EXACTA de nadie. Si auditas OTRA cuenta, layouts genéricos del estilo de esa cuenta. Si es la propia cuenta del usuario, layouts de una creadora genérica de marca como referencia para editores (no su cara real).
 - **NO** scrapear solo N cuando piden "top N vs bottom N": eso da los N más RECIENTES. Scrapear ~70 y ordenar por playCount.
-- **NO** ignorar las estadísticas nativas si Andrea las pega: guardados/compartidos/seguidores/%no-seguidores NO vienen del scraper y cambian el análisis.
+- **NO** ignorar las estadísticas nativas si el usuario las pega: guardados/compartidos/seguidores/%no-seguidores NO vienen del scraper y cambian el análisis.
 - **SÍ** marcar el sesgo de recencia (reels <5 días en el bottom).
 - **NO** codificar el carrier (PASO 6.5) mirando primero quién es top/bottom — eso es la circularidad que hundió el estudio *1000 Ganchos*. Codifica a ciegas (frames barajados) y revela después.
 - **NO** reportar el carrier como regla universal ("el visual gana"). Se INVIERTE por nicho (ventas/mindset lideran texto/hablado): reporta SIEMPRE el dato de ESA cuenta, y con n chico dilo como "señal, no prueba".

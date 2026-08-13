@@ -1,12 +1,12 @@
 # Perfil Visual de Marca — FÓRMULA 100K (Andrea Vega)
 
-> ⚠️ **ESTILO PREDETERMINADO (desde jul-2026): EDITORIAL OSCURO.** El scrapbook crema quedó como ALTERNATIVO (usar solo si Andrea lo pide: "scrapbook / estilo diario / crema").
+> ⚠️ **ESTILO PREDETERMINADO (desde jul-2026): EDITORIAL OSCURO.** El scrapbook crema quedó como ALTERNATIVO (usar solo si el usuario lo pide: "scrapbook / estilo diario / crema").
 
 ## Identidad Visual
-- Nombre de marca: FÓRMULA 100K · @andreaestratega
+- Nombre de marca: FÓRMULA 100K · @tuhandle
 - Estilo general (default): **editorial / magazine premium tech, cinematográfico, oscuro elegante**
 - Tono visual: aspiracional, premium, confiable; foto real full-bleed + serif itálica; prueba real con capturas
-- Referencia canónica: `/Users/kissita/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel "Mi stack de IA")
+- Referencia canónica: `~/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel "Mi stack de IA")
 
 ## Paleta de Colores (Editorial Oscuro)
 - Fondo base: `#050509` (casi negro) · cajas/ventanas `#0b0b10`
@@ -24,8 +24,8 @@
 
 ## Layout Base (Editorial Oscuro)
 - Orientación: titular a la izquierda en portada; contenido centrado en interiores
-- Fondo: foto REAL de Andrea full-bleed (nítida en portada/CTA; blur(22px) brightness(.7) en interiores) + overlay oscuro degradado
-- Uso de imágenes: foto real de Andrea SIEMPRE (`ANDREA ADN` / `ANDREA SELFIES`); capturas reales enmarcadas en ventana Mac
+- Fondo: foto REAL del usuario full-bleed (nítida en portada/CTA; blur(22px) brightness(.7) en interiores) + overlay oscuro degradado
+- Uso de imágenes: foto real del usuario SIEMPRE (`MI ADN VISUAL` / `MIS SELFIES`); capturas reales enmarcadas en ventana Mac
 - Elementos: eyebrow tracked, handle, número "#N" serif, íconos squircle (border-radius 24%), flecha SVG dibujada a mano, badge "CAPTURA REAL", caja glass oscura para CTA
 - NO usar: crema, washi tape, post-its, stickers-decoración (eso es solo el estilo alternativo scrapbook)
 
@@ -35,7 +35,7 @@
 - CTA visual: titular grande + subline serif con keyword dorada + caja glass oscura con borde dorado + 💜
 
 ## Prompt de Diseño (Editorial Oscuro)
-"Carrusel Instagram FÓRMULA 100K (Andrea Vega), estilo editorial premium tech oscuro: fondo casi negro `#050509` con foto real de Andrea full-bleed cinematográfica + overlay oscuro degradado; interiores con la foto desenfocada. Titulares MEZCLANDO Helvetica/-apple-system 800 (letter-spacing negativo) con Georgia serif itálica blanca; cuerpo Georgia serif 44px off-white centrado. Eyebrow UPPERCASE tracked arriba-izq, @andreaestratega arriba-der. Palabras clave en dorado `#F0B24A`. Capturas de pantalla REALES enmarcadas en ventana de Mac (barra + 3 dots) con sombra + flecha a mano + badge verde 'CAPTURA REAL'. CTA con caja glass oscura de borde dorado y 💜. Estilo: cinematográfico, magazine, premium, alto contraste. SIN crema, SIN washi tape, SIN stickers."
+"Carrusel Instagram FÓRMULA 100K (Andrea Vega), estilo editorial premium tech oscuro: fondo casi negro `#050509` con foto real del usuario full-bleed cinematográfica + overlay oscuro degradado; interiores con la foto desenfocada. Titulares MEZCLANDO Helvetica/-apple-system 800 (letter-spacing negativo) con Georgia serif itálica blanca; cuerpo Georgia serif 44px off-white centrado. Eyebrow UPPERCASE tracked arriba-izq, @tuhandle arriba-der. Palabras clave en dorado `#F0B24A`. Capturas de pantalla REALES enmarcadas en ventana de Mac (barra + 3 dots) con sombra + flecha a mano + badge verde 'CAPTURA REAL'. CTA con caja glass oscura de borde dorado y 💜. Estilo: cinematográfico, magazine, premium, alto contraste. SIN crema, SIN washi tape, SIN stickers."
 
 ---
 

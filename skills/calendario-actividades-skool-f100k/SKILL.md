@@ -95,7 +95,7 @@ Un calendario pobre (2–3 chips sueltos) NO es el entregable. Un calendario viv
 
 Cada tema vive en `themes/<nombre>/` con `theme.json` (CSS vars + tipografía) y un `fondo.jpg` opcional:
 
-- **`alquimista-f100k`** — el flagship (fondo de laboratorio alquimista, azul profundo). El de la comunidad de Andrea.
+- **`alquimista-f100k`** — el flagship (fondo de laboratorio alquimista, azul profundo). El de la comunidad del usuario.
 - **`minimalista-claro`** — fondo claro, sin imagen, 100% CSS. Marca sobria.
 - **`oscuro-neon`** — morado/neón, sin imagen, 100% CSS.
 

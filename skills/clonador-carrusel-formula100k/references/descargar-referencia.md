@@ -73,7 +73,7 @@ Si el link de TikTok es un video normal (no photo mode) → avisar que el clonad
 
 Solo si Apify falla (post privado, sin red, o el actor no devuelve imágenes):
 
-1. Invocar la skill `agent-browser` con la sesión logueada de Andrea.
+1. Invocar la skill `agent-browser` con la sesión logueada del usuario.
 2. Abrir el post.
 3. Capturar la portada y avanzar el carrusel capturando cada slide (una captura por slide) a
    `$SCRATCH/carrusel-ref/slide-XX.png`.

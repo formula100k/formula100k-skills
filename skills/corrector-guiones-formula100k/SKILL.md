@@ -49,7 +49,7 @@ Diagnostica y corrige guiones de video aplicando los frameworks completos de FÓ
 
 ## Cuándo se activa
 
-Se activa cuando Andrea (o una alumna) pide:
+Se activa cuando el usuario (o una alumna) pide:
 - "Corrige este guion / mejora este guion / audita este guion"
 - "Revisa este reel / diagnóstico este script"
 - "Este guion no retiene / por qué no funciona"
@@ -58,20 +58,20 @@ Se activa cuando Andrea (o una alumna) pide:
 
 ## Contexto crítico antes de empezar
 
-**Usuaria:** Andrea Vega o una alumna de FÓRMULA 100K. Audiencia: emprendedoras hispanas.
+**Usuario:** creador/a de contenido que aplica FÓRMULA 100K. Audiencia: emprendedoras hispanas.
 
 **Material de referencia disponible:**
 - `frameworks.md` — Las 35 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
 - `ejemplos.md` — 3 ejemplos completos de diagnóstico (uno fuerte, uno débil, uno mixto)
-- Artifact educativo: `/Users/kissita/Documents/FORMULA100K/ARTIFACTS/f100k-guionizacion.html`
-- Material original: `/Users/kissita/Downloads/FW GUIONES/R1-R5`
+- Artifact educativo: `~/Documents/FORMULA100K/ARTIFACTS/f100k-guionizacion.html`
+- Material original: `~/Downloads/FW GUIONES/R1-R5`
 
 **Idioma:** Español neutro, sin voseo argentino. PROHIBIDO: vos, sos, tenés, podés, sabés, sentís, querés, debés, aplicás, Mostrá, Pintá, Creá, etc. USAR: tú, eres, tienes, puedes, sabes, sientes, quieres, debes, aplicas, Muestra, Pinta, Crea.
 
 ## Paso a paso del diagnóstico
 
 ### Paso 1: Recibir el guion
-Si Andrea no pega el guion completo, pídeselo. Acepta:
+Si el usuario no pega el guion completo, pídeselo. Acepta:
 - Texto pegado directamente
 - Ruta a un archivo (.txt, .docx, .srt)
 - Una nota de voz transcrita
@@ -295,7 +295,7 @@ Sigue este template EXACTO. No improvises secciones.
 - **NO inventar estructuras** — solo las 33 documentadas en `frameworks.md`
 - **NO inventar pilares de valor** — solo los 7 documentados
 - **NO usar voseo argentino** — siempre español neutro
-- **NO suavizar el diagnóstico** — Andrea valora honestidad estratégica, no validación vacía
+- **NO suavizar el diagnóstico** — El usuario valora honestidad estratégica, no validación vacía
 - **NO reescribir el guion completo si no hace falta** — corrige lo roto, conserva lo que funciona
 - **NO confundir viralidad con vacuidad** — un buen guion viral SIEMPRE tiene un pilar de valor
 - **NO inventar contenido nuevo** — si la idea base del guion no funciona, dilo. No la fabriques.
@@ -307,13 +307,13 @@ Sigue este template EXACTO. No improvises secciones.
 - Sé directo, no condescendiente
 - Si el guion es muy bueno, dilo y explica por qué (no infles defectos imaginarios)
 - Si el guion es muy malo, dilo y prioriza qué arreglar primero
-- Habla como Andrea: profesional, directa, con autoridad
+- Habla con la voz de la marca: profesional, directa, con autoridad
 - Usa los términos exactos del manual (Tríada del Gancho, Escala Viral, Pilar de Valor, etc.)
 
 ## Conexiones con otras skills
 
 - Si el problema es solo el CTA → sugiere usar `/optimizador-cta-formula100k`
-- Si Andrea quiere reescribir varios guiones de un video largo → sugiere `/transcripcion-youtube-formula100k`
+- Si el usuario quiere reescribir varios guiones de un video largo → sugiere `/transcripcion-youtube-formula100k`
 - Si quiere multiplicar el guion en otros formatos → sugiere `/multiplicador-de-contenido`
 - Si el guion suena a IA → sugiere `/guionizacion-humanizada`
 - Si necesita escribir desde cero (no corregir) → sugiere `/guionizacion-formula100k`

@@ -26,7 +26,7 @@ Instagram Stories usa fuentes nativas, todas sans-serif. Imitarlas con estas equ
 | **Typewriter** | "Courier Prime" |
 | **Neon** | hand-drawn glow font |
 
-**Default:** Classic (la más usada por Andrea).
+**Default:** Classic (la más usada por el usuario).
 
 **Tamaños relativos:**
 - Frase principal: **64-80pt** (tipografía dominante del slide)
@@ -52,7 +52,7 @@ Esto es lo que más distingue el "look IG nativo" de un diseño genérico.
 - Background: solid color (no degradados)
 ```
 
-### Las 5 cajas oficiales de Andrea:
+### Las 5 cajas oficiales del usuario:
 
 | Caja | Hex Background | Hex Text | Cuándo |
 |---|---|---|---|
@@ -69,7 +69,7 @@ Esto es lo que más distingue el "look IG nativo" de un diseño genérico.
 
 ## HIGHLIGHTS DE PALABRA (subrayado o color de fondo dentro del texto)
 
-Patrón usado por Andrea en 11/11 secuencias:
+Patrón usado por el usuario en 11/11 secuencias:
 
 ### Highlight de fondo color:
 ```css
@@ -91,7 +91,7 @@ Padding del highlight: 2-4px horizontal, 0px vertical.
 
 ### 1. Flecha amarilla curva (drawn-by-hand style)
 
-Es el ELEMENTO ESTRELLA de Andrea.
+Es el ELEMENTO ESTRELLA del usuario.
 
 ```
 Color: #FFE93C (amarillo neón)
@@ -165,7 +165,7 @@ Los emojis se usan **grandes y solos** como anclas visuales, no decorativos.
 | ✋ 🤚 | 60-80px | Stop / atención |
 | 👇 | 40-60px | Apuntar al elemento de abajo |
 
-Los emojis SON los de Apple (no Google) — Andrea graba desde iPhone.
+Los emojis SON los de Apple (no Google) — El usuario graba desde iPhone.
 
 ---
 
@@ -186,14 +186,14 @@ Toda captura que se monte sobre el fondo debe llevar:
 
 ## FONDOS
 
-### Si el slide tiene foto base de Andrea:
+### Si el slide tiene foto base del usuario:
 - Aplicar **darken filter ligero** (10-15%) para que el texto destaque
 - Si la foto es muy clara/saturada, agregar gradiente sutil oscuro abajo (para dejar leer texto)
 - Si la foto es muy oscura, no tocar — el texto blanco resalta solo
 
 ### Si el slide es F9 (fondo de color, urgencia):
 Colores de fondo permitidos:
-- Crema/nude `#F5E6D3` (Andrea lo usa para frases reflexivas)
+- Crema/nude `#F5E6D3` (el usuario lo usa para frases reflexivas)
 - Negro puro `#000000` (urgencia + dramatismo)
 - Rojo intenso `#DC2626` (alerta máxima)
 
@@ -201,7 +201,7 @@ Colores de fondo permitidos:
 
 ## NIVEL DE "RUIDO VISUAL" DESEADO
 
-Andrea NO usa diseño limpio minimalista. Usa diseño **denso intencional** (estilo collage):
+El usuario NO usa diseño limpio minimalista. Usa diseño **denso intencional** (estilo collage):
 
 - 2-4 cajas de texto por slide
 - 1-2 elementos gráficos (flecha, X, ✓, emoji)
@@ -226,7 +226,7 @@ Cuando construyas el prompt para Banana/Higgsfield, incluí estos negativos:
 - NO watermarks or generated AI artifacts
 - NO over-saturated colors (use exact hex values)
 - NO low-quality emoji renderings
-- NO Hispanic stock-looking faces (use the photo of Andrea)
+- NO Hispanic stock-looking faces (use the photo of the creator)
 - NO duplicated/morphed faces
 ```
 
@@ -236,7 +236,7 @@ Cuando construyas el prompt para Banana/Higgsfield, incluí estos negativos:
 
 Si el motor lo permite (Higgsfield sí), pasa **siempre** estas referencias:
 
-1. **1-2 fotos de stories pasadas de Andrea** (de la carpeta de fotos, las que tienen ya el estilo aplicado) — como style reference
+1. **1-2 fotos de stories pasadas del usuario** (de la carpeta de fotos, las que tienen ya el estilo aplicado) — como style reference
 2. **La foto base elegida** del slide actual — como subject reference
 3. **Captura/mockup** específico del slide (si aplica) — como composition reference
 
@@ -250,10 +250,10 @@ Antes de marcar el slide como "listo", verifica:
 
 - [ ] La frase principal se lee desde 1 metro de distancia (en el preview de IG)
 - [ ] La paleta es de las 5 cajas oficiales (no colores random)
-- [ ] La cara de Andrea se ve igual a la foto base (no morphed)
+- [ ] La cara del usuario se ve igual a la foto base (no morphed)
 - [ ] No hay artefactos de IA (manos extras, texto basura)
 - [ ] El emoji se ve nítido (no pixelado)
 - [ ] El highlight amarillo/verde está SOLO sobre 1-3 palabras clave
 - [ ] El border radius de las cajas es 12-16px (no perfectamente cuadrado, no super redondo)
 - [ ] La captura/mockup tiene drop shadow sutil
-- [ ] El slide se siente "Andrea" (no genérico de stock)
+- [ ] El slide se siente propio de la marca (no genérico de stock)

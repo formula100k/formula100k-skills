@@ -43,7 +43,7 @@ Luego usar esa PNG como input de `gemini_edit_image`.
 
 Usar `gemini_generate_image` con descripción detallada.
 
-**Descripción física estándar para Andrea (adaptar para otros):**
+**Descripción física estándar para el usuario (adaptar para otros):**
 ```
 Latin American woman in her late 20s, long dark hair, warm skin tone,
 confident radiant smile, professional but approachable style,

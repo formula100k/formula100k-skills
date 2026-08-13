@@ -55,7 +55,7 @@ No es opcional.
 1. **Tema libre**: `"cómo afecta el azúcar al hígado"` → research con Tavily
 2. **URL de artículo**: `https://...` → extracción con supadata_extract o WebFetch
 3. **URL de YouTube**: `https://youtube.com/watch?v=...` → transcripción con supadata_transcript
-4. **Ruta .md** (guion ya destilado): `/Users/kissita/Documents/FORMULA100K/.../guion.md`
+4. **Ruta .md** (guion ya destilado): `~/Documents/FORMULA100K/.../guion.md`
 
 Si el input es ambiguo, **detecta automáticamente** (regex de URL → tipo) y procede sin preguntar.
 Si el tema es muy amplio (ej: "salud"), pide al usuario que lo acote en una pregunta corta.
@@ -146,7 +146,7 @@ mcp__higgsfield__generate_image({
 
 Polling con `job_status` cada 10–15s. Cuando termina, **descarga el .png** a:
 ```
-/Users/kissita/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/01_imagen_base.png
+~/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/01_imagen_base.png
 ```
 
 ### Paso 5 — Mostrar imagen al usuario y aprobar
@@ -183,7 +183,7 @@ FURminator, anti-flea, deshedding) → fallback automático a `kling3_0` con pro
 
 Polling. Cuando termina, descarga el .mp4 a:
 ```
-/Users/kissita/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/02_reel.mp4
+~/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/02_reel.mp4
 ```
 
 ### Paso 7 — Entregar al usuario
@@ -228,9 +228,9 @@ Skill:
 
 ## REGLAS NO NEGOCIABLES
 
-1. **Idioma**: Andrea escribe en español NEUTRO, no argentino. Aplica reemplazos vos→tú, tenés→tienes,
+1. **Idioma**: El usuario escribe en español NEUTRO, no argentino. Aplica reemplazos vos→tú, tenés→tienes,
    acá→aquí, mirá→mira en TODO copy generado. Si el input es en inglés, mantener inglés.
-2. **Output**: SIEMPRE en `/Users/kissita/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/`.
+2. **Output**: SIEMPRE en `~/Documents/FORMULA100K/INFOGRAFIAS/<slug-tema>/`.
    Estructura por carpeta: `01_imagen_base.png`, `02_reel.mp4`, `brief.yaml`, `prompts.md`.
 3. **No mockear el watermark** — agrégalo opcionalmente sólo si el usuario pide su handle (`@usuario`).
 4. **No inventar datos** — si el tema requiere datos verificables (estadísticas, propiedades médicas),

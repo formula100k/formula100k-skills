@@ -71,7 +71,7 @@ Cada variante debe especificar la composición visual con este nivel de detalle 
 - **Zona segura:** texto a mínimo 8% de los bordes verticales (evita corte por UI de IG).
 - **Tipografías:** una de [Inter Bold, Poppins Bold, Helvetica Neue Bold, Caveat para acentos manuscritos]. NO Arial. NO Times. NO Comic Sans (jamás).
 - **Paletas permitidas:**
-  - Crema/beige + negro + acento amarillo (estilo Andrea)
+  - Crema/beige + negro + acento amarillo (estilo F100K)
   - Negro puro + blanco + acento rojo o amarillo
   - Azul oscuro + blanco + acento naranja
   - Verde oscuro + crema + acento dorado
@@ -193,7 +193,7 @@ Todos los valores en escala 0-100 antes de aplicar pesos.
 
 ### Insight clave heredado del primer LAB real
 
-> En el test "tokens Claude" (2026-05-15), la diferencia entre V1 ganadora (61.8) y V2 perdedora (52.3) se explicó casi enteramente por **Default Mode**: V1 = 48.7 (cerebro enfocado), V2 = 60.7 (cerebro divagando). Hook_score absoluto fue bajo en ambas (43 vs 33) porque la mujer AI no replica charisma real — esperar lift de 10-15 pts al grabar con Andrea. Conclusión: **mira siempre la curva del DMN antes de declarar ganador.**
+> En el test "tokens Claude" (2026-05-15), la diferencia entre V1 ganadora (61.8) y V2 perdedora (52.3) se explicó casi enteramente por **Default Mode**: V1 = 48.7 (cerebro enfocado), V2 = 60.7 (cerebro divagando). Hook_score absoluto fue bajo en ambas (43 vs 33) porque la mujer AI no replica charisma real — esperar lift de 10-15 pts al grabar con el usuario. Conclusión: **mira siempre la curva del DMN antes de declarar ganador.**
 
 ### Bandas de calidad del score_final
 

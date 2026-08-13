@@ -195,7 +195,7 @@ Esto es lo que hace que el calendario sea TUYO y no genérico.
 
 **Guardar en:**
 ```
-/Users/kissita/Documents/Vault-F100K/03-INVESTIGACION/brief-[nicho-slug]-[YYYY-MM-DD].md
+~/Documents/Vault-F100K/03-INVESTIGACION/brief-[nicho-slug]-[YYYY-MM-DD].md
 ```
 
 ---

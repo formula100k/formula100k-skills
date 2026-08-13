@@ -29,7 +29,8 @@ Resultado: **`slide-01-ANIMADO.mp4`** (1080×1350, 5s, sin audio) — va de PRIM
 ### PASO 0 — Recoger insumos
 Pregunta / confirma:
 - **Foto gancho:** ¿ya existe (path o `job_id` de Higgsfield) o hay que generarla? Si hay que generarla,
-  pide/usa 2-3 selfies del usuario (Andrea: `/Users/kissita/Documents/ANDREA SELFIES`).
+  pide/usa 2-3 selfies del usuario (si tiene carpeta configurada, p. ej. `~/Documents/MIS SELFIES`;
+  si no existe, pregúntale la ruta — no inventes una).
 - **Título:** 3 partes — línea pequeña arriba / título grande / línea pequeña de cierre — + sub tipo
   "DESLIZA PARA VER →". (Suele venir del slide 1 del carrusel que ya armaste.)
 - **Carpeta de salida** del carrusel (ej. `…/CARRUSELES ESPEJO/FECHA_tema/`). Crea `recursos/` dentro.

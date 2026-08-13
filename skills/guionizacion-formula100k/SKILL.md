@@ -433,11 +433,14 @@ en lugar del fallback de Google.
 
 ---
 
-## PASO FINAL — Handoff a calibración (SOLO si el guion es para Andrea)
+## PASO FINAL — Calibración contra la data de TU cuenta (opcional)
 
-Si el guion que acabas de generar es para **Andrea (@andreaestratega)**, no lo des por terminado:
-corre inmediatamente la skill **`calibrador-guion-andrea`** sobre este guion. Ese pase lo re-ingenia
-contra la data medida de SU cuenta (gancho del segundo 1, tríada visual, CTA de sus reels top,
-matriz ángulo→métrica, kill-list) y entrega scorecard + diff anotado + guion final calibrado.
+Este guion ya es el entregable final. Si además tienes data medida de tu propia cuenta
+(una auditoría de tus reels: qué ganchos retienen, qué CTAs convierten, qué formatos
+se hunden), pásale un segundo filtro con `auditor-ganchos-cuenta-formula100k` y ajusta:
 
-Para cualquier otra clienta, este es el entregable final (no corras el calibrador).
+- El gancho del segundo 1 contra los ganchos que ya te funcionaron.
+- El CTA contra el que más comentarios/DMs te trajo.
+- La kill-list: lo que en TU cuenta ya demostró no funcionar.
+
+Si no tienes esa data todavía, no inventes números: el guion se entrega tal cual.

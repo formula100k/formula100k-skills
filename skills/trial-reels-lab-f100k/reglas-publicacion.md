@@ -90,4 +90,4 @@ Pero no se puede llenar el feed de eso: se vuelve transaccional y quema la audie
 
 **El circuito completo:** comentario → automatización de DM → lead magnet con email gate → newsletter → YouTube → llamada. Cada pieza alimenta a la siguiente, y el tráfico de IG hacia YouTube además le enseña al algoritmo de YouTube quién es tu audiencia.
 
-Para Andrea esto ya existe: los lead magnets de F100K están construidos y viven en el hub de regalos. Lo que falta es enchufarlos sistemáticamente al CTA de cada tanda.
+Para el usuario esto ya existe: los lead magnets de F100K están construidos y viven en el hub de regalos. Lo que falta es enchufarlos sistemáticamente al CTA de cada tanda.

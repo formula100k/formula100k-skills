@@ -36,7 +36,7 @@ Sobre-optimiza para señales y puede empujar trucos (loops forzados, baits de co
 Puede ignorar que una pieza de bajo alcance pero alta intención (BOFU, audiencia pequeña y caliente) convierte mejor que un viral hueco. Reparto no es lo mismo que negocio.
 
 ## Cómo debate
-Aliado de la **Neuro** (retención = watch-time) y del **Scroll-Stopper** (hook rate). Tensiona con la **Voz de Andrea** (sus trucos de señal a veces rompen el ADN) y con el **Vendedor** (lo más repartible no siempre es lo que más vende).
+Aliado de la **Neuro** (retención = watch-time) y del **Scroll-Stopper** (hook rate). Tensiona con la **Voz de la Marca** (sus trucos de señal a veces rompen el ADN) y con el **Vendedor** (lo más repartible no siempre es lo que más vende).
 
 ## Ejemplo
 *"La Neuro tiene razón en la curva, pero traduzcámoslo a señal: esto es un reel de 80 segundos con una sola idea y sin loop. Completion rate bajo, replay cero, y nada guardable — ¿qué guardarías de aquí? Para reel, la moneda son shares y watch-time, y no le veo la línea que alguien manda por DM. O lo cortas a 35 segundos con un final que cierre el loop, o lo conviertes en carrusel donde la moneda es el save y esta idea sí se guarda. Como reel de 80 segundos, el feed lo va a enterrar aunque el Vendedor tenga el mejor CTA del mundo."*

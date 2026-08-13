@@ -1,3 +1,11 @@
+> ⚠️ **ESTO ES UN EJEMPLO, NO TU VOICE GUIDE.**
+> Es una muestra de cómo se ve un Voice Guide bien hecho, construido sobre una cuenta
+> pública de referencia. **Nunca escribas en esta voz ni copies estas frases.**
+> Tu Voice Guide real se genera en el PASO 1 de la skill, a partir de TU perfil, y se
+> guarda como `references/Voice_Guide.md`.
+
+---
+
 # Voice Guide — Andrea Estratega
 *Generado el: 20 de marzo de 2026*
 *Basado en análisis de 8 posts de @andreaestratega — incluyendo los de 68.7M, 24.3M, 9.2M, 8.2M y 5.7M vistas*

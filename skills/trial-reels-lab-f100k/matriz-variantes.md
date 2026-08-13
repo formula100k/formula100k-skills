@@ -168,7 +168,7 @@ Si cambian dos cosas a la vez, el resultado no dice cuál fue la que movió la a
 
 ## Reglas de posición (validadas en producción)
 
-- **Superior:** el **borde inferior** del overlay queda al ras del cabello. En un 9:16 de Andrea el hairline está ~40-45% desde arriba. Flotando arriba en el vacío se ve desconectado — es un error que ya se corrigió una vez.
+- **Superior:** el **borde inferior** del overlay queda al ras del cabello. En un 9:16 del usuario el hairline está ~40-45% desde arriba. Flotando arriba en el vacío se ve desconectado — es un error que ya se corrigió una vez.
 - **Inferior:** a la altura del pecho, `bottom: 520px` en 1080×1920. Nunca subir de la barbilla.
 - **Centro: prohibido.** Tapa la cara.
 - Dos overlays consecutivos no se solapan: `entrada_B > entrada_A + duración_A`.

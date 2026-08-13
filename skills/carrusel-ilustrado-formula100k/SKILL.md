@@ -223,7 +223,7 @@ Esperar los resultados y anotar el job_id de cada generación.
 Para cada job_id:
 1. Llamar `mcp__higgsfield__job_status` hasta que el status sea "completed"
 2. Obtener la URL de la imagen generada
-3. Descargar a: `/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug-del-tema]/`
+3. Descargar a: `~/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug-del-tema]/`
    - Naming: `slide-01-[tipo].png`, `slide-02-[tipo].png`, etc.
 
 Si alguna imagen no refleja el estilo Xiaohei correctamente (fondos de color, sombras, kawaii):
@@ -426,7 +426,7 @@ Mantener en TODOS los slides:
 ## CARPETA DE SALIDA
 
 ```
-/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug]/
+~/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug]/
 │
 │  ── ASSETS FUENTE ──
 ├── slide-01-role-status.png          ← ilustraciones Higgsfield

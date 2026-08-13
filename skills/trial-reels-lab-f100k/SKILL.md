@@ -54,7 +54,7 @@ Esta skill toma UN material y saca **4 variantes que difieren solo en los primer
 - "hazme las variantes de gancho de este video" / "ABCD este reel"
 - "quiero testear este gancho antes de subirlo"
 - "genera los overlays de gancho para que el editor los monte"
-- Cuando Andrea pasa un `.mov` grabado o un guion y menciona trial reels / testear / variantes
+- Cuando el usuario pasa un `.mov` grabado o un guion y menciona trial reels / testear / variantes
 
 ## NO activar para
 
@@ -70,7 +70,7 @@ Esta skill toma UN material y saca **4 variantes que difieren solo en los primer
 |---|---|---|
 | **Entrada** | `.mov` / `.mp4` ya grabado | guion en texto (+ opcional: un frame de referencia) |
 | **Salida** | 4 × `VARIANTE_[A-D].mp4` listos para subir | 4 × `overlay_[A-D].mov` con alfa + `HOJA_MONTAJE.md` |
-| **Para quién** | Andrea sube directo | el editor los suelta encima mientras edita |
+| **Para quién** | el usuario sube directo | el editor los suelta encima mientras edita |
 | **Se detecta por** | la ruta apunta a un archivo de video | no hay video, solo texto |
 
 Si no queda claro cuál quiere, preguntar con `AskUserQuestion`. **Nunca asumir.**
@@ -186,7 +186,7 @@ Están detalladas en `reglas-publicacion.md`. Las que nunca se negocian:
 - **5 minutos entre publicación y publicación** de las variantes de una misma tanda.
 - **La misma caption en las 4 está bien** y no cuenta como duplicado. Lo único que debe cambiar son los primeros 2-3 segundos visuales.
 - **Nunca subir el mismo archivo dos veces a trials** sin una mutación técnica (zoom 1.02× o speed 1.02×). Entre grid y trials sí se puede, son sistemas separados.
-- **Regla de 48h y regla del 25%** para decidir cuándo empujar el ganador al grid — la skill las calcula y las agenda, pero la decisión de publicar es de Andrea.
+- **Regla de 48h y regla del 25%** para decidir cuándo empujar el ganador al grid — la skill las calcula y las agenda, pero la decisión de publicar es del usuario.
 
 ## Lo que esta skill NO hace
 

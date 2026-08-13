@@ -250,10 +250,10 @@ git add -A       # .env.local ya está en .gitignore
 git commit -m "feat: landing [producto]"
 
 # 3. GitHub (opcional, recomendado)
-gh repo create Kissicore/[repo] --private --source=. --push
+gh repo create <TU-USUARIO-GITHUB>/[repo] --private --source=. --push
 
 # 4. Vercel link
-vercel link --yes --project [nombre] --scope andreavegabocanegra-5978s-projects
+vercel link --yes --project [nombre] --scope <TU-SCOPE-DE-VERCEL>
 
 # 5. Env vars en Vercel
 printf 'sk_live_...' | vercel env add STRIPE_SECRET_KEY production --yes
@@ -264,7 +264,7 @@ printf '20'          | vercel env add NEXT_PUBLIC_PRICE_MONTHLY production --yes
 printf '197'         | vercel env add NEXT_PUBLIC_PRICE_ANNUAL production --yes
 
 # 6. Deploy
-vercel --prod --scope andreavegabocanegra-5978s-projects --yes
+vercel --prod --scope <TU-SCOPE-DE-VERCEL> --yes
 ```
 
 ### Post-deploy — actualizar NEXT_PUBLIC_LANDING_URL
@@ -273,7 +273,7 @@ Una vez que Vercel devuelva la URL real:
 
 ```bash
 printf 'https://[url-real].vercel.app' | vercel env add NEXT_PUBLIC_LANDING_URL production --yes
-vercel --prod --scope andreavegabocanegra-5978s-projects --yes
+vercel --prod --scope <TU-SCOPE-DE-VERCEL> --yes
 ```
 
 ---
@@ -291,7 +291,7 @@ vercel --prod --scope andreavegabocanegra-5978s-projects --yes
 
 ## Notas y gotchas
 
-- **Cuenta Vercel**: siempre `andreavegabocanegra-5978s-projects` (scope obligatorio en CLI)
+- **Cuenta Vercel**: el scope de Vercel del usuario (`vercel whoami` para verlo). NUNCA asumir uno.
 - **`NEXT_PUBLIC_` vars**: Vercel muestra warning "pueden verse por visitantes" — es normal para precios de display
 - **Auto-mode classifier**: puede bloquear `git commit` si hay `sk_live_` en el historial de la sesión. Correr el commit en terminal externa o en nueva sesión de Claude Code
 - **Imágenes `<img>` vs `<Image>`**: para capturas locales estáticas usar `<img>` normal es suficiente; `next/image` agrega complejidad innecesaria para una landing

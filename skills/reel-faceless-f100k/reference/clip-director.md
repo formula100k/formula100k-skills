@@ -5,7 +5,7 @@ leyendo el transcript para decidir, segmento por segmento, qué visual generar. 
 dos skills:
 
 - `reel-faceless-f100k` en **modo `full`** (los clips SON el video, 9:16).
-- `editor-video-formula100k` en **modo `support`** (clips de apoyo sobre la toma de Andrea, 16:9).
+- `editor-video-formula100k` en **modo `support`** (clips de apoyo sobre la toma del usuario, 16:9).
 
 ---
 
@@ -75,12 +75,12 @@ mcp__higgsfield__generate_video(
     duration=5,
     resolution="1080p",
     genre="<action|epic|drama|comedy>",
-    medias=[{"value": "<media_id>", "role": "image"}]   # SOLO si el segmento es sobre Andrea
+    medias=[{"value": "<media_id>", "role": "image"}]   # SOLO si el segmento es sobre el usuario
 )
 ```
 
-- **Con avatar** (segmento sobre Andrea, su logro, su historia): subir foto de
-  `/Users/kissita/Documents/ANDREA SELFIES` (media_upload → PUT → media_confirm), pasar
+- **Con avatar** (segmento sobre el usuario, su logro, su historia): subir foto de
+  `~/Documents/MIS SELFIES` (media_upload → PUT → media_confirm), pasar
   `medias`, y cerrar el prompt con `, character inspired by the reference image provided,
   maintain facial features from reference`. Descripción de persona:
   `a Latin woman with long straight dark hair and light-tan skin`.
@@ -109,7 +109,7 @@ Comparison / Chapter / Quote / Kinetic de esa skill.
   segura (no hay cara que evitar). El fondo magenta se reemplaza en composición por el B-roll
   contiguo o un fondo de color/gradiente.
 - **Modo `support`:** la card es un **overlay** en zona segura — usar `SAFE_CARD_CSS` de
-  `motion-reels-f100k` (bottom: 250px) para no tapar la cara de Andrea.
+  `motion-reels-f100k` (bottom: 250px) para no tapar la cara del usuario.
 - Animación: entrada `gsap.from()` / `fromTo()` + salida `gsap.to()` 0.5-0.6 s antes del
   final (reglas de `motion-reels-f100k`). ⚠ Nunca `opacity:0` en CSS + `.from({opacity:0})`:
   usar `fromTo` (lección confirmada F100K).
@@ -145,7 +145,7 @@ Nunca fallar en seco. Antes de generar, verificar créditos con `mcp__higgsfield
 
 | Situación | Acción |
 |-----------|--------|
-| Sin créditos Higgsfield | Todos los `broll`/`pixel` caen a `card` (HyperFrames, gratis/local). Avisar a Andrea. |
+| Sin créditos Higgsfield | Todos los `broll`/`pixel` caen a `card` (HyperFrames, gratis/local). Avisar al usuario. |
 | Motor pixel no disponible | Segmento `pixel` → `card` (Kinetic Word). |
 | Segmento sin clasificación clara | Default a `card`. |
 | Audio no transcribible / muy ruidoso | Avisar y pedir regrabar ese tramo (no inventar timestamps). |

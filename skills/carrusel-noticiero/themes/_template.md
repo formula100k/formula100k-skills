@@ -10,7 +10,7 @@ Un "tema" es un archivo `.md` en esta carpeta con un template HTML completo del 
 2. **Reescribe solo el `<style>`** con tu nuevo look (colores, tipografías, fondo, adornos).
 3. **Respeta el CONTRATO de estructura** para que el copy siga encajando. Cada slide debe conservar:
    - Un `.slide` de **1080×1350** con `overflow:hidden` (formato 4:5 obligatorio).
-   - `.num` (X / 8) y `.handle` (@andreaestratega) en cada slide.
+   - `.num` (X / 8) y `.handle` (@tuhandle) en cada slide.
    - Los roles y sus zonas de texto (tag/título/contenido/lista/CTA) — puedes renombrar clases,
      pero el ORDEN y el rol de los 8 slides no cambian:
      `s2` QUÉ PASÓ · `s3` EL MOTIVO · `s4` EL DATO · `s5` ¿Y A TI QUÉ? ·

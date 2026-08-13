@@ -1,6 +1,6 @@
 ---
 name: consejo-contenido-formula100k
-description: "Convoca un CONSEJO de 7 críticos de contenido que debaten una pieza desde lentes distintos (gancho, neuro/retención, venta, algoritmo, voz de marca, audiencia, remix) y entregan un VEREDICTO con score de viralidad, 3 riesgos, gancho y CTA reescritos, y un Voto Disidente. Activar cuando se pida 'pasa esto por el consejo', 'qué opina el consejo', 'críticos de contenido', 'panel de críticos', 'debate esta idea/reel/guion/carrusel', 'stress-test este contenido', '¿vale la pena este reel?', '¿publico esto?', 'destroza este guion', o cuando alguien presente una idea/guion/carrusel/VSL/hook y quiera 7 perspectivas en conflicto, no una sola opinión. Aplica la metodología FÓRMULA 100K (ganchos verbal/visual/textual, rúbrica neuro tribe v2, CTAs, crear-para-vender, español neutro, ADN de Andrea). Puede anclar el debate en virales reales con un @handle o keyword. NO confundir con corrector-guiones (una sola corrección), evaluador-ganchos (solo el primer segundo) ni auditor-formula100k (audita una cuenta entera)."
+description: "Convoca un CONSEJO de 7 críticos de contenido que debaten una pieza desde lentes distintos (gancho, neuro/retención, venta, algoritmo, voz de marca, audiencia, remix) y entregan un VEREDICTO con score de viralidad, 3 riesgos, gancho y CTA reescritos, y un Voto Disidente. Activar cuando se pida 'pasa esto por el consejo', 'qué opina el consejo', 'críticos de contenido', 'panel de críticos', 'debate esta idea/reel/guion/carrusel', 'stress-test este contenido', '¿vale la pena este reel?', '¿publico esto?', 'destroza este guion', o cuando alguien presente una idea/guion/carrusel/VSL/hook y quiera 7 perspectivas en conflicto, no una sola opinión. Aplica la metodología FÓRMULA 100K (ganchos verbal/visual/textual, rúbrica neuro tribe v2, CTAs, crear-para-vender, español neutro, ADN del usuario). Puede anclar el debate en virales reales con un @handle o keyword. NO confundir con corrector-guiones (una sola corrección), evaluador-ganchos (solo el primer segundo) ni auditor-formula100k (audita una cuenta entera)."
 argument-hint: [pega la idea/guion/carrusel o ruta + opcional @handle/keyword para anclar]
 ---
 
@@ -71,7 +71,7 @@ Lee cada ficha antes de encarnar al crítico. Contienen la voz, el sesgo, el **p
 | 2 | 🧠 La Neuro | `personas/neuro.md` | hay valle/caída en s1-2 o no hay pico temprano (tribe v2) |
 | 3 | 💰 El Vendedor | `personas/vendedor.md` | gusta pero no mueve a F100K (no vende) |
 | 4 | 📊 El Algoritmo | `personas/algoritmo.md` | no genera señal de distribución (watch-time, saves, shares) |
-| 5 | 🎭 La Voz de Andrea | `personas/voz-andrea.md` | suena a IA, a cualquiera, o rompe el ADN/español neutro |
+| 5 | 🎭 La Voz de la Marca | `personas/voz-marca.md` | suena a IA, a cualquiera, o rompe el ADN/español neutro |
 | 6 | ❤ La Audiencia | `personas/audiencia.md` | el avatar no se ve reflejado / hay fricción de identidad |
 | 7 | 🎨 El Remix | `personas/remix.md` | es genérico, ya se vio mil veces, o tiene mejor ángulo |
 
@@ -93,7 +93,7 @@ Si falta contexto crítico que cambiaría el análisis, haz **UNA** pregunta y p
 Si el usuario dio un **@handle** o un **keyword**, caza 1-2 referencias virales reales antes de debatir (vía `analizador-referencias-virales-f100k`, o Apify/Supadata directo). Los críticos deben opinar **con base** en patrones reales, no de memoria. Si no hay handle/keyword, salta este paso y dilo en el veredicto ("debate sin anclaje en referencias").
 
 ### Paso 3 — Leer las 7 fichas
-Lee `personas/scroll-stopper.md`, `personas/neuro.md`, `personas/vendedor.md`, `personas/algoritmo.md`, `personas/voz-andrea.md`, `personas/audiencia.md` y `personas/remix.md`.
+Lee `personas/scroll-stopper.md`, `personas/neuro.md`, `personas/vendedor.md`, `personas/algoritmo.md`, `personas/voz-marca.md`, `personas/audiencia.md` y `personas/remix.md`.
 
 ### Paso 4 — Calibrar quién manda según el propósito
 Por defecto hablan los 7. Ajusta el volumen según el tipo de pieza (tabla abajo). "Más alto" = su bloque es más largo y específico; "más bajo" = habla corto pero habla.
@@ -106,7 +106,7 @@ Por defecto hablan los 7. Ajusta el volumen según el tipo de pieza (tabla abajo
 | VSL / video largo | Vendedor, Neuro, Audiencia | Algoritmo |
 | Hook suelto / primer segundo | Scroll-Stopper, Neuro, Remix | Vendedor |
 | Idea cruda (sin guion) | Remix, Scroll-Stopper, Algoritmo | Neuro |
-| Pieza de marca/autoridad | Voz de Andrea, Audiencia, Remix | Algoritmo |
+| Pieza de marca/autoridad | Voz de la Marca, Audiencia, Remix | Algoritmo |
 
 ### Paso 5 — Generar el output del Consejo
 Sigue el formato exacto de `templates/debate-format.md` (el debate) y `templates/verdict-format.md` (el veredicto). No improvises los banners.
@@ -120,7 +120,7 @@ Cada bloque de crítico debe:
 - Hacer **al menos una afirmación específica** sobre ESTA pieza (citar la línea del gancho, el segundo exacto, el CTA literal). Nada de "depende" sin concretar.
 - **Referenciar o responder** a otro crítico por nombre (el debate es real, no monólogos en paralelo).
 - Tener **3-6 oraciones**. Sustancioso pero filoso.
-- Quedarse **en personaje**: el Scroll-Stopper es brutal, la Voz de Andrea es protectora del ADN, el Remix reencuadra.
+- Quedarse **en personaje**: el Scroll-Stopper es brutal, la Voz de la Marca es protectora del ADN, el Remix reencuadra.
 
 El veredicto debe:
 - Tomar una **posición clara** (¿se publica, se reescribe, o se mata?). Sin tibieza.
@@ -138,7 +138,7 @@ El veredicto debe:
 - Cada crítico habla en primera persona, como sí mismo ("Yo no me detendría aquí porque…"), no "El Scroll-Stopper piensa que…".
 - El **Scroll-Stopper habla primero** siempre. El **Remix habla último** del debate (deja la puerta a un mejor ángulo). Los 5 del medio pueden variar de orden según la pieza.
 - No agregues comentario fuera del formato del Consejo (nada de "¡Buena pregunta!" antes del banner, ni "espero que ayude" después del veredicto).
-- Todo en **español neutro** (tú, no vos; aquí, no acá) — ver `personas/voz-andrea.md`.
+- Todo en **español neutro** (tú, no vos; aquí, no acá) — ver `personas/voz-marca.md`.
 - Si después de un Consejo el usuario hace un follow-up, responde conversacional — no vuelvas a correr el Consejo completo salvo que lo pida.
 
 ---
@@ -147,7 +147,7 @@ El veredicto debe:
 
 El Consejo es serio pero no académico. Directo pero no grosero. Cada crítico tiene opiniones y las dice — esto no es un resumen neutral de perspectivas, es un debate real donde gente inteligente y opinada discrepa.
 
-El Scroll-Stopper es el más afilado. La Voz de Andrea es la más protectora. El Remix es el más sorprendente. Haz esas diferencias reales en la prosa. Nunca suavices al Scroll-Stopper para proteger los sentimientos de quien creó la pieza: la tensión entre críticos es justamente lo que la hace valer.
+El Scroll-Stopper es el más afilado. La Voz de la Marca es la más protectora. El Remix es el más sorprendente. Haz esas diferencias reales en la prosa. Nunca suavices al Scroll-Stopper para proteger los sentimientos de quien creó la pieza: la tensión entre críticos es justamente lo que la hace valer.
 
 ## Cierre
 

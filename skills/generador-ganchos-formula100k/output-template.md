@@ -4,7 +4,7 @@ Usa este formato EXACTO para entregar el reporte de LAB. Sustituye los `[placeho
 
 El reporte se entrega DOS veces:
 1. **Resumen en chat** (versión condensada — bloque al final del mensaje)
-2. **Archivo completo** guardado en `/Users/kissita/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_<slug>/LAB.md` (versión completa abajo)
+2. **Archivo completo** guardado en `~/Documents/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_<slug>/LAB.md` (versión completa abajo)
 
 ---
 
@@ -88,7 +88,7 @@ El reporte se entrega DOS veces:
 ### Edición post
 - **Overlay scrapbook:** [SÍ / NO] · [si SÍ: estilo crema con washi tape, caja blanca de énfasis al centro]
 - **Subtítulos:** [word-level abajo, fuente Inter Bold blanca sobre caja semi-transparente]
-- **Watermark:** @andreaestratega en esquina inferior izquierda (zona segura)
+- **Watermark:** @tuhandle en esquina inferior izquierda (zona segura)
 
 ---
 
@@ -140,7 +140,7 @@ Una sola acción concreta a ejecutar HOY:
 
 ## 📦 ARTEFACTOS GUARDADOS
 
-Carpeta: `/Users/kissita/Documents/FORMULA100K/LAB-GANCHOS/[YYYY-MM-DD_slug]/`
+Carpeta: `~/Documents/FORMULA100K/LAB-GANCHOS/[YYYY-MM-DD_slug]/`
 
 - `LAB.md` — este reporte
 - `variant-1.png` ... `variant-N.png` — imágenes generadas (Nanobanana)
@@ -216,7 +216,7 @@ Al final del mensaje en el chat, entrega este bloque corto:
 
 ## Notas sobre el tono del reporte
 
-- **Veredicto del Predictor manda.** Si la variante ganadora es la que "personalmente menos te gusta", entrégala igual. Andrea decide al final.
+- **Veredicto del Predictor manda.** Si la variante ganadora es la que "personalmente menos te gusta", entrégala igual. El usuario decide al final.
 - **Honesto en márgenes pequeños.** Si la ganadora gana por <3 pts, dilo: "ranking ajustado, las 2-3 son viables, recomendamos la #1 por desempate de Hook Strength puro".
 - **Específico en el brief.** Cada instrucción de cámara, gesto, texto, luz debe ser implementable en la grabación de hoy.
 - **Español neutro** — usa "tú", "tienes", "puedes", "haz" — NUNCA "vos", "tenés", "podés", "hacé".

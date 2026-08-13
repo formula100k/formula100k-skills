@@ -19,7 +19,7 @@ Ejemplos válidos:
 - `2026-05-07_one-shot_caso-brenda-39-sesiones.md`
 - `2026-05-09_urgencia_ultimo-dia-banco-historias.md`
 
-Ruta completa: `/Users/kissita/Documents/FORMULA100K/HISTORIAS/guiones/[NOMBRE].md`
+Ruta completa: `~/Documents/FORMULA100K/HISTORIAS/guiones/[NOMBRE].md`
 
 ---
 
@@ -98,7 +98,7 @@ Si quieres testear, aquí hay 2 variantes del slide 1 (gancho):
 ```yaml
 slides_count: [N]
 fotos_necesarias_de_carpeta:
-  - slide_1: [descripción de la foto a buscar — ej: "Andrea caminando en escenario amplio, plano general"]
+  - slide_1: [descripción de la foto a buscar — ej: "la creadora caminando en escenario amplio, plano general"]
   - slide_2: [...]
   - slide_3: [...]
   - slide_4: [...]

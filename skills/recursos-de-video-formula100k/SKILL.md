@@ -1,6 +1,6 @@
 ---
 name: recursos-de-video-formula100k
-description: "Convierte un video grabado por Andrea en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) para superponer sobre la toma. Variante de graficos-de-video-formula100k. 4 modos: (1) IA — pixel-avatar mascot e infografía-pixel con Higgsfield sobre chroma key verde; (2) WEB — recursos reales de Pinterest, Google Images, TikTok virales y noticias; (3) HÍBRIDO — combina ambos por timestamp; (4) UI/TUTORIAL — capturas tipo terminal/callout/paso vía capturas-tutorial-formula100k. Admite SCREENSHOTS manuales (USER/). NO usa bancos de stock. NO edita el video final (editor-video-formula100k). Activar SIEMPRE que Andrea pase un .mov/.mp4 y diga 'cazame recursos para este video', 'busca b-roll real', 'tráeme recursos web', 'mezcla IA + recursos reales', 'overlays UI para mi tutorial', o cualquier variación que combine un video grabado con cazar/generar recursos visuales. Output: FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/ + MANIFEST.md."
+description: "Convierte un video grabado por el usuario en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) para superponer sobre la toma. Variante de graficos-de-video-formula100k. 4 modos: (1) IA — pixel-avatar mascot e infografía-pixel con Higgsfield sobre chroma key verde; (2) WEB — recursos reales de Pinterest, Google Images, TikTok virales y noticias; (3) HÍBRIDO — combina ambos por timestamp; (4) UI/TUTORIAL — capturas tipo terminal/callout/paso vía capturas-tutorial-formula100k. Admite SCREENSHOTS manuales (USER/). NO usa bancos de stock. NO edita el video final (editor-video-formula100k). Activar SIEMPRE que el usuario pase un .mov/.mp4 y diga 'cazame recursos para este video', 'busca b-roll real', 'tráeme recursos web', 'mezcla IA + recursos reales', 'overlays UI para mi tutorial', o cualquier variación que combine un video grabado con cazar/generar recursos visuales. Output: FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/ + MANIFEST.md."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__claude_ai_supadara__supadata_scrape, mcp__claude_ai_supadara__supadata_transcript, mcp__claude_ai_supadara__supadata_metadata, mcp__claude_ai_Tavily__authenticate, mcp__claude_ai_Tavily__complete_authentication
 delegates-to:
   - guionizacion-formula100k          # para generar el header viral (gancho textual)
@@ -10,7 +10,7 @@ delegates-to:
 
 # Recursos de Video — FÓRMULA 100K
 
-Pipeline para convertir un video grabado por Andrea en un set de recursos de edición (B-roll, overlays, referencias visuales) listos para superponer sobre la toma.
+Pipeline para convertir un video grabado por el usuario en un set de recursos de edición (B-roll, overlays, referencias visuales) listos para superponer sobre la toma.
 
 **Esta skill SOLO caza recursos y arma el MANIFEST.md.** No edita ni renderiza el video. Para auto-componer el `BORRADOR_AUTO.mp4` final, usar `editor-video-formula100k` después de que esta skill termine.
 
@@ -22,7 +22,7 @@ Activar cuando se cumplan AMBAS:
 
 Si el usuario solo dice "hazme gráficos / scrapbook / overlays con IA" → usar `graficos-de-video-formula100k` directamente.
 
-**Detección automática de modo TUTORIAL:** durante el Paso 3 (identificar momentos), si el transcript Whisper revela ≥3 cues léxicos de tutorial (`copia este comando`, `paso N`, `entra a https://...`, `presiona Cmd+`, `cuando termine vas a ver`, etc. — ver lista completa en [[capturas-tutorial-formula100k]]), proponer modo UI a Andrea con `AskUserQuestion`. Si dice sí, se delega el render de esos cues a la skill `capturas-tutorial-formula100k`.
+**Detección automática de modo TUTORIAL:** durante el Paso 3 (identificar momentos), si el transcript Whisper revela ≥3 cues léxicos de tutorial (`copia este comando`, `paso N`, `entra a https://...`, `presiona Cmd+`, `cuando termine vas a ver`, etc. — ver lista completa en [[capturas-tutorial-formula100k]]), proponer modo UI al usuario con `AskUserQuestion`. Si dice sí, se delega el render de esos cues a la skill `capturas-tutorial-formula100k`.
 
 ## NO activar para
 
@@ -54,7 +54,7 @@ placebear.com, placehold.it, placehold.co, via.placeholder.com,
 fakeimg.pl, dummyimage.com, baconmockup.com, fillmurray.com
 ```
 
-Estos servicios devuelven imágenes ALEATORIAS — nunca van a matchear el contenido del video. Si no se puede cazar un recurso real relevante después de los intentos del Paso 7, **dejar el cue sin recurso** (no incluirlo en MANIFEST). Es mejor no tener overlay que tener uno que no tiene nada que ver con lo que Andrea está diciendo en ese segundo.
+Estos servicios devuelven imágenes ALEATORIAS — nunca van a matchear el contenido del video. Si no se puede cazar un recurso real relevante después de los intentos del Paso 7, **dejar el cue sin recurso** (no incluirlo en MANIFEST). Es mejor no tener overlay que tener uno que no tiene nada que ver con lo que el usuario está diciendo en ese segundo.
 
 ## Regla VALIDACIÓN-VISUAL (obligatoria)
 
@@ -62,13 +62,13 @@ Cada archivo cazado (WEB o IA) debe pasar una inspección visual antes de inclui
 
 Para cada candidato:
 
-1. **Imágenes (.jpg, .png, .webp):** usar `Read` sobre el archivo descargado y comparar contra el `concepto_visual` + `texto_clave` del momento. Preguntarse: "¿Esta imagen ilustra LITERALMENTE lo que Andrea está diciendo en ese segundo del video?" Si la respuesta es "más o menos", "podría servir", "es genérica pero está bien" → **descartar**. Solo aceptar matches CLAROS.
+1. **Imágenes (.jpg, .png, .webp):** usar `Read` sobre el archivo descargado y comparar contra el `concepto_visual` + `texto_clave` del momento. Preguntarse: "¿Esta imagen ilustra LITERALMENTE lo que el usuario está diciendo en ese segundo del video?" Si la respuesta es "más o menos", "podría servir", "es genérica pero está bien" → **descartar**. Solo aceptar matches CLAROS.
 
 2. **Videos (.mp4, .mov):** extraer 3 keyframes con ffmpeg (al 25%, 50%, 75%) y leer cada uno (ya documentado en Paso 7c para subtítulos quemados). Aplicar el mismo criterio de relevancia visual.
 
 3. **IA generada (Higgsfield):** misma regla — leer el rawUrl después del job, confirmar que el output respeta el prompt y no derivó (sucede a veces con `nano_banana_2`).
 
-Si tras 3 intentos de cazada/regenerada un cue no consigue un match relevante, marcar ese cue como **"sin recurso"** y omitirlo del MANIFEST. Andrea prefiere un reel con menos overlays que con overlays incorrectos.
+Si tras 3 intentos de cazada/regenerada un cue no consigue un match relevante, marcar ese cue como **"sin recurso"** y omitirlo del MANIFEST. El usuario prefiere un reel con menos overlays que con overlays incorrectos.
 
 > Ejemplo de fallo a evitar: video habla de "descargar recursos de Internet" en el segundo 42. La cazadora encuentra una foto bonita de lluvia de chispas en cámara lenta. Visualmente impactante pero NO TIENE NADA QUE VER con internet/redes/contenido. **Descartar.** Mejor dejar ese segundo sin overlay.
 
@@ -106,7 +106,7 @@ Si el video es más largo, escalar proporcionalmente:
 - 60-120s → 7-10 momentos
 - >120s → 10-14 momentos
 
-Si el video es muy corto (<20s) y honestamente no caben 7 momentos sin saturar, avisarle a Andrea con un AskUserQuestion antes de saltarse la regla — pero el default es siempre 7+.
+Si el video es muy corto (<20s) y honestamente no caben 7 momentos sin saturar, avisarle al usuario con un AskUserQuestion antes de saltarse la regla — pero el default es siempre 7+.
 
 Por momento extrae:
 - `timestamp_in`, `timestamp_out` (informativo, no se usa en el MANIFEST nuevo — el editor resuelve por keyword)
@@ -118,15 +118,15 @@ Por momento extrae:
   - En lowercase, sin puntuación
   - Si el texto_clave usa una palabra rara/marca/nombre propio, ESE es el keyword ideal
 - `clase_visual` — **overlay** o **broll**:
-  - `overlay` → gráfico se superpone sobre el pecho de Andrea (~480-560px ancho). Aplicable a: scrapbook IA, mascots de acción única, **infografías-pixel generadas con IA**, infografías de Pinterest, screenshots de UI, charts, iconos, capturas de redes.
-  - `broll` → reemplaza fullscreen la cámara durante unos segundos. Aplicable SOLO a: TikToks virales, fotos de lugares/personas/eventos reales, clips de noticias. **NUNCA usar B-roll para infografías-pixel** — la cara de Andrea se ve a través de los huecos transparentes del chroma key y queda visualmente caótico.
+  - `overlay` → gráfico se superpone sobre el pecho del usuario (~480-560px ancho). Aplicable a: scrapbook IA, mascots de acción única, **infografías-pixel generadas con IA**, infografías de Pinterest, screenshots de UI, charts, iconos, capturas de redes.
+  - `broll` → reemplaza fullscreen la cámara durante unos segundos. Aplicable SOLO a: TikToks virales, fotos de lugares/personas/eventos reales, clips de noticias. **NUNCA usar B-roll para infografías-pixel** — la cara del usuario se ve a través de los huecos transparentes del chroma key y queda visualmente caótico.
 - `tipo_dominante` (pantalla IG / comparación / dato duro / persona / objeto / lugar / proceso / emoción / **ecosistema** / **grid** / **mapa**)
 - `subtipo_ia` (solo si modo IA/HÍBRIDO) — **mascot** o **infografia-pixel**:
   - `mascot` (default) → un solo personaje pixel-art haciendo una acción. Va a Overlays con ancho 480-500px.
-  - `infografia-pixel` → panel denso multi-elemento (mandala de tiles, grid 2×N, split comparativo). Usar cuando el `texto_clave` enumera ≥3 elementos, o el `tipo_dominante` es `ecosistema | comparación | grid | mapa`, o Andrea dice explícitamente "muéstralo como infografía / mapa / sistema". **Va SIEMPRE a Overlays** con ancho 520-560px y duración 4-5s (más tiempo que un mascot porque el viewer necesita leer texto).
+  - `infografia-pixel` → panel denso multi-elemento (mandala de tiles, grid 2×N, split comparativo). Usar cuando el `texto_clave` enumera ≥3 elementos, o el `tipo_dominante` es `ecosistema | comparación | grid | mapa`, o la usuaria dice explícitamente "muéstralo como infografía / mapa / sistema". **Va SIEMPRE a Overlays** con ancho 520-560px y duración 4-5s (más tiempo que un mascot porque el viewer necesita leer texto).
 - `riqueza_visual` (alta / media / baja) — qué tan "buscable" es ese momento en la web
 
-**Regla de oro de keyword:** si en el video Andrea dice "...con la skill de Cloud Remotion que edita...", el keyword puede ser `remotion` (única, fácil de encontrar). Si dice "...Yapper Method...", el keyword es `japer` o `yapper` — lo que efectivamente diga el audio (mlx-whisper a veces lo transcribe como "Japer"). Si dudas, mejor inspecciona `captions.json` después del corte para elegir keywords que sí estén ahí.
+**Regla de oro de keyword:** si en el video la usuaria dice "...con la skill de Cloud Remotion que edita...", el keyword puede ser `remotion` (única, fácil de encontrar). Si dice "...Yapper Method...", el keyword es `japer` o `yapper` — lo que efectivamente diga el audio (mlx-whisper a veces lo transcribe como "Japer"). Si dudas, mejor inspecciona `captions.json` después del corte para elegir keywords que sí estén ahí.
 
 ### Paso 3.5 — Diseñar el Header del reel (delegar a `guionizacion-formula100k`)
 
@@ -146,9 +146,9 @@ Necesito 3 variantes de gancho textual en formato:
 Aplicar framework "Gancho Textual del Top 1%". Sin all caps.
 ```
 
-Mostrar las 3 variantes a Andrea con `AskUserQuestion` y dejar que elija. Si pide variaciones, volver a invocar la skill con feedback específico.
+Mostrar las 3 variantes al usuario con `AskUserQuestion` y dejar que elija. Si pide variaciones, volver a invocar la skill con feedback específico.
 
-> Si la skill `guionizacion-formula100k` no está instalada, generar el header tú mismo aplicando estas reglas, pero avisar a Andrea: "para mejor calidad de gancho instala guionizacion-formula100k".
+> Si la skill `guionizacion-formula100k` no está instalada, generar el header tú mismo aplicando estas reglas, pero avisar al usuario: "para mejor calidad de gancho instala guionizacion-formula100k".
 
 ### Paso 3.55 — Carpeta de fotos de referencia del usuario (OBLIGATORIO antes de generar IA)
 
@@ -166,7 +166,7 @@ AskUserQuestion:
       description: "El mascot sale en estilo pixel genérico, sin parecido al usuario. Útil si nunca van a ver su cara en el reel y solo es decoración."
 ```
 
-**Default para Andrea (siempre):** si la usuaria es Andrea (revisar memoria `reference_andrea_selfies_folder.md`), saltar la pregunta y usar `/Users/kissita/Documents/ANDREA SELFIES`. Listar el directorio, leer 2-3 archivos con Read y elegir el que tenga cara frontal/3-cuartos clara, buena iluminación, sin objetos tapando el rostro.
+**Atajo si ya hay carpeta de selfies conocida:** si el usuario tiene una carpeta de selfies configurada (p. ej. `~/Documents/MIS SELFIES`) y existe, saltar la pregunta y usarla. Listar el directorio, leer 2-3 archivos con Read y elegir el que tenga cara frontal/3-cuartos clara, buena iluminación, sin objetos tapando el rostro. Si no existe ninguna carpeta conocida, **preguntar** — no inventar una ruta.
 
 Una vez elegida la foto:
 1. Subirla a Higgsfield con `mcp__higgsfield__media_upload` (returns `upload_url`).
@@ -176,11 +176,11 @@ Una vez elegida la foto:
 
 Guardar el `media_id` en memoria conversacional (se reusa en TODAS las generaciones del reel — el HOOK + los 4-5 overlays).
 
-### Paso 3.6 — Imagen gancho del segundo 1 (OPCIONAL — preguntar a Andrea)
+### Paso 3.6 — Imagen gancho del segundo 1 (OPCIONAL — preguntar al usuario)
 
 La imagen gancho es un **pixel-avatar mascot** que aparece en el segundo 0.3-2.5 en la parte inferior del frame (para no tapar el header grande), rotado ligeramente, sin chocar con la cara. Es CRÍTICA para el primer segundo cuando se usa — el viewer la registra antes que el header. PERO no siempre se quiere: a veces el primer segundo está mejor "limpio" para que el viewer fije la mirada en la cara y el header.
 
-**Preguntar SIEMPRE a Andrea antes de generar nada:**
+**Preguntar SIEMPRE al usuario antes de generar nada:**
 
 ```
 AskUserQuestion:
@@ -191,7 +191,7 @@ AskUserQuestion:
     - label: "Sí, genera el pixel mascot"
       description: "Genero un pixel-avatar mascot (380px) con la skill banana — cuerpo blocky salmón, contorno blanco grueso, ojos cuadrados, haciendo la acción del gancho. Aparece top-right en seg 0.3-2.5, rotado 3°, sin tapar la cara."
     - label: "Sí, usar captura mía"
-      description: "Andrea pasa la ruta a una captura de pantalla (PNG/JPG) que se usa tal cual como gancho. Útil para mostrar conversaciones, UI de IG, dashboards, mensajes, etc."
+      description: "el usuario pasa la ruta a una captura de pantalla (PNG/JPG) que se usa tal cual como gancho. Útil para mostrar conversaciones, UI de IG, dashboards, mensajes, etc."
     - label: "No, dejar el segundo 1 limpio"
       description: "Sólo header centrado arriba + cara. El primer segundo respira; el viewer fija la mirada en ti directamente."
 ```
@@ -201,9 +201,9 @@ AskUserQuestion:
 - "con pixel" / "con mascot" / "hazme el hook" → modo PIXEL (genera)
 - "con captura" / "usa esta foto" + ruta → modo CAPTURA
 
-**Si Andrea elige "Sí, pixel mascot":**
+**Si el usuario elige "Sí, pixel mascot":**
 
-Concepto: un **personaje pixel-art chunky** (estilo retro 16-bit / sprite de juego) representando a Andrea haciendo la acción que sintetiza el video. Mismo personaje recurrente entre videos, distinta pose por gancho. Ejemplos:
+Concepto: un **personaje pixel-art chunky** (estilo retro 16-bit / sprite de juego) representando al usuario haciendo la acción que sintetiza el video. Mismo personaje recurrente entre videos, distinta pose por gancho. Ejemplos:
 - Video sobre perfeccionismo → mascot con cara dubitativa rompiendo un papel + ✗ pixelada
 - Video sobre auto-edición → mascot con pulgar arriba + ✓ pixelada azul
 - Video sobre venta en DM → mascot sosteniendo un teléfono pixelado con notificación
@@ -236,7 +236,7 @@ Reglas:
 6. **Post-procesar con chroma key OBLIGATORIO** (ver Paso 7g) — el PNG final guardado en `IA/` debe tener alpha transparente, no fondo verde
 7. Validación visual (Read tool): el mascot debe leerse claro a 380px. El contorno blanco debe destacar contra cualquier fondo. Descartar y regenerar si parece tridimensional / con sombras suaves / sin contorno, o si tiene pixeles verdes en el mascot.
 
-**Si Andrea elige "Sí, captura":**
+**Si el usuario elige "Sí, captura":**
 
 1. Pedirle la ruta del archivo (`AskUserQuestion` o input directo).
 2. Copiar/hardlinkar el archivo a `IA/HOOK_<slug>.png`.
@@ -244,7 +244,7 @@ Reglas:
 
 Una vez aprobada (cualquiera de los dos modos), registrarla en MANIFEST.md sección `## Gancho visual`.
 
-**Si Andrea elige "No":**
+**Si el usuario elige "No":**
 
 Saltar la generación. **NO incluir** la sección `## Gancho visual` en MANIFEST.md (el editor la ignora silenciosamente si no existe). El primer segundo del reel queda con header + cara únicamente.
 
@@ -276,9 +276,9 @@ Atajos textuales que saltan la pregunta:
 - "modo ui" / "modo tutorial" / "es tutorial" / "overlays ui" / "capturas tutorial" / "solo capturas tutorial" / "solo estilo tutorial" → modo **UI / TUTORIAL PURO** (NO genera mascots IA ni WEB — TODOS los overlays son capturas UI)
 - "ui + web" / "ui más web" / "capturas tutorial + tiktoks" → modo **UI + Web combinado**
 
-**Regla de oro del modo UI puro:** cuando Andrea pide "capturas-tutorial" o "modo UI" sin más calificadores, **se asume PURO**. No hay mascots IA, no hay recursos web, no hay imagen gancho IA (HOOK_*.png). Si un cue del Paso 3 no encaja con ninguno de los 8 tipos UI (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`), conviértelo al tipo más cercano (típicamente `callout` info/success) en vez de degradarlo a mascot o a WEB. Razón: Andrea quiere consistencia estética total en sus reels tutorial — el cambio de capa visual entre captura UI y mascot pixel rompe el flow del viewer.
+**Regla de oro del modo UI puro:** cuando el usuario pide "capturas-tutorial" o "modo UI" sin más calificadores, **se asume PURO**. No hay mascots IA, no hay recursos web, no hay imagen gancho IA (HOOK_*.png). Si un cue del Paso 3 no encaja con ninguno de los 8 tipos UI (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`), conviértelo al tipo más cercano (típicamente `callout` info/success) en vez de degradarlo a mascot o a WEB. Razón: El usuario quiere consistencia estética total en sus reels tutorial — el cambio de capa visual entre captura UI y mascot pixel rompe el flow del viewer.
 
-**Modo UI + Web (combinado, opcional):** SOLO si Andrea lo pidió explícitamente. Aplica UI a los cues léxicos detectados y WEB al resto. La detección por cue se hace en el Paso 3 marcando cada momento con `subtipo: ui | broll`. NO incluye IA mascots — si los quiere, debe pedir HÍBRIDO o IA directamente.
+**Modo UI + Web (combinado, opcional):** SOLO si el usuario lo pidió explícitamente. Aplica UI a los cues léxicos detectados y WEB al resto. La detección por cue se hace en el Paso 3 marcando cada momento con `subtipo: ui | broll`. NO incluye IA mascots — si los quiere, debe pedir HÍBRIDO o IA directamente.
 
 ### Paso 5 — Decidir cantidad y fuentes por timestamp (adaptativo)
 
@@ -295,7 +295,7 @@ Mapeo `tipo_dominante` → fuente más probable:
 - `pantalla IG` / `comparación` / `dato duro` → **Pinterest** (infografías virales) + IA
 - `proceso` / `tutorial` → **TikTok** + Pinterest
 - `emoción` / `objeto` → **Google Images** + Pinterest
-- `nicho de Andrea` (algoritmo IG, ventas DM, contenido) → **TikTok** + Pinterest
+- `nicho del usuario` (algoritmo IG, ventas DM, contenido) → **TikTok** + Pinterest
 
 ### Paso 6 — Mostrar plan y confirmar
 
@@ -359,7 +359,7 @@ Si un dominio de stock aparece en top 5, agregarlo a la query con `-site:` y rei
    ```bash
    yt-dlp -f "best[ext=mp4]" -o "$DEST/WEB/tiktok/T<n>_<slug>.%(ext)s" "$URL"
    ```
-6. **🚫 FILTRO ANTI-SUBTÍTULOS QUEMADOS (obligatorio, regla de Andrea):**
+6. **🚫 FILTRO ANTI-SUBTÍTULOS QUEMADOS (obligatorio, regla del usuario):**
    Los TikToks con captions/subtítulos quemados sobre el video crean ruido visual cuando se superponen. Antes de aceptar un TikTok como recurso final:
    
    a. Extraer 3 keyframes distribuidos (al 25%, 50%, 75%):
@@ -409,9 +409,9 @@ Filtrar dominios de stock incluso si Google los devuelve.
 **Dos sub-tipos pixel-art, ambos sobre chroma green:**
 
 - **7e.1 — Mascot** (default): un solo personaje pixel-art haciendo una acción. Va a tabla `Overlays` (~480px). Usar para cues con `subtipo_ia: mascot` o cuando no se especifica.
-- **7e.2 — Infografía pixel** (NUEVO): panel denso multi-elemento (mandala de tiles, grid 2×N, split comparativo). **Va SIEMPRE a tabla `Overlays`** (no a B-roll fullscreen — la transparencia del chroma key hace que la cara de Andrea se vea por los huecos y queda caótico). Usar para cues con `subtipo_ia: infografia-pixel` (ecosistema / comparación / grid / mapa / lista enumerada). Ancho recomendado 520-560px, duración 4-5s.
+- **7e.2 — Infografía pixel** (NUEVO): panel denso multi-elemento (mandala de tiles, grid 2×N, split comparativo). **Va SIEMPRE a tabla `Overlays`** (no a B-roll fullscreen — la transparencia del chroma key hace que la cara del usuario se vea por los huecos y queda caótico). Usar para cues con `subtipo_ia: infografia-pixel` (ecosistema / comparación / grid / mapa / lista enumerada). Ancho recomendado 520-560px, duración 4-5s.
 
-> Nota: la skill `infografia-reel-formula100k` también hace infografías pero entrega un REEL completo 9:16 listo para subir a IG. Esta sub-sección 7e.2 es distinta — genera una **infografía estática 1:1 como overlay inferior** dentro de un reel talking-head de Andrea, recortable con chroma key. Si el usuario quiere infografía como deliverable final (no inserto), redirigir a `infografia-reel-formula100k`.
+> Nota: la skill `infografia-reel-formula100k` también hace infografías pero entrega un REEL completo 9:16 listo para subir a IG. Esta sub-sección 7e.2 es distinta — genera una **infografía estática 1:1 como overlay inferior** dentro de un reel talking-head del usuario, recortable con chroma key. Si el usuario quiere infografía como deliverable final (no inserto), redirigir a `infografia-reel-formula100k`.
 
 #### 7e.1 — Mascot (acción única, overlay)
 
@@ -453,7 +453,7 @@ Flujo de generación:
 Cuándo dispararla, en orden de prioridad:
 1. El `texto_clave` del cue enumera ≥3 elementos discretos (ej: "tengo 9 áreas / 5 ofertas / 3 tipos / 7 fases").
 2. `tipo_dominante` ∈ `{ecosistema, comparación, grid, mapa}`.
-3. Andrea dice explícitamente en el video o en chat "muéstralo como infografía / mapa / sistema / grid / poster".
+3. El usuario dice explícitamente en el video o en chat "muéstralo como infografía / mapa / sistema / grid / poster".
 4. El concepto necesita densidad visual que un solo mascot no resuelve (ej: "mi ecosistema completo", "antes vs después con 5 puntos cada uno", "los 10 subagentes").
 
 Si ninguna se cumple → usar 7e.1 (mascot). No sobre-aplicar: una infografía mal usada interrumpe el reel.
@@ -466,7 +466,7 @@ Tres layouts soportados (elegir según el contenido del cue):
 | **`grid-2xN`** | Lista de 4-10 ítems paralelos | 2 columnas × N filas de cartas, cada una con mini-mascot + label + 3-5 chips |
 | **`split`** | Comparación A vs B | Panel izquierdo color 1 + panel derecho color 2, mascot+stack de bullets en cada lado |
 
-Prompt base — copiar, elegir layout, llenar `<TÍTULO>`, `<SUBTÍTULO>` y `<CONTENIDO>`. Pasar el `media_id` del Paso 3.55 en `medias` si quieres que los mascots internos respeten los rasgos de Andrea:
+Prompt base — copiar, elegir layout, llenar `<TÍTULO>`, `<SUBTÍTULO>` y `<CONTENIDO>`. Pasar el `media_id` del Paso 3.55 en `medias` si quieres que los mascots internos respeten los rasgos del usuario:
 
 ```
 Retro 16-bit pixel art infographic, sharp chunky pixels, no anti-aliasing, no smooth gradients.
@@ -489,10 +489,10 @@ Aspect ratio 1:1, 1024×1024px.
 ```
 
 Reglas obligatorias para infografía-pixel:
-- **Aspect ratio: 1:1.** Va a la tabla `Overlays` con `ancho 520-560px` y `duración 4-5s` (más tiempo que un mascot porque el viewer necesita leer texto). NUNCA va a B-roll fullscreen — la cara de Andrea se ve a través de los huecos transparentes del chroma key y queda visualmente caótico.
+- **Aspect ratio: 1:1.** Va a la tabla `Overlays` con `ancho 520-560px` y `duración 4-5s` (más tiempo que un mascot porque el viewer necesita leer texto). NUNCA va a B-roll fullscreen — la cara del usuario se ve a través de los huecos transparentes del chroma key y queda visualmente caótico.
 - **Máx 8 elementos discretos** en el panel (antes 10). Como overlay ocupa ~520px de ancho en 1080px de canvas, los textos quedan más chicos que en B-roll — bajar densidad para mantener legibilidad.
 - **Texto interno por bloque: ≤ 20 caracteres** (antes 25). Abreviar nombres largos (ej: `guionizacion-formula100k` → `GUIONES`).
-- **Mismo personaje salmón** en todos los cards/tiles si aparecen mascots internos — pasar el `media_id` de Andrea para que pelo/piel respeten su look. Si la infografía no incluye mascots de cara, el `media_id` se puede omitir.
+- **Mismo personaje salmón** en todos los cards/tiles si aparecen mascots internos — pasar el `media_id` del usuario para que pelo/piel respeten su look. Si la infografía no incluye mascots de cara, el `media_id` se puede omitir.
 - **Cero verde en los elementos** — chocaría con el chroma key.
 - **NO escribir texto que no esté en el prompt** — Nano Banana inventa labels si no le pides cero extra text. Reforzar con la frase "NEVER include extra text" en el prompt final.
 - **Validación visual obligatoria (Read tool)**: (a) los elementos prometidos están y son legibles, (b) los colores corresponden a los del prompt, (c) no hay micro-typos en labels críticos (si los hay y son corregibles, re-generar el cue específico — vale más generar 3 veces que dejar un typo en un overlay), (d) fondo es verde plano #00FF00 sin gradiente.
@@ -534,9 +534,9 @@ Si tras 2 intentos el halo verde no se va, revertir al fondo negro (cambiar prom
 
 #### 7h. UI / Tutorial — delegar a `capturas-tutorial-formula100k`
 
-Activar SOLO si Andrea eligió modo UI / TUTORIAL (puro) o el modo UI + Web combinado (en este caso solo para los cues marcados `subtipo: ui` en el Paso 3).
+Activar SOLO si el usuario eligió modo UI / TUTORIAL (puro) o el modo UI + Web combinado (en este caso solo para los cues marcados `subtipo: ui` en el Paso 3).
 
-**En modo UI PURO**: TODOS los cues del Paso 3 generan un item UI tutorial. Si un cue no encaja con ninguno de los 9 patrones léxicos de abajo (ej: una frase de storytelling como "Tengo +30 estructuras"), convertirlo al tipo más cercano — casi siempre `callout` variant `info` (declaración/fact) o `callout` variant `success` (CTA/cierre). **Nunca degradar a mascot IA ni a WEB en modo UI puro** — Andrea quiere consistencia estética total. Si genuinamente no hay nada que decir visualmente en ese momento, omitir el cue (mejor sin overlay que con mascot que rompe el flow).
+**En modo UI PURO**: TODOS los cues del Paso 3 generan un item UI tutorial. Si un cue no encaja con ninguno de los 9 patrones léxicos de abajo (ej: una frase de storytelling como "Tengo +30 estructuras"), convertirlo al tipo más cercano — casi siempre `callout` variant `info` (declaración/fact) o `callout` variant `success` (CTA/cierre). **Nunca degradar a mascot IA ni a WEB en modo UI puro** — El usuario quiere consistencia estética total. Si genuinamente no hay nada que decir visualmente en ese momento, omitir el cue (mejor sin overlay que con mascot que rompe el flow).
 
 **Triggers léxicos para clasificar un cue como UI** (escanear el `texto_clave` de cada cue del Paso 3):
 
@@ -561,7 +561,7 @@ Activar SOLO si Andrea eligió modo UI / TUTORIAL (puro) o el modo UI + Web comb
 recursos:
   - id: r01
     tipo: terminal
-    bg: transparent       # default — Andrea decide en edición
+    bg: transparent       # default — El usuario decide en edición
     width: 1920
     height: 1080
     data:
@@ -601,13 +601,13 @@ node ~/.claude/skills/capturas-tutorial-formula100k/scripts/render.mjs \
 
 **Reglas:**
 - NO usar IA generativa para terminales / callouts — la IA rompe el texto. HTML + Puppeteer garantiza pixel-perfect.
-- NO inventar comandos ni URLs: si en el transcript Andrea dice "el comando de install" pero no lo dicta, **detener el render** y pedirle el comando exacto con `AskUserQuestion` antes de continuar.
-- PNG con fondo transparente por default. Si Andrea pide fondo crema (`#F5EFE6`), pasar `bg: cream` en el item.
+- NO inventar comandos ni URLs: si en el transcript la usuaria dice "el comando de install" pero no lo dicta, **detener el render** y pedirle el comando exacto con `AskUserQuestion` antes de continuar.
+- PNG con fondo transparente por default. Si el usuario pide fondo crema (`#F5EFE6`), pasar `bg: cream` en el item.
 - Nunca 9:16 para overlays UI ([[feedback_aspect_ratio_graficos_video]]). Default: 1920×1080 (16:9).
 
 #### 7f. Capturas del usuario (modo SCREENSHOT)
 
-Andrea puede aportar **screenshots propios** (DMs, dashboards, posts virales, conversaciones, UI de IG/TikTok, gráficas reales, mensajes de pago) que se usan tal cual como overlay sin generación IA. Útil cuando necesita mostrar **prueba real** o data específica que un mascot no puede representar.
+El usuario puede aportar **screenshots propios** (DMs, dashboards, posts virales, conversaciones, UI de IG/TikTok, gráficas reales, mensajes de pago) que se usan tal cual como overlay sin generación IA. Útil cuando necesita mostrar **prueba real** o data específica que un mascot no puede representar.
 
 Flujo:
 1. Durante el Paso 6 (confirmación de plan), preguntar si algún timestamp se cubre con captura propia.
@@ -623,7 +623,7 @@ Atajos textuales:
 ### Paso 8 — Estructura de carpeta destino
 
 ```bash
-DEST="/Users/kissita/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
+DEST="~/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>"
 mkdir -p "$DEST/IA"
 mkdir -p "$DEST/USER"
 mkdir -p "$DEST/WEB/pinterest"
@@ -633,7 +633,7 @@ mkdir -p "$DEST/WEB/noticias"
 ```
 
 `IA/` → pixel-avatar mascots generados con Higgsfield.
-`USER/` → screenshots que Andrea pasó manualmente **+ capturas UI tipo tutorial** (terminal, callout, step, etc.) renderizadas con `capturas-tutorial-formula100k`. PNGs transparentes. Aquí viven tanto los assets del usuario como los outputs del modo UI/Tutorial — una sola carpeta porque `editor-video-formula100k` solo lee IA/, USER/ y WEB/.
+`USER/` → screenshots que el usuario pasó manualmente **+ capturas UI tipo tutorial** (terminal, callout, step, etc.) renderizadas con `capturas-tutorial-formula100k`. PNGs transparentes. Aquí viven tanto los assets del usuario como los outputs del modo UI/Tutorial — una sola carpeta porque `editor-video-formula100k` solo lee IA/, USER/ y WEB/.
 `WEB/` → recursos cazados de la web.
 
 `<nombre_descriptivo>` en snake_case sin acentos (ej: `algoritmo_instagram_recursos`).
@@ -713,10 +713,10 @@ Archivo `MANIFEST.md` en la raíz de `$DEST`. La skill `editor-video-formula100k
 - 4-10 cajas blancas que aparecen al centro del video durante 1.4-2.0s cada una.
 - Cada fila ancla a UNA `keyword` que existe literalmente en el audio.
 - El `Texto` de la caja puede ser DISTINTO de la keyword: la keyword es solo el ancla temporal; el texto es lo que se muestra (más corto/punzante).
-- Ej: `keyword: perfección` → `Texto: Olvida la perfección`. La caja aparece cuando Andrea dice "perfección".
+- Ej: `keyword: perfección` → `Texto: Olvida la perfección`. La caja aparece cuando el usuario dice "perfección".
 - Buenos candidatos: declaraciones definitivas, frases-bomba, números importantes, veredictos.
 
-**Overlays** (recomendada — recursos sobre el pecho de Andrea — **tabla única** que mezcla mascot IA + screenshots del usuario + capturas UI tutorial):
+**Overlays** (recomendada — recursos sobre el pecho del usuario — **tabla única** que mezcla mascot IA + screenshots del usuario + capturas UI tutorial):
 - Una fila por cada recurso clasificado como `overlay` en el Paso 3 — incluye mascots, infografías-pixel (7e.2), screenshots de USER/, y **todas las capturas UI generadas en 7h** (terminal, step, callout, keys, etc.).
 - `Archivo` es path relativo a `$DEST/`. Hay 3 prefijos válidos:
   - `IA/T<n>_..._.png` · `IA/T<n>_INFO_..._.png` (mascot e infografía-pixel)
@@ -761,7 +761,7 @@ Los B-roll se renderean con `object-fit: cover`. Si el recurso es horizontal se 
 - Fotos de noticias: prefiere las verticales/cuadradas; si solo hay horizontal, conserva pero avisa
 - Pinterest pins: prefiere los verticales
 - Screenshots de UI: NO mandar a B-roll, mejor como overlay
-- **Infografías-pixel: NUNCA a B-roll** — el chroma key transparente deja ver la cara de Andrea entre los huecos de los paneles y queda visualmente caótico. Siempre como Overlay inferior.
+- **Infografías-pixel: NUNCA a B-roll** — el chroma key transparente deja ver la cara del usuario entre los huecos de los paneles y queda visualmente caótico. Siempre como Overlay inferior.
 
 **No hay más columna `Layout`.** Los recursos van a una de dos tablas (`Overlays` o `B-roll`), y cada tabla tiene su rendering fijo. Esto es más simple y predecible que el viejo `pip` / `fullscreen` / `split`.
 
@@ -802,7 +802,7 @@ Si pide "este momento mejor IA": llamar a `mcp__higgsfield__generate_image` solo
 - `/recursos-video <ruta>` → modo HÍBRIDO por default, aspect ratio 1:1, decide cantidad adaptativo.
 - `/recursos-video <ruta> --modo ia` → modo solo IA.
 - `/recursos-video <ruta> --modo web` → modo solo web, sin IA.
-- `/recursos-video <ruta> --modo ui` → modo **UI/TUTORIAL PURO** — delega TODO a `capturas-tutorial-formula100k`. Genera 1 item UI por cada momento del Paso 3 (los cues que no son tutorial se convierten a `callout`). **NO genera mascots IA, NO baja WEB, NO crea HOOK_*.png**. Solo capturas estilo tutorial. Es lo que Andrea quiere cuando dice "solo capturas-tutorial".
+- `/recursos-video <ruta> --modo ui` → modo **UI/TUTORIAL PURO** — delega TODO a `capturas-tutorial-formula100k`. Genera 1 item UI por cada momento del Paso 3 (los cues que no son tutorial se convierten a `callout`). **NO genera mascots IA, NO baja WEB, NO crea HOOK_*.png**. Solo capturas estilo tutorial. Es lo que el usuario quiere cuando dice "solo capturas-tutorial".
 - `/recursos-video <ruta> --modo ui+web` → combina: UI para cues tutorial detectados, WEB para los demás. Sin mascots IA.
 - `/recursos-video <ruta> --solo-tiktok` → solo TikToks virales.
 

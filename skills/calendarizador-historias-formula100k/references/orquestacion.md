@@ -48,7 +48,7 @@ Esto garantiza que el "esqueleto" del calendario quede cohesionado antes de rell
 ## EVITAR DUPLICACIÓN DE PALABRAS CLAVE
 
 Cada secuencia tiene una palabra clave de CTA (GPT, INFO, CASO, etc.). NO se pueden repetir
-dentro del mismo día (rompe el sistema de DM automatizados de Andrea).
+dentro del mismo día (rompe el sistema de DM automatizados del usuario).
 
 Reglas:
 - En **el mismo día**: nunca repetir palabra clave.
@@ -122,7 +122,7 @@ Sesión 2: VIAJE/EXTERIOR
 - Outfit sugerido: [...]
 ```
 
-Esto le ahorra a Andrea tiempo: una sola sesión de grabación para 5-6 clips en vez de grabar a diario.
+Esto le ahorra al usuario tiempo: una sola sesión de grabación para 5-6 clips en vez de grabar a diario.
 
 ---
 
@@ -157,7 +157,7 @@ Si Python/openpyxl no están disponibles:
 **Pasos del calendarizador:**
 
 1. Cargar modo Lanzamiento (14 slots Lun-Dom)
-2. Asignar las 4 ideas de Andrea a slots compatibles:
+2. Asignar las 4 ideas del usuario a slots compatibles:
    - Caso Brenda → Jueves (Caso) o Miércoles (One-Shot caso)
    - Demo del GPT → Martes (One-Shot Anuncio)
    - Anunciar el banco → Miércoles (Lead Magnet) o Lunes (preview)

@@ -5,7 +5,7 @@ description: >
 argument-hint: "<palabra clave o tema del video>"
 metadata:
   version: "2.0.0"
-  author: AndreaEstratega
+  author: TU-HANDLE
 ---
 
 # Skill: Miniatura YouTube FORMULA 100K
@@ -145,7 +145,7 @@ which magick || which convert || echo "Instala: brew install imagemagick"
 
 Después de generar, siempre entregar:
 
-1. **Las 4 imágenes generadas** con sus rutas (carpeta de entrega: `/Users/kissita/Documents/FORMULA100K/MINIATURAS/AAAA-MM-DD_<slug>/`)
+1. **Las 4 imágenes generadas** con sus rutas (carpeta de entrega: `~/Documents/FORMULA100K/MINIATURAS/AAAA-MM-DD_<slug>/`)
 2. **Recomendación de cuál usar primero** (parecido + nitidez + composición + "set" del fondo)
 3. **Recordar montar el texto/logo/burbuja en Canva** sobre la ganadora (la generación va limpia a propósito)
 4. **Estrategia de iteración CTR:**
@@ -157,7 +157,7 @@ Después de generar, siempre entregar:
 
 ---
 
-## DEFAULTS Y ESTILO ANDREA ESTRATEGA
+## DEFAULTS Y ESTILO FIRMA F100K
 
 Cuando el usuario no especifica estilo, aplicar el **Estilo FORMULA 100K**:
 

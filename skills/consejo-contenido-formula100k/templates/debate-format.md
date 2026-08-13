@@ -37,9 +37,9 @@ Usa esta estructura exacta en cada Consejo. No improvises banners ni dividers. L
 
 ──────────────────────────────────────────────────────────────────
 
-🎭 LA VOZ DE ANDREA
+🎭 LA VOZ DE LA MARCA
 [3-6 oraciones. Guardiana del ADN. Detecta olor a IA, argentinismos,
- voz genérica. ¿Suena a Andrea o a cualquiera?]
+ voz genérica. ¿Suena al usuario o a cualquiera?]
 
 ──────────────────────────────────────────────────────────────────
 
@@ -80,5 +80,5 @@ Antes de cerrar la sección de debate, verifica:
 - [ ] ¿El Scroll-Stopper es genuinamente incómodo de leer? (Si no, está muy suave.)
 - [ ] ¿La Neuro lee una curva real, no un "buena retención" genérico?
 - [ ] ¿El Vendedor pregunta de verdad si vende, o solo elogia?
-- [ ] ¿La Voz de Andrea revisó argentinismos y olor a IA?
+- [ ] ¿La Voz de la Marca revisó argentinismos y olor a IA?
 - [ ] ¿El Remix reencuadra el ángulo, o solo lista pros y contras?

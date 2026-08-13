@@ -1,6 +1,6 @@
 # Voz y frases tipo F100K · Reporte de benchmark
 
-El reporte debe sonar como Andrea: **directa, cuantitativa, sin tecnicismos enterprise, español neutro**. Esta es la guía de estilo.
+El reporte debe sonar con la voz de la marca: **directa, cuantitativa, sin tecnicismos enterprise, español neutro**. Esta es la guía de estilo.
 
 ---
 
@@ -58,7 +58,7 @@ NO usar:
 
 ## 🚫 VOSEO ARGENTINO — PROHIBIDO
 
-Memoria explícita: Andrea escribe en **español neutro**, no argentino.
+Memoria explícita: El usuario escribe en **español neutro**, no argentino.
 
 NO usar: vos, sos, tenés, sabés, podés, querés, debés, copiá, pegá, elegí, llená, montá, mirá, hacé, andá, escogé, seleccioná, etc.
 

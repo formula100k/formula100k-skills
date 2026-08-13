@@ -110,11 +110,9 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `audios-venta-f100k` — Audios de venta para DM/WhatsApp
 - `constructor-ofertas-f100k` — Construir ofertas irresistibles
 - `cazador-lead-magnets-f100k` — Lead magnets tangibles que generan comentarios masivos (Método LMT)
-- `andrea-vendedora-instagram` — Agente vendedor para DMs de Instagram
 
 ### Comunidad Skool
 - `creadora-comunidades-skool` — Construir comunidades Skool desde cero
-- `respondedora-andrea-skool` — Responder posts/comentarios en Skool
 - `auditor-formula100k` — Auditar comunidades Skool + estrategias de contenido
 - `roadmap-producto-f100k` — Roadmap de producto con Backward Design
 
@@ -160,6 +158,44 @@ Familia de 6 skills que automatizan tu rutina diaria y semanal de contenido. **C
 **Config:** Guardada en `~/.f100k-radar/config.json` en tu máquina (local, no en el repo — cada alumna tiene la suya).
 
 **MCPs requeridos:** Apify, Tavily, Gmail. Ver [`MCPS.md`](./MCPS.md).
+
+---
+
+## 🔒 Para el equipo — antes de publicar (obligatorio)
+
+Este repo es la **copia de distribución**: lo que hay aquí se instala en la máquina de cada
+alumna. Las skills se escriben en `~/.claude/skills/`, donde es normal que estén personalizadas
+(rutas locales, la cuenta propia, la voz propia). **Al copiarlas aquí, esa personalización se
+convierte en una fuga**: el Claude de la alumna lee "eres Andrea" o "usa la carpeta de Andrea"
+y se niega a trabajar ("no puedo usar información privada de otra persona"), o intenta leer
+rutas y repos que no existen en su máquina.
+
+Antes de cada commit de sync:
+
+```bash
+./scripts/check-fugas.sh
+```
+
+Revisa 7 clases de fuga: rutas `/Users/<alguien>/`, carpetas personales, handle hardcodeado,
+cuentas de GitHub/Vercel/Skool ajenas, "Andrea" usada como sujeto, punteros a memorias que
+solo existen en la máquina de origen, y secretos. Sale con error si encuentra algo.
+
+Reglas al escribir una skill para distribución:
+
+| En vez de… | Escribe… |
+|---|---|
+| `/Users/kissita/Documents/…` | `~/Documents/…` (docs) o `$HOME/…` (scripts) |
+| "Si Andrea pide…", "para Andrea" | "Si el usuario pide…", "para el usuario" |
+| `@andreaestratega` en una plantilla | `@tuhandle` + pregúntale el suyo la primera vez |
+| Carpeta `ANDREA SELFIES` | `MIS SELFIES`, y si no existe **pregunta** la ruta |
+| "usa la memoria `feedback_x_andrea`" | deja la regla escrita inline en la skill |
+| `Kissicore/repo`, scope de Vercel propio | `<TU-USUARIO-GITHUB>` / `vercel whoami` |
+
+Atribuir la metodología a **Andrea Vega** (autoría) sí está bien. Lo que no puede aparecer es
+Andrea como **usuaria** de la skill: en la máquina de la alumna, la usuaria es ella.
+
+Y al publicar: bumpea **las dos** versiones (`.claude-plugin/plugin.json` y `marketplace.json`)
+o la update-detection de las alumnas no dispara.
 
 ---
 

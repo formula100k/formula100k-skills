@@ -2,7 +2,7 @@
   "name": "carrusel-render-formula100k",
   "version": "1.0.0",
   "private": true,
-  "description": "Render carousel scripts to PNG slides using Andrea's FORMULA 100K brandkit",
+  "description": "Render carousel scripts to PNG slides using the creator's FORMULA 100K brandkit",
   "main": "export.js",
   "scripts": {
     "export": "node export.js"

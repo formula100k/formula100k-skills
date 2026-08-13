@@ -89,7 +89,7 @@ Para el slot de VIERNES (venta suave), el CTA incluye:
 
 ### Paso 5 — Generar CSV
 
-Crear archivo en `/Users/kissita/Documents/FORMULA100K/CALENDARIOS/` con nombre:
+Crear archivo en `~/Documents/FORMULA100K/CALENDARIOS/` con nombre:
 `calendario_[fecha_lunes]_[nicho_slug].csv`
 
 Donde `nicho_slug` = primeras 2 palabras del nicho en minúsculas con guión (ej: `finanzas-personales`, `marketing-digital`)

@@ -1,7 +1,7 @@
 ---
 name: carrusel-render-formula100k
 description: >
-  Skill para renderizar guiones de carrusel a slides PNG terminados, listos para subir a Instagram, usando el brandkit visual de Andrea Vega (FÓRMULA 100K) — estilo scrapbook/collage con paleta crema, tipografías Caveat + Poppins, post-its, washi tape y stickers. Soporta integrar FOTOS REALES del usuario (polaroid, hero background, cutout). Activar SIEMPRE que Andrea pida: "renderiza este carrusel", "exporta este guion a PNG", "convierte este guion en slides", "diséñame el carrusel", "hazme las imágenes del carrusel", "genera las slides en mi estilo", "carrusel con mi foto", "usa mis fotos", o cualquier solicitud que combine un guion de carrusel (slide 1 / slide 2 / etc.) con la intención de tener archivos visuales listos. También activar cuando le pasen el output de la skill carrusel-viral-formula100k y quiera renderizarlo. NO usar para generar el guion — para eso está carrusel-viral-formula100k.
+  Skill para renderizar guiones de carrusel a slides PNG terminados, listos para subir a Instagram, usando el brandkit visual de Andrea Vega (FÓRMULA 100K) — estilo scrapbook/collage con paleta crema, tipografías Caveat + Poppins, post-its, washi tape y stickers. Soporta integrar FOTOS REALES del usuario (polaroid, hero background, cutout). Activar SIEMPRE que el usuario pida: "renderiza este carrusel", "exporta este guion a PNG", "convierte este guion en slides", "diséñame el carrusel", "hazme las imágenes del carrusel", "genera las slides en mi estilo", "carrusel con mi foto", "usa mis fotos", o cualquier solicitud que combine un guion de carrusel (slide 1 / slide 2 / etc.) con la intención de tener archivos visuales listos. También activar cuando le pasen el output de la skill carrusel-viral-formula100k y quiera renderizarlo. NO usar para generar el guion — para eso está carrusel-viral-formula100k.
 ---
 
 # Skill: Carrusel Render Fórmula 100K
@@ -12,7 +12,7 @@ Toma un guion estructurado de carrusel y produce los slides como imágenes PNG l
 
 ## CUÁNDO USAR ESTA SKILL
 
-Activar cuando Andrea ya tiene un guion de carrusel y necesita los slides VISUALES (PNG) renderizados. Esta skill **NO escribe el guion** — eso lo hace `carrusel-viral-formula100k`. Esta skill toma el guion y lo convierte en archivos visuales.
+Activar cuando el usuario ya tiene un guion de carrusel y necesita los slides VISUALES (PNG) renderizados. Esta skill **NO escribe el guion** — eso lo hace `carrusel-viral-formula100k`. Esta skill toma el guion y lo convierte en archivos visuales.
 
 Triggers típicos:
 - "Renderiza este carrusel"
@@ -21,7 +21,7 @@ Triggers típicos:
 - "Diséñame el carrusel"
 - "Convierte este carrusel en imágenes"
 - "Genera el carrusel en mi estilo"
-- Cuando Andrea pega un guion con estructura `Slide 1: ... / Slide 2: ...`
+- Cuando el usuario pega un guion con estructura `Slide 1: ... / Slide 2: ...`
 
 ---
 
@@ -36,21 +36,21 @@ Antes de escribir HTML, leer `brandkit.md` para conocer:
 - Handle e identidad
 
 ### Paso 2 — Confirmar el guion
-Si Andrea solo pasa una idea (no un guion estructurado), pídele que te dé el guion completo o sugiérele invocar primero `carrusel-viral-formula100k`. Si pasa un guion, identifica:
+Si el usuario solo pasa una idea (no un guion estructurado), pídele que te dé el guion completo o sugiérele invocar primero `carrusel-viral-formula100k`. Si pasa un guion, identifica:
 - Cuántos slides tiene (incluido portada y cierre)
 - Tema central (afecta acentos visuales del slide)
 - Si quiere subtema/color por slide (chisme tiene un color por chisme; otros temas pueden ser monocromáticos)
 
 ### Paso 3 — Confirmar uso de fotos reales
 
-Preguntar a Andrea si quiere incluir fotos suyas en el carrusel. Las opciones son:
+Preguntar al usuario si quiere incluir fotos suyas en el carrusel. Las opciones son:
 
 1. **Sin fotos** — solo brandkit con stickers, post-its, doodles (default si no responde)
 2. **Foto en uno o más slides** — pedir:
    - Ruta de la(s) foto(s), O
-   - Carpeta default `/Users/kissita/Documents/ANDREA SELFIES` (pool grande sin tags)
-   - Carpeta curada `/Users/kissita/Documents/ANDREA ADN` (3 fotos curadas con tags)
-3. **Si Andrea da una carpeta**: revisar las fotos con la herramienta Read y elegir la(s) que mejor calce(n) con cada slide según composición + tema
+   - Carpeta default `~/Documents/MIS SELFIES` (pool grande sin tags)
+   - Carpeta curada `~/Documents/MI ADN VISUAL` (3 fotos curadas con tags)
+3. **Si el usuario da una carpeta**: revisar las fotos con la herramienta Read y elegir la(s) que mejor calce(n) con cada slide según composición + tema
 
 Patrones de composición con foto disponibles (ver `references/fotos-reales.md`):
 - **Polaroid** — foto con borde blanco rotada como recorte de álbum
@@ -58,14 +58,14 @@ Patrones de composición con foto disponibles (ver `references/fotos-reales.md`)
 - **Cutout circular** — foto en círculo con sombra (estilo profile pic)
 - **Photo strip** — múltiples fotos pequeñas tipo tira de fotomatón
 
-Si la foto se incluye, copiarla a la carpeta de output con nombre simple (`andrea.jpg`, `slide-3-foto.jpg`) para que el `<img src="...">` use ruta relativa.
+Si la foto se incluye, copiarla a la carpeta de output con nombre simple (`foto.jpg`, `slide-3-foto.jpg`) para que el `<img src="...">` use ruta relativa.
 
 ### Paso 4 — Confirmar carpeta de salida
-Carpeta default: `/Users/kissita/Documents/FORMULA100K/CARRUSELES/CARRUSELES DIARIOS/{YYYY-MM-DD}-{slug-tema}/`
+Carpeta default: `~/Documents/FORMULA100K/CARRUSELES/CARRUSELES DIARIOS/{YYYY-MM-DD}-{slug-tema}/`
 
 Donde `{slug-tema}` es 2-4 palabras del tema en kebab-case. Ej: `2026-05-03-chisme-silicon-valley`.
 
-Confirmar con Andrea o usar default.
+Confirmar con el usuario o usar default.
 
 ### Paso 5 — Generar el HTML
 - Leer `references/composiciones.md` para variar la composición entre slides (no todos iguales)
@@ -84,19 +84,19 @@ Confirmar con Andrea o usar default.
 ### Paso 6 — Verificar dependencias
 Comprobar si `node_modules/puppeteer-core` existe en la carpeta de la skill:
 ```bash
-ls "/Users/kissita/.claude/skills/carrusel-render-formula100k/node_modules/puppeteer-core" 2>/dev/null
+ls "~/.claude/skills/carrusel-render-formula100k/node_modules/puppeteer-core" 2>/dev/null
 ```
 
 Si no existe, instalar UNA SOLA VEZ (la skill es self-contained):
 ```bash
-cd "/Users/kissita/.claude/skills/carrusel-render-formula100k" && npm install puppeteer-core --cache /tmp/npm-cache-skill
+cd "~/.claude/skills/carrusel-render-formula100k" && npm install puppeteer-core --cache /tmp/npm-cache-skill
 ```
 
 NOTA: usar siempre `--cache /tmp/npm-cache-skill` para evitar el bug conocido de permisos en `~/.npm/_cacache`.
 
 ### Paso 7 — Exportar PNGs
 ```bash
-node "/Users/kissita/.claude/skills/carrusel-render-formula100k/export.js" "{ruta-al-html}"
+node "~/.claude/skills/carrusel-render-formula100k/export.js" "{ruta-al-html}"
 ```
 
 El script:
@@ -108,7 +108,7 @@ El script:
 ### Paso 8 — Confirmar y abrir
 - Verificar que existen N PNGs
 - `open "{carpeta-output}"` para mostrar en Finder
-- Reportar a Andrea: ruta, cantidad de slides, tamaño, instrucciones para regenerar
+- Reportar al usuario: ruta, cantidad de slides, tamaño, instrucciones para regenerar
 
 ---
 
@@ -126,7 +126,7 @@ El script:
 
 ## FORMATO DE GUION ESPERADO
 
-Andrea suele pasar guiones así:
+El usuario suele pasar guiones así:
 
 ```
 Slide 1: Portada
@@ -137,7 +137,7 @@ Slide 2: ...
 Cuerpo: ...
 ```
 
-O en formato libre. La skill debe ser flexible: si Andrea pasa el guion en otro formato, parsearlo igual y mapear a slides.
+O en formato libre. La skill debe ser flexible: si el usuario pasa el guion en otro formato, parsearlo igual y mapear a slides.
 
 ---
 

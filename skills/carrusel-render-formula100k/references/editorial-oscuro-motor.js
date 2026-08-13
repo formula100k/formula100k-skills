@@ -92,7 +92,7 @@ function appBg(){return `<div class="bg" style="background-image:url('${PHOTO}')
 function cover(){
   return `<div class="slide">${coverBg()}
    <div class="eyebrow">Mi stack de IA</div>
-   <div class="handle">@andreaestratega</div>
+   <div class="handle">@tuhandle</div>
    <div class="h1">
      <div class="a">Las 6 apps</div>
      <div class="b">con las que creo</div>
@@ -137,7 +137,7 @@ function appSlide(app,idx){
 function cta(){
   return `<div class="slide">${coverBg()}
    <div class="eyebrow">Mi stack de IA</div>
-   <div class="handle">@andreaestratega</div>
+   <div class="handle">@tuhandle</div>
    <div class="cta">
      <div class="k">¿Quieres<br>el stack?</div>
      <div class="s">Comenta <span class="word">“APP”</span> y te mando<br>la guía completa por DM 👽</div>

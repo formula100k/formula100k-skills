@@ -1,12 +1,12 @@
 ---
 name: motion-takeover-f100k
-description: "Convierte un video GRABADO CON TU CARA (16:9) en un video con TAKEOVERS faceless a pantalla completa estilo el video de 'Claude Routines': en los momentos clave la pantalla se llena de motion graphics — SVG paths que se dibujan solos + secuencia de mockups paso a paso + imágenes IA/capturas; tu voz sigue debajo y luego regresa tu cara. Con cara en cuadro van overlays ligeros en zonas seguras. Hereda de motion-youtube-f100k (overlays, cara) y editor-video-formula100k (corte semántico). GARANTÍA de audio sin desfase: los takeovers se montan como overlay OPACO (enable=between), nunca cortando/concatenando. Activar cuando Andrea diga: 'edita este video con takeovers', 'motion graphics fullscreen tipo el video que te mandé', 'ponle SVG paths a pantalla completa', 'mockups paso a paso', 'estilo Claude Routines', 'cortes a gráfica'. NO usar para 9:16 (motion-reels-f100k), overlays sin takeover (motion-youtube-f100k), ni solo corte (editor-video-formula100k). Output: \$DEST/video_final.mp4"
+description: "Convierte un video GRABADO CON TU CARA (16:9) en un video con TAKEOVERS faceless a pantalla completa estilo el video de 'Claude Routines': en los momentos clave la pantalla se llena de motion graphics — SVG paths que se dibujan solos + secuencia de mockups paso a paso + imágenes IA/capturas; tu voz sigue debajo y luego regresa tu cara. Con cara en cuadro van overlays ligeros en zonas seguras. Hereda de motion-youtube-f100k (overlays, cara) y editor-video-formula100k (corte semántico). GARANTÍA de audio sin desfase: los takeovers se montan como overlay OPACO (enable=between), nunca cortando/concatenando. Activar cuando el usuario diga: 'edita este video con takeovers', 'motion graphics fullscreen tipo el video que te mandé', 'ponle SVG paths a pantalla completa', 'mockups paso a paso', 'estilo Claude Routines', 'cortes a gráfica'. NO usar para 9:16 (motion-reels-f100k), overlays sin takeover (motion-youtube-f100k), ni solo corte (editor-video-formula100k). Output: \$DEST/video_final.mp4"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill
 ---
 
 # Motion Takeover para YouTube — FÓRMULA 100K
 
-Toma un **video grabado con la cara de Andrea (16:9)** y produce un `video_final.mp4` que **alterna dos modos**:
+Toma un **video grabado con la cara del usuario (16:9)** y produce un `video_final.mp4` que **alterna dos modos**:
 
 - **Modo cara** → overlays ligeros en zonas seguras (hereda los 6 templates de `motion-youtube-f100k`).
 - **Modo takeover** → en los momentos clave la pantalla **se llena** de motion graphics faceless (SVG paths que se dibujan + mockups paso a paso + imágenes IA/capturas). La voz sigue debajo; luego regresa la cara.
@@ -57,7 +57,7 @@ Definir variables:
 - `$DEST` — carpeta de trabajo (la del archivo, o `~/Desktop/takeover-$(date +%Y%m%d)/`).
 - `$SKILL` — `$HOME/.claude/skills/motion-takeover-f100k` (templates + scripts de esta skill).
 - `$OUTPUT` — `$DEST/video_final.mp4`.
-- `$USER_SHOTS` — `$DEST/USER/` (capturas reales opcionales que deje Andrea).
+- `$USER_SHOTS` — `$DEST/USER/` (capturas reales opcionales que deje el usuario).
 
 ---
 
@@ -81,7 +81,7 @@ ffprobe -v error -show_entries format=duration -of default=nokey=1:noprint_wrapp
 
 El corte deja `captions.json` (word-level, sobre la línea cortada). Se reutiliza en el Paso 2.
 
-> Si Andrea insiste en "ya está editado, no cortes" → saltar, pero **advertir** que el corte semántico es la regla de la casa. Por defecto SIEMPRE se corta.
+> Si el usuario insiste en "ya está editado, no cortes" → saltar, pero **advertir** que el corte semántico es la regla de la casa. Por defecto SIEMPRE se corta.
 
 ---
 
@@ -172,7 +172,7 @@ Para cada entrada `lane:"takeover"`:
 2. **Imágenes IA (cuando la escena es `image`/`bignum` o el guion pide una escena real):**
    - Genera con la skill **`banana`** (Gemini Nano Banana) o el MCP **Higgsfield** (`mcp__higgsfield__generate_image`, `nano_banana_2`, 16:9).
    - Guarda en `$DEST/assets/` y referénciala como `<img src="../assets/xxx.png">` dentro de la escena.
-   - Respeta la identidad de marca de Andrea (memoria: avatar-imagen) si aparece su cara.
+   - Respeta la identidad de marca del usuario (memoria: avatar-imagen) si aparece su cara.
 3. **Capturas reales (`USER/`):** si existe `$DEST/USER/*.png|jpg`, slottéala **dentro del `.mock .body`** de una escena `ui` (reemplaza el placeholder de texto por `<img>`), para mostrar el software real.
 
 > Regla: NADA de stock. Si no hay imagen IA ni captura, la escena se resuelve 100% vectorial (mockups + paths + tipografía).
@@ -311,7 +311,7 @@ $DEST/
 ├── captions.json / transcript.json
 ├── motion_board.json          ← 2 carriles (overlay + takeover)
 ├── assets/                     ← imágenes IA / capturas procesadas
-├── USER/                       ← (input) capturas reales que deja Andrea
+├── USER/                       ← (input) capturas reales que dejal usuario
 ├── overlays/
 │   ├── index.html (#00ff00)   ← overlays modo cara (keyed)
 │   └── overlays.mp4

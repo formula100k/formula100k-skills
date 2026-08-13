@@ -76,7 +76,7 @@ Cada hook se entrega con: texto verbal · gancho visual · nivel de consciencia 
 
 **Nivel de consciencia:** Consciente de la solución → Consciente del producto.
 
-**Mejor para:** Tráfico tibio, audiencias que ya consumen contenido de Andrea.
+**Mejor para:** Tráfico tibio, audiencias que ya consumen contenido del usuario.
 
 **Gancho visual:** Texto-comando en MAYÚSCULAS con fondo de color contraste. Dedo apuntando o gesto de "stop".
 
@@ -95,7 +95,7 @@ Cada hook se entrega con: texto verbal · gancho visual · nivel de consciencia 
 
 **Mejor para:** Tráfico frío de TikTok (donde la controversia engancha).
 
-**Gancho visual:** Andrea apuntando al teléfono con cara de "qué error" + texto contrario al consejo común tachado en rojo.
+**Gancho visual:** la creadora apuntando al teléfono con cara de "qué error" + texto contrario al consejo común tachado en rojo.
 
 **Regla:** La provocación debe ser DEFENDIBLE con datos. Si es solo edgy, pierde credibilidad en el meat.
 
@@ -133,7 +133,7 @@ Cada hook se entrega con: texto verbal · gancho visual · nivel de consciencia 
 
 **Mejor para:** Tráfico frío de Meta (Facebook + IG). Funciona menos bien en TikTok porque el ritmo es lento al inicio.
 
-**Gancho visual:** Plano cerrado de Andrea hablando con expresión de "estaba viviendo esto" + B-roll del lugar específico mencionado (consulta, escritorio, café).
+**Gancho visual:** Plano cerrado del usuario hablando con expresión de "estaba viviendo esto" + B-roll del lugar específico mencionado (consulta, escritorio, café).
 
 **Regla:** La situación debe ser ESPECÍFICA (lugar + hora del día + objeto). Lo genérico ("estaba pensando un día...") mata el hook.
 
@@ -171,7 +171,7 @@ Cada hook se entrega con: texto verbal · gancho visual · nivel de consciencia 
 
 **Mejor para:** Tráfico frío + retargeting. Mejor en YouTube Ads y Reels promocionados.
 
-**Gancho visual:** Número GIGANTE con animación de contador. Andrea con cara de "esto no te lo cuentan".
+**Gancho visual:** Número GIGANTE con animación de contador. El usuario con cara de "esto no te lo cuentan".
 
 **Regla:** El stat debe ser específico y verificable. Si no tienes data, usa rango propio: "De cada 10 creadoras que asesoro, 8 cometen este error" (es verídico y específico).
 
@@ -213,5 +213,5 @@ Cada hook se entrega con: texto verbal · gancho visual · nivel de consciencia 
 1. **Hook genérico:** "Si eres emprendedora, esto es para ti" → fail. Específica: "Si vendes coaching 1-on-1 a más de $1.000 y no escalas". 
 2. **Doble call-out:** "Si eres coach Y mamá Y emprendedora..." → diluye. Máximo 1 dimensión avatar.
 3. **Promesa imposible:** "Factura $100K en 7 días" → Meta lo bloquea, el avatar no lo cree.
-4. **Hook sin condición de valor:** "Hola, soy Andrea" → no vende el siguiente segundo.
+4. **Hook sin condición de valor:** "Hola, soy [tu nombre]" → no vende el siguiente segundo.
 5. **Hook al final del ad:** SIEMPRE va en 0:00-0:03.

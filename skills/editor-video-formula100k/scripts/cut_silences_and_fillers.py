@@ -29,7 +29,7 @@ Strategy:
       Skipped gracefully when no key is set. An over-delete guard (40% cap) means
       a bad suggestion can never gut the video.
   3. Drop consecutive repeated words (stutters), keeping the LAST attempt
-  4. Drop phrase restarts (el usuario stumbles + retries)
+  4. Drop phrase restarts (Andrea stumbles + retries)
   5. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
   6. Compute "keep" ranges; any gap > MIN_SILENCE between kept words is cut
   6b. Snap every cut boundary onto the nearest REAL silence in the audio energy
@@ -186,7 +186,7 @@ def remove_repeated_words(words: list[dict], max_gap: float) -> tuple[list[dict]
 
 
 # ── Phrase-level restart removal ─────────────────────────────────────────
-# Detects when the user restarts a sentence after a stumble: e.g.
+# Detects when Andrea restarts a sentence after a stumble: e.g.
 #   "Si usas cloud para crear contenido... Si usas códigos de cloud..."
 # Keeps only the LAST attempt of each restart chain.
 
@@ -242,7 +242,7 @@ def _split_phrases(words: list[dict], min_pause: float) -> list[list[dict]]:
 def _is_restart(a: list[dict], b: list[dict], max_gap: float) -> bool:
     """Returns True if phrase a is a restart of phrase b.
 
-    Differentiates restarts (el usuario stumbled) from list items (consecutive sentences
+    Differentiates restarts (Andrea stumbled) from list items (consecutive sentences
     starting the same way intentionally) by requiring either (a) very strong
     first-word match (4+), (b) substantial repeated chunk (LCS ≥ 4 AND ≥ 40%),
     or (c) shorter/unfinished `a` with weaker overlap.
@@ -330,7 +330,7 @@ def remove_phrase_restarts(
 # ── Semantic cleanup (Claude) ────────────────────────────────────────────
 # The lexical layers above (stutter dedupe, phrase-restart, fillers) only catch
 # repetitions that LOOK alike as strings. They miss the real failure mode:
-# The speaker misspeaks, then re-says the idea with DIFFERENT words — or repeats a
+# Andrea misspeaks, then re-says the idea with DIFFERENT words — or repeats a
 # word with a breath in between, or wanders off and comes back. To "understand"
 # the transcript we hand it to Claude, which reasons like a human editor:
 # "she botched this take and nailed it here → keep the good one". Claude returns

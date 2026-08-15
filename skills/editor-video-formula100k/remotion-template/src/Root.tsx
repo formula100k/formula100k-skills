@@ -61,7 +61,7 @@ const statDefaults: StatCounterProps = {
 
 const quoteDefaults: QuoteCardProps = {
   quote: 'El contenido que vende no es el más bonito, es el más claro.',
-  author: '[TU NOMBRE] — Fórmula 100K',
+  author: 'Andrea Vega — Fórmula 100K',
   accentColor: '#F59E0B',
 };
 

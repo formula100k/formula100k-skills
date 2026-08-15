@@ -62,6 +62,13 @@ export type CreaContenidoViralProps = {
   height: number;
   fps: number;
   durationInFrames: number;
+  formato?: string;
+  tema?: string;
+  subtitulos?: boolean;
+  /** Screen recording que hace de lienzo en el formato pip. */
+  canvasSrc?: string;
+  /** Esquina donde va el recuadro de cámara. Default 'tr' (ver pip.tsx). */
+  pipEsquina?: 'tl' | 'tr' | 'bl' | 'br';
 };
 
 // ──────────────────────────────────────────────────────────────────────
@@ -119,4 +126,15 @@ export type TutorialFacelessProps = {
   height: number;
   fps: number;
   durationInFrames: number;
+};
+
+// ──────────────────────────────────────────────────────────────────────
+// Despachador de formatos — props ya resueltas que consume cada componente
+// registrado en `formatos/index.ts`.
+// ──────────────────────────────────────────────────────────────────────
+
+export type FormatoProps = CreaContenidoViralProps & {
+  formato: string;
+  tema: string;
+  subtitulos: boolean;
 };

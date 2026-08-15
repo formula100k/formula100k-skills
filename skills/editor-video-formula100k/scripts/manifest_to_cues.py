@@ -110,6 +110,96 @@ def _clean_inline(s: str) -> str:
 DEFAULT_HEADER_HIDE_AFTER = 8.0  # segundos — el header funciona como gancho, no debe quedarse todo el video
 
 
+# ── Catálogo de formatos ────────────────────────────────────────────────
+# Espejo de remotion-template/src/formatos.ts. test_manifest_formato.py
+# verifica que ambos lados no se desfasen.
+FORMATOS_VALIDOS = ('fullscreen', 'split', 'pip', 'faceless', 'noticiero')
+FORMATO_DEFAULT = 'fullscreen'
+TEMAS_VALIDOS = ('default', 'crema-editorial')
+ESQUINAS_VALIDAS = ('tl', 'tr', 'bl', 'br')
+
+_TEMA_POR_FORMATO = {
+    'fullscreen': 'default',
+    'split': 'crema-editorial',
+    'pip': 'default',
+    'faceless': 'default',
+    'noticiero': 'default',
+}
+_SUBTITULOS_POR_FORMATO = {
+    'fullscreen': False,
+    'split': True,
+    'pip': True,
+    'faceless': True,
+    'noticiero': False,
+}
+
+_VERDADEROS = {'on', 'si', 'sí', 'true', '1', 'yes'}
+_FALSOS = {'off', 'no', 'false', '0'}
+
+
+def parse_formato(text: str) -> dict:
+    """Lee `Formato`, `Tema`, `Subtítulos` y `Esquina cámara` del MANIFEST.
+
+    Los cuatro son opcionales. Sin ellos, el resultado equivale al
+    comportamiento anterior al catálogo (fullscreen, tema default,
+    subtítulos apagados, sin `pipEsquina` — el formato usa su propio
+    default).
+    """
+    def grab(*labels: str) -> str | None:
+        for label in labels:
+            m = re.search(
+                rf'^\s*[-*]?\s*\*{{0,2}}\s*{label}\s*\*{{0,2}}\s*:\s*(.+?)\s*$',
+                text, re.IGNORECASE | re.MULTILINE,
+            )
+            if m:
+                return _clean_inline(m.group(1)).lower()
+        return None
+
+    formato = grab('Formato')
+    if formato is not None and formato not in FORMATOS_VALIDOS:
+        print(f'[warn] formato desconocido: {formato!r} — uso {FORMATO_DEFAULT}',
+              file=sys.stderr)
+        formato = None
+    formato = formato or FORMATO_DEFAULT
+
+    tema = grab('Tema')
+    if tema is not None and tema not in TEMAS_VALIDOS:
+        print(f'[warn] tema desconocido: {tema!r} — uso el del formato',
+              file=sys.stderr)
+        tema = None
+    tema = tema or _TEMA_POR_FORMATO[formato]
+
+    subs_raw = grab('Subtítulos', 'Subtitulos')
+    if subs_raw in _VERDADEROS:
+        subtitulos = True
+    elif subs_raw in _FALSOS:
+        subtitulos = False
+    else:
+        if subs_raw is not None:
+            print(f'[warn] valor de subtítulos no reconocido: {subs_raw!r} — '
+                  f'uso el del formato', file=sys.stderr)
+        subtitulos = _SUBTITULOS_POR_FORMATO[formato]
+
+    out = {'formato': formato, 'tema': tema, 'subtitulos': subtitulos}
+
+    # Esquina cámara: sólo se emite la clave si el valor es válido. Ausente,
+    # vacío o desconocido → se omite y el formato usa su propio default (hoy
+    # 'tr' en pip.tsx), en vez de forzar uno acá. Un campo vacío en el
+    # MANIFEST (`- **Esquina cámara:**` sin nada después) se parsea como
+    # cadena vacía, no como None (el `**` de cierre del bold queda como
+    # "valor" hasta que `_clean_inline` lo limpia) — se trata igual que
+    # ausente, sin ruido: no es un valor desconocido, es simplemente nada.
+    esquina = grab('Esquina cámara', 'Esquina camara')
+    if esquina:
+        if esquina in ESQUINAS_VALIDAS:
+            out['pipEsquina'] = esquina
+        else:
+            print(f'[warn] esquina cámara desconocida: {esquina!r} — se omite',
+                  file=sys.stderr)
+
+    return out
+
+
 def parse_header(text: str) -> dict:
     sec = _section(text, 'Header')
     line1 = ''
@@ -287,6 +377,7 @@ def main() -> int:
         'overlayCues': parse_overlays(text),
         'brollCues': parse_broll(text),
         'hookCue': parse_hook_cue(text),
+        **parse_formato(text),
     }
 
     # Optional sanity check: warn if any keyword doesn't appear in captions.json.
@@ -321,6 +412,8 @@ def main() -> int:
     print(f'  brollCues:    {len(cues["brollCues"])}', file=sys.stderr)
     print(f'  hookCue:      {"yes — " + cues["hookCue"]["src"] if cues["hookCue"] else "no"}',
           file=sys.stderr)
+    print(f'  formato:      {cues["formato"]} · tema {cues["tema"]} · '
+          f'subtítulos {"on" if cues["subtitulos"] else "off"}', file=sys.stderr)
     return 0
 
 

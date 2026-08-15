@@ -110,6 +110,39 @@ def main() -> int:
         (pub / '_source_cut.mov').unlink()
     copy_or_link(cut_video, pub / '_source_cut.mov')
 
+    # Limpieza del canvas de un proyecto anterior: siempre se borran los
+    # `_canvas.*` que hubiera en public/ antes de decidir si este proyecto
+    # trae uno nuevo. Si no lo trae, el barrido ya dejó public/ limpio.
+    for viejo in pub.glob('_canvas.*'):
+        viejo.unlink()
+
+    # Canvas opcional para el formato pip: primer .mp4/.mov/.webm dentro de
+    # $DEST/CANVAS/, copiado SIEMPRE a un nombre reservado (`_canvas<ext>`),
+    # nunca con el nombre original. Si se copiara con su nombre original y
+    # el usuario llamó a su grabación igual que el archivo que este script
+    # ya gestiona (p. ej. `_source_cut.mov`), el canvas pisaría la toma de
+    # cámara en public/ y `render.ts` recibiría `--video` y `--canvas`
+    # apuntando al mismo archivo: la cámara desaparecería en silencio y el
+    # lienzo se dibujaría dos veces. El nombre reservado hace esa colisión
+    # imposible.
+    canvas_arg: list[str] = []
+    canvas_dir = dest / 'CANVAS'
+    if canvas_dir.is_dir():
+        candidatos = sorted(
+            p for p in canvas_dir.iterdir()
+            if p.suffix.lower() in {'.mp4', '.mov', '.webm'}
+        )
+        if candidatos:
+            elegido = candidatos[0]
+            stderr(
+                f'[warn] canvas de pip: uso {elegido.name} de CANVAS/'
+                + (f' ({len(candidatos)} candidatos, orden alfabético)'
+                   if len(candidatos) > 1 else '')
+            )
+            nombre_canvas = f'_canvas{elegido.suffix.lower()}'
+            copy_or_link(elegido, pub / nombre_canvas)
+            canvas_arg = ['--canvas', nombre_canvas]
+
     # Paso D — Render con npx tsx
     step('4/4', 'Renderizando reel-viral...')
     out = dest / 'BORRADOR_AUTO.mp4'
@@ -120,6 +153,7 @@ def main() -> int:
          '--video', '_source_cut.mov',
          '--transcript', str(captions),
          '--cues', str(dest / 'cues.json'),
+         *canvas_arg,
          '--out', str(out)],
         cwd=str(template_dir),
         check=True,

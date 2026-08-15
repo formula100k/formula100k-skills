@@ -14,7 +14,7 @@ import {
 // ────────────────────────────────────────────────────────────────────────
 // FÓRMULA 100K NEWS — composición horizontal 1920×1080 (broadcast bulletin)
 //
-// Todo gráfico vive en el TERCIO INFERIOR para no tapar la cara del usuario
+// Todo gráfico vive en el TERCIO INFERIOR para no tapar la cara de Andrea
 // (centro en talking-head) ni la burbuja de cámara (arriba-centro en
 // screen-share). Sistema: barra de noticias persistente + chyrons lower-third
 // + tarjetas (título, bignum, leaderboard, lista) ancladas por keyword.

@@ -24,6 +24,13 @@
  *     --cues <cues.json> \
  *     --captions <captions_kinetic.json> \
  *     --out <ruta-de-salida.mp4>
+ *
+ *   NOTA: los captions cinéticos de este modo pasan por la capa compartida
+ *   `src/layers/Captions.tsx`, que aplica `textTransform: uppercase` sin
+ *   forma de apagarlo por prop. El componente de captions que tenía este
+ *   modo antes de compartir la capa NO ponía mayúsculas — quien consuma este
+ *   output esperando el casing original del transcript debe saber que ahora
+ *   sale en MAYÚSCULAS.
  */
 
 import path from 'node:path';
@@ -55,6 +62,10 @@ type CuesFile = {
   overlayCues: OverlayCue[];
   brollCues: BrollCue[];
   hookCue?: HookCue | null;
+  formato?: string;
+  tema?: string;
+  subtitulos?: boolean;
+  pipEsquina?: 'tl' | 'tr' | 'bl' | 'br';
 };
 
 type ReelArgs = {
@@ -64,6 +75,7 @@ type ReelArgs = {
   cuesPath: string;
   outPath: string;
   duration?: number;
+  canvas?: string;
 };
 
 type MotionArgs = {
@@ -107,6 +119,7 @@ function parseArgs(argv: string[]): Args {
     else if (a === '--duration') raw.duration = next();
     else if (a === '--composition') raw.composition = next();
     else if (a === '--props') raw.props = next();
+    else if (a === '--canvas') raw.canvas = next();
   }
 
   if (raw.mode === 'tutorial') {
@@ -148,6 +161,7 @@ function parseArgs(argv: string[]): Args {
     cuesPath: path.resolve(raw.cuesPath),
     outPath: path.resolve(raw.outPath ?? './reel-viral.mp4'),
     duration: raw.duration ? Number(raw.duration) : undefined,
+    canvas: raw.canvas,
   };
 }
 
@@ -299,6 +313,11 @@ async function main() {
     height: 1920,
     fps,
     durationInFrames,
+    formato: cues.formato ?? 'fullscreen',
+    tema: cues.tema ?? 'default',
+    subtitulos: cues.subtitulos ?? false,
+    canvasSrc: args.canvas ? path.basename(args.canvas) : undefined,
+    pipEsquina: cues.pipEsquina,
   };
 
   console.log('[render] selecting composition reel-viral…');

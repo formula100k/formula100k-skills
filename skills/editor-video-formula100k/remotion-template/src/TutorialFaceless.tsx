@@ -4,8 +4,10 @@ import {
   spring, staticFile, useCurrentFrame, useVideoConfig,
 } from 'remotion';
 import type {
-  TutorialFacelessProps, KineticCaption, BackgroundCue, CardCue, BrollCue,
+  TutorialFacelessProps, BackgroundCue, CardCue, BrollCue,
 } from './types';
+import {Captions} from './layers/Captions';
+import {getTema} from './temas';
 
 function norm(s: string): string {
   return s.toLowerCase()
@@ -106,41 +108,6 @@ const Broll: React.FC<{cue: BrollCue; fps: number; transcript: TutorialFacelessP
   );
 };
 
-// ── Captions cinéticos ──────────────────────────────────────────────────
-const Captions: React.FC<{caps: KineticCaption[]; fps: number; position: 'center'|'lower-third'}> =
-({caps, fps, position}) => (
-  <>
-    {caps.map((c, i) => {
-      const from = Math.round(c.start * fps);
-      const frames = Math.max(1, Math.round((c.end - c.start) * fps));
-      return (
-        <Sequence key={i} from={from} durationInFrames={frames}>
-          <CaptionWord text={c.text} fps={fps} position={position} />
-        </Sequence>
-      );
-    })}
-  </>
-);
-
-const CaptionWord: React.FC<{text: string; fps: number; position: 'center'|'lower-third'}> =
-({text, fps, position}) => {
-  const frame = useCurrentFrame();
-  const pop = spring({frame, fps, config: {stiffness: 320, damping: 26}});
-  const justify = position === 'center' ? 'center' : 'flex-end';
-  const pad = position === 'center' ? 0 : 360;
-  return (
-    <AbsoluteFill style={{justifyContent: justify, alignItems: 'center', paddingBottom: pad}}>
-      <div style={{
-        fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 84, color: '#fff',
-        WebkitTextStroke: '6px #000', textShadow: '0 6px 18px rgba(0,0,0,0.5)',
-        transform: `scale(${0.85 + pop * 0.15})`, textAlign: 'center', maxWidth: 900,
-        lineHeight: 1.05, padding: '0 40px'}}>
-        {text}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
 // ── Tarjeta gancho / CTA (fullscreen pop) ───────────────────────────────
 const FullCard: React.FC<{src: string; fps: number}> = ({src, fps}) => {
   const frame = useCurrentFrame();
@@ -174,7 +141,12 @@ export const TutorialFaceless: React.FC<TutorialFacelessProps> = (props) => {
 
       {/* Captions cinéticos */}
       {props.captionsConfig.enabled &&
-        <Captions caps={props.kineticCaptions} fps={fps} position={props.captionsConfig.position} />}
+        <Captions
+          chunks={props.kineticCaptions}
+          fps={fps}
+          position={props.captionsConfig.position}
+          tema={getTema('default')}
+        />}
 
       {/* Tarjeta gancho (encima de todo, al inicio) */}
       {props.hookCard &&

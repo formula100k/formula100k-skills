@@ -11,8 +11,8 @@ Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del t
 
 **Antes de escribir nada:**
 
-1. Identifica el **RUBRO real** de la persona (léelo de su Segundo Cerebro, de su perfil o
-   pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
+1. Identifica el **RUBRO real** de la persona (léelo de lo que ya te haya contado, de su
+   perfil, o pregúntaselo en una línea si no está claro). Decláralo: *"Rubro: ___"*.
 2. Todos los ejemplos, analogías, comparaciones, objeciones, métricas y vocabulario salen
    de **ESE** rubro.
 3. Si el rubro **no** es marketing, redes sociales, creación de contenido, ventas online o

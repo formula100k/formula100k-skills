@@ -1,18 +1,18 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado por Andrea + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone uno de 3 formatos elegibles desde el MANIFEST — fullscreen (talking-head 9:16), split, pip — de un catálogo de 5 (faceless/noticiero: aún no elegibles); subtítulos según formato. Sincroniza por keyword sobre el transcript (no por timestamp), sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: motion graphics animados (HyperFrames, HTML+GSAP, gratis) como overlays o B-roll. Activar cuando Andrea diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md con intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); primera vez instala dependencias vía bootstrap."
+description: "Toma un video grabado por el usuario + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone uno de 3 formatos elegibles desde el MANIFEST — fullscreen (talking-head 9:16), split, pip — de un catálogo de 5 (faceless/noticiero: aún no elegibles); subtítulos según formato. Sincroniza por keyword sobre el transcript (no por timestamp), sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: motion graphics animados (HyperFrames, HTML+GSAP, gratis) como overlays o B-roll. Activar cuando el usuario diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md con intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); primera vez instala dependencias vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
 # Editor de Video Auto — FÓRMULA 100K
 
-Pipeline automatizado: toma una grabación de Andrea + un `MANIFEST.md` (keyword-based) y produce `BORRADOR_AUTO.mp4` listo para retoque fino en CapCut/Premiere.
+Pipeline automatizado: toma una grabación del usuario + un `MANIFEST.md` (keyword-based) y produce `BORRADOR_AUTO.mp4` listo para retoque fino en CapCut/Premiere.
 
 El preset visual default es **"Crea contenido viral"** — el formato `fullscreen` del catálogo (ver `## Catálogo de formatos` más abajo; hay otros 4) — talking-head 9:16 a 30fps con:
 - Header persistente (2 líneas) grande, con trazo negro, debajo del cuarto superior
 - **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
 - Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
-- Overlays gráficos en el **tercio inferior** (muy por debajo del rostro, `bottom: 520`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, NUNCA tapan la cara, ni cuando Andrea se acerca a cámara)
+- Overlays gráficos en el **tercio inferior** (muy por debajo del rostro, `bottom: 520`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, NUNCA tapan la cara, ni cuando quien habla se acerca a cámara)
 - B-roll **videos** fullscreen estilo `monitor-photo` / **imágenes** en el tercio inferior (`bottom: 520`), igual que overlays — nunca tapan la cara
 - **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
 - **Sin subtítulos** — default de `fullscreen` (y también de `noticiero`); la cara y los gráficos llevan todo el peso visual. `split`, `pip` y `faceless` los traen encendidos por default.
@@ -90,12 +90,12 @@ La primera vez que invocas `/render <carpeta>` o `/edita <carpeta>`, el wrapper 
 
 Para correrlo manualmente:
 ```bash
-bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
+bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
 ```
 
 Sólo verificar sin instalar:
 ```bash
-bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
+bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
 ```
 
 ### Windows
@@ -122,7 +122,7 @@ Tarda ~5-8 min en máquina limpia, **sólo la primera vez**. Las invocaciones si
 
 ## Paso 0 — Confirmar el gancho textual (OBLIGATORIO antes del render)
 
-Antes de invocar `render.sh` / `render.ps1`, el agente **SIEMPRE** debe revisar y ofrecer variantes del header del MANIFEST. El header es el **gancho textual** del reel — vive sobre la cara de Andrea los primeros 8 segundos y carga el 80% del trabajo de retención. No se renderiza ciegamente lo que está en el MANIFEST; se valida con Andrea, aunque ella nunca lo haya pedido.
+Antes de invocar `render.sh` / `render.ps1`, el agente **SIEMPRE** debe revisar y ofrecer variantes del header del MANIFEST. El header es el **gancho textual** del reel — vive sobre la cara de quien habla los primeros 8 segundos y carga el 80% del trabajo de retención. No se renderiza ciegamente lo que está en el MANIFEST; se valida con el usuario, aunque nunca lo haya pedido.
 
 Esta regla aplica incluso si:
 - El MANIFEST viene recién generado por `recursos-de-video-formula100k` (sí, ese flujo ya pregunta en Paso 3.5 — pero al saltar a `/render` directamente o en un re-render posterior, esa elección puede no haber pasado).
@@ -132,7 +132,7 @@ Esta regla aplica incluso si:
 **Aviso — el header puede no llegar a renderizarse.** Este paso corre antes
 del Paso 0.5 (elección de formato), así que todavía no se sabe qué formato
 va a usarse. Si termina siendo `split`, `pip` o `faceless`, el header que
-Andrea acaba de confirmar aquí **no se renderiza** — esos formatos no
+El usuario acaba de confirmar aquí **no se renderiza** — esos formatos no
 incluyen la capa `header` (ver `### Reglas por sección` → "Alcance por
 formato"). No es un bug de este paso, es trabajo que se descarta cuando el
 Paso 0.5 elige otro formato. No se reordenan los pasos por esto (harían
@@ -153,7 +153,7 @@ confirmado "desaparece" del render.
    - Sentence case (NO all caps)
    - Estilos diversos: una declaración punzante, una con contraste/contraintuitivo, una con número fuerte o promesa concreta
 
-4. Mostrar a Andrea con `AskUserQuestion` **siempre 4 opciones** en este orden:
+4. Mostrar al usuario con `AskUserQuestion` **siempre 4 opciones** en este orden:
    - **Opción 1 (Recomendada solo si no hay nada mejor):** "Conservar el actual — `<L1 actual>` / `<L2 actual>`"
    - **Opción 2:** Variante 1 — `<L1>` / `<L2>` (estilo: declaración punzante)
    - **Opción 3:** Variante 2 — `<L1>` / `<L2>` (estilo: contraste / contraintuitivo)
@@ -170,7 +170,7 @@ confirmado "desaparece" del render.
 
 7. Solo cuando el header esté confirmado y guardado en el MANIFEST, continuar con el pipeline de render abajo.
 
-**Si `guionizacion-formula100k` no está disponible:** generar las 3 variantes aplicando estas reglas a mano sobre el transcript, pero avisar a Andrea: "para mejor calidad de gancho instala `guionizacion-formula100k`".
+**Si `guionizacion-formula100k` no está disponible:** generar las 3 variantes aplicando estas reglas a mano sobre el transcript, pero avisar al usuario: "para mejor calidad de gancho instala `guionizacion-formula100k`".
 
 **Re-renders y atajo de skip:** si Andrea explícitamente dice "renderiza tal cual", "no toques el header", "el header está bien", "skip", o invoca con `/render <carpeta> --skip-hook`, saltar este paso. Por default — incluso en re-render — se pregunta.
 
@@ -180,7 +180,7 @@ confirmado "desaparece" del render.
 
 Después de confirmar el gancho textual y antes de invocar `render.sh`, proponer
 el formato de edición. Se salta si el MANIFEST ya declara `**Formato:**` con
-**uno de los tres ids válidos** (`fullscreen`, `split`, `pip`) y Andrea dice
+**uno de los tres ids válidos** (`fullscreen`, `split`, `pip`) y el usuario dice
 "renderiza tal cual", o si se invoca con `--skip-formato`. Un MANIFEST real
 puede traer `- **Formato:** 1920×1080` (texto libre, no un id) — el parser lo
 descarta por inválido y cae al default en silencio; si la regla de salto sólo
@@ -194,7 +194,7 @@ la condición es sobre el **valor**, no sobre la presencia del campo.
 `- **Formato:** noticiero` en el MANIFEST: el render caería en silencio a
 `fullscreen` con las dimensiones equivocadas (vertical en vez del horizontal
 que promete `noticiero`, por ejemplo). Si las señales del video apuntan a uno
-de esos dos, decírselo a Andrea **en palabras** — no como campo del
+de esos dos, decírselo al usuario **en palabras** — no como campo del
 MANIFEST — y ofrecerle el más cercano de los tres elegibles.
 
 **Flujo:**
@@ -212,7 +212,7 @@ MANIFEST — y ofrecerle el más cercano de los tres elegibles.
    pipeline, y dejar que ella decida entre los tres elegibles con el
    `AskUserQuestion` del paso siguiente (si el video no tiene cámara en
    absoluto, decirlo explícitamente — ninguno de los tres elegibles fue
-   pensado para eso, y es preferible que Andrea lo sepa antes de un render
+   pensado para eso, y es preferible que el usuario lo sepa antes de un render
    de varios minutos que igual va a mostrar algo raro).
 5. Mostrar con `AskUserQuestion` el formato recomendado **entre los tres
    elegibles**, con su razón concreta (qué señal lo disparó), más la o las
@@ -231,7 +231,7 @@ minutos; equivocarse de formato sin preguntar cuesta más que la pregunta.
 
 **macOS:**
 ```bash
-bash /Users/kissita/.claude/skills/editor-video-formula100k/scripts/render.sh "$DEST" "$VIDEO_PATH"
+bash ~/.claude/skills/editor-video-formula100k/scripts/render.sh "$DEST" "$VIDEO_PATH"
 ```
 
 **Windows (PowerShell):**
@@ -271,7 +271,7 @@ Un segundo pase de Claude que NO corta: lee el transcript y detecta **momentos d
 - **`card`** — concepto simple/numérico → una infografía/tarjeta HTML (gratis, instantánea).
 - **`imagen`** — concepto rico o "visualizable" (ej. *representar una skill* como una escena/objeto) → imagen generada con Higgsfield **nano_banana**.
 
-**Activar cuando** Andrea diga "ilustra los conceptos", "agrégale visuales a lo que explico", "representa la skill que menciono", o como paso extra antes del render. Flujo:
+**Activar cuando** el usuario diga "ilustra los conceptos", "agrégale visuales a lo que explico", "representa la skill que menciono", o como paso extra antes del render. Flujo:
 
 ```bash
 # 1. Proponer (corre sobre el captions.json del corte ya hecho; necesita ANTHROPIC_API_KEY)
@@ -282,7 +282,7 @@ python3 "$HOME/.claude/skills/editor-video-formula100k/scripts/concept_director.
 
 `concept_proposals.json` = lista de `{keyword, concepto, tipo, prompt_visual, t_hint}`. El `keyword` ya viene **anclado** (verificado contra el transcript), así sobrevive a re-cortes.
 
-2. **CHECKPOINT humano (antes de gastar créditos):** mostrar las propuestas con `AskUserQuestion`. Andrea aprueba, edita el `prompt_visual`, cambia `tipo`, o descarta. **No se genera ninguna imagen sin su OK.**
+2. **CHECKPOINT humano (antes de gastar créditos):** mostrar las propuestas con `AskUserQuestion`. El usuario aprueba, edita el `prompt_visual`, cambia `tipo`, o descarta. **No se genera ninguna imagen sin su OK.**
 
 3. **Generar el visual de cada propuesta aprobada:**
    - `tipo: card` → generar la infografía con la skill `graficos-de-video-formula100k` (o una card HTML) → guardar en `$DEST/IA/concepto_<slug>.png`.
@@ -402,7 +402,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 ```markdown
 # Reel — <título corto>
 
-- **Video fuente:** /Users/kissita/Downloads/IMG_1969.MOV
+- **Video fuente:** ~/Downloads/IMG_1969.MOV
 - **Fecha:** 2026-05-13
 
 ## Header
@@ -457,7 +457,7 @@ práctica esto sólo importa para `fullscreen`, `split` y `pip` — son los
 únicos formatos elegibles hoy desde el MANIFEST (ver
 `## Catálogo de formatos`).
 
-**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de Andrea limpia. **Anton (pack F100K, `F100K Display`) 92px en MAYÚSCULAS**, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de Andrea). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
+**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de quien habla limpia. **Anton (pack F100K, `F100K Display`) 92px en MAYÚSCULAS**, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de quien habla). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
 
 **Gancho visual** — Imagen tipo sticker (UN solo archivo) que aparece en los primeros segundos en una esquina superior. Columnas: `Archivo | Posición | Inicio | Duración | Ancho | Rotación`. Defaults: `Posición=right`, `Inicio=0.3s`, `Duración=2.2s`, `Ancho=360px`, `Rotación=3°`. Anclado a `top: 340px` para no chocar con el header. Spring drop desde fuera del frame + wobble sutil + fade out. NO cubre la cara centrada (zona segura x≥640 si position=right).
 
@@ -466,7 +466,7 @@ práctica esto sólo importa para `fullscreen`, `split` y `pip` — son los
 **Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración | Posición`. Defaults: `Ancho = 420px`, `Duración = 2.0s`, `Posición = bottom`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`).
 
 - **`Posición: bottom` (default)** — Renderiza en el **tercio inferior** (`bottom: 520`), zona pecho/manos. MUY por debajo del rostro.
-- **`Posición: top`** — Renderiza en la **zona superior al ras del cabello** (`bottom: 1100` ≈ 820px desde arriba en 1920px). El BORDE INFERIOR del overlay toca el hairline de Andrea — nunca flotando en el espacio vacío arriba. Usar para UI tutorial, terminal, callouts que se ubican encima de la cabeza.
+- **`Posición: top`** — Renderiza en la **zona superior al ras del cabello** (`bottom: 1100` ≈ 820px desde arriba en 1920px). El BORDE INFERIOR del overlay toca el hairline de quien habla — nunca flotando en el espacio vacío arriba. Usar para UI tutorial, terminal, callouts que se ubican encima de la cabeza.
 
 Regla dura: los overlays NUNCA tapan la cara, independientemente de la posición. Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
 
@@ -507,7 +507,7 @@ t_end   = t_start + duration
 
 1. El **header funciona como gancho** — vive los primeros 8s (default) y luego se quita. Si se necesita persistente, override con `Esconder después: 0` en el MANIFEST.
 2. **Emphasis excluye overlay** — el énfasis (`bottom: 220`) y el overlay (`bottom: 520`) viven ambos en el tercio inferior; si coinciden en un frame compiten por la atención visual; gana el emphasis y el overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
-3. **La cara de Andrea queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
+3. **La cara de quien habla queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
 4. **Subtítulos según el formato.** `fullscreen` y `noticiero` los mantienen apagados por default; `split`, `pip` y `faceless` los traen encendidos (ver `### Subtítulos` abajo). Se fuerzan con `**Subtítulos:** on|off` en el MANIFEST.
 5. **Sentence case** en cajas blancas — NUNCA all caps.
 
@@ -541,11 +541,11 @@ Paso opcional para **generar B-roll a medida del guion** con IA (Higgsfield) e i
 MANIFEST, en vez de solo cazar recursos sueltos con `recursos-de-video-formula100k`. Usa el
 **Clip Director**, el mismo motor que `reel-faceless-f100k`.
 
-**Cuándo:** Andrea dice "genera clips de apoyo", "b-roll a medida del guion", "clips
+**Cuándo:** el usuario dice "genera clips de apoyo", "b-roll a medida del guion", "clips
 generados para este video", o tras transcribir un video **16:9** largo (YouTube) que necesita
 apoyo visual en conceptos/datos/ejemplos.
 
-**Cómo (auto-propone → Andrea aprueba):**
+**Cómo (auto-propone → el usuario aprueba):**
 
 1. **Transcript.** Requiere `captions.json` (ya lo produce el Paso 1 del pipeline). Si aún no
    existe, correr primero el corte/transcripción, o usar el guion.
@@ -554,7 +554,7 @@ apoyo visual en conceptos/datos/ejemplos.
    que piden apoyo (concepto/dato/ejemplo → `visual_type`) y **auto-propone** un plan donde
    cada segmento trae un `keyword` **verbatim** del transcript (8-15 palabras) como ancla.
 3. **Aprobación.** Mostrar la tabla propuesta y preguntar con `AskUserQuestion`:
-   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". Andrea puede agregar o
+   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". El usuario puede agregar o
    quitar marcas.
 4. **Generar.** Higgsfield `generate_video` con `aspect_ratio="16:9"` (lotes ≤8, poll
    `job_status(sync:true)`, declinar presets, anti-NSFW — ver la receta `broll` del reference).
@@ -574,7 +574,7 @@ apoyo visual en conceptos/datos/ejemplos.
    debe existir en `captions.json` (el parser avisa con `[warn]` si no).
 6. **Render normal.** Continuar con el pipeline de abajo: `manifest_to_cues.py` resuelve las
    keywords y el render coloca cada clip como B-roll fullscreen por su ventana y vuelve a la
-   cara de Andrea (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
+   cara de quien habla (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
 
 **Degradación:** si `mcp__higgsfield__balance` es 0, el Director degrada a cards/pixel o
 sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference §6). No falla.
@@ -585,8 +585,8 @@ sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference
 
 - `/render <carpeta>` → pipeline completo. Auto-detecta el video fuente desde `**Video fuente:**` del MANIFEST. **Antes de renderizar siempre corre el Paso 0** (confirmación de gancho textual con 3 variantes).
 - `/edita <carpeta>` → equivalente.
-- `/render <carpeta> --skip-hook` → saltea el Paso 0. Úsalo cuando Andrea ya confirmó el header en una invocación previa de esta misma sesión, cuando explícitamente dijo "renderiza tal cual", o cuando se está iterando solo sobre énfasis/overlays sin tocar el header.
-- `/render <carpeta> --skip-formato` → saltea el Paso 0.5. Úsalo cuando el MANIFEST ya trae `**Formato:**` declarado y Andrea dijo "renderiza tal cual", o cuando se está iterando sin cambiar de formato.
+- `/render <carpeta> --skip-hook` → saltea el Paso 0. Úsalo cuando el usuario ya confirmó el header en una invocación previa de esta misma sesión, cuando explícitamente dijo "renderiza tal cual", o cuando se está iterando solo sobre énfasis/overlays sin tocar el header.
+- `/render <carpeta> --skip-formato` → saltea el Paso 0.5. Úsalo cuando el MANIFEST ya trae `**Formato:**` declarado y el usuario dijo "renderiza tal cual", o cuando se está iterando sin cambiar de formato.
 - `/setup` → corre el bootstrap correspondiente a la plataforma para instalar/verificar dependencias (`bootstrap.sh` en Mac, `bootstrap.ps1` en Windows).
 
 Para invocación natural ("edita este video"), preguntar al usuario por la carpeta DEST si no es obvia y luego correr el Paso 0 antes del pipeline. La skill detecta la plataforma automáticamente: en Mac llama `render.sh`, en Windows llama `render.ps1`. El usuario no necesita elegir.
@@ -617,7 +617,7 @@ Para invocación natural ("edita este video"), preguntar al usuario por la carpe
 
 **Probar un solo cambio en cues sin re-bundlear nada de Python:**
 ```bash
-cd /Users/kissita/.claude/skills/editor-video-formula100k/remotion-template
+cd ~/.claude/skills/editor-video-formula100k/remotion-template
 npx tsx scripts/render.ts \
   --video _source_cut.mov \
   --transcript "$DEST/captions.json" \
@@ -719,7 +719,7 @@ El template de Remotion incluye 4 composiciones standalone listas para usar como
 ### Cómo renderizar
 
 ```bash
-cd /Users/kissita/.claude/skills/editor-video-formula100k/remotion-template
+cd ~/.claude/skills/editor-video-formula100k/remotion-template
 
 # Badge numerado
 npx tsx scripts/render.ts \

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Regenera la carpeta de distribución que Andrea sube al Drive del curso.
+# Regenera la carpeta de distribución que se sube al Drive del curso.
 #
 # Toma las versiones vigentes de las skills en ~/.claude/skills/, las copia a
-# /Users/kissita/Documents/FORMULA100K/distribucion-skill-editor/ (excluyendo
+# $HOME/Documents/FORMULA100K/distribucion-skill-editor/ (excluyendo
 # node_modules y artefactos de test), preserva GUIA_INSTALACION.md y instalar.sh,
 # y opcionalmente genera el .zip listo para subir.
 #
@@ -12,7 +12,7 @@
 
 set -e
 
-DIST="/Users/kissita/Documents/SKILLS/EDICIÓN AUTOMÁTICA/formula100k-editor-video"
+DIST="$HOME/Documents/SKILLS/EDICIÓN AUTOMÁTICA/formula100k-editor-video"
 SKILLS="$HOME/.claude/skills"
 
 GREEN='\033[0;32m'

@@ -8,7 +8,9 @@
  *     --transcript <ruta-al-transcript.json> \
  *     --cues <ruta-al-cues.json> \
  *     [--out <ruta-de-salida.mp4>] \
- *     [--duration <segundos>]
+ *     [--duration <segundos>] \
+ *     [--canvas <lienzo-de-pip>] \
+ *     [--lienzo <pizarra-con-alfa>] [--cutout <sujeto-con-alfa>]
  *
  * Modo motion graphics:
  *   tsx scripts/render.ts \
@@ -66,6 +68,7 @@ type CuesFile = {
   tema?: string;
   subtitulos?: boolean;
   pipEsquina?: 'tl' | 'tr' | 'bl' | 'br';
+  versusEtiquetas?: {a: string; b: string};
 };
 
 type ReelArgs = {
@@ -76,6 +79,8 @@ type ReelArgs = {
   outPath: string;
   duration?: number;
   canvas?: string;
+  lienzo?: string;
+  cutout?: string;
 };
 
 type MotionArgs = {
@@ -120,6 +125,8 @@ function parseArgs(argv: string[]): Args {
     else if (a === '--composition') raw.composition = next();
     else if (a === '--props') raw.props = next();
     else if (a === '--canvas') raw.canvas = next();
+    else if (a === '--lienzo') raw.lienzo = next();
+    else if (a === '--cutout') raw.cutout = next();
   }
 
   if (raw.mode === 'tutorial') {
@@ -162,6 +169,8 @@ function parseArgs(argv: string[]): Args {
     outPath: path.resolve(raw.outPath ?? './reel-viral.mp4'),
     duration: raw.duration ? Number(raw.duration) : undefined,
     canvas: raw.canvas,
+    lienzo: raw.lienzo,
+    cutout: raw.cutout,
   };
 }
 
@@ -318,6 +327,9 @@ async function main() {
     subtitulos: cues.subtitulos ?? false,
     canvasSrc: args.canvas ? path.basename(args.canvas) : undefined,
     pipEsquina: cues.pipEsquina,
+    versusEtiquetas: cues.versusEtiquetas,
+    lienzoSrc: args.lienzo ? path.basename(args.lienzo) : undefined,
+    cutoutSrc: args.cutout ? path.basename(args.cutout) : undefined,
   };
 
   console.log('[render] selecting composition reel-viral…');

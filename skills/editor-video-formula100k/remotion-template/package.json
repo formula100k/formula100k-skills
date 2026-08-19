@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "render": "tsx scripts/render.ts",
-    "studio": "remotion studio src/index.ts"
+    "studio": "remotion studio src/index.ts",
+    "test": "tsx --test src/*.test.ts src/formatos/*.test.ts src/layers/*.test.ts"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.300",

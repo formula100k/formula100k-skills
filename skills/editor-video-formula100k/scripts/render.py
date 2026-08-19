@@ -14,6 +14,7 @@ Funciona en macOS y Windows. En Mac usa mlx-whisper; en Windows faster-whisper.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import subprocess
@@ -115,6 +116,8 @@ def main() -> int:
     # trae uno nuevo. Si no lo trae, el barrido ya dejó public/ limpio.
     for viejo in pub.glob('_canvas.*'):
         viejo.unlink()
+    for viejo in list(pub.glob('_lienzo.*')) + list(pub.glob('_cutout.*')):
+        viejo.unlink()
 
     # Canvas opcional para el formato pip: primer .mp4/.mov/.webm dentro de
     # $DEST/CANVAS/, copiado SIEMPRE a un nombre reservado (`_canvas<ext>`),
@@ -143,6 +146,77 @@ def main() -> int:
             copy_or_link(elegido, pub / nombre_canvas)
             canvas_arg = ['--canvas', nombre_canvas]
 
+    # Insumos opcionales del formato `pizarra`. Mismo criterio que el canvas
+    # de pip: se copian SIEMPRE a un nombre reservado (`_lienzo.*`,
+    # `_cutout.*`), nunca con el suyo, para que no puedan pisar
+    # `_source_cut.mov` ni entre sí.
+    #
+    # El cutout se busca por nombre porque es un artefacto derivado que la
+    # alumna genera con `hyperframes remove-background`; el lienzo lo deja
+    # `pizarra-explicativa-f100k`. Los dos son opcionales: sin ellos el
+    # formato avisa y cae a fullscreen (ver pizarra.tsx), no rompe.
+    def _primer_archivo(patrones: list[str]) -> Path | None:
+        vistos: list[Path] = []
+        for patron in patrones:
+            vistos.extend(sorted(dest.glob(patron)))
+        return vistos[0] if vistos else None
+
+    def _a_webm_con_alfa(origen: Path, destino: Path) -> Path:
+        """Convierte a VP9/webm si hace falta, y devuelve lo que se debe usar.
+
+        Chrome —y por lo tanto Remotion— **no** respeta el alfa de un .mov
+        HEVC: se comprobó decodificando un frame contra un fondo rojo y el
+        rojo no aparecía por ningún lado, el frame salía opaco entero. Y el
+        entregable de `pizarra-explicativa-f100k` es justamente un .mov HEVC
+        con alfa (su formato ligero, ~100 MB frente a los 4 GB del ProRes).
+        O sea: el insumo natural de este formato es ilegible para el motor
+        de render sin convertirlo antes.
+
+        VP9 en .webm sí lo respeta (mismo experimento, rojo visible). Así que
+        se convierte una vez y se cachea junto al original: la alumna deja el
+        .mov que le dio la otra skill y esto se ocupa solo.
+        """
+        if origen.suffix.lower() == '.webm':
+            return origen
+        if destino.is_file() and destino.stat().st_mtime >= origen.stat().st_mtime:
+            stderr(f'[warn] pizarra: reuso {destino.name} (ya convertido)')
+            return destino
+        stderr(f'[warn] pizarra: {origen.name} es {origen.suffix} — Chrome no lee '
+               'su alfa; convirtiendo a VP9/webm (una sola vez)...')
+        subprocess.run(
+            ['ffmpeg', '-y', '-v', 'error', '-i', str(origen),
+             '-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p',
+             '-auto-alt-ref', '0', '-b:v', '4M', '-an', str(destino)],
+            check=True,
+        )
+        return destino
+
+    pizarra_args: list[str] = []
+    if (cues_json := dest / 'cues.json').is_file():
+        try:
+            formato_pedido = json.loads(cues_json.read_text()).get('formato')
+        except (json.JSONDecodeError, OSError):
+            formato_pedido = None
+    else:
+        formato_pedido = None
+
+    if formato_pedido == 'pizarra':
+        lienzo = _primer_archivo(['*lienzo*.mov', '*lienzo*.webm',
+                                  'PIZARRA/*.mov', 'PIZARRA/*.webm'])
+        cutout = _primer_archivo(['*cutout*.webm', '*cutout*.mov'])
+        for etiqueta, elegido, flag in (('lienzo', lienzo, '--lienzo'),
+                                        ('cutout', cutout, '--cutout')):
+            if elegido is None:
+                stderr(f'[warn] pizarra: no encuentro el {etiqueta} en {dest.name}/')
+                continue
+            stderr(f'[warn] pizarra: uso {elegido.name} como {etiqueta}')
+            usable = _a_webm_con_alfa(
+                elegido, dest / f'_{etiqueta}_alfa.webm'
+            )
+            nombre = f'_{etiqueta}{usable.suffix.lower()}'
+            copy_or_link(usable, pub / nombre)
+            pizarra_args += [flag, nombre]
+
     # Paso D — Render con npx tsx
     step('4/4', 'Renderizando reel-viral...')
     out = dest / 'BORRADOR_AUTO.mp4'
@@ -154,6 +228,7 @@ def main() -> int:
          '--transcript', str(captions),
          '--cues', str(dest / 'cues.json'),
          *canvas_arg,
+         *pizarra_args,
          '--out', str(out)],
         cwd=str(template_dir),
         check=True,

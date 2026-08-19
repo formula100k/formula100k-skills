@@ -83,7 +83,14 @@ export const BrollLayer: React.FC<{
     durationInFrames: 10,
   });
   const floatY = Math.sin(frame / 10) * 4;
-  const imgWidth = cue.width ?? 900;
+  // 900 fijo: la tabla de B-roll del MANIFEST no tiene columna `Ancho`
+  // (sus columnas son Keyword | Archivo | Duración | Estilo, más `Lado` en
+  // versus). Antes esto leía `cue.width`, un campo que no existe en
+  // `BrollCue` ni en `ResolvedBroll`: siempre valía undefined y siempre caía
+  // a 900. Era un error de tipos y una promesa falsa en la documentación.
+  // Si algún día hace falta el ancho por fila, hay que agregar la columna al
+  // parser, al tipo y acá — no basta con volver a poner `cue.width`.
+  const imgWidth = 900;
   const isPanel = encuadre === 'panel';
 
   const contenedorStyle: React.CSSProperties = isPanel

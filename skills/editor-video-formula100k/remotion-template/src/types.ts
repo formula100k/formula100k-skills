@@ -37,6 +37,8 @@ export type BrollCue = {
   src: string;
   duration?: number;
   style?: BrollStyle;
+  /** Mitad del cuadro en el formato versus. Default 'a' (la de arriba). */
+  lado?: 'a' | 'b';
 };
 
 // Imagen gancho del segundo 1 — sticker editorial que aparece brevemente
@@ -69,6 +71,12 @@ export type CreaContenidoViralProps = {
   canvasSrc?: string;
   /** Esquina donde va el recuadro de cámara. Default 'tr' (ver pip.tsx). */
   pipEsquina?: 'tl' | 'tr' | 'bl' | 'br';
+  /** Etiquetas de cada mitad en el formato versus. Default ANTES/AHORA. */
+  versusEtiquetas?: {a: string; b: string};
+  /** Lienzo animado de la pizarra (.mov/.webm con alfa) en el formato pizarra. */
+  lienzoSrc?: string;
+  /** Sujeto recortado sin fondo (.webm VP9 con alfa) en el formato pizarra. */
+  cutoutSrc?: string;
 };
 
 // ──────────────────────────────────────────────────────────────────────

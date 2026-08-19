@@ -83,6 +83,40 @@ export const FORMATOS: FormatoDef[] = [
     temaDefault: 'default',
   },
   {
+    id: 'versus',
+    nombre: 'Versus',
+    descripcion: 'Cuadro partido en dos mitades que compara A contra B, con tu cámara en la costura.',
+    cuandoUsar: [
+      'el guion contrapone dos cosas: antes/ahora, mito/realidad, error/acierto',
+      'hay dos imágenes o clips que se entienden mejor juntos que separados',
+      'quieres que se vea la diferencia, no explicarla',
+    ],
+    dimensiones: {w: 1080, h: 1920},
+    composicion: 'reel-viral',
+    modo: 'reel',
+    capas: ['emphasis', 'broll', 'captions', 'sfx'],
+    capasDefault: {emphasis: true, broll: true, captions: true, sfx: true},
+    temaDefault: 'crema-editorial',
+  },
+  {
+    id: 'pizarra',
+    nombre: 'Pizarra',
+    descripcion: 'Una pizarra que se va dibujando sola detrás de ti al ritmo de lo que dices.',
+    cuandoUsar: [
+      'estás explicando algo que se entiende mejor dibujado que dicho',
+      'el guion conecta ideas: esto lleva a esto, y esto a esto otro',
+      'grabaste contra una pared lisa y con buena luz',
+    ],
+    dimensiones: {w: 1080, h: 1920},
+    composicion: 'reel-viral',
+    modo: 'reel',
+    // Sin `broll` a propósito: el lienzo YA es el apoyo visual del formato.
+    // Un B-roll encima taparía exactamente lo que se viene a mostrar.
+    capas: ['emphasis', 'captions', 'sfx'],
+    capasDefault: {emphasis: true, captions: true, sfx: true},
+    temaDefault: 'default',
+  },
+  {
     id: 'faceless',
     nombre: 'Sin cara',
     descripcion: 'Screen recording y tarjetas sobre voz en off, sin cámara.',

@@ -90,6 +90,71 @@ class TestParseFormato(unittest.TestCase):
         self.assertNotIn("desconocida", fake_err.getvalue())
 
 
+class TestVersus(unittest.TestCase):
+    def test_lee_las_dos_etiquetas(self):
+        out = m.parse_formato(_manifest(
+            "- **Formato:** versus\n"
+            "- **Etiqueta A:** Antes\n"
+            "- **Etiqueta B:** Después"
+        ))
+        self.assertEqual(out["formato"], "versus")
+        self.assertEqual(out["versusEtiquetas"], {"a": "ANTES", "b": "DESPUÉS"})
+
+    def test_sin_etiquetas_no_emite_la_clave(self):
+        out = m.parse_formato(_manifest("- **Formato:** versus"))
+        self.assertNotIn("versusEtiquetas", out)
+
+    def test_una_sola_etiqueta_no_emite_la_clave(self):
+        # A medias no sirve: el componente necesita las dos o cae a su default.
+        out = m.parse_formato(_manifest(
+            "- **Formato:** versus\n- **Etiqueta A:** Antes"
+        ))
+        self.assertNotIn("versusEtiquetas", out)
+
+    def test_se_ignoran_si_el_formato_no_es_versus(self):
+        out = m.parse_formato(_manifest(
+            "- **Formato:** split\n- **Etiqueta A:** Antes\n- **Etiqueta B:** Ahora"
+        ))
+        self.assertNotIn("versusEtiquetas", out)
+
+    def test_defaults_del_formato_versus(self):
+        out = m.parse_formato(_manifest("- **Formato:** versus"))
+        self.assertEqual(out["tema"], "crema-editorial")
+        self.assertTrue(out["subtitulos"])
+
+
+class TestColumnaLado(unittest.TestCase):
+    TABLA = (
+        "## B-roll\n"
+        "| Keyword | Archivo | Duración | Estilo | Lado |\n"
+        "|---|---|---|---|---|\n"
+        "| antes | a.png | 4 | clean | a |\n"
+        "| ahora | b.png | 4 | clean | B |\n"
+        "| otro  | c.png | 4 | clean |   |\n"
+        "| raro  | d.png | 4 | clean | izquierda |\n"
+    )
+
+    def test_lee_a_y_b_sin_importar_mayusculas(self):
+        cues = m.parse_broll(self.TABLA)
+        self.assertEqual(cues[0]["lado"], "a")
+        self.assertEqual(cues[1]["lado"], "b")
+
+    def test_celda_vacia_o_desconocida_no_emite_la_clave(self):
+        cues = m.parse_broll(self.TABLA)
+        self.assertNotIn("lado", cues[2])
+        self.assertNotIn("lado", cues[3])
+
+    def test_sin_la_columna_el_broll_de_siempre_sigue_igual(self):
+        cues = m.parse_broll(
+            "## B-roll\n"
+            "| Keyword | Archivo | Duración | Estilo |\n"
+            "|---|---|---|---|\n"
+            "| algo | a.png | 4 | clean |\n"
+        )
+        self.assertEqual(len(cues), 1)
+        self.assertNotIn("lado", cues[0])
+
+
 class TestSincroniaConElRegistro(unittest.TestCase):
     """Si formatos.ts cambia, esto falla antes que producción."""
 
@@ -104,4 +169,29 @@ class TestSincroniaConElRegistro(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    unittest.main()
+
+
+class PizarraFormato(unittest.TestCase):
+    """`pizarra` se declara en el MANIFEST como cualquier otro formato."""
+
+    def test_pizarra_es_formato_valido(self):
+        self.assertIn('pizarra', m.FORMATOS_VALIDOS)
+
+    def test_pizarra_trae_subtitulos_encendidos_y_tema_default(self):
+        cues = m.parse_formato('- **Formato:** pizarra\n')
+        self.assertEqual(cues['formato'], 'pizarra')
+        self.assertEqual(cues['tema'], 'default')
+        self.assertTrue(cues['subtitulos'])
+
+    def test_las_etiquetas_de_versus_se_ignoran_en_pizarra(self):
+        cues = m.parse_formato(
+            '- **Formato:** pizarra\n'
+            '- **Etiqueta A:** ANTES\n'
+            '- **Etiqueta B:** AHORA\n'
+        )
+        self.assertNotIn('versusEtiquetas', cues)
+
+
+if __name__ == '__main__':
     unittest.main()

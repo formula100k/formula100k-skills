@@ -113,7 +113,8 @@ DEFAULT_HEADER_HIDE_AFTER = 8.0  # segundos — el header funciona como gancho, 
 # ── Catálogo de formatos ────────────────────────────────────────────────
 # Espejo de remotion-template/src/formatos.ts. test_manifest_formato.py
 # verifica que ambos lados no se desfasen.
-FORMATOS_VALIDOS = ('fullscreen', 'split', 'pip', 'faceless', 'noticiero')
+FORMATOS_VALIDOS = ('fullscreen', 'split', 'pip', 'versus', 'pizarra',
+                    'faceless', 'noticiero')
 FORMATO_DEFAULT = 'fullscreen'
 TEMAS_VALIDOS = ('default', 'crema-editorial')
 ESQUINAS_VALIDAS = ('tl', 'tr', 'bl', 'br')
@@ -122,6 +123,8 @@ _TEMA_POR_FORMATO = {
     'fullscreen': 'default',
     'split': 'crema-editorial',
     'pip': 'default',
+    'versus': 'crema-editorial',
+    'pizarra': 'default',
     'faceless': 'default',
     'noticiero': 'default',
 }
@@ -129,6 +132,8 @@ _SUBTITULOS_POR_FORMATO = {
     'fullscreen': False,
     'split': True,
     'pip': True,
+    'versus': True,
+    'pizarra': True,
     'faceless': True,
     'noticiero': False,
 }
@@ -196,6 +201,23 @@ def parse_formato(text: str) -> dict:
         else:
             print(f'[warn] esquina cámara desconocida: {esquina!r} — se omite',
                   file=sys.stderr)
+
+    # Etiquetas del versus: mismo criterio que `Esquina cámara` — sólo se
+    # emite la clave si el MANIFEST trae LAS DOS. Con una sola no se puede
+    # rotular el cuadro, así que se omite y el componente usa su default
+    # (ANTES/AHORA). Se ignoran si el formato no es versus, igual que
+    # `pipEsquina` se ignora fuera de pip.
+    if formato == 'versus':
+        etiqueta_a = grab('Etiqueta A')
+        etiqueta_b = grab('Etiqueta B')
+        if etiqueta_a and etiqueta_b:
+            out['versusEtiquetas'] = {
+                'a': etiqueta_a.upper(),
+                'b': etiqueta_b.upper(),
+            }
+        elif etiqueta_a or etiqueta_b:
+            print('[warn] versus necesita Etiqueta A y Etiqueta B — se omiten '
+                  'las dos y uso ANTES/AHORA', file=sys.stderr)
 
     return out
 
@@ -330,12 +352,20 @@ def parse_broll(text: str) -> list[dict]:
         style = _cell(cells, 3).lower() or DEFAULT_BROLL_STYLE
         if style not in {'monitor-photo', 'clean'}:
             style = DEFAULT_BROLL_STYLE
-        cues.append({
+        cue = {
             'keyword': keyword,
             'src': src,
             'duration': _to_float(_cell(cells, 2), DEFAULT_BROLL_DURATION),
             'style': style,
-        })
+        }
+        # Columna opcional `Lado` — sólo la lee el formato versus. Cualquier
+        # valor que no sea 'a' o 'b' se ignora en silencio: el componente ya
+        # cae a 'a', y una columna de más en un MANIFEST de otro formato no
+        # es un error del que haya que avisar.
+        lado = _cell(cells, 4).strip().lower()
+        if lado in {'a', 'b'}:
+            cue['lado'] = lado
+        cues.append(cue)
     return cues
 
 

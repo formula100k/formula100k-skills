@@ -10,14 +10,22 @@ export const Captions: React.FC<{
   tema: Tema;
   /** Sólo para position 'seam': píxeles desde arriba. */
   seamTop?: number;
-}> = ({chunks, fps, position, tema, seamTop = 800}) => (
+  /**
+   * Pinta una caja sólida detrás del subtítulo. Default `false` — sin ella,
+   * el subtítulo se apoya sólo en su trazo y su sombra, que alcanzan cuando
+   * cae sobre video (`fullscreen`, `split`, `pip`). En `versus` cae sobre
+   * una card de B-roll que puede ser clara, oscura o llena de texto: ahí el
+   * trazo no alcanza y hace falta la caja.
+   */
+  fondo?: boolean;
+}> = ({chunks, fps, position, tema, seamTop = 800, fondo = false}) => (
   <>
     {chunks.map((c, i) => {
       const from = Math.round(c.start * fps);
       const frames = Math.max(1, Math.round((c.end - c.start) * fps));
       return (
         <Sequence key={i} from={from} durationInFrames={frames}>
-          <CaptionWord chunk={c} fps={fps} position={position} tema={tema} seamTop={seamTop} />
+          <CaptionWord chunk={c} fps={fps} position={position} tema={tema} seamTop={seamTop} fondo={fondo} />
         </Sequence>
       );
     })}
@@ -30,7 +38,8 @@ const CaptionWord: React.FC<{
   position: 'center' | 'lower-third' | 'seam';
   tema: Tema;
   seamTop: number;
-}> = ({chunk, fps, position, tema, seamTop}) => {
+  fondo: boolean;
+}> = ({chunk, fps, position, tema, seamTop, fondo}) => {
   const frame = useCurrentFrame();
   const pop = spring({frame, fps, config: {stiffness: 320, damping: 26}});
 
@@ -59,8 +68,15 @@ const CaptionWord: React.FC<{
           textAlign: 'center',
           maxWidth: 900,
           lineHeight: 1.05,
-          padding: '0 40px',
+          padding: fondo ? '18px 34px' : '0 40px',
           textTransform: 'uppercase',
+          ...(fondo
+            ? {
+                backgroundColor: 'rgba(0,0,0,0.82)',
+                borderRadius: 18,
+                boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+              }
+            : {}),
         }}
       >
         {partes.map((p, i) => {

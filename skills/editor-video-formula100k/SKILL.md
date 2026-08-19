@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado por el usuario + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone uno de 3 formatos elegibles desde el MANIFEST — fullscreen (talking-head 9:16), split, pip — de un catálogo de 5 (faceless/noticiero: aún no elegibles); subtítulos según formato. Sincroniza por keyword sobre el transcript (no por timestamp), sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: motion graphics animados (HyperFrames, HTML+GSAP, gratis) como overlays o B-roll. Activar cuando el usuario diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md con intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); primera vez instala dependencias vía bootstrap."
+description: "Toma un video grabado por el usuario + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone uno de 5 formatos elegibles — fullscreen, split, pip, versus, pizarra — de un catálogo de 7 (faceless/noticiero: aún no); subtítulos según formato. Sincroniza por keyword sobre el transcript (no por timestamp), sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: motion graphics animados (HyperFrames, HTML+GSAP) como overlays o B-roll. Activar cuando el usuario diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md con intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); primera vez instala dependencias vía bootstrap."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
@@ -180,14 +180,16 @@ confirmado "desaparece" del render.
 
 Después de confirmar el gancho textual y antes de invocar `render.sh`, proponer
 el formato de edición. Se salta si el MANIFEST ya declara `**Formato:**` con
-**uno de los tres ids válidos** (`fullscreen`, `split`, `pip`) y el usuario dice
+**uno de los cinco ids válidos** (`fullscreen`, `split`, `pip`, `versus`,
+`pizarra`) y el usuario dice
 "renderiza tal cual", o si se invoca con `--skip-formato`. Un MANIFEST real
 puede traer `- **Formato:** 1920×1080` (texto libre, no un id) — el parser lo
 descarta por inválido y cae al default en silencio; si la regla de salto sólo
 mirara "¿existe el campo?" el agente nunca preguntaría en ese caso. Por eso
 la condición es sobre el **valor**, no sobre la presencia del campo.
 
-**Sólo tres formatos son elegibles hoy: `fullscreen`, `split`, `pip`.**
+**Sólo cinco formatos son elegibles hoy: `fullscreen`, `split`, `pip`, `versus`,
+`pizarra`.**
 `faceless` y `noticiero` están en el catálogo (`formatos.ts`) pero
 `render.py` no tiene forma de invocarlos todavía — ver el porqué en
 `## Catálogo de formatos`. **Nunca escribir** `- **Formato:** faceless` ni
@@ -195,30 +197,30 @@ la condición es sobre el **valor**, no sobre la presencia del campo.
 `fullscreen` con las dimensiones equivocadas (vertical en vez del horizontal
 que promete `noticiero`, por ejemplo). Si las señales del video apuntan a uno
 de esos dos, decírselo al usuario **en palabras** — no como campo del
-MANIFEST — y ofrecerle el más cercano de los tres elegibles.
+MANIFEST — y ofrecerle el más cercano de los cinco elegibles.
 
 **Flujo:**
 
-1. Leer `remotion-template/src/formatos.ts` para tener los cinco formatos con
+1. Leer `remotion-template/src/formatos.ts` para tener los siete formatos con
    su campo `cuandoUsar` — se lee para reconocer señales, no para elegir
-   directamente entre los cinco (sólo tres son elegibles, ver arriba).
+   directamente entre los siete (sólo cinco son elegibles, ver arriba).
 2. Inventariar `$DEST`: ¿hay una carpeta `CANVAS/` con screen recordings?
    ¿el video fuente tiene cara o es sólo audio?
 3. Leer `captions.json` si existe y contar cuántas señales de `cuandoUsar`
-   aparecen en el transcript, de los cinco formatos.
+   aparecen en el transcript, de los siete formatos.
 4. Si las señales dominantes apuntan a `faceless` o `noticiero`, **no
    recomendar ese id**: avisar a Andrea en texto plano que el contenido pide
    ese formato pero que el catálogo todavía no lo soporta desde este
-   pipeline, y dejar que ella decida entre los tres elegibles con el
+   pipeline, y dejar que ella decida entre los cinco elegibles con el
    `AskUserQuestion` del paso siguiente (si el video no tiene cámara en
-   absoluto, decirlo explícitamente — ninguno de los tres elegibles fue
+   absoluto, decirlo explícitamente — ninguno de los cinco elegibles fue
    pensado para eso, y es preferible que el usuario lo sepa antes de un render
    de varios minutos que igual va a mostrar algo raro).
-5. Mostrar con `AskUserQuestion` el formato recomendado **entre los tres
+5. Mostrar con `AskUserQuestion` el formato recomendado **entre los cinco
    elegibles**, con su razón concreta (qué señal lo disparó), más la o las
    alternativas más cercanas — también elegibles. Header: `"Formato"`.
    Pregunta: `"¿Con qué formato lo edito?"`.
-6. Escribir `- **Formato:** <id>` en el MANIFEST (siempre uno de los tres
+6. Escribir `- **Formato:** <id>` en el MANIFEST (siempre uno de los cinco
    elegibles), debajo de la metadata de cabecera, y continuar con el
    pipeline.
 
@@ -263,7 +265,14 @@ Sin key, el pase se salta **automáticamente** y corre solo el motor local (con 
 
 **Seguridad (no sobre-borra):** si Claude propone borrar más del 40% del video (`--semantic-max-drop`), se descarta su sugerencia y corre solo el motor local. Una toma buena jamás se pierde por error del modelo. El llamado se hace por HTTP nativo (sin SDK), así que no agrega dependencias.
 
-**Flags:** `--no-semantic` (desactiva el pase), `--semantic-model claude-haiku-4-5` (más barato/rápido; default `claude-opus-4-8` por calidad), `--guion ruta.txt`, `--semantic-max-drop 0.4`.
+**Flags:** `--no-semantic` (desactiva el pase), `--semantic-model claude-haiku-4-5` (más barato/rápido; default `claude-opus-4-8` por calidad), `--guion ruta.txt`, `--semantic-max-drop 0.4`, `--semantic-level conservador|ajustado`.
+
+**`--semantic-level`** (default `conservador`) — qué tan agresivo es el pase:
+
+- `conservador` — sólo tomas falladas literales. Es el default y el seguro.
+- `ajustado` — además recorta preámbulos de arranque, divagaciones tangenciales y re-enunciados redundantes, protegiendo gancho, pasos, datos y CTA. Recorta ≈2-3× más.
+
+Usá `ajustado` cuando grabaste limpio y el reel te quedó largo y flojo: sobre video sin tropiezos el default corta ~6% y no alcanza. `collage-cine-f100k` ya lo exige siempre por esa razón.
 
 ### Director de conceptos (ilustrar lo que se explica) — OPCIONAL
 
@@ -319,12 +328,14 @@ verdad. Esta tabla es un resumen; si difieren, manda el código.
 | `fullscreen` | Talking-head 9:16 + overlays en los tercios | apagados | `default` | ✅ |
 | `split` | Canvas arriba 40% / cara abajo 60% | encendidos | `crema-editorial` | ✅ |
 | `pip` | Screen-rec de lienzo + cámara en recuadro | encendidos | `default` | ✅ |
+| `versus` | Cuadro partido A/B + cámara en la costura | encendidos | `crema-editorial` | ✅ |
+| `pizarra` | Trazos a mano que se dibujan detrás de ti | encendidos | `default` | ✅ |
 | `faceless` | Screen-rec + cards sobre voz en off | encendidos | `default` | ❌ |
 | `noticiero` | 16:9 con barra de noticias y chyrons | apagados | `default` | ❌ |
 
-**Los cinco formatos existen en el catálogo, pero hoy sólo tres se activan
+**Los siete formatos existen en el catálogo, pero hoy sólo cinco se activan
 desde el MANIFEST.** `remotion-template/src/formatos/index.ts` sólo registra
-componente para `fullscreen`, `split` y `pip`. `faceless` (modo `tutorial`) y
+componente para `fullscreen`, `split`, `pip`, `versus` y `pizarra`. `faceless` (modo `tutorial`) y
 `noticiero` (modo `news`, horizontal 1920×1080) están definidos en
 `formatos.ts` y tienen su composición Remotion registrada en `Root.tsx`, pero
 `render.py` **nunca pasa `--mode`** al invocar `render.ts` — siempre corre en
@@ -339,17 +350,106 @@ pipeline esperando que el render los use: hoy no existe un `/render` que los
 invoque. Cablear el modo por formato es trabajo de una tarea aparte, no de
 esta.
 
-Se declara en el MANIFEST con hasta cuatro campos opcionales (sólo tienen
-efecto real para `fullscreen`, `split` y `pip`):
+Se declara en el MANIFEST con hasta seis campos opcionales (sólo tienen
+efecto real para `fullscreen`, `split`, `pip`, `versus` y `pizarra`):
 
 ```markdown
 - **Formato:** split
 - **Tema:** crema-editorial
 - **Subtítulos:** on
 - **Esquina cámara:** tr
+- **Etiqueta A:** ANTES
+- **Etiqueta B:** AHORA
 ```
 
 Un MANIFEST sin ellos renderiza exactamente como antes del catálogo.
+
+**Para `versus`:** el cuadro se parte en dos mitades de 960 px y la cámara va
+en un círculo sobre la costura. Cada fila de la tabla de B-roll declara en qué
+mitad vive con una columna extra **`Lado`** (`a` = arriba, `b` = abajo):
+
+```markdown
+| Keyword | Archivo | Duración | Estilo | Lado |
+|---|---|---|---|---|
+| antes | captura-vieja.png | 4 | clean | a |
+| ahora | captura-nueva.png | 4 | clean | b |
+```
+
+Una fila sin `Lado` (o con cualquier otro valor) cae en el lado `a`. `Etiqueta
+A` y `Etiqueta B` rotulan cada mitad; se emiten **sólo si vienen las dos** —
+con una sola, el render avisa con `[warn]` y usa ANTES/AHORA. Se ignoran fuera
+de `versus`, igual que `Esquina cámara` fuera de `pip`.
+
+⚠️ El clamp de B-roll («cada cue termina donde empieza el siguiente») es **por
+lado** justamente por este formato: si fuera global, el cue del lado B cortaría
+al del lado A y las dos mitades nunca se verían juntas — que es el formato
+entero. Los demás formatos no notan la diferencia porque todo cae en `a`.
+
+**Zonas muertas de la card (medidas en un render real, no teoría).** En `versus`
+el frame ya está ocupado por el cromo del formato, así que una card que use todo
+su lienzo se pisa sola. Al diseñar las imágenes de B-roll para este formato:
+
+- **Esquina superior izquierda de cada mitad (~100 px de alto):** ahí se dibuja
+  la etiqueta-chip (`Etiqueta A` / `Etiqueta B`). Deja ese borde libre.
+- **Franja bajo la cámara (~1200-1380 px del frame, o sea el tercio superior de
+  la mitad B):** ahí viven el subtítulo y el énfasis. La card del lado **b**
+  debe llevar su contenido **abajo**.
+- **Borde inferior de la mitad A (~210 px):** lo muerde el círculo de cámara.
+  La card del lado **a** debe llevar su contenido **arriba**.
+
+Regla corta: **el contenido huye de la costura** — la card de arriba empuja
+hacia arriba, la de abajo empuja hacia abajo. Si tus cards son texto denso y no
+querés rediseñarlas, apagá los subtítulos con `- **Subtítulos:** off`.
+
+**Subtítulo y énfasis comparten banda y se excluyen.** Los dos se anclan debajo
+de la cámara (no en el tercio inferior, que en este formato es cuerpo de card).
+Mientras un énfasis está activo, el subtítulo que lo pisaría **se descarta** —
+es la misma regla que ya rige entre énfasis y overlay en `fullscreen`, sólo que
+acá el que cede es el subtítulo.
+
+**Para `pizarra`:** es un formato de **montaje**, no un motor — no dibuja
+nada, apila dos insumos que ya producen otras skills:
+
+| Insumo | Lo produce | Dónde dejarlo |
+|---|---|---|
+| **lienzo** — los trazos a mano, con alfa | `pizarra-explicativa-f100k` | `$DEST/*lienzo*.webm` (o `.mov`), o `$DEST/PIZARRA/` |
+| **cutout** — vos recortada, con alfa | `hyperframes remove-background` | `$DEST/*cutout*.webm` |
+
+```bash
+# el cutout: local, gratis, sin pantalla verde, sobre cualquier pared
+npx hyperframes remove-background "$DEST/_source_cut.mov" \
+  -o "$DEST/cutout.webm" --quality balanced
+```
+
+Los dos se descubren solos por nombre y **no se declaran en el MANIFEST**: al
+MANIFEST le alcanza con `- **Formato:** pizarra`. Si falta cualquiera de los
+dos, el render avisa con `[warn]` y cae a `fullscreen` — nunca rompe.
+
+⚠️ **El alfa de un `.mov` HEVC no lo lee Chrome, y por lo tanto tampoco
+Remotion.** Se comprobó decodificando un frame contra un fondo rojo: con
+`.webm` VP9 el rojo se ve a través; con `.mov` HEVC el frame sale opaco entero
+y el lienzo desaparece. Y resulta que el entregable de
+`pizarra-explicativa-f100k` es justamente un `.mov` HEVC (su formato ligero,
+~100 MB frente a los 4 GB del ProRes). El pipeline lo resuelve solo:
+**convierte el lienzo a VP9/webm la primera vez y cachea el resultado** junto
+al original. Si podés elegir, pedile el lienzo directamente en `.webm`
+(`hyperframes render . --format webm`) y te ahorrás la conversión.
+
+**`pizarra` no admite B-roll.** No es un olvido: el lienzo YA es el apoyo
+visual del formato, y un B-roll encima taparía exactamente lo que se viene a
+mostrar. Sus capas son `emphasis`, `captions` y `sfx`.
+
+**Dónde caben los trazos.** El sujeto ocupa el frame de la cintura para abajo.
+Medido sobre la máscara alfa de una toma real: de `y=0` a `y≈480` el frame está
+**libre del todo**, entre 480 y 720 quedan libres los costados, y de 720 hacia
+abajo cualquier trazo queda tapado. Diseñá el lienzo dentro de esos primeros
+~700 px.
+
+**Limitación conocida:** donde la ropa oscura toca el fondo oscuro, el matting
+puede dejar una banda tenue. Si molesta, subí a `--quality best` en
+`remove-background`; si la toma tiene mala luz y el recorte sale sucio de
+verdad, el fallback probado es `split` (pizarra arriba, cara abajo) — que es
+exactamente el modo Paneles de `collage-cine-f100k`.
 
 **Para `pip`:** dejar el screen recording en `$DEST/CANVAS/`. El pipeline toma
 el primer video de esa carpeta **por orden alfabético** como lienzo y avisa
@@ -386,6 +486,34 @@ ronda, no bugs a arreglar:
   fondo del tema (`tema.fondo`). A diferencia de `pip` (que sí avisa cuando
   le falta el lienzo), `split` no tiene forma de detectar "canvas vacío" y
   quedarse callado ahí es esperado, no un bug.
+
+### Catálogo de estilos (lo que ve la alumna)
+
+`remotion-template/src/estilos.ts` es el registro de **estilos** — lo que la
+alumna elige — frente a `formatos.ts`, que es lo que el render sabe componer.
+Hoy son 1:1, pero el tipo ya distingue `resuelvePor: 'formato' | 'skill'`
+porque a futuro un estilo podrá resolverlo otra skill (`collage-cine-f100k`,
+`motion-reels-f100k`) sin que ella note la diferencia.
+
+`construirPrompt(id)` compone el prompt que se copia de la vitrina: tres
+partes fijas (instalación → recorte semántico → estilo) más el paso del
+MANIFEST y los requisitos duros de ese estilo. El texto de las dos primeras
+partes es una constante compartida: si cambia el instalador, cambia en un
+solo lugar.
+
+**Regla dura, la que ya costó caro con `faceless`/`noticiero`:** un estilo no
+entra a `ESTILOS` hasta que su render salga bien de punta a punta. Hay un test
+que lo fija (`estilos.test.ts` verifica que todo estilo apunte a un formato
+realmente elegible desde el MANIFEST). Vale más un catálogo de cuatro honesto
+que uno de cinco con una promesa falsa.
+
+**Los cinco demos** salen del mismo clip fuente a propósito — la comparación
+honesta es el argumento de venta del catálogo. Viven en
+`FORMULA100K/RECURSOS VIDEOS/2026-08-19_demos-estilos/DEMOS/`, junto al
+MANIFEST con el que se produjo cada uno. **No se commitean a esta skill**
+(son ~175 MB); los consume la vitrina del Grimorio, que es trabajo aparte.
+
+---
 
 **Degradaciones:** formato desconocido cae a `fullscreen`; tema desconocido cae
 al del formato; subtítulos sin `captions.json` se apagan. Todas avisan con
@@ -447,14 +575,16 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 ### Reglas por sección
 
 **Alcance por formato.** No todas estas secciones del MANIFEST existen en
-los cinco formatos — cada uno declara sus propias `capas` en `formatos.ts`.
+los siete formatos — cada uno declara sus propias `capas` en `formatos.ts`.
 `Header` y `Gancho visual` (hook) **sólo existen en `fullscreen`**:
 escribirlas en el MANIFEST de `split` o `pip` no hace nada, se ignoran en
 silencio (ni siquiera avisan con `[warn]`). `Énfasis` existe en `fullscreen`
 y **también en `split`** (no en `pip`). `Overlays` existe en `fullscreen`,
-`split` y `pip`. `B-roll` y el SFX de "pop" existen en los tres. En la
-práctica esto sólo importa para `fullscreen`, `split` y `pip` — son los
-únicos formatos elegibles hoy desde el MANIFEST (ver
+`split` y `pip`. `B-roll` y el SFX de "pop" existen en los tres, y también
+en `versus` (con su columna extra `Lado`). **`pizarra` no admite ninguna de
+las cuatro**: sus capas son sólo `emphasis`, `captions` y `sfx` — el lienzo
+ya es su apoyo visual. Los formatos elegibles hoy desde el MANIFEST son
+`fullscreen`, `split`, `pip`, `versus` y `pizarra` (ver
 `## Catálogo de formatos`).
 
 **Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de quien habla limpia. **Anton (pack F100K, `F100K Display`) 92px en MAYÚSCULAS**, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de quien habla). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
@@ -478,7 +608,7 @@ sólo tienen efecto en los formatos que usan el frame completo (`fullscreen`,
 el tiempo, se dibujan **uno encima del otro** en el mismo punto (el panel no
 tiene tercios donde separarlos).
 
-**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. **Videos (.mp4/.mov/.webm)** → fullscreen con `object-fit: cover`; el estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8%. **Imágenes (.png/.jpg/.gif)** → se renderizan en la parte inferior (`bottom: 520`), centradas, con width configurable (default 900px), igual que los overlays — nunca tapan la cara. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
+**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. **Videos (.mp4/.mov/.webm)** → fullscreen con `object-fit: cover`; el estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8%. **Imágenes (.png/.jpg/.gif)** → se renderizan en la parte inferior (`bottom: 520`), centradas, a **900 px fijos** — la tabla de B-roll no tiene columna `Ancho`, a diferencia de la de Overlays. Igual que los overlays, nunca tapan la cara. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
 
 ### Sincronización por keyword
 

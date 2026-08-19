@@ -17,7 +17,15 @@ const {fontFamily: INTER} = loadFont('normal', {
 export const EmphasisLayer: React.FC<{
   cue: ResolvedEmphasis;
   durationInFrames: number;
-}> = ({cue, durationInFrames}) => {
+  /**
+   * Ancla la caja a `top: topPx` en vez del `bottom: 220` de siempre.
+   * Lo usa `versus`, donde el tercio inferior no es zona libre sino el
+   * cuerpo de la card del panel B: ahí la caja caía justo encima del texto
+   * de la card. Sin este prop el comportamiento es el de antes, así que
+   * `fullscreen` y `split` no se enteran.
+   */
+  topPx?: number;
+}> = ({cue, durationInFrames, topPx}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
 
@@ -53,7 +61,7 @@ export const EmphasisLayer: React.FC<{
       <div
         style={{
           position: 'absolute',
-          bottom: 220,
+          ...(topPx == null ? {bottom: 220} : {top: topPx}),
           left: '50%',
           transform: `translate(-50%, 0) scale(${scale})`,
           opacity,

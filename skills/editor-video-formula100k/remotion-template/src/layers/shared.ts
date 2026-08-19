@@ -86,6 +86,8 @@ export type ResolvedBroll = {
   start: number;
   end: number;
   style: 'monitor-photo' | 'clean';
+  /** Sólo lo lee `versus`; los demás formatos lo ignoran. Default 'a'. */
+  lado: 'a' | 'b';
 };
 
 export function resolveEmphasis(
@@ -136,15 +138,28 @@ export function resolveBroll(
         start: t,
         end: t + (c.duration ?? DEFAULT_BROLL_DURATION),
         style: c.style ?? 'monitor-photo',
+        lado: c.lado ?? 'a',
       };
     })
     .filter((x): x is ResolvedBroll => x !== null)
     .sort((a, b) => a.start - b.start);
 
   // Clamp overlapping entries: each broll ends when the next one starts.
-  for (let i = 0; i < resolved.length - 1; i++) {
-    if (resolved[i].end > resolved[i + 1].start) {
-      resolved[i] = {...resolved[i], end: resolved[i + 1].start};
+  //
+  // El clamp es POR LADO a propósito. En `versus` las dos mitades se ven a la
+  // vez — ese es el formato entero — así que un cue del lado B no debe cortar
+  // al del lado A. Para el resto de los formatos todo cae en el lado 'a' por
+  // default, y el comportamiento es idéntico al de antes.
+  for (const lado of ['a', 'b'] as const) {
+    const idx = resolved
+      .map((c, i) => (c.lado === lado ? i : -1))
+      .filter((i) => i >= 0);
+    for (let k = 0; k < idx.length - 1; k++) {
+      const cur = idx[k];
+      const next = idx[k + 1];
+      if (resolved[cur].end > resolved[next].start) {
+        resolved[cur] = {...resolved[cur], end: resolved[next].start};
+      }
     }
   }
   return resolved;

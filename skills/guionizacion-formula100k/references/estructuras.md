@@ -1,3 +1,37 @@
+# CÓMO LEER ESTE ARCHIVO
+
+Cada estructura trae hasta tres bloques. **No pesan lo mismo.**
+
+| Bloque | Qué te enseña | Cómo se usa |
+|---|---|---|
+| **Estructura paso a paso** | el **ORDEN** de las piezas | es el molde: se respeta |
+| **Ejemplo aplicado** | qué va en cada casilla | es un **esqueleto etiquetado**, NO prosa. Nunca copies su registro |
+| **🎙️ La misma estructura, EN BOCA** | **CÓMO SUENA** una línea bien escrita | esto es lo que se imita |
+
+⚠️ **La trampa de este archivo:** los "Ejemplo aplicado" son viejos, están escritos en frases
+planas de una línea y casi todos usan vocabulario de marketing y redes sociales — que el
+**🧭 ANCLAJE DE RUBRO** de la skill prohíbe salvo que la creadora sea de ese mundo. Si imitas
+el registro de esos ejemplos, tu guion sale genérico. Están ahí porque explican bien el molde,
+no porque estén bien escritos.
+
+Los bloques **🎙️ EN BOCA** son la referencia de escritura. Están escritos contra la sección
+**EL OFICIO** de `SKILL.md` (resbaladero, especificidad, verbo filmable, cadencia, kill-list)
+y cada uno va en un rubro distinto, a propósito, para que se vea que el molde viaja y el
+vocabulario no.
+
+> **Las cifras de los ejemplos EN BOCA son ilustrativas.** Enseñan la *textura* de un dato
+> específico, no el dato. Cámbialas por las reales de la creadora. Nunca inventes data en un
+> guion que se va a publicar.
+
+⚠️ **El rubro de un bloque EN BOCA NO es un dato para elegir estructura.** Que el ejemplo de la
+estructura 9 esté en repostería no significa que la 9 sea "la de repostería", ni que haya que
+evitarla cuando la creadora es repostera. **La estructura se elige por el pilar de valor y el
+objetivo (Pasos 3 y 4), nunca por el rubro del ejemplo.** Si la estructura correcta resulta ser
+la que trae un ejemplo de tu mismo rubro, úsala igual: escribe tus propias líneas y el
+Movimiento 5 del Paso 6.5 se encarga de que no queden calcadas.
+
+---
+
 NUEVAS ESTRUCTURAS DE GUION:
 
 **Las estructuras de guion**
@@ -609,6 +643,24 @@ Ejemplo aplicado:
 5.  CTA: "¿Quieres la plantilla exacta que uso para mis reels? Comenta
     > 'quiero crecer' y te la paso."
 
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: repostería*
+
+"Llevas cuatro bizcochos hundidos y ya cambiaste de harina dos veces. No era la harina.
+
+El mes pasado le pasé esto a once alumnas del taller. Nueve me mandaron foto del bizcocho entero.
+
+Uno: saca los huevos de la nevera cuarenta minutos antes. Fríos no montan.
+
+Dos: la harina entra en tres tandas, con espátula, de abajo hacia arriba. Nunca con batidora.
+
+Tres: no abras el horno antes del minuto veinticinco. Ni para mirar.
+
+Haz esos tres y el próximo sale parejo. El de después también.
+
+¿Cuál de los tres estabas rompiendo? Escríbeme el número. 👇"
+
+*Qué cambió:* "10.000 seguidores en 30 días" es una cifra redonda de folleto; "cuatro bizcochos, once alumnas, nueve fotos, minuto veinticinco" son cifras que nadie se inventa (Regla 2). Los tips pasaron de infinitivos genéricos a verbos que se pueden filmar: *saca, entra, abras* (Regla 4). Y el CTA no pide un comentario: pide **un número**, que es más fácil de dar que una frase.
+
 Análisis detallado del guion propuesto:
 
 1\. Gancho con deseo fuerte y meta concreta:
@@ -684,6 +736,18 @@ Ejemplo aplicado:
 4.  CTA: "¿Crees que deberíamos premiar más la disciplina... o aceptar
     > que la emoción siempre gana en redes? Comenta abajo, quiero
     > leerte."
+
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: fisioterapia*
+
+"Estirar antes de correr no previene lesiones. Puede causártelas.
+
+Un músculo estirado en frío pierde fuerza durante los veinte minutos siguientes. Sales con el motor apagado y la rodilla paga la cuenta.
+
+Llevo seis años mandando a mis pacientes a caminar rápido cinco minutos en vez de estirar. De los 40 corredores que hicieron el cambio completo, 3 volvieron ese año con molestia de rodilla. Antes eran la mitad.
+
+¿A ti quién te enseñó a estirar antes de correr? Dime quién, porque yo también lo enseñé mal durante años. 👇"
+
+*Qué cambió:* la afirmación controversial ya no opina sobre una categoría abstracta ("la gente no sigue al disciplinado"), ataca **una conducta que el espectador hizo esta mañana**. La prueba dejó de ser un "estudios muestran" sin fuente —que además viola la regla de nunca inventar data— y pasó a ser de primera mano y contable. El CTA no pregunta una opinión: pregunta **un nombre**, y la última línea se autoinculpa, que es lo que baja la guardia para comentar.
 
 Análisis detallado del guion propuesto:
 
@@ -921,6 +985,20 @@ Ejemplo aplicado:
 5.  CTA: "¿Te ha pasado? ¿Sentiste que diste demasiado y no te
     > valoraron? Comenta 'me ha pasado' si alguna vez sentiste eso."
 
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: relaciones*
+
+"Le contestas el mensaje en cuanto vibra el teléfono. Él contesta seis horas después, y tú le inventas la razón.
+
+No estás loca. Yo hice eso tres años.
+
+Lo que pasa es esto: cuando alguien sabe exactamente a qué hora vas a responder, deja de preguntarse si vas a responder. Y lo que no se pregunta, no se cuida.
+
+No te estoy diciendo que juegues. Te estoy diciendo que dejes el teléfono boca abajo mientras cenas. Empieza por ahí.
+
+¿Cuánto te demoraste hoy en contestarle? Escribe el número. 👇"
+
+*Qué cambió:* "sientes que cuanto más te esfuerzas, más te ignoran" es un **estado** y muere en el test del bostezo. "Le contestas en cuanto vibra el teléfono" es la **conducta** que delata ese estado, y se puede filmar. Fíjate también en el cierre: usa el molde `no es X, es Y` que la kill-list prohíbe — y aquí está permitido, porque el segundo lado no es otra abstracción ("es amor propio") sino un hecho que se hace esta noche a la hora de la cena.
+
 Análisis detallado del guion propuesto:
 
 1\. Frase inicial con impacto emocional directo:
@@ -1002,6 +1080,22 @@ Ejemplo aplicado:
 5.  CTA: "Comenta 'quiero más tips' y te envío la plantilla exacta que
     > uso para viralizar reels en 60 segundos."
 
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: jardinería*
+
+"Si riegas tu planta cuando ves la tierra seca por encima, la estás ahogando.
+
+La capa de arriba se seca en un día. Abajo, donde están las raíces, lleva húmeda una semana.
+
+Mete el dedo hasta el segundo nudillo. Si sale con tierra pegada, no riegas. Si sale limpio, riegas hasta que salga agua por el hueco de abajo. Hasta que salga.
+
+Y botas el platito. Siempre.
+
+Hazlo dos semanas y la hoja amarilla nueva se detiene.
+
+¿Cuántas plantas has enterrado creyendo que les faltaba agua? Yo, nueve. 👇"
+
+*Qué cambió:* el gancho negativo dejó de nombrar un error de oficio ("empiezas diciendo hola chicos") y pasó a describir **el gesto exacto** que la persona hace con la mano. Los pasos se volvieron filmables: *mete, sale, botas*. Y el CTA no pide participación, la **modela**: al responder primero con su propia cifra ("Yo, nueve"), quien habla vuelve barato confesar.
+
 Análisis detallado del guion propuesto:
 
 1\. Gancho negativo que detiene el scroll:
@@ -1078,6 +1172,20 @@ Ejemplo aplicado (guion corto estilo Reel):
 
 5.  CTA: "Guarda este video si quieres mejorar tus ganchos. Y si ya te
     > diste cuenta que fallabas ahí, comenta 'me pasaba'."
+
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: formulación cosmética*
+
+"Tu crema huele bien, se siente bien, y a las seis semanas te va a dar una infección.
+
+No es el aceite. No es el agua del grifo.
+
+Es que la estás guardando en un tarro de boca ancha y metiendo el dedo. Cada vez que metes el dedo le siembras la flora de tu mano a un producto que tiene agua adentro. Eso es un caldo de cultivo, literal.
+
+Pásala a un dosificador. Es lo más barato que vas a hacer por tu piel este mes.
+
+Guarda esto antes de tu próximo lote. Y si ya se te dañó una crema sin saber por qué, comenta 'me pasó'. 👇"
+
+*Qué cambió:* el vacío de información se abre con una **fecha** ("a las seis semanas"), no con una vaguedad ("hay un error que casi nadie detecta"). Descartar las dos causas obvias antes de dar la verdadera es lo que sostiene el resbaladero: después de "no es el aceite" no te puedes ir. Y el tecnicismo se queda y se traduce en su primera mención —*caldo de cultivo*— en vez de borrarse para "simplificar" (Regla 6).
 
 Análisis detallado del guion propuesto:
 
@@ -1217,6 +1325,22 @@ Ejemplo aplicado:
 
 3.  CTA: Guarda este video y pruébalo esta semana. Vas a notar la
     > diferencia. Y si te funcionó, sígueme para más hacks como este.
+
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: finanzas personales*
+
+"Si te pagan el 30 y para el 10 ya no sabes en qué se fue, esto es para ti. Si llevas un Excel al día, no lo es.
+
+El día que caiga el sueldo, antes de comprar nada: pasa el 10% a una cuenta que no tenga tarjeta. Que no tenga tarjeta.
+
+Después paga arriendo y servicios. Ese mismo día. No el viernes.
+
+Lo que quede, divídelo entre los días que faltan del mes. Ese número es tu día. No lo negocias.
+
+Tres pasos, veinte minutos, una vez al mes.
+
+Guárdalo y hazlo el 30. Vuelve el 10 y me cuentas si supiste en qué se fue. 👇"
+
+*Qué cambió:* el gancho filtrante ahora filtra de verdad — la segunda frase **expulsa** a quien no es (Regla 3: le hablas a una, no a mil). La repetición "que no tenga tarjeta" no es descuido: es la corta que pega después de dos largas (Regla 5). Y el CTA le pone **fecha de vuelta** ("vuelve el 10"), que es lo que convierte un guardado en un regreso.
 
 Análisis detallado del guion propuesto:
 
@@ -1370,6 +1494,20 @@ Ejemplo aplicado:
 5.  CTA: "¿Tú trabajas mejor en la mañana o en la noche? Déjame tu
     > opinión abajo, quiero saber si soy el único."
 
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: hábitos / productividad*
+
+"Madrugar no te hace productivo. A algunos los está quebrando.
+
+Nos vendieron el club de las cinco de la mañana como si el cuerpo de todos corriera con el mismo reloj. No corre. Hay gente cuyo pico de concentración llega a las diez de la noche y lleva años levantándose a las cinco a pelearse con un cerebro dormido.
+
+Yo lo hice cuatro años. Me levantaba a las 5, escribía dos párrafos malos, y a las 11 de la mañana ya no servía para nada. Moví mi bloque de escritura a las 10 a.m. y saqué el libro en siete meses.
+
+No te falta disciplina. Te falta haber probado tu propio horario una semana.
+
+¿Tú a qué hora piensas mejor? No a qué hora te toca. A qué hora piensas. 👇"
+
+*Qué cambió:* mismo tema que el ejemplo de arriba, otra escritura. El caso real dejó de ser un adjetivo ("tripliqué mi enfoque") y se volvió una escena con hora y resultado contable: *5 a.m., dos párrafos malos, el libro en siete meses*. El CTA se corrige a sí mismo en voz alta —"no a qué hora te toca"— y esa corrección es lo que impide contestar en automático.
+
 Análisis detallado del guion propuesto:
 
 1\. Frase que rompe una norma cultural:
@@ -1452,6 +1590,22 @@ Ejemplo aplicado:
 6.  CTA: "¿Te pasó algo parecido? ¿Fallaste antes de encontrar tu forma?
     > Comenta 'yo también' o compártelo con alguien que esté en ese
     > punto."
+
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: jabonería*
+
+"Este jabón lleva ocho meses en el mostrador y sigue duro. El primero que hice se me deshizo en cuatro días.
+
+Empecé cambiando de aceite. Compré coco, palma, oliva de primera prensada. Gasté ciento veinte mil pesos y salió blando igual.
+
+Después le eché sal, porque me lo dijeron en un grupo de Facebook. Salió blando y además rayaba.
+
+Lo que estaba mal era la sosa. Yo pesaba el agua a ojo y la sosa con una cuchara. Compré una balanza de 0,1 gramos —treinta y cinco mil pesos— y el siguiente lote salió duro.
+
+No era el aceite. Nunca fue el aceite.
+
+¿Cuántos lotes llevas cambiando de aceite? Comenta el número. 👇"
+
+*Qué cambió:* el resultado de apertura es **un objeto que se puede poner frente a la cámara** ("ocho meses en el mostrador y sigue duro"), no una sensación ("me siento mejor que nunca"). Los dos fracasos ahora cuestan plata con cifra, que es lo que los vuelve creíbles. Y la revelación no es un consejo: es un instrumento con precio. Lo barato de la solución después de lo caro del error es el golpe.
 
 Análisis detallado del guion propuesto:
 
@@ -1609,6 +1763,22 @@ Ejemplo aplicado:
 
 6.  CTA: "¿Estás enfocándote en lo bonito o en lo que realmente importa?
     > Comenta 'necesito foco' si alguna vez te pasó algo así."
+
+**🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: negocio de barrio (panadería)*
+
+"Cerré la panadería con dieciocho millones de deuda. Eso no fue lo peor.
+
+Abrí con el mejor pan del barrio y sin saber cuánto me costaba hacerlo. Vendía el croissant a cuatro mil. Me costaba cuatro mil doscientos.
+
+Pensé que era falta de gente. Metí seis millones en pauta y en un toldo nuevo. Entró más gente. Perdí más plata, más rápido.
+
+Mi hija dejó de pedirme que la recogiera del colegio porque ya se sabía la respuesta. Eso sí fue lo peor.
+
+Me senté con una hoja y saqué el costo de cada producto, uno por uno. Once de los veintitrés se vendían por debajo del costo. Subí precios, saqué cuatro del menú, y a las siete semanas la caja cerró en positivo.
+
+Si vendes algo hecho por ti: ¿sabes cuánto te cuesta una unidad? Con decimales. Comenta el número. 👇"
+
+*Qué cambió:* la caída doble aquí es **económica y luego humana**, y la segunda se cuenta con una escena de tres segundos en vez de con un adjetivo ("estaba obsesionado"). El detalle que carga todo el guion es *cuatro mil contra cuatro mil doscientos*: doscientos pesos explican dieciocho millones. Esa es la especificidad de la Regla 2 haciendo el trabajo que ninguna frase motivacional hace.
 
 Análisis detallado del guion propuesto:
 
@@ -2787,6 +2957,28 @@ Etapa 5 — La cuenta fantasma: "subo cuando tenga una mejor idea". Muere.\
 Resurrección: no murió por falta de contenido, murió por falta de variación → calendario de experimentación de formatos (30 días, formato nuevo cada 3, mides, doblas en el ganador).\
 Frase-ancla: "Una cuenta no muere por publicar poco. Muere por publicar siempre lo mismo."\
 CTA: "¿En qué etapa está tu cuenta? Comenta el número. 👇"
+
+## **🎙️ LA MISMA ESTRUCTURA, EN BOCA** — *rubro: gimnasio / entrenamiento*
+
+"Si tu entrenamiento está en la etapa 4, todavía se arregla. No te cambies de gimnasio.
+
+Etapa 1 — La novedad: entras, todo te da agujetas, subes peso cada semana.
+
+Etapa 2 — La meseta: unas semanas subes cinco kilos, otras nada. Todavía funciona.
+
+Etapa 3 — Te acomodas: encontraste tu rutina y la repites. **Aquí el músculo deja de crecer y tú no te enteras.**
+
+Etapa 4 — El gimnasio caro: vas tres veces por semana, cumples, y llevas siete meses con el mismo peso en la barra.
+
+Etapa 5 — La membresía fantasma: "vuelvo en enero".
+
+Lo que lo revive: no son más días. Es mover **una** variable cada cuatro semanas —el peso, las repeticiones o el descanso— y anotarla.
+
+Frase-ancla: "Un cuerpo no se estanca por entrenar poco. Se estanca por entrenar siempre igual."
+
+CTA: "¿En qué etapa estás? Comenta el número. 👇"
+
+*Qué cambió:* la escalera es la misma; lo que se movió es el **rubro**. El ejemplo de arriba está escrito en vocabulario de redes sociales, que el ANCLAJE DE RUBRO prohíbe salvo que la creadora sea de ese mundo. Este demuestra que el molde viaja entero: la etapa 3 sigue siendo la trampa silenciosa, la 5 sigue siendo la frase que la gente se dice a sí misma —y por eso duele—, y la frase-ancla conserva su simetría. Nota que la etapa 4 no se describe con un juicio ("vas mal"): se describe con **un dato del gimnasio**, el mismo peso en la barra durante siete meses.
 
 ## **🔍 Reglas de oro**
 

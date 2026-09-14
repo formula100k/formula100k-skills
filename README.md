@@ -122,6 +122,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `recursos-de-video-formula100k` — Caza B-roll real + IA para reels
 - `historias-a-imagenes-nanobanana` — Convertir guion de stories en PNGs
 - `carrusel-render-formula100k` — Renderizar guion de carrusel a slides PNG
+- `carrusel-formatos-f100k` — 35 formatos de carrusel: elige por objetivo, visual detallado y prompts para Claude, Gemini y ChatGPT
 - `clonador-carrusel-formula100k` — Skill ESPEJO: clona el estilo de un carrusel de referencia desde una captura, lo mejora con F100K y renderiza los PNG finales con tu marca
 - `portada-video-carrusel-formula100k` — Portada en VIDEO para carruseles: anima la foto gancho (cinemagraph Higgsfield) y compone el título en HTML transparente → slide-01-ANIMADO.mp4
 - `miniatura-youtube-formula100k` — Miniaturas virales de YouTube

@@ -72,6 +72,7 @@ Lee la referencia del módulo **antes** de empezarlo. Cada una trae quién hace 
 | 4 | Cobros por país | `references/04-cobros-por-pais.md` | `app/api/webhooks/stripe`, `app/api/cron/refresco` |
 | 5 | Centro de control | `references/05-centro-de-control.md` | `app/admin/{page,panel}.tsx`, `app/api/admin/miembros` |
 | 6 | Publicar | `references/06-publicar.md` | — |
+| — | Prompts armados por plataforma | `references/prompts-por-plataforma.md` | (para quien sigue sin la skill) |
 | + | Varias apps, un portero | `references/07-varias-apps-un-portero.md` | (avanzado, solo si lo pide) |
 
 ### Cómo usar las plantillas
@@ -112,4 +113,4 @@ Nunca dejes un módulo a medias. Si hay que parar, deja todo funcionando y anota
    - URLs de webhooks y cron con el dominio final.
    - **La rutina**: "Cada [día], exporta el CSV de [plataforma] y súbelo en /admin" (si la plataforma no tiene API).
    - Qué hacer si alguien dice "pagué y no puedo entrar": mirar rebotes → dar acceso manual.
-3. Si prefiere seguir por su cuenta o compartirlo con alguien de su equipo: `references/prompts-para-copiar.md` tiene los mismos pasos como prompts sueltos.
+3. Si prefiere seguir por su cuenta o compartirlo con alguien de su equipo: `references/prompts-para-copiar.md` tiene los mismos pasos como prompts sueltos, y `references/prompts-por-plataforma.md` trae el portero y el centro de control ya armados para su plataforma (dale el de la suya, no el genérico).

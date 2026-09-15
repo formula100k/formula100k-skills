@@ -4,6 +4,8 @@ Para quien **no** tiene la skill instalada. Funcionan en Claude Code (Claude hac
 
 Cambia lo que está entre [CORCHETES].
 
+¿Cobras en una plataforma concreta? Los prompts 3 (portero) y 5 (centro de control) están **ya armados para cada una** (Skool, Hotmart, Stripe, Mercado Pago, Polar/Lemon Squeezy, otra, o pagos a mano) en `prompts-por-plataforma.md`, junto con un prompt por cada pieza del panel.
+
 ---
 
 ## 0 · Modo guía (pégalo primero, una sola vez)
@@ -57,6 +59,8 @@ Agrega login con Google usando Supabase Auth (@supabase/ssr) a mi app Next.js.
 
 ## 3 · El portero: solo entra quien pagó
 
+> **Versión armada para tu plataforma:** `prompts-por-plataforma.md` → «El portero, según dónde cobras».
+
 > **Qué hace:** tu app guarda una lista de correos. Si el correo de quien entra no está en la lista, no pasa y ve una pantalla amable. Así tu app valida contra Skool, Hotmart, Kajabi, Stripe o donde cobres (incluso si te pagan por transferencia), **sin que las plataformas estén conectadas entre sí**.
 
 ```
@@ -90,6 +94,8 @@ Prueba final en modo prueba: compra con tarjeta de prueba → el correo aparece 
 ---
 
 ## 5 · Centro de control
+
+> **Versión armada para tu plataforma, o una sola pieza del panel:** `prompts-por-plataforma.md`.
 
 > **Qué hace:** tu panel /admin para manejar la lista sin tocar código.
 

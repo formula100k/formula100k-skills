@@ -3,12 +3,12 @@ name: conecta-tu-app-f100k
 description: >
   Guía paso a paso para conectar una app a lo que la vuelve un negocio: base de datos (Supabase),
   login (Google o enlace por correo), el PORTERO (solo entran los correos de quienes pagaron, validado
-  contra Skool, Hotmart, Stripe o Mercado Pago sin que estén conectadas entre sí), cobros según el país,
+  contra Skool, Hotmart, Kajabi, Stripe, Mercado Pago o pagos a mano, sin que estén conectadas entre sí), cobros según el país,
   centro de control /admin con refresco de la lista, y publicación en Vercel. Claude hace lo técnico y
   pide solo lo que no puede hacer (crear cuentas, copiar llaves, clics en paneles). Trae plantillas
   probadas y prompts para copiar y pegar. Usar cuando digan "cómo conecto el login", "conecta Supabase",
   "base de datos para mi app", "que solo entren mis alumnos", "cómo valido que pagó", "que solo entre
-  quien está en Skool", "pasarela de pagos", "cómo cobro desde Colombia", "Stripe no está en mi país",
+  quien compró mi curso", "pasarela de pagos", "cómo cobro desde Colombia", "Stripe no está en mi país",
   "centro de control", "panel admin", "webhook de pagos" o "conecta mi app". NO construye la app desde
   cero (constructor-miniapps-f100k, crea-tu-app-f100k) ni landings de venta.
 argument-hint: "[login | base | portero | cobros | control | publicar | todo]"
@@ -40,7 +40,7 @@ Si tiene Claude in Chrome conectado, **ofrécelo** para los paneles ("¿quieres 
 
 1. **¿Qué hace tu app y dónde está?** Mira la carpeta tú mismo: `package.json` → versión de Next. Si es **un solo archivo HTML**, explica en 3 líneas que login y base de datos necesitan servidor, y ofrece pasarla a Next.js conservando el diseño (con `constructor-miniapps-f100k`). Si no hay app todavía, deriva a `crea-tu-app-f100k`.
 2. **¿Quién debería poder entrar?** (cualquiera con cuenta / solo quien pagó / solo miembros de mi comunidad)
-3. **¿Dónde te pagan hoy, o dónde piensas cobrar?** (Skool, Hotmart, Stripe, Mercado Pago, transferencia, todavía no cobro)
+3. **¿Qué vendes y dónde te pagan hoy, o dónde piensas cobrar?** (curso, membresía, comunidad, servicio o la app misma · Skool, Hotmart, Kajabi, Stripe, Mercado Pago, transferencia, todavía no cobro). No asumas ninguna plataforma: la skill sirve igual para quien no tiene comunidad.
 4. **¿En qué país vives** (para la pasarela) **y dónde está tu público?**
 
 Con eso arma el **mapa** y muéstraselo antes de tocar nada:

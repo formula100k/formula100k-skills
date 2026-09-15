@@ -1,6 +1,6 @@
 # 03 · El portero: solo entra quien está en tu lista
 
-**La pregunta que lo resuelve:** "La gente paga en Skool (o Hotmart, o Stripe) y mi app vive en otro lado. ¿Cómo sabe mi app quién pagó, si no están conectadas?"
+**La pregunta que lo resuelve:** "La gente me paga en una plataforma (Skool, Hotmart, Kajabi, Stripe, Mercado Pago… o por transferencia) y mi app vive en otro lado. ¿Cómo sabe mi app quién pagó, si no están conectadas?"
 
 **La respuesta:** no hace falta conectarlas. Hace falta **una lista**. Tu app guarda en su base de datos los correos de quienes pagaron. Cada vez que alguien abre una página, el portero mira su correo: **si está en la lista, pasa. Si no, ve una pantalla amable que le dice cómo unirse.** Tu tarea es mantener esa lista al día, y eso se puede automatizar casi por completo.
 
@@ -36,6 +36,7 @@ Instalación (Claude): `npm i @supabase/ssr @supabase/supabase-js papaparse` + `
 | **Stripe** | Webhook `checkout.session.completed` (plantilla `stripe`) | Webhook `customer.subscription.deleted` | ✅ Cron `refresco` (lee suscripciones activas) |
 | **Mercado Pago** | Webhook de suscripciones → tu ruta **consulta la suscripción en la API** antes de dar acceso | Mismo webhook (estado `cancelled`) | ✅ Cron con la búsqueda de suscripciones (preapproval) `authorized` |
 | **Hotmart** | Webhook (postback) de compra aprobada → `/api/webhooks/alta` vía Zapier o directo | Webhook de cancelación de suscripción → `/api/webhooks/baja` | Posible con su API. Si no, CSV. |
+| **Kajabi, Teachable, Circle, Gumroad u otra** | Si tiene webhooks o Zapier → `/api/webhooks/alta` | Si avisa cancelaciones → `/api/webhooks/baja`; si no, CSV | Si tiene API, sí. Claude revisa su documentación actual. |
 | **Lemon Squeezy / Polar / Paddle** | Webhook de orden o suscripción creada | Webhook de suscripción cancelada/expirada | ✅ Con su API |
 | **Transferencia, efectivo, a mano** | Centro de control → "Dar acceso" | Centro de control → "Quitar acceso" | — |
 

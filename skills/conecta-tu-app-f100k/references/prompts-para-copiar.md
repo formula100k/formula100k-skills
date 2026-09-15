@@ -57,17 +57,17 @@ Agrega login con Google usando Supabase Auth (@supabase/ssr) a mi app Next.js.
 
 ## 3 · El portero: solo entra quien pagó
 
-> **Qué hace:** tu app guarda una lista de correos. Si el correo de quien entra no está en la lista, no pasa y ve una pantalla amable. Así tu app valida contra Skool, Hotmart o donde cobres, **sin que las plataformas estén conectadas entre sí**.
+> **Qué hace:** tu app guarda una lista de correos. Si el correo de quien entra no está en la lista, no pasa y ve una pantalla amable. Así tu app valida contra Skool, Hotmart, Kajabi, Stripe o donde cobres (incluso si te pagan por transferencia), **sin que las plataformas estén conectadas entre sí**.
 
 ```
-Quiero que solo entren a mi app las personas que pagaron. Cobro en: [Skool / Stripe / Mercado Pago / Hotmart / Polar / Lemon Squeezy / otra].
+Quiero que solo entren a mi app las personas que pagaron. Vendo: [curso / membresía / comunidad / servicio / la app misma]. Cobro en: [Skool / Hotmart / Kajabi / Stripe / Mercado Pago / Polar / Lemon Squeezy / transferencia o efectivo / otra].
 Construye un "portero" así:
 1. Tabla miembros_activos (email como llave, siempre en minúsculas y sin espacios), tabla lotes_miembros (historial de cada cambio: origen csv/manual/webhook/pasarela/cron, agregados, quitados) y tabla rebotes (quién intentó entrar y no pudo). RLS encendido y sin políticas: solo el servidor las toca.
 2. Función SQL que reemplace la lista TODO O NADA. Tiene que negarse si la lista nueva viene vacía y NO borrar a los que agregué a mano.
 3. proxy.ts (o middleware.ts si mi Next es 15 o menor) que revise la lista EN CADA VISITA, no solo al iniciar sesión. Mi correo va en ADMIN_EMAILS y pasa siempre. Si la base no responde, el portero cierra.
 4. /api/webhooks y /api/cron NO pasan por el login (los llaman máquinas). Cada uno se protege con su propio secreto.
 5. Página /acceso-cerrado amable: "quizás entraste con otro correo distinto al que usaste para pagar", un botón para unirme ([mi link de pago]) y "entrar con otro correo".
-6. Webhook /api/webhooks/alta con header x-webhook-secret para que [Zapier / mi plataforma] agregue a quien paga. Busca en la documentación ACTUAL de mi plataforma cómo se llaman sus eventos de pago y de cancelación; no lo digas de memoria. Si mi plataforma no avisa cancelaciones (Skool no lo hace), las bajas se hacen subiendo el CSV de miembros.
+6. Webhook /api/webhooks/alta con header x-webhook-secret para que [Zapier / mi plataforma] agregue a quien paga. Si me pagan por transferencia o efectivo, no hace falta webhook: doy acceso a mano desde el panel. Busca en la documentación ACTUAL de mi plataforma cómo se llaman sus eventos de pago y de cancelación; no lo digas de memoria. Si mi plataforma no avisa cancelaciones (Skool no lo hace), las bajas se hacen subiendo el CSV de miembros.
 7. Registra cada rebote.
 Prueba final: un correo en la lista entra; uno fuera ve /acceso-cerrado y aparece en rebotes; si lo quito, en su siguiente clic ya no entra; el webhook con el secreto incorrecto da 401.
 ```

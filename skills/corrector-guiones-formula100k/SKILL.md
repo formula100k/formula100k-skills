@@ -45,7 +45,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Corrector de Guiones · FÓRMULA 100K
 
-Diagnostica y corrige guiones de video aplicando los frameworks completos de FÓRMULA 100K (Andrea Vega). Devuelve un diagnóstico estructurado + score por Escala Viral + reescritura corregida del guion.
+Diagnostica y corrige guiones de video aplicando los frameworks completos de FÓRMULA 100K. Devuelve un diagnóstico estructurado + score por Escala Viral + reescritura corregida del guion.
 
 ## Cuándo se activa
 
@@ -58,7 +58,7 @@ Se activa cuando el usuario (o una alumna) pide:
 
 ## Contexto crítico antes de empezar
 
-**Usuario:** creador/a de contenido que aplica FÓRMULA 100K. Audiencia: emprendedoras hispanas.
+**Usuario:** creador/a de contenido que aplica FÓRMULA 100K. Audiencia: la de SU rubro (léela de su perfil o pregúntala en una línea; no asumas ninguna).
 
 **Material de referencia disponible:**
 - `frameworks.md` — Las 35 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles

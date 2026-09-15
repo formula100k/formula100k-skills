@@ -1,0 +1,154 @@
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { analizar, mediana, repartirPiezas, validarLectura, derivar } from './motor.mjs'
+import { postsCuentaMedida } from './fixture-cuenta-medida.mjs'
+
+const clonar = () => structuredClone(postsCuentaMedida)
+
+test('mediana par e impar; ignora null', () => {
+  assert.equal(mediana([3, 1, 2]), 2)
+  assert.equal(mediana([4, 1, 3, 2]), 2.5)
+  assert.equal(mediana([null, 5]), 5)
+  assert.equal(mediana([]), null)
+})
+
+test('columnas derivadas como la Hoja de Etiquetado', () => {
+  const d = derivar({ vistas: 100296, guardados: 477, compartidos: 163, pct_no_seguidores: 77.7, seguidores_nuevos: 46 })
+  assert.equal(d.valor_1000, 6.4)
+  assert.equal(d.intencion, null)
+})
+
+test('Regla del Lote: menos de 9 posts no se lee', () => {
+  const r = analizar({ posts: clonar().slice(0, 8), ventana: { dias_publicando: 40 } })
+  assert.equal(r.lote.valido, false)
+  assert.equal(r.filtros, undefined)
+})
+
+test('Regla del Lote: 9 posts en menos de 30 días tampoco', () => {
+  const r = analizar({ posts: clonar().slice(0, 12) })
+  assert.equal(r.lote.valido, false)
+  assert.match(r.lote.motivo, /días/)
+})
+
+test('caso vivo del sílabo: el filtro 1 se tapa con los números medidos', () => {
+  const r = analizar({ posts: clonar() })
+  assert.equal(r.ventanas.modo, 'partido')
+  assert.equal(r.ventanas.mes.n, 10)
+  assert.equal(r.ventanas.base.desde, '2026-07-30')
+  assert.equal(r.ventanas.base.hasta, '2026-08-19')
+  const [vistas, pct] = r.filtros[0].comps
+  assert.equal(vistas.base, 12062)
+  assert.equal(vistas.mes, 5305)
+  assert.equal(pct.base, 42.15)
+  assert.equal(pct.mes, 37.2)
+  assert.equal(r.tapado, 1)
+  assert.equal(r.filtros[1].estado, 'no-se-lee')
+  assert.equal(r.filtros[2].estado, 'no-se-lee')
+})
+
+test('el Valor subió (13,6 → 16,4) y aun así no se lee', () => {
+  const r = analizar({ posts: clonar() })
+  // se recalcula aparte para comprobar el dato del sílabo
+  const base = r.posts.slice(10).map((p) => p.metricas.valor_1000)
+  const mes = r.posts.slice(0, 10).map((p) => p.metricas.valor_1000)
+  assert.equal(mediana(base), 13.55)
+  assert.equal(mediana(mes), 16.4)
+  assert.equal(r.filtros[2].estado, 'no-se-lee')
+})
+
+test('mediana vs promedio: 7.479,5 contra 16.473,7 y 24 de 30 bajo el promedio', () => {
+  const r = analizar({ posts: clonar() })
+  assert.equal(r.medianaVsPromedio.mediana, 7479.5)
+  assert.equal(r.medianaVsPromedio.promedio, 16473.7)
+  assert.equal(r.medianaVsPromedio.veces, 2.2)
+  assert.equal(r.medianaVsPromedio.bajoPromedio, 24)
+})
+
+test('mezcla inclinada por filtro 1: 40/30/30', () => {
+  const r = analizar({ posts: clonar(), piezas_mes: 12 })
+  assert.deepEqual([r.reparto.rep, r.reparto.var_, r.reparto.apo], [40, 30, 30])
+  const c = r.reparto.cubetas
+  assert.equal(c.rep + c.var_ + c.apo, 12)
+})
+
+test('ORO y CHATARRA: 7 y 7 con 30 posts, redondeo hacia abajo', () => {
+  const r = analizar({ posts: clonar() })
+  assert.equal(r.cuarto, 7)
+  assert.equal(r.posts.filter((p) => p.zona === 'ORO').length, 7)
+  assert.equal(r.posts.filter((p) => p.zona === 'CHATARRA').length, 7)
+  assert.equal(r.orden.columna, 'pct_no_seguidores')
+})
+
+test('ordenado por Valor, los virales 1.º y 3.º caen a CHATARRA y el 2.º no', () => {
+  const todos = postsCuentaMedida.map((p) => p.n)
+  // misma ventana a los dos lados ⇒ ningún filtro se tapa ⇒ se ordena por Valor
+  const r = analizar({ posts: clonar(), ventanas: { base: todos, mes: todos } })
+  assert.equal(r.tapado, 0)
+  assert.equal(r.orden.columna, 'valor_1000')
+  const zona = Object.fromEntries(r.posts.map((p) => [p.n, p.zona]))
+  assert.equal(zona[29], 'CHATARRA') // 100.296 vistas, valor 6,4
+  assert.equal(zona[30], 'CHATARRA') // 65.858 vistas, valor 4,3
+  assert.notEqual(zona[16], 'CHATARRA') // 74.716 vistas, valor 16,5
+  assert.deepEqual(r.engañoVistas.topVistasEnChatarra.sort((a, b) => a - b), [22, 29, 30]) // 3 de los 7 más vistos
+})
+
+test('veredicto por formato: 2 ORO repetir, 2 CHATARRA matar, 1 ORO confirmar', () => {
+  const posts = clonar()
+  const r0 = analizar({ posts })
+  const oro = r0.ranking.filter((x) => x.zona === 'ORO').map((x) => x.n)
+  const chat = r0.ranking.filter((x) => x.zona === 'CHATARRA').map((x) => x.n)
+  const et = (n, formato) => { posts.find((p) => p.n === n).etiquetas = { formato, angulo: 'X', proposito: 'Nutrición' } }
+  et(oro[0], 'Lista numerada'); et(oro[1], 'Lista numerada')
+  et(chat[0], 'Vlog sin gancho'); et(chat[1], 'Vlog sin gancho')
+  et(oro[2], 'Detrás de cámara')
+  const r = analizar({ posts })
+  const v = Object.fromEntries(r.formatos.map((f) => [f.formato, f.veredicto]))
+  assert.equal(v['Lista numerada'], 'REPETIR')
+  assert.equal(v['Vlog sin gancho'], 'MATAR')
+  assert.equal(v['Detrás de cámara'], 'CONFIRMAR')
+})
+
+test('ángulo de Venta sin dato de intención no se corona', () => {
+  const posts = clonar().map((p) => ({ ...p, etiquetas: { formato: 'F', angulo: 'Objeción', proposito: 'Venta' } }))
+  const r = analizar({ posts })
+  assert.equal(r.angulos.find((a) => a.proposito === 'Venta').estado, 'sin-dato')
+})
+
+test('ángulo de Crecimiento se corona por % no seguidores, no por el filtro tapado', () => {
+  const posts = clonar().map((p) => ({ ...p, etiquetas: { formato: 'F', angulo: p.metricas.pct_no_seguidores > 70 ? 'Contraintuitivo' : 'Error común', proposito: 'Crecimiento' } }))
+  const r = analizar({ posts })
+  const c = r.angulos.find((a) => a.proposito === 'Crecimiento')
+  assert.equal(c.estado, 'coronado')
+  assert.equal(c.coronados[0].angulo, 'Contraintuitivo')
+})
+
+test('sin dato ni pasa ni se tapa: la lectura sigue', () => {
+  const posts = clonar().map((p) => ({ ...p, metricas: { ...p.metricas } }))
+  // mes con más alcance que la base para que el 1 pase
+  posts.slice(0, 10).forEach((p) => { p.metricas.vistas *= 5; p.metricas.pct_no_seguidores = 80 })
+  const r = analizar({ posts })
+  assert.equal(r.filtros[0].estado, 'pasa')
+  assert.equal(r.filtros[1].estado, 'sin-dato')
+  assert.notEqual(r.filtros[2].estado, 'no-se-lee')
+})
+
+test('encuesta: con filtro 1 tapado no sirve', () => {
+  assert.equal(analizar({ posts: clonar() }).encuesta.sirve, false)
+})
+
+test('repartirPiezas no pierde piezas', () => {
+  assert.deepEqual(repartirPiezas(12, { rep: 40, var_: 30, apo: 30 }), { rep: 5, var_: 4, apo: 3 })
+  assert.deepEqual(repartirPiezas(10, { rep: 60, var_: 40, apo: 0 }), { rep: 6, var_: 4, apo: 0 })
+})
+
+test('validarLectura caza lo que contradice al motor', () => {
+  const posts = clonar().map((p) => ({ ...p, etiquetas: { formato: p.n % 2 ? 'A' : 'B', angulo: 'x', proposito: 'Crecimiento' } }))
+  const r = analizar({ posts, piezas_mes: 4 })
+  const errores = validarLectura(r, {
+    preguntas: [{ pregunta: '¿?', evidencia: [99] }],
+    aplicacion: { calendario: [{ de_donde_sale: 'REPETIR', formato: 'A' }], campana: 'algo' },
+  })
+  assert.ok(errores.some((e) => e.includes('99')))
+  assert.ok(errores.some((e) => e.includes('piezas')))
+  assert.ok(errores.some((e) => e.includes('campaña')))
+})

@@ -1,6 +1,6 @@
 ---
 name: analiza-tu-contenido-f100k
-description: Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K completo sobre la cuenta de la alumna y lo entrega en UNA infografía imprimible (La Hoja del Mes). Baja y transcribe sus últimos 30 Reels, lee las estadísticas del panel «Ver insights» (del Chrome logueado o de capturas de pantalla), etiqueta formato · ángulo · propósito, lee los 5 filtros y declara el filtro tapado, corona moldes (ORO/CHATARRA → repetir · confirmar · matar) y ángulos, deja hechas las preguntas para que la alumna solo marque, reparte el 60/30/10 inclinado, escribe las conclusiones y arma el calendario del mes con acta y la apuesta con 4 ganchos. Usar SIEMPRE que digan «analiza mi contenido», «analiza mi cuenta del mes», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «llena el tablero por mí», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k), ni para desglosar UN video (analisis-video-viral-f100k).
+description: Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K completo sobre la cuenta de la alumna y lo entrega en UNA infografía imprimible (La Hoja del Mes). Baja y transcribe sus últimos 30 Reels, lee las estadísticas del panel «Ver insights» (del Chrome logueado o de capturas de pantalla), etiqueta formato · ángulo · propósito, lee los 5 filtros y declara el filtro tapado, corona moldes (ORO/CHATARRA → repetir · confirmar · matar) y ángulos, deja hechas las preguntas para que la alumna solo marque, reparte el 60/30/10 inclinado, saca las 3 conclusiones fijas (formato ganador, ángulo que más viraliza, posible mejor ángulo de venta) y arma el calendario del mes pieza por pieza —ángulo exacto, primera frase, estructura, CTA, Reel de referencia y meta— con la apuesta y sus 4 ganchos. Usar SIEMPRE que digan «analiza mi contenido», «analiza mi cuenta del mes», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «llena el tablero por mí», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k), ni para desglosar UN video (analisis-video-viral-f100k).
 ---
 
 # Analiza tu Contenido — La Hoja del Mes
@@ -88,7 +88,18 @@ Guárdalo en `posts[].etiquetas` de `datos.json`. Normaliza nombres antes de seg
 node ~/.claude/skills/analiza-tu-contenido-f100k/scripts/render.mjs --datos datos.json --solo-motor resultado.json
 ```
 Lee `resultado.json` entero antes de escribir nada: `tapado`, `filtros`, `ranking`, `engañoVistas`,
-`formatos` (veredictos), `angulos` (coronas), `reparto.cubetas`, `encuesta.sirve`.
+`formatos` (veredictos), `angulos` (coronas), **`conclusionesFijas`**, `medianas`, `reparto.cubetas`, `encuesta.sirve`.
+
+### Las 3 conclusiones fijas (las elige el motor, salen en TODOS los informes)
+
+| Conclusión | Regla del motor | Si no alcanza |
+|---|---|---|
+| **Formato ganador** | veredicto REPETIR (pueden ser varios) | el mejor CONFIRMAR, marcado «candidato» |
+| **Ángulo que más te ayuda a viralizar** | todos los Reels agrupados por ángulo; gana la mayor mediana de **% de no seguidores** | «pista» si solo 1 Reel quedó en el cuarto de arriba; «patrón» con 2+ |
+| **Posible mejor ángulo de venta** | el ángulo de Venta coronado; si no, mayor mediana de **intención**; sin intención, de **conversión** | con conversión se dice «posible» y se pide capturar la sección Perfil |
+
+Un ángulo compite solo con 2+ Reels y tiene que ganarle a la mediana de la cuenta. Nunca cambies el
+ganador ni lo «corrijas» con tu criterio: si no te convence, dilo en el texto, pero el nombre es el del motor.
 
 ## PASO 5 — La lectura (`lectura.json`): lo único que redactas
 
@@ -100,9 +111,25 @@ Esquema en `references/esquema.md`. Contenido:
   - `tipo: "hipotesis"`: un patrón que VES en los transcripts de ORO vs CHATARRA y los números no explican (cómo abren, cuánto tardan en decir el tema, si nombran al desconocido, si piden algo…). Cada una con `porque` (lo que viste), `evidencia` (números de Reel) y `destino` (qué cambia en el calendario si dice que sí).
   - Si `resultado.encuesta.sirve` es true, agrega 2 `tipo: "encuesta"` ya redactadas para su audiencia: la de **lenguaje** (abierta: «Cuéntame con tus palabras qué estás intentando resolver con…») y la de **objeción**. Si es false, ninguna: el motor ya explica por qué.
   - Prohibido: «¿de qué quieres que hable?» y A/B de cosas que no va a hacer.
-- **conclusiones** (máx. 3): `{ titulo, texto, evidencia }`. La primera siempre es el filtro tapado. Otra, lo que las vistas coronaban y el filtro no (`engañoVistas`).
+- **conclusiones_fijas**: `{ formato, angulo_viral, angulo_venta }`, cada una `{ texto, evidencia }`. Solo explicas el PORQUÉ del ganador que eligió el motor, mirando sus transcripts: qué tienen en común esos Reels (cómo abren, a quién le hablan). 2–3 frases. Si es «pista», «candidato» o «posible», dilo y di qué lo confirma.
+- **conclusiones** (máx. 3, se muestran como «Otras conclusiones»): `{ titulo, texto, evidencia }`. La primera siempre es el filtro tapado. Otra, lo que las vistas coronaban y el filtro no (`engañoVistas`). No repitas las fijas.
 - **aplicacion**:
-  - `calendario`: exactamente `reparto.piezas` filas; REPETIR/VARIAR/APOSTAR = `reparto.cubetas`. REPETIR solo con formatos de veredicto REPETIR (si no hay ninguno, usa CONFIRMAR y dilo en `por_que`). Nunca un formato MATAR. VARIAR cambia UNA sola variable. APOSTAR = formato nuevo de `references/formatos.json` que ella no haya usado. Cada fila: `semana, tema, formato, angulo, proposito, de_donde_sale, filtro_que_ataca, por_que, evidencia`. Temas concretos de SU nicho, sacados de sus transcripts.
+  - `calendario`: exactamente `reparto.piezas` filas; REPETIR/VARIAR/APOSTAR = `reparto.cubetas`. REPETIR solo con formatos de veredicto REPETIR (si no hay ninguno, usa CONFIRMAR y dilo en `por_que`). Nunca un formato MATAR. VARIAR cambia UNA sola variable. APOSTAR = formato nuevo de `references/formatos.json` que ella no haya usado. Temas concretos de SU nicho, sacados de sus transcripts.
+    El ángulo que viraliza y el de venta **tienen que aparecer** en el calendario (el validador lo exige). Con filtro tapado 1 o 2, el que viraliza va en la mayoría de REPETIR; el de venta, en al menos una pieza de Nutrición o Venta.
+    Cada fila se tiene que poder grabar sin adivinar:
+    | Campo | Qué va |
+    |---|---|
+    | `semana`, `dia` | 1–4 y Lun/Mié/Vie (o su ritmo) |
+    | `tema` | el título de la pieza |
+    | `formato`, `angulo`, `proposito`, `de_donde_sale`, `filtro_que_ataca` | los nombres exactos del motor |
+    | `angulo_exacto` | la frase del ángulo aplicada a ESTE tema («El dolor de publicar todos los días y seguir igual»), no la categoría |
+    | `gancho` | la primera frase literal que dice |
+    | `texto_pantalla` | (opcional) el rótulo del segundo 1 |
+    | `estructura` | 3–6 pasos siguiendo la `anatomia` del formato en `references/formatos.json`, ya escritos con su tema |
+    | `cta` | literal. No repitas la misma palabra clave en dos piezas |
+    | `referencia` | `{ post: n, que_copiar }` = un Reel SUYO: en REPETIR, uno del mismo formato (el validador lo exige), preferible el de ORO; `que_copiar` dice qué movimiento concreto se copia. En APOSTAR, `{ biblioteca: "<formato>", que_copiar }` (el informe muestra la ficha) |
+    | `por_que`, `evidencia` | el acta con los números del motor |
+    La meta («funcionó si supera X, tu mediana») la pone el informe con `resultado.medianas`: no la escribas.
   - `campana`: solo si hay ángulo de Venta coronado (`{ frase: "[ángulo] + hasta el DÍA + lo que se pierde", detalle }`). Si no, `sin_campana` con el porqué. La campaña va en REPETIR, nunca en APOSTAR.
   - `apuesta`: `{ formato, por_que, tasa_mediana: mediana de tasa_conv del lote, ganchos: { A claim de texto, B gancho visual, C conflicto, D prueba } }`.
   - `esta_semana`: 3 acciones concretas, con verbo, para los próximos 7 días.
@@ -115,11 +142,11 @@ Estilo: frases cortas, en tú, sin «el algoritmo», sin promesas de viralidad.
 node ~/.claude/skills/analiza-tu-contenido-f100k/scripts/render.mjs --datos datos.json --lectura lectura.json --salida hoja-del-mes.html
 ```
 Sale un HTML completo que se abre con doble clic. Para publicarlo como Artifact, agrega `--artifact` (el visor pone su propio esqueleto).
-- Salida 2 = el validador encontró contradicciones: corrige `lectura.json` y vuelve a correr. No uses `--forzar` salvo que ella lo pida.
-- El informe trae 4 vistas: **📋 La clase** (el método explicado con esquemas y los números de la cuenta: El mapa · Los 5 filtros · Etiquetar y coronar · Preguntar · Decidir), **📊 Mi hoja** (la infografía + anexos), **🃏 Flashcards** (8) y **✅ Examen** (5 casos). Abre en Mi hoja; para una clase o un ejemplo para enseñar, agrega `--vista clase`.
+- Salida 2 = el validador encontró contradicciones o faltan campos del calendario: corrige `lectura.json` y vuelve a correr. No uses `--forzar` salvo que ella lo pida.
+- El informe trae 4 vistas: **📋 La clase** (el método explicado con esquemas y los números de la cuenta: El mapa · Los 5 filtros · Etiquetar y coronar —con el paso E, cómo salen las 3 conclusiones fijas— · Preguntar · Decidir), **📊 Mi hoja** (las 3 conclusiones fijas arriba, la infografía y los anexos; el calendario va en tarjetas por semana y se copia a Sheets con «Copiar el calendario»), **🃏 Flashcards** (10) y **✅ Examen** (5 casos). Abre en Mi hoja; para una clase o un ejemplo para enseñar, agrega `--vista clase`.
 - Mira el informe UNA vez (screenshot) antes de entregarlo.
 - Publícalo como Artifact si tienes la herramienta (queda privado y lo puede compartir con su equipo); si no, entrégale el archivo: se abre con doble clic sin internet y el botón «Imprimir o guardar PDF» saca la hoja en carta horizontal.
-- En el chat, 5 líneas máximo: filtro tapado, el formato a repetir, el que se mata, y la primera acción de la semana.
+- En el chat, 5 líneas máximo: filtro tapado, formato ganador, ángulo que viraliza, posible ángulo de venta y la primera acción de la semana.
 
 ## Cada mes
 

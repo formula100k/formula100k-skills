@@ -54,8 +54,8 @@
   ],
   "conclusiones_fijas": {
     "formato": { "texto": "por qué ganó el formato que eligió el motor", "evidencia": [29, 27] },
-    "angulo_viral": { "texto": "…", "evidencia": [29] },
-    "angulo_venta": { "texto": "…", "evidencia": [4, 17] }
+    "angulo_viral": { "angulo_especifico": "Curiosidad de cómo generar contenido viral en automático con Claude", "texto": "…", "evidencia": [29] },
+    "angulo_venta": { "angulo_especifico": "Método paso a paso para que Claude te haga el trabajo pesado", "texto": "…", "evidencia": [4, 17] }
   },
   "conclusiones": [ { "titulo": "…", "texto": "…", "evidencia": [29, 30] } ],
   "aplicacion": {

@@ -226,3 +226,22 @@ test('validarLectura exige el detalle de cada fila y los ángulos fijos en el ca
   assert.ok(errores.some((e) => e.includes('ángulo que viraliza')))
   assert.ok(errores.some((e) => e.includes('conclusiones_fijas')))
 })
+
+test('el ángulo fijo se aterriza a un tema: angulo_especifico obligatorio y fiel al motor', () => {
+  const posts = conAngulos((p) => ({ formato: 'F', angulo: p.metricas.pct_no_seguidores > 50 ? 'Curiosidad' : 'Método', proposito: 'Crecimiento' }))
+  const r = analizar({ posts, piezas_mes: 3 })
+  const base = (viral, venta) => ({ conclusiones_fijas: {
+    formato: { texto: 'x' },
+    angulo_viral: { texto: 'x', angulo_especifico: viral },
+    angulo_venta: { texto: 'x', angulo_especifico: venta },
+  } })
+  const venta = r.conclusionesFijas.anguloVenta.angulo
+  const e1 = validarLectura(r, base(undefined, `${venta} paso a paso para automatizar tus anuncios`))
+  assert.ok(e1.some((e) => e.includes('angulo_viral: falta angulo_especifico')))
+  const e2 = validarLectura(r, base('Método para crear contenido con Claude', `${venta} paso a paso para automatizar tus anuncios`))
+  assert.ok(e2.some((e) => e.includes('tiene que partir de «Curiosidad»')))
+  const e3 = validarLectura(r, base('Curiosidad', `${venta} paso a paso para automatizar tus anuncios`))
+  assert.ok(e3.some((e) => e.includes('repite la categoría')))
+  const e4 = validarLectura(r, base('Curiosidad de cómo generar contenido automático con Claude', `${venta} paso a paso para automatizar tus anuncios`))
+  assert.ok(!e4.some((e) => e.includes('angulo_especifico')))
+})

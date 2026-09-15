@@ -152,6 +152,8 @@ button{font:inherit;color:inherit}
 .fija .fq{font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
 .fija .fr{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.15;letter-spacing:-.5px;overflow-wrap:anywhere}
 .fija .fr small{display:block;font-size:15px;margin-top:2px}
+.fija .fcat{font-size:12.5px;color:var(--tenue)}
+.fija .fcat b{color:var(--tinta);font-weight:700}
 .fija .fn{font-family:var(--mono);font-size:12px;line-height:1.45;color:var(--tinta-2)}
 .fija .ft{font-size:13.5px;color:var(--tinta-2)}
 .fija .fx{font-size:12.5px;color:var(--tenue)}
@@ -525,8 +527,9 @@ function refMini(n){
 }
 function rolAngulo(a){
   var r=[];
-  if(CF&&CF.anguloViral.estado==="ganador"&&a===CF.anguloViral.angulo) r.push('<span class="chip viral">Tu ángulo que viraliza</span>');
-  if(CF&&CF.anguloVenta.estado==="ganador"&&a===CF.anguloVenta.angulo) r.push('<span class="chip vende">Tu posible ángulo de venta</span>');
+  var LF0=L.conclusiones_fijas||{}, t=function(k){ return LF0[k]&&LF0[k].angulo_especifico?' title="'+esc(LF0[k].angulo_especifico)+'"':''; };
+  if(CF&&CF.anguloViral.estado==="ganador"&&a===CF.anguloViral.angulo) r.push('<span class="chip viral"'+t("angulo_viral")+'>Tu ángulo que viraliza</span>');
+  if(CF&&CF.anguloVenta.estado==="ganador"&&a===CF.anguloVenta.angulo) r.push('<span class="chip vende"'+t("angulo_venta")+'>Tu posible ángulo de venta</span>');
   return r.join("");
 }
 var META_FILTRO={1:["pct_no_seguidores","vistas"],2:["retencion_3s"],3:["valor_1000"],4:["tasa_conv"],5:["intencion"]};
@@ -601,7 +604,9 @@ if(CF){
   var cardAng=function(k,titulo,a,pill){
     return '<article class="fija'+(a.estado==="ganador"?' gana':'')+'"><p class="fq">'+titulo+'</p>'+
       (a.estado==="ganador"
-        ?'<p class="fr">'+esc(a.angulo)+'</p><p>'+pill+'</p>'+
+        ?(LF[k]&&LF[k].angulo_especifico
+            ?'<p class="fcat">Categoría: <b>'+esc(a.angulo)+'</b></p><p class="fr">'+esc(LF[k].angulo_especifico)+'</p>'
+            :'<p class="fr">'+esc(a.angulo)+'</p>')+'<p>'+pill+'</p>'+
           '<p class="fn">'+(a.mediana!=null?'Mediana '+colTxt(a.columna,a.mediana)+' en '+a.veces+' Reels<br>Tu cuenta: '+colTxt(a.columna,a.medianaCuenta):a.veces+' Reels arriba')+
           (a.segundo?'<br>Le sigue: '+esc(a.segundo.angulo)+' ('+fmt(a.segundo.mediana,2)+(COLS[a.columna]||["",""])[1]+')':'')+'</p>'
         :'<p class="fr">Todavía ninguno</p><p class="fx">'+esc(a.motivo)+'</p>')+
@@ -972,12 +977,13 @@ function subCoronar(){
       }).join("")+'</div><p class="sub">La raya negra es la mediana de tu cuenta ('+fmt(a.medianaCuenta,2)+u+'). ·N = cuántos Reels tiene ese ángulo.</p>';
     };
     var gF=CF.formato.ganadores[0];
+    var aterrizado=function(k){ var x=(L.conclusiones_fijas||{})[k]; return x&&x.angulo_especifico?tuMes('La categoría sola no se graba. Aterrizada a tus Reels: <b>'+esc(x.angulo_especifico)+'</b>.'):''; };
     s+='<h3 class="h-clase"><span class="paso">E</span> Las 3 conclusiones fijas: <span class="ser">salen solas de lo anterior</span></h3>'+
       '<div class="leyes">'+
       caja("1 · Formato ganador",'<p>El formato con veredicto <b>REPETIR</b>. Si no hay, el mejor <b>CONFIRMAR</b>, marcado como candidato.</p>'+
         tuMes(gF?'<b>'+esc(gF.formato)+'</b>: '+gF.oro+'× en ORO en '+gF.veces+' Reels.':esc(CF.formato.motivo)))+
-      caja("2 · El ángulo que viraliza",'<p>Viralizar es que te vea <b>quien no te sigue</b>. Se agrupan todos tus Reels por ángulo y gana la mediana más alta de <b>% de no seguidores</b>, con 2 Reels o más.</p>'+rank(CF.anguloViral))+
-      caja("3 · Tu posible ángulo de venta",'<p>Si hay ángulo de Venta <b>coronado</b>, es ese. Si no, gana la mediana más alta de <b>intención</b>. Sin dato de intención, se usa <b>conversión</b> y se dice «posible».</p>'+rank(CF.anguloVenta))+
+      caja("2 · El ángulo que viraliza",'<p>Viralizar es que te vea <b>quien no te sigue</b>. Se agrupan todos tus Reels por ángulo y gana la mediana más alta de <b>% de no seguidores</b>, con 2 Reels o más. Después se <b>aterriza</b>: de qué tema hablan esos Reels.</p>'+rank(CF.anguloViral)+aterrizado("angulo_viral"))+
+      caja("3 · Tu posible ángulo de venta",'<p>Si hay ángulo de Venta <b>coronado</b>, es ese. Si no, gana la mediana más alta de <b>intención</b>. Sin dato de intención, se usa <b>conversión</b> y se dice «posible». Y también se aterriza a su tema.</p>'+rank(CF.anguloVenta)+aterrizado("angulo_venta"))+
       '</div>';
   }
   s+=error("Coronar un ángulo de venta porque tuvo muchos guardados. Un ángulo de venta que gana en guardados es un ángulo de nutrición disfrazado: la gente lo archiva y no compra.");
@@ -1058,6 +1064,7 @@ var CARDS=[
   ["Aplicación","¿Cómo queda la mezcla si se tapa el Alcance?","40 / 30 / 30\n\nAPOSTAR sube a 30 %:\nhace falta sangre nueva.\nLos 20 puntos salen de REPETIR."],
   ["Casos límite","¿Qué pasa con un filtro sin dato?","Ni pasa ni se tapa.\nLa lectura sigue al siguiente.\n\nSuele pasar con Retención e Intención\nsi no capturas la app del teléfono."],
   ["Conclusiones fijas","¿Cómo se elige el ángulo que más te ayuda a viralizar?","Agrupas tus Reels por ángulo.\nGana la mediana más alta\nde % de no seguidores.\n\nSolo compiten ángulos con 2+ Reels\ny que le ganen a tu cuenta."],
+  ["Conclusiones fijas","¿Por qué «Curiosidad» sola no sirve como ángulo?","Porque es una categoría:\nno te dice qué grabar.\n\nSe aterriza al tema de los Reels que ganaron:\n«Curiosidad de cómo generar\ncontenido automático con Claude»."],
   ["Conclusiones fijas","¿Por qué el ángulo de venta dice «posible»?","Porque el panel no dio intención\n(visitas + enlace + DMs).\n\nSe usa conversión mientras tanto.\nCaptura la sección Perfil en la app\ny el mes que viene se corona."],
   ["Casos límite","¿Qué prueba un trial reel?","Ganchos, no formatos:\nel video es el mismo.\n\nGana el que supera en 25 %\ntu tasa mediana de conversión, a las 48 h."]
 ];

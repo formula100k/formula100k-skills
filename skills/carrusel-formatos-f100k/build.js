@@ -28,7 +28,7 @@ const puppeteer = cargarPuppeteer();
 function cargarPuppeteer() {
   const candidatos = ['puppeteer-core', path.join(__dirname, '..', 'carrusel-render-formula100k', 'node_modules', 'puppeteer-core')];
   for (const c of candidatos) { try { return require(c); } catch {} }
-  console.error('Falta puppeteer-core. Instálalo una vez:\n  cd "' + path.join(__dirname, '..', 'carrusel-render-formula100k') + '" && npm install puppeteer-core');
+  console.error('Falta puppeteer-core. Instálalo una vez:\n  cd "' + __dirname + '" && npm install');
   process.exit(1);
 }
 
@@ -45,7 +45,7 @@ const SPEC_FILE = ENTRADA;
 const SPEC_DIR = path.dirname(SPEC_FILE);
 const OUT_DIR = path.resolve(args[1] || SPEC_DIR);
 const SKILL = __dirname;
-const EXPORT_JS = path.join(SKILL, '..', 'carrusel-render-formula100k', 'export.js');
+const EXPORT_JS = [path.join(SKILL, 'export.js'), path.join(SKILL, '..', 'carrusel-render-formula100k', 'export.js')].find(p => fs.existsSync(p));
 
 const spec = LIBRE ? null : JSON.parse(fs.readFileSync(SPEC_FILE, 'utf8'));
 const plantilla = spec && spec.plantilla;

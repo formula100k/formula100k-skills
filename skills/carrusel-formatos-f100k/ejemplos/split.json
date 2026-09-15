@@ -8,12 +8,12 @@
       "estilo": "fino",
       "arriba": {
         "foto": "fotos/foto-3.jpg",
-        "texto": "dejé de cobrar barato",
+        "texto": "[dejé de …]",
         "pos": "arriba"
       },
       "abajo": {
         "foto": "fotos/foto-4.jpg",
-        "texto": "y algunas clientas se fueron",
+        "texto": "[y pasó …]",
         "pos": "arriba"
       }
     },
@@ -22,11 +22,11 @@
       "estilo": "titular",
       "arriba": {
         "foto": "fotos/foto-5.jpg",
-        "texto": "Empezó con 200 seguidores…"
+        "texto": "[Cómo empezó…]"
       },
       "abajo": {
         "foto": "fotos/foto-2.jpg",
-        "texto": "Y facturó su primer año en España"
+        "texto": "[Y lo que logró]"
       }
     },
     {

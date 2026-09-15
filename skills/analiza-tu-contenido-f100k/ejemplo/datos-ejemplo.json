@@ -1,0 +1,671 @@
+{
+ "cuenta": {
+  "handle": "tucuenta",
+  "fuente": "panel «Ver insights» de Instagram"
+ },
+ "proposito_mes": "Crecimiento",
+ "piezas_mes": 12,
+ "ventanas": null,
+ "posts": [
+  {
+   "n": 1,
+   "fecha": "2026-09-02",
+   "url": null,
+   "portada": null,
+   "duracion_s": 74.8,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 460,
+    "pct_no_seguidores": 39.7,
+    "likes": 8,
+    "comentarios": 0,
+    "guardados": 1,
+    "compartidos": 0,
+    "seguidores_nuevos": 0
+   },
+   "etiquetas": {
+    "formato": "Tier list (S/A/B/C/F)",
+    "angulo": "Contraintuitivo",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 2,
+   "fecha": "2026-09-02",
+   "url": null,
+   "portada": null,
+   "duracion_s": 36.4,
+   "sin_voz": true,
+   "metricas": {
+    "vistas": 13537,
+    "pct_no_seguidores": 63.3,
+    "likes": 385,
+    "comentarios": 30,
+    "guardados": 133,
+    "compartidos": 40,
+    "seguidores_nuevos": 3
+   },
+   "etiquetas": {
+    "formato": "POV con texto en pantalla",
+    "angulo": "Prueba / resultado",
+    "proposito": "Venta"
+   }
+  },
+  {
+   "n": 3,
+   "fecha": "2026-08-31",
+   "url": null,
+   "portada": null,
+   "duracion_s": 61.7,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 3995,
+    "pct_no_seguidores": 25,
+    "likes": 53,
+    "comentarios": 38,
+    "guardados": 46,
+    "compartidos": 18,
+    "seguidores_nuevos": 0
+   },
+   "etiquetas": {
+    "formato": "Comparación",
+    "angulo": "Dolor concreto",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 4,
+   "fecha": "2026-08-29",
+   "url": null,
+   "portada": null,
+   "duracion_s": 36.3,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 6256,
+    "pct_no_seguidores": 46.6,
+    "likes": 102,
+    "comentarios": 81,
+    "guardados": 115,
+    "compartidos": 48,
+    "seguidores_nuevos": 22
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 5,
+   "fecha": "2026-08-28",
+   "url": null,
+   "portada": null,
+   "duracion_s": 96.8,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 7019,
+    "pct_no_seguidores": 39.6,
+    "likes": 239,
+    "comentarios": 5,
+    "guardados": 141,
+    "compartidos": 41,
+    "seguidores_nuevos": 12
+   },
+   "etiquetas": {
+    "formato": "Experiencia narrada (voz en off + B-roll)",
+    "angulo": "Dolor concreto",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 6,
+   "fecha": "2026-08-26",
+   "url": null,
+   "portada": null,
+   "duracion_s": 73.8,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 6807,
+    "pct_no_seguidores": 29.4,
+    "likes": 140,
+    "comentarios": 47,
+    "guardados": 184,
+    "compartidos": 68,
+    "seguidores_nuevos": 5
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 7,
+   "fecha": "2026-08-25",
+   "url": null,
+   "portada": null,
+   "duracion_s": 85.4,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4328,
+    "pct_no_seguidores": 33.8,
+    "likes": 65,
+    "comentarios": 35,
+    "guardados": 54,
+    "compartidos": 15,
+    "seguidores_nuevos": 0
+   },
+   "etiquetas": {
+    "formato": "Tier list (S/A/B/C/F)",
+    "angulo": "Error común",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 8,
+   "fecha": "2026-08-24",
+   "url": null,
+   "portada": null,
+   "duracion_s": 99.8,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 3570,
+    "pct_no_seguidores": 34.8,
+    "likes": 62,
+    "comentarios": 24,
+    "guardados": 64,
+    "compartidos": 15,
+    "seguidores_nuevos": 1
+   },
+   "etiquetas": {
+    "formato": "Formato Calificación",
+    "angulo": "Dolor concreto",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 9,
+   "fecha": "2026-08-21",
+   "url": null,
+   "portada": null,
+   "duracion_s": 60.7,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4354,
+    "pct_no_seguidores": 34.4,
+    "likes": 71,
+    "comentarios": 33,
+    "guardados": 49,
+    "compartidos": 24,
+    "seguidores_nuevos": 4
+   },
+   "etiquetas": {
+    "formato": "Sketch + narración",
+    "angulo": "Contraintuitivo",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 10,
+   "fecha": "2026-08-20",
+   "url": null,
+   "portada": null,
+   "duracion_s": 76.5,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 16193,
+    "pct_no_seguidores": 55.5,
+    "likes": 246,
+    "comentarios": 88,
+    "guardados": 184,
+    "compartidos": 65,
+    "seguidores_nuevos": 20
+   },
+   "etiquetas": {
+    "formato": "\"Cosas que hacemos mal con X\"",
+    "angulo": "Error común",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 11,
+   "fecha": "2026-08-19",
+   "url": null,
+   "portada": null,
+   "duracion_s": 58.5,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4957,
+    "pct_no_seguidores": 22.9,
+    "likes": 79,
+    "comentarios": 28,
+    "guardados": 40,
+    "compartidos": 9,
+    "seguidores_nuevos": 5
+   },
+   "etiquetas": {
+    "formato": "Formato Condicional",
+    "angulo": "Error común",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 12,
+   "fecha": "2026-08-18",
+   "url": null,
+   "portada": null,
+   "duracion_s": 64.1,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 13195,
+    "pct_no_seguidores": 46.5,
+    "likes": 206,
+    "comentarios": 3,
+    "guardados": 33,
+    "compartidos": 6,
+    "seguidores_nuevos": 7
+   },
+   "etiquetas": {
+    "formato": "Experiencia narrada (voz en off + B-roll)",
+    "angulo": "Creencia",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 13,
+   "fecha": "2026-08-17",
+   "url": null,
+   "portada": null,
+   "duracion_s": 68.6,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 8615,
+    "pct_no_seguidores": 48.9,
+    "likes": 178,
+    "comentarios": 48,
+    "guardados": 57,
+    "compartidos": 31,
+    "seguidores_nuevos": 12
+   },
+   "etiquetas": {
+    "formato": "Metáfora visual",
+    "angulo": "Error común",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 14,
+   "fecha": "2026-08-16",
+   "url": null,
+   "portada": null,
+   "duracion_s": 38.2,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 14790,
+    "pct_no_seguidores": 51.5,
+    "likes": 240,
+    "comentarios": 3,
+    "guardados": 74,
+    "compartidos": 10,
+    "seguidores_nuevos": 40
+   },
+   "etiquetas": {
+    "formato": "Storytelling de presentación",
+    "angulo": "Curiosidad",
+    "proposito": "Experimentación"
+   }
+  },
+  {
+   "n": 15,
+   "fecha": "2026-08-15",
+   "url": null,
+   "portada": null,
+   "duracion_s": 84.6,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4606,
+    "pct_no_seguidores": 43.8,
+    "likes": 57,
+    "comentarios": 38,
+    "guardados": 55,
+    "compartidos": 21,
+    "seguidores_nuevos": 11
+   },
+   "etiquetas": {
+    "formato": "Sketch: tú interpretas a los dos personajes",
+    "angulo": "Dolor concreto",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 16,
+   "fecha": "2026-08-14",
+   "url": null,
+   "portada": null,
+   "duracion_s": 62.9,
+   "sin_voz": true,
+   "metricas": {
+    "vistas": 74716,
+    "pct_no_seguidores": 42.1,
+    "likes": 3134,
+    "comentarios": 132,
+    "guardados": 877,
+    "compartidos": 358,
+    "seguidores_nuevos": 149
+   },
+   "etiquetas": {
+    "formato": "POV con texto en pantalla",
+    "angulo": "Detrás de escena",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 17,
+   "fecha": "2026-08-13",
+   "url": null,
+   "portada": null,
+   "duracion_s": 68.6,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4263,
+    "pct_no_seguidores": 37.5,
+    "likes": 68,
+    "comentarios": 38,
+    "guardados": 94,
+    "compartidos": 23,
+    "seguidores_nuevos": 7
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 18,
+   "fecha": "2026-08-12",
+   "url": null,
+   "portada": null,
+   "duracion_s": 93.5,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 24044,
+    "pct_no_seguidores": 77.6,
+    "likes": 209,
+    "comentarios": 75,
+    "guardados": 235,
+    "compartidos": 98,
+    "seguidores_nuevos": 21
+   },
+   "etiquetas": {
+    "formato": "Escalera de negaciones",
+    "angulo": "Contraintuitivo",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 19,
+   "fecha": "2026-08-12",
+   "url": null,
+   "portada": null,
+   "duracion_s": 20,
+   "sin_voz": true,
+   "metricas": {
+    "vistas": 7320,
+    "pct_no_seguidores": 25.1,
+    "likes": 104,
+    "comentarios": 6,
+    "guardados": 44,
+    "compartidos": 12,
+    "seguidores_nuevos": 0
+   },
+   "etiquetas": {
+    "formato": "B-roll con una frase que avanza",
+    "angulo": "Creencia",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 20,
+   "fecha": "2026-08-11",
+   "url": null,
+   "portada": null,
+   "duracion_s": 69.4,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 4506,
+    "pct_no_seguidores": 32.5,
+    "likes": 49,
+    "comentarios": 10,
+    "guardados": 28,
+    "compartidos": 2,
+    "seguidores_nuevos": 3
+   },
+   "etiquetas": {
+    "formato": "Me dijeron que…",
+    "angulo": "Prueba / resultado",
+    "proposito": "Venta"
+   }
+  },
+  {
+   "n": 21,
+   "fecha": "2026-08-11",
+   "url": null,
+   "portada": null,
+   "duracion_s": 95.6,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 14982,
+    "pct_no_seguidores": 55.3,
+    "likes": 412,
+    "comentarios": 487,
+    "guardados": 541,
+    "compartidos": 231,
+    "seguidores_nuevos": 31
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 22,
+   "fecha": "2026-08-11",
+   "url": null,
+   "portada": null,
+   "duracion_s": 6,
+   "sin_voz": true,
+   "metricas": {
+    "vistas": 20940,
+    "pct_no_seguidores": 21,
+    "likes": 249,
+    "comentarios": 10,
+    "guardados": 92,
+    "compartidos": 22,
+    "seguidores_nuevos": 1
+   },
+   "etiquetas": {
+    "formato": "Detrás de cámara vs. la toma",
+    "angulo": "Detrás de escena",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 23,
+   "fecha": "2026-08-10",
+   "url": null,
+   "portada": null,
+   "duracion_s": 47.1,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 7639,
+    "pct_no_seguidores": 38.6,
+    "likes": 164,
+    "comentarios": 128,
+    "guardados": 241,
+    "compartidos": 82,
+    "seguidores_nuevos": 12
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 24,
+   "fecha": "2026-08-08",
+   "url": null,
+   "portada": null,
+   "duracion_s": 58.7,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 6131,
+    "pct_no_seguidores": 38.7,
+    "likes": 144,
+    "comentarios": 61,
+    "guardados": 138,
+    "compartidos": 55,
+    "seguidores_nuevos": 4
+   },
+   "etiquetas": {
+    "formato": "Formato Condicional",
+    "angulo": "Curiosidad",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 25,
+   "fecha": "2026-08-07",
+   "url": null,
+   "portada": null,
+   "duracion_s": 32.6,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 19580,
+    "pct_no_seguidores": 30.4,
+    "likes": 537,
+    "comentarios": 904,
+    "guardados": 745,
+    "compartidos": 341,
+    "seguidores_nuevos": 19
+   },
+   "etiquetas": {
+    "formato": "Formato Condicional",
+    "angulo": "Dolor concreto",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 26,
+   "fecha": "2026-08-05",
+   "url": null,
+   "portada": null,
+   "duracion_s": 42.5,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 6076,
+    "pct_no_seguidores": 41.1,
+    "likes": 112,
+    "comentarios": 7,
+    "guardados": 53,
+    "compartidos": 28,
+    "seguidores_nuevos": 5
+   },
+   "etiquetas": {
+    "formato": "Escalada en vivo: \"¿en qué nivel te pierdo?\"",
+    "angulo": "Error común",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 27,
+   "fecha": "2026-08-04",
+   "url": null,
+   "portada": null,
+   "duracion_s": 58.5,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 10929,
+    "pct_no_seguidores": 51.9,
+    "likes": 141,
+    "comentarios": 82,
+    "guardados": 132,
+    "compartidos": 57,
+    "seguidores_nuevos": 13
+   },
+   "etiquetas": {
+    "formato": "Sketch: tú interpretas a los dos personajes",
+    "angulo": "Dolor concreto",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 28,
+   "fecha": "2026-08-03",
+   "url": null,
+   "portada": null,
+   "duracion_s": 63.1,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 14248,
+    "pct_no_seguidores": 42.2,
+    "likes": 220,
+    "comentarios": 172,
+    "guardados": 292,
+    "compartidos": 194,
+    "seguidores_nuevos": 7
+   },
+   "etiquetas": {
+    "formato": "Micro tutorial",
+    "angulo": "Método",
+    "proposito": "Nutrición"
+   }
+  },
+  {
+   "n": 29,
+   "fecha": "2026-07-31",
+   "url": null,
+   "portada": null,
+   "duracion_s": 57,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 100296,
+    "pct_no_seguidores": 77.7,
+    "likes": 359,
+    "comentarios": 455,
+    "guardados": 477,
+    "compartidos": 163,
+    "seguidores_nuevos": 46
+   },
+   "etiquetas": {
+    "formato": "Sketch: tú interpretas a los dos personajes",
+    "angulo": "Curiosidad",
+    "proposito": "Crecimiento"
+   }
+  },
+  {
+   "n": 30,
+   "fecha": "2026-07-30",
+   "url": null,
+   "portada": null,
+   "duracion_s": 125,
+   "sin_voz": false,
+   "metricas": {
+    "vistas": 65858,
+    "pct_no_seguidores": 77.2,
+    "likes": 220,
+    "comentarios": 221,
+    "guardados": 212,
+    "compartidos": 73,
+    "seguidores_nuevos": 18
+   },
+   "etiquetas": {
+    "formato": "Demo de la app en pantalla",
+    "angulo": "Comparación",
+    "proposito": "Venta"
+   }
+  }
+ ]
+}

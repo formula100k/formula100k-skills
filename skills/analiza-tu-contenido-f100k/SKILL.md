@@ -1,6 +1,6 @@
 ---
 name: analiza-tu-contenido-f100k
-description: Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K completo sobre la cuenta de la alumna y lo entrega en UNA infografía imprimible (La Hoja del Mes). Baja y transcribe sus últimos 30 Reels, lee las estadísticas del panel «Ver insights» (del Chrome logueado o de capturas de pantalla), etiqueta formato · ángulo · propósito, lee los 5 filtros y declara el filtro tapado, corona moldes (ORO/CHATARRA → repetir · confirmar · matar) y ángulos, deja hechas las preguntas para que la alumna solo marque, reparte el 60/30/10 inclinado, saca las 3 conclusiones fijas (formato ganador, ángulo que más viraliza, posible mejor ángulo de venta) y arma el calendario del mes pieza por pieza —ángulo exacto, primera frase, estructura, CTA, Reel de referencia y meta— con la apuesta y sus 4 ganchos. Usar SIEMPRE que digan «analiza mi contenido», «analiza mi cuenta del mes», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «llena el tablero por mí», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k), ni para desglosar UN video (analisis-video-viral-f100k).
+description: Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K sobre la cuenta de la alumna y lo entrega en La Hoja del Mes (infografía imprimible). Baja y transcribe sus últimos 30 Reels, lee sus estadísticas básicas (Chrome logueado) y pide las avanzadas por captura de la app (retención y actividad en el perfil), lee los 5 filtros y el filtro tapado, corona moldes y ángulos, saca 3 conclusiones fijas (formato ganador, ángulo que más viraliza y posible ángulo de venta, aterrizados a su tema) y arma el calendario pieza por pieza con ángulo exacto, gancho, estructura, CTA y Reel de referencia. Usar SIEMPRE que digan «analiza mi contenido», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k) ni para desglosar UN video (analisis-video-viral-f100k).
 ---
 
 # Analiza tu Contenido — La Hoja del Mes
@@ -39,10 +39,11 @@ Vocabulario fijo: «filtro tapado» (nunca «dial roto»), «pasa», «sin dato�
 
 1. Su **@ de Instagram**.
 2. **Propósito del mes** (Experimentación · Crecimiento · Nutrición · Venta) y **cuántas piezas** publica al mes. Si no sabe, Crecimiento y 12.
-3. **Las estadísticas del panel**, por el camino más fácil que tenga (ofrécelos en este orden):
-   - **A · Chrome logueado (lo más fácil):** tú abres «Ver insights» de cada Reel con `claude-in-chrome` y lees los números. Ella no hace nada. (El puente de cookies de agent-browser lo bloquea el clasificador: usa claude-in-chrome.)
-   - **B · Capturas:** desde la app, en cada Reel → «Ver estadísticas», 1 o 2 capturas por Reel. Pídeselas en una carpeta. Ver `references/capturas.md` para qué debe salir en cada captura.
-   - **C · Solo retención e intención por capturas** y el resto por A. Es la mejor combinación: el panel web no da retención ni el desglose de intención.
+3. **Las estadísticas, en dos partes. Pide SIEMPRE las dos:**
+   - **Básicas** (vistas, % de no seguidores, guardados, compartidos, seguidores nuevos): **A · Chrome logueado**, tú abres «Ver insights» de cada Reel con `claude-in-chrome` y lees los números; ella no hace nada. (El puente de cookies de agent-browser lo bloquea el clasificador.) Si no hay Chrome, salen de sus capturas.
+   - **Avanzadas, por captura desde la app del teléfono** (el panel del computador NO las trae): **Retención** (tasa de omisión + tiempo de visualización promedio → filtro 2) y **Actividad en el perfil** (visitas al perfil + toques en enlaces → filtro 5). Sin ellas los filtros 2 y 5 quedan sin dato y el ángulo de venta sale «posible». Pídeselas con el mensaje de `references/capturas.md`, que dice qué se tiene que ver en cada captura.
+   - Mínimo para leer un filtro: **5 Reels de «este mes» y 5 de la línea base** con ese dato (el motor no lee con menos). Si no puede con los 30, que empiece por esos 10: los más recientes y, en la base, los que queden en ORO y CHATARRA. Si todavía no tienes el corte, corre primero el motor con las básicas y usa `calidadDatos.avanzadas[].prioridad`.
+   - Si no las manda, sigue igual, pero dilo: el informe muestra el bloque «Tu data» con la lista de Reels a capturar, y «esta semana» tiene que incluir capturarlas (el validador lo exige).
 
 Si tiene menos de 9 Reels o menos de 30 días publicando: no sigas. Díselo con la frase «esto todavía es anécdota, no data» y cuándo volver.
 
@@ -64,8 +65,9 @@ Carpeta de trabajo: `~/Documents/ANALIZA-TU-CONTENIDO/<handle>-<AAAA-MM>/` con `
 ## PASO 2 — Números del panel → `datos.json`
 
 Por Reel, en `metricas` (números crudos, sin formato): `vistas`, `pct_no_seguidores`, `guardados`,
-`compartidos`, `seguidores_nuevos`, `likes`, `comentarios` y, si hay: `retencion_3s` (= 100 − tasa de
+`compartidos`, `seguidores_nuevos`, `likes`, `comentarios` y, de las capturas avanzadas: `retencion_3s` (= 100 − tasa de
 omisión), `duracion_media` (s), `visitas_perfil`, `toques_enlace`, `dms`.
+Lee cada captura con Read (es una imagen) y copia el número tal cual; si la captura está cortada o no se lee, ese dato queda `null`.
 **No llenes** `valor_1000`, `tasa_conv` ni `intencion`: las calcula el motor.
 
 Ojo: en el panel web, «Actividad en el perfil» NO es intención (en la cuenta medida era idéntica a
@@ -87,7 +89,7 @@ Guárdalo en `posts[].etiquetas` de `datos.json`. Normaliza nombres antes de seg
 ```bash
 node ~/.claude/skills/analiza-tu-contenido-f100k/scripts/render.mjs --datos datos.json --solo-motor resultado.json
 ```
-Lee `resultado.json` entero antes de escribir nada: `tapado`, `filtros`, `ranking`, `engañoVistas`,
+Lee `resultado.json` entero antes de escribir nada: `calidadDatos` (qué falta y qué capturar primero), `tapado`, `filtros`, `ranking`, `engañoVistas`,
 `formatos` (veredictos), `angulos` (coronas), **`conclusionesFijas`**, `medianas`, `reparto.cubetas`, `encuesta.sirve`.
 
 ### Las 3 conclusiones fijas (las elige el motor, salen en TODOS los informes)
@@ -137,7 +139,7 @@ Esquema en `references/esquema.md`. Contenido:
     La meta («funcionó si supera X, tu mediana») la pone el informe con `resultado.medianas`: no la escribas.
   - `campana`: solo si hay ángulo de Venta coronado (`{ frase: "[ángulo] + hasta el DÍA + lo que se pierde", detalle }`). Si no, `sin_campana` con el porqué. La campaña va en REPETIR, nunca en APOSTAR.
   - `apuesta`: `{ formato, por_que, tasa_mediana: mediana de tasa_conv del lote, ganchos: { A claim de texto, B gancho visual, C conflicto, D prueba } }`.
-  - `esta_semana`: 3 acciones concretas, con verbo, para los próximos 7 días.
+  - `esta_semana`: 3 acciones concretas, con verbo, para los próximos 7 días. Si `calidadDatos` tiene avanzadas incompletas, agrega una 4.ª: capturar esas estadísticas de los Reels de `prioridad` (el validador exige una acción con «captur»).
 
 Estilo: frases cortas, en tú, sin «el algoritmo», sin promesas de viralidad.
 
@@ -151,7 +153,7 @@ Sale un HTML completo que se abre con doble clic. Para publicarlo como Artifact,
 - El informe trae 4 vistas: **📋 La clase** (el método explicado con esquemas y los números de la cuenta: El mapa · Los 5 filtros · Etiquetar y coronar —con el paso E, cómo salen las 3 conclusiones fijas— · Preguntar · Decidir), **📊 Mi hoja** (las 3 conclusiones fijas arriba, la infografía y los anexos; el calendario va en tarjetas por semana y se copia a Sheets con «Copiar el calendario»), **🃏 Flashcards** (10) y **✅ Examen** (5 casos). Abre en Mi hoja; para una clase o un ejemplo para enseñar, agrega `--vista clase`.
 - Mira el informe UNA vez (screenshot) antes de entregarlo.
 - Publícalo como Artifact si tienes la herramienta (queda privado y lo puede compartir con su equipo); si no, entrégale el archivo: se abre con doble clic sin internet y el botón «Imprimir o guardar PDF» saca la hoja en carta horizontal.
-- En el chat, 5 líneas máximo: filtro tapado, formato ganador, ángulo que viraliza, posible ángulo de venta y la primera acción de la semana.
+- En el chat, 6 líneas máximo: filtro tapado, formato ganador, ángulo que viraliza, posible ángulo de venta, la primera acción de la semana y, si falta data, qué capturas faltan.
 
 ## Cada mes
 

@@ -144,6 +144,58 @@ button{font:inherit;color:inherit}
 .semana li{display:flex;gap:10px;align-items:flex-start;font-size:14px}
 .semana li::before{content:"";flex:0 0 16px;height:16px;margin-top:2px;border:1.5px solid var(--tinta);border-radius:4px}
 
+/* las 3 conclusiones fijas */
+.fijas-cab{display:flex;flex-direction:column;gap:4px}
+.fijas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fija{border:1px solid var(--pelo);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.fija.gana{border-color:var(--oro);box-shadow:inset 0 3px 0 var(--oro)}
+.fija .fq{font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
+.fija .fr{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.15;letter-spacing:-.5px;overflow-wrap:anywhere}
+.fija .fr small{display:block;font-size:15px;margin-top:2px}
+.fija .fn{font-family:var(--mono);font-size:12px;line-height:1.45;color:var(--tinta-2)}
+.fija .ft{font-size:13.5px;color:var(--tinta-2)}
+.fija .fx{font-size:12.5px;color:var(--tenue)}
+.refs{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.ref{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--pelo);border-radius:8px;padding:3px 9px 3px 3px;font-family:var(--mono);font-size:11.5px;color:var(--tinta-2);text-decoration:none;min-height:38px}
+.ref:hover{border-color:var(--tinta)}
+.ref img{width:32px;height:32px;object-fit:cover;border-radius:5px;display:block}
+.ref .sinfoto{width:32px;height:32px;border-radius:5px;background:var(--gris-fondo)}
+
+/* calendario con detalle */
+.semana-cal{display:flex;flex-direction:column;gap:10px}
+.semana-cal>h3{font-size:15px;font-weight:800;letter-spacing:-.2px;border-bottom:1px solid var(--pelo);padding-bottom:6px}
+.piezas{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.pieza{border:1px solid var(--pelo);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.pieza[data-sale="REPETIR"]{border-color:var(--tinta)}
+.pz-cab{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between}
+.pz-tema{font-size:16.5px;font-weight:700;letter-spacing:-.3px;line-height:1.25}
+.chip.viral{border-color:var(--oro);background:var(--oro-fondo);color:var(--oro-tinta);font-weight:700}
+.chip.vende{border-color:var(--pasa);background:var(--pasa-fondo);color:var(--pasa);font-weight:700}
+.pz-angulo{font-size:13.5px;color:var(--tinta-2)}
+.pz-caja{background:var(--gris-fondo);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.pz-caja .caja-t,.pz-t{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
+.pz-gancho{font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.35}
+.pz-pantalla{font-size:12.5px;color:var(--tinta-2)}
+.pz-estructura{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px;font-size:13.5px}
+.pz-estructura li::marker{font-family:var(--mono);font-size:12px;color:var(--tenue)}
+.pz-cta{font-size:13.5px}
+.pz-ref{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;border:1px dashed var(--pelo-fuerte);border-radius:10px;padding:8px}
+.pz-ref.bib{grid-template-columns:1fr}
+.pz-ref img,.pz-ref .sinfoto{width:64px;height:80px;object-fit:cover;border-radius:6px;display:block;background:var(--gris-fondo)}
+.pz-ref p{font-size:13px;color:var(--tinta-2)}
+.pz-ref a{font-size:12px;color:var(--tenue)}
+.pz-meta{font-size:12.5px;font-family:var(--mono);color:var(--pasa)}
+.pieza .porque{font-size:12.5px;color:var(--tenue);border-top:1px solid var(--pelo);padding-top:8px;margin-top:auto}
+
+/* clase: ranking de ángulos */
+.rank-ang{display:flex;flex-direction:column;gap:6px}
+.rank-ang .fila{display:grid;grid-template-columns:minmax(90px,150px) 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.rank-ang .riel{position:relative;height:14px;border-radius:4px;background:var(--gris-fondo)}
+.rank-ang .riel i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--pelo-fuerte)}
+.rank-ang .fila.gana .riel i{background:var(--oro)}
+.rank-ang .riel em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--tinta)}
+.rank-ang b{font-family:var(--mono);font-size:12px;text-align:right}
+
 /* ── ANEXOS ── */
 .anexo{background:var(--hoja);border:1px solid var(--pelo);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px}
 .anexo>header{display:flex;flex-direction:column;gap:6px;max-width:72ch}
@@ -402,6 +454,7 @@ td .tema{font-weight:600}
 
 @media (max-width:900px){
   .c-5,.c-7,.c-4,.c-6,.c-8{grid-column:span 12}
+  .fijas{grid-template-columns:1fr}
   .mapa{grid-template-columns:1fr}
   .coronas{grid-template-columns:1fr}
 }
@@ -432,7 +485,9 @@ td .tema{font-weight:600}
   .c-5{grid-column:span 5}.c-7{grid-column:span 7}.c-4{grid-column:span 4}.c-6{grid-column:span 6}.c-8{grid-column:span 8}
   .mapa{grid-template-columns:repeat(3,1fr)}
   .coronas{grid-template-columns:repeat(3,1fr)}
-  .video,.preg,tr{break-inside:avoid}
+  .video,.preg,tr,.pieza,.fija{break-inside:avoid}
+  .fijas{grid-template-columns:repeat(3,1fr)}
+  .piezas{grid-template-columns:repeat(3,1fr)}
   .videos{grid-template-columns:repeat(5,1fr)}
   .lienzo-pend svg{min-width:0}
 }
@@ -459,6 +514,29 @@ function fecha(f){ if(!f) return ""; var d=new Date(f+"T12:00:00"); return d.toL
 function ev(arr){ return (arr&&arr.length) ? '<span class="ev">Reels '+arr.map(function(n){return "#"+n;}).join(" · ")+'</span>' : ""; }
 function zonaPill(z){ return z==="ORO"?'<span class="pildora p-oro">ORO</span>':z==="CHATARRA"?'<span class="pildora p-chat">Chatarra</span>':'<span class="pildora p-gris">'+(z==="TIBIO"?"Tibio":"Sin dato")+'</span>'; }
 
+var BIB = D.biblioteca || {};
+var CF = R.conclusionesFijas || null;
+var COLS={pct_no_seguidores:["de no seguidores"," %"],tasa_conv:["de conversión (seguidores nuevos por cada 100 vistas de afuera)"," %"],intencion:["de intención (visitas + enlace + DMs)",""],valor_1000:["de valor por 1.000 vistas",""],retencion_3s:["de retención a 3 s"," %"],vistas:["vistas",""]};
+function colTxt(c,v){ var x=COLS[c]||[c,""]; return fmt(v,c==="vistas"?0:2)+x[1]+" "+x[0]; }
+function refMini(n){
+  var p=porN[n]; if(!p) return "";
+  var cuerpo=(p.portada?'<img src="'+esc(p.portada)+'" alt="" loading="lazy">':'<span class="sinfoto"></span>')+'#'+n+' · '+fmt(p.metricas.vistas,0)+' vistas';
+  return p.url?'<a class="ref" href="'+esc(p.url)+'" target="_blank" rel="noopener" title="Ver el Reel #'+n+'">'+cuerpo+'</a>':'<span class="ref">'+cuerpo+'</span>';
+}
+function rolAngulo(a){
+  var r=[];
+  if(CF&&CF.anguloViral.estado==="ganador"&&a===CF.anguloViral.angulo) r.push('<span class="chip viral">Tu ángulo que viraliza</span>');
+  if(CF&&CF.anguloVenta.estado==="ganador"&&a===CF.anguloVenta.angulo) r.push('<span class="chip vende">Tu posible ángulo de venta</span>');
+  return r.join("");
+}
+var META_FILTRO={1:["pct_no_seguidores","vistas"],2:["retencion_3s"],3:["valor_1000"],4:["tasa_conv"],5:["intencion"]};
+function metaDe(filtroTxt){
+  var n=parseInt(String(filtroTxt||""),10), cols=META_FILTRO[n]; if(!cols||!R.medianas) return "";
+  var partes=cols.map(function(c){ return R.medianas[c]==null?null:colTxt(c,R.medianas[c]); }).filter(Boolean);
+  if(!partes.length) return 'Mide: el filtro '+n+' no tiene dato. Captura su número desde la app para saber si funcionó.';
+  return 'Funcionó si supera '+partes.join(" y ")+' (tu mediana).';
+}
+
 var MOMENTOS=[
   {t:"Diagnostica",q:"¿Dónde se tapa?",est:[[1,"Leer los 5 filtros","filtros"]],sale:"tu filtro tapado"},
   {t:"Descifra",q:"¿Qué lo explica?",est:[[2,"Etiquetar","coronar"],[3,"Coronar","coronar"],[4,"Preguntar","preguntar"]],sale:"tus moldes ganadores y el porqué"},
@@ -472,6 +550,7 @@ var h=[];
 h.push('<div class="acciones"><div class="grupo">'+
   '<button class="btn btn-oro" id="btn-imprimir" type="button">Imprimir o guardar PDF</button>'+
   '<button class="btn" id="btn-hoja" type="button">Copiar la hoja de los 30 videos</button>'+
+  '<button class="btn" id="btn-calendario" type="button">Copiar el calendario</button>'+
   '<button class="btn" id="btn-respuestas" type="button">Copiar mis respuestas</button>'+
   '</div><p class="aviso" id="aviso" role="status"></p></div>');
 
@@ -503,6 +582,41 @@ MOMENTOS.forEach(function(m,i){
     '<p class="sale">Sale: <strong>'+m.sale+'</strong></p></div>');
 });
 h.push('</nav>');
+
+// las 3 conclusiones fijas
+if(CF){
+  var LF=L.conclusiones_fijas||{};
+  var txtF=function(k){ var x=LF[k]; return x&&x.texto?'<p class="ft">'+esc(x.texto)+' '+ev(x.evidencia)+'</p>':''; };
+  var cards=[];
+  var fo=CF.formato, g0=fo.ganadores[0];
+  cards.push('<article class="fija'+(fo.estado==="repetir"?' gana':'')+'"><p class="fq">1 · Tu formato ganador</p>'+
+    (g0?'<p class="fr">'+fo.ganadores.map(function(g){return esc(g.formato);}).join('<small>y</small>')+'</p>'+
+      '<p>'+(fo.estado==="repetir"?'<span class="pildora p-oro">Repetir · '+g0.oro+'× en ORO</span>':'<span class="pildora p-gris">Candidato · confírmalo</span>')+'</p>'+
+      '<p class="fn">'+fo.ganadores.map(function(g){return g.oro+'× ORO · '+g.chatarra+'× chatarra en '+g.veces+' Reels · mediana '+colTxt(fo.columna,g.mediana);}).join('<br>')+'</p>'
+      :'<p class="fr">Todavía ninguno</p><p class="fx">'+esc(fo.motivo)+'</p>')+
+    (fo.estado==="candidato"?'<p class="fx">'+esc(fo.motivo)+'</p>':'')+
+    txtF("formato")+
+    (fo.matar.length?'<p class="fx">Sale del calendario: <b>'+fo.matar.map(esc).join(", ")+'</b> (2+ veces en CHATARRA).</p>':'')+
+    '<div class="refs">'+(g0?fo.ganadores.reduce(function(a,g){return a.concat(g.referencias.length?g.referencias:g.posts);},[]).slice(0,3).map(refMini).join(""):'')+'</div></article>');
+  var cardAng=function(k,titulo,a,pill){
+    return '<article class="fija'+(a.estado==="ganador"?' gana':'')+'"><p class="fq">'+titulo+'</p>'+
+      (a.estado==="ganador"
+        ?'<p class="fr">'+esc(a.angulo)+'</p><p>'+pill+'</p>'+
+          '<p class="fn">'+(a.mediana!=null?'Mediana '+colTxt(a.columna,a.mediana)+' en '+a.veces+' Reels<br>Tu cuenta: '+colTxt(a.columna,a.medianaCuenta):a.veces+' Reels arriba')+
+          (a.segundo?'<br>Le sigue: '+esc(a.segundo.angulo)+' ('+fmt(a.segundo.mediana,2)+(COLS[a.columna]||["",""])[1]+')':'')+'</p>'
+        :'<p class="fr">Todavía ninguno</p><p class="fx">'+esc(a.motivo)+'</p>')+
+      txtF(k)+'<p class="fx">Se mide con: '+esc(a.fuente)+'.</p>'+
+      '<div class="refs">'+(a.referencias||[]).map(refMini).join("")+'</div></article>';
+  };
+  var av=CF.anguloViral, ave=CF.anguloVenta;
+  cards.push(cardAng("angulo_viral","2 · El ángulo que más te ayuda a viralizar",av,
+    av.fuerza==="patron"?'<span class="pildora p-oro">Patrón · '+av.arriba+'× arriba</span>':'<span class="pildora p-gris">Pista · 1 vez arriba</span>'));
+  cards.push(cardAng("angulo_venta","3 · Tu posible mejor ángulo de venta",ave,
+    ave.seguridad==="coronado"?'<span class="pildora p-pasa">Coronado</span>':ave.seguridad==="medido"?'<span class="pildora p-pasa">Medido con intención</span>':'<span class="pildora p-gris">Posible · medido con conversión</span>'));
+  h.push('<section class="bloque" id="fijas"><div class="fijas-cab"><p class="ceja">Las 3 conclusiones fijas · salen en todos los informes</p>'+
+    '<h2>Lo que <span class="ser">te llevas</span> de este mes</h2></div><div class="fijas">'+cards.join("")+'</div>'+
+    '<p class="sub">Las elige el motor con reglas fijas, no la IA: un ángulo necesita 2 Reels o más y ganarle a la mediana de tu cuenta. «Viralizar» = que te vea quien no te sigue.</p></section>');
+}
 
 h.push('<div class="rejilla">');
 
@@ -575,7 +689,7 @@ h.push('<section class="bloque c-4" id="repartir"><p class="ceja">5 · Repartir 
   '<p class="sub">'+esc(rp.nota)+'</p></section>');
 
 // conclusiones
-h.push('<section class="bloque c-4"><p class="ceja">Conclusiones</p><ol class="conclusiones">'+
+h.push('<section class="bloque c-4"><p class="ceja">Otras conclusiones</p><ol class="conclusiones">'+
   (L.conclusiones||[]).map(function(c){return '<li><div><b>'+esc(c.titulo)+'</b><span>'+esc(c.texto)+'</span> '+ev(c.evidencia)+'</div></li>';}).join("")+
   '</ol></section>');
 
@@ -657,16 +771,44 @@ pr.forEach(function(q,i){
 h.push('</div></section>');
 
 /* ══ ANEXO: calendario + campaña + apuesta ══ */
+function salePill(s){ return s==="REPETIR"?'<span class="pildora p-oro">Repetir</span>':s==="VARIAR"?'<span class="pildora p-gris">Variar</span>':'<span class="pildora p-chat">Apostar</span>'; }
+function piezaHtml(f,i){
+  var ref=f.referencia||{}, rp=ref.post!=null?porN[ref.post]:null, ficha=BIB[f.formato];
+  var refHtml;
+  if(rp){
+    refHtml='<div class="pz-ref">'+(rp.portada?'<img src="'+esc(rp.portada)+'" alt="Portada del Reel #'+rp.n+'" loading="lazy">':'<span class="sinfoto"></span>')+
+      '<div><p class="pz-t">Referencia · tu Reel #'+rp.n+' '+zonaPill(rp.zona)+'</p>'+
+      '<p>'+esc(ref.que_copiar||"")+'</p>'+
+      '<p class="ev">'+fmt(rp.metricas.vistas,0)+' vistas · '+fmt(rp.metricas.pct_no_seguidores,1)+' % no seg. · '+esc((rp.etiquetas||{}).angulo||"")+'</p>'+
+      (rp.url?'<a href="'+esc(rp.url)+'" target="_blank" rel="noopener">Ver el Reel ↗</a>':'')+'</div></div>';
+  } else {
+    refHtml='<div class="pz-ref bib"><div><p class="pz-t">Referencia · Biblioteca de formatos</p>'+
+      (ficha?'<p>'+esc(ficha.queEs)+'</p>':'')+(ref.que_copiar?'<p>'+esc(ref.que_copiar)+'</p>':'')+
+      (ref.url?'<a href="'+esc(ref.url)+'" target="_blank" rel="noopener">Ver el ejemplo ↗</a>':'')+'</div></div>';
+  }
+  return '<article class="pieza" data-sale="'+esc(f.de_donde_sale)+'">'+
+    '<header class="pz-cab"><span class="ev">Pieza '+(i+1)+(f.dia?' · '+esc(f.dia):'')+' · ataca '+esc(f.filtro_que_ataca)+'</span>'+salePill(f.de_donde_sale)+'</header>'+
+    '<h3 class="pz-tema">'+esc(f.tema)+'</h3>'+
+    '<div class="chips"><span class="chip f">'+esc(f.formato)+'</span><span class="chip">'+esc(f.angulo)+'</span><span class="chip">'+esc(f.proposito)+'</span>'+rolAngulo(f.angulo)+'</div>'+
+    (f.angulo_exacto?'<p class="pz-angulo"><b>Ángulo exacto:</b> '+esc(f.angulo_exacto)+'</p>':'')+
+    (f.gancho?'<div class="pz-caja"><p class="caja-t">Primera frase</p><p class="pz-gancho">«'+esc(f.gancho)+'»</p>'+(f.texto_pantalla?'<p class="pz-pantalla">En pantalla: '+esc(f.texto_pantalla)+'</p>':'')+'</div>':'')+
+    (f.estructura&&f.estructura.length?'<div><p class="pz-t">Estructura</p><ol class="pz-estructura">'+f.estructura.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol></div>':'')+
+    (f.cta?'<p class="pz-cta"><b>CTA:</b> '+esc(f.cta)+'</p>':'')+
+    refHtml+
+    '<p class="pz-meta">'+esc(metaDe(f.filtro_que_ataca))+'</p>'+
+    '<p class="porque">'+esc(f.por_que)+' '+ev(f.evidencia)+'</p></article>';
+}
+function piezasCal(cal){
+  var semanas=[], i=0;
+  cal.forEach(function(f){ var s=f.semana; var g=semanas.filter(function(x){return x.s===s;})[0]; if(!g){ g={s:s,fs:[]}; semanas.push(g); } g.fs.push([f,i++]); });
+  return semanas.map(function(g){ return '<div class="semana-cal"><h3>Semana '+esc(g.s)+'</h3><div class="piezas">'+g.fs.map(function(x){return piezaHtml(x[0],x[1]);}).join("")+'</div></div>'; }).join("");
+}
 var ap=L.aplicacion||{};
 var cal=ap.calendario||[];
 h.push('<section class="anexo" id="calendario"><header><p class="ceja">Anexo D · Estaciones 5 y 6 · La aplicación real</p>'+
   '<h2>El mes que viene, <span class="ser">fila por fila y con acta</span></h2>'+
-  '<p>Cada pieza dice de dónde sale (repetir, variar o apostar), qué filtro ataca y por qué está aquí, con los Reels que lo prueban.</p></header>'+
-  '<div class="tabla-env"><table><thead><tr><th>Sem.</th><th>Pieza</th><th>Formato</th><th>Ángulo · propósito</th><th>Sale de</th><th>Filtro</th><th>Por qué está aquí</th></tr></thead><tbody>'+
-  cal.map(function(f){return '<tr><td class="num">'+esc(f.semana)+'</td><td><span class="tema">'+esc(f.tema)+'</span></td><td>'+esc(f.formato)+'</td><td>'+esc(f.angulo)+'<br><span class="ev">'+esc(f.proposito)+'</span></td><td>'+
-    (f.de_donde_sale==="REPETIR"?'<span class="pildora p-oro">Repetir</span>':f.de_donde_sale==="VARIAR"?'<span class="pildora p-gris">Variar</span>':'<span class="pildora p-chat">Apostar</span>')+
-    '</td><td class="num">'+esc(f.filtro_que_ataca)+'</td><td class="porque">'+esc(f.por_que)+' '+ev(f.evidencia)+'</td></tr>';}).join("")+
-  '</tbody></table></div>'+
+  '<p>Cada pieza trae el ángulo exacto, la primera frase, la estructura, el CTA, el Reel que tomas de referencia y el número que dice si funcionó. Lo dorado y lo verde marcan tus ángulos de las conclusiones fijas.</p></header>'+
+  piezasCal(cal)+
   (ap.campana?'<div class="cubo"><div class="ti"><b>Campaña del mes</b><span class="pildora p-oro">Va en repetir</span></div><p class="gancho ser" style="font-size:18px">'+esc(ap.campana.frase)+'</p><p class="sub">'+esc(ap.campana.detalle||"")+'</p></div>'
     :'<p class="sub"><b>Sin campaña de urgencia este mes:</b> '+esc(ap.sin_campana||"no hay un ángulo de venta coronado. Una campaña sin ángulo probado es un anuncio con prisa.")+'</p>')+
   '</section>');
@@ -820,6 +962,24 @@ function subCoronar(){
       var tr=a.proposito==="Experimentación"?"descubrir a quién le hablas":a.trabajo;
       return '<tr><td><b>'+a.proposito+'</b></td><td>'+col+'</td><td>'+esc(tr)+'</td><td>'+(a.estado==="coronado"?'👑 '+a.coronados.map(function(c){return esc(c.angulo);}).join(", "):'<span class="sub">'+esc(a.motivo)+'</span>')+'</td></tr>';
     }).join("")+'</tbody></table></div>';
+  // paso E
+  if(CF){
+    var rank=function(a){
+      if(!a.tabla||!a.tabla.length) return '<p class="sub">'+esc(a.motivo||"Sin dato.")+'</p>';
+      var mx=Math.max.apply(null,a.tabla.map(function(t){return t.mediana;}).concat([a.medianaCuenta||0]))||1, u=(COLS[a.columna]||["",""])[1];
+      return '<div class="rank-ang" role="img" aria-label="Mediana por ángulo">'+a.tabla.map(function(t){
+        return '<div class="fila'+(a.estado==="ganador"&&t.angulo===a.angulo?' gana':'')+'"><span>'+esc(t.angulo)+' <span class="ev">·'+t.veces+'</span></span><div class="riel"><i style="width:'+(t.mediana/mx*100)+'%"></i>'+(a.medianaCuenta!=null?'<em style="left:'+(a.medianaCuenta/mx*100)+'%"></em>':'')+'</div><b>'+fmt(t.mediana,2)+u+'</b></div>';
+      }).join("")+'</div><p class="sub">La raya negra es la mediana de tu cuenta ('+fmt(a.medianaCuenta,2)+u+'). ·N = cuántos Reels tiene ese ángulo.</p>';
+    };
+    var gF=CF.formato.ganadores[0];
+    s+='<h3 class="h-clase"><span class="paso">E</span> Las 3 conclusiones fijas: <span class="ser">salen solas de lo anterior</span></h3>'+
+      '<div class="leyes">'+
+      caja("1 · Formato ganador",'<p>El formato con veredicto <b>REPETIR</b>. Si no hay, el mejor <b>CONFIRMAR</b>, marcado como candidato.</p>'+
+        tuMes(gF?'<b>'+esc(gF.formato)+'</b>: '+gF.oro+'× en ORO en '+gF.veces+' Reels.':esc(CF.formato.motivo)))+
+      caja("2 · El ángulo que viraliza",'<p>Viralizar es que te vea <b>quien no te sigue</b>. Se agrupan todos tus Reels por ángulo y gana la mediana más alta de <b>% de no seguidores</b>, con 2 Reels o más.</p>'+rank(CF.anguloViral))+
+      caja("3 · Tu posible ángulo de venta",'<p>Si hay ángulo de Venta <b>coronado</b>, es ese. Si no, gana la mediana más alta de <b>intención</b>. Sin dato de intención, se usa <b>conversión</b> y se dice «posible».</p>'+rank(CF.anguloVenta))+
+      '</div>';
+  }
   s+=error("Coronar un ángulo de venta porque tuvo muchos guardados. Un ángulo de venta que gana en guardados es un ángulo de nutrición disfrazado: la gente lo archiva y no compra.");
   return s;
 }
@@ -860,12 +1020,13 @@ function barraMezcla(t){
 }
 function subDecidir(){
   var cal=ap0.calendario||[];
-  var ej=function(k){var f=cal.filter(function(x){return x.de_donde_sale===k;})[0]; return f?'<p class="ej-cal">Ej. de tu mes: <b>'+esc(f.tema)+'</b> · '+esc(f.formato)+'</p>':'';};
+  var ej=function(k){var f=cal.filter(function(x){return x.de_donde_sale===k;})[0]; return f?'<p class="ej-cal">Ej. de tu mes: <b>'+esc(f.tema)+'</b> · '+esc(f.formato)+(f.angulo_exacto?' · <i>'+esc(f.angulo_exacto)+'</i>':'')+'</p>':'';};
   var s='<div class="intro-clase"><p class="caja-t">Estaciones 5, 6 y 7 · Decide</p><p class="grande">El calendario ya no se imagina: <span class="ser">se reparte</span></p><p>Cada pieza del mes sale de uno de tres lugares, y tu filtro tapado decide cuánto pesa cada uno.</p></div>';
   s+='<h3 class="h-clase"><span class="paso">5</span> Repartir</h3><div class="cubetas-clase">'+
     '<div class="cub"><p class="cub-n">60 %</p><b>Repetir</b><p>Formato ganador, tema nuevo. El molde se respeta.</p>'+ej("REPETIR")+'</div>'+
     '<div class="cub"><p class="cub-n">30 %</p><b>Variar</b><p>Sobre algo probado cambias <b>una sola</b> cosa: el ángulo o el formato.</p>'+ej("VARIAR")+'</div>'+
     '<div class="cub"><p class="cub-n">10 %</p><b>Apostar</b><p>Formato nuevo. Su gancho pasa antes por trial reels.</p>'+ej("APOSTAR")+'</div></div>'+
+    '<p class="sub" style="margin-top:10px">Cada pieza del calendario trae 7 cosas: <b>ángulo exacto · primera frase · estructura · CTA · un Reel tuyo de referencia · la meta con tu mediana · el porqué</b>. Si le falta una, no se puede grabar sin adivinar.</p>'+
     '<p class="caja-t" style="margin-top:14px">Así se inclina según el filtro tapado · toca uno</p><div class="selector" role="group" aria-label="Filtro tapado">'+
     [0,1,2,3,4,5].map(function(t){return '<button type="button" data-mezcla="'+t+'" aria-pressed="'+(t===tap)+'">'+(t?t+" "+nomFiltro(t):"Ninguno")+'</button>';}).join("")+
     '</div><div id="mezcla-demo">'+barraMezcla(tap)+'</div>';
@@ -896,9 +1057,11 @@ var CARDS=[
   ["Aplicación","Un formato sale 2 veces en ORO. ¿Qué haces?","REPETIR: mismo molde, tema nuevo.\n\n1 vez en ORO → CONFIRMAR\n2 veces en CHATARRA → MATAR"],
   ["Aplicación","¿Cómo queda la mezcla si se tapa el Alcance?","40 / 30 / 30\n\nAPOSTAR sube a 30 %:\nhace falta sangre nueva.\nLos 20 puntos salen de REPETIR."],
   ["Casos límite","¿Qué pasa con un filtro sin dato?","Ni pasa ni se tapa.\nLa lectura sigue al siguiente.\n\nSuele pasar con Retención e Intención\nsi no capturas la app del teléfono."],
+  ["Conclusiones fijas","¿Cómo se elige el ángulo que más te ayuda a viralizar?","Agrupas tus Reels por ángulo.\nGana la mediana más alta\nde % de no seguidores.\n\nSolo compiten ángulos con 2+ Reels\ny que le ganen a tu cuenta."],
+  ["Conclusiones fijas","¿Por qué el ángulo de venta dice «posible»?","Porque el panel no dio intención\n(visitas + enlace + DMs).\n\nSe usa conversión mientras tanto.\nCaptura la sección Perfil en la app\ny el mes que viene se corona."],
   ["Casos límite","¿Qué prueba un trial reel?","Ganchos, no formatos:\nel video es el mismo.\n\nGana el que supera en 25 %\ntu tasa mediana de conversión, a las 48 h."]
 ];
-var flashHtml='<section class="clase"><header class="clase-cab"><p class="ceja">Repaso</p><h1>8 flashcards <span class="ser">para no olvidarlo</span></h1><p class="arreglo">Toca la tarjeta para voltearla.</p></header>'+
+var flashHtml='<section class="clase"><header class="clase-cab"><p class="ceja">Repaso</p><h1>'+CARDS.length+' flashcards <span class="ser">para no olvidarlo</span></h1><p class="arreglo">Toca la tarjeta para voltearla.</p></header>'+
   '<div class="flash-zona"><div class="flip-container" id="flip" role="button" tabindex="0" aria-label="Voltear tarjeta"><div class="flip-inner" id="flip-inner"><div class="flip-front"><span class="pildora p-oro" id="fc-tag"></span><p class="fc-q" id="fc-q"></p><p class="sub">Toca para ver la respuesta</p></div><div class="flip-back"><p class="fc-a" id="fc-a"></p></div></div></div>'+
   '<div class="flash-nav"><button type="button" class="btn" id="fc-prev">← Anterior</button><span class="num" id="fc-cont"></span><button type="button" class="btn" id="fc-next">Siguiente →</button></div></div></section>';
 
@@ -1005,6 +1168,15 @@ document.getElementById("btn-hoja").addEventListener("click",function(){
   var filas=["N,FECHA,LINK,FORMATO,ANGULO,PROPOSITO,VISTAS,% NO SEGUIDORES,RETENCION 3S,GUARDADOS,COMPARTIDOS,SEGUIDORES NUEVOS,INTENCION,ZONA,VALOR /1000,TASA CONV %"];
   R.posts.forEach(function(p){ var m=p.metricas,e=p.etiquetas||{}; filas.push([p.n,p.fecha,p.url,e.formato,e.angulo,e.proposito,m.vistas,m.pct_no_seguidores,m.retencion_3s,m.guardados,m.compartidos,m.seguidores_nuevos,m.intencion,p.zona,m.valor_1000,m.tasa_conv].map(q).join(",")); });
   copiar(filas.join("\n"),"Copiada. Pégala en Google Sheets, Numbers o Excel.");
+});
+document.getElementById("btn-calendario").addEventListener("click",function(){
+  var q=function(s){ return '"'+String(s==null?"":s).replace(/"/g,'""')+'"'; };
+  var filas=["SEMANA,DIA,TEMA,FORMATO,ANGULO,ANGULO EXACTO,PROPOSITO,SALE DE,FILTRO,PRIMERA FRASE,EN PANTALLA,ESTRUCTURA,CTA,REFERENCIA,QUE COPIAR,META,POR QUE"];
+  (ap.calendario||[]).forEach(function(f){
+    var ref=f.referencia||{}, rp=ref.post!=null?porN[ref.post]:null;
+    filas.push([f.semana,f.dia,f.tema,f.formato,f.angulo,f.angulo_exacto,f.proposito,f.de_donde_sale,f.filtro_que_ataca,f.gancho,f.texto_pantalla,(f.estructura||[]).map(function(x,i){return (i+1)+". "+x;}).join("\n"),f.cta,rp?("#"+rp.n+" "+(rp.url||"")):(ref.url||"Biblioteca de formatos"),ref.que_copiar,metaDe(f.filtro_que_ataca),f.por_que].map(q).join(","));
+  });
+  copiar(filas.join("\n"),"Calendario copiado. Pégalo en Google Sheets, Numbers o Excel.");
 });
 document.getElementById("btn-respuestas").addEventListener("click",function(){
   var t=pr.filter(function(q){return q.tipo!=="encuesta";}).map(function(q,i){ var id=q.id||("p"+(i+1)); return "• "+q.pregunta+" → "+(resp[id]||"sin marcar"); }).join("\n");

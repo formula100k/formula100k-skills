@@ -152,3 +152,77 @@ test('validarLectura caza lo que contradice al motor', () => {
   assert.ok(errores.some((e) => e.includes('piezas')))
   assert.ok(errores.some((e) => e.includes('campaña')))
 })
+
+// ── Las 3 conclusiones fijas ──
+const conAngulos = (fn) => clonar().map((p) => ({ ...p, etiquetas: fn(p) }))
+
+test('formato ganador: sale el REPETIR con sus Reels de ORO como referencia', () => {
+  const posts = clonar()
+  const r0 = analizar({ posts })
+  const oro = r0.ranking.filter((x) => x.zona === 'ORO').map((x) => x.n)
+  posts.forEach((p) => { p.etiquetas = { formato: oro.slice(0, 2).includes(p.n) ? 'Sketch' : 'Otro' + p.n, angulo: 'X', proposito: 'Crecimiento' } })
+  const f = analizar({ posts }).conclusionesFijas.formato
+  assert.equal(f.estado, 'repetir')
+  assert.equal(f.ganadores[0].formato, 'Sketch')
+  assert.deepEqual(f.ganadores[0].referencias, oro.slice(0, 2))
+})
+
+test('formato ganador: sin REPETIR sale el mejor CONFIRMAR como candidato', () => {
+  const posts = clonar()
+  const oro = analizar({ posts }).ranking.filter((x) => x.zona === 'ORO').map((x) => x.n)
+  posts.forEach((p) => { p.etiquetas = { formato: p.n === oro[0] ? 'Demo' : 'Otro' + p.n, angulo: 'X', proposito: 'Crecimiento' } })
+  const f = analizar({ posts }).conclusionesFijas.formato
+  assert.equal(f.estado, 'candidato')
+  assert.equal(f.ganadores[0].formato, 'Demo')
+})
+
+test('ángulo que viraliza: gana la mayor mediana de % no seguidores', () => {
+  const posts = conAngulos((p) => ({ formato: 'F', angulo: p.metricas.pct_no_seguidores > 50 ? 'Curiosidad' : 'Método', proposito: 'Crecimiento' }))
+  const v = analizar({ posts }).conclusionesFijas.anguloViral
+  assert.equal(v.estado, 'ganador')
+  assert.equal(v.angulo, 'Curiosidad')
+  assert.equal(v.fuerza, 'patron')
+  assert.equal(v.referencias[0], 29) // 77,7 %
+})
+
+test('ángulo que viraliza: un ángulo de 1 solo Reel no compite', () => {
+  const posts = conAngulos((p) => ({ formato: 'F', angulo: p.n === 29 ? 'Único' : p.n % 2 ? 'A' : 'B', proposito: 'Crecimiento' }))
+  const v = analizar({ posts }).conclusionesFijas.anguloViral
+  assert.notEqual(v.angulo, 'Único')
+  assert.ok(v.tabla.every((t) => t.angulo !== 'Único'))
+})
+
+test('ángulo de venta: sin intención usa conversión y lo marca como posible (proxy)', () => {
+  const posts = conAngulos((p) => ({ formato: 'F', angulo: p.metricas.seguidores_nuevos >= 20 ? 'Método' : 'Opinión', proposito: 'Nutrición' }))
+  const v = analizar({ posts }).conclusionesFijas.anguloVenta
+  assert.equal(v.seguridad, 'proxy')
+  assert.equal(v.columna, 'tasa_conv')
+  assert.equal(v.angulo, 'Método')
+})
+
+test('ángulo de venta: con intención medida usa intención', () => {
+  const posts = conAngulos((p) => ({ formato: 'F', angulo: p.n <= 15 ? 'Objeción' : 'Opinión', proposito: 'Crecimiento' }))
+  posts.forEach((p) => { p.metricas.visitas_perfil = p.n <= 15 ? 90 : 10 })
+  const v = analizar({ posts }).conclusionesFijas.anguloVenta
+  assert.equal(v.seguridad, 'medido')
+  assert.equal(v.angulo, 'Objeción')
+})
+
+test('validarLectura exige el detalle de cada fila y los ángulos fijos en el calendario', () => {
+  const posts = conAngulos((p) => ({ formato: p.n % 2 ? 'A' : 'B', angulo: p.metricas.pct_no_seguidores > 50 ? 'Curiosidad' : 'Método', proposito: 'Crecimiento' }))
+  const r = analizar({ posts, piezas_mes: 3 })
+  const errores = validarLectura(r, {
+    aplicacion: { calendario: [
+      { de_donde_sale: 'REPETIR', formato: 'A', angulo: 'Método', referencia: { post: 2, que_copiar: 'todo' } },
+      { de_donde_sale: 'APOSTAR', formato: 'B', angulo: 'Método', referencia: { biblioteca: 'B' } },
+    ] },
+  }, { biblioteca: ['Z'] })
+  assert.ok(errores.some((e) => e.includes('falta el gancho')))
+  assert.ok(errores.some((e) => e.includes('estructura')))
+  assert.ok(errores.some((e) => e.includes('falta el CTA')))
+  assert.ok(errores.some((e) => e.includes('otro formato'))) // #2 es formato B
+  assert.ok(errores.some((e) => e.includes('ya usaste')))
+  assert.ok(errores.some((e) => e.includes('no está en la Biblioteca')))
+  assert.ok(errores.some((e) => e.includes('ángulo que viraliza')))
+  assert.ok(errores.some((e) => e.includes('conclusiones_fijas')))
+})

@@ -272,6 +272,13 @@ export function analizar(datos) {
     }
   })
 
+  // Medianas del lote entero: la meta de cada pieza del calendario.
+  salida.medianas = Object.fromEntries(['vistas', 'pct_no_seguidores', 'retencion_3s', 'valor_1000', 'tasa_conv', 'intencion']
+    .map((k) => [k, redondear(mediana(col(posts, k)), 2)]))
+
+  // ── Las 3 conclusiones fijas ──
+  salida.conclusionesFijas = conclusionesFijas(posts, salida, columnaOrden)
+
   // ── Reparto ──
   const mz = MEZCLAS[tapado]
   const piezas = datos.piezas_mes || 12
@@ -288,12 +295,114 @@ export function analizar(datos) {
   return salida
 }
 
+// ── Las 3 conclusiones fijas ─────────────────────────────────────
+// Salen en TODOS los informes, con reglas fijas:
+//   1. Formato ganador   = veredicto REPETIR (si no hay, el mejor CONFIRMAR, marcado como candidato).
+//   2. Ángulo que viraliza = mediana de % de no seguidores por ángulo (salir de tu casa).
+//   3. Ángulo de venta   = el coronado de Venta; si no, mediana de intención; si tampoco hay, de conversión (posible).
+// Un ángulo necesita 2+ Reels para competir (una vez es suerte) y ganarle a la mediana de la cuenta.
+export const MIN_REELS_ANGULO = 2
+
+export function rankingAngulos(posts, columna) {
+  const medibles = posts.filter((p) => esNum(p.metricas[columna]))
+  const desc = (a, b) => b.metricas[columna] - a.metricas[columna] || a.n - b.n
+  const cuarto = Math.floor(medibles.length * 0.25)
+  const arriba = new Set([...medibles].sort(desc).slice(0, cuarto).map((p) => p.n))
+  const g = new Map()
+  medibles.forEach((p) => {
+    const a = p.etiquetas?.angulo?.trim()
+    if (!a) return
+    if (!g.has(a)) g.set(a, [])
+    g.get(a).push(p)
+  })
+  const filas = [...g]
+    .filter(([, ps]) => ps.length >= MIN_REELS_ANGULO)
+    .map(([angulo, ps]) => ({
+      angulo,
+      veces: ps.length,
+      mediana: redondear(mediana(ps.map((p) => p.metricas[columna])), 2),
+      medianaVistas: redondear(mediana(ps.map((p) => p.metricas.vistas)), 0),
+      arriba: ps.filter((p) => arriba.has(p.n)).length,
+      posts: [...ps].sort(desc).map((p) => p.n),
+    }))
+    .sort((a, b) => b.mediana - a.mediana || b.arriba - a.arriba || b.veces - a.veces || a.angulo.localeCompare(b.angulo))
+  return { columna, filas, medianaCuenta: redondear(mediana(medibles.map((p) => p.metricas[columna])), 2) }
+}
+
+function elegirAngulo(rk, extra) {
+  const [g, segundo] = rk.filas
+  if (!g) return { estado: 'sin-dato', columna: rk.columna, motivo: `Ningún ángulo tiene ${MIN_REELS_ANGULO} Reels con este dato: una vez es suerte.`, tabla: [], ...extra }
+  if (!(g.mediana > rk.medianaCuenta)) return { estado: 'sin-ganador', columna: rk.columna, medianaCuenta: rk.medianaCuenta, motivo: 'Ningún ángulo le gana a la mediana de tu cuenta: todavía no hay uno que haga la diferencia.', tabla: rk.filas.slice(0, 5), ...extra }
+  return {
+    estado: 'ganador', columna: rk.columna, medianaCuenta: rk.medianaCuenta,
+    angulo: g.angulo, veces: g.veces, mediana: g.mediana, medianaVistas: g.medianaVistas, arriba: g.arriba,
+    fuerza: g.arriba >= 2 ? 'patron' : 'pista',
+    referencias: g.posts.slice(0, 3),
+    segundo: segundo ? { angulo: segundo.angulo, mediana: segundo.mediana, veces: segundo.veces } : null,
+    tabla: rk.filas.slice(0, 5),
+    ...extra,
+  }
+}
+
+function conclusionesFijas(posts, salida, columnaOrden) {
+  const valorDe = (n) => posts.find((p) => p.n === n)?.metricas[columnaOrden] ?? -Infinity
+  const conDatos = (f) => {
+    const ps = posts.filter((p) => f.posts.includes(p.n))
+    return {
+      formato: f.formato, veredicto: f.veredicto, veces: f.veces, oro: f.oro, chatarra: f.chatarra, posts: f.posts,
+      referencias: ps.filter((p) => p.zona === 'ORO').sort((a, b) => valorDe(b.n) - valorDe(a.n)).map((p) => p.n),
+      mediana: redondear(mediana(ps.map((p) => p.metricas[columnaOrden])), 2),
+      medianaVistas: redondear(mediana(ps.map((p) => p.metricas.vistas)), 0),
+    }
+  }
+
+  // 1 · Formato ganador
+  const repetir = salida.formatos.filter((f) => f.veredicto === 'REPETIR')
+  const confirmar = salida.formatos.filter((f) => f.veredicto === 'CONFIRMAR')
+    .sort((a, b) => a.chatarra - b.chatarra || Math.max(...b.posts.map(valorDe)) - Math.max(...a.posts.map(valorDe)))
+  const formato = repetir.length
+    ? { estado: 'repetir', ganadores: repetir.map(conDatos) }
+    : confirmar.length
+      ? { estado: 'candidato', ganadores: [conDatos(confirmar[0])], motivo: 'Ningún formato fue 2 veces a ORO. Este es el mejor candidato: fue 1 vez y hay que confirmarlo.' }
+      : { estado: 'sin-ganador', ganadores: [], motivo: 'Ningún formato llegó a ORO: etiqueta con más cuidado o sigue publicando.' }
+  formato.columna = columnaOrden
+  formato.matar = salida.formatos.filter((f) => f.veredicto === 'MATAR').map((f) => f.formato)
+
+  // 2 · Ángulo que más te ayuda a viralizar = el que más sale de tu casa
+  const anguloViral = elegirAngulo(rankingAngulos(posts, 'pct_no_seguidores'), { fuente: 'Filtro 1 · % de vistas de no seguidores' })
+
+  // 3 · Posible mejor ángulo de venta
+  const ventaCoronada = salida.angulos.find((a) => a.proposito === 'Venta' && a.estado === 'coronado')
+  let anguloVenta
+  if (ventaCoronada) {
+    const rk = rankingAngulos(posts.filter((p) => p.etiquetas?.proposito === 'Venta'), 'intencion')
+    const fila = rk.filas.find((f) => f.angulo === ventaCoronada.coronados[0].angulo)
+    anguloVenta = {
+      estado: 'ganador', seguridad: 'coronado', columna: 'intencion', fuente: 'Filtro 5 · Intención, coronado en tus piezas de Venta',
+      angulo: ventaCoronada.coronados[0].angulo, veces: fila?.veces ?? ventaCoronada.coronados[0].veces,
+      mediana: fila?.mediana ?? null, medianaVistas: fila?.medianaVistas ?? null, medianaCuenta: rk.medianaCuenta,
+      arriba: ventaCoronada.coronados[0].veces, fuerza: 'patron',
+      referencias: fila ? fila.posts.slice(0, 3) : ventaCoronada.arriba, tabla: rk.filas.slice(0, 5), segundo: null,
+    }
+  } else {
+    const rkInt = rankingAngulos(posts, 'intencion')
+    anguloVenta = rkInt.filas.length
+      ? elegirAngulo(rkInt, { seguridad: 'medido', fuente: 'Filtro 5 · Intención (visitas + enlace + DMs)' })
+      : elegirAngulo(rankingAngulos(posts, 'tasa_conv'), { seguridad: 'proxy', fuente: 'Filtro 4 · Conversión: no hay dato de intención' })
+  }
+
+  return { formato, anguloViral, anguloVenta }
+}
+
 // ── Validador de la parte que escribe la IA ──────────────────────
 // Rechaza lo que contradiga al motor: posts inexistentes, formatos
 // muertos en REPETIR, cubetas con otro número de piezas, etc.
-export function validarLectura(resultado, lectura) {
+export function validarLectura(resultado, lectura, opciones = {}) {
   const errores = []
   const ns = new Set(resultado.posts.map((p) => p.n))
+  const porN = new Map(resultado.posts.map((p) => [p.n, p]))
+  const usados = new Set(resultado.posts.map((p) => p.etiquetas?.formato?.trim()).filter(Boolean))
+  const biblioteca = opciones.biblioteca ? new Set(opciones.biblioteca) : null
   const refs = (arr, donde) => (arr || []).forEach((n) => { if (!ns.has(n)) errores.push(`${donde}: el post ${n} no existe en el lote`) })
 
   ;(lectura.preguntas || []).forEach((q, i) => refs(q.evidencia, `pregunta ${i + 1}`))
@@ -314,7 +423,53 @@ export function validarLectura(resultado, lectura) {
       if (muertos.has(f.formato)) errores.push(`calendario fila ${i + 1}: «${f.formato}» tiene veredicto MATAR`)
       if (f.de_donde_sale === 'REPETIR' && ganadores.size && !ganadores.has(f.formato)) errores.push(`calendario fila ${i + 1}: REPETIR con «${f.formato}», que no tiene veredicto REPETIR`)
       refs(f.evidencia, `calendario fila ${i + 1}`)
+
+      // El detalle que hace grabable cada fila.
+      const donde = `calendario fila ${i + 1}`
+      const vacio = (x) => typeof x !== 'string' || !x.trim()
+      if (vacio(f.angulo)) errores.push(`${donde}: falta el ángulo`)
+      if (vacio(f.angulo_exacto)) errores.push(`${donde}: falta angulo_exacto (la frase del ángulo aplicada a este tema)`)
+      if (vacio(f.gancho)) errores.push(`${donde}: falta el gancho (la primera frase literal)`)
+      if (!Array.isArray(f.estructura) || f.estructura.length < 3) errores.push(`${donde}: la estructura necesita 3 pasos o más`)
+      if (vacio(f.cta)) errores.push(`${donde}: falta el CTA`)
+      const ref = f.referencia
+      if (!ref || (ref.post == null && vacio(ref.biblioteca))) {
+        errores.push(`${donde}: falta la referencia (un Reel tuyo o, en APOSTAR, la ficha de la Biblioteca)`)
+      } else {
+        if (ref.post != null && !ns.has(ref.post)) errores.push(`${donde}: la referencia #${ref.post} no existe en el lote`)
+        if (ref.post != null && vacio(ref.que_copiar)) errores.push(`${donde}: la referencia #${ref.post} no dice qué se copia de ella`)
+        if (f.de_donde_sale === 'REPETIR' && ref.post != null && ns.has(ref.post) && porN.get(ref.post).etiquetas?.formato?.trim() !== f.formato) {
+          errores.push(`${donde}: REPETIR copia el molde, pero la referencia #${ref.post} está hecha con otro formato`)
+        }
+      }
+      if (f.de_donde_sale === 'APOSTAR') {
+        if (usados.has(f.formato)) errores.push(`${donde}: APOSTAR con «${f.formato}», que ya usaste en el lote`)
+        if (biblioteca && !biblioteca.has(f.formato)) errores.push(`${donde}: APOSTAR con «${f.formato}», que no está en la Biblioteca de formatos`)
+      }
     })
+
+    // Los ángulos de las conclusiones fijas tienen que estar en el calendario.
+    const cf = resultado.conclusionesFijas
+    const angulosCal = new Set(cal.map((f) => f.angulo?.trim()))
+    if (cf?.anguloViral?.estado === 'ganador' && !angulosCal.has(cf.anguloViral.angulo)) {
+      errores.push(`calendario: ninguna pieza usa tu ángulo que viraliza («${cf.anguloViral.angulo}»)`)
+    }
+    if (cf?.anguloVenta?.estado === 'ganador' && !angulosCal.has(cf.anguloVenta.angulo)) {
+      errores.push(`calendario: ninguna pieza usa tu posible ángulo de venta («${cf.anguloVenta.angulo}»)`)
+    }
+  }
+
+  // Las 3 conclusiones fijas: el motor elige, la IA solo explica el porqué.
+  const cfL = lectura.conclusiones_fijas
+  const cfR = resultado.conclusionesFijas
+  if (cfR && resultado.reparto) {
+    if (!cfL) errores.push('conclusiones_fijas: falta el porqué de las 3 (formato, angulo_viral, angulo_venta)')
+    else {
+      ;['formato', 'angulo_viral', 'angulo_venta'].forEach((k) => {
+        if (!cfL[k] || typeof cfL[k].texto !== 'string' || !cfL[k].texto.trim()) errores.push(`conclusiones_fijas.${k}: falta el texto`)
+        else refs(cfL[k].evidencia, `conclusiones_fijas.${k}`)
+      })
+    }
   }
   if (lectura.aplicacion?.campana && !resultado.angulos?.find((a) => a.proposito === 'Venta' && a.estado === 'coronado')) {
     errores.push('campaña: no hay ángulo de Venta coronado; una campaña sin ángulo probado es un anuncio con prisa')

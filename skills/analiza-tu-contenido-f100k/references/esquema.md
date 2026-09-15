@@ -36,6 +36,12 @@
 - `ventana.dias_publicando` (opcional): si la cuenta lleva más días publicando que lo que abarca el lote.
 - Números crudos: `7479.5`, nunca `"7.479,5"`. Lo que no hay es `null`.
 
+## resultado.json → conclusionesFijas (lo pone el motor)
+
+`formato.estado` = repetir · candidato · sin-ganador, con `ganadores[]` ({ formato, oro, chatarra, veces, referencias, mediana }) y `matar[]`.
+`anguloViral` y `anguloVenta`: `estado` = ganador · sin-ganador · sin-dato, `angulo`, `mediana`, `medianaCuenta`, `veces`, `arriba`, `fuerza` (patron · pista), `referencias`, `tabla` (top 5) y, en venta, `seguridad` = coronado · medido · proxy.
+`medianas` = mediana del lote por columna: el informe arma con ella la meta de cada pieza.
+
 ## lectura.json (lo que redacta la IA)
 
 ```json
@@ -46,11 +52,24 @@
     { "id": "p1", "tipo": "hipotesis", "pregunta": "¿…?", "porque": "…", "evidencia": [18, 29], "destino": "…" },
     { "id": "e1", "tipo": "encuesta", "pregunta": "Cuéntame con tus palabras…", "porque": "…" }
   ],
+  "conclusiones_fijas": {
+    "formato": { "texto": "por qué ganó el formato que eligió el motor", "evidencia": [29, 27] },
+    "angulo_viral": { "texto": "…", "evidencia": [29] },
+    "angulo_venta": { "texto": "…", "evidencia": [4, 17] }
+  },
   "conclusiones": [ { "titulo": "…", "texto": "…", "evidencia": [29, 30] } ],
   "aplicacion": {
     "calendario": [
-      { "semana": 1, "tema": "…", "formato": "…", "angulo": "…", "proposito": "Crecimiento",
-        "de_donde_sale": "REPETIR", "filtro_que_ataca": "1 Alcance", "por_que": "…", "evidencia": [18] }
+      { "semana": 1, "dia": "Lun", "tema": "…", "formato": "…", "angulo": "Curiosidad", "proposito": "Crecimiento",
+        "de_donde_sale": "REPETIR", "filtro_que_ataca": "1 Alcance",
+        "angulo_exacto": "la frase del ángulo aplicada a este tema",
+        "gancho": "primera frase literal", "texto_pantalla": "rótulo del segundo 1 (opcional)",
+        "estructura": ["paso 1", "paso 2", "paso 3"],
+        "cta": "Comenta PALABRA y …",
+        "referencia": { "post": 29, "que_copiar": "el movimiento concreto que se copia de ese Reel" },
+        "por_que": "…", "evidencia": [29] },
+      { "semana": 2, "de_donde_sale": "APOSTAR", "formato": "Duelo de mentalidades", "…": "…",
+        "referencia": { "biblioteca": "Duelo de mentalidades", "que_copiar": "…" } }
     ],
     "campana": null,
     "sin_campana": "…",

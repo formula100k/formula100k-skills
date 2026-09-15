@@ -98,6 +98,8 @@ COMPOSICIÓN DE ESTA SLIDE: NO hay portada con título: la primera slide ya es l
 ELEMENTOS GRÁFICOS: ninguno: sin logo, sin número, sin flecha · fotos reales tuyas, no de banco
 EVITA: fotos de banco o caras que no son tuyas; revisa la frase letra por letra (un error de tipeo se nota en grande).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -118,7 +120,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el mismo molde con otra pareja de fotos y otra frase partida («empecé a…» / «y…»); el cambio de color entre foto de arriba y de abajo marca el ritmo.
-(Para la última slide usa: la frase que cambia la culpa de lugar («no alejaste a nadie» / «solo dejaste de doblarte para retenerlos»), mismo molde, sin CTA en la imagen.)
+(Si es la última slide, la composición es: la frase que cambia la culpa de lugar («no alejaste a nadie» / «solo dejaste de doblarte para retenerlos»), mismo molde, sin CTA en la imagen.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -138,6 +142,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: NO hay portada con título: la primera slide ya es la mecánica. Mitad de arriba: «dejé de [acción]» centrado a ~28% del alto. Mitad de abajo: «y [lo que pasó]» centrado a ~76%. Una línea por foto, máx. 80% del ancho.
 ELEMENTOS GRÁFICOS: ninguno: sin logo, sin número, sin flecha · fotos reales tuyas, no de banco
 EVITA: fotos de banco o caras que no son tuyas; revisa la frase letra por letra (un error de tipeo se nota en grande).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -158,7 +164,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el mismo molde con otra pareja de fotos y otra frase partida («empecé a…» / «y…»); el cambio de color entre foto de arriba y de abajo marca el ritmo.
-(Para la última slide usa: la frase que cambia la culpa de lugar («no alejaste a nadie» / «solo dejaste de doblarte para retenerlos»), mismo molde, sin CTA en la imagen.)
+(Si es la última slide, la composición es: la frase que cambia la culpa de lugar («no alejaste a nadie» / «solo dejaste de doblarte para retenerlos»), mismo molde, sin CTA en la imagen.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -245,6 +253,8 @@ COMPOSICIÓN DE ESTA SLIDE: el primer caso ya es la portada: franja de texto bla
 ELEMENTOS GRÁFICOS: degradados negros que sostienen el texto · píldora «desliza ›» con borde blanco · logo chico arriba a la izquierda en blanco semitransparente
 EVITA: logos o píldoras de marcas ajenas; nunca generes con IA caras de personas reales: usa casos propios o de clientas con permiso.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -267,7 +277,9 @@ Paleta: #FEFDFD = texto de arriba · #ECF735 = texto de abajo, el golpe · #0501
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el MISMO molde idéntico con otro caso: solo cambian las dos fotos y el final de la frase (anáfora visual).
-(Para la última slide usa: último caso con el remate más cercano al lector («Y AHORA TE TOCA A TI.»).)
+(Si es la última slide, la composición es: último caso con el remate más cercano al lector («Y AHORA TE TOCA A TI.»).)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -287,6 +299,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: el primer caso ya es la portada: franja de texto blanco a ~47% del alto sobre el degradado de la foto de arriba («DOS AMIGAS SE JUNTARON…») y franja amarilla lima a ~95% sobre el degradado de abajo («Y CREARON [RESULTADO].»); píldora «desliza ›» con borde blanco arriba a la derecha.
 ELEMENTOS GRÁFICOS: degradados negros que sostienen el texto · píldora «desliza ›» con borde blanco · logo chico arriba a la izquierda en blanco semitransparente
 EVITA: logos o píldoras de marcas ajenas; nunca generes con IA caras de personas reales: usa casos propios o de clientas con permiso.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -309,7 +323,9 @@ Colores: #FEFDFD = texto de arriba · #ECF735 = texto de abajo, el golpe · #050
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el MISMO molde idéntico con otro caso: solo cambian las dos fotos y el final de la frase (anáfora visual).
-(Para la última slide usa: último caso con el remate más cercano al lector («Y AHORA TE TOCA A TI.»).)
+(Si es la última slide, la composición es: último caso con el remate más cercano al lector («Y AHORA TE TOCA A TI.»).)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -398,6 +414,7 @@ COMPOSICIÓN DE ESTA SLIDE: ícono STOP rojo arriba al centro; titular de 2 lín
 ELEMENTOS GRÁFICOS: subrayado rojo hecho a mano bajo el comando · capturas REALES, nunca simuladas · firma gris muy claro al pie
 EVITA: comandos que no probaste tú; tratar de «usted»; capturas simuladas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -418,7 +435,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: alterna dos slides: INSTRUCCIÓN = titular arriba + captura del chat (caja negra, 85% del ancho) con el comando escrito y subrayado a mano en rojo; RESULTADO = la imagen que salió a sangre lateral con el titular arriba.
-(Para la última slide usa: fondo celeste con 3 etiquetas tipo sticker (amarilla con texto negro, blanca, rosa con texto blanco) y el CTA.)
+(Si es la última slide, la composición es: fondo celeste con 3 etiquetas tipo sticker (amarilla con texto negro, blanca, rosa con texto blanco) y el CTA.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -439,6 +457,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: ícono STOP rojo arriba al centro; titular de 2 líneas «Deja de publicar [lo malo] así» (8-30% del alto); 2 ejemplos malos lado a lado; «Usa estos 3 comandos en [herramienta] →» al pie.
 ELEMENTOS GRÁFICOS: subrayado rojo hecho a mano bajo el comando · capturas REALES, nunca simuladas · firma gris muy claro al pie
 EVITA: comandos que no probaste tú; tratar de «usted»; capturas simuladas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -459,7 +478,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: alterna dos slides: INSTRUCCIÓN = titular arriba + captura del chat (caja negra, 85% del ancho) con el comando escrito y subrayado a mano en rojo; RESULTADO = la imagen que salió a sangre lateral con el titular arriba.
-(Para la última slide usa: fondo celeste con 3 etiquetas tipo sticker (amarilla con texto negro, blanca, rosa con texto blanco) y el CTA.)
+(Si es la última slide, la composición es: fondo celeste con 3 etiquetas tipo sticker (amarilla con texto negro, blanca, rosa con texto blanco) y el CTA.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -548,6 +568,8 @@ COMPOSICIÓN DE ESTA SLIDE: la página izquierda ocupa ~75% del ancho; título d
 ELEMENTOS GRÁFICOS: mano real sosteniendo la libreta · resaltador SOLO en la promesa y en la palabra del CTA · garabatos mínimos (rayitas, corazón)
 EVITA: promesas de cifras que no puedes sostener («+1 MILLÓN»); firmas o nombres que no son tuyos.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -570,7 +592,9 @@ Paleta: #D2C0A7 = papel crema con renglones tenues · #040000 = tinta · #DDBA41
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: «N. [paso]» como título (15-30% de la página), 4-6 viñetas cortas (35-70%) y un remate resaltado (72-82%); rayitas de énfasis a mano.
-(Para la última slide usa: «¿Quieres [el método completo]? Comenta [PALABRA] y te lo envío por privado», con la palabra resaltada.)
+(Si es la última slide, la composición es: «¿Quieres [el método completo]? Comenta [PALABRA] y te lo envío por privado», con la palabra resaltada.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -591,6 +615,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: la página izquierda ocupa ~75% del ancho; título de 3-4 líneas en el tercio superior de la página con la promesa resaltada en mostaza; subtítulo entre paréntesis debajo.
 ELEMENTOS GRÁFICOS: mano real sosteniendo la libreta · resaltador SOLO en la promesa y en la palabra del CTA · garabatos mínimos (rayitas, corazón)
 EVITA: promesas de cifras que no puedes sostener («+1 MILLÓN»); firmas o nombres que no son tuyos.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -613,7 +639,9 @@ Colores: #D2C0A7 = papel crema con renglones tenues · #040000 = tinta · #DDBA4
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: «N. [paso]» como título (15-30% de la página), 4-6 viñetas cortas (35-70%) y un remate resaltado (72-82%); rayitas de énfasis a mano.
-(Para la última slide usa: «¿Quieres [el método completo]? Comenta [PALABRA] y te lo envío por privado», con la palabra resaltada.)
+(Si es la última slide, la composición es: «¿Quieres [el método completo]? Comenta [PALABRA] y te lo envío por privado», con la palabra resaltada.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -708,6 +736,8 @@ COMPOSICIÓN DE ESTA SLIDE: tu foto a sangre + título centrado en 2-3 líneas (
 ELEMENTOS GRÁFICOS: la costura horizontal es donde vive el titular · imágenes metafóricas en b/n o sepia con un solo color puntual
 EVITA: escribir «10/10» como si fueran 10 hábitos (es una nota); fotos de banco.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -730,7 +760,9 @@ Paleta: #000000 = bloque de texto · #FFFFFF = texto principal · #BBBBBB = itá
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: cuadrícula fija; etiqueta chica arriba del bloque negro; el hábito en blanco centrado SOBRE la costura horizontal (47-58% del alto) cruzando las dos columnas; en el bloque negro 3 renglones: normal / itálica gris / negrita.
-(Para la última slide usa: tu foto a sangre + pregunta en itálica + «comenta [PALABRA] ↓».)
+(Si es la última slide, la composición es: tu foto a sangre + pregunta en itálica + «comenta [PALABRA] ↓».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -752,6 +784,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: tu foto a sangre + título centrado en 2-3 líneas («10/10 hábitos para…») y subtítulo en itálica («y casi ninguno trata de ti…»).
 ELEMENTOS GRÁFICOS: la costura horizontal es donde vive el titular · imágenes metafóricas en b/n o sepia con un solo color puntual
 EVITA: escribir «10/10» como si fueran 10 hábitos (es una nota); fotos de banco.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -774,7 +808,9 @@ Colores: #000000 = bloque de texto · #FFFFFF = texto principal · #BBBBBB = it�
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: cuadrícula fija; etiqueta chica arriba del bloque negro; el hábito en blanco centrado SOBRE la costura horizontal (47-58% del alto) cruzando las dos columnas; en el bloque negro 3 renglones: normal / itálica gris / negrita.
-(Para la última slide usa: tu foto a sangre + pregunta en itálica + «comenta [PALABRA] ↓».)
+(Si es la última slide, la composición es: tu foto a sangre + pregunta en itálica + «comenta [PALABRA] ↓».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -867,6 +903,8 @@ COMPOSICIÓN DE ESTA SLIDE: texto manuscrito en 3-4 renglones arriba (8-45% del 
 ELEMENTOS GRÁFICOS: personajes 3D recortados con borde blanco grueso · firma vertical sobre el margen izquierdo · subrayado rojo a mano
 EVITA: personajes de otras marcas o logos como cara de personaje: crea los tuyos.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -889,7 +927,9 @@ Paleta: #C5BAB4 = papel · #010286 = tinta azul bolígrafo · #D32F2F = subrayad
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: la misma hoja; 1 frase por slide y 1-4 personajes sticker; UNA palabra subrayada en rojo.
-(Para la última slide usa: giro emocional en una frase + corazón rojo a mano.)
+(Si es la última slide, la composición es: giro emocional en una frase + corazón rojo a mano.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -910,6 +950,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: texto manuscrito en 3-4 renglones arriba (8-45% del alto): el concepto HABLA en primera persona («Soy [X] y…»); personaje 3D tipo sticker (borde blanco grueso + sombra) abajo (45-95%).
 ELEMENTOS GRÁFICOS: personajes 3D recortados con borde blanco grueso · firma vertical sobre el margen izquierdo · subrayado rojo a mano
 EVITA: personajes de otras marcas o logos como cara de personaje: crea los tuyos.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -932,7 +974,9 @@ Colores: #C5BAB4 = papel · #010286 = tinta azul bolígrafo · #D32F2F = subraya
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: la misma hoja; 1 frase por slide y 1-4 personajes sticker; UNA palabra subrayada en rojo.
-(Para la última slide usa: giro emocional en una frase + corazón rojo a mano.)
+(Si es la última slide, la composición es: giro emocional en una frase + corazón rojo a mano.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1023,6 +1067,8 @@ COMPOSICIÓN DE ESTA SLIDE: slide 1 DENSA: título arriba (5-12%); a la izquierd
 ELEMENTOS GRÁFICOS: líneas finas del nodo a cada fila · firma vertical en el margen · subrayado doble rojo
 EVITA: cerrar con una frase genérica y tratar de «usted»; verifica cada fila (una mal = comentarios corrigiéndote).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1045,7 +1091,9 @@ Paleta: #CDC8CA = papel · #B2B4BF = renglones · #A31536 = margen y subrayados 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: no hay: son 2 slides.
-(Para la última slide usa: slide 2 casi vacía: frase centrada (35-62%) con escasez honesta y remate subrayado doble en rojo pidiendo seguir.)
+(Si es la última slide, la composición es: slide 2 casi vacía: frase centrada (35-62%) con escasez honesta y remate subrayado doble en rojo pidiendo seguir.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1067,6 +1115,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: slide 1 DENSA: título arriba (5-12%); a la izquierda (40-58% del alto) un NODO en recuadro de doble línea; de él salen ~25-28 líneas finas en abanico hasta cada fila «dato – qué hace», filas alineadas de 15% a 97% del alto (~90 palabras).
 ELEMENTOS GRÁFICOS: líneas finas del nodo a cada fila · firma vertical en el margen · subrayado doble rojo
 EVITA: cerrar con una frase genérica y tratar de «usted»; verifica cada fila (una mal = comentarios corrigiéndote).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1089,7 +1139,9 @@ Colores: #CDC8CA = papel · #B2B4BF = renglones · #A31536 = margen y subrayados
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: no hay: son 2 slides.
-(Para la última slide usa: slide 2 casi vacía: frase centrada (35-62%) con escasez honesta y remate subrayado doble en rojo pidiendo seguir.)
+(Si es la última slide, la composición es: slide 2 casi vacía: frase centrada (35-62%) con escasez honesta y remate subrayado doble en rojo pidiendo seguir.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1179,6 +1231,8 @@ COMPOSICIÓN DE ESTA SLIDE: cabecera «D · M · A» arriba (5-20%) y 4-6 renglo
 ELEMENTOS GRÁFICOS: texto que cae sobre los renglones · sin color de acento · cambio de letra en la slide del CTA
 EVITA: el voseo (tú tuteas) y firmas de calígrafo que no son tuyas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1201,7 +1255,9 @@ Paleta: #B3B4B3 = papel gris frío con sombra · #0A0A08 = tinta · #8E8F8E = l�
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: solo renglones; el paso con una lista de ✓ escrita a mano.
-(Para la última slide usa: cambia la letra a versalitas a mano: la frase-idea + «COMENTA [PALABRA] Y TE ESCRIBO».)
+(Si es la última slide, la composición es: cambia la letra a versalitas a mano: la frase-idea + «COMENTA [PALABRA] Y TE ESCRIBO».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1222,6 +1278,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: cabecera «D · M · A» arriba (5-20%) y 4-6 renglones escritos a mano SOBRE las líneas, alineados a la izquierda: el consejo empieza como nota privada («Adopta el hábito de…»).
 ELEMENTOS GRÁFICOS: texto que cae sobre los renglones · sin color de acento · cambio de letra en la slide del CTA
 EVITA: el voseo (tú tuteas) y firmas de calígrafo que no son tuyas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1244,7 +1302,9 @@ Colores: #B3B4B3 = papel gris frío con sombra · #0A0A08 = tinta · #8E8F8E = l
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: solo renglones; el paso con una lista de ✓ escrita a mano.
-(Para la última slide usa: cambia la letra a versalitas a mano: la frase-idea + «COMENTA [PALABRA] Y TE ESCRIBO».)
+(Si es la última slide, la composición es: cambia la letra a versalitas a mano: la frase-idea + «COMENTA [PALABRA] Y TE ESCRIBO».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1336,6 +1396,8 @@ COMPOSICIÓN DE ESTA SLIDE: tarjeta blanca de esquinas redondeadas anclada abajo
 ELEMENTOS GRÁFICOS: chispas/rayitas a mano en tu color · ícono de la herramienta pegado a la tarjeta · una palabra resaltada por renglón
 EVITA: promesas de resultados diarios («1.000 todos los días»); un acento que choque con tu marca; formato cuadrado: hazlo 4:5.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1356,7 +1418,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: la misma foto; la tarjeta cambia: número del paso en círculo de color, título serif, cuerpo sans chico, checklist con círculos ✓, ícono de la herramienta pegado al borde.
-(Para la última slide usa: tarjeta con «Comenta [PALABRA] y te envío…» y la palabra resaltada.)
+(Si es la última slide, la composición es: tarjeta con «Comenta [PALABRA] y te envío…» y la palabra resaltada.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1378,6 +1442,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: tarjeta blanca de esquinas redondeadas anclada abajo al centro (45-98% del alto, 60-75% del ancho) que tapa el torso y NUNCA la cara; título serif con 1 palabra en script subrayada en tu color.
 ELEMENTOS GRÁFICOS: chispas/rayitas a mano en tu color · ícono de la herramienta pegado a la tarjeta · una palabra resaltada por renglón
 EVITA: promesas de resultados diarios («1.000 todos los días»); un acento que choque con tu marca; formato cuadrado: hazlo 4:5.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1398,7 +1464,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: la misma foto; la tarjeta cambia: número del paso en círculo de color, título serif, cuerpo sans chico, checklist con círculos ✓, ícono de la herramienta pegado al borde.
-(Para la última slide usa: tarjeta con «Comenta [PALABRA] y te envío…» y la palabra resaltada.)
+(Si es la última slide, la composición es: tarjeta con «Comenta [PALABRA] y te envío…» y la palabra resaltada.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1491,6 +1559,8 @@ COMPOSICIÓN DE ESTA SLIDE: 4 líneas grandes centradas arriba (12-40% del alto)
 ELEMENTOS GRÁFICOS: itálica y subrayado como único énfasis (sin color) · sin cajas ni fondos detrás del texto
 EVITA: fotos de banco y frases de portada gastadas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1511,7 +1581,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el PREFIJO que se repite chico arriba («avergüénzate…») + la acción grande al centro + el remate chico desplazado a la derecha o abajo (60-80%). Texto directo sobre la foto, sin caja.
-(Para la última slide usa: «sígueme para ver qué pasa cuando sigues» sobre una foto tuya.)
+(Si es la última slide, la composición es: «sígueme para ver qué pasa cuando sigues» sobre una foto tuya.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1532,6 +1604,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: 4 líneas grandes centradas arriba (12-40% del alto) con 1 palabra subrayada y la última en itálica.
 ELEMENTOS GRÁFICOS: itálica y subrayado como único énfasis (sin color) · sin cajas ni fondos detrás del texto
 EVITA: fotos de banco y frases de portada gastadas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1552,7 +1626,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el PREFIJO que se repite chico arriba («avergüénzate…») + la acción grande al centro + el remate chico desplazado a la derecha o abajo (60-80%). Texto directo sobre la foto, sin caja.
-(Para la última slide usa: «sígueme para ver qué pasa cuando sigues» sobre una foto tuya.)
+(Si es la última slide, la composición es: «sígueme para ver qué pasa cuando sigues» sobre una foto tuya.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1650,6 +1726,8 @@ COMPOSICIÓN DE ESTA SLIDE: tu foto escolar de niña a sangre; «9 años» chico
 ELEMENTOS GRÁFICOS: la edad como ancla · el objeto físico del producto como prueba del giro
 EVITA: historias o productos que no son tuyos; no inventes fotos de archivo con IA.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1670,7 +1748,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: una etapa por slide con su edad; 1-3 bloques cortos arriba, a veces uno junto a la persona (nunca sobre la cara); la frase que muta de sentido etapa a etapa.
-(Para la última slide usa: el giro con el objeto físico de tu producto en la mano, y la última con «comenta [PALABRA]» gigante + urgencia real.)
+(Si es la última slide, la composición es: el giro con el objeto físico de tu producto en la mano, y la última con «comenta [PALABRA]» gigante + urgencia real.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1692,6 +1772,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: tu foto escolar de niña a sangre; «9 años» chico como primera línea; la frase-herida con una palabra en itálica, centrada arriba (8-35%).
 ELEMENTOS GRÁFICOS: la edad como ancla · el objeto físico del producto como prueba del giro
 EVITA: historias o productos que no son tuyos; no inventes fotos de archivo con IA.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1712,7 +1794,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: una etapa por slide con su edad; 1-3 bloques cortos arriba, a veces uno junto a la persona (nunca sobre la cara); la frase que muta de sentido etapa a etapa.
-(Para la última slide usa: el giro con el objeto físico de tu producto en la mano, y la última con «comenta [PALABRA]» gigante + urgencia real.)
+(Si es la última slide, la composición es: el giro con el objeto físico de tu producto en la mano, y la última con «comenta [PALABRA]» gigante + urgencia real.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1802,6 +1886,8 @@ COMPOSICIÓN DE ESTA SLIDE: 6-8 tiras de papel rasgado (bordes irregulares, somb
 ELEMENTOS GRÁFICOS: bordes rasgados irregulares, nunca rectos · 2-3 garabatos rosas mínimos (estrella, rayitas) junto a las palabras clave · sombra suave bajo cada tira para que parezca pegada
 EVITA: datos personales inventados; las tiras perfectamente alineadas (el desorden leve es la firma humana).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1824,7 +1910,9 @@ Paleta: #C9A27A = tira kraft · #F4B6C2 = tira rosa · #111111 = letra · #E85C8
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: una foto tuya de esa etapa a sangre + 3-4 tiras con «[edad]:» en la primera y qué dejaste / qué aprendiste en las siguientes, en el tercio inferior sin tapar la cara.
-(Para la última slide usa: foto tuya de hoy + 2 tiras con dónde estás + una tira rosa con la pregunta «¿cuántas veces has empezado de nuevo tú?».)
+(Si es la última slide, la composición es: foto tuya de hoy + 2 tiras con dónde estás + una tira rosa con la pregunta «¿cuántas veces has empezado de nuevo tú?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1845,6 +1933,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: 6-8 tiras de papel rasgado (bordes irregulares, sombra suave de 6 px) apiladas en el tercio central, cada una girada entre -4° y +4° y desplazada unos 20-40 px a izquierda o derecha; tiras kraft y rosa alternadas; la edad y «TODAS» van en letra hueca gigante sobre tira rosa.
 ELEMENTOS GRÁFICOS: bordes rasgados irregulares, nunca rectos · 2-3 garabatos rosas mínimos (estrella, rayitas) junto a las palabras clave · sombra suave bajo cada tira para que parezca pegada
 EVITA: datos personales inventados; las tiras perfectamente alineadas (el desorden leve es la firma humana).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -1867,7 +1957,9 @@ Colores: #C9A27A = tira kraft · #F4B6C2 = tira rosa · #111111 = letra · #E85C
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: una foto tuya de esa etapa a sangre + 3-4 tiras con «[edad]:» en la primera y qué dejaste / qué aprendiste en las siguientes, en el tercio inferior sin tapar la cara.
-(Para la última slide usa: foto tuya de hoy + 2 tiras con dónde estás + una tira rosa con la pregunta «¿cuántas veces has empezado de nuevo tú?».)
+(Si es la última slide, la composición es: foto tuya de hoy + 2 tiras con dónde estás + una tira rosa con la pregunta «¿cuántas veces has empezado de nuevo tú?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1957,6 +2049,8 @@ COMPOSICIÓN DE ESTA SLIDE: «¿Nueva por aquí?» grande en el cielo libre, arr
 ELEMENTOS GRÁFICOS: contorno de silueta dibujado a mano · flechas curvas con punta abierta · círculos imperfectos alrededor de objetos · subrayados dobles
 EVITA: texto en inglés y datos personales de terceros; nunca pongas texto encima de la cara.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -1977,7 +2071,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: otra foto tuya; UN dato por slide escrito en el espacio libre y conectado con flecha o círculo a algo concreto de la foto (el café, la laptop, tu mano).
-(Para la última slide usa: foto tuya mirando a cámara; «si te quedas, esto vas a encontrar:» + 3 temas con flechitas + «sígueme» subrayado dos veces.)
+(Si es la última slide, la composición es: foto tuya mirando a cámara; «si te quedas, esto vas a encontrar:» + 3 temas con flechitas + «sígueme» subrayado dos veces.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -1998,6 +2094,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: «¿Nueva por aquí?» grande en el cielo libre, arriba a la izquierda; contorno amarillo dibujado a mano (trazo de 8 px, irregular, sin cerrar del todo) alrededor de tu silueta; 2-3 datos cortos con flecha curva que apunta a una parte tuya; flecha «→» arriba a la derecha invitando a deslizar.
 ELEMENTOS GRÁFICOS: contorno de silueta dibujado a mano · flechas curvas con punta abierta · círculos imperfectos alrededor de objetos · subrayados dobles
 EVITA: texto en inglés y datos personales de terceros; nunca pongas texto encima de la cara.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2018,7 +2116,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: otra foto tuya; UN dato por slide escrito en el espacio libre y conectado con flecha o círculo a algo concreto de la foto (el café, la laptop, tu mano).
-(Para la última slide usa: foto tuya mirando a cámara; «si te quedas, esto vas a encontrar:» + 3 temas con flechitas + «sígueme» subrayado dos veces.)
+(Si es la última slide, la composición es: foto tuya mirando a cámara; «si te quedas, esto vas a encontrar:» + 3 temas con flechitas + «sígueme» subrayado dos veces.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -2108,6 +2208,7 @@ COMPOSICIÓN DE ESTA SLIDE: plano general: tú de pie a la izquierda con las man
 ELEMENTOS GRÁFICOS: boom de micrófono visible · hoja con leve curvatura y sombra del rotafolio · resaltador amarillo que se sale un poco de la frase
 EVITA: opiniones que no son tuyas; usa tu cara real o tu personaje, nunca una persona inventada que parezca tú.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2130,7 +2231,8 @@ Paleta: #6B2FD6 = fondo morado · #FFFFFF = hoja del rotafolio · #1A1A1A = marc
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: hojas nuevas del rotafolio con cambios de «cámara»: primer plano de la hoja (texto grande), plano medio tuyo señalando, plano cenital de la hoja arrancada.
-(Para la última slide usa: plano medio tuyo mirando a cámara con la hoja «¿Estás de acuerdo o no?».)
+(Si es la última slide, la composición es: plano medio tuyo mirando a cámara con la hoja «¿Estás de acuerdo o no?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2151,6 +2253,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: plano general: tú de pie a la izquierda con las manos atrás, rotafolio blanco a la derecha ocupando 45% del ancho; la hoja muestra «Hot take:» subrayado y la opinión en 4-5 líneas.
 ELEMENTOS GRÁFICOS: boom de micrófono visible · hoja con leve curvatura y sombra del rotafolio · resaltador amarillo que se sale un poco de la frase
 EVITA: opiniones que no son tuyas; usa tu cara real o tu personaje, nunca una persona inventada que parezca tú.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2173,7 +2276,8 @@ Colores: #6B2FD6 = fondo morado · #FFFFFF = hoja del rotafolio · #1A1A1A = mar
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: hojas nuevas del rotafolio con cambios de «cámara»: primer plano de la hoja (texto grande), plano medio tuyo señalando, plano cenital de la hoja arrancada.
-(Para la última slide usa: plano medio tuyo mirando a cámara con la hoja «¿Estás de acuerdo o no?».)
+(Si es la última slide, la composición es: plano medio tuyo mirando a cámara con la hoja «¿Estás de acuerdo o no?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2266,6 +2370,7 @@ COMPOSICIÓN DE ESTA SLIDE: titular de 3-5 palabras en el 40% superior, alineado
 ELEMENTOS GRÁFICOS: formas 3D flotantes (esfera, anillo, píldora) con brillo, cortadas por el borde · recorte fotográfico limpio sin sombra dura · contador N/10
 EVITA: imágenes de bebés o personas sin permiso y texto en inglés; el degradado en más de una palabra.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2288,7 +2393,8 @@ Paleta: #FFFFFF = fondo · #0A0A0A = titular · #FF3D7F = inicio del degradado �
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: fondo claro; título de 4-6 palabras en negro ultra bold arriba, 2 líneas de explicación en Inter 40 px, y un dato o ejemplo en un bloque gris claro redondeado; contador «N/10».
-(Para la última slide usa: resumen en una frase ultra bold con una palabra en degradado + «guárdalo» en gris.)
+(Si es la última slide, la composición es: resumen en una frase ultra bold con una palabra en degradado + «guárdalo» en gris.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2310,6 +2416,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: titular de 3-5 palabras en el 40% superior, alineado a la izquierda, con UNA palabra en degradado; debajo, centrado, un objeto o rostro recortado sobre blanco que traduce el titular literalmente (ocupa 45% del alto); formas 3D brillantes de color en 2 esquinas; contador «1/10» arriba a la derecha.
 ELEMENTOS GRÁFICOS: formas 3D flotantes (esfera, anillo, píldora) con brillo, cortadas por el borde · recorte fotográfico limpio sin sombra dura · contador N/10
 EVITA: imágenes de bebés o personas sin permiso y texto en inglés; el degradado en más de una palabra.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2332,7 +2439,8 @@ Colores: #FFFFFF = fondo · #0A0A0A = titular · #FF3D7F = inicio del degradado 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: fondo claro; título de 4-6 palabras en negro ultra bold arriba, 2 líneas de explicación en Inter 40 px, y un dato o ejemplo en un bloque gris claro redondeado; contador «N/10».
-(Para la última slide usa: resumen en una frase ultra bold con una palabra en degradado + «guárdalo» en gris.)
+(Si es la última slide, la composición es: resumen en una frase ultra bold con una palabra en degradado + «guárdalo» en gris.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2425,6 +2533,7 @@ COMPOSICIÓN DE ESTA SLIDE: titular en 2 niveles arriba (azul oscuro + subtítul
 ELEMENTOS GRÁFICOS: personaje idéntico en todas las slides (misma ropa, pelo y rasgo) · trazo limpio de grosor uniforme · recuadro redondeado que separa dibujo de dato
 EVITA: personajes o marcas ajenas: crea tu propio personaje con una hoja de personaje primero.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2447,7 +2556,8 @@ Paleta: #FFFFFF = fondo · #1E2A5A = titular azul oscuro · #6E8FD8 = subtítulo
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: título en forma de pregunta arriba; escena del personaje haciendo el consejo en el centro (40% del alto); recuadro de esquinas redondeadas (radio 32 px, fondo #EEF3FF) abajo con máx. 25 palabras.
-(Para la última slide usa: personaje feliz y descansado + CTA al servicio en un botón redondeado amarillo.)
+(Si es la última slide, la composición es: personaje feliz y descansado + CTA al servicio en un botón redondeado amarillo.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2469,6 +2579,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: titular en 2 niveles arriba (azul oscuro + subtítulo azul claro); personaje kawaii centrado ocupando 50% del alto, exagerando la emoción del problema (ojos en espiral, gato colgando de la cabeza); logo pequeño abajo.
 ELEMENTOS GRÁFICOS: personaje idéntico en todas las slides (misma ropa, pelo y rasgo) · trazo limpio de grosor uniforme · recuadro redondeado que separa dibujo de dato
 EVITA: personajes o marcas ajenas: crea tu propio personaje con una hoja de personaje primero.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2491,7 +2602,8 @@ Colores: #FFFFFF = fondo · #1E2A5A = titular azul oscuro · #6E8FD8 = subtítul
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: título en forma de pregunta arriba; escena del personaje haciendo el consejo en el centro (40% del alto); recuadro de esquinas redondeadas (radio 32 px, fondo #EEF3FF) abajo con máx. 25 palabras.
-(Para la última slide usa: personaje feliz y descansado + CTA al servicio en un botón redondeado amarillo.)
+(Si es la última slide, la composición es: personaje feliz y descansado + CTA al servicio en un botón redondeado amarillo.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2583,6 +2695,7 @@ COMPOSICIÓN DE ESTA SLIDE: UNA slide: titular de 2 líneas centrado arriba (3-1
 ELEMENTOS GRÁFICOS: líneas finas entre filas · punto de color del nivel en cada miniatura · firma centrada al pie entre líneas
 EVITA: miniaturas con capturas de otras cuentas: usa capturas propias o íconos. Decide si mantienes S = rojo.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2603,7 +2716,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: si haces versión carrusel: una fila por slide con el porqué.
-(Para la última slide usa: «¿qué moverías tú?».)
+(Si es la última slide, la composición es: «¿qué moverías tú?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2625,6 +2739,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: UNA slide: titular de 2 líneas centrado arriba (3-17%) con línea negra debajo; 4 filas iguales (~19% del alto): columna izquierda de color a sangre (23% del ancho) con la letra en cuadradito negro + etiqueta de OPINIÓN en 2-4 líneas (blanca en S/A/C, negra en B); a la derecha 3 miniaturas redondeadas con punto de su color y nombre debajo.
 ELEMENTOS GRÁFICOS: líneas finas entre filas · punto de color del nivel en cada miniatura · firma centrada al pie entre líneas
 EVITA: miniaturas con capturas de otras cuentas: usa capturas propias o íconos. Decide si mantienes S = rojo.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2645,7 +2760,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: si haces versión carrusel: una fila por slide con el porqué.
-(Para la última slide usa: «¿qué moverías tú?».)
+(Si es la última slide, la composición es: «¿qué moverías tú?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2740,6 +2856,7 @@ COMPOSICIÓN DE ESTA SLIDE: titular serif de 2 líneas centrado (8-26%); subtít
 ELEMENTOS GRÁFICOS: la altura de la pila ES el gráfico · dos líneas finas enmarcan el subtítulo · luz lateral dramática en los objetos
 EVITA: cifras sin fuente y un cierre genérico.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2762,7 +2879,8 @@ Paleta: #000000 = fondo · #F1E3CD = titular crema · #C8552A = subtítulo y cif
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el mismo molde con otra variable medible y otro subtítulo sorpresa.
-(Para la última slide usa: negro tipográfico: «SÍGUEME» gigante + para más consejos de [tema] + 1 palabra en script.)
+(Si es la última slide, la composición es: negro tipográfico: «SÍGUEME» gigante + para más consejos de [tema] + 1 palabra en script.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2784,6 +2902,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: titular serif de 2 líneas centrado (8-26%); subtítulo naranja que rompe una creencia entre dos líneas finas (~28%); nota de unidad chica (~31%); zona de datos (35-97%): 6 columnas de elementos reales apilados de mayor a menor, cifra grande naranja encima y nombre blanco debajo.
 ELEMENTOS GRÁFICOS: la altura de la pila ES el gráfico · dos líneas finas enmarcan el subtítulo · luz lateral dramática en los objetos
 EVITA: cifras sin fuente y un cierre genérico.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2806,7 +2925,8 @@ Colores: #000000 = fondo · #F1E3CD = titular crema · #C8552A = subtítulo y ci
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el mismo molde con otra variable medible y otro subtítulo sorpresa.
-(Para la última slide usa: negro tipográfico: «SÍGUEME» gigante + para más consejos de [tema] + 1 palabra en script.)
+(Si es la última slide, la composición es: negro tipográfico: «SÍGUEME» gigante + para más consejos de [tema] + 1 palabra en script.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2901,6 +3021,7 @@ COMPOSICIÓN DE ESTA SLIDE: UNA slide: al centro (43-55%) la frase del cliente c
 ELEMENTOS GRÁFICOS: líneas finas en ángulo recto (no curvas) · cero color
 EVITA: logos ajenos y la barra de íconos de Instagram pegada encima.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -2921,7 +3042,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: no hay.
-(Para la última slide usa: tu @ centrado al pie entre dos líneas (~93%).)
+(Si es la última slide, la composición es: tu @ centrado al pie entre dos líneas (~93%).)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -2944,6 +3066,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: UNA slide: al centro (43-55%) la frase del cliente con diminutivo («Hazme un» mediano + «Videíto» gigante); 12-14 ramas en líneas negras finas en ángulo recto hacia etiquetas repartidas alrededor (arriba 25-40%, lados 40-65%, abajo 60-80%), 2-5 palabras cada una; 1-3 aclaraciones entre paréntesis en gris.
 ELEMENTOS GRÁFICOS: líneas finas en ángulo recto (no curvas) · cero color
 EVITA: logos ajenos y la barra de íconos de Instagram pegada encima.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -2964,7 +3087,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: no hay.
-(Para la última slide usa: tu @ centrado al pie entre dos líneas (~93%).)
+(Si es la última slide, la composición es: tu @ centrado al pie entre dos líneas (~93%).)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3057,6 +3181,7 @@ COMPOSICIÓN DE ESTA SLIDE: título serif bold centrado arriba (2-8%) + subtítu
 ELEMENTOS GRÁFICOS: densidad: menos de 15 recortes parece moodboard · tachones rojos · testimonios en capturas reales
 EVITA: afirmaciones de salud sin respaldo, marcas registradas como recortes y testimonios que no son tuyos.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -3079,7 +3204,8 @@ Paleta: #000000 = fondo · #FFFFFF = etiquetas sobre negro · #E02424 = tachón 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: otro manifiesto con el mismo sistema (puede invertirse a fondo blanco).
-(Para la última slide usa: póster claro: marca arriba, titular serif grande con la pregunta de la oferta, 4 viñetas ◆, «comenta [PALABRA]», capturas de testimonios reales a los lados.)
+(Si es la última slide, la composición es: póster claro: marca arriba, titular serif grande con la pregunta de la oferta, 4 viñetas ◆, «comenta [PALABRA]», capturas de testimonios reales a los lados.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3101,6 +3227,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: título serif bold centrado arriba (2-8%) + subtítulo itálica (8-12%); 20-30 recortes sin fondo (objetos, figuras, productos) repartidos por todo el lienzo, tamaños muy distintos, algunos superpuestos, cada uno con etiqueta de 2-4 palabras pegada, sin caja; X roja gruesa sobre lo que hay que dejar.
 ELEMENTOS GRÁFICOS: densidad: menos de 15 recortes parece moodboard · tachones rojos · testimonios en capturas reales
 EVITA: afirmaciones de salud sin respaldo, marcas registradas como recortes y testimonios que no son tuyos.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3123,7 +3250,8 @@ Colores: #000000 = fondo · #FFFFFF = etiquetas sobre negro · #E02424 = tachón
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: otro manifiesto con el mismo sistema (puede invertirse a fondo blanco).
-(Para la última slide usa: póster claro: marca arriba, titular serif grande con la pregunta de la oferta, 4 viñetas ◆, «comenta [PALABRA]», capturas de testimonios reales a los lados.)
+(Si es la última slide, la composición es: póster claro: marca arriba, titular serif grande con la pregunta de la oferta, 4 viñetas ◆, «comenta [PALABRA]», capturas de testimonios reales a los lados.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3213,6 +3341,8 @@ COMPOSICIÓN DE ESTA SLIDE: avatar circular + tu @ arriba al centro (3-10%); tit
 ELEMENTOS GRÁFICOS: un ícono por tarea · tareas que empiezan con verbo · en español: 6-9 tareas por slide para que quepan
 EVITA: ilustraciones ajenas: usa las tuyas o genera las propias.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -3235,7 +3365,9 @@ Paleta: #9B9C9F = velo arriba · #12141A = velo abajo · #FCFCFB = texto · #806
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el MISMO título cambiando solo la persona («…PARA MAMÁS QUE TRABAJAN»); cada slide es un checklist completo para otro tipo de persona.
-(Para la última slide usa: el checklist general («RESET DEL DOMINGO») + «guárdalo».)
+(Si es la última slide, la composición es: el checklist general («RESET DEL DOMINGO») + «guárdalo».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3256,6 +3388,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: avatar circular + tu @ arriba al centro (3-10%); titular de 2 líneas «CHECKLIST SEMANAL PARA [PERSONA]» (12-28%); grilla de 3 columnas × 3 filas (30-97%): ilustración acuarela chica + tarea con verbo debajo.
 ELEMENTOS GRÁFICOS: un ícono por tarea · tareas que empiezan con verbo · en español: 6-9 tareas por slide para que quepan
 EVITA: ilustraciones ajenas: usa las tuyas o genera las propias.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3278,7 +3412,9 @@ Colores: #9B9C9F = velo arriba · #12141A = velo abajo · #FCFCFB = texto · #80
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el MISMO título cambiando solo la persona («…PARA MAMÁS QUE TRABAJAN»); cada slide es un checklist completo para otro tipo de persona.
-(Para la última slide usa: el checklist general («RESET DEL DOMINGO») + «guárdalo».)
+(Si es la última slide, la composición es: el checklist general («RESET DEL DOMINGO») + «guárdalo».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3371,6 +3507,8 @@ COMPOSICIÓN DE ESTA SLIDE: foto que se ve «de noticia» (tuya o del producto, 
 ELEMENTOS GRÁFICOS: palabras de marca en su color · «desliza →» en todas · cuadrícula de puntos tenue
 EVITA: fotos de personas reales humilladas, el voseo y «es oficial» sin fuente.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -3393,7 +3531,9 @@ Paleta: #000000 = portada · #F42A2A = píldora URGENTE · #FAED0A = última lí
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: fondo blanco con puntos; handle arriba; titular negro centrado (15-30%); visual al centro (35-80%): esquema de 2 logos unidos, captura de la app o del chat; pie en itálica con 1 frase en rojo; «desliza →» abajo.
-(Para la última slide usa: gris claro: ícono de chat + pregunta + «comenta [PALABRA] y te mando el PDF» en verde.)
+(Si es la última slide, la composición es: gris claro: ícono de chat + pregunta + «comenta [PALABRA] y te mando el PDF» en verde.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3415,6 +3555,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: foto que se ve «de noticia» (tuya o del producto, nunca una persona real ridiculizada); píldora roja «ÚLTIMA HORA» (~66% del alto) + titular blanco de 3 líneas con la última en amarillo (70-92%) + «desliza →» chico (~96%).
 ELEMENTOS GRÁFICOS: palabras de marca en su color · «desliza →» en todas · cuadrícula de puntos tenue
 EVITA: fotos de personas reales humilladas, el voseo y «es oficial» sin fuente.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3437,7 +3579,9 @@ Colores: #000000 = portada · #F42A2A = píldora URGENTE · #FAED0A = última l�
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: fondo blanco con puntos; handle arriba; titular negro centrado (15-30%); visual al centro (35-80%): esquema de 2 logos unidos, captura de la app o del chat; pie en itálica con 1 frase en rojo; «desliza →» abajo.
-(Para la última slide usa: gris claro: ícono de chat + pregunta + «comenta [PALABRA] y te mando el PDF» en verde.)
+(Si es la última slide, la composición es: gris claro: ícono de chat + pregunta + «comenta [PALABRA] y te mando el PDF» en verde.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3529,6 +3673,7 @@ COMPOSICIÓN DE ESTA SLIDE: pregunta al centro (45-60%) con mezcla serif itálic
 ELEMENTOS GRÁFICOS: objetos de producto recortados a todo color · numeración 1.–5. en serif · frase-firma entre comillas por tipo
 EVITA: logos, mascotas o apps ajenas como protagonistas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -3551,7 +3696,8 @@ Paleta: #F3F3F1 = fondo · #000000 = tinta · #AE102E = rojo de marca: cursor, d
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: píldora con borde «Kit de [TIPO]» (~14%); nombre del arquetipo en serif itálica grande (18-24%); collage de 5 objetos recortados numerados «1.–5.» (30-85%) que lo delatan; pie: 2 renglones + frase-firma entre comillas en serif itálica.
-(Para la última slide usa: «¿Cuál eres tú?» + «escríbelo en los comentarios» + un elemento de marca tuyo.)
+(Si es la última slide, la composición es: «¿Cuál eres tú?» + «escríbelo en los comentarios» + un elemento de marca tuyo.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3573,6 +3719,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: pregunta al centro (45-60%) con mezcla serif itálica + sans extra bold; objetos 3D recortados en las esquinas (café, audífonos, laptop) + un cursor de tu color apuntando.
 ELEMENTOS GRÁFICOS: objetos de producto recortados a todo color · numeración 1.–5. en serif · frase-firma entre comillas por tipo
 EVITA: logos, mascotas o apps ajenas como protagonistas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3595,7 +3742,8 @@ Colores: #F3F3F1 = fondo · #000000 = tinta · #AE102E = rojo de marca: cursor, 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: píldora con borde «Kit de [TIPO]» (~14%); nombre del arquetipo en serif itálica grande (18-24%); collage de 5 objetos recortados numerados «1.–5.» (30-85%) que lo delatan; pie: 2 renglones + frase-firma entre comillas en serif itálica.
-(Para la última slide usa: «¿Cuál eres tú?» + «escríbelo en los comentarios» + un elemento de marca tuyo.)
+(Si es la última slide, la composición es: «¿Cuál eres tú?» + «escríbelo en los comentarios» + un elemento de marca tuyo.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3690,6 +3838,8 @@ COMPOSICIÓN DE ESTA SLIDE: «lo que nadie te dice» en ARCO siguiendo las cabez
 ELEMENTOS GRÁFICOS: texto en arco en la portada · degradado de marca en el tercio inferior · tachado sobre lo que te dicen
 EVITA: fotos de banco y un rosa que no sea tu marca.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -3710,7 +3860,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: sobre el degradado inferior (60-95%): etiqueta «LO QUE TE DICEN:» + la frase tachada; debajo «LO QUE PASA:» + la verdad en bold + 1-2 líneas de tu experiencia. La penúltima: la verdad más incómoda sola y grande.
-(Para la última slide usa: línea de alivio («y aun así vale la pena si…») + «guárdalo».)
+(Si es la última slide, la composición es: línea de alivio («y aun así vale la pena si…») + «guárdalo».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3733,6 +3885,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: «lo que nadie te dice» en ARCO siguiendo las cabezas de la foto + «de [tema]» en arco abajo; letras blancas con contorno de tu color.
 ELEMENTOS GRÁFICOS: texto en arco en la portada · degradado de marca en el tercio inferior · tachado sobre lo que te dicen
 EVITA: fotos de banco y un rosa que no sea tu marca.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3753,7 +3907,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: sobre el degradado inferior (60-95%): etiqueta «LO QUE TE DICEN:» + la frase tachada; debajo «LO QUE PASA:» + la verdad en bold + 1-2 líneas de tu experiencia. La penúltima: la verdad más incómoda sola y grande.
-(Para la última slide usa: línea de alivio («y aun así vale la pena si…») + «guárdalo».)
+(Si es la última slide, la composición es: línea de alivio («y aun así vale la pena si…») + «guárdalo».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -3845,6 +4001,7 @@ COMPOSICIÓN DE ESTA SLIDE: 6 líneas centradas (22-80% del alto) mezclando peso
 ELEMENTOS GRÁFICOS: íconos reales reconocibles · solo 2 colores + fondo liso
 EVITA: prometer un número que no muestras.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -3865,7 +4022,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: título alineado a la izquierda arriba «Herramientas para» + categoría en verde (12-35%); grilla de fichas blancas redondeadas con el ícono real (17% del ancho): fila de 3 + fila de 2 (40-90%), nombre + para qué en 1 línea debajo de cada una. (Si haces 1 por slide: ficha grande + «Yo la uso cuando…».)
-(Para la última slide usa: píldora blanca con 3 emojis + pregunta fina + «Comenta [PALABRA]» bold verde subrayado.)
+(Si es la última slide, la composición es: píldora blanca con 3 emojis + pregunta fina + «Comenta [PALABRA]» bold verde subrayado.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -3887,6 +4045,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: 6 líneas centradas (22-80% del alto) mezclando peso fino blanco y bold verde, emojis 3D pegados a letras, flecha fina → abajo.
 ELEMENTOS GRÁFICOS: íconos reales reconocibles · solo 2 colores + fondo liso
 EVITA: prometer un número que no muestras.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -3907,7 +4066,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: título alineado a la izquierda arriba «Herramientas para» + categoría en verde (12-35%); grilla de fichas blancas redondeadas con el ícono real (17% del ancho): fila de 3 + fila de 2 (40-90%), nombre + para qué en 1 línea debajo de cada una. (Si haces 1 por slide: ficha grande + «Yo la uso cuando…».)
-(Para la última slide usa: píldora blanca con 3 emojis + pregunta fina + «Comenta [PALABRA]» bold verde subrayado.)
+(Si es la última slide, la composición es: píldora blanca con 3 emojis + pregunta fina + «Comenta [PALABRA]» bold verde subrayado.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4001,6 +4161,7 @@ COMPOSICIÓN DE ESTA SLIDE: «Glosario» en contorno blanco hueco + «de [tu nic
 ELEMENTOS GRÁFICOS: brochazo detrás del término · óvalo rojo dibujado a mano · numeración de página
 EVITA: rótulos de otras marcas y texto blanco fino sobre naranja claro (no se lee).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4021,7 +4182,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: UN término por slide: término sobre brochazo naranja oscuro + emoji 3D (15-35%); definición en tinta oscura de 2-3 líneas con 1 palabra rodeada por un óvalo rojo a mano (40-65%); «Ejemplo:» en itálica en un recuadro blanco (70-88%); número de página abajo a la derecha.
-(Para la última slide usa: «Guárdalo para cuando lo vuelvas a leer» + píldora con ♥ 💬 ✈ 🔖.)
+(Si es la última slide, la composición es: «Guárdalo para cuando lo vuelvas a leer» + píldora con ♥ 💬 ✈ 🔖.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4044,6 +4206,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: «Glosario» en contorno blanco hueco + «de [tu nicho]» bold + «(para principiantes)» fino; objetos 3D (libreta, lápiz) abajo a la derecha.
 ELEMENTOS GRÁFICOS: brochazo detrás del término · óvalo rojo dibujado a mano · numeración de página
 EVITA: rótulos de otras marcas y texto blanco fino sobre naranja claro (no se lee).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4064,7 +4227,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: UN término por slide: término sobre brochazo naranja oscuro + emoji 3D (15-35%); definición en tinta oscura de 2-3 líneas con 1 palabra rodeada por un óvalo rojo a mano (40-65%); «Ejemplo:» en itálica en un recuadro blanco (70-88%); número de página abajo a la derecha.
-(Para la última slide usa: «Guárdalo para cuando lo vuelvas a leer» + píldora con ♥ 💬 ✈ 🔖.)
+(Si es la última slide, la composición es: «Guárdalo para cuando lo vuelvas a leer» + píldora con ♥ 💬 ✈ 🔖.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4154,6 +4318,7 @@ COMPOSICIÓN DE ESTA SLIDE: tú de cuerpo entero en la escena; texto disperso en
 ELEMENTOS GRÁFICOS: capturas reales de tus datos como prueba · la escena oscurecida como hilo visual
 EVITA: escenas de banco y citas de terceros sin verificar.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4174,7 +4339,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: frase arriba centrada (15-25%); PRUEBA al centro (~50% del ancho): captura de tus métricas o de tu grid; explicación abajo (70-90%) con la frase clave en bold.
-(Para la última slide usa: 3 párrafos centrados con la lección + ícono de guardar abajo a la derecha.)
+(Si es la última slide, la composición es: 3 párrafos centrados con la lección + ícono de guardar abajo a la derecha.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4195,6 +4361,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: tú de cuerpo entero en la escena; texto disperso en 3 bloques (izq 48-56%, centro 75-78%, abajo a la derecha 88-95%) con la palabra del resultado gigante en itálica.
 ELEMENTOS GRÁFICOS: capturas reales de tus datos como prueba · la escena oscurecida como hilo visual
 EVITA: escenas de banco y citas de terceros sin verificar.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4215,7 +4382,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: frase arriba centrada (15-25%); PRUEBA al centro (~50% del ancho): captura de tus métricas o de tu grid; explicación abajo (70-90%) con la frase clave en bold.
-(Para la última slide usa: 3 párrafos centrados con la lección + ícono de guardar abajo a la derecha.)
+(Si es la última slide, la composición es: 3 párrafos centrados con la lección + ícono de guardar abajo a la derecha.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4308,6 +4476,7 @@ COMPOSICIÓN DE ESTA SLIDE: avatar + nombre arriba a la izquierda (5-12%); titul
 ELEMENTOS GRÁFICOS: tarjeta con borde de color para cada bloque · huecos resaltados · captura del resultado en la slide 2
 EVITA: personajes 3D, avatares o colores de otra marca.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4328,7 +4497,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: frase de instrucción arriba a la izquierda (20-35%) con 1 frase en tu color; al centro (40-90%) el BLOQUE DEL MOLDE en una tarjeta con borde de 2 px de tu color y esquinas redondeadas: texto fijo en negro y [HUECOS EN MAYÚSCULAS] resaltados; debajo, «Ejemplo:» relleno en itálica chica.
-(Para la última slide usa: avatar grande + «Comenta [PALABRA]» en serif de tu color + «y te lo mando en texto para copiar».)
+(Si es la última slide, la composición es: avatar grande + «Comenta [PALABRA]» en serif de tu color + «y te lo mando en texto para copiar».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4350,6 +4520,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: avatar + nombre arriba a la izquierda (5-12%); titular serif centrado de 2 líneas (30-43%); banda de tu color con texto blanco (~45%) «listo para copiar».
 ELEMENTOS GRÁFICOS: tarjeta con borde de color para cada bloque · huecos resaltados · captura del resultado en la slide 2
 EVITA: personajes 3D, avatares o colores de otra marca.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4370,7 +4541,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: frase de instrucción arriba a la izquierda (20-35%) con 1 frase en tu color; al centro (40-90%) el BLOQUE DEL MOLDE en una tarjeta con borde de 2 px de tu color y esquinas redondeadas: texto fijo en negro y [HUECOS EN MAYÚSCULAS] resaltados; debajo, «Ejemplo:» relleno en itálica chica.
-(Para la última slide usa: avatar grande + «Comenta [PALABRA]» en serif de tu color + «y te lo mando en texto para copiar».)
+(Si es la última slide, la composición es: avatar grande + «Comenta [PALABRA]» en serif de tu color + «y te lo mando en texto para copiar».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4464,6 +4636,7 @@ COMPOSICIÓN DE ESTA SLIDE: frase grande alineada a la izquierda (15-60%) mezcla
 ELEMENTOS GRÁFICOS: el corte siempre en el mismo sitio · la continuación en gris al abrir cada slide · píldora amarilla como «deuda»
 EVITA: frases gancho gastadas («Roba mi sistema»), miniaturas y métricas ajenas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4484,7 +4657,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: abre arriba con «…» completando la anterior, en gris 60%; la nueva frase en negro; termina cortada en el MISMO lugar (píldora abajo a la derecha).
-(Para la última slide usa: penúltima: la revelación completa, SIN píldora; última: «Comenta» + [PALABRA] en la píldora amarilla.)
+(Si es la última slide, la composición es: penúltima: la revelación completa, SIN píldora; última: «Comenta» + [PALABRA] en la píldora amarilla.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4506,6 +4680,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: frase grande alineada a la izquierda (15-60%) mezclando sans extra bold y UNA palabra en serif gigante sobre bloque amarillo redondeado; termina cortada en «…»; la continuación asoma en una píldora amarilla abajo a la derecha (85-92%).
 ELEMENTOS GRÁFICOS: el corte siempre en el mismo sitio · la continuación en gris al abrir cada slide · píldora amarilla como «deuda»
 EVITA: frases gancho gastadas («Roba mi sistema»), miniaturas y métricas ajenas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4526,7 +4701,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: abre arriba con «…» completando la anterior, en gris 60%; la nueva frase en negro; termina cortada en el MISMO lugar (píldora abajo a la derecha).
-(Para la última slide usa: penúltima: la revelación completa, SIN píldora; última: «Comenta» + [PALABRA] en la píldora amarilla.)
+(Si es la última slide, la composición es: penúltima: la revelación completa, SIN píldora; última: «Comenta» + [PALABRA] en la píldora amarilla.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4619,6 +4795,7 @@ COMPOSICIÓN DE ESTA SLIDE: «[N] frases para cuando [momento]» centrado en el 
 ELEMENTOS GRÁFICOS: mucho aire (márgenes de 120 px) · una sola palabra de color por frase · línea fina como separador
 EVITA: citas de otros autores: las frases tienen que ser tuyas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4639,7 +4816,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: UNA frase centrada vertical y horizontalmente, máx. 14 palabras, con UNA palabra en itálica de color; número «2/5» arriba a la derecha; tu @ chico abajo al centro.
-(Para la última slide usa: «¿Con cuál te quedas? Comenta el número».)
+(Si es la última slide, la composición es: «¿Con cuál te quedas? Comenta el número».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4661,6 +4839,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: «[N] frases para cuando [momento]» centrado en el 40% central, con el momento en itálica de color; línea fina decorativa debajo.
 ELEMENTOS GRÁFICOS: mucho aire (márgenes de 120 px) · una sola palabra de color por frase · línea fina como separador
 EVITA: citas de otros autores: las frases tienen que ser tuyas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4681,7 +4860,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: UNA frase centrada vertical y horizontalmente, máx. 14 palabras, con UNA palabra en itálica de color; número «2/5» arriba a la derecha; tu @ chico abajo al centro.
-(Para la última slide usa: «¿Con cuál te quedas? Comenta el número».)
+(Si es la última slide, la composición es: «¿Con cuál te quedas? Comenta el número».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4774,6 +4954,8 @@ COMPOSICIÓN DE ESTA SLIDE: foto tuya real oscurecida; titular MAYÚSCULAS arrib
 ELEMENTOS GRÁFICOS: notas al margen a mano con tu reacción honesta · tú recortada tipo sticker con borde blanco · parte clave en amarillo pálido
 EVITA: errores ajenos o genéricos; fotos de banco: tiene que ser tu cara real.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -4794,7 +4976,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: foto distinta por error; confesión en 2-3 líneas centrada arriba (10-25%) con la parte clave en amarillo; en el medio la prueba o TÚ RECORTADA con borde blanco tipo sticker; nota al margen chica en blanco con flecha a mano amarilla («uff, me replanteó todo»).
-(Para la última slide usa: 3 párrafos centrados arriba con palabras en amarillo bold + corazón amarillo + tú recortada con el celular + «¿cuál te sorprendió más?».)
+(Si es la última slide, la composición es: 3 párrafos centrados arriba con palabras en amarillo bold + corazón amarillo + tú recortada con el celular + «¿cuál te sorprendió más?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -4816,6 +5000,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: foto tuya real oscurecida; titular MAYÚSCULAS arriba a la izquierda (15-30%) con la palabra «ERRORES» en amarillo pálido + un garabato «✕»; etiqueta amarilla redondeada con texto negro abajo a la izquierda (82-92%) «como [profesión]».
 ELEMENTOS GRÁFICOS: notas al margen a mano con tu reacción honesta · tú recortada tipo sticker con borde blanco · parte clave en amarillo pálido
 EVITA: errores ajenos o genéricos; fotos de banco: tiene que ser tu cara real.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4836,7 +5022,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: foto distinta por error; confesión en 2-3 líneas centrada arriba (10-25%) con la parte clave en amarillo; en el medio la prueba o TÚ RECORTADA con borde blanco tipo sticker; nota al margen chica en blanco con flecha a mano amarilla («uff, me replanteó todo»).
-(Para la última slide usa: 3 párrafos centrados arriba con palabras en amarillo bold + corazón amarillo + tú recortada con el celular + «¿cuál te sorprendió más?».)
+(Si es la última slide, la composición es: 3 párrafos centrados arriba con palabras en amarillo bold + corazón amarillo + tú recortada con el celular + «¿cuál te sorprendió más?».)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -4931,6 +5119,7 @@ COMPOSICIÓN DE ESTA SLIDE: chat con UNA burbuja blanca a la izquierda con la pr
 ELEMENTOS GRÁFICOS: chat solo en la portada; notas en el resto · sin logos de WhatsApp ni de Apple · cursor de texto al final de la última línea
 EVITA: el nombre o la foto de quien preguntó: usa su rol («mi paciente», «una alumna»).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -4951,7 +5140,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: nota del celular: fecha gris arriba («ayer, 23:14»), título corto en negrita y el cuerpo en primera persona de corrido; ninguna decoración más. En la slide de aprendizaje, los 2 consejos numerados como lista de la nota.
-(Para la última slide usa: nota con 3 preguntas abiertas en lista, cada una en su línea, y el cursor parpadeando al final.)
+(Si es la última slide, la composición es: nota con 3 preguntas abiertas en lista, cada una en su línea, y el cursor parpadeando al final.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -4973,6 +5163,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: chat con UNA burbuja blanca a la izquierda con la pregunta tal cual (54 px), hora debajo; en la barra, «[quién] · ayer»; debajo del chat, fuera de la burbuja, «y me hizo pensar…» en gris.
 ELEMENTOS GRÁFICOS: chat solo en la portada; notas en el resto · sin logos de WhatsApp ni de Apple · cursor de texto al final de la última línea
 EVITA: el nombre o la foto de quien preguntó: usa su rol («mi paciente», «una alumna»).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -4993,7 +5184,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: nota del celular: fecha gris arriba («ayer, 23:14»), título corto en negrita y el cuerpo en primera persona de corrido; ninguna decoración más. En la slide de aprendizaje, los 2 consejos numerados como lista de la nota.
-(Para la última slide usa: nota con 3 preguntas abiertas en lista, cada una en su línea, y el cursor parpadeando al final.)
+(Si es la última slide, la composición es: nota con 3 preguntas abiertas en lista, cada una en su línea, y el cursor parpadeando al final.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -5089,6 +5281,7 @@ COMPOSICIÓN DE ESTA SLIDE: arriba «De [A]» en gris y abajo «a [B]» en negro
 ELEMENTOS GRÁFICOS: la barra NO aparece en la antesala · stepper de 4 nodos en la slide de reencuadre · un solo color de acento en todo el carrusel
 EVITA: promesas de tiempo que no puedes sostener («en 30 días»).
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -5109,7 +5302,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: PASOS: barra de progreso de 16 px arriba a lo ancho que se llena 25% → 50% → 75% → 100% + chip violeta «PASO N DE 4»; título en el tercio superior; «cómo sabes que lo hiciste bien» en gris debajo. ANTESALA (validación, razones, a quién le sirve): fondo crema, SIN barra — la barra aparece recién en el paso 1.
-(Para la última slide usa: barra al 100% + «No necesitas hacerlo perfecto» + la acción pequeña en un recuadro violeta claro + CTA de palabra clave.)
+(Si es la última slide, la composición es: barra al 100% + «No necesitas hacerlo perfecto» + la acción pequeña en un recuadro violeta claro + CTA de palabra clave.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -5131,6 +5325,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: arriba «De [A]» en gris y abajo «a [B]» en negro ultra bold, unidos por una línea vertical violeta con dos nodos; «una guía realista, sin hacks mágicos» chico al pie.
 ELEMENTOS GRÁFICOS: la barra NO aparece en la antesala · stepper de 4 nodos en la slide de reencuadre · un solo color de acento en todo el carrusel
 EVITA: promesas de tiempo que no puedes sostener («en 30 días»).
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -5151,7 +5346,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: PASOS: barra de progreso de 16 px arriba a lo ancho que se llena 25% → 50% → 75% → 100% + chip violeta «PASO N DE 4»; título en el tercio superior; «cómo sabes que lo hiciste bien» en gris debajo. ANTESALA (validación, razones, a quién le sirve): fondo crema, SIN barra — la barra aparece recién en el paso 1.
-(Para la última slide usa: barra al 100% + «No necesitas hacerlo perfecto» + la acción pequeña en un recuadro violeta claro + CTA de palabra clave.)
+(Si es la última slide, la composición es: barra al 100% + «No necesitas hacerlo perfecto» + la acción pequeña en un recuadro violeta claro + CTA de palabra clave.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -5238,6 +5434,8 @@ COMPOSICIÓN DE ESTA SLIDE: arriba la foto del comienzo con la píldora «PRIMER
 ELEMENTOS GRÁFICOS: rótulo idéntico en todas (anáfora visual) · la foto fea del inicio es la que conecta · pares con el mismo encuadre de tema
 EVITA: fotos sin consentimiento escrito; en salud o estética no prometas resultados.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **B · Con tu marca**
 ```
@@ -5258,7 +5456,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: el MISMO rótulo en todas; solo cambian los pares de fotos (mismo tema, dos momentos). Variante servicio: split vertical con línea blanca, «ANTES» / «DESPUÉS» en píldoras con borde abajo y etiquetas de zona con líneas guía finas.
-(Para la última slide usa: el par más fuerte + pregunta («¿qué te pareció el cambio?») o CTA.)
+(Si es la última slide, la composición es: el par más fuerte + pregunta («¿qué te pareció el cambio?») o CTA.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -5278,6 +5478,8 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: arriba la foto del comienzo con la píldora «PRIMERO EMPIEZAS» centrada a ~47% del alto; abajo la foto de hoy con «LUEGO MEJORAS» a ~75%.
 ELEMENTOS GRÁFICOS: rótulo idéntico en todas (anáfora visual) · la foto fea del inicio es la que conecta · pares con el mismo encuadre de tema
 EVITA: fotos sin consentimiento escrito; en salud o estética no prometas resultados.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -5298,7 +5500,9 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: el MISMO rótulo en todas; solo cambian los pares de fotos (mismo tema, dos momentos). Variante servicio: split vertical con línea blanca, «ANTES» / «DESPUÉS» en píldoras con borde abajo y etiquetas de zona con líneas guía finas.
-(Para la última slide usa: el par más fuerte + pregunta («¿qué te pareció el cambio?») o CTA.)
+(Si es la última slide, la composición es: el par más fuerte + pregunta («¿qué te pareció el cambio?») o CTA.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```
@@ -5390,6 +5594,7 @@ COMPOSICIÓN DE ESTA SLIDE: barra superior con «Preguntas antes de comprar»; u
 ELEMENTOS GRÁFICOS: avatar circular sin foto de terceros · hora y ✓✓ en cada mensaje · máx. 2 burbujas por slide para que se lea a 46 px · la respuesta arranca con No/Sí en itálica bold
 EVITA: logos de WhatsApp o Instagram y nombres reales de clientas: usa «Clienta» o iniciales con permiso.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **B · Con tu marca**
 ```
@@ -5410,7 +5615,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición de esta slide: burbuja blanca a la izquierda con la pregunta tal cual (esquina superior izquierda en punta) + burbuja verde a la derecha con tu respuesta (esquina superior derecha en punta); hora abajo a la derecha de cada burbuja y ✓✓ azules en la tuya; contador «2/5» en la barra. VARIANTE: sobre papel texturizado claro, un objeto de tu rubro (portapapeles, libreta) con la pregunta en una burbuja de diálogo de tu color en MAYÚSCULAS blancas y la respuesta debajo que arranca con «No.» / «Sí.» en itálica bold.
-(Para la última slide usa: burbuja tuya: «¿Tienes otra? Escríbeme [PALABRA] por DM» + campo de escribir abajo con la palabra ya escrita.)
+(Si es la última slide, la composición es: burbuja tuya: «¿Tienes otra? Escríbeme [PALABRA] por DM» + campo de escribir abajo con la palabra ya escrita.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```
@@ -5432,6 +5638,7 @@ TIPOGRAFÍA:
 COMPOSICIÓN DE ESTA SLIDE: barra superior con «Preguntas antes de comprar»; una burbuja grande tuya centrada con el titular «Las 5 preguntas que me hacen antes de [comprar]» en 64 px; indicador «escribiendo…» debajo.
 ELEMENTOS GRÁFICOS: avatar circular sin foto de terceros · hora y ✓✓ en cada mensaje · máx. 2 burbujas por slide para que se lea a 46 px · la respuesta arranca con No/Sí en itálica bold
 EVITA: logos de WhatsApp o Instagram y nombres reales de clientas: usa «Clienta» o iniciales con permiso.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
 ```
 **B · Con tu marca**
@@ -5452,7 +5659,8 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
 Composición: burbuja blanca a la izquierda con la pregunta tal cual (esquina superior izquierda en punta) + burbuja verde a la derecha con tu respuesta (esquina superior derecha en punta); hora abajo a la derecha de cada burbuja y ✓✓ azules en la tuya; contador «2/5» en la barra. VARIANTE: sobre papel texturizado claro, un objeto de tu rubro (portapapeles, libreta) con la pregunta en una burbuja de diálogo de tu color en MAYÚSCULAS blancas y la respuesta debajo que arranca con «No.» / «Sí.» en itálica bold.
-(Para la última slide usa: burbuja tuya: «¿Tienes otra? Escríbeme [PALABRA] por DM» + campo de escribir abajo con la palabra ya escrita.)
+(Si es la última slide, la composición es: burbuja tuya: «¿Tienes otra? Escríbeme [PALABRA] por DM» + campo de escribir abajo con la palabra ya escrita.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 ```
 **Arreglar una palabra**
 ```

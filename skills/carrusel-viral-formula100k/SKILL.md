@@ -1,7 +1,7 @@
 ---
 name: carrusel-viral-formula100k
 description: >
-  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con Nanobanana (Gemini API via skill banana), construye el carrusel directamente en Canva si el usuario proporciona el enlace, y da instrucciones precisas de producción.
+  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 35 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G15: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con Nanobanana (Gemini API via skill banana), construye el carrusel directamente en Canva si el usuario proporciona el enlace, y da instrucciones precisas de producción.
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -198,7 +198,7 @@ Antes de hacer cualquier investigación, extrae los siguientes elementos del inp
 1. **Tema central** — ¿de qué trata exactamente?
 2. **Audiencia objetivo** — ¿a quién le habla? (creadores, emprendedores, coaches, etc.)
 3. **Mensaje clave** — ¿cuál es la única cosa que el lector debe recordar?
-4. **Tipo de carrusel más adecuado** — se confirma en el PASO 3, con los patrones que devuelva la investigación del PASO 2 (no antes: el tipo lo decide lo que ya está funcionando en el nicho, no una preferencia previa)
+4. **Objetivo del carrusel** — qué debe hacer la persona al terminar de deslizar: guardar, comentar, compartir, seguir, conectar o comprar. Si no está claro, pregúntalo en UNA línea: decide el formato del PASO 3
 5. **Potencial de gancho** — ¿hay curiosity gap, dato sorprendente, promesa concreta o controversia?
 
 ---
@@ -260,12 +260,31 @@ Compara la idea del usuario con los patrones encontrados:
 
 ---
 
-## PASO 3 — Seleccionar tipo y estructura de carrusel
+## PASO 3 — Elegir el FORMATO (uno de los 35) y la estructura
 
-Con el análisis del PASO 1 y los patrones del PASO 2, confirma:
-1. **Tipo de carrusel** — derivarlo de los carruseles virales analizados en el PASO 2: qué arquitectura de slides repiten los que funcionaron en este nicho. Si el PASO 2 no arrojó referencias suficientes, decirlo y elegir la arquitectura más simple (gancho → 3-5 puntos → cierre con CTA) en vez de asumir un tipo
-2. **Número de slides** (mínimo 5, máximo 10 para primera publicación)
+**Lee `references/formatos-carrusel-35.md`**: los 35 formatos del recetario de FÓRMULA 100K con su objetivo, mecánica, soporte, motor y qué tan bien los resuelve Nano Banana. No inventes un «tipo» si uno de los 35 ya lo cubre.
+
+1. **Formato** — cruza el objetivo del PASO 1 con los patrones virales del PASO 2:
+   - Si las referencias del nicho repiten una mecánica que coincide con una ficha (ej. todas son tier lists → **F17**), usa esa ficha.
+   - Si no, propón **3 fichas** del objetivo, cada una con 1 línea de por qué, y deja elegir.
+   - Si la persona ya nombró un formato («carrusel en libreta», «checklist», «tipo chat», «garabatos sobre mi foto», «F07»), úsalo directo.
+
+   | Objetivo | Primero se proponen | También |
+   |---|---|---|
+   | Guardado | F07 chuleta · G01 checklist · G05 recursos | F18, F04, G06 glosario, G13 de A a B |
+   | Comentario | F17 tier list · G03 qué tipo eres · G08 molde | F08, F14, G12 confesión, G10 frases |
+   | Compartido | F01 causa y consecuencia · G10 frases · G06 glosario | F19 mapa |
+   | Seguidor | F10 anáfora · F13 garabatos (post fijado) · F07 | F06 |
+   | Conexión | F11 historia de origen · G11 errores propios · G12 confesión | F12 |
+   | Venta | G07 caso de estudio · G14 antes/después · G15 FAQ en chat | F11, F20, F09 |
+   | Autoridad / actualidad | G02 noticia · G04 lo que nadie te dice | F14 hot take |
+
+   Ninguna encaja de verdad → dilo y usa la arquitectura simple (gancho → 3-5 puntos → cierre con CTA).
+2. **Anatomía** — con la ficha elegida, abre su bloque en `~/.claude/skills/carrusel-formatos-f100k/references/catalogo.md` (`### <ID> · `) y respeta su anatomía slide por slide, su prompt de guion y su **error típico**. El número de slides lo manda la ficha (F17 puede ser 1 sola; F07, 2); si la ficha no lo fija: mínimo 5, máximo 10.
 3. **CTA final** — específico y accionable ("Comenta X", "Guarda esto", "Envía a alguien que...")
+
+**Fabricación según el formato:** el guion lo entregas aquí (PASO 4). Para los PNG del formato elegido (plantillas split / papel / datos / garabato, HTML libre de las fichas G, o los prompts listos para Gemini y ChatGPT si la persona no usa Claude Code), invoca `carrusel-formatos-f100k` con la ficha + el guion aprobado: esa skill tiene el visual detallado, las plantillas y su tabla de a qué skill derivar. El PASO 6 (Canva) queda para cuando la persona da un link de Canva.
+**Nano Banana:** si el índice marca 2 o más arreglos para esa ficha, o si la slide lleva más de ~25 palabras o una lista, no le pidas el texto al modelo de imagen: texto en HTML (motor A) o fondo IA sin texto + texto encima (motor C).
 
 ---
 
@@ -723,6 +742,7 @@ Incluye siempre este bloque al final del calendario:
 
 Antes de entregar, verifica:
 
+- [ ] ¿Se eligió uno de los 35 formatos (o se dijo por qué ninguno encaja) y se respeta su anatomía y su error típico?
 - [ ] ¿El gancho genera curiosity gap real? ¿Hay una razón urgente para deslizar?
 - [ ] ¿El gancho está validado por al menos 1-2 referencias virales encontradas en investigación?
 - [ ] ¿Cada slide tiene UNA sola idea?
@@ -754,4 +774,4 @@ Antes de entregar, verifica:
 - **Si el input es un guion de reel:** identifica el gancho verbal del reel (los primeros 3 segundos) y conviértelo en gancho visual del Slide 1. El resto del guion se distribuye en slides interiores.
 - **El calendario (PASO 9) es automático** — se entrega siempre después del guion, sin que el usuario lo pida. Es parte del entregable estándar.
 - **El Perfil Visual (PASO 0) se verifica en cada sesión.** Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
-- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (es el único archivo de referencia de esta skill; el sistema visual vive ahí).
+- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (el sistema visual de la marca vive ahí) y `references/formatos-carrusel-35.md` en el PASO 3 (los 35 formatos; se regenera desde el recetario, no se edita a mano).

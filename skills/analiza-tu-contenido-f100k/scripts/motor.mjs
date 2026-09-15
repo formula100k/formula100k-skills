@@ -469,6 +469,17 @@ export function validarLectura(resultado, lectura, opciones = {}) {
         if (!cfL[k] || typeof cfL[k].texto !== 'string' || !cfL[k].texto.trim()) errores.push(`conclusiones_fijas.${k}: falta el texto`)
         else refs(cfL[k].evidencia, `conclusiones_fijas.${k}`)
       })
+      // El ángulo no se entrega como categoría suelta: se aterriza al tema de SUS Reels.
+      const sinTildes = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      ;[['angulo_viral', cfR.anguloViral], ['angulo_venta', cfR.anguloVenta]].forEach(([k, a]) => {
+        if (a?.estado !== 'ganador' || !cfL[k]) return
+        const esp = cfL[k].angulo_especifico
+        const raiz = sinTildes(a.angulo).split(/[\s/]+/)[0]
+        if (typeof esp !== 'string' || !esp.trim()) errores.push(`conclusiones_fijas.${k}: falta angulo_especifico («${a.angulo} de …», aterrizado al tema de sus Reels)`)
+        else if (!sinTildes(esp).includes(raiz)) errores.push(`conclusiones_fijas.${k}: angulo_especifico tiene que partir de «${a.angulo}», que es el que eligió el motor`)
+        else if (sinTildes(esp).trim().length < sinTildes(a.angulo).length + 12) errores.push(`conclusiones_fijas.${k}: angulo_especifico repite la categoría; di de QUÉ tema («${a.angulo} de cómo…»)`)
+        else if (esp.length > 110) errores.push(`conclusiones_fijas.${k}: angulo_especifico pasa de 110 caracteres; tiene que caber como titular`)
+      })
     }
   }
   if (lectura.aplicacion?.campana && !resultado.angulos?.find((a) => a.proposito === 'Venta' && a.estado === 'coronado')) {

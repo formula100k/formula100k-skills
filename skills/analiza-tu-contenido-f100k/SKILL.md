@@ -112,6 +112,11 @@ Esquema en `references/esquema.md`. Contenido:
   - Si `resultado.encuesta.sirve` es true, agrega 2 `tipo: "encuesta"` ya redactadas para su audiencia: la de **lenguaje** (abierta: «Cuéntame con tus palabras qué estás intentando resolver con…») y la de **objeción**. Si es false, ninguna: el motor ya explica por qué.
   - Prohibido: «¿de qué quieres que hable?» y A/B de cosas que no va a hacer.
 - **conclusiones_fijas**: `{ formato, angulo_viral, angulo_venta }`, cada una `{ texto, evidencia }`. Solo explicas el PORQUÉ del ganador que eligió el motor, mirando sus transcripts: qué tienen en común esos Reels (cómo abren, a quién le hablan). 2–3 frases. Si es «pista», «candidato» o «posible», dilo y di qué lo confirma.
+  - `angulo_viral` y `angulo_venta` llevan además **`angulo_especifico`**: la categoría del motor **aterrizada al tema** de los Reels que la hicieron ganar (sus `referencias`, leyendo `videos[n].idea` y los transcripts). Es el titular de la tarjeta, así que ≤110 caracteres.
+    - Mal: «Curiosidad». Bien: «Curiosidad de cómo generar contenido viral en automático con Claude».
+    - Mal: «Método». Bien: «Método paso a paso para que Claude te haga el trabajo pesado: anuncios, landings y visuales».
+    - Parte SIEMPRE de la categoría del motor (el validador lo exige). El tema sale del Reel que más empuja la mediana; si los otros Reels del ángulo hablan de otra cosa, dilo en `texto`, no lo mezcles en el titular.
+    - En el calendario, las piezas con ese ángulo usan ESE tema en su `angulo_exacto`, no solo la categoría.
 - **conclusiones** (máx. 3, se muestran como «Otras conclusiones»): `{ titulo, texto, evidencia }`. La primera siempre es el filtro tapado. Otra, lo que las vistas coronaban y el filtro no (`engañoVistas`). No repitas las fijas.
 - **aplicacion**:
   - `calendario`: exactamente `reparto.piezas` filas; REPETIR/VARIAR/APOSTAR = `reparto.cubetas`. REPETIR solo con formatos de veredicto REPETIR (si no hay ninguno, usa CONFIRMAR y dilo en `por_que`). Nunca un formato MATAR. VARIAR cambia UNA sola variable. APOSTAR = formato nuevo de `references/formatos.json` que ella no haya usado. Temas concretos de SU nicho, sacados de sus transcripts.

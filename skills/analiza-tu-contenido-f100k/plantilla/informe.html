@@ -163,6 +163,20 @@ button{font:inherit;color:inherit}
 .ref img{width:32px;height:32px;object-fit:cover;border-radius:5px;display:block}
 .ref .sinfoto{width:32px;height:32px;border-radius:5px;background:var(--gris-fondo)}
 
+/* tu data */
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.dato{border:1px solid var(--pelo);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dato[data-estado="sin-dato"]{border-color:var(--chatarra)}
+.dato .ti{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dato .ti b{font-size:15px}
+.dato .riel{height:10px;border-radius:5px;background:var(--gris-fondo);overflow:hidden}
+.dato .riel i{display:block;height:100%;background:var(--pasa)}
+.dato p{font-size:13.5px;color:var(--tinta-2)}
+.dato .desb{font-family:var(--serif);font-style:italic;color:var(--tinta)}
+.dato .refs{margin-top:0}
+.dato .ref{min-height:34px;padding:2px 8px 2px 2px}
+.dato .ref img,.dato .ref .sinfoto{width:28px;height:28px}
+
 /* calendario con detalle */
 .semana-cal{display:flex;flex-direction:column;gap:10px}
 .semana-cal>h3{font-size:15px;font-weight:800;letter-spacing:-.2px;border-bottom:1px solid var(--pelo);padding-bottom:6px}
@@ -610,7 +624,7 @@ if(CF){
           '<p class="fn">'+(a.mediana!=null?'Mediana '+colTxt(a.columna,a.mediana)+' en '+a.veces+' Reels<br>Tu cuenta: '+colTxt(a.columna,a.medianaCuenta):a.veces+' Reels arriba')+
           (a.segundo?'<br>Le sigue: '+esc(a.segundo.angulo)+' ('+fmt(a.segundo.mediana,2)+(COLS[a.columna]||["",""])[1]+')':'')+'</p>'
         :'<p class="fr">Todavía ninguno</p><p class="fx">'+esc(a.motivo)+'</p>')+
-      txtF(k)+'<p class="fx">Se mide con: '+esc(a.fuente)+'.</p>'+
+      txtF(k)+'<p class="fx">Se mide con: '+esc(a.fuente)+'.'+(a.seguridad==="proxy"&&R.calidadDatos&&!R.calidadDatos.completa?' <a href="#tu-data">Qué capturar para confirmarlo ↓</a>':'')+'</p>'+
       '<div class="refs">'+(a.referencias||[]).map(refMini).join("")+'</div></article>';
   };
   var av=CF.anguloViral, ave=CF.anguloVenta;
@@ -655,6 +669,28 @@ h.push('<section class="bloque c-5"><p class="ceja">Por qué no se lee con el pr
   '<p class="arreglo">Ordenados por <b>'+esc(R.orden.etiqueta)+'</b>'+(R.orden.porDefecto?' (sin filtro tapado se ordena por Valor)':'')+', '+
   (eng.topVistasEnChatarra.length ? '<b>'+eng.topVistasEnChatarra.length+' de tus '+eng.topVistas.length+' Reels más vistos</b> caen en CHATARRA ('+eng.topVistasEnChatarra.map(function(n){return "#"+n;}).join(", ")+'). Copiarlos sería repetir lo que no sirve.' : 'tus Reels más vistos no caen en CHATARRA: este mes las vistas no te engañan.')+'</p>'+
   '<a class="estacion" href="#pendiente" style="align-self:flex-start">Ver la comparación completa</a></section>');
+
+// tu data: lo que falta para leerte completa
+var CD=R.calidadDatos;
+if(CD&&!CD.completa){
+  var inc=CD.avanzadas.filter(function(a){return a.estado!=="completo";});
+  h.push('<section class="bloque c-12" id="tu-data"><p class="ceja">Tu data · lo que falta para leerte completa</p>'+
+    '<h2>'+(inc.length?'Te faltan <span class="ser">'+inc.length+' captura'+(inc.length>1?'s':'')+'</span> de la app':'Te faltan <span class="ser">números básicos</span>')+'</h2>'+
+    '<p class="arreglo">El panel del computador no trae retención ni actividad en el perfil: solo salen en la app del teléfono. Sin ellas, esos filtros quedan sin dato y este informe se lee a medias. Con <b>5 Reels de este mes y 5 de tu línea base</b> ya se leen; lo ideal es tenerlos todos.</p>'+
+    '<div class="datos">'+
+    (CD.basicas.faltan.length?'<div class="dato" data-estado="parcial"><div class="ti"><b>Números básicos</b><span class="pildora p-gris">'+CD.basicas.con+' de '+CD.basicas.total+'</span></div><p>Vistas, % de no seguidores, guardados, compartidos y seguidores nuevos.</p><div class="refs">'+CD.basicas.faltan.map(refMini).join("")+'</div></div>':'')+
+    CD.avanzadas.map(function(a){
+      var pill=a.estado==="completo"?'<span class="pildora p-pasa">Completo</span>':a.estado==="parcial"?'<span class="pildora p-gris">'+a.con+' de '+a.total+'</span>':'<span class="pildora p-tapado">0 de '+a.total+'</span>';
+      return '<div class="dato" data-estado="'+a.estado+'"><div class="ti"><b>'+esc(a.nombre)+'</b>'+pill+'</div>'+
+        '<div class="riel" role="img" aria-label="'+a.con+' de '+a.total+' Reels con este dato"><i style="width:'+(a.con/a.total*100)+'%"></i></div>'+
+        '<p class="desb">Desbloquea el '+esc(a.desbloquea)+'</p>'+
+        (a.estado==="completo"?'':'<p><b>Cómo:</b> '+esc(a.captura)+'</p>'+
+          (a.prioridad&&a.prioridad.length?'<p class="pz-t">Captura primero estos '+a.prioridad.length+'</p><div class="refs">'+a.prioridad.map(refMini).join("")+'</div>'+
+            (a.faltan.length>a.prioridad.length?'<p class="fx">Después, los otros '+(a.faltan.length-a.prioridad.length)+' que faltan.</p>':''):''))+
+        '</div>';
+    }).join("")+'</div>'+
+    '<button class="btn" id="btn-capturas" type="button" style="align-self:flex-start">Copiar la lista de capturas</button></section>');
+}
 
 // coronación
 var fx=R.formatos||[];
@@ -1062,6 +1098,7 @@ var CARDS=[
   ["Mecánica","Con 30 Reels, ¿cuántos van a ORO y a CHATARRA?","Ordenas por la columna de tu filtro tapado.\n25 % de 30 = 7,5 → hacia abajo.\n\n7 ORO · 16 tibios · 7 CHATARRA."],
   ["Aplicación","Un formato sale 2 veces en ORO. ¿Qué haces?","REPETIR: mismo molde, tema nuevo.\n\n1 vez en ORO → CONFIRMAR\n2 veces en CHATARRA → MATAR"],
   ["Aplicación","¿Cómo queda la mezcla si se tapa el Alcance?","40 / 30 / 30\n\nAPOSTAR sube a 30 %:\nhace falta sangre nueva.\nLos 20 puntos salen de REPETIR."],
+  ["Casos límite","¿Cuántas capturas de retención hacen falta para leer el filtro 2?","5 Reels de este mes\ny 5 de tu línea base.\n\nCon 2 capturas sueltas no hay mediana:\nel filtro queda sin dato.\nLo ideal: todos."],
   ["Casos límite","¿Qué pasa con un filtro sin dato?","Ni pasa ni se tapa.\nLa lectura sigue al siguiente.\n\nSuele pasar con Retención e Intención\nsi no capturas la app del teléfono."],
   ["Conclusiones fijas","¿Cómo se elige el ángulo que más te ayuda a viralizar?","Agrupas tus Reels por ángulo.\nGana la mediana más alta\nde % de no seguidores.\n\nSolo compiten ángulos con 2+ Reels\ny que le ganen a tu cuenta."],
   ["Conclusiones fijas","¿Por qué «Curiosidad» sola no sirve como ángulo?","Porque es una categoría:\nno te dice qué grabar.\n\nSe aterriza al tema de los Reels que ganaron:\n«Curiosidad de cómo generar\ncontenido automático con Claude»."],
@@ -1175,6 +1212,19 @@ document.getElementById("btn-hoja").addEventListener("click",function(){
   var filas=["N,FECHA,LINK,FORMATO,ANGULO,PROPOSITO,VISTAS,% NO SEGUIDORES,RETENCION 3S,GUARDADOS,COMPARTIDOS,SEGUIDORES NUEVOS,INTENCION,ZONA,VALOR /1000,TASA CONV %"];
   R.posts.forEach(function(p){ var m=p.metricas,e=p.etiquetas||{}; filas.push([p.n,p.fecha,p.url,e.formato,e.angulo,e.proposito,m.vistas,m.pct_no_seguidores,m.retencion_3s,m.guardados,m.compartidos,m.seguidores_nuevos,m.intencion,p.zona,m.valor_1000,m.tasa_conv].map(q).join(",")); });
   copiar(filas.join("\n"),"Copiada. Pégala en Google Sheets, Numbers o Excel.");
+});
+var btnCap=document.getElementById("btn-capturas");
+if(btnCap) btnCap.addEventListener("click",function(){
+  var t=["Capturas que faltan · desde la app: el Reel → Ver estadísticas",""];
+  R.calidadDatos.avanzadas.filter(function(a){return a.estado!=="completo";}).forEach(function(a){
+    t.push("## "+a.nombre+" ("+a.con+" de "+a.total+")", a.captura, "Primero:");
+    a.prioridad.forEach(function(n){ var p=porN[n]; t.push("[ ] #"+n+" · "+fecha(p.fecha)+(p.url?" · "+p.url:"")); });
+    var resto=a.faltan.filter(function(n){return a.prioridad.indexOf(n)<0;});
+    if(resto.length){ t.push("Después:"); resto.forEach(function(n){ var p=porN[n]; t.push("[ ] #"+n+" · "+fecha(p.fecha)+(p.url?" · "+p.url:"")); }); }
+    t.push("");
+  });
+  t.push("Nombra las capturas con el número del Reel: 01a.png, 01b.png… (01 = el más reciente).");
+  copiar(t.join("\n"),"Lista copiada. Mándatela al teléfono y marca a medida que capturas.");
 });
 document.getElementById("btn-calendario").addEventListener("click",function(){
   var q=function(s){ return '"'+String(s==null?"":s).replace(/"/g,'""')+'"'; };

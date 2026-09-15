@@ -92,6 +92,55 @@ export function derivar(m = {}) {
   return { valor_1000, tasa_conv, intencion }
 }
 
+// Un filtro se lee solo si cada ventana tiene su mínimo de Reels con ese dato: 5, o la mitad si la ventana es chica.
+export const MIN_DATO_VENTANA = 5
+export const minimoPorVentana = (n) => Math.min(MIN_DATO_VENTANA, Math.ceil(n / 2))
+
+// Las estadísticas avanzadas solo están en la app del teléfono: se piden por captura.
+export const DATOS_AVANZADOS = [
+  {
+    clave: 'retencion', nombre: 'Retención', columnas: ['retencion_3s', 'duracion_media'], filtro: 2,
+    captura: 'En la app: el Reel → Ver estadísticas → Retención. Que se vea la gráfica, la tasa de omisión y el tiempo de visualización promedio.',
+    desbloquea: 'Filtro 2 · ¿Se quedaron viendo? Dice si el problema es el gancho (caída a los 3 s) o el desarrollo (caída al medio).',
+  },
+  {
+    clave: 'perfil', nombre: 'Actividad en el perfil', columnas: ['visitas_perfil', 'toques_enlace', 'dms'], filtro: 5,
+    captura: 'En la app: el Reel → Ver estadísticas → Actividad en el perfil. Que se vean las visitas al perfil y los toques en enlaces externos. Los DMs que trajo, anótalos tú.',
+    desbloquea: 'Filtro 5 · Intención. Sin esto el ángulo de venta sale «posible» (medido con conversión) y no se puede armar campaña.',
+  },
+]
+
+function calidadDatos(posts) {
+  const tiene = (p, cols) => cols.some((c) => esNum(p.metricas[c]))
+  const basicas = ['vistas', 'pct_no_seguidores', 'guardados', 'compartidos', 'seguidores_nuevos']
+  const faltanBasicas = posts.filter((p) => !basicas.every((c) => esNum(p.metricas[c]))).map((p) => p.n)
+  const avanzadas = DATOS_AVANZADOS.map((d) => {
+    const con = posts.filter((p) => tiene(p, d.columnas)).map((p) => p.n)
+    const faltan = posts.filter((p) => !tiene(p, d.columnas)).map((p) => p.n)
+    return { ...d, con: con.length, total: posts.length, faltan, estado: faltan.length === 0 ? 'completo' : con.length ? 'parcial' : 'sin-dato' }
+  })
+  return {
+    basicas: { con: posts.length - faltanBasicas.length, total: posts.length, faltan: faltanBasicas },
+    avanzadas,
+    completa: faltanBasicas.length === 0 && avanzadas.every((a) => a.estado === 'completo'),
+  }
+}
+
+// Qué capturar primero: el mínimo de cada ventana; en la línea base, primero ORO y CHATARRA (son los que enseñan).
+function prioridadCapturas(cd, ventanas, porN) {
+  cd.avanzadas.forEach((a) => {
+    if (a.estado === 'completo') { a.prioridad = []; return }
+    const falta = new Set(a.faltan)
+    const tomar = (ns, orden) => {
+      const tienen = ns.length - ns.filter((n) => falta.has(n)).length
+      const hacen = Math.max(0, minimoPorVentana(ns.length) - tienen)
+      return ns.filter((n) => falta.has(n)).sort(orden).slice(0, hacen)
+    }
+    const peso = (n) => (['ORO', 'CHATARRA'].includes(porN.get(n)?.zona) ? 0 : 1)
+    a.prioridad = [...tomar(ventanas.mes.posts, (x, y) => x - y), ...tomar(ventanas.base.posts, (x, y) => peso(x) - peso(y) || x - y)]
+  })
+}
+
 function diasEntre(a, b) {
   return Math.round(Math.abs(new Date(b) - new Date(a)) / 86400000) + 1
 }
@@ -132,6 +181,7 @@ export function analizar(datos) {
       : `Solo ${diasPublicando} días publicando. Hacen falta ${DIAS_MINIMOS}.`
 
   const salida = { lote, posts, generado: new Date().toISOString().slice(0, 10) }
+  salida.calidadDatos = calidadDatos(posts)
   if (!lote.valido) return salida
 
   // Ventanas: explícitas, o primer mes partido 20/10 (proporción 2/3 – 1/3 si no son 30).
@@ -156,6 +206,9 @@ export function analizar(datos) {
   // ── Los 5 filtros ──
   const col = (arr, k) => arr.map((p) => p.metricas[k])
   const comp = (et, k, dec, unidad = '') => {
+    // Con 1 o 2 capturas sueltas no hay mediana que valga: cada ventana necesita su mínimo.
+    const alcanza = (arr) => col(arr, k).filter(esNum).length >= minimoPorVentana(arr.length)
+    if (!alcanza(base) || !alcanza(mes)) return null
     const b = mediana(col(base, k)), mm = mediana(col(mes, k))
     if (b === null || mm === null) return null
     return { et, columna: k, base: redondear(b, dec), mes: redondear(mm, dec), unidad, ok: mm >= b }
@@ -271,6 +324,8 @@ export function analizar(datos) {
       motivo: coronados.length ? '' : 'Ningún ángulo apareció 2 veces arriba: una vez es suerte.',
     }
   })
+
+  prioridadCapturas(salida.calidadDatos, salida.ventanas, new Map(posts.map((p) => [p.n, p])))
 
   // Medianas del lote entero: la meta de cada pieza del calendario.
   salida.medianas = Object.fromEntries(['vistas', 'pct_no_seguidores', 'retencion_3s', 'valor_1000', 'tasa_conv', 'intencion']
@@ -456,6 +511,15 @@ export function validarLectura(resultado, lectura, opciones = {}) {
     }
     if (cf?.anguloVenta?.estado === 'ganador' && !angulosCal.has(cf.anguloVenta.angulo)) {
       errores.push(`calendario: ninguna pieza usa tu posible ángulo de venta («${cf.anguloVenta.angulo}»)`)
+    }
+  }
+
+  // Si falta data avanzada, conseguirla es una acción de la semana, no una nota al pie.
+  const incompletas = (resultado.calidadDatos?.avanzadas || []).filter((a) => a.estado !== 'completo')
+  if (resultado.reparto && incompletas.length) {
+    const es = lectura.aplicacion?.esta_semana || []
+    if (!es.some((x) => /captur/i.test(x))) {
+      errores.push(`esta_semana: falta la acción de capturar ${incompletas.map((a) => a.nombre).join(' y ')} (sin eso, los filtros ${incompletas.map((a) => a.filtro).join(' y ')} siguen sin dato)`)
     }
   }
 

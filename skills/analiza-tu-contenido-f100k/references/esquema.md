@@ -36,6 +36,11 @@
 - `ventana.dias_publicando` (opcional): si la cuenta lleva más días publicando que lo que abarca el lote.
 - Números crudos: `7479.5`, nunca `"7.479,5"`. Lo que no hay es `null`.
 
+## resultado.json → calidadDatos (lo pone el motor)
+
+`basicas: { con, total, faltan[] }` · `avanzadas[]`: `{ clave: retencion|perfil, nombre, filtro, captura, desbloquea, con, total, faltan[], prioridad[], estado: completo|parcial|sin-dato }` · `completa`.
+Un filtro solo se lee si cada ventana tiene `min(5, mitad de la ventana)` Reels con el dato.
+
 ## resultado.json → conclusionesFijas (lo pone el motor)
 
 `formato.estado` = repetir · candidato · sin-ganador, con `ganadores[]` ({ formato, oro, chatarra, veces, referencias, mediana }) y `matar[]`.

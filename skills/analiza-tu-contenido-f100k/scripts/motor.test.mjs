@@ -245,3 +245,35 @@ test('el ángulo fijo se aterriza a un tema: angulo_especifico obligatorio y fie
   const e4 = validarLectura(r, base('Curiosidad de cómo generar contenido automático con Claude', `${venta} paso a paso para automatizar tus anuncios`))
   assert.ok(!e4.some((e) => e.includes('angulo_especifico')))
 })
+
+// ── Calidad de la data: las estadísticas avanzadas ──
+test('calidadDatos: sin capturas de la app, retención y perfil quedan sin dato con la lista de Reels', () => {
+  const r = analizar({ posts: clonar() })
+  const [ret, perfil] = r.calidadDatos.avanzadas
+  assert.equal(ret.estado, 'sin-dato')
+  assert.equal(perfil.faltan.length, 30)
+  assert.equal(r.calidadDatos.completa, false)
+  // prioridad: el mínimo de cada ventana (5 de este mes + 5 de la base), no los 30
+  assert.equal(ret.prioridad.length, 10)
+  assert.deepEqual(ret.prioridad.slice(0, 5), [1, 2, 3, 4, 5])
+  const zona = Object.fromEntries(r.posts.map((p) => [p.n, p.zona]))
+  assert.ok(ret.prioridad.slice(5).every((n) => ['ORO', 'CHATARRA'].includes(zona[n])))
+})
+
+test('un filtro no se lee con 2 capturas sueltas: hace falta el mínimo por ventana', () => {
+  const posts = clonar()
+  posts.slice(0, 10).forEach((p) => { p.metricas.vistas *= 5; p.metricas.pct_no_seguidores = 80 }) // pasa el 1
+  posts.find((p) => p.n === 1).metricas.retencion_3s = 40
+  posts.find((p) => p.n === 20).metricas.retencion_3s = 90
+  assert.equal(analizar({ posts }).filtros[1].estado, 'sin-dato')
+  posts.forEach((p) => { p.metricas.retencion_3s = p.n <= 10 ? 40 : 90 })
+  const r = analizar({ posts })
+  assert.equal(r.filtros[1].estado, 'tapado')
+  assert.equal(r.calidadDatos.avanzadas[0].estado, 'completo')
+})
+
+test('validarLectura: con data avanzada incompleta, esta_semana tiene que pedir las capturas', () => {
+  const r = analizar({ posts: clonar(), piezas_mes: 12 })
+  assert.ok(validarLectura(r, { aplicacion: { esta_semana: ['Graba', 'Sube'] } }).some((e) => e.includes('capturar')))
+  assert.ok(!validarLectura(r, { aplicacion: { esta_semana: ['Captura Retención de 10 Reels'] } }).some((e) => e.includes('capturar')))
+})

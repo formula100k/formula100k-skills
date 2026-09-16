@@ -1,0 +1,131 @@
+{
+  "_que_es": "Configuración del canal OpenClaw. La lee scripts/build_openclaw.py. Para sumar una skill: agrégala en 'skills' con notas reales (qué herramienta usa y su reemplazo en servidor) y vuelve a correr el script.",
+  "workspace_dirs": ["guiones", "ideas", "informes", "cerebro", "entregables"],
+  "fallback_dir": "entregables/",
+  "path_map": [
+    ["~/.f100k-radar/config.json", "cerebro/f100k-config.json"],
+    ["$HOME/.f100k-radar/config.json", "cerebro/f100k-config.json"],
+    ["~/.claude/skills/historias-a-imagenes-nanobanana/preset.json", "cerebro/preset-historias.json"],
+    ["~/.claude/skills/", "skills/"],
+    ["~/Documents/FORMULA100K/HISTORIAS/calendarios/", "guiones/historias/calendarios/"],
+    ["~/Documents/FORMULA100K/HISTORIAS/guiones/", "guiones/historias/"],
+    ["~/Documents/FORMULA100K/HISTORIAS/imagenes/", "entregables/historias/"],
+    ["~/Documents/FORMULA100K/stories/", "entregables/historias/"],
+    ["~/Documents/FORMULA100K/stories", "entregables/historias"],
+    ["~/Documents/FORMULA100K/CALENDARIOS/", "guiones/calendarios/"],
+    ["~/Documents/FORMULA100K/LAB-GANCHOS/", "ideas/lab-ganchos/"],
+    ["~/Documents/FORMULA100K/1000-GANCHOS/", "cerebro/1000-ganchos/"],
+    ["~/Documents/FORMULA100K/ARTIFACTS/", "entregables/artifacts/"],
+    ["~/Documents/MI ADN VISUAL", "cerebro/fotos"],
+    ["~/Documents/MIS SELFIES", "cerebro/fotos"],
+    ["/Users/.../fotos/", "cerebro/fotos/"]
+  ],
+  "skills": {
+    "radar-tendencias-f100k": {
+      "notes": [
+        "La config no vive en la carpeta oculta de la Mac: léela de `cerebro/f100k-config.json`. Si no existe, créala con el nicho y las palabras clave de `USER.md` y `cerebro/`, y confírmala por Telegram. No mandes a correr rutina-maestra.",
+        "Señal de TikTok con Apify (`clockworks/tiktok-scraper`) solo si hay `APIFY_TOKEN`. Sin token, detecta con búsqueda web y dilo en la primera línea.",
+        "Tavily = tu búsqueda web.",
+        "La «FASE 5 — email de alerta» NO manda correo: la alerta va por Telegram con el mismo formato. Si no hay tendencia real y la automatización no pide informe diario, no mandes nada."
+      ]
+    },
+    "radar-virales-f100k": {
+      "notes": [
+        "Config en `cerebro/f100k-config.json` (si falta, créala desde `USER.md` y confírmala por Telegram).",
+        "Carriles A y B (Tavily) = tu búsqueda web. Carril C (virales sin cara en TikTok) usa Apify: solo con `APIFY_TOKEN`; sin token, salta el carril C y avísalo.",
+        "El «Paso 5 — email con Gmail» se reemplaza por un mensaje de Telegram con el mismo contenido.",
+        "Muestra la línea de costo de Apify solo si Apify corrió de verdad."
+      ]
+    },
+    "generador-ganchos-formula100k": {
+      "notes": [
+        "Los clips (Nano Banana + Seedance) y el `virality_predictor` son de Higgsfield: úsalos solo si el plugin de Higgsfield está conectado, y antes di el costo en créditos y espera ✅.",
+        "Sin Higgsfield: entrega las 2 a 4 variantes en texto (composición del primer segundo + gancho textual + hipótesis de viralidad) y di claramente que no hubo predicción.",
+        "El dataset `cerebro/1000-ganchos/` casi nunca existe en el servidor: si no está, sigue con `moldes-gancho.md` de esta skill.",
+        "La referencia a los criterios de `evaluador-ganchos-formula100k` apunta a una skill que no viene en este paquete: usa `criterios.md` de esta misma skill.",
+        "Si el input es una URL de Instagram o TikTok, no la abras logueada: pide el texto del gancho o una captura por Telegram, o usa Apify si hay `APIFY_TOKEN`."
+      ]
+    },
+    "metricas-semanales-f100k": {
+      "notes": [
+        "El handle sale de `USER.md` o `cerebro/f100k-config.json`.",
+        "Instagram, en este orden: 1) Composio si Instagram profesional está conectado (trae alcance y guardados reales de la cuenta propia); 2) Apify con `APIFY_TOKEN` (solo datos públicos); 3) si no hay ninguno, pídele a la usuaria capturas de sus estadísticas. Nunca navegador logueado.",
+        "El informe va por Telegram (no borrador de Gmail) y se guarda en `informes/metricas-AAAA-MM-DD.md`.",
+        "Si la automatización que te llamó pide comparar contra la mediana, usa la mediana: un solo viral distorsiona el promedio."
+      ]
+    },
+    "calendario-semanal-f100k": {
+      "notes": [
+        "Config en `cerebro/f100k-config.json` (si falta, créala desde `USER.md`).",
+        "Los 7 slots se alimentan primero de `ideas/aprobadas.md`, `ideas/banco.md` y `informes/`; Apify TikTok solo suma referencias si hay `APIFY_TOKEN`.",
+        "Guarda en `guiones/calendarios/`. El «Paso 6 — Gmail» se reemplaza por un mensaje de Telegram con la tabla y el archivo completo como documento.",
+        "Eventos en Google Calendar solo vía Composio y solo después del ✅ de la usuaria."
+      ]
+    },
+    "guionizacion-formula100k": {
+      "notes": [
+        "Módulo de verificación de viralidad: busca referencias con tu búsqueda web; si hay `APIFY_TOKEN`, confirma vistas con Apify. Nunca navegador logueado. Si no encontraste una referencia verificada, dilo; no inventes vistas.",
+        "La sección «Setup para Claude Desktop» (Xpoz, MCP sociales) no aplica aquí: sáltala.",
+        "Pase de voz: usa `cerebro/voice-guide.md` si existe. Si no existe, no abras Instagram: ofrece correr `guionizacion-humanizada`, que lo arma con textos que la usuaria te mande.",
+        "Guarda cada guion en `guiones/` con fecha en el nombre."
+      ]
+    },
+    "optimizador-cta-formula100k": {
+      "notes": [
+        "Skill de solo texto: corre tal cual.",
+        "La oferta, el lead magnet y la palabra clave de cada CTA salen de `cerebro/`. Si no están, pregúntalas por Telegram antes de proponer."
+      ]
+    },
+    "corrector-guiones-formula100k": {
+      "notes": [
+        "Skill de solo texto: corre tal cual.",
+        "El «artifact educativo» que menciona la skill no existe en el servidor: ignora esa referencia.",
+        "Si la usuaria manda el guion como archivo, léelo; si manda un audio, trabaja sobre la transcripción."
+      ]
+    },
+    "calendarizador-historias-formula100k": {
+      "notes": [
+        "Guarda el calendario en `guiones/historias/calendarios/` y los guiones en `guiones/historias/`.",
+        "El paso a imágenes (`historias-a-imagenes-nanobanana`) gasta créditos: ofrécelo con costo estimado y espera ✅.",
+        "El modo (lanzamiento, nutrición, mixto, urgencia) pregúntalo por Telegram con opciones numeradas si no vino en el pedido."
+      ]
+    },
+    "guionizacion-historias-formula100k": {
+      "notes": [
+        "Guarda en `guiones/historias/` respetando al pie de la letra `references/output-template.md`: otra skill lo parsea.",
+        "Entrega por Telegram el resumen de la secuencia y el `.md` completo como documento."
+      ]
+    },
+    "historias-a-imagenes-nanobanana": {
+      "notes": [
+        "Motor de imagen, en este orden: plugin de Higgsfield (`nano_banana_2`) si está conectado; si no, `GEMINI_API_KEY` o el modelo de imagen de OpenRouter; si no hay ninguno, entrega los prompts por historia y avisa.",
+        "La skill `banana` no viene en este paquete: llama al motor disponible directo.",
+        "Fotos de la usuaria: `cerebro/fotos/`. Si está vacía, pídele por Telegram 3 a 6 fotos suyas enviadas como archivo.",
+        "El preset se guarda en `cerebro/preset-historias.json`, no dentro de la skill (las actualizaciones lo borrarían).",
+        "Siempre: costo estimado → ✅ → generar → mandar las imágenes por Telegram y guardarlas en `entregables/historias/`."
+      ]
+    },
+    "guionizacion-humanizada": {
+      "notes": [
+        "PASO 1 abre Instagram con el navegador: aquí NO. Construye el Voice Guide con lo que haya en `cerebro/` y pide por Telegram de 6 a 8 captions o transcripciones de sus mejores posts (o un audio hablando como le habla a su audiencia). Si hay `APIFY_TOKEN`, puedes bajar captions públicos de su perfil con un actor de Instagram.",
+        "El Voice Guide se guarda en `cerebro/voice-guide.md`, fuera de la skill, para que las actualizaciones no lo borren.",
+        "El ejemplo de Voice Guide de la versión de escritorio no viene en este paquete."
+      ],
+      "replace": [
+        ["<directorio de esta skill>/references/Voice_Guide.md", "cerebro/voice-guide.md"],
+        ["`references/Voice_Guide.md` dentro de la carpeta de esta skill", "`cerebro/voice-guide.md` dentro de tu workspace"],
+        ["> `references/ejemplo-voice-guide.md`, es SOLO", "> el ejemplo de la versión de escritorio (no incluido aquí), es SOLO"],
+        ["references/Voice_Guide.md", "cerebro/voice-guide.md"]
+      ],
+      "exclude": ["references/ejemplo-voice-guide.md"]
+    },
+    "multiplicador-de-contenido": {
+      "notes": [
+        "Skill de solo texto: corre tal cual.",
+        "La sección «Setup para Claude Desktop» (Xpoz, MCP sociales) no aplica aquí: sáltala.",
+        "Si la usuaria manda un link de YouTube o un video largo, pide la transcripción o usa tu herramienta para leer la página; no descargues video pesado.",
+        "Guarda las piezas en `guiones/` y manda el resumen por Telegram."
+      ]
+    }
+  }
+}

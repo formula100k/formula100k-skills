@@ -15,7 +15,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
-TARGETS="skills agents"
+TARGETS="skills agents openclaw"
 EXCLUDE='node_modules|remotion-template|/scripts/check-fugas.sh'
 # Único archivo donde la voz de otra persona es intencional (está rotulado como ejemplo):
 ALLOW='skills/guionizacion-humanizada/references/ejemplo-voice-guide.md'

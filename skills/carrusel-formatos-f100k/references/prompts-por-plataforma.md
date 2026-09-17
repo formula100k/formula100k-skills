@@ -5668,3 +5668,326 @@ Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palab
 ```
 
 ---
+
+## G16 · Vitrina de lo que construiste (N cosas que hice)
+
+**Ejemplo:** @nicolebrener_digital · https://www.instagram.com/p/Dcy5upWjA22/ · 18.922 likes · 23.700 comentarios · 7 slides (3 en video) (el original vosea y 3 de sus slides son grabaciones de pantalla: aquí se ve el primer cuadro)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 80 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
+TIPOGRAFÍA:
+- titular «N. Nombre»: Bricolage Grotesque 700, interletra apretada (-4%), 78 px
+- línea de qué hace: Urbanist 400, 56 px
+- titular apilado de la portada: Bricolage Grotesque 700, 96 px; cada palabra o grupo en su renglón, alineaciones alternadas izquierda/derecha
+PORTADA: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+SLIDES DEL MEDIO: fondo azul plano; arriba (8-15% del alto) «N. Nombre que dice el beneficio» en crema bold apretado, en una línea; debajo (17-27%) 1-2 renglones de qué hace en crema regular; abajo la pantalla REAL dentro de un marco tipo tablet de borde casi negro de 10 px y esquinas muy redondeadas, que ocupa del 30% al 80% del alto y se sale un poco por los dos lados (o un celular centrado si la app es móvil). La pantalla muestra la app con datos cargados. En 2-3 slides la pantalla es una grabación de 10-25 s de la app en uso.
+CIERRE: fondo azul plano sin pantalla; «Comenta» en crema a la izquierda al 40% del alto con una estrella arriba a la derecha; la PALABRA entre comillas en grande entre dos estrellas al 55%; debajo, justificado a lo ancho, «Y te comparto [lo que regalas]» en crema bold.
+ELEMENTOS GRÁFICOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+EVITA: maquetas o pantallas inventadas por la IA en vez de capturas reales; datos personales reales de clientas visibles en la captura; cambiar el color de fondo entre slides.
+```
+
+> Cada slide lleva poco texto (máx. ~22 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Tengo estas [N] cosas REALES que construí y uso en mi negocio: [LISTA: nombre de la herramienta/app/plantilla + qué problema me resuelve + si tengo captura o grabación].
+Escribe un carrusel vitrina de [N+2] slides:
+Slide 1 (portada): titular apilado de máx. 12 palabras del tipo "[N] [cosas] que [dejé de pagar / uso cada día] y las hice con [herramienta]" + qué foto mía usar (celebrando o trabajando, en mi espacio).
+Slides 2 a N+1: una por slide → "N. [Nombre que dice el beneficio, máx. 5 palabras]" + 1 línea de qué hace, con un dato concreto (máx. 16 palabras) + qué pantalla mostrar (con datos de ejemplo cargados, nunca vacía) y si va captura o grabación de 10-25 s.
+Ordénalas de la más útil para [mi cliente ideal] a la más curiosa.
+Última slide: "Comenta [PALABRA]" + qué le mandas por privado (los prompts, la plantilla o la guía para hacer la suya).
+Solo cosas que construí de verdad. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G16 (Vitrina de lo que construiste (N cosas que hice)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 80 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
+TIPOGRAFÍA:
+- titular «N. Nombre»: Bricolage Grotesque 700, interletra apretada (-4%), 78 px
+- línea de qué hace: Urbanist 400, 56 px
+- titular apilado de la portada: Bricolage Grotesque 700, 96 px; cada palabra o grupo en su renglón, alineaciones alternadas izquierda/derecha
+PORTADA: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+SLIDES DEL MEDIO: fondo azul plano; arriba (8-15% del alto) «N. Nombre que dice el beneficio» en crema bold apretado, en una línea; debajo (17-27%) 1-2 renglones de qué hace en crema regular; abajo la pantalla REAL dentro de un marco tipo tablet de borde casi negro de 10 px y esquinas muy redondeadas, que ocupa del 30% al 80% del alto y se sale un poco por los dos lados (o un celular centrado si la app es móvil). La pantalla muestra la app con datos cargados. En 2-3 slides la pantalla es una grabación de 10-25 s de la app en uso.
+CIERRE: fondo azul plano sin pantalla; «Comenta» en crema a la izquierda al 40% del alto con una estrella arriba a la derecha; la PALABRA entre comillas en grande entre dos estrellas al 55%; debajo, justificado a lo ancho, «Y te comparto [lo que regalas]» en crema bold.
+ELEMENTOS GRÁFICOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+EVITA: maquetas o pantallas inventadas por la IA en vez de capturas reales; datos personales reales de clientas visibles en la captura; cambiar el color de fondo entre slides.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 80 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
+TIPOGRAFÍA:
+- titular «N. Nombre»: estilo Bricolage Grotesque (700), interletra apretada (-4%), letra de ~6% del alto
+- línea de qué hace: estilo Urbanist (400), letra de ~4% del alto
+- titular apilado de la portada: estilo Bricolage Grotesque (700), letra de ~7% del alto; cada palabra o grupo en su renglón, alineaciones alternadas izquierda/derecha
+COMPOSICIÓN DE ESTA SLIDE: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+ELEMENTOS GRÁFICOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+EVITA: maquetas o pantallas inventadas por la IA en vez de capturas reales; datos personales reales de clientas visibles en la captura; cambiar el color de fondo entre slides.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+COMPOSICIÓN: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+ELEMENTOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: fondo azul plano; arriba (8-15% del alto) «N. Nombre que dice el beneficio» en crema bold apretado, en una línea; debajo (17-27%) 1-2 renglones de qué hace en crema regular; abajo la pantalla REAL dentro de un marco tipo tablet de borde casi negro de 10 px y esquinas muy redondeadas, que ocupa del 30% al 80% del alto y se sale un poco por los dos lados (o un celular centrado si la app es móvil). La pantalla muestra la app con datos cargados. En 2-3 slides la pantalla es una grabación de 10-25 s de la app en uso.
+(Si es la última slide, la composición es: fondo azul plano sin pantalla; «Comenta» en crema a la izquierda al 40% del alto con una estrella arriba a la derecha; la PALABRA entre comillas en grande entre dos estrellas al 55%; debajo, justificado a lo ancho, «Y te comparto [lo que regalas]» en crema bold.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
+TIPOGRAFÍA:
+- titular «N. Nombre»: estilo Bricolage Grotesque (700), interletra apretada (-4%), letra de ~6% del alto
+- línea de qué hace: estilo Urbanist (400), letra de ~4% del alto
+- titular apilado de la portada: estilo Bricolage Grotesque (700), letra de ~7% del alto; cada palabra o grupo en su renglón, alineaciones alternadas izquierda/derecha
+COMPOSICIÓN DE ESTA SLIDE: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+ELEMENTOS GRÁFICOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+EVITA: maquetas o pantallas inventadas por la IA en vez de capturas reales; datos personales reales de clientas visibles en la captura; cambiar el color de fondo entre slides.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
+COMPOSICIÓN: tu foto real a sangre (celebrando con los brazos arriba o trabajando en tu escritorio); titular crema apilado en 5-6 renglones con alineación alternada que ocupa el 50% central, con la cifra y el nombre de la herramienta como los renglones más grandes; 3-4 estrellas-sticker rosas alrededor; el logo o ícono de la herramienta como sticker ladeado abajo a la izquierda; una flecha fina crema «→» que invita a deslizar.
+ELEMENTOS: mismo fondo y mismo marco en TODAS las slides del medio · el número pegado al nombre del ítem, en el mismo renglón · pantallas con datos, nunca vacías · estrellas-sticker solo en portada y cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: fondo azul plano; arriba (8-15% del alto) «N. Nombre que dice el beneficio» en crema bold apretado, en una línea; debajo (17-27%) 1-2 renglones de qué hace en crema regular; abajo la pantalla REAL dentro de un marco tipo tablet de borde casi negro de 10 px y esquinas muy redondeadas, que ocupa del 30% al 80% del alto y se sale un poco por los dos lados (o un celular centrado si la app es móvil). La pantalla muestra la app con datos cargados. En 2-3 slides la pantalla es una grabación de 10-25 s de la app en uso.
+(Si es la última slide, la composición es: fondo azul plano sin pantalla; «Comenta» en crema a la izquierda al 40% del alto con una estrella arriba a la derecha; la PALABRA entre comillas en grande entre dos estrellas al 55%; debajo, justificado a lo ancho, «Y te comparto [lo que regalas]» en crema bold.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G17 · Hilo de tuits: comando → resultado
+
+**Ejemplo:** @marceloalaminoo · https://www.instagram.com/p/DdM3nuWgczR/ · 40.120 likes · 118 comentarios · 14 slides (sus comandos con barra no existen y usa fotos de famosos: se copia solo la forma del tuit)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 80 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: blanco #FFFFFF liso en todas las slides.
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
+TIPOGRAFÍA:
+- texto del tuit: Poppins 400, 44 px; las palabras clave y el comando en Poppins 700
+- nombre: Poppins 600, 36 px
+- tu usuario: Poppins 400, 28 px
+PORTADA: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+SLIDES DEL MEDIO: mismo encabezado de tuit. RESULTADO: una línea de lo que logra con el verbo en bold + el DESPUÉS en el mismo marco y tamaño que el antes. VARIANTE lado a lado: texto a la izquierda centrado en vertical (45% del ancho) y foto vertical redondeada a la derecha. PAUSA DE LIKE: encabezado más abajo (≈45% del alto) y solo un corazón rojo seguido de la frase que pide el like, sin imagen.
+CIERRE: mismo encabezado; tuit largo de 3 párrafos cortos alineado a la izquierda con frases clave en bold (a quién ayudas, qué logran, la oferta o la palabra a comentar); abajo una captura de prueba chica (60% del ancho) con sombra suave.
+ELEMENTOS GRÁFICOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+EVITA: comandos con barra inventados (/algo) que no existen; fotos de famosos o de terceros; logos de X/Twitter; números falsos de me gusta o retuits.
+```
+
+> OJO: esta ficha lleva más de ~25 palabras por slide. Los modelos de imagen fallan tildes y listas largas: usa la VARIANTE C (fondo sin texto) y pon el texto con la opción HTML.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel tipo hilo de tuits de [8-12] slides con [3-5] trucos de [HERRAMIENTA] para [RESULTADO que quiere mi cliente ideal].
+Cada truco son 2 slides:
+- INSTRUCCIÓN: "[Sube/Pega] [qué] en [herramienta] y escribe:" + el prompt EXACTO que funciona (máx. 20 palabras, en bold, en su propia línea) + qué ANTES mostrar (captura o foto de partida).
+- RESULTADO: "Va a [verbo en bold] [lo que logra]" (máx. 20 palabras) + qué DESPUÉS mostrar, del mismo caso.
+Después del truco 2, una slide sola sin imagen: "❤️ Antes de continuar, dale like si quieres más trucos de [herramienta]".
+Ordena los trucos del más fácil al más vistoso.
+Última slide: tuit de 3 párrafos cortos → a quién ayudo + qué logran + mi oferta o CTA "Comenta [PALABRA]".
+No inventes comandos con barra (/algo) que no existan: si es un prompt, escríbelo completo. Nada de fotos de famosos ni de terceros sin permiso. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G17 (Hilo de tuits: comando → resultado) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 80 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: blanco #FFFFFF liso en todas las slides.
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
+TIPOGRAFÍA:
+- texto del tuit: Poppins 400, 44 px; las palabras clave y el comando en Poppins 700
+- nombre: Poppins 600, 36 px
+- tu usuario: Poppins 400, 28 px
+PORTADA: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+SLIDES DEL MEDIO: mismo encabezado de tuit. RESULTADO: una línea de lo que logra con el verbo en bold + el DESPUÉS en el mismo marco y tamaño que el antes. VARIANTE lado a lado: texto a la izquierda centrado en vertical (45% del ancho) y foto vertical redondeada a la derecha. PAUSA DE LIKE: encabezado más abajo (≈45% del alto) y solo un corazón rojo seguido de la frase que pide el like, sin imagen.
+CIERRE: mismo encabezado; tuit largo de 3 párrafos cortos alineado a la izquierda con frases clave en bold (a quién ayudas, qué logran, la oferta o la palabra a comentar); abajo una captura de prueba chica (60% del ancho) con sombra suave.
+ELEMENTOS GRÁFICOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+EVITA: comandos con barra inventados (/algo) que no existen; fotos de famosos o de terceros; logos de X/Twitter; números falsos de me gusta o retuits.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 80 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: blanco #FFFFFF liso en todas las slides.
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
+TIPOGRAFÍA:
+- texto del tuit: estilo Poppins (400), letra de ~3% del alto; las palabras clave y el comando en Poppins 700
+- nombre: estilo Poppins (600), letra de ~3% del alto
+- tu usuario: estilo Poppins (400), letra de ~2% del alto
+COMPOSICIÓN DE ESTA SLIDE: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+ELEMENTOS GRÁFICOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+EVITA: comandos con barra inventados (/algo) que no existen; fotos de famosos o de terceros; logos de X/Twitter; números falsos de me gusta o retuits.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: blanco #FFFFFF liso en todas las slides.
+COMPOSICIÓN: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+ELEMENTOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (blanco #FFFFFF liso en todas las slides.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: mismo encabezado de tuit. RESULTADO: una línea de lo que logra con el verbo en bold + el DESPUÉS en el mismo marco y tamaño que el antes. VARIANTE lado a lado: texto a la izquierda centrado en vertical (45% del ancho) y foto vertical redondeada a la derecha. PAUSA DE LIKE: encabezado más abajo (≈45% del alto) y solo un corazón rojo seguido de la frase que pide el like, sin imagen.
+(Si es la última slide, la composición es: mismo encabezado; tuit largo de 3 párrafos cortos alineado a la izquierda con frases clave en bold (a quién ayudas, qué logran, la oferta o la palabra a comentar); abajo una captura de prueba chica (60% del ancho) con sombra suave.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: blanco #FFFFFF liso en todas las slides.
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
+TIPOGRAFÍA:
+- texto del tuit: estilo Poppins (400), letra de ~3% del alto; las palabras clave y el comando en Poppins 700
+- nombre: estilo Poppins (600), letra de ~3% del alto
+- tu usuario: estilo Poppins (400), letra de ~2% del alto
+COMPOSICIÓN DE ESTA SLIDE: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+ELEMENTOS GRÁFICOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+EVITA: comandos con barra inventados (/algo) que no existen; fotos de famosos o de terceros; logos de X/Twitter; números falsos de me gusta o retuits.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: blanco #FFFFFF liso en todas las slides.
+COMPOSICIÓN: arriba a la izquierda (5-9% del alto) avatar circular de 92 px con tu foto + ✓ azul + nombre en negro y tu usuario en gris debajo; texto del tuit alineado a la izquierda desde el 13%; el comando o prompt en bold en su propio renglón; el ANTES (foto o captura) en un marco de esquinas redondeadas 24 px, centrado, 55-65% del ancho, entre el 22% y el 45% del alto. La mitad de abajo queda en blanco a propósito.
+ELEMENTOS: el encabezado de tuit idéntico en todas las slides · el antes y el después en slides distintas, mismo marco · una sola idea en bold por tuit · slide de pausa de like a la mitad, sin imagen
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (blanco #FFFFFF liso en todas las slides.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: mismo encabezado de tuit. RESULTADO: una línea de lo que logra con el verbo en bold + el DESPUÉS en el mismo marco y tamaño que el antes. VARIANTE lado a lado: texto a la izquierda centrado en vertical (45% del ancho) y foto vertical redondeada a la derecha. PAUSA DE LIKE: encabezado más abajo (≈45% del alto) y solo un corazón rojo seguido de la frase que pide el like, sin imagen.
+(Si es la última slide, la composición es: mismo encabezado; tuit largo de 3 párrafos cortos alineado a la izquierda con frases clave en bold (a quién ayudas, qué logran, la oferta o la palabra a comentar); abajo una captura de prueba chica (60% del ancho) con sombra suave.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---

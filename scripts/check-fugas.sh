@@ -78,7 +78,7 @@ check "memorias personales" \
   "Esas memorias solo existen en la máquina de origen. Quita el puntero o deja la regla escrita inline."
 
 check "secretos" \
-  'github_pat_|ghp_[A-Za-z0-9]{20}|sk-[A-Za-z0-9]{20}|AIzaSy[A-Za-z0-9_-]{20}' \
+  'github_pat_|ghp_[A-Za-z0-9]{20}|sk-[A-Za-z0-9]{20}|AIzaSy[A-Za-z0-9_-]{20}|sd_[a-f0-9]{16,}|apify_api_[A-Za-z0-9]{10,}|tvly-[A-Za-z0-9-]{10,}' \
   "NUNCA commitear tokens. Rótalo ya si aparece."
 
 echo ""

@@ -71,8 +71,9 @@ Si no hay posts en 7 días → terminar con mensaje:
 Para CADA video/reel filtrado, ejecutar:
 
 ```bash
+[ -z "$SUPADATA_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && set -a && . "$HOME/.config/f100k/secrets.env" && set +a
 curl -s -X GET "https://api.supadata.ai/v1/transcript?url=https://www.instagram.com/reel/[shortCode]/" \
-  -H "x-api-key: sd_8ff1f1f233fc19cb14b5b86277ae2d6b"
+  -H "x-api-key: $SUPADATA_API_KEY"
 ```
 
 Del response extraer:
@@ -223,7 +224,7 @@ Mostrar en terminal:
 
 - **Rutina remota:** `trig_01SgUSXxiGAm6jVNvm8knuQ1` — corre cada lunes a las 08:05 AM Lima (13:05 UTC) · https://claude.ai/code/routines/trig_01SgUSXxiGAm6jVNvm8knuQ1
 - **MCPs requeridos:** Apify (scraping IG) + Bash (Supadata via curl)
-- **Supadata key:** `sd_8ff1f1f233fc19cb14b5b86277ae2d6b`
+- **Supadata key:** variable `SUPADATA_API_KEY` (en la Mac: `~/.config/f100k/secrets.env`; en la rutina remota: variable de entorno del entorno de la rutina). Nunca la escribas en este archivo.
 - **Memoria destino:** `~/.claude/projects/<tu-proyecto>/memory/patterns_ig_<handle>.md`
 - **Config:** `~/.f100k-radar/config.json` — campo `ig_handle`
 - **Costo estimado:** ~$0.50 por ejecución (Apify scraping + ~10 llamadas Supadata)

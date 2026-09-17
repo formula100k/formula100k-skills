@@ -440,7 +440,7 @@
       "notes": [
         "El render a PNG (`build.js` + `export.js`) está hecho para una Mac con Chrome. En el servidor, por defecto entrega el camino **«prompts por plataforma»**: el prompt listo para Gemini o ChatGPT de la ficha elegida, con las 3 variantes.",
         "Si la usuaria tiene `GEMINI_API_KEY` o un modelo de imagen en OpenRouter, puedes generar las imágenes tú: costo estimado → ✅ → generar → mandar por Telegram.",
-        "Intenta `build.js` solo si `node`, `puppeteer-core` y Chrome/Chromium existen en el servidor; si falla, vuelve a los prompts sin insistir.",
+        "`build.js` y `export.js` buscan Chrome en `CHROME_PATH`, `/usr/bin/google-chrome-stable` o `/usr/bin/chromium` y lanzan con `--no-sandbox`. Úsalos si `node` y `puppeteer-core` están instalados; si fallan, vuelve a los prompts sin insistir.",
         "Las fotos de la usuaria están en `cerebro/fotos/`. Skills que menciona y no vienen en este paquete (render, clonador, ilustrado con tu cara): ofrece el prompt equivalente."
       ],
       "description_override": "Router del catálogo de 35 formatos de carrusel de FÓRMULA 100K (20 fichas F con referencia mirada + 15 fichas G de la guía maestra de 25 estilos). Elige el formato por objetivo, escribe el guion con el prompt de la ficha, fija el visual y la referencia, y lo entrega como prompts listos para Gemini, ChatGPT o cualquier chat (3 variantes: desde la descripción, con su marca, solo fondo) o como HTML. Usar cuando se diga \"qué formato de carrusel uso\", \"catálogo de formatos de carrusel\", \"hazme un carrusel tipo [ficha]\", \"carrusel en libreta\", \"carrusel frase partida\", \"carrusel tier list\", \"chuleta en lapicero\", \"carrusel checklist\", \"carrusel de noticias\", \"lo que nadie te dice\", \"carrusel antes y después\", \"carrusel tipo chat\", \"dame el prompt para hacerlo en Gemini/ChatGPT\", \"carrusel estilo bento/recibo/periódico/terminal\".",
@@ -452,6 +452,24 @@
         [
           "[describí la escena",
           "[describe la escena"
+        ],
+        [
+          "  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',\n  '/Applications/Google Chrome Canary.app",
+          "  process.env.CHROME_PATH,\n  '/usr/bin/google-chrome-stable',\n  '/usr/bin/chromium',\n  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',\n  '/Applications/Google Chrome Canary.app"
+        ],
+        [
+          "const CHROME = [\n  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',",
+          "const CHROME = [\n  process.env.CHROME_PATH,\n  '/usr/bin/google-chrome-stable',\n  '/usr/bin/chromium',\n  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',"
+        ],
+        [
+          "No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.",
+          "No se encontró Chrome/Chromium. Define CHROME_PATH con la ruta del Chrome del servidor."
+        ]
+      ],
+      "replace_re": [
+        [
+          "headless: 'new',",
+          "headless: 'new', args: ['--no-sandbox', '--disable-dev-shm-usage'],"
         ]
       ]
     },
@@ -619,6 +637,1491 @@
         "Lo que solo se ve con login (retención, insights de cuentas ajenas) va marcado como no disponible: no lo estimes. Informe en `informes/` y por Telegram."
       ],
       "description_override": "Analiza perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que se pida analizar un perfil, revisar métricas, identificar qué videos funcionan/repetir/dejar de hacer, qué genera seguidores o ventas, auditar una cuenta, diagnosticar por qué no crece, o cualquier análisis de contenido en redes. En un agente OpenClaw la captura es: Composio con Instagram profesional para la cuenta propia (métricas reales), Apify para cuentas ajenas (datos públicos, reels con transcripción) o capturas que manda la usuaria; nunca un navegador logueado. Basada en la metodología F100K para leer métricas como experta: top videos, ángulos de venta, qué dejar de hacer, vacíos en comentarios y plan de 2 semanas."
+    },
+    "digest-comunidad-f100k": {
+      "notes": [
+        "La «Opción A — agent-browser» NO corre aquí. Comentarios, en este orden: 1) Composio con Instagram profesional conectado (comentarios de los posts propios, sin límite de scraping); 2) Apify con `APIFY_TOKEN` (`apify/instagram-comment-scraper`, `clockworks/tiktok-scraper`), diciendo antes el costo estimado; 3) si no hay ninguno, pide por Telegram capturas de los comentarios de sus 5 a 7 últimos posts.",
+        "Si ninguna fuente corrió, no armes el digest con temas supuestos: dilo en la primera línea del mensaje. Cada tema lleva al menos una cita real de un comentario.",
+        "La «FASE 5 — email del viernes» no manda correo: el mismo formato va por Telegram y se guarda en `informes/digest-comunidad-AAAA-MM-DD.md`.",
+        "Para que «el Calendario Semanal del lunes las tenga en cuenta», agrega las 5 ideas al final de `ideas/banco.md` (es de donde lee `calendario-semanal-f100k`). Sin eso, esa línea del mensaje es falsa: no la pongas.",
+        "Los nombres y números de estructura (Estructura 7, 12, 19) son ejemplos: usa los nombres reales del catálogo de `guionizacion-formula100k`.",
+        "El @usuario de quien comentó es un dato de terceros: va en el informe privado de la usuaria, nunca en un guion ni en contenido público."
+      ],
+      "description_override": "Módulo del Autopilot F100K que corre cada viernes: analiza los comentarios de los últimos 7 días en el Instagram/TikTok de la usuaria (Composio con Instagram profesional, Apify con datos públicos o capturas que ella manda), extrae las 5 preguntas más repetidas y los dolores más mencionados, y los convierte en ideas de contenido de alto valor con estructura de guion lista, que se suman a ideas/banco.md. Usar cuando alguien diga: \"qué preguntan mis seguidores\", \"ideas desde mis comentarios\", \"qué quiere ver mi comunidad\", \"ejecutar digest comunidad\", o cuando la automatización de los viernes lo invoque. El digest llega por Telegram. Requiere cerebro/f100k-config.json con ig_handle o tiktok_handle."
+    },
+    "investigacion-nicho-formula100k": {
+      "notes": [
+        "La fila «agent-browser» del stack no corre aquí. Perfiles de IG/TikTok y engagement: Apify con `APIFY_TOKEN` (datos públicos). Sin token, trabaja con búsqueda web y marca seguidores y engagement como `[NO VERIFICADO]`.",
+        "Comunidades de Skool, páginas de venta y precios de la competencia: tu navegador (Chromium) sobre las páginas PÚBLICAS, sin iniciar sesión (skool.com/discovery, la landing «about» de cada comunidad). Lo que solo se ve adentro de la comunidad queda como no disponible.",
+        "vidIQ solo si está conectado; si no, busca outliers de YouTube con tu búsqueda web y dilo.",
+        "La «voz de la audiencia (verbatim)» sale de comentarios reales (Apify o capturas que mande la usuaria) o de foros y reseñas públicas: nunca parafrasees como si fuera cita.",
+        "El brief se guarda en `informes/nicho-<slug>-AAAA-MM-DD.md`; por Telegram manda el resumen ejecutivo y la recomendación, con el archivo completo como documento."
+      ]
+    },
+    "landing-producto-formula100k": {
+      "notes": [
+        "Escribe el proyecto en `entregables/landings/<producto>/` y mándalo por Telegram como `.zip`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.",
+        "Fase 2B — capturas reales: si la app es pública, tómalas con tu navegador (Chromium) a 1440×900. Si pide login, pídele a la usuaria las capturas por Telegram como archivo; no inicies sesión con sus credenciales. Mientras no lleguen, deja los mockups CSS de la Fase 2A.",
+        "Fase 3 — HyperFrames NO corre aquí (es edición de video). En su lugar ofrece un clip demo generado con el plugin de Higgsfield (image-to-video sobre las capturas, 5 a 10 s por escena): costo estimado → ✅ → generar. Si varias escenas salen en clips separados, puedes juntarlos con ffmpeg en concat simple, sin efectos ni texto. Sin Higgsfield, deja `DemoSection` con la captura principal en vez de video.",
+        "Stripe: las llaves `sk_live_`/`price_` nunca van en un archivo, en el `.zip` ni en el chat. Deja `.env.example` con los nombres de las variables y dile a la usuaria que las cargue ella en Vercel.",
+        "Fase 5 — deploy: solo si la usuaria conectó SU cuenta de Vercel (y de GitHub, si quiere repo) y dio ✅. Si no, entrega el `.zip` con la secuencia de comandos de la Fase 5 para que la corra en su compu.",
+        "Si lo que pide es una landing de venta de una sola página sin app detrás, usa `landing-alta-conversion-f100k`."
+      ],
+      "replace": [
+        [
+          "Referencia base: SMMA Bento Landing (`~/Documents/smma-bento-landing`).",
+          "Referencia base: una landing SaaS oscura de una sola página (hero con mockup, features alternadas, pricing con toggle)."
+        ],
+        [
+          "### Paleta estándar (dark indigo — estilo SMMA Bento)",
+          "### Paleta estándar (dark indigo)"
+        ]
+      ],
+      "description_override": "Use when someone asks to build a product landing page, create a sales landing for an app or SaaS, make a launch page, or create a landing with screenshots, mockups, a demo clip and Stripe checkout. Builds a Next.js landing (hero, features, demo, pricing with monthly/annual toggle, Stripe checkout route) as files delivered by Telegram as a .zip. In an OpenClaw agent the demo clip is generated with Higgsfield (cost + ✅), not edited with HyperFrames, and the Vercel deploy only happens with the user's own connected account and ✅."
+    },
+    "adaptador-formatos-f100k": {
+      "notes": [
+        "Paso 1 SIN navegador logueado. Link de Instagram: Apify con `APIFY_TOKEN` (`apify/instagram-scraper` con la URL del post trae caption, autor, vistas, miniatura y comentarios). TikTok: `clockworks/tiktok-scraper` con la URL. YouTube: tu navegador o tu herramienta web sobre la página pública, y la transcripción con `transcripcion-youtube-formula100k` si está.",
+        "El «frame» del Paso 1 es la miniatura (`displayUrl`/cover) que devuelve Apify: mírala. No descargues el video ni saques cuadros con ffmpeg en el servidor.",
+        "Sin `APIFY_TOKEN`, o si el post es privado: pide por Telegram 2 o 3 capturas (primer cuadro con el texto en pantalla + comentarios) o una grabación de pantalla corta. La regla de la skill se mantiene: si no puedes confirmar la mecánica, lo dices y no la adivinas.",
+        "«Cerrar el navegador y borrar capturas» no aplica aquí; las capturas que mande la usuaria no se guardan salvo que lo pida (entonces en `ideas/formatos/`).",
+        "Los ángulos se guardan en `ideas/formatos-adaptados.md` (uno debajo del otro, con el link original) y por Telegram mandas el bloque de salida. El Paso 5 sigue con `guionizacion-formula100k`, que guarda en `guiones/`."
+      ],
+      "replace": [
+        [
+          "FÓRMULA 100K — audiencia: creadores de contenido hispanos y emprendedores digitales. Temas: creación de contenido viral, negocios digitales, monetización, comunidades Skool, IA aplicada (Claude, agentes, MCP, apps), escalar sin depender de tu cara, el ecosistema F100K. Voz: directa, estratégica, \"tú\", nivel sexto grado.",
+          "El negocio de la usuaria: su rubro, su audiencia, su oferta y sus pilares están en `USER.md` y `cerebro/`. Voz: la de `cerebro/voice-guide.md` si existe; si no, directa, \"tú\", nivel sexto grado."
+        ],
+        [
+          "Si no, se proponen ángulos basados en estos pilares de negocio.",
+          "Si no, se proponen ángulos basados en los pilares de su negocio."
+        ]
+      ]
+    },
+    "publicar-ig": {
+      "notes": [
+        "Publicas con la conexión de Instagram profesional de la USUARIA: Composio si está conectado (revisa en su lista de acciones que exista la de publicar foto/carrusel/reel), o Zapier MCP si ella lo conectó. Si ninguna existe, no publiques: manda los archivos y el caption por Telegram listos para subir a mano.",
+        "Instagram exige URLs públicas. En orden: 1) si el archivo salió de Higgsfield, usa su URL de resultado directo (no hace falta subir nada); 2) si ella dio una URL pública, esa; 3) el repo público de GitHub del Paso 2 SOLO con su propia cuenta de GitHub conectada y su ✅ para crearlo, avisándole que todo lo que se sube ahí queda visible para cualquiera. Nunca un repo o almacenamiento que no sea de ella.",
+        "Las rutas locales se resuelven contra el workspace: carruseles en `entregables/carruseles/<tema>/`, infografías en `entregables/infografias/`. Los slides que mandó por Telegram se guardan primero en `entregables/publicar/AAAA-MM-DD-<slug>/`.",
+        "El Paso 4 (preview + «¿Publico?») es obligatorio SIEMPRE, también dentro de una automatización: sin ✅ explícito de la usuaria en Telegram no se publica. Nunca publiques algo que no se le mostró completo (todas las slides + caption entero).",
+        "El `instagramPageId` se guarda en `cerebro/memoria/instagram_page_id.md` y se suma a `cerebro/INDICE.md`.",
+        "Stories siguen sin soporte. Reels de más de 50 MB no pasan por Telegram: pide el link público."
+      ],
+      "replace": [
+        [
+          "   - Path esperado: `~/Documents/FORMULA100K/.ig-assets-repo/`",
+          "   - Path esperado: `entregables/.ig-assets-repo/` (solo si la usuaria conectó SU GitHub y dio ✅)"
+        ],
+        [
+          "   - Si no existe: `gh repo clone <TU-USUARIO-GITHUB>/ig-assets ~/Documents/FORMULA100K/.ig-assets-repo`",
+          "   - Si no existe: `gh repo clone <TU-USUARIO-GITHUB>/ig-assets entregables/.ig-assets-repo`"
+        ],
+        [
+          "   - Buscar en `~/.claude/projects/<tu-proyecto>/memory/reference_instagram_page_id.md`",
+          "   - Buscar en `cerebro/memoria/instagram_page_id.md`"
+        ],
+        [
+          "     Y agregar al MEMORY.md la línea correspondiente.",
+          "     Y agregar a `cerebro/INDICE.md` la línea correspondiente."
+        ],
+        [
+          "  (`feedback_espanol_neutro.md`): vos→tú, tenés→tienes, copiá→copia, acá→aquí, etc.",
+          "  (tabla de tuteo): vos→tú, tenés→tienes, copiá→copia, acá→aquí, etc."
+        ],
+        [
+          "Esa skill deja los slides en `/FORMULA100K/CARRUSELES/<tema>/`.",
+          "Esa skill deja los slides en `entregables/carruseles/<tema>/`."
+        ],
+        [
+          "- Carpeta: la última modificada en `/FORMULA100K/CARRUSELES/`",
+          "- Carpeta: la última modificada en `entregables/carruseles/`"
+        ],
+        [
+          "Esa skill deja un `.mp4` en `/FORMULA100K/INFOGRAFIAS/`.",
+          "Esa skill deja un `.mp4` en `entregables/infografias/`."
+        ],
+        [
+          "4. **Nunca publicar contenido que esté en `/FORMULA100K/PRIVADO/` o cualquier subcarpeta",
+          "4. **Nunca publicar contenido que esté en `cerebro/`, en una carpeta `PRIVADO/` o cualquier subcarpeta"
+        ]
+      ],
+      "description_override": "Skill para publicar fotos, carruseles (1-10 slides) o reels en el Instagram profesional de la usuaria desde su agente, con la conexión de Instagram que ELLA conectó (Composio, o Zapier si lo tiene). Activar SIEMPRE que pida: \"publica esto en Instagram\", \"/publicar-ig\", \"sube este carrusel a IG\", \"publica este reel\", \"manda esto a Instagram\", \"haz el post en IG\", \"publica lo que acabamos de hacer\", o cualquier variación que combine un archivo/carpeta de imagen o video con la intención de publicarlo en Instagram. Usa URLs públicas (las de Higgsfield, una que ella dé, o su propio repo público de GitHub si lo conectó). Nunca publica sin mostrar el preview completo y recibir ✅ explícito por Telegram. NO maneja Stories."
+    },
+    "graficos-de-video-formula100k": {
+      "notes": [
+        "Pasos 1 a 3 (ffprobe, ffmpeg, mlx-whisper) NO corren aquí: mlx-whisper es solo para Mac y procesar el video es demasiado pesado para el servidor. Pide por Telegram la transcripción CON tiempos: el `.srt` que exportan CapCut, Premiere o DaVinci con subtítulos automáticos, o el texto con marcas mm:ss. Si pega texto sin tiempos, propón los momentos por orden y avisa que los timestamps son aproximados.",
+        "Desde el Paso 4 la skill corre igual. Paso 5: las dos preguntas van por Telegram con opciones numeradas. Paso 7: genera con el plugin de Higgsfield (`nano_banana_2`), una imagen por gráfico; antes di el costo total (N gráficos × créditos) y espera ✅. Sin Higgsfield: entrega la tabla de momentos + los prompts listos para pegar.",
+        "Paso 8: guarda en `entregables/graficos-video/AAAA-MM-DD_<nombre>/` los PNG y `TRANSCRIPCION.md`; manda las imágenes por Telegram como archivo (no como foto, para que no las comprima) y el plan de superposición. `job_display` y `open \"$DEST\"` no aplican.",
+        "La superposición sobre la toma la hace la usuaria en su editor: tú no compones el video.",
+        "La paleta crema + Caveat/Poppins es el scrapbook F100K por defecto; si `cerebro/` trae la identidad visual de la usuaria (colores, tipografías), úsala en su lugar."
+      ],
+      "replace": [
+        [
+          "Ver `feedback_espanol_neutro.md`.",
+          ""
+        ],
+        [
+          "**Crear carpeta destino** (convención obligatoria, ver `feedback_recursos_videos.md`):",
+          "**Crear carpeta destino** (convención obligatoria):"
+        ],
+        [
+          "DEST=\"~/Documents/FORMULA100K/RECURSOS VIDEOS/$(date +%Y-%m-%d)_<nombre_descriptivo>\"",
+          "DEST=\"entregables/graficos-video/$(date +%Y-%m-%d)_<nombre_descriptivo>\""
+        ]
+      ],
+      "exclude": [
+        "scripts/transcribe.sh"
+      ],
+      "description_override": "Convierte lo que dice un video grabado por la usuaria en una serie de gráficos scrapbook listos para superponerse sobre la toma. Parte de la transcripción con tiempos (el .srt que exporta CapCut/Premiere/DaVinci o el texto con marcas mm:ss), identifica los momentos visuales clave, propone gráficos con la estética scrapbook FÓRMULA 100K (paleta crema, washi tape, post-its, Caveat + Poppins) y los genera con Higgsfield nano_banana_2 (costo + ✅). Activar SIEMPRE que la usuaria mande un video o su transcripción y diga \"hazme gráficos\", \"saca timestamps y genera scrapbook para este reel\", \"haz los b-roll de este video\", \"convierte este video en gráficos\", \"acompáñame esta toma con scrapbook\", o cualquier variación que combine un video grabado con overlays visuales. No edita ni compone el video: entrega los PNG + plan de superposición en entregables/graficos-video/."
+    },
+    "agente-investigadora-f100k": {
+      "notes": [
+        "Aquí no eres un agente aparte: corres cada skill de la tabla TÚ, una detrás de otra, en el orden del PASO 1A→1D, y guardas lo que sale de cada una antes de pasar a la siguiente (así no pierdes nada si se corta).",
+        "Si una de las skills orquestadas no está instalada en este agente (por ejemplo `analizador-referencias-virales-f100k`, `benchmark-producto-formula100k` o `auditor-ganchos-cuenta-formula100k`), dilo en una línea y cubre ese paso así: referencias virales con `investigacion-contenido-formula100k` + Apify; competencia con `investigacion-nicho-formula100k` (Modo 2); patrones de la cuenta con `patron-ig-f100k` o `analizador-perfiles-formula100k`.",
+        "PASO 1D (tu cuenta): métricas con Composio si su Instagram profesional está conectado; si no, Apify con `APIFY_TOKEN` o capturas de estadísticas. Nunca navegador logueado. Si no hay 9+ reels con datos reales, la sección 5 va con la frase de «sin historial suficiente».",
+        "El Tipo D completo gasta Apify en varias skills: antes de empezar suma el costo estimado de todas y espera un solo ✅.",
+        "El brief va a `informes/brief-<nicho-slug>-AAAA-MM-DD.md`. Por Telegram manda las secciones 6 y 7 (fusión + ideas) en el chat y el brief completo como documento. Si luego piden el calendario, `calendario-semanal-f100k` o `calendarizador-contenido-formula100k` lo leen de `informes/`."
+      ],
+      "replace": [
+        [
+          "~/Documents/Vault-F100K/03-INVESTIGACION/brief-[nicho-slug]-[YYYY-MM-DD].md",
+          "informes/brief-[nicho-slug]-[YYYY-MM-DD].md"
+        ]
+      ],
+      "description_override": "Investigación profunda antes de crear contenido o calendarios, corrida en secuencia dentro del agente: referencias virales con análisis de ganchos, validación de nicho, competencia, y patrones de la PROPIA cuenta. Hace DOBLE lectura de patrones: los del NICHO (referencias virales de la competencia) y los de TU CUENTA (top vs bottom de tus reels) cuando se da un handle, y los FUSIONA en un brief con ideas listas para el calendario. Encadena las skills F100K instaladas con Apify, Composio y búsqueda web; nunca navegador logueado. Usar cuando se pida 'investígame este nicho antes de empezar', 'dame un brief de investigación completo', 'qué está funcionando en TikTok/IG en el nicho X', 'dame referencias virales con análisis de ganchos', 'investiga a la competencia de mi clienta', 'analiza los patrones de mi cuenta', 'cruza mis patrones con los del nicho'."
+    },
+    "carrusel-render-formula100k": {
+      "notes": [
+        "Cómo renderizar en el servidor: en la carpeta de esta skill corre `npm install --omit=dev` una sola vez (solo instala `puppeteer-core`, no baja navegador). Luego `CHROME_PATH=\"$(command -v chromium || command -v chromium-browser || command -v google-chrome)\" node export.js <html> --width 1080 --height 1350 --scale 2`. Si el Chromium del agente es el de Playwright, la ruta es `~/.cache/ms-playwright/chromium-*/chrome-linux/chrome`. Esta versión del script ya busca `CHROME_PATH` y rutas de Linux y lanza con `--no-sandbox`.",
+        "Si no hay Node o `puppeteer-core` no instala: abre el HTML en tu navegador (Chromium del agente) con ventana de 1080×1350 y toma captura de cada `.slide`. Si tampoco puedes, entrega el `.html` por Telegram y dilo en la primera línea.",
+        "Fuentes en Linux: `-apple-system`, `Helvetica` y `Georgia` no existen en el servidor y el render sale con otra letra. En el `<head>` carga de Google Fonts `Inter` (800) y `Gelasio` (tiene las medidas de Georgia) y ponlas primero en cada `font-family`. Los stickers emoji necesitan la fuente Noto Color Emoji instalada; si salen cuadritos, avisa y no entregues.",
+        "Estilo por defecto: EDITORIAL OSCURO (así lo dice `brandkit.md`, aunque otras partes digan scrapbook). Scrapbook solo si ella lo pide.",
+        "Handle, palabra del CTA y oferta: sácalos de `USER.md` y `cerebro/`. Donde la skill diga «Comenta 100K» o «cierra vendiendo F100K», usa SU palabra clave y SU oferta; pregunta en una línea si no están.",
+        "Fotos: `cerebro/fotos/`. Copia la elegida a la carpeta del carrusel con nombre simple para que el `<img>` use ruta relativa. Las capturas «CAPTURA REAL» tienen que mandarlas ella: nunca las inventes.",
+        "Entrega: los PNG por Telegram como archivo (documento, no foto, para que no se compriman), en orden `slide-01…`. Guarda todo en `entregables/carruseles/`."
+      ],
+      "replace": [
+        [
+          "aplicando el brandkit visual de Andrea Vega.",
+          "aplicando el brandkit visual de FÓRMULA 100K con el handle, la oferta y las fotos de la usuaria."
+        ],
+        [
+          "# Brandkit Visual — Andrea Vega · FÓRMULA 100K",
+          "# Brandkit Visual — FÓRMULA 100K"
+        ],
+        [
+          "`~/Documents/FORMULA100K/CARRUSELES/apps-que-uso/` (carrusel \"Mi stack de IA\"). Su `build.js` es el motor exacto reproducible; `slide-01/02/08.png` muestran el look.",
+          "`references/editorial-oscuro-motor.js` (carrusel \"Mi stack de IA\"): es el motor exacto reproducible del look."
+        ],
+        [
+          "const CHROME_CANDIDATES = [",
+          "const CHROME_CANDIDATES = [\n  process.env.CHROME_PATH,\n  '/usr/bin/chromium',\n  '/usr/bin/chromium-browser',\n  '/usr/bin/google-chrome',\n  '/usr/bin/google-chrome-stable',"
+        ],
+        [
+          "headless: 'new',",
+          "headless: 'new',\n    args: ['--no-sandbox', '--disable-dev-shm-usage'],"
+        ],
+        [
+          "No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.",
+          "No se encontró Chromium. Define CHROME_PATH con la ruta del Chromium del servidor."
+        ],
+        [
+          "node \"~/.claude/skills/carrusel-render-formula100k/export.js\" \"{ruta-al-html}\"",
+          "CHROME_PATH=\"<ruta del Chromium>\" node \"~/.claude/skills/carrusel-render-formula100k/export.js\" \"{ruta-al-html}\""
+        ],
+        [
+          "- `open \"{carpeta-output}\"` para mostrar en Finder",
+          "- Manda los PNG por Telegram como archivo, en orden"
+        ]
+      ],
+      "description_override": "Renderiza un guion de carrusel a slides PNG terminados (1080×1350, exportados a 2x), listos para subir a Instagram. Estilo por defecto EDITORIAL OSCURO (foto real de la usuaria, sans pesada + serif itálica, acento dorado); alternativo SCRAPBOOK (crema, Caveat + Poppins, post-its, washi tape, stickers) si lo pide. Integra fotos reales de la usuaria (polaroid, hero, cutout, tira de fotomatón). Escribe el HTML y lo exporta a PNG con el Chromium headless del servidor. Activar SIEMPRE que pida: \"renderiza este carrusel\", \"exporta este guion a PNG\", \"convierte este guion en slides\", \"diséñame el carrusel\", \"hazme las imágenes del carrusel\", \"genera las slides en mi estilo\", \"carrusel con mi foto\", \"usa mis fotos\", o pase un guion con Slide 1 / Slide 2 queriendo los archivos visuales. También con el resultado de carrusel-viral-formula100k. NO escribe el guion: para eso está carrusel-viral-formula100k."
+    },
+    "portada-video-carrusel-formula100k": {
+      "notes": [
+        "PASO 4 (ffmpeg crop + overlay) NO corre en este servidor. Entrega por Telegram: `cover_anim_raw.mp4` (el clip de Higgsfield) + `title-overlay.png` (título transparente) + la portada estática, y dile en 2 líneas cómo unirlos en CapCut o Edits (video abajo, PNG encima a pantalla completa, lienzo 4:5).",
+        "Portada estática: arma un HTML de 1080×1350 con `recursos/cover.png` de fondo y el mismo título encima, y renderízalo a PNG con Chromium. Eso es render de HTML, sí se puede, y le deja `slide-01.png` listo aunque no use el video.",
+        "Título transparente: `CHROME_PATH=\"$(command -v chromium || command -v chromium-browser)\" node overlay_export.js <overlay.html> --out <png> --width 1080 --height 1350 --scale 2`, después de `npm install --omit=dev` en la carpeta de la skill. El script ya busca Chromium de Linux y lanza con `--no-sandbox`. Instala la fuente Poppins vía el `<link>` de Google Fonts: el servidor necesita salida a internet.",
+        "Higgsfield: foto (`nano_banana_2`, 2k, 4:5) y video (`seedance_2_0`, `3:4`, 5 s) llevan costo estimado → ✅. Pon `generate_audio: false` (Seedance 2.0 genera audio si no lo apagas). Seedance no tiene 4:5: el clip sale 3:4 y el recorte a 4:5 lo hace ella al unirlo.",
+        "Selfies: `cerebro/fotos/`. Si hay menos de 3, pídele que las mande por Telegram como archivo. Súbelas con `media_upload` → `curl -X PUT` → `media_confirm`.",
+        "Muéstrale la foto gancho por Telegram y espera ✅ antes de animar: el video es lo caro.",
+        "Si el clip pesa más de 50 MB (límite de Telegram), manda el link de Higgsfield en vez del archivo."
+      ],
+      "replace": [
+        [
+          "const CHROME = [",
+          "const CHROME = [\n  process.env.CHROME_PATH,\n  '/usr/bin/chromium',\n  '/usr/bin/chromium-browser',\n  '/usr/bin/google-chrome',\n  '/usr/bin/google-chrome-stable',"
+        ],
+        [
+          "headless: 'new',",
+          "headless: 'new', args: ['--no-sandbox', '--disable-dev-shm-usage'],"
+        ],
+        [
+          "No se encontró Chrome/Chromium/Brave/Edge en /Applications.",
+          "No se encontró Chromium. Define CHROME_PATH con la ruta del Chromium del servidor."
+        ],
+        [
+          "### PASO 4 — Componer con ffmpeg",
+          "### PASO 4 — Componer con ffmpeg (NO corre en este servidor: lee el bloque 🦞 de arriba)"
+        ],
+        [
+          "- `ffmpeg` (composición). `node` + Chrome (render del título transparente vía `overlay_export.js`).",
+          "- `node` + Chromium (render del título transparente vía `overlay_export.js`). La composición con `ffmpeg` no corre en este servidor."
+        ]
+      ],
+      "description_override": "Portada animada para un carrusel de Instagram: genera (o toma) la foto gancho con la cara de la usuaria en Higgsfield, la anima como cinemagraph de cámara fija (5 s, sin audio) y renderiza el título como PNG transparente con Chromium. En este servidor entrega las piezas (clip animado + título transparente + portada estática en PNG) listas para unir en CapCut o Edits. Usar cuando pida una portada animada o \"tipo video\" para un carrusel, \"anima la foto gancho\", \"cinemagraph de portada\", \"la portada que se mueve\", \"convierte mi portada en video\", \"el primer slide en video\". NO confundir con carrusel-render-formula100k (slides PNG), carrusel-viral-formula100k (guion) ni clonador-carrusel-formula100k (clonar estilo): esta skill solo hace la portada.",
+      "exclude": [
+        "SETUP.md"
+      ]
+    },
+    "carrusel-noticiero": {
+      "notes": [
+        "Cómo renderizar en el servidor: en la carpeta de esta skill corre `npm install --omit=dev` una sola vez (solo instala `puppeteer-core`, no baja navegador). Luego `CHROME_PATH=\"$(command -v chromium || command -v chromium-browser || command -v google-chrome)\" node export.js <html> --width 1080 --height 1350 --scale 2`. Si el Chromium del agente es el de Playwright, la ruta es `~/.cache/ms-playwright/chromium-*/chrome-linux/chrome`. Esta versión del script ya busca `CHROME_PATH` y rutas de Linux y lanza con `--no-sandbox`.",
+        "Fuentes en Linux: `-apple-system`, `Helvetica` y `Georgia` no existen en el servidor y el render sale con otra letra. En el `<head>` carga de Google Fonts `Inter` (800) y `Gelasio` (tiene las medidas de Georgia) y ponlas primero en cada `font-family`. Los stickers emoji necesitan la fuente Noto Color Emoji instalada; si salen cuadritos, avisa y no entregues.",
+        "Portada animada: genera la imagen (`nano_banana_2`) y el video (`seedance_2_0` en `3:4` o `kling`, `generate_audio: false`) con costo → ✅. La composición ffmpeg del paso 4 NO corre aquí: entrega `cover_anim_raw.mp4` + `title-overlay.png` (render con `--transparent`) + `slide-01.png` estático, y dile cómo unirlos en CapCut o Edits.",
+        "La noticia: si manda un link de web, léelo con tu herramienta web. Si es un post de Instagram, TikTok o X, no entres logueada: usa Apify con `APIFY_TOKEN` o pídele el texto o la captura por Telegram. Sin fuente confirmada no hay carrusel.",
+        "Handle y CTA: de `USER.md` y `cerebro/`. Donde diga «Comenta 100K» o «cierra vendiendo F100K», usa SU palabra clave y SU oferta.",
+        "Entrega: `slide-01.png … slide-08.png` por Telegram como archivo, en orden, más las piezas de la portada. Guarda en `entregables/carruseles/`. No publiques nada."
+      ],
+      "replace": [
+        [
+          "Es el brandkit de Andrea Vega.",
+          "Es el brandkit scrapbook de FÓRMULA 100K."
+        ],
+        [
+          "const CHROME_CANDIDATES = [",
+          "const CHROME_CANDIDATES = [\n  process.env.CHROME_PATH,\n  '/usr/bin/chromium',\n  '/usr/bin/chromium-browser',\n  '/usr/bin/google-chrome',\n  '/usr/bin/google-chrome-stable',"
+        ],
+        [
+          "headless: 'new',",
+          "headless: 'new',\n    args: ['--no-sandbox', '--disable-dev-shm-usage'],"
+        ],
+        [
+          "No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.",
+          "No se encontró Chromium. Define CHROME_PATH con la ruta del Chromium del servidor."
+        ],
+        [
+          "4. **Composición ffmpeg:** superpón el overlay PNG sobre el video → `slide-01-ANIMADO.mp4`. Comando exacto en `reference.md`.",
+          "4. **Composición:** NO corre en este servidor (lee el bloque 🦞). Entrega `recursos/cover_anim_raw.mp4` + `recursos/title-overlay.png` para unirlos en CapCut o Edits."
+        ],
+        [
+          "### 4. Composición ffmpeg",
+          "### 4. Composición ffmpeg (solo en una compu; NO corre en el servidor OpenClaw)"
+        ],
+        [
+          "### 6. Entrega y (si el usuario lo pide) publica",
+          "### 6. Entrega por Telegram"
+        ],
+        [
+          "- **Publicar la SKILL** (no el carrusel) al repo/marketplace: ver `reference.md` sección \"Publicar la skill\".",
+          "- No publiques nada: el carrusel lo sube la usuaria."
+        ]
+      ],
+      "replace_re": [
+        [
+          "## C\\) Publicar la SKILL al repo / formula100k\\.app[\\s\\S]*",
+          "## C) Publicar\n\nEl carrusel no se publica desde aquí: se entrega por Telegram y la usuaria lo sube. Nada público sin ✅.\n"
+        ]
+      ],
+      "description_override": "Convierte una noticia de IA/tech en un carrusel noticiero de Instagram de 8 slides (QUÉ PASÓ → MOTIVO → EL DATO → ¿Y A TI QUÉ? → 3 JUGADAS → REGLA DE ORO → CTA), traducida para creadoras, con temas HTML intercambiables (scrapbook por defecto) renderizados a PNG 1080×1350 con Chromium headless. La portada animada (imagen Higgsfield → video Higgsfield) se genera con ✅ de créditos y se entrega junto al titular en PNG transparente para unirlos en CapCut o Edits. Usar cuando pida \"carrusel noticiero\", \"carrusel de noticia\", \"carrusel newsjacking\", \"convierte esta noticia de IA en carrusel\", \"el carrusel de la noticia de hoy\". NO usar para carruseles virales genéricos (carrusel-viral-formula100k) ni para solo renderizar un guion existente (carrusel-render-formula100k)."
+    },
+    "boceto-a-animacion-f100k": {
+      "notes": [
+        "El boceto llega por Telegram: pídele que lo mande como archivo (no como foto comprimida) y guárdalo en `entregables/animaciones/<fecha>_<slug>/boceto.jpg`.",
+        "Paso 11 NO corre aquí (`scripts/componer.py` no viene en esta versión). Entrega `clips/clip.mp4` (ya sale 9:16 de Seedance), `frames/ancla.png`, `frames/opuesto.png`, `boceto.jpg` y `PROMPTS.md`, y explícale en 3 líneas cómo armar el split y el revelado en CapCut o Edits.",
+        "Paso 10: para revisar el borrador puedes sacar 4 cuadros con ffmpeg solo para mirarlos (no se entregan). Manda la hoja por Telegram y espera ✅ antes del final a 720p.",
+        "Costos: consulta `get_cost` y `balance` y muestra el total (≈33 créditos por clip) antes de generar. Sin ✅ no se genera nada; con `solo-prompts` o sin Higgsfield, entrega `PROMPTS.md`.",
+        "La elección de estilo va por Telegram con opciones numeradas (el recomendado primero).",
+        "`MANIFEST_BROLL.md` sirve para quien edita en una compu con `editor-video-formula100k`; genéralo igual si hay frase del guion."
+      ],
+      "replace": [
+        [
+          "### Paso 11: Componer",
+          "### Paso 11: Componer (NO corre en este servidor: lee el bloque 🦞 de arriba)"
+        ],
+        [
+          "3. `scripts/componer.py`: el compositor (solo · split · revelado)",
+          "3. `scripts/componer.py`: el compositor (solo · split · revelado). No viene en esta versión: la composición no corre en el servidor"
+        ],
+        [
+          "Carpeta (pregunta la raíz la primera vez; propón `~/Documents/ANIMACIONES/` y confirma antes de crearla):",
+          "Carpeta: `entregables/animaciones/` (no hace falta preguntar la raíz):"
+        ]
+      ],
+      "exclude": [
+        "scripts/componer.py"
+      ],
+      "description_override": "Convierte un DIBUJO A MANO (foto o captura mandada por Telegram) o una frase del guion en un clip animado 9:16 de motion graphics para acompañar un reel. Lee el boceto como plano de composición (objetos, texto literal, movimiento implícito), decide si el dibujo es el cuadro INICIAL o el FINAL, elige estilo de un catálogo de 7, escribe los 3 prompts (primer cuadro, último cuadro, movimiento) y, con ✅ de créditos, lo genera en Higgsfield: GPT Image 2.5 con el boceto de referencia → el cuadro opuesto EDITANDO el primero → Seedance 2.0 con start_image + end_image. Entrega clip + cuadros + PROMPTS.md; el split «Animación | Boceto» y el revelado se arman en CapCut o Edits. Activar con 'anima este dibujo', 'convierte mi boceto en animación', 'de dibujo a video', 'primer y último cuadro', 'first frame last frame', 'dibujé esto, dale vida'. NO para overlays sobre la cara, historias con varios clips (storytelling-animado-f100k) ni para componer video grabado."
+    },
+    "reel-faceless-f100k": {
+      "notes": [
+        "Onboarding (brew, HyperFrames, mlx-whisper) NO aplica: sáltalo.",
+        "La voz llega por Telegram como nota de voz o audio. Guárdala en la carpeta del reel como `voz.ogg`/`voz.mp3`. Nunca generes ni clones la voz.",
+        "Tiempos (Paso 3): si hay `GROQ_API_KEY` u `OPENAI_API_KEY`, transcribe con la API de Whisper pidiendo marcas de tiempo por palabra. Si no, reparte los tramos por el teleprompter a ≈2,5 palabras por segundo y marca el plan como «tiempos estimados».",
+        "Clip Director en este servidor: cada tramo lleva un clip `broll` de Higgsfield que forma la base continua. Usa tramos de segundos enteros entre 4 y 15 (el mínimo de Seedance 2.0 es 4 s) para que ningún clip haya que recortarlo. Las `card` se escriben como HTML de 1080×1920 y se renderizan a PNG con Chromium; los `pixel` salen con `generate_image`. Cards y pixel se entregan como PNG para poner encima en su tramo. La regla de mezcla se cuenta sumando cards y pixel.",
+        "Todos los clips con el MISMO modelo, resolución (720p por defecto), `aspect_ratio: \"9:16\"` y `generate_audio: false`, para que el concat funcione sin re-codificar. Costo total estimado (tramos × precio) → ✅ antes del primer lote; lotes de máximo 8.",
+        "Paso 5 recortado: solo junta los clips en orden con `ffmpeg -f concat -safe 0 -i lista.txt -c copy base.mp4`. Nada de escalar, overlays, colorkey ni mezclar audio. Entrega `base.mp4` (mudo) + la voz + los PNG + `plan.json` con los tiempos, y explícale cómo poner la voz y los PNG encima en CapCut o Edits.",
+        "Sin créditos de Higgsfield: entrega guion, teleprompter, `plan.json` con el prompt de cada tramo y las cards en PNG. Dilo en la primera línea.",
+        "Si `base.mp4` pesa más de 50 MB (límite de Telegram), avisa y manda los clips por link o a 720p."
+      ],
+      "replace": [
+        [
+          "## Onboarding — Auto-install (ejecutar siempre al inicio)",
+          "## Onboarding — Auto-install (NO aplica en este servidor: sáltalo y lee el bloque 🦞)"
+        ],
+        [
+          "### Paso 3 — Transcripción word-level (Whisper local)",
+          "### Paso 3 — Transcripción word-level (en este servidor: API o tiempos estimados, lee el bloque 🦞)"
+        ],
+        [
+          "### Paso 5 — Composición",
+          "### Paso 5 — Composición (recortada en este servidor: solo concat, lee el bloque 🦞)"
+        ],
+        [
+          "`a Latin woman with long straight dark hair and light-tan skin`",
+          "la descripción física de la usuaria sacada de SUS fotos (nunca un ejemplo fijo)"
+        ],
+        [
+          "open \"$DEST\"",
+          "# manda el resultado por Telegram"
+        ]
+      ],
+      "exclude": [
+        "scripts/compose_faceless.sh",
+        "scripts/test_compose.sh"
+      ],
+      "description_override": "Convierte un tema en un Reel 9:16 faceless (30-90 s) donde la usuaria GRABA la voz pero nunca sale en cámara. Escribe el guion con gancho, retención y cierre de venta, arma el teleprompter, recibe la nota de voz por Telegram, saca los tiempos (transcripción por API si hay llave, o estimados) y el Clip Director decide por gancho el visual de cada tramo (B-roll cinemático IA, card de dato, pixel-meme; mezcla obligatoria). Genera los clips con Higgsfield (con ✅ de créditos), renderiza las cards a PNG con Chromium y junta los clips en orden en un solo video mudo con ffmpeg concat. Entrega ese video + la voz + las cards + el plan para montar la voz y el texto en CapCut o Edits. Activar con 'hazme un reel faceless de X', 'video faceless sin mi cara', 'explainer faceless', 'convierte este tema en video sin grabarme en cámara', 'reel solo con mi voz'. NO para talking-head con su cara, VSL (broll-vsl-formula100k) ni carruseles."
+    },
+    "tutorial-viral-f100k": {
+      "notes": [
+        "Fases 1, 2 y 3 corren igual. **La Fase 4 (`render_tutorial.py`, Remotion, corte de silencios, captions cinéticos quemados) no corre aquí** y los scripts no vienen en este paquete.",
+        "Fase 2: el brief va por Telegram. La usuaria NO te manda voz ni pantallas para renderizar: las graba y las monta ella en CapCut (u otro editor) con el kit que le entregas.",
+        "Fase 3: cards, títulos y CTA con el plugin de Higgsfield (`nano_banana_2`) o `GEMINI_API_KEY`; capturas de terminal/pasos/callouts con `capturas-tutorial-formula100k` (HTML → PNG con Chromium); capturas de webs sin login con tu navegador. B-roll animado con Higgsfield (video). Todo con costo total → ✅ → generar.",
+        "Si pide «un borrador sin grabar»: genera un clip de Higgsfield por beat del guion (mismo formato 9:16 y fps) y júntalos con `ffmpeg -f concat -safe 0 -i lista.txt -c copy borrador.mp4`. Nada más: sin subtítulos, sin overlays, sin mezclar voz.",
+        "Fase 5 en lugar de `BORRADOR_AUTO.mp4`: `GUION.md`, `BRIEF_GRABACION.md`, `MANIFEST.md` (qué card entra en qué palabra) y un `.zip` con `IA/` y `WEB/`, en `entregables/tutoriales/<fecha>_<slug>/` y por Telegram. Dile que los captions los saque con los subtítulos automáticos de su editor.",
+        "Recursos web: nunca stock ni imágenes de redes con sesión iniciada; si un recurso no se pudo verificar mirándolo, no entra al MANIFEST."
+      ],
+      "replace": [
+        [
+          "La referencia que originó este diseño: reel de Ramiro Cubria (IG `DZslxK-Hy_x`) — tutorial faceless con screen-recording, captions cinéticos y cards pop-in.",
+          "La referencia de este diseño: un reel tutorial faceless con screen-recording, captions cinéticos y cards pop-in."
+        ],
+        [
+          "~/Documents/FORMULA100K/TUTORIALES/",
+          "entregables/tutoriales/"
+        ],
+        [
+          "### Fase 4 — Ensamblaje + render",
+          "### Fase 4 — Ensamblaje + render (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Requisitos previos",
+          "## Requisitos previos (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Iteración y re-render",
+          "## Iteración y re-render (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ]
+      ],
+      "description_override": "Orquesta un tutorial viral faceless (sin cara) de FÓRMULA 100K: de una idea o guion a un kit listo para montar. Fase 1 guion con marcas [PANTALLA]/[CARD]/[CTA]; Fase 2 brief de grabación (voz real + pantallas que graba la usuaria); Fase 3 genera cards, mockups y B-roll con Higgsfield o Gemini y capturas tipo tutorial en PNG; Fase 5 entrega GUION.md, BRIEF_GRABACION.md, MANIFEST.md (qué card entra en qué palabra) y un .zip de recursos por Telegram para montarlo en CapCut. En este agente no renderiza ni edita el video; opcional: un borrador juntando clips generados en Higgsfield. Activar cuando se diga: 'tutorial viral', 'explicación viral faceless', 'video sin cara', 'hazme un tutorial de X', 'video tipo screen recording con captions', '/tutorial <tema>'. NO usar para talking-head reels, carruseles, stories ni miniaturas.",
+      "exclude": [
+        "README.md",
+        "scripts/render_tutorial.py",
+        "scripts/faceless_manifest_to_cues.py",
+        "scripts/generate_kinetic_captions.py",
+        "scripts/tests/test_audio_only.py",
+        "scripts/tests/test_kinetic_captions.py",
+        "scripts/tests/test_faceless_cues.py"
+      ]
+    },
+    "capturas-tutorial-formula100k": {
+      "notes": [
+        "Render con Puppeteer sobre **el Chromium que ya trae OpenClaw**: instala las dependencias con `PUPPETEER_SKIP_DOWNLOAD=1 npm install` dentro de la carpeta de la skill (evita bajar otro Chrome de ~170 MB) y corre `render.mjs` con `PUPPETEER_EXECUTABLE_PATH=<ruta de tu Chromium>`. Primera instalación: dile qué se instala y espera ✅. Renderiza de a uno, no en paralelo.",
+        "Las fuentes (DM Serif Display, Inter, JetBrains Mono) se cargan de Google Fonts: el servidor necesita internet al renderizar. Si salen con la fuente genérica, vuelve a renderizar.",
+        "Tipo `screenshot`: la imagen llega por Telegram como archivo (guárdala en `entregables/capturas/`) o la tomas tú con tu navegador de una web **sin iniciar sesión** (landing, docs, app propia de la usuaria). Nunca capturas de Instagram/TikTok con sesión.",
+        "Mira cada PNG antes de entregarlo (texto cortado, comando incompleto). Entrega en `entregables/capturas/` y por Telegram como documento, no como foto (Telegram comprime y se pierde la transparencia). Varios PNG → un `.zip`.",
+        "Los anchos y duraciones «sobre video» son la sugerencia para que la usuaria los monte en su editor; aquí no se compone ningún video."
+      ],
+      "replace": [
+        [
+          "\"image\":\"~/Desktop/captura.png\"",
+          "\"image\":\"entregables/capturas/captura.png\""
+        ],
+        [
+          "~/Documents/FORMULA100K/RECURSOS\\ VIDEOS/2026-05-22_claude-install/",
+          "entregables/recursos-video/2026-05-22_claude-install/"
+        ],
+        [
+          " ([[feedback_modo_ui_puro]])",
+          ""
+        ],
+        [
+          " ([[feedback_aspect_ratio_graficos_video]])",
+          ""
+        ],
+        [
+          "Validado con el usuario en r08 de `2026-05-22_claude_basura_guiones` (callout horizontal → claude-input vertical, ratio 4.7:1 → 1.5:1, paragraph → 0 párrafos).",
+          "Validado en producción: el callout horizontal pasó a claude-input vertical y el párrafo desapareció."
+        ]
+      ]
+    },
+    "recursos-de-video-formula100k": {
+      "notes": [
+        "**No se transcribe ni se corta el video aquí** (Paso 2 no corre). Pídele por Telegram el `.srt` que exporta su editor (CapCut: Subtítulos automáticos → Exportar) del video YA cortado, o la transcripción si está publicado (Supadata solo con `SUPADATA_API_KEY`). Las keywords del Paso 3 salen de ese texto. Para la duración basta con el SRT.",
+        "Pinterest, Google Imágenes y medios (7a, 7b, 7d): con tu navegador **sin iniciar sesión nunca**. Si Pinterest pide login, sáltalo en ese cue. La regla NO-STOCK y la validación visual siguen: mira cada imagen antes de meterla.",
+        "TikToks (7c): búsqueda web o Apify con `APIFY_TOKEN` (vistas y portada). **No descargues con yt-dlp ni extraigas fotogramas con ffmpeg**: en el MANIFEST va el link + la portada, marcado «subtítulos quemados: sin verificar», y la usuaria lo baja en su compu.",
+        "Mascots e infografías pixel (7e) con el plugin de Higgsfield: la selfie sale de `cerebro/fotos/` o llega por Telegram como archivo. **El chroma key del 7g no se hace con ffmpeg**: quita el fondo con `remove_background` de Higgsfield. Antes de generar, costo total (imágenes + quitar fondo) → ✅.",
+        "Modo UI/Tutorial (7h): usa `capturas-tutorial-formula100k` (HTML → PNG con Chromium); sus PNG van a `USER/` igual que en la skill.",
+        "Paso 10: en vez de `open`, comprime la carpeta en `.zip` y mándala por Telegram con el resumen (recursos por modo y fuente, cues sin recurso). No hay `editor-video-formula100k` aquí: el MANIFEST.md es la hoja de montaje para su editor. Si el zip pasa de 50 MB, manda primero el MANIFEST y los PNG y avisa qué quedó fuera."
+      ],
+      "replace": [
+        [
+          "### Paso 2 — Transcribir (idempotente)",
+          "### Paso 2 — Transcribir (idempotente) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "Si Pinterest pide login, usar la sesión persistente del agent-browser (vault).",
+          "Si Pinterest pide login, no inicies sesión: salta Pinterest en ese cue y sigue con Google."
+        ],
+        [
+          "Reintentar con sesión persistente del agent-browser. Si sigue, marcar el timestamp",
+          "No iniciar sesión: marcar el timestamp"
+        ],
+        [
+          "#### 7c. TikTok virales (vía Tavily + yt-dlp)",
+          "#### 7c. TikTok virales (vía Tavily + yt-dlp) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "#### 7g. Aplicar chroma key a los PNGs IA (OBLIGATORIO)",
+          "#### 7g. Aplicar chroma key a los PNGs IA (OBLIGATORIO) — en OpenClaw: quitar fondo con Higgsfield, mira el bloque 🦞"
+        ],
+        [
+          " ([[feedback_aspect_ratio_graficos_video]])",
+          ""
+        ]
+      ],
+      "description_override": "Convierte un video grabado por la usuaria en un set de RECURSOS de edición (B-roll, overlays, referencias visuales) y un MANIFEST.md para montarlos en su editor. 4 modos: (1) IA — pixel-avatar mascot e infografía pixel generados con Higgsfield, fondo quitado; (2) WEB — recursos reales de Pinterest, Google Imágenes, TikToks virales (como link) y noticias, sin stock; (3) HÍBRIDO — ambos por momento; (4) UI/TUTORIAL — capturas tipo terminal/callout/paso con capturas-tutorial-formula100k. Admite capturas propias. Trabaja sobre la transcripción o el .srt del video; no edita ni renderiza el video. Activar cuando la usuaria mande un video o su .srt y diga 'cázame recursos para este video', 'busca b-roll real', 'tráeme recursos web', 'mezcla IA + recursos reales', 'overlays UI para mi tutorial'. Entrega: carpeta en entregables/ + MANIFEST.md en .zip por Telegram.",
+      "exclude": [
+        "scripts/chroma_key.sh"
+      ]
+    },
+    "motion-takeover-f100k": {
+      "notes": [
+        "**No corren aquí:** Paso 0 (corte semántico), transcripción con Whisper, `hyperframes render`, la composición ffmpeg del Paso 7 ni `verify_audio_sync.py`. Nada se monta sobre su video.",
+        "Entrada: la usuaria corta su video en su editor y te manda por Telegram el `.srt` de ESA versión cortada (los tiempos tienen que coincidir) + 1 captura de un cuadro con su cara. Con eso armas `motion_board.json` (Paso 4) y lo apruebas con ella antes de gastar nada.",
+        "Cada takeover: llena `templates/takeover-template.html` y renderízalo a PNG 1920×1080 con Chromium headless; antes de la captura adelanta la animación al final con `window.__timelines['takeover'].progress(1)` para que se vean mockups y trazos completos. Imágenes de escena con el plugin de Higgsfield (`nano_banana_2`, 16:9).",
+        "Si quiere movimiento: anima cada PNG con Higgsfield imagen → video (16:9, movimiento suave, que no deforme el texto), con la duración del takeover. Costo total → ✅ → generar. Revisa que el texto siga legible; si se deforma, entrega el PNG.",
+        "Overlays de modo cara: PNG con fondo transparente (Chromium, fondo omitido) o `capturas-tutorial-formula100k`. Sin fondo verde.",
+        "Entrega en `entregables/takeover-<fecha>/`: `motion_board.json`, `HOJA_MONTAJE.md` (inicio y fin de cada takeover en el video cortado, «colócalo encima, opaco, sin mover la pista de voz») y un `.zip` con PNG/MP4, por Telegram."
+      ],
+      "replace": [
+        [
+          "`~/Desktop/takeover-$(date +%Y%m%d)/`",
+          "`entregables/takeover-$(date +%Y%m%d)/`"
+        ],
+        [
+          "## Paso 1 — Onboarding (auto-install)",
+          "## Paso 1 — Onboarding (auto-install) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 0 — Corte semántico (OBLIGATORIO, va PRIMERO)",
+          "## Paso 0 — Corte semántico (OBLIGATORIO, va PRIMERO) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 6 — Render de cada composición",
+          "## Paso 6 — Render de cada composición (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 7 — Composición ffmpeg AUDIO-SAFE (⛔ el punto crítico)",
+          "## Paso 7 — Composición ffmpeg AUDIO-SAFE (⛔ el punto crítico) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 8 — Verificación (⛔ audio primero)",
+          "## Paso 8 — Verificación (⛔ audio primero) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ]
+      ],
+      "description_override": "Planea TAKEOVERS faceless a pantalla completa para un video de YouTube 16:9 grabado con tu cara, estilo 'Claude Routines': en los momentos clave la pantalla se llena de mockups paso a paso, trazos SVG e imágenes IA, y luego vuelve tu cara. A partir del .srt del video ya cortado arma el plan de 2 carriles (takeovers + overlays ligeros), renderiza cada takeover como PNG 1920×1080 y, si quieres movimiento, lo anima con Higgsfield. Entrega las piezas + una hoja de montaje con el segundo exacto de cada takeover para ponerlas encima en tu editor. En este agente no edita ni compone el video. Activar cuando se diga: 'takeovers para mi video', 'motion graphics fullscreen tipo el video que te mandé', 'mockups paso a paso', 'estilo Claude Routines', 'cortes a gráfica'. NO usar para 9:16 (motion-reels-f100k).",
+      "exclude": [
+        "scripts/verify_audio_sync.py"
+      ]
+    },
+    "motion-reels-f100k": {
+      "notes": [
+        "**No corren aquí:** Paso 0 (corte), Whisper/mlx-whisper, `hyperframes render` (Paso 6) ni la composición ffmpeg (Paso 7). No hay `video_final_motion.mp4`.",
+        "Entrada: la usuaria corta su reel en su editor y te manda el `.srt` de esa versión (CapCut: Subtítulos automáticos → Exportar) + 1 captura de un cuadro a mitad del video. Con la captura haces el Paso 1.5 (zonas seguras); con el SRT, el 3 y el 4 (clasificación, densidad de 1 gráfico cada 5 s, motion board). Si es un video publicado, Supadata solo con `SUPADATA_API_KEY` del entorno: nunca escribas la llave.",
+        "Paso 5 cambia: cada overlay del board se arma con su template en un HTML 1080×1920 con `background: transparent` y el pack de `fonts/`, y se renderiza a PNG con Chromium headless (fondo omitido) con la animación adelantada al final (`window.__timelines[...]`.progress(1)) para que la tarjeta salga completa.",
+        "Entrega en `entregables/motion-reels/<slug>/`: los PNG numerados, `motion_board.json` y `HOJA_MONTAJE.md` (archivo, segundo de entrada y salida, posición, y la animación de entrada/salida que tiene que poner en su editor: pop, deslizar, fundido). Todo en `.zip` por Telegram como documento.",
+        "No uses Higgsfield para estas tarjetas: el texto de la IA se deforma. Solo si una tarjeta pide una imagen (UI card con ilustración), genérala con el plugin de Higgsfield con costo → ✅."
+      ],
+      "replace": [
+        [
+          "  - Ruta local: /Users/.../mi_reel.mp4",
+          "  - Archivo o .srt enviado por Telegram"
+        ],
+        [
+          "find \"$HOME/.claude\" -name cut_silences_and_fillers.py",
+          "find skills -name cut_silences_and_fillers.py"
+        ],
+        [
+          "### Paso 0 — Recorte de silencios y equivocaciones (PRIMERO, antes de animar)",
+          "### Paso 0 — Recorte de silencios y equivocaciones (PRIMERO, antes de animar) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "### Paso 6 — Preview y render",
+          "### Paso 6 — Preview y render (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "### Paso 7 — Componer sobre el video original con ffmpeg",
+          "### Paso 7 — Componer sobre el video original con ffmpeg (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ]
+      ],
+      "description_override": "Diseña motion graphics para un reel 9:16 talking-head estilo softgirlnocode: con una captura del video detecta dónde está la persona y calcula zonas seguras; con el .srt auto-clasifica el guion para elegir el overlay correcto (antes/ahora → comparison card, listas → chapter card, herramientas → UI card, identidad → pill labels, frases → kinetic, citas → quote pull) y cumple la densidad de 1 gráfico cada 5 segundos. Entrega las tarjetas como PNG transparentes 1080×1920 renderizadas desde HTML + un motion board + una hoja de montaje con segundo de entrada, salida, posición y animación para ponerlas en tu editor. En este agente no edita ni compone el video. Activar cuando se diga: 'agrega motion graphics a este reel', 'motion graphics 9:16', 'overlays animados reel', 'estilo softgirlnocode', 'quiero motion graphics para este talking-head'. NO usar para 16:9.",
+      "exclude": [
+        "scripts/build_font_pack.py"
+      ]
+    },
+    "pizarra-explicativa-f100k": {
+      "notes": [
+        "**No corren aquí:** Whisper (Paso 1), HyperFrames (Pasos 0, 3, 4 y 5), `render_pizarra.sh`, el HEVC con alfa ni la previsualización del montaje. La plantilla y las trampas de HyperFrames no vienen en este paquete.",
+        "Paso 1: pídele el `.srt` del video ya cortado (CapCut: Subtítulos automáticos → Exportar). Los tiempos de cada beat salen de ahí; corrige los errores de transcripción igual que dice la skill.",
+        "Paso 2 igual: mapa de 8-12 beats, qué se dibuja en cada uno, y **aprobación por Telegram antes de gastar**. Suma el costo total en Higgsfield (clips × duración) al mapa.",
+        "Generación: un clip por beat con el preset explainer **Whiteboard Doodle** o **Hand Drawn** del plugin de Higgsfield (`get_explainer_presets` → `resolve_explainer_preset`), duración = la del beat. Pocas palabras por beat (1-4): la IA deforma el texto largo; revisa cada clip y regenera el que salga con letras rotas.",
+        "Junta los clips en orden con ffmpeg concat simple (`ffmpeg -f concat -safe 0 -i lista.txt -c copy pizarra.mp4`; todos del mismo formato y fps). Sin alfa, sin audio, sin subtítulos, sin montaje sobre su video.",
+        "Entrega en `entregables/pizarra/<fecha>_<slug>/`: `pizarra.mp4`, los clips sueltos y `LEEME.md` con la tabla de beats (segundo de entrada de cada clip) para que ella la alinee en pantalla dividida en su editor. Por Telegram; si pesa más de 50 MB, manda los clips por separado."
+      ],
+      "replace": [
+        [
+          "## Paso 0 · Comprobar el terreno",
+          "## Paso 0 · Comprobar el terreno (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 1 · Transcribir con tiempos palabra por palabra",
+          "## Paso 1 · Transcribir con tiempos palabra por palabra (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 3 · Construir la composición",
+          "## Paso 3 · Construir la composición (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 4 · Verificar por fotogramas (obligatorio)",
+          "## Paso 4 · Verificar por fotogramas (obligatorio) (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "## Paso 5 · Renderizar y comprimir",
+          "## Paso 5 · Renderizar y comprimir (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ]
+      ],
+      "description_override": "Convierte un video grabado (talking head) en un clip de PIZARRA de apoyo para pantalla dividida: lo que dice se va escribiendo, encerrando y conectando a mano. Con el .srt del video arma el mapa de 8-12 beats anclado al rubro real de quien habla, PIDE APROBACIÓN con el costo, genera un clip por beat con los presets Whiteboard Doodle o Hand Drawn de Higgsfield, los junta en un solo pizarra.mp4 y entrega un LEEME con el segundo de cada beat para alinearlo en su editor. En este agente no edita ni compone el video. Activar cuando se pida 'hazme la pizarra de este video', 'clip de pizarra para este reel', 'apoyo visual explicativo en pantalla dividida', 'motion graphics de pizarra', 'acompaña este video con una pizarra'. NO caza b-roll (recursos-de-video-formula100k).",
+      "exclude": [
+        "scripts/render_pizarra.sh",
+        "templates/composicion_base.html",
+        "referencia/trampas.md"
+      ]
+    },
+    "trial-reels-lab-f100k": {
+      "notes": [
+        "**MODO VIDEO no corre aquí** (`analizar_base.py`, `render_variantes.py`, Whisper, `hyperframes render`, ffmpeg): no hay `VARIANTE_[A-D].mp4`. Si la usuaria manda un video, trabaja en MODO PACK y dile que monte cada overlay en su editor.",
+        "En vez del Paso 1-2: pídele por Telegram 1 captura del primer segundo del video (para el hairline, objeto en mano, zonas libres) y hasta qué segundo dura el gancho hablado (o el `.srt`). Si no hay video, el `hook_end` es 3.0 s.",
+        "Capa 1 del criterio: lee `cerebro/memoria/patterns_ig_<handle>.md` si existe (lo escribe `patron-ig-f100k`). Si no existe, dilo y sigue con la Capa 2. Nunca inventes patrones ni cifras.",
+        "Paso 5-6: `build_overlays.py` sí corre (solo Python). Luego renderiza cada `comp_[A-D]/index.html` a PNG 1080×1920 con Chromium headless, fondo transparente, con la animación adelantada (`window.__timelines['a']`.seek(1.0) o `.progress(1)`). Escribe tú `HOJA_MONTAJE.md` con texto, posición en píxeles, entrada/salida y el `por_que` de cada variante.",
+        "Celda B (visual) o D (prueba): el asset visual se genera con el plugin de Higgsfield (costo → ✅) o es la captura real que manda la usuaria. La cifra de la celda D tiene que ser suya y verificable.",
+        "Mutaciones (zoom/speed 1.02×): no se procesan aquí; van anotadas en la hoja para que las aplique en su editor.",
+        "Paso 7: corre `plan_publicacion.py` **sin** `--recordatorios` (no hay Apple Reminders). Los avisos de 48 h y del 25% se crean como automatización de OpenClaw que escribe por Telegram, solo con ✅. Las métricas para decidir el ganador llegan por Composio (IG profesional) o capturas; tú no publicas nada."
+      ],
+      "replace": [
+        [
+          "find ~/.claude/skills ~/.claude/plugins -maxdepth 6",
+          "find skills -maxdepth 2"
+        ],
+        [
+          "### Paso 1 · Analizar la base",
+          "### Paso 1 · Analizar la base (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "### Paso 6 · Renderizar y componer",
+          "### Paso 6 · Renderizar y componer (en OpenClaw NO corre: mira el bloque 🦞 de arriba)"
+        ],
+        [
+          "buscar en Google Drive con el MCP el doc más reciente `name contains 'Patrones IG @<handle-del-usuario>'` (el Autopilot crea uno cada lunes ~08:05)",
+          "leer `cerebro/memoria/patterns_ig_<handle>.md` (lo actualiza `patron-ig-f100k` cada semana)"
+        ],
+        [
+          "Si el MCP de Drive no está disponible, **decirlo en voz alta**",
+          "Si ese archivo no existe, **decirlo en voz alta**"
+        ],
+        [
+          "Inventar patrones de la cuenta cuando el MCP de Drive no responde.",
+          "Inventar patrones de la cuenta cuando no hay archivo de patrones."
+        ],
+        [
+          "(auditoría real de 70 reels de una cuenta de nicho marketing)",
+          "(auditoría de los reels de una cuenta de nicho marketing)"
+        ],
+        [
+          "La brecha entre su mejor reel (483K vistas) y el peor (2.229) es **217×**, y no la explica",
+          "La brecha entre su mejor reel y el peor es de **cientos de veces**, y no la explica"
+        ],
+        [
+          "en SU cuenta el carrier **visual rinde peor** (mediana 4.140 plays, 2/10 en top vs 4/10 en bottom) y el textual/verbal gana. Nada de eso es estadísticamente significativo (n=20, Fisher p=0.63) pero la dirección es consistente.",
+          "en ESA cuenta el carrier **visual rindió peor** y el textual/verbal ganó. No fue estadísticamente significativo (muestra chica) pero la dirección fue consistente."
+        ],
+        [
+          "**Ganchos visuales que sí tienen números propios de ella:** pop culture (Marilyn + promesa concreta → 1.2M), logo de IA intervenido con símbolo emocional (💔 ⚠️ ✓ X) → 22-70K estable, \"Terminé con [APP]\" + logo + 💔 → 69.8K, \"Principiante / Pro\" con burbujas de IG → 22K. El logo **limpio, sin intervenir, no funciona**.",
+          "**Ganchos visuales que sí le funcionaron a esa cuenta:** referencia de cultura pop + promesa concreta, logo de una app intervenido con símbolo emocional (💔 ⚠️ ✓ X), \"Terminé con [APP]\" + logo + 💔, \"Principiante / Pro\" con burbujas de chat. El logo **limpio, sin intervenir, no funcionó**."
+        ],
+        [
+          "El dataset crudo es de la cuenta del usuario y vive en su máquina:",
+          "El dataset crudo no viene en este paquete; si la usuaria lo tiene, estaría en:"
+        ],
+        [
+          "(caso normal en cualquier máquina que no sea la de ella)",
+          "(caso normal en este agente)"
+        ],
+        [
+          " y lo que mejor rinde históricamente en esta cuenta",
+          ""
+        ],
+        [
+          "en esta cuenta el visual ha rendido peor. Pero es la más infrautilizada y la que rompió el techo cuando funcionó (pop culture → 1.2M).",
+          "en nichos de dinero el visual suele rendir menos. Pero es la más infrautilizada y la que más puede romper el techo cuando funciona."
+        ],
+        [
+          "> captura de 483K vistas · `Este reel hizo 483 mil vistas y duró 8 segundos`",
+          "> captura de tu mejor métrica real · `Este reel hizo [TU CIFRA REAL] vistas y duró 8 segundos`"
+        ],
+        [
+          "\"texto\": \"483.000 vistas\"",
+          "\"texto\": \"[TU CIFRA REAL] vistas\""
+        ],
+        [
+          "assets/captura_483k.png",
+          "assets/captura_metrica.png"
+        ],
+        [
+          "Apuesta: el carrier visual rinde peor en esta cuenta pero rompió el techo con pop culture. Se prueba sin costo.",
+          "Apuesta: el carrier visual es la celda menos probada. Se prueba sin costo."
+        ],
+        [
+          "Para el usuario esto ya existe: los lead magnets de F100K están construidos y viven en el hub de regalos. Lo que falta es enchufarlos sistemáticamente al CTA de cada tanda.",
+          "Si ya tienes lead magnets (revisa `cerebro/`), enchúfalos al CTA de cada tanda; si no, anótalo como pendiente antes de publicar la tanda."
+        ]
+      ],
+      "description_override": "Convierte UN video (o UN guion) en 4 variantes de gancho A/B/C/D para publicar como TRIAL REELS de Instagram y descubrir con datos cuál gancho gana antes de tocar el grid. Usa la matriz forzada de 4 celdas (claim de texto / gancho visual / conflicto / prueba) para que el test enseñe algo, con el criterio de 300 ganchos virales observados y los patrones de tu cuenta si existen. Entrega los 4 overlays como PNG transparentes 1080×1920 + hoja de montaje con texto, posición y tiempos para ponerlos en tu editor, y el plan de publicación (5/día, 5 min entre subidas, regla de 48h, regla del 25%, Play A vs Play B, reciclaje a 60 días) con avisos por Telegram si los apruebas. En este agente no compone el video ni publica. Activar con: 'trial reels', 'testea este gancho', 'hazme 4 variantes de gancho', 'variantes ABCD de este reel', 'overlays de gancho para el editor', 'prueba este video antes de subirlo al grid'.",
+      "exclude": [
+        "scripts/analizar_base.py",
+        "scripts/render_variantes.py"
+      ]
+    },
+    "conecta-tu-app-f100k": {
+      "notes": [
+        "La app tiene que estar en el workspace (`entregables/apps/<app>/`): pídele el `.zip` por Telegram o el link de su repo si conectó SU GitHub. Si no hay app todavía, deriva a `crea-tu-app-f100k`.",
+        "Aquí nadie mueve su cursor ni entra a sus paneles: la sección de «Claude in Chrome / uso de la computadora» no aplica. Los clics en Supabase, Google Cloud, Vercel, Stripe, Zapier o Skool los hace ella con la ruta exacta que le das; si dudas de que el panel siga igual, pídele una captura por Telegram.",
+        "El SQL (`plantillas/sql/01-portero.sql`) mándalo como archivo `.sql` para que lo pegue en Supabase → SQL Editor → Run. El MCP de Supabase y `claude mcp add` no existen aquí; usa la API de Supabase solo si ella conectó un token de SU cuenta y te da ✅.",
+        "Las llaves secretas (`sb_secret_`, `service_role`, `sk_live_`, `whsec_`) no se piden por Telegram: le das el nombre exacto de cada variable y ella las pega directo en Vercel → Settings → Environment Variables. Si alguna hace falta para probar en el servidor, avísale que queda en el historial del chat, guárdala solo en el `.env.local` del proyecto y pídele que borre el mensaje.",
+        "`npx tsc --noEmit` y `npm run build` sí corren en el servidor (una app a la vez). Supabase local con Docker, `stripe listen` y `vercel crons run` no: las pruebas vivas se hacen en SU despliegue de prueba.",
+        "Desplegar (`vercel`, `vercel env add`) solo con SU cuenta de Vercel conectada y ✅. Si no la conectó, mándale el proyecto en `.zip` con los pasos para importarlo en vercel.com.",
+        "`CONEXIONES.md` va en la raíz del proyecto y también se lo mandas por Telegram como documento, sin ningún valor secreto.",
+        "Para comprobar que el dominio final no redirige (trampa 1 de publicar) usa `curl -sI` o el navegador del agente sobre su URL pública: es una web propia, no una red social."
+      ]
+    },
+    "crea-tu-app-f100k": {
+      "notes": [
+        "El proyecto vive en `entregables/apps/<nombre-app>/` y `PERFIL-MARCA.md` va en su raíz. Construye una app a la vez: el servidor Básico tiene 4 GB.",
+        "Ella no puede abrir el `localhost` del servidor. En cada checkpoint levanta la app (`npm run dev`), ábrela con el navegador del agente y mándale por Telegram capturas a 390 px (teléfono) y 1280 px (compu) de lo principal funcionando. Apaga el servidor de desarrollo al terminar.",
+        "Colores de su marca: su web pública la miras con el navegador del agente; de Instagram, pídele por Telegram capturas de su perfil y de 3 posts. Nunca entres logueada a su Instagram.",
+        "`constructor-miniapps-f100k`, `ux-elevacion-formula100k` y `landing-producto-formula100k`: úsalas si están instaladas; si no, haz tú ese paso con el mismo criterio. `superpowers:brainstorming` y `superpowers:systematic-debugging` no existen aquí: acuerda el diseño con ella por Telegram en preguntas cortas y depura tú en silencio.",
+        "Llaves (Fase 4): ella las pega directo en SU Vercel → Settings → Environment Variables; tú le das el nombre exacto de cada una. No pidas llaves secretas por Telegram; si una hace falta para probar en el servidor, avísale que queda en el historial, guárdala solo en el `.env.local` del proyecto y pídele que borre el mensaje.",
+        "Publicar (Fase 5) y hacer push a GitHub: solo con SU cuenta conectada y ✅. Si no, mándale el proyecto en `.zip` (sin `node_modules` ni `.env*`) con los pasos para importarlo en vercel.com."
+      ],
+      "replace": [
+        [
+          "(puedes mirar su perfil con `agent-browser` si lo autoriza)",
+          "(su web pública la miras con el navegador del agente; de Instagram, pídele capturas por Telegram)"
+        ],
+        [
+          "→ si lo autoriza, mírala con `agent-browser` y extrae colores/estilo reales.",
+          "→ su web la miras con el navegador del agente; de Instagram, pídele 3 capturas por Telegram (nunca entres logueada) y extrae colores/estilo reales."
+        ],
+        [
+          "| 1 (si pide marca de su IG) | `agent-browser` | Sacar colores/estilo de su perfil real |",
+          "| 1 (si pide marca de su web o IG) | Navegador del agente (web) o capturas por Telegram (IG) | Sacar colores/estilo reales |"
+        ],
+        [
+          "4. Levanta la app en local (`npm run dev`) y dale el link `localhost`.",
+          "4. Levanta la app en el servidor (`npm run dev`), ábrela con el navegador del agente y mándale capturas a 390 px y 1280 px: ella no puede abrir el `localhost` del servidor."
+        ],
+        [
+          "\"Ábrela aquí 👉 [localhost] y prueba lo principal. ¿Hace lo que esperabas?\"",
+          "\"Mira las capturas 👉 esto es lo principal funcionando. ¿Hace lo que esperabas?\""
+        ],
+        [
+          "\"Mírala ahora 👉 [localhost]. ¿Te gusta",
+          "\"Mírala ahora 👉 [capturas nuevas]. ¿Te gusta"
+        ],
+        [
+          "Ella la pega **una vez**. Tú la guardas en `.env.local` (local) y en Vercel → Settings → Environment Variables.",
+          "Ella la pega **una vez**, directo en SU Vercel → Settings → Environment Variables (tú le das el nombre exacto de la variable). Si hace falta para probar en el servidor, guárdala solo en el `.env.local` del proyecto."
+        ],
+        [
+          "1. Despliega en **su** Vercel (su cuenta).",
+          "1. Despliega en **su** Vercel solo si conectó SU cuenta y te dio ✅ (si no, mándale el `.zip` del proyecto con los pasos para importarlo)."
+        ]
+      ],
+      "description_override": "Wizard guiado para que una alumna de FÓRMULA 100K construya su propia app de IA paso a paso, sin programar y personalizada a SU negocio. Puerta de entrada del Catálogo de Apps IA. Usar cuando alguien diga: \"quiero crear mi app\", \"ayúdame a hacer una app\", \"construye mi primera app\", \"crea tu app\", \"quiero la app de [X] del catálogo\", \"no sé qué app hacer para mi negocio\", \"guíame para construir una app\", \"hazme una app con mi marca\". Entrevista a la alumna (nicho, oferta, audiencia) y le RECOMIENDA qué app le conviene; captura su MARCA; construye el core; eleva el diseño; le muestra cada avance con capturas por Telegram; le dice qué llaves conectar en SUS cuentas; y la publica en SU Vercel solo si conectó su cuenta y da ✅ (si no, le entrega el proyecto en .zip). Checkpoint humano entre fases. NO usar para landings de venta ni artifacts educativos HTML (generador-artifact-educativo-formula100k)."
+    },
+    "fabrica-design-md": {
+      "notes": [
+        "Las capturas de sus 9 piezas que mejor funcionaron te las manda por Telegram **como archivo** (así no pierden color); guárdalas en `cerebro/design/piezas/`. Nunca las saques entrando logueada a Instagram.",
+        "Si tiene web pública, el código lo lees con el navegador del agente o bajando su HTML/CSS: el `grep` de hex por frecuencia funciona igual sobre esos archivos. Si su repo es privado, pídele un `.zip`.",
+        "`python3 references/contraste.py` corre tal cual en el servidor. Nunca escribas un ratio que no salió del script.",
+        "`references/medir.mjs` necesita Playwright; no instales su Chromium sin ✅. Si no está, mide con el navegador del agente: abre `prueba.html` con viewport de 1280×900 y de 390×844 (emulación de viewport, no `--window-size`: headless por debajo de 500 px recorta y da desbordes falsos), corre en consola el mismo chequeo de desborde y `opacity:0` del script y toma las dos capturas.",
+        "`DESIGN.md`, `prueba.html` y las capturas van a `entregables/design/` y se mandan por Telegram. Copia además el `DESIGN.md` a `cerebro/DESIGN.md` para que las demás skills lo usen."
+      ]
+    },
+    "caso-estudio-contenido-f100k": {
+      "notes": [
+        "LUNA y CALI no existen aquí: haz tú la investigación y luego guiones, ganchos y calendario, en secuencia, con `investigacion-contenido-formula100k`, `analizador-referencias-virales-f100k`, `guionizacion-formula100k`, `generador-ganchos-formula100k` y `calendarizador-contenido-formula100k` si están instaladas. El checkpoint entre investigación y producción va por Telegram y se espera su ✅.",
+        "Las 12 referencias virales salen de Apify con `APIFY_TOKEN` (datos públicos, costo estimado y ✅ antes) o de los links que mande la alumna. Nunca navegador logueado. Si no hay Apify, dilo y deja las vistas como «pendiente», nunca «Original» ni inventadas.",
+        "Los patrones de SU cuenta: Composio si tiene Instagram profesional conectado; si no, pídele capturas de sus estadísticas por Telegram. Sin datos, sáltalo y anótalo.",
+        "Todo va a `entregables/casos-de-estudio/<nicho-slug>-<AAAA-MM-DD>/`. El render usa solo la librería estándar: `python3 skills/caso-estudio-contenido-f100k/render_caso_estudio.py <carpeta>/data.json <carpeta>/index.html`.",
+        "`calendario.xlsx` necesita `openpyxl`; si no está, entrega solo el CSV y dilo. Revisa el `index.html` con el navegador del agente (captura a 390 px) antes de entregarlo.",
+        "Manda por Telegram el `index.html`, un `.zip` de la carpeta y el CSV. Ella lo sube a netlify.com/drop o a su Vercel; tú no despliegas salvo que conecte SU cuenta y dé ✅."
+      ],
+      "replace": [
+        [
+          ", 'haz mi caso de estudio como el de la crucerista',",
+          ","
+        ],
+        [
+          "produjo la alumna Mafe Rojas en `crucerista-camba-club.netlify.app`:",
+          "produjo una alumna real del reto (su página no viaja en este paquete):"
+        ],
+        [
+          "`~/Documents/FORMULA100K/CASOS-DE-ESTUDIO/<nicho-slug>-<AAAA-MM-DD>/`",
+          "`entregables/casos-de-estudio/<nicho-slug>-<AAAA-MM-DD>/`"
+        ],
+        [
+          "agent-browser primero y Apify si no.",
+          "Apify con `APIFY_TOKEN` o links que mande la alumna; nunca navegador logueado."
+        ],
+        [
+          "\"nicho\": \"Cruceros y viajes en crucero\",",
+          "\"nicho\": \"Repostería creativa para eventos\","
+        ],
+        [
+          "\"handle\": \"@crucerista_camba\",",
+          "\"handle\": \"@tu_cuenta\","
+        ],
+        [
+          "\"autora\": \"Mafe Rojas (@cambamberaporelmundo)\",",
+          "\"autora\": \"Tu nombre (@tu_cuenta)\","
+        ],
+        [
+          "\"nombre\": \"Nerea\", \"edad\": \"32-43\",",
+          "\"nombre\": \"Laura\", \"edad\": \"28-40\","
+        ],
+        [
+          "\"creencia\": \"Un crucero es un lujo caro e inalcanzable para mí\",",
+          "\"creencia\": \"Un pastel de diseño es imposible de hacer en casa\","
+        ],
+        [
+          "\"deseo\": \"Vivir un viaje inolvidable sin endeudarse\"",
+          "\"deseo\": \"Lucirse en la fiesta de sus hijos sin pagar una fortuna\""
+        ],
+        [
+          "\"ancla\": \"Podcast de entrevistas a viajeros\",",
+          "\"ancla\": \"Podcast de entrevistas a reposteras\","
+        ]
+      ],
+      "description_override": "Reto final del módulo de Creación de Contenido de FÓRMULA 100K: corre el pipeline completo sobre el nicho de una alumna y entrega una PÁGINA DE CASO DE ESTUDIO (HTML de una sola página) lista para subir a Netlify/Vercel como portafolio, más el calendario en CSV. Activar SIEMPRE que se pida 'quiero hacer el reto final', 'crea mi caso de estudio de contenido', 'arma mi calendario + investigación del reto', 'el reto del módulo de contenido', 'haz mi caso de estudio', o cuando se invoque /caso-estudio. Investiga referencias virales reales, arma guiones, ganchos y calendario de 30 días con un checkpoint humano en medio, suma el plan de mes 2 y maqueta el HTML final. NO confundir con calendarizador-contenido (solo el calendario) ni con MAESTRO (semana completa con colocación en Yapper/Bento)."
+    },
+    "creador-estrategia-contenido-formula100k": {
+      "notes": [
+        "Si `cerebro/` ya tiene avatar, oferta o manual lleno, confírmalo con ella en vez de preguntarlo de nuevo (es el caso «alumna que comparte el manual ya lleno»). Los bloques de preguntas van por Telegram, uno a la vez.",
+        "Cuentas de referencia de IG/TikTok: Apify con `APIFY_TOKEN` (costo estimado y ✅), o los links y capturas que mande la alumna. vidIQ no está aquí: para outliers de YouTube usa búsqueda web o un actor de YouTube en Apify, y di en el resumen que no son datos de vidIQ.",
+        "Los artifacts de referencia de FÓRMULA 100K (`f100k-ganchos.html`, `f100k-niveles-energia.html`…) no vienen en este paquete: trabaja con `frameworks.md` y el resto de archivos de la skill.",
+        "La estrategia se guarda en `entregables/estrategias/{nombre-kebab-case}-estrategia.md` y se manda por Telegram como documento, con el resumen ejecutivo en el chat."
+      ],
+      "replace": [
+        [
+          "`~/Documents/FORMULA100K/ESTRATEGIAS/{nombre-kebab-case}-estrategia.md`",
+          "`entregables/estrategias/{nombre-kebab-case}-estrategia.md`"
+        ],
+        [
+          "**Artifacts de referencia:**",
+          "**Artifacts de referencia (no vienen en el paquete de OpenClaw; si no están, sigue con los .md de la skill):**"
+        ],
+        [
+          "Stack permanente: agent-browser + Tavily + vidIQ + Supadata.",
+          "Stack en OpenClaw: Apify (cuentas públicas de IG/TikTok) + búsqueda web + vidIQ si está conectado + Supadata si hay llave."
+        ],
+        [
+          "| 1 | **agent-browser** | IG/TikTok logueado, captions verbatim, métricas privadas, hashtags personalizados | SIEMPRE que la alumna nombró 1+ cuenta referencia o el nicho es IG/TikTok |",
+          "| 1 | **Apify** (`APIFY_TOKEN`) o capturas de la alumna | IG/TikTok públicos: captions verbatim, vistas, hashtags. Nunca navegador logueado | SIEMPRE que la alumna nombró 1+ cuenta referencia o el nicho es IG/TikTok |"
+        ],
+        [
+          "**Regla de oro:** agent-browser NUNCA es \"fallback\". Si la alumna nombró cuentas referencia, agent-browser entra primero. Si Tavily/vidIQ se cae, agent-browser sigue corriendo igual.",
+          "**Regla de oro:** si la alumna nombró cuentas de referencia, Apify entra primero (costo estimado y ✅). Si no hay `APIFY_TOKEN`, pídele links o capturas. Nunca se entra logueada a una red social desde el servidor."
+        ],
+        [
+          "Abre Chrome con sesión existente (IG y TikTok logueados con la cuenta del usuario).",
+          "Corre con `APIFY_TOKEN` los actores públicos de Instagram y TikTok (perfil/reels y búsqueda). Solo datos públicos: nunca navegador logueado."
+        ],
+        [
+          "| agent-browser no disponible | Decir explícito: \"no puedo entrar logueada, solo tengo Tavily/WebSearch + Supadata para landings\". Procede sin captions verbatim. |",
+          "| Sin `APIFY_TOKEN` | Decir explícito: \"no tengo Apify conectado; trabajo con búsqueda web y los links o capturas que me mandes\". Procede sin captions verbatim. |"
+        ]
+      ],
+      "replace_re": [
+        [
+          "agent-browser",
+          "Apify"
+        ]
+      ],
+      "description_override": "Skill conversacional que guía a una alumna de FÓRMULA 100K paso a paso para construir su estrategia de contenido completa. Activar SIEMPRE que alguien pida \"crea mi estrategia de contenido\", \"ayúdame a armar mi estrategia\", \"construye mi plan de contenido\", \"diseña mi estrategia\", \"no sé qué publicar\", \"necesito un plan de contenido\", \"hazme una estrategia para mi nicho de X\", \"armemos mi calendario de contenido\", \"qué publico esta semana\", \"estructura mi contenido\". Combina avatar + oferta + 3 pilares + investigación automática (búsqueda web de tendencias, Apify para cuentas públicas de IG/TikTok o capturas que manda la alumna, outliers de YouTube) + matriz Viralidad/Valor/Venta + calendario por niveles de energía. Nunca entra logueada a redes sociales. Genera la estrategia completa lista para pegar en el TAB 6 del Manual de Negocio 100K."
+    },
+    "calendario-actividades-skool-f100k": {
+      "notes": [
+        "Arranca desde `plantillas/dinamicas-genericas.json` (o `blanco.json`). La config real de FÓRMULA 100K no viaja en este paquete. La config de su comunidad guárdala en `cerebro/calendario-actividades/<comunidad>.json` para clonarla el mes siguiente.",
+        "Render: la primera vez `npm install` dentro de la carpeta de la skill (solo `puppeteer-core`, no baja navegador). Corre desde la raíz del workspace con el Chromium del servidor: `CHROME_PATH=$(command -v chromium || command -v chromium-browser) node skills/calendario-actividades-skool-f100k/render.js cerebro/calendario-actividades/<comunidad>.json --out entregables/calendarios-actividades/<AAAA-MM>_<comunidad>.png`.",
+        "El tema `alquimista-f100k` es la marca de FÓRMULA 100K. Para la comunidad de la usuaria usa `minimalista-claro`, `oscuro-neon` o un fondo propio; el tema nuevo va en `cerebro/calendario-actividades/themes/<marca>/` y lo copias a `themes/` antes de renderizar (las actualizaciones borran la carpeta de la skill).",
+        "Fondo propio con Higgsfield: costo estimado y ✅ antes de generar. Si no está el plugin, entrega el prompt y usa un tema CSS.",
+        "Mira el PNG antes de mandarlo (fechas en su día, chips sin desbordar) y mándalo por Telegram como archivo junto al `.html` editable. Publicarlo en Skool lo hace ella."
+      ],
+      "exclude": [
+        "plantillas/f100k.json"
+      ],
+      "replace": [
+        [
+          "`~/Documents/FORMULA100K/CALENDARIOS-ACTIVIDADES/`",
+          "`entregables/calendarios-actividades/` (corre el render desde la raíz del workspace)"
+        ],
+        [
+          "npm install          # instala puppeteer-core (usa el Chrome de macOS, no descarga otro)",
+          "npm install          # instala puppeteer-core (usa el Chromium del servidor vía CHROME_PATH, no descarga otro)"
+        ],
+        [
+          "node render.js plantillas/f100k.json                       # usa mes/anio/tema del config",
+          "node render.js plantillas/dinamicas-genericas.json         # usa mes/anio/tema del config"
+        ],
+        [
+          "(o de `plantillas/f100k.json` / `plantillas/dinamicas-genericas.json`)",
+          "(o de `plantillas/dinamicas-genericas.json`)"
+        ],
+        [
+          "├── f100k.json               # config real de FÓRMULA 100K (ejemplo vivo + para clonar)",
+          "├── (la config real de FÓRMULA 100K no viaja en este paquete)"
+        ],
+        [
+          "El de la comunidad del usuario.",
+          "Es la marca de FÓRMULA 100K: para otra comunidad usa otro tema o genera su fondo."
+        ],
+        [
+          "Convierte el PNG descargado a JPEG (`sips -s format jpeg ...`) para que pese menos.",
+          "Si llega en PNG, conviértela a JPEG con Pillow para que pese menos, o déjala como `fondo.png` y cambia `\"fondo\"` en `theme.json`."
+        ],
+        [
+          "(default: Documents/FORMULA100K/CALENDARIOS-ACTIVIDADES/AAAA-MM_comunidad.png)",
+          "(default: entregables/calendarios-actividades/AAAA-MM_comunidad.png, relativo a donde corres el comando)"
+        ],
+        [
+          "const defOutDir = path.join(os.homedir(), 'Documents', 'FORMULA100K', 'CALENDARIOS-ACTIVIDADES');",
+          "const defOutDir = path.join(process.cwd(), 'entregables', 'calendarios-actividades');"
+        ],
+        [
+          "  process.env.CHROME_PATH,\n",
+          "  process.env.CHROME_PATH,\n  '/usr/bin/chromium',\n  '/usr/bin/chromium-browser',\n  '/usr/bin/google-chrome',\n"
+        ],
+        [
+          "    headless: 'new',\n",
+          "    headless: 'new',\n    args: ['--no-sandbox', '--disable-dev-shm-usage'],\n"
+        ]
+      ]
+    },
+    "generador-artifact-educativo-formula100k": {
+      "notes": [
+        "Sirve para recursos de SU curso o comunidad (o de un tema de FÓRMULA 100K que esté estudiando). El material fuente te lo manda por Telegram como archivo o texto; los artifacts de FÓRMULA 100K que menciona la skill no vienen en este paquete, así que solo cruza referencias con los que existan en `entregables/artifacts/`.",
+        "`.docx` sin `textutil` (es de Mac): usa `pandoc -t plain` o `python-docx` si están; si no, pídele el texto en `.txt` o pegado.",
+        "Guarda en `entregables/artifacts/f100k-{tema}.html` (o con el prefijo de su marca si lo prefiere). Revisa el HTML con el navegador del agente a 390 px y 1280 px (las tres vistas cargan y las flashcards giran) y mándalo por Telegram como documento: funciona con doble clic, sin servidor.",
+        "Para elegir paleta sin repetir, lista los artifacts que ya hay en `entregables/artifacts/`; `paletas.md` trae las usadas en FÓRMULA 100K, no las de ella.",
+        "En el header y el footer del template cambia `@TUHANDLE` por su handle (sale de `USER.md`); nunca dejes el de otra persona."
+      ],
+      "replace": [
+        [
+          "(her Skool community)",
+          "(or the user's own course or community)"
+        ],
+        [
+          "Genera artifacts educativos consistentes con los 7 ya creados para la comunidad de Andrea Vega.",
+          "Genera artifacts educativos con un mismo sistema reconocible."
+        ],
+        [
+          "que ayuda a las alumnas a entender un concepto del manual de FÓRMULA 100K.",
+          "que ayuda a las alumnas a entender un concepto de su curso, su comunidad o del manual de FÓRMULA 100K."
+        ],
+        [
+          "textutil -convert txt -stdout \"ruta/al/archivo.docx\"",
+          "pandoc -t plain \"ruta/al/archivo.docx\"   # o python-docx; si no hay ninguno, pide el texto en .txt"
+        ],
+        [
+          "open \"~/Documents/FORMULA100K/ARTIFACTS/f100k-{tema}.html\"",
+          "# ábrelo con el navegador del agente (390 px y 1280 px) y mándalo por Telegram como documento"
+        ],
+        [
+          "Cuando el tema lo permita, haz referencia explícita a otros artifacts ya creados:",
+          "Cuando el tema lo permita y esos artifacts existan en `entregables/artifacts/` (los de FÓRMULA 100K no vienen en el paquete de OpenClaw), haz referencia explícita a otros artifacts ya creados:"
+        ],
+        [
+          "- vos, sos, tenés, sabés, podés, debés, querés, vivís",
+          "- (voseo) vos, sos, tenés, sabés, podés, debés, querés, vivís"
+        ],
+        [
+          "- aplicás, encuestás, conocés, entendés, decís",
+          "- (voseo) aplicás, encuestás, conocés, entendés, decís"
+        ],
+        [
+          "- Pintá, Mostrá, Ofrecé, Creá, Documentá, Usá, Traducí, Convertí",
+          "- (voseo) Pintá, Mostrá, Ofrecé, Creá, Documentá, Usá, Traducí, Convertí"
+        ],
+        [
+          "- Identificá, Eliminá, Listá, Capturá, andá, mirá, hacé, llevá",
+          "- (voseo) Identificá, Eliminá, Listá, Capturá, andá, mirá, hacé, llevá"
+        ],
+        [
+          "- \"en vos\", \"a vos\", \"para vos\", \"te conviene a vos\"",
+          "- (voseo) \"en vos\", \"a vos\", \"para vos\", \"te conviene a vos\""
+        ],
+        [
+          "para vos\" /ruta/al/archivo.html",
+          "para vos\" /ruta/al/archivo.html   # detector de voseo"
+        ]
+      ],
+      "description_override": "Use when the user asks to create an educational artifact, miniapp, interactive resource, or visual guide for a concept of her own course or community, or of FÓRMULA 100K. Triggers on phrases like \"crea un artifact\", \"miniapp educativa\", \"recurso para mis alumnas\", \"artifact del tab X\", \"guía interactiva\", \"construye un artifact sobre [tema]\", \"armemos un artifact de [concepto]\". Generates a single self-contained HTML file (Guía / Flashcards / Examen) with React + Tailwind + Babel via CDN that works by double-clicking — no server, no build, no Claude subscription needed. Saves it to entregables/artifacts/ and sends it by Telegram."
+    },
+    "auditor-ux-app-f100k": {
+      "notes": [
+        "El recorrido de las 8 pruebas se hace con el navegador del agente (Chromium de OpenClaw) sobre la URL pública de su app o sobre el proyecto levantado en el workspace (`entregables/apps/<app>/`). Nunca inicies sesión con su Google ni con su contraseña personal: si la app pide login, pídele una cuenta de prueba creada para la auditoría, y otra sin acceso para la prueba 7.",
+        "Prueba de teléfono: emula el viewport de 390×844 en el navegador. No uses `--window-size`: Chrome headless por debajo de 500 px recorta y da desbordes falsos.",
+        "Si solo te pasa el link y no el código, audita lo que se ve y deja la lectura de código en «No verificado». Con documento (brief, spec, plan), te lo manda por Telegram como archivo.",
+        "Capturas y notas van a `informes/auditoria-ux/<app>/`. El informe se manda por Telegram como documento, con el termómetro y los 3 arreglos en el chat.",
+        "Fase 5: aplicar arreglos solo sobre archivos que están en el workspace, y después le mandas el `.zip` o el diff. Push y deploy solo con SU cuenta conectada y ✅.",
+        "Las cicatrices vienen anonimizadas («la app de guiones», «la app de retos»…): cítalas como «mismo patrón que la cicatriz C5», no como datos de su app."
+      ],
+      "replace": [
+        [
+          "fallos que ya te costaron caro en tus propias apps",
+          "fallos que ya costaron caro en apps reales del ecosistema F100K"
+        ],
+        [
+          "§Puertas: en tus apps esos",
+          "§Puertas: en apps así esos"
+        ],
+        [
+          "capturas y notas al directorio de scratchpad de la sesión",
+          "capturas y notas a `informes/auditoria-ux/<app>/` del workspace"
+        ],
+        [
+          "En Yapper existe `/preview-shell` y es lo que permitió medir el menú",
+          "En una de las apps de origen existía una ruta así y es lo que permitió medir el menú"
+        ],
+        [
+          "una ruta tipo `/preview-shell` que renderice",
+          "una ruta de previsualización que renderice"
+        ],
+        [
+          "`miboveda.vercel.app`",
+          "`tuapp.vercel.app`"
+        ],
+        [
+          "**Dónde:** Yapper. `components/YapperApp.tsx` es **código muerto**; el shell vivo es\n`components/shell/AppShell.tsx` + `TopNav.tsx`, y el router de cuerpos es `canvas/NotebookHome.tsx`.",
+          "**Dónde:** Yapper. Un componente de app completo era **código muerto**; el shell vivo estaba en otra carpeta\ny el router de pantallas en un tercer archivo."
+        ],
+        [
+          "`save_yapper_script`",
+          "la acción de guardar guion"
+        ],
+        [
+          "Caso real: la\ndueña de la cuenta con 2 miembros en un silo y todo su equipo con 160 en otro, la misma persona con un caso\nabierto en cada uno, y ninguno veía al otro.",
+          "Caso real: la\ndueña de la cuenta en un silo y todo su equipo en otro, la misma persona con un caso\nabierto en cada uno, y ninguno veía al otro."
+        ],
+        [
+          "De 12 asistentes, solo 1 pudo reclamar.",
+          "Casi ninguna asistente pudo reclamar."
+        ],
+        [
+          "reto Road to 1K, día 14 (jul-2026)",
+          "un reto de comunidad, a mitad de camino (jul-2026)"
+        ],
+        [
+          "29 eventos repartieron 26.012 puntos frente a 8.830 de la constancia de 297 personas\n   en 14 días: un solo corte pesaba tres veces todo el reto. Alguien con 600K seguidores sumó 4.368 puntos por\n   crecer 0,6%; quien tenía ventas reales",
+          "los puntos por crecimiento repartían tres veces más que la constancia de todas\n   las participantes juntas: un solo corte pesaba más que todo el reto. Una cuenta muy grande sumó muchísimo por\n   crecer menos de 1%; quien tenía ventas reales"
+        ],
+        [
+          "y 7 de 22 quedaron\n   con delta negativo",
+          "y casi un tercio quedó\n   con delta negativo"
+        ]
+      ],
+      "replace_re": [
+        [
+          "SMMA-BENTO|\\bBento\\b",
+          "la app de agencia"
+        ],
+        [
+          "\\bYapper\\b",
+          "la app de guiones"
+        ],
+        [
+          "\\bVictoryOS\\b",
+          "la plataforma de cursos"
+        ],
+        [
+          "\\bChallengerz\\b",
+          "la app de retos"
+        ],
+        [
+          "\\bSkoop\\b",
+          "la app de escritorio con licencias"
+        ]
+      ],
+      "description_override": "Auditor de la construcción de UX de una app (producto, no pixel) con la doctrina de FÓRMULA 100K y 22 cicatrices reales de apps en producción. Revisa CUALQUIER etapa: brief, spec/PRD, plan de implementación o la app ya construida. Recorre la app como usuaria con el navegador del agente (URL pública o proyecto en el workspace), la puntúa contra una rúbrica de 10 dimensiones (claridad, primer minuto, los 4+1 estados, feedback honesto, no perder el trabajo, la pantalla no miente, móvil de verdad, dashboard 1-3-5, puertas de acceso y dinero, salir al mundo), entrega un informe con termómetro 0-100 y hallazgos con evidencia, y —tras tu ✅— APLICA los arreglos en los archivos. Usar cuando digan \"revisa la UX de esta app\", \"audita mi app\", \"qué le falta a mi app\", \"revisa este spec/plan/brief antes de construir\", \"/audita-ux\", \"por qué mi app se siente a medias\". NO es la skill de diseño visual (ux-elevacion-formula100k); NO construye la app desde cero (crea-tu-app-f100k)."
+    },
+    "analiza-tu-contenido-f100k": {
+      "notes": [
+        "**Nada de Chrome logueado, yt-dlp, `sips` ni Whisper en este servidor** (PASO 0 A y PASO 1): no se bajan ni se transcriben videos aquí.",
+        "Lista de Reels + estadísticas básicas: Composio con su Instagram profesional (es SU cuenta, así que es la fuente buena: vistas, guardados, compartidos, seguidores y lo que traiga de tiempo de visualización). Si Composio no está, Apify `apify/instagram-reel-scraper` con `includeTranscript: true` (solo datos públicos: vistas, likes, comentarios, caption, duración, portada) y el resto de las básicas por captura. Lo que ninguna fuente trae (por ejemplo % de no seguidores) queda `null`: nunca lo estimes.",
+        "Transcripts: el `transcript` de Apify o Supadata si hay `SUPADATA_API_KEY`. Si un Reel no tiene transcript, no es `sin_voz`: etiquétalo solo con la portada y dilo; si tampoco hay portada, no lo etiquetes.",
+        "Portadas: baja la imagen de la portada (`displayUrl`/`thumbnail`) con curl a `portadas/`, sin redimensionar. Si el HTML pasa de ~10 MB, deja `portada: null` en los Reels de la línea base.",
+        "Capturas avanzadas (retención y actividad en el perfil): la usuaria las manda por Telegram, como foto o archivo, con el número del Reel en el pie de foto. Léelas como imagen y copia el número tal cual.",
+        "Carpeta de trabajo: `informes/analiza-tu-contenido/<handle>-<AAAA-MM>/`. El motor se corre con `node skills/analiza-tu-contenido-f100k/scripts/render.mjs` (necesita Node 18+; es cálculo, no procesa video).",
+        "Para «míralo una vez» abre el HTML en el navegador del agente y toma un screenshot. No hay Artifact: manda `hoja-del-mes.html` por Telegram como documento (se abre con doble clic y trae el botón de imprimir/PDF) y el resumen de 6 líneas en el chat.",
+        "Guarda `datos.json` de cada mes en esa misma carpeta: el mes siguiente lo necesitas como línea base."
+      ],
+      "replace": [
+        [
+          "   - **Básicas** (vistas, % de no seguidores, guardados, compartidos, seguidores nuevos): **A · Chrome logueado**, tú abres «Ver insights» de cada Reel con `claude-in-chrome` y lees los números; ella no hace nada. (El puente de cookies de agent-browser lo bloquea el clasificador.) Si no hay Chrome, salen de sus capturas.",
+          "   - **Básicas** (vistas, % de no seguidores, guardados, compartidos, seguidores nuevos): **A · Composio** con su Instagram profesional (ella no hace nada); si no está conectado, Apify para lo público y sus capturas para el resto. Nunca un navegador logueado."
+        ],
+        [
+          "Carpeta de trabajo: `~/Documents/ANALIZA-TU-CONTENIDO/<handle>-<AAAA-MM>/` con `reels/`, `portadas/`, `transcripts/`.",
+          "Carpeta de trabajo: `informes/analiza-tu-contenido/<handle>-<AAAA-MM>/` con `portadas/` y `transcripts/`."
+        ],
+        [
+          "- **Lista de Reels** (code, fecha, caption, duración, portada): con claude-in-chrome en la pestaña Reels del perfil.",
+          "- **Lista de Reels** (code, fecha, caption, duración, portada): Composio (su cuenta) o Apify `apify/instagram-reel-scraper` con `includeTranscript: true`. Lo de abajo es la receta de escritorio con Chrome logueado: en este servidor NO se usa."
+        ],
+        [
+          "- **Videos**: `yt-dlp \"https://www.instagram.com/reel/<code>/\"` sin cookies (los Reels públicos bajan sin fallar).",
+          "- **Videos**: en este servidor NO se bajan (receta de escritorio: `yt-dlp \"https://www.instagram.com/reel/<code>/\"`)."
+        ],
+        [
+          "- **Portadas** a ~320 px (`sips -Z 320`). **Transcripción**: `whisper <video> --model small --language es --output_format txt`.",
+          "- **Portadas**: baja la imagen de portada con curl, sin redimensionar. **Transcripción**: el `transcript` de Apify, o Supadata si hay llave (aquí no corre Whisper)."
+        ],
+        [
+          "- **Nunca etiquetes un Reel que no bajaste.** El caption no es prueba.",
+          "- **Nunca etiquetes un Reel sin transcript ni portada vistos.** El caption no es prueba."
+        ],
+        [
+          "Esquema completo en `references/esquema.md`. Ejemplo con los 30 Reels de una cuenta real (sin enlaces ni textos) en `ejemplo/datos-ejemplo.json`.",
+          "Esquema completo en `references/esquema.md`."
+        ],
+        [
+          "Sale un HTML completo que se abre con doble clic. Para publicarlo como Artifact, agrega `--artifact` (el visor pone su propio esqueleto).",
+          "Sale un HTML completo que se abre con doble clic. En este agente no uses `--artifact`: el archivo se manda por Telegram."
+        ],
+        [
+          "- Publícalo como Artifact si tienes la herramienta (queda privado y lo puede compartir con su equipo); si no, entrégale el archivo: se abre con doble clic sin internet y el botón «Imprimir o guardar PDF» saca la hoja en carta horizontal.",
+          "- Mándale el archivo por Telegram como documento: se abre con doble clic sin internet y el botón «Imprimir o guardar PDF» saca la hoja en carta horizontal."
+        ],
+        [
+          "| Básicas (solo si no hay Chrome) |",
+          "| Básicas (solo si no hay Composio) |"
+        ],
+        [
+          "> Nómbralas con el número del Reel y una letra: `01a.png` (retención), `01b.png` (perfil). El 01 es el más reciente. Mándamelas en una carpeta.",
+          "> Mándamelas por aquí y escribe en el pie de cada foto el número del Reel y una letra: `01a` (retención), `01b` (perfil). El 01 es el más reciente."
+        ]
+      ],
+      "description_override": "Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K sobre la cuenta de la alumna y lo entrega en La Hoja del Mes (infografía imprimible en HTML). Trae sus últimos 30 Reels con sus estadísticas básicas (Composio con su Instagram profesional, o Apify + capturas) y sus transcripts, pide las avanzadas por captura de la app (retención y actividad en el perfil), lee los 5 filtros y el filtro tapado, corona moldes y ángulos, saca 3 conclusiones fijas (formato ganador, ángulo que más viraliza y posible ángulo de venta) y arma el calendario pieza por pieza con ángulo exacto, gancho, estructura, CTA y Reel de referencia. Usar SIEMPRE que digan «analiza mi contenido», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k).",
+      "exclude": [
+        "ejemplo/datos-ejemplo.json",
+        "scripts/fixture-cuenta-medida.mjs",
+        "scripts/motor.test.mjs"
+      ]
+    },
+    "constructor-miniapps-f100k": {
+      "notes": [
+        "Camino por defecto: escribe `entregables/apps/<nombre>/index.html` y mándalo por Telegram como documento (o `.zip` si son varios archivos). Eso ya es una entrega completa: se abre con doble clic.",
+        "Fase 3: prueba la app abriéndola en el navegador del agente (archivo local, sin login): recorre el flujo, el camino torcido y el ancho de 390 px con screenshots. No digas que funciona sin haberla recorrido.",
+        "Fase 4 · Camino A (publicarla tú) solo si la usuaria conectó **su propia** cuenta de Vercel (`VERCEL_TOKEN` en el entorno) y te da ✅: `vercel --prod --yes --token \"$VERCEL_TOKEN\"`. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Sin token, dale el Camino B (arrastrar la carpeta en vercel.com) paso a paso por Telegram y pídele la URL para comprobarla tú.",
+        "Next.js / Supabase / Stripe: escribe el proyecto y mándalo en `.zip`. **No corras `npm install` ni `next build` en este servidor** (es pesado para el plan); si se despliega, que construya Vercel. Las llaves nunca van en los archivos que mandas.",
+        "Clonar una web de referencia: navegador del agente, solo páginas públicas."
+      ],
+      "replace": [
+        [
+          "- **`agent-browser`** — para clonar una web de referencia inspeccionando su estructura y estilo.",
+          "- **Navegador del agente (sin login)** — para clonar una web de referencia pública inspeccionando su estructura y estilo."
+        ],
+        [
+          "Apify (scraping logueado)",
+          "Apify (datos públicos)"
+        ]
+      ],
+      "description_override": "Construye mini-apps y herramientas reales sin ser programadora, con la metodología FÓRMULA 100K. Usar SIEMPRE que alguien pida: \"quiero que construyas una mini app web llamada X\", \"constrúyeme una app\", \"hazme una mini-app\", \"es mi primera app\", \"crea una herramienta\", \"una calculadora web\", \"un quiz que dé un resultado\", \"un generador de X\", \"una auditoría exprés\", \"una extensión de Chrome\", \"una app con mi API/IA\", \"un mini-SaaS\", \"clona esta web/app\", \"publícala en Vercel\", \"dame el link de mi app\". Empieza SIEMPRE por el brief de 5 preguntas y, si no hay motivo real para más, entrega una app de UN SOLO ARCHIVO HTML que funciona con doble clic, probada en el navegador del agente y enviada por Telegram — sin llaves de IA, sin base de datos, sin login. La publica en *.vercel.app solo con la cuenta de Vercel de la usuaria conectada y su ✅. NO usar para landings de venta puras ni para diseñar la estrategia del lead magnet (cazador-lead-magnets-f100k)."
+    },
+    "analizador-referencias-virales-f100k": {
+      "notes": [
+        "El motor es Apify con `APIFY_TOKEN`. Sin token: no hay métricas; pide los links y las capturas de vistas a la usuaria, o marca todo `[NO VERIFICADO — scrape no corrió]` como dice el PASO 4.5.",
+        "Transcripción: Supadata solo si existe `SUPADATA_API_KEY`. Si no, usa el campo de transcripción/subtítulos que devuelva el actor de Apify (`apify/instagram-reel-scraper` con `includeTranscript: true` para Reels); si tampoco hay, aplica el fallback `[sin transcripción]` del PASO 3.",
+        "Antes de lanzar los actores di el costo estimado de la tabla COSTOS y espera ✅. Corre las keywords una tras otra, no en paralelo.",
+        "Si una URL no la cubre Apify, se pide la captura: nunca navegador logueado. El archivo va a `informes/` y la tabla resumida al chat de Telegram."
+      ],
+      "replace": [
+        [
+          "   - O agent-browser logueado si Apify no cubre la URL.",
+          "   - Si Apify no cubre la URL: pídele a la usuaria la captura con las vistas (nunca navegador logueado)."
+        ],
+        [
+          "(`playCount` / `videoPlayCount` de Apify o del DOM extraído por agent-browser)",
+          "(`playCount` / `videoPlayCount` de Apify, o una captura que mandó la usuaria)"
+        ],
+        [
+          "(tienes un `runId`/`datasetId` real) o agent-browser extrajo el dato en vivo?",
+          "(tienes un `runId`/`datasetId` real) o la usuaria mandó la captura con el dato?"
+        ],
+        [
+          "(Apify/agent-browser sin conexión o sesión caducada)",
+          "(Apify sin conexión, sin saldo o sin `APIFY_TOKEN`)"
+        ],
+        [
+          "### Guardado en Obsidian (siempre, aunque el usuario no lo pida)",
+          "### Guardado en `informes/` (siempre, aunque el usuario no lo pida)"
+        ],
+        [
+          "~/Documents/Vault-F100K/03-INVESTIGACION/refs-virales-[keyword-slug]-[YYYY-MM-DD].md",
+          "informes/refs-virales-[keyword-slug]-[YYYY-MM-DD].md"
+        ],
+        [
+          "Tabla completa en chat + guardado Obsidian",
+          "Tabla completa en chat + guardado en `informes/`"
+        ],
+        [
+          "- ✅ Guardar siempre en Obsidian.",
+          "- ✅ Guardar siempre en `informes/`."
+        ]
+      ]
+    },
+    "cazador-lead-magnets-f100k": {
+      "notes": [
+        "Paso 1 · data real: comentarios de sus Reels más vistos con Composio (su Instagram profesional) o Apify (`apify/instagram-comment-scraper`, costo → ✅). Los DMs los pega o los manda en captura ella por Telegram: no los leas por tu cuenta aunque haya conexión. Competencia: Apify con los 3 @ que te dé.",
+        "Si el formato ganador es una miniapp, constrúyela con `constructor-miniapps-f100k`; si es un bot o agente, descríbelo en el briefing, no lo despliegues.",
+        "El briefing va a `entregables/lead-magnets/` y se manda por Telegram como documento. Los `[[...]]` son notas internas de la versión de escritorio: ignóralos."
+      ],
+      "replace": [
+        [
+          "Opcionalmente derivar a [[analizador-perfiles-formula100k]] para extracción automatizada con agent-browser.",
+          "Opcionalmente derivar a `analizador-perfiles-formula100k` para extraerlo con Composio o Apify."
+        ],
+        [
+          "`~/Documents/FORMULA100K/LEAD_MAGNETS/YYYY-MM-DD_<slug-del-lead-magnet>.md`",
+          "`entregables/lead-magnets/YYYY-MM-DD_<slug-del-lead-magnet>.md`"
+        ]
+      ]
+    },
+    "radar-contenido-f100k": {
+      "notes": [
+        "**No hay Explorar ni guardados logueados en este servidor**: FASE 2 con Claude in Chrome, `scripts/cosecha.js` y `scripts/mirar.sh` no vienen en este paquete. El PASO 0 de instalación tampoco aplica: aquí solo comprueba `APIFY_TOKEN` y, si lo vas a usar, el plugin de Higgsfield.",
+        "Cosecha: Apify con las búsquedas cortas convertidas a hashtags (`apify/instagram-scraper`, `resultsType: \"posts\"`) y, para seguidores, `apify/instagram-profile-scraper` sobre los autores con +100K vistas. Calcula el ratio vistas ÷ seguidores igual que la skill. Canal = `apify:<hashtag>`. Di el costo antes y espera ✅.",
+        "Guardados: la usuaria te reenvía por Telegram los links de los Reels que guardó; entran por el modo AGREGAR 1 con `fuente: \"guardados\"`.",
+        "FASE 4 (compuerta visual, sigue siendo bloqueante): aquí no se bajan videos ni se sacan fotogramas. Para mirar un Reel usa, en este orden: capturas que mande la usuaria (inicio, medio y final); o el análisis por escenas de Higgsfield (`media_import_url` con el `videoUrl` de Apify → `video_analysis_create`, costo → ✅). La transcripción sale del actor de Apify (`includeTranscript`). Lo que no se pudo mirar **no entra** al registro.",
+        "Carpeta del radar: `informes/radar-contenido/` (`config.json`, `registro.json`, `corridas/`, `reportes/`). El reporte se manda por Telegram.",
+        "Con Apify puede ir en una automatización de OpenClaw (por ejemplo lunes y jueves) que entrega el reporte por Telegram; muestra la hora y el costo por corrida y espera ✅ antes de crearla."
+      ],
+      "replace": [
+        [
+          "Metodología de Andrea Vega. Un radar",
+          "Metodología FÓRMULA 100K. Un radar"
+        ],
+        [
+          "## PASO 0 · Comprobar la instalación (primera vez, y cuando algo falle)",
+          "## PASO 0 · Comprobar la instalación (versión de escritorio: en este servidor solo comprueba `APIFY_TOKEN` y el plugin de Higgsfield)"
+        ],
+        [
+          "- **Carpeta del radar.** Propón `~/radar-contenido/` y confirma.",
+          "- **Carpeta del radar.** Usa `informes/radar-contenido/`."
+        ],
+        [
+          "## FASE 2 · Cosecha (Claude in Chrome)",
+          "## FASE 2 · Cosecha (versión de escritorio con Claude in Chrome: en este servidor NO se usa; cosecha con Apify como dice el bloque de arriba)"
+        ],
+        [
+          "## FASE 4 · Compuerta visual (bloqueante)",
+          "## FASE 4 · Compuerta visual (bloqueante; en este servidor no se corre `mirar.sh`: mira con capturas o con el análisis de video de Higgsfield)"
+        ],
+        [
+          "- **Corrida**: 1 o 2 veces por semana. Necesita el Chrome del usuario abierto, así que se lanza a mano.",
+          "- **Corrida**: 1 o 2 veces por semana. Con Apify puede ir en una automatización, con el costo aprobado."
+        ]
+      ],
+      "description_override": "Radar de contenido de FÓRMULA 100K: monta y corre un sistema que vigila Instagram y te avisa qué FORMATOS están despegando. Cosecha con Apify (búsquedas cortas convertidas a hashtags) y con los Reels guardados que la usuaria reenvía por Telegram; filtra cuentas pequeñas cuyas vistas multiplican sus seguidores; mira cada reel (capturas o análisis de video de Higgsfield) antes de anotarlo; describe la mecánica (no el tema) con anatomía de 4-6 pasos; y la anota en un registro de recurrencia. Una mecánica cruza el umbral cuando aparece en 2+ nichos sin relación. Usar cuando se diga: 'monta mi radar', 'corre mi radar de contenido', 'radar de formatos', 'qué formatos están despegando', 'busca storytelling en Instagram', 'agrega este reel al radar [link]', 'qué cruzó el umbral'. Nunca usa una sesión logueada. NO escribe guiones (guionizacion-formula100k), NO audita una cuenta entera (analizador-perfiles-formula100k), NO caza temas del día (radar-virales-f100k).",
+      "exclude": [
+        "scripts/cosecha.js",
+        "scripts/mirar.sh"
+      ]
+    },
+    "investigacion-ads-formula100k": {
+      "notes": [
+        "Meta Ads Library: navegador del agente **sin iniciar sesión** (es pública). Nunca entres con el Facebook de la usuaria. Si la página no carga, pide captcha o corta la lista, pasa a Apify `apify/facebook-ads-library-scraper` (costo → ✅).",
+        "TikTok Creative Center: navegador del agente en modo público. Lo que solo se ve con cuenta de TikTok Business (algunos CTR/CVR) va como «no disponible»: no lo estimes.",
+        "No descargues los .mp4: guarda la URL del anuncio y un screenshot de su tarjeta en la biblioteca. Para leer el gancho visual, mira ese screenshot; si hace falta el video entero, que la usuaria lo abra.",
+        "Landings de los anuncios: tu herramienta web o el navegador del agente.",
+        "Todo va a `informes/ads-referencias/<fecha>_<proyecto>/` y los guiones a `guiones/ads/`. Por Telegram: los patrones en el chat y los `.md` como documentos."
+      ],
+      "replace": [
+        [
+          "Está extraído del artifact `f100k-anuncios-goat.html` y debe transmitirse",
+          "Es la doctrina de FÓRMULA 100K y debe transmitirse"
+        ],
+        [
+          "| **agent-browser** | Meta Ads Library con sesión real · TikTok Creative Center · TikTok Top Ads · descarga de .mp4 de creativos · scrolleo lazy · landings detrás de pixel |",
+          "| **Navegador del agente (sin login)** | Meta Ads Library pública · TikTok Creative Center · TikTok Top Ads · screenshots de cada anuncio · scrolleo lazy · landings |"
+        ],
+        [
+          "**Regla de oro:** la Biblioteca de Anuncios de Meta y el TikTok Creative Center cierran cada vez más data al visitante anónimo. Con sesión logueada del usuario (agent-browser), se ve TODO: anuncios activos, fechas, plataformas, variantes, demografía mostrada.",
+          "**Regla de oro:** en este agente nunca se entra con la cuenta de la usuaria. La Biblioteca de Anuncios de Meta es pública (anuncios activos, fechas, plataformas, variantes); lo que se cierre al visitante anónimo sale de Apify o queda como «no disponible»."
+        ],
+        [
+          "### Paso 1 — Meta Ads Library con agent-browser (motor principal)",
+          "### Paso 1 — Meta Ads Library con el navegador del agente, sin login (motor principal)"
+        ],
+        [
+          "Abre Chrome con la sesión existente del usuario (Facebook logueado).",
+          "Abre el navegador del agente SIN iniciar sesión (la biblioteca es pública)."
+        ],
+        [
+          "5. Descarga los .mp4 / .jpg de cada creativo a ~/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_[marca]/",
+          "5. Guarda la URL y un screenshot de la tarjeta de cada anuncio en informes/ads-referencias/[YYYY-MM-DD]_[marca]/ (no descargues los .mp4)"
+        ],
+        [
+          "**Cuando NO hay sesión logueada en el Chrome del usuario:**",
+          "**Cuando la biblioteca no carga, pide captcha o corta resultados:**"
+        ],
+        [
+          "### Paso 2 — TikTok Creative Center con agent-browser",
+          "### Paso 2 — TikTok Creative Center con el navegador del agente (público)"
+        ],
+        [
+          "Abre Chrome (TikTok Business Center logueado si tiene acceso, o público).",
+          "Abre el navegador del agente en modo público (sin iniciar sesión)."
+        ],
+        [
+          "5. Descarga los .mp4 a ~/Documents/FORMULA100K/ADS-REFERENCIAS/[YYYY-MM-DD]_tiktok_topads/",
+          "5. Guarda las URLs y screenshots en informes/ads-referencias/[YYYY-MM-DD]_tiktok_topads/ (no descargues los .mp4)"
+        ],
+        [
+          "~/Documents/FORMULA100K/ADS-REFERENCIAS/",
+          "informes/ads-referencias/"
+        ],
+        [
+          "Demo de la app YapperMethod generando 30 guiones en 2 minutos",
+          "Demo de [TU APP] generando 30 guiones en 2 minutos"
+        ],
+        [
+          "\"Esto es YapperMethod. Le metes el tema",
+          "\"Esto es [TU APP]. Le metes el tema"
+        ],
+        [
+          "\"Tatiana cerró 3 clientes en una semana.",
+          "\"[Nombre de tu clienta] cerró 3 clientes en una semana."
+        ]
+      ],
+      "description_override": "Investigación de ANUNCIOS PAGOS (paid ads) con la metodología FÓRMULA 100K + framework GOAT de Hormozi (Hook + Meat + CTA). Activar SIEMPRE que se pida 'investiga ads', 'busca ads de referencia', 'espía a la competencia en ads', 'biblioteca de anuncios de Meta', 'meta/facebook ads library', 'tiktok creative center', 'top ads', 'ads de [competidor]', 'qué anuncios corre X', 'dame 30 ideas de ads', '30-50 variantes de anuncios', 'guionízame este ad', 'variantes de un ad ganador', 'H x M x C', 'modulariza este ad'. NO confundir con investigacion-contenido-formula100k (contenido orgánico). Revisa la Biblioteca de Anuncios de Meta y el TikTok Creative Center en modo público con el navegador del agente (sin login) y Apify para lotes grandes, caza 30-50 ads, los desglosa con GOAT (Hook 80% / Meat 15% / CTA 5%), saca ángulos y ganchos ganadores, genera ideas propias y opcionalmente guioniza con H x M x C para variantes masivas."
+    },
+    "clonador-carrusel-formula100k": {
+      "notes": [
+        "Referencia por enlace: Apify `apify/instagram-scraper` (costo de centavos, avisa). Si Apify falla, pídele a la usuaria una captura por slide por Telegram: nunca navegador logueado. Las capturas que mande ya son la referencia (PASO 0 A).",
+        "Carpeta de trabajo: `entregables/carruseles/espejo-<AAAA-MM-DD>_<tema>/` con `ref/` (lo que llamas `$SCRATCH/carrusel-ref/`), `carrusel-espejo.html` y los PNG. Sus fotos están en `cerebro/fotos/`: referéncialas con `file://` y ruta absoluta del workspace.",
+        "Render: `node export.js` con el Chromium headless del servidor (1080×1350 por defecto). Esta versión busca `CHROME_PATH` y las rutas de Chromium de Linux. Necesita `puppeteer-core`; si no está, pide ✅ para `npm install` en la carpeta de la skill o manda el HTML y dilo.",
+        "Mira al menos la portada y el cierre renderizados antes de entregar. Manda los PNG por Telegram en orden (como álbum o como archivos para que no pierdan calidad) y el caption aparte. Publicar en Instagram: nunca sin ✅."
+      ],
+      "replace": [
+        [
+          "4. Si Apify falla o no hay red → **fallback**: `agent-browser` logueado abre el post y captura cada slide (patrón `feedback_ig_apify_default` dice Apify primero, pero agent-browser queda como respaldo).",
+          "4. Si Apify falla o no hay red → **fallback**: pídele a la usuaria una captura por slide, en orden, por Telegram (nunca navegador logueado)."
+        ],
+        [
+          "**Output recomendado:** `~/Documents/FORMULA100K/CARRUSELES ESPEJO/YYYY-MM-DD_tema/`",
+          "**Output recomendado:** `entregables/carruseles/espejo-YYYY-MM-DD_tema/`"
+        ],
+        [
+          "## 3. Fallback — agent-browser logueado",
+          "## 3. Fallback — capturas de la usuaria (nunca navegador logueado)"
+        ],
+        [
+          "1. Invocar la skill `agent-browser` con la sesión logueada del usuario.",
+          "1. Pídele por Telegram una captura de cada slide, en orden."
+        ],
+        [
+          "const CHROME_PATH = CHROME_CANDIDATES.find(p => fs.existsSync(p));",
+          "const CHROME_PATH = [process.env.CHROME_PATH, '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/snap/bin/chromium', ...CHROME_CANDIDATES].find(p => p && fs.existsSync(p));"
+        ],
+        [
+          "console.error('No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.');",
+          "console.error('No se encontró Chromium. Define CHROME_PATH con la ruta del Chromium del servidor.');"
+        ],
+        [
+          "    headless: 'new',",
+          "    headless: true,\n    args: ['--no-sandbox', '--disable-dev-shm-usage'],"
+        ]
+      ],
+      "description_override": "Skill ESPEJO de FÓRMULA 100K. Toma una CAPTURA DE PANTALLA o un ENLACE de Instagram/TikTok del carrusel de cualquier referente, extrae el \"ADN de estilo\" (layout, tipografía, paleta, patrón de gancho, arquitectura de slides), lo MEJORA con los principios de viralidad y legibilidad de F100K, y RENDERIZA un carrusel completo en PNG (HTML + Chromium headless) con TU tema y TU marca en ese estilo clonado-mejorado. Activar SIEMPRE que alguien diga: \"clona este carrusel\", \"copia el estilo de este carrusel\", \"hazme un carrusel como este\", \"imita a este referente\", \"tengo una captura de un carrusel que me gustó\", \"clona este carrusel desde este link\", \"replica este post de instagram\", \"replica este estilo\", \"carrusel espejo\", o cualquier captura o enlace de un carrusel con intención de reproducir y mejorar su estilo para contenido propio. NO usar para escribir un guion desde cero sin referencia visual (carrusel-viral-formula100k).",
+      "exclude": [
+        "SETUP.md"
+      ]
+    },
+    "evaluador-ganchos-formula100k": {
+      "notes": [
+        "La captura del primer segundo llega por Telegram (mejor como archivo, para que no pierda calidad). Si manda solo el video, pídele también la captura del segundo 1: en este servidor no se extraen fotogramas.",
+        "Virality Predictor (Paso 7): solo con el plugin de Higgsfield. Sube el video que mandó (`media_upload` → `media_confirm`), di el costo estimado y espera ✅ antes de `virality_predictor`. Sin plugin, entrega solo el diagnóstico manual y dilo en la primera línea.",
+        "El diagnóstico va entero al chat de Telegram; si es largo, resumen + `.md` en `informes/ganchos/`."
+      ],
+      "replace": [
+        [
+          "**Artifact educativo:** `~/Documents/FORMULA100K/ARTIFACTS/f100k-ganchos.html` — contiene la metodología visual completa que esta skill operacionaliza.",
+          "**Material educativo:** la guía visual de ganchos de FÓRMULA 100K (en la comunidad) contiene la metodología completa que esta skill operacionaliza."
+        ],
+        [
+          "toma un frame del segundo 1 (manual o con ffmpeg) y aplica los criterios.",
+          "pídele la captura del segundo 1 (en este servidor no se extraen fotogramas del video) y aplica los criterios."
+        ]
+      ]
+    },
+    "auditor-ganchos-cuenta-formula100k": {
+      "notes": [
+        "**Sin ffmpeg ni descarga de videos en este servidor** (PASOS 3 y 4). Para cada reel del TOP y del BOTTOM baja solo la portada (`displayUrl`) como `hook_<pos>.jpg` y márcala en el reporte como «portada», no «segundo 1». Si es la cuenta de la usuaria, pídele capturas del segundo 1 de los 3 mejores y los 3 peores: esas mandan sobre la portada.",
+        "Anatomía por segundos: solo con capturas a 0/3/6/10 s que mande la usuaria, o con el análisis por escenas de Higgsfield (`media_import_url` con el `videoUrl` → `video_analysis_create`) para 3-4 héroes y 3-4 peores, con costo → ✅. Sin ninguna de las dos, la pestaña dice «no disponible en esta corrida» y no se inventa.",
+        "Apify con `APIFY_TOKEN`: di el costo (~0,45 USD por 70 reels con transcripts) y espera ✅. Estadísticas nativas: Composio si es su Instagram profesional, o las que pegue en el chat.",
+        "Layouts de Higgsfield (PASO 7): plugin conectado, `balance` antes, costo total → ✅.",
+        "Carpeta: `informes/auditorias-ganchos/<usuario>_<AAAA-MM-DD>/`. Manda `index.html` en un `.zip` con las imágenes (usa rutas relativas) y el resumen del PASO 10 al chat. Memoria → `cerebro/memoria/`; Yapper solo si su MCP está conectado, si no, los guiones van a `guiones/`."
+      ],
+      "replace": [
+        [
+          "`~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/cambamberaporelmundo_2026-05-23/index.html`",
+          "(la implementación de referencia de 1177 líneas no viene en este paquete: arma el HTML con esta plantilla)"
+        ],
+        [
+          "open \"~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<fecha>/index.html\"",
+          "# en este agente: comprime la carpeta y manda el .zip por Telegram"
+        ],
+        [
+          "~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/",
+          "informes/auditorias-ganchos/"
+        ],
+        [
+          "Si más adelante hay una sesión IG guardada en `~/.agent-browser/sessions/`, agent-browser puede reemplazar Apify (pero no es el default).",
+          "En este agente nunca se usa una sesión de Instagram: Apify, Composio (cuenta propia) o capturas."
+        ],
+        [
+          "**integralos**",
+          "**intégralos**"
+        ],
+        [
+          "Descargar los N videos en paralelo desde `videoUrl` con curl (las URLs de IG expiran rápido, no demorar):",
+          "En este servidor NO se descargan videos: baja solo la portada de cada reel (`displayUrl`) como `hook_<pos>.jpg`, una tras otra (las URLs de IG expiran rápido, no demorar). El bloque de abajo es de la versión de escritorio: cambia `videoUrl` por `displayUrl` y `reel_${pos}.mp4` por `hook_${pos}.jpg`."
+        ],
+        [
+          "## PASO 4 — Extraer frame @ t=1s con ffmpeg",
+          "## PASO 4 — Extraer frame @ t=1s con ffmpeg (versión de escritorio: en este servidor NO; usa la portada o las capturas de la usuaria)"
+        ],
+        [
+          "import json, random, os, subprocess",
+          "import json, random, os, shutil"
+        ],
+        [
+          "1. Lee `carrier/blind/blind_01..NN.png`",
+          "1. Lee `carrier/blind/blind_01..NN.jpg`"
+        ],
+        [
+          "    subprocess.run([\"sips\",\"-Z\",\"520\",f\"hook_{r['rank']}.png\",\"--out\",f\"carrier/blind/{bid}.png\"],\n                   stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)",
+          "    shutil.copy(f\"hook_{r['rank']}.jpg\", f\"carrier/blind/{bid}.jpg\")"
+        ],
+        [
+          "- **NO** saltarse el ffmpeg con `-ss 1` — el frame 0 suele ser negro o thumbnail genérico.",
+          "- **NO** presentes la portada como si fuera el segundo 1: la portada puede ser un thumbnail elegido aparte. Márcala como «portada»."
+        ],
+        [
+          "- **SÍ** descargar videos Y screenshots a disco — las URLs de IG expiran en horas.",
+          "- **SÍ** descargar las portadas a disco — las URLs de IG expiran en horas. Los videos no se bajan en este servidor."
+        ],
+        [
+          "- `ffmpeg` instalado (vía Homebrew: `brew install ffmpeg`)",
+          "- Sin ffmpeg: en este servidor no se procesan videos"
+        ],
+        [
+          "- `curl` (preinstalado en macOS)",
+          "- `curl`"
+        ],
+        [
+          "**Fuente**: Apify `instagram-reel-scraper` + frame extraction (ffmpeg @ t=1s) + transcripciones de audio del actor",
+          "**Fuente**: Apify `instagram-reel-scraper` (portadas + transcripciones de audio del actor) + capturas de la usuaria si las hubo"
+        ]
+      ],
+      "description_override": "Auditoría end-to-end del PATRÓN DE GANCHO de una cuenta IG/TikTok. Activar cuando pidan: \"audita los últimos N reels de @cuenta\", \"top 10 vs 10 peores\", \"analiza esta cuenta y su patrón ganador\", \"compara top vs bottom\", \"qué hace funcionar los reels de X\", \"reverse-engineering de @cuenta\", \"reporte visual de los ganchos de [cuenta]\". Pipeline: Apify instagram-reel-scraper (métricas, portadas y transcripts) → integra estadísticas nativas de IG si las pasan (Composio o pegadas) → análisis Top-N vs Bottom-N + comparación de ganchos textual/visual/verbal + carrier en lectura ciega + ángulos (comentarios vs vistas vs guardados) + ganchos perfectos → HTML interactivo + layouts de gancho con Higgsfield (9:16/2k) para editores. El gancho visual se lee de portadas o capturas; la anatomía por segundos, de capturas o del análisis de video de Higgsfield. Sin navegador logueado ni ffmpeg. NO confundir con analizador-perfiles, evaluador-ganchos (UN gancho), generador-ganchos (crea desde cero)."
+    },
+    "benchmark-producto-formula100k": {
+      "notes": [
+        "PASO 3 F (lo que la skill hace con agent-browser): landings, pricing, screenshots fullpage y la página About pública de Skool con el **navegador del agente sin login**. Reels del fundador o la marca → Apify (`apify/instagram-reel-scraper`, `clockworks/tiktok-scraper`). Funnels detrás de login: no; márcalos «no visible».",
+        "Skool: **nunca** pidas ni pongas email y contraseña en un actor de Apify (el `skool-posts-scraper` con credenciales no se usa aquí). Solo la About pública o capturas que mande la usuaria.",
+        "Ads activos: la Biblioteca de Anuncios de Meta es pública (navegador del agente sin login) o Apify. Supadata/Tavily = tus herramientas web. «Activar Apify» = que la usuaria ponga `APIFY_TOKEN`; las instrucciones de Claude Desktop no aplican.",
+        "Antes de Apify, suma el costo de la tabla de `references/apify-actors.md` para la profundidad elegida y espera ✅.",
+        "Carpeta: `informes/benchmarks/<AAAA-MM-DD>_<nicho>/`; la matriz sale en `.csv`. El espejo a `cerebro/benchmarks/` se hace igual (sin el HTML). Entrega: resumen ejecutivo en el chat + `01-REPORTE-COMPLETO.html` y el `.csv` como documentos por Telegram."
+      ],
+      "replace": [
+        [
+          "3. **Abrir el reporte HTML automáticamente** en el navegador del usuario: `open ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html`",
+          "3. **Mandar el reporte HTML por Telegram** como documento (`informes/benchmarks/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html`), junto con el `.csv`."
+        ],
+        [
+          "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/",
+          "cerebro/benchmarks/"
+        ],
+        [
+          "~/Documents/FORMULA100K/BENCHMARKS/",
+          "informes/benchmarks/"
+        ],
+        [
+          "Guardar el raw scraped de cada competidor en:",
+          "Guardar el raw de cada competidor en:"
+        ],
+        [
+          "3. **IG/TikTok del fundador o marca:** top 9 reels con caption + views + formato. Esto NO lo da ninguna API pública.",
+          "3. **IG/TikTok del fundador o marca:** top 9 reels con caption + views + formato, con Apify (datos públicos). Nunca con sesión logueada."
+        ],
+        [
+          "4. **Comunidad Skool del competidor** (si es público o tienes acceso): tomar screenshots del About + leaderboard + foro destacado",
+          "4. **Comunidad Skool del competidor:** solo la página About pública (screenshot), sin iniciar sesión"
+        ],
+        [
+          "Abre Chrome con sesión existente. Para cada competidor en [lista]:",
+          "Abre el navegador del agente SIN iniciar sesión. Para cada competidor en [lista]:"
+        ],
+        [
+          "3. Visita instagram.com/[handle]/reels/ → top 9 reels con URL+caption+views",
+          "3. Reels del competidor → NO en el navegador: Apify con el @handle (top 9 con URL+caption+views)"
+        ],
+        [
+          "*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` · F100K · Andrea Vega*",
+          "*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` · FÓRMULA 100K*"
+        ],
+        [
+          "NO usar: vos, sos, tenés,",
+          "PROHIBIDO (voseo): vos, sos, tenés,"
+        ],
+        [
+          "grep -nE \"\\bvos\\b|\\bsos\\b|tenés|sabés|podés|debés|querés|aplicás|copiá|pegá|elegí|llená|montá\" reporte.md",
+          "grep -nE \"\\bvos\\b|\\bsos\\b|tenés|sabés|podés|debés|querés|aplicás|copiá|pegá|elegí|llená|montá\" reporte.md   # busca voseo"
+        ]
+      ],
+      "description_override": "Benchmark de producto/competencia profundo en cualquier nicho (cursos, comunidades Skool, coaching, SaaS, productos físicos). Activar SIEMPRE que se pida 'benchmark de producto', 'análisis de competencia', 'investiga a mi competencia', 'estudia el mercado de X', 'comparativa de competidores', 'mapeo competitivo', 'investigación de mercado', 'qué ofrecen otros en mi nicho', 'espía a mi competencia', 'qué gaps tiene mi nicho'. Motores: búsqueda web (discovery) + lectura de landings + navegador del agente sin login (pricing, screenshots, About pública de Skool, Biblioteca de Anuncios de Meta) + Apify (reviews, ads, reels públicos del competidor). Nunca entra con sesión a redes ni a comunidades privadas. Genera reporte HTML con resumen ejecutivo, mapa competitivo, matriz 10D, fichas del top 10, patrones, oportunidades y plan 30/60/90. NO usar para auditar UNA comunidad del cliente (auditor-formula100k), UN perfil (analizador-perfiles-formula100k) ni contenido viral (investigacion-contenido-formula100k)."
     }
   }
 }

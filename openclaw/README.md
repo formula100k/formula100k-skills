@@ -63,3 +63,22 @@ Por ser público, `build_openclaw.py` además falla si en lo generado queda: una
 el nombre del origen del método de las fichas profundas de storytelling, o «vos» fuera de una regla
 de idioma. Convierte el voseo a tuteo (las alumnas se tutean) y no copia ejemplos con datos de clientes
 reales (`exclude` + `blank_json` en config).
+
+## Lo que el servidor necesita (lote 3)
+
+Las skills de carruseles, video, apps e investigación piden esto en el VPS (Ubuntu 24.04, root):
+
+| Qué | Para qué |
+|---|---|
+| 2 GB de swap | Chrome + un render no tumban el agente con 4 GB de RAM |
+| `ffmpeg` | **Solo** juntar clips ya generados (`concat -c copy`). Nada de edición |
+| Google Chrome (`.deb`, no el `chromium` de apt, que es snap) + `CHROME_PATH=/usr/bin/google-chrome-stable` | Navegador del agente sin login y render HTML → PNG de carruseles |
+| Fuentes `fonts-noto-color-emoji fonts-liberation fonts-dejavu fonts-noto-core` | Que los carruseles no salgan con cuadritos |
+| Node 20+ y `puppeteer-core` (sin bajar navegador) | `export.js` / `render.js` de las skills de carrusel |
+| `python3-pip`, `zip`, `jq`, `curl` | Scripts auxiliares y mandar carpetas por Telegram |
+| Higgsfield CLI (`npm i -g @higgsfield/cli` + `higgsfield auth login`) | Generar imágenes, clips y animaciones |
+| Llaves de la usuaria: `APIFY_TOKEN`; opcionales `SUPADATA_API_KEY`, `GROQ_API_KEY`/`OPENAI_API_KEY` | Datos públicos de redes, transcripts, voz |
+| Composio con Instagram profesional | Métricas de su propia cuenta y publicar con ✅ |
+
+**No se instala:** Remotion, HyperFrames, yt-dlp, Whisper local, Playwright con su propio Chromium.
+Omitidas por ser edición de metraje grabado: `editor-video-formula100k`, `motion-youtube-f100k`, `motion-tracking-dedo-f100k`, `collage-cine-f100k`.

@@ -135,6 +135,9 @@ async function revisarLibre() {
 }
 
 const CHROME = [
+  process.env.CHROME_PATH,
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium',
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
@@ -142,7 +145,7 @@ const CHROME = [
 ].find(p => fs.existsSync(p));
 
 (async () => {
-  const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', defaultViewport: { width: 1080, height: 1350 } });
+  const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox', '--disable-dev-shm-usage'], defaultViewport: { width: 1080, height: 1350 } });
   const page = await browser.newPage();
   const errores = [];
   page.on('pageerror', e => errores.push(e.message));

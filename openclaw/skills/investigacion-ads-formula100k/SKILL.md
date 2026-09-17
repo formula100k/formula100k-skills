@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Meta Ads Library: navegador del agente **sin iniciar sesión** (es pública). Nunca entres con el Facebook de la usuaria. Si la página no carga, pide captcha o corta la lista, pasa a Apify `apify/facebook-ads-library-scraper` (costo → ✅).

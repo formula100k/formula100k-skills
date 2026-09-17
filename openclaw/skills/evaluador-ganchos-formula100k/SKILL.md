@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La captura del primer segundo llega por Telegram (mejor como archivo, para que no pierda calidad). Si manda solo el video, pídele también la captura del segundo 1: en este servidor no se extraen fotogramas.

@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Paso 1 SIN navegador logueado. Link de Instagram: Apify con `APIFY_TOKEN` (`apify/instagram-scraper` con la URL del post trae caption, autor, vistas, miniatura y comentarios). TikTok: `clockworks/tiktok-scraper` con la URL. YouTube: tu navegador o tu herramienta web sobre la página pública, y la transcripción con `transcripcion-youtube-formula100k` si está.

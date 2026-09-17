@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - El proyecto vive en `entregables/apps/<nombre-app>/` y `PERFIL-MARCA.md` va en su raíz. Construye una app a la vez: el servidor Básico tiene 4 GB.

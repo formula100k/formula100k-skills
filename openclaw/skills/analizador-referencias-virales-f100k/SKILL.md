@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - El motor es Apify con `APIFY_TOKEN`. Sin token: no hay métricas; pide los links y las capturas de vistas a la usuaria, o marca todo `[NO VERIFICADO — scrape no corrió]` como dice el PASO 4.5.

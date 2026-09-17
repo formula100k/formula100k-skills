@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - PASO 3 F (lo que la skill hace con agent-browser): landings, pricing, screenshots fullpage y la página About pública de Skool con el **navegador del agente sin login**. Reels del fundador o la marca → Apify (`apify/instagram-reel-scraper`, `clockworks/tiktok-scraper`). Funnels detrás de login: no; márcalos «no visible».

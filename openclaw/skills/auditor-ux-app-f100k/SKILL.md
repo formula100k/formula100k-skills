@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - El recorrido de las 8 pruebas se hace con el navegador del agente (Chromium de OpenClaw) sobre la URL pública de su app o sobre el proyecto levantado en el workspace (`entregables/apps/<app>/`). Nunca inicies sesión con su Google ni con su contraseña personal: si la app pide login, pídele una cuenta de prueba creada para la auditoría, y otra sin acceso para la prueba 7.

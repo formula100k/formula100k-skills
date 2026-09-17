@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **No se transcribe ni se corta el video aquí** (Paso 2 no corre). Pídele por Telegram el `.srt` que exporta su editor (CapCut: Subtítulos automáticos → Exportar) del video YA cortado, o la transcripción si está publicado (Supadata solo con `SUPADATA_API_KEY`). Las keywords del Paso 3 salen de ese texto. Para la duración basta con el SRT.

@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Arranca desde `plantillas/dinamicas-genericas.json` (o `blanco.json`). La config real de FÓRMULA 100K no viaja en este paquete. La config de su comunidad guárdala en `cerebro/calendario-actividades/<comunidad>.json` para clonarla el mes siguiente.

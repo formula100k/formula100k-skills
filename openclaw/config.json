@@ -593,7 +593,7 @@
       ],
       "replace": [
         [
-          "- **Supadata key:** `$SUPADATA_API_KEY`",
+          "- **Supadata key:** variable `SUPADATA_API_KEY` (en la Mac: `~/.config/f100k/secrets.env`; en la rutina remota: variable de entorno del entorno de la rutina). Nunca la escribas en este archivo.",
           "- **Supadata key:** variable de entorno `SUPADATA_API_KEY` (nunca escrita en el archivo)"
         ],
         [

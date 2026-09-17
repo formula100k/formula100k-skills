@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Paso 1 · data real: comentarios de sus Reels más vistos con Composio (su Instagram profesional) o Apify (`apify/instagram-comment-scraper`, costo → ✅). Los DMs los pega o los manda en captura ella por Telegram: no los leas por tu cuenta aunque haya conexión. Competencia: Apify con los 3 @ que te dé.

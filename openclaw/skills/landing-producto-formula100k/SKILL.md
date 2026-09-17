@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Escribe el proyecto en `entregables/landings/<producto>/`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.

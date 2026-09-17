@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **MODO VIDEO no corre aquí** (`analizar_base.py`, `render_variantes.py`, Whisper, `hyperframes render`, ffmpeg): no hay `VARIANTE_[A-D].mp4`. Si la usuaria manda un video, trabaja en MODO PACK y dile que monte cada overlay en su editor.

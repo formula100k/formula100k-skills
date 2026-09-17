@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - PASO 4 (ffmpeg crop + overlay) NO corre en este servidor. Entrega por Telegram: `cover_anim_raw.mp4` (el clip de Higgsfield) + `title-overlay.png` (título transparente) + la portada estática, y dile en 2 líneas cómo unirlos en CapCut o Edits (video abajo, PNG encima a pantalla completa, lienzo 4:5).

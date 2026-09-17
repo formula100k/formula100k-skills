@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La app tiene que estar en el workspace (`entregables/apps/<app>/`): pídele el `.zip` por Telegram o el link de su repo si conectó SU GitHub. Si no hay app todavía, deriva a `crea-tu-app-f100k`.

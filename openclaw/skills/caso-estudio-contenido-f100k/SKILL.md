@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - LUNA y CALI no existen aquí: haz tú la investigación y luego guiones, ganchos y calendario, en secuencia, con `investigacion-contenido-formula100k`, `analizador-referencias-virales-f100k`, `guionizacion-formula100k`, `generador-ganchos-formula100k` y `calendarizador-contenido-formula100k` si están instaladas. El checkpoint entre investigación y producción va por Telegram y se espera su ✅.

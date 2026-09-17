@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **Sin ffmpeg ni descarga de videos en este servidor** (PASOS 3 y 4). Para cada reel del TOP y del BOTTOM baja solo la portada (`displayUrl`) como `hook_<pos>.jpg` y márcala en el reporte como «portada», no «segundo 1». Si es la cuenta de la usuaria, pídele capturas del segundo 1 de los 3 mejores y los 3 peores: esas mandan sobre la portada.

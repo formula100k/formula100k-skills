@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Pasos 1 a 3 (ffprobe, ffmpeg, mlx-whisper) NO corren aquí: mlx-whisper es solo para Mac y procesar el video es demasiado pesado para el servidor. Pide por Telegram la transcripción CON tiempos: el `.srt` que exportan CapCut, Premiere o DaVinci con subtítulos automáticos, o el texto con marcas mm:ss. Si pega texto sin tiempos, propón los momentos por orden y avisa que los timestamps son aproximados.

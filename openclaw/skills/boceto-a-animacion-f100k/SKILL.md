@@ -9,7 +9,7 @@ metadata: {"version": "1.0.0", "mcp-required": ["higgsfield"], "origen": "reel @
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - El boceto llega por Telegram: pídele que lo mande como archivo (no como foto comprimida) y guárdalo en `entregables/animaciones/<fecha>_<slug>/boceto.jpg`.

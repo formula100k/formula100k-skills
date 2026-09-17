@@ -8,7 +8,7 @@ metadata: {"version": "1.0.0", "depends-on": [], "mcp-required": ["Zapier-MCP"],
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Publicas con la conexión de Instagram profesional de la USUARIA: Composio si está conectado (revisa en su lista de acciones que exista la de publicar foto/carrusel/reel), o Zapier MCP si ella lo conectó. Si ninguna existe, no publiques: manda los archivos y el caption por Telegram listos para subir a mano.

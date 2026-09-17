@@ -9,7 +9,7 @@ metadata: {"version": "1.0.0", "aspect_ratio": "9:16", "output": "REEL_FACELESS.
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Onboarding (brew, HyperFrames, mlx-whisper) NO aplica: sáltalo.

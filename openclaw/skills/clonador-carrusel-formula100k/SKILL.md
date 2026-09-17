@@ -8,7 +8,7 @@ metadata: {"version": "1.1.0", "origen": "Clase de Carruseles · 11 junio 2026 �
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Referencia por enlace: Apify `apify/instagram-scraper` (costo de centavos, avisa). Si Apify falla, pídele a la usuaria una captura por slide por Telegram: nunca navegador logueado. Las capturas que mande ya son la referencia (PASO 0 A).

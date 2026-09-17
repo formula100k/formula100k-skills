@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **No corren aquí:** Whisper (Paso 1), HyperFrames (Pasos 0, 3, 4 y 5), `render_pizarra.sh`, el HEVC con alfa ni la previsualización del montaje. La plantilla y las trampas de HyperFrames no vienen en este paquete.

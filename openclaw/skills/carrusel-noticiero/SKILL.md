@@ -9,7 +9,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Cómo renderizar en el servidor: en la carpeta de esta skill corre `npm install --omit=dev` una sola vez (solo instala `puppeteer-core`, no baja navegador). Luego `CHROME_PATH="$(command -v chromium || command -v chromium-browser || command -v google-chrome)" node export.js <html> --width 1080 --height 1350 --scale 2`. Si el Chromium del agente es el de Playwright, la ruta es `~/.cache/ms-playwright/chromium-*/chrome-linux/chrome`. Esta versión del script ya busca `CHROME_PATH` y rutas de Linux y lanza con `--no-sandbox`.

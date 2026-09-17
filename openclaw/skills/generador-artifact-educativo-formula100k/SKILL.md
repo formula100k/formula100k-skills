@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Sirve para recursos de SU curso o comunidad (o de un tema de FÓRMULA 100K que esté estudiando). El material fuente te lo manda por Telegram como archivo o texto; los artifacts de FÓRMULA 100K que menciona la skill no vienen en este paquete, así que solo cruza referencias con los que existan en `entregables/artifacts/`.

@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Render con Puppeteer sobre **el Chromium que ya trae OpenClaw**: instala las dependencias con `PUPPETEER_SKIP_DOWNLOAD=1 npm install` dentro de la carpeta de la skill (evita bajar otro Chrome de ~170 MB) y corre `render.mjs` con `PUPPETEER_EXECUTABLE_PATH=<ruta de tu Chromium>`. Primera instalación: dile qué se instala y espera ✅. Renderiza de a uno, no en paralelo.

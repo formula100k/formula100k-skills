@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **No hay Explorar ni guardados logueados en este servidor**: FASE 2 con Claude in Chrome, `scripts/cosecha.js` y `scripts/mirar.sh` no vienen en este paquete. El PASO 0 de instalación tampoco aplica: aquí solo comprueba `APIFY_TOKEN` y, si lo vas a usar, el plugin de Higgsfield.

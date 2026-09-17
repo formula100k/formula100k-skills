@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La fila «agent-browser» del stack no corre aquí. Perfiles de IG/TikTok y engagement: Apify con `APIFY_TOKEN` (datos públicos). Sin token, trabaja con búsqueda web y marca seguidores y engagement como `[NO VERIFICADO]`.

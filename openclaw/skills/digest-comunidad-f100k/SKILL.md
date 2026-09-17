@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La «Opción A — agent-browser» NO corre aquí. Comentarios, en este orden: 1) Composio con Instagram profesional conectado (comentarios de los posts propios, sin límite de scraping); 2) Apify con `APIFY_TOKEN` (`apify/instagram-comment-scraper`, `clockworks/tiktok-scraper`), diciendo antes el costo estimado; 3) si no hay ninguno, pide por Telegram capturas de los comentarios de sus 5 a 7 últimos posts.

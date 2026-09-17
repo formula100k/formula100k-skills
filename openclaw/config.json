@@ -1,24 +1,186 @@
 {
   "_que_es": "Configuración del canal OpenClaw. La lee scripts/build_openclaw.py. Para sumar una skill: agrégala en 'skills' con notas reales (qué herramienta usa y su reemplazo en servidor) y vuelve a correr el script.",
-  "workspace_dirs": ["guiones", "ideas", "informes", "cerebro", "entregables"],
+  "workspace_dirs": [
+    "guiones",
+    "ideas",
+    "informes",
+    "cerebro",
+    "entregables"
+  ],
   "fallback_dir": "entregables/",
   "path_map": [
-    ["~/.f100k-radar/config.json", "cerebro/f100k-config.json"],
-    ["$HOME/.f100k-radar/config.json", "cerebro/f100k-config.json"],
-    ["~/.claude/skills/historias-a-imagenes-nanobanana/preset.json", "cerebro/preset-historias.json"],
-    ["~/.claude/skills/", "skills/"],
-    ["~/Documents/FORMULA100K/HISTORIAS/calendarios/", "guiones/historias/calendarios/"],
-    ["~/Documents/FORMULA100K/HISTORIAS/guiones/", "guiones/historias/"],
-    ["~/Documents/FORMULA100K/HISTORIAS/imagenes/", "entregables/historias/"],
-    ["~/Documents/FORMULA100K/stories/", "entregables/historias/"],
-    ["~/Documents/FORMULA100K/stories", "entregables/historias"],
-    ["~/Documents/FORMULA100K/CALENDARIOS/", "guiones/calendarios/"],
-    ["~/Documents/FORMULA100K/LAB-GANCHOS/", "ideas/lab-ganchos/"],
-    ["~/Documents/FORMULA100K/1000-GANCHOS/", "cerebro/1000-ganchos/"],
-    ["~/Documents/FORMULA100K/ARTIFACTS/", "entregables/artifacts/"],
-    ["~/Documents/MI ADN VISUAL", "cerebro/fotos"],
-    ["~/Documents/MIS SELFIES", "cerebro/fotos"],
-    ["/Users/.../fotos/", "cerebro/fotos/"]
+    [
+      "~/.f100k-radar/config.json",
+      "cerebro/f100k-config.json"
+    ],
+    [
+      "$HOME/.f100k-radar/config.json",
+      "cerebro/f100k-config.json"
+    ],
+    [
+      "~/.claude/skills/historias-a-imagenes-nanobanana/preset.json",
+      "cerebro/preset-historias.json"
+    ],
+    [
+      "~/.claude/skills/",
+      "skills/"
+    ],
+    [
+      "~/Documents/FORMULA100K/HISTORIAS/calendarios/",
+      "guiones/historias/calendarios/"
+    ],
+    [
+      "~/Documents/FORMULA100K/HISTORIAS/guiones/",
+      "guiones/historias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/HISTORIAS/imagenes/",
+      "entregables/historias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/stories/",
+      "entregables/historias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/stories",
+      "entregables/historias"
+    ],
+    [
+      "~/Documents/FORMULA100K/CALENDARIOS/",
+      "guiones/calendarios/"
+    ],
+    [
+      "~/Documents/FORMULA100K/LAB-GANCHOS/",
+      "ideas/lab-ganchos/"
+    ],
+    [
+      "~/Documents/FORMULA100K/1000-GANCHOS/",
+      "cerebro/1000-ganchos/"
+    ],
+    [
+      "~/Documents/FORMULA100K/ARTIFACTS/",
+      "entregables/artifacts/"
+    ],
+    [
+      "~/Documents/MI ADN VISUAL",
+      "cerebro/fotos"
+    ],
+    [
+      "~/Documents/MIS SELFIES",
+      "cerebro/fotos"
+    ],
+    [
+      "/Users/.../fotos/",
+      "cerebro/fotos/"
+    ],
+    [
+      "~/Documents/SEGUNDO CEREBRO/ROADMAPS/",
+      "cerebro/roadmaps/"
+    ],
+    [
+      "~/Documents/SEGUNDO CEREBRO/",
+      "cerebro/"
+    ],
+    [
+      "~/Documents/FORMULA100K/RECURSOS VIDEOS/",
+      "entregables/"
+    ],
+    [
+      "~/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/",
+      "guiones/calendarios/carruseles/"
+    ],
+    [
+      "~/Documents/FORMULA100K/CARRUSELES/CALENDARIO",
+      "guiones/calendarios/carruseles"
+    ],
+    [
+      "~/Documents/FORMULA100K/DINÁMICAS DE URGENCIA/",
+      "entregables/urgencias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/DINÁMICAS",
+      "entregables/urgencias"
+    ],
+    [
+      "~/Documents/FORMULA100K/AUDITORIAS/clientes/",
+      "entregables/auditorias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/CLIENTES/",
+      "entregables/clientes/"
+    ],
+    [
+      "~/Documents/FORMULA100K/OFERTAS/",
+      "entregables/ofertas/"
+    ],
+    [
+      "~/Documents/FORMULA100K/VSL/",
+      "entregables/vsl/"
+    ],
+    [
+      "~/Documents/FORMULA100K/AUDIOS-VENTA/",
+      "entregables/audios-venta/"
+    ],
+    [
+      "~/Documents/FORMULA100K/ROADMAPS/",
+      "entregables/roadmaps/"
+    ],
+    [
+      "~/Documents/FORMULA100K/ADS-REFERENCIAS/guiones-propios/",
+      "guiones/ads/"
+    ],
+    [
+      "~/Documents/FORMULA100K/INFOGRAFIAS/",
+      "entregables/infografias/"
+    ],
+    [
+      "~/Documents/FORMULA100K/MINIATURAS/",
+      "entregables/miniaturas/"
+    ],
+    [
+      "~/Documents/FORMULA100K/LANDINGS/",
+      "entregables/landings/"
+    ],
+    [
+      "~/Documents/FORMULA100K/CALENDARIOS/",
+      "guiones/calendarios/"
+    ],
+    [
+      "~/Documents/FORMULA100K/CARRUSELES/",
+      "entregables/carruseles/"
+    ],
+    [
+      "~/Documents/CARRUSELES/",
+      "entregables/carruseles/"
+    ],
+    [
+      "~/Documents/STORYTELLING/",
+      "entregables/storytelling/"
+    ],
+    [
+      "~/Documents/nanobanana_generated/",
+      "entregables/imagenes/"
+    ],
+    [
+      "~/.claude/projects/<tu-proyecto>/memory/",
+      "cerebro/memoria/"
+    ],
+    [
+      "~/.claude/settings.json",
+      "la variable de entorno GEMINI_API_KEY"
+    ],
+    [
+      "/Users/<usuario>/Downloads/",
+      "entregables/"
+    ],
+    [
+      "/Users/tu-nombre/Fotos",
+      "cerebro/fotos"
+    ],
+    [
+      "~/.f100k-radar",
+      "cerebro"
+    ]
   ],
   "skills": {
     "radar-tendencias-f100k": {
@@ -44,6 +206,12 @@
         "El dataset `cerebro/1000-ganchos/` casi nunca existe en el servidor: si no está, sigue con `moldes-gancho.md` de esta skill.",
         "La referencia a los criterios de `evaluador-ganchos-formula100k` apunta a una skill que no viene en este paquete: usa `criterios.md` de esta misma skill.",
         "Si el input es una URL de Instagram o TikTok, no la abras logueada: pide el texto del gancho o una captura por Telegram, o usa Apify si hay `APIFY_TOKEN`."
+      ],
+      "replace": [
+        [
+          "Ven para acá. Los dos.",
+          "Ven aquí. Los dos."
+        ]
       ]
     },
     "metricas-semanales-f100k": {
@@ -81,6 +249,12 @@
         "Skill de solo texto: corre tal cual.",
         "El «artifact educativo» que menciona la skill no existe en el servidor: ignora esa referencia.",
         "Si la usuaria manda el guion como archivo, léelo; si manda un audio, trabaja sobre la transcripción."
+      ],
+      "replace": [
+        [
+          "- Material original: `~/Downloads/FW GUIONES/R1-R5`",
+          "- Material original: rondas R1-R5 de guiones corregidos (no incluidas en este paquete)"
+        ]
       ]
     },
     "calendarizador-historias-formula100k": {
@@ -112,12 +286,26 @@
         "El ejemplo de Voice Guide de la versión de escritorio no viene en este paquete."
       ],
       "replace": [
-        ["<directorio de esta skill>/references/Voice_Guide.md", "cerebro/voice-guide.md"],
-        ["`references/Voice_Guide.md` dentro de la carpeta de esta skill", "`cerebro/voice-guide.md` dentro de tu workspace"],
-        ["> `references/ejemplo-voice-guide.md`, es SOLO", "> el ejemplo de la versión de escritorio (no incluido aquí), es SOLO"],
-        ["references/Voice_Guide.md", "cerebro/voice-guide.md"]
+        [
+          "<directorio de esta skill>/references/Voice_Guide.md",
+          "cerebro/voice-guide.md"
+        ],
+        [
+          "`references/Voice_Guide.md` dentro de la carpeta de esta skill",
+          "`cerebro/voice-guide.md` dentro de tu workspace"
+        ],
+        [
+          "> `references/ejemplo-voice-guide.md`, es SOLO",
+          "> el ejemplo de la versión de escritorio (no incluido aquí), es SOLO"
+        ],
+        [
+          "references/Voice_Guide.md",
+          "cerebro/voice-guide.md"
+        ]
       ],
-      "exclude": ["references/ejemplo-voice-guide.md"]
+      "exclude": [
+        "references/ejemplo-voice-guide.md"
+      ]
     },
     "multiplicador-de-contenido": {
       "notes": [
@@ -126,6 +314,311 @@
         "Si la usuaria manda un link de YouTube o un video largo, pide la transcripción o usa tu herramienta para leer la página; no descargues video pesado.",
         "Guarda las piezas en `guiones/` y manda el resumen por Telegram."
       ]
+    },
+    "audios-venta-f100k": {
+      "notes": [
+        "Skill de texto: corre tal cual. La oferta, el precio y el dolor de la prospecta salen de `cerebro/`; lo que falte, pregúntalo por Telegram.",
+        "Los guiones de audio se guardan en `entregables/audios-venta/` (o `entregables/clientes/<nombre>/audios-venta/`) y se entregan por Telegram listos para grabar.",
+        "Nunca mandes el audio ni el mensaje a la prospecta: la usuaria lo graba y lo envía ella."
+      ]
+    },
+    "auditor-formula100k": {
+      "notes": [
+        "Las preguntas con opciones (`AskUserQuestion`) van por Telegram, numeradas y una tanda a la vez.",
+        "Para auditar contenido, los datos de la cuenta salen de Composio (Instagram profesional propio), Apify con `APIFY_TOKEN` (cuentas ajenas, datos públicos) o capturas que manda la usuaria. Nunca navegador logueado. Para Skool, pide capturas o exportes: no entres a Skool.",
+        "Los tres archivos de la auditoría van a `entregables/auditorias/<cliente>/` y se mandan por Telegram como documentos.",
+        "Lo que la skill guarda en la memoria de Claude Code, aquí va a `cerebro/memoria/`."
+      ]
+    },
+    "campana-lanzamiento-formula100k": {
+      "notes": [
+        "Skill de texto: corre tal cual. Fechas, oferta y precios salen de `cerebro/`; si faltan, pregúntalos por Telegram antes de armar la campaña.",
+        "Si la usuaria quiere que la campaña quede agendada, crea automatizaciones (recordatorios de lives, cuenta regresiva) solo después de su ✅ y dile la lista con fechas y horas.",
+        "Correos y mensajes de la campaña se entregan como borradores por Telegram: nada se envía solo."
+      ]
+    },
+    "constructor-ofertas-f100k": {
+      "notes": [
+        "Skill de texto: corre tal cual. Producto, cliente ideal y resultados reales salen de `cerebro/`; nunca inventes testimonios ni cifras para la garantía o el valor.",
+        "Guarda la oferta en `entregables/ofertas/` (o `entregables/clientes/<nombre>/oferta.md`) y copia lo esencial a `cerebro/` si la usuaria lo aprueba: así las demás skills venden la oferta correcta."
+      ]
+    },
+    "roadmap-producto-f100k": {
+      "notes": [
+        "Genera los `.md` del paquete en `entregables/roadmaps/`. El `.docx` y el `.html` solo si el servidor tiene cómo producirlos (python-docx); si no, entrega los `.md` y dilo.",
+        "El «espejo al segundo cerebro» aquí es copiar los `.md` a `cerebro/roadmaps/` y sumarlos a `cerebro/INDICE.md`.",
+        "Entrega por Telegram: resumen del roadmap en el chat y los archivos como documentos."
+      ],
+      "replace": [
+        [
+          "a `/SEGUNDO CEREBRO/ROADMAPS/<carpeta>/`",
+          "a `cerebro/roadmaps/<carpeta>/`"
+        ]
+      ]
+    },
+    "rutina-maestra-formula100k": {
+      "notes": [
+        "Aquí no existe `/schedule`: cada módulo se programa como una **automatización de OpenClaw** con su hora y la zona horaria de `USER.md`, entregando por Telegram. Antes de crearlas, muestra la lista y espera ✅.",
+        "La config se guarda en `cerebro/f100k-config.json`. Lo que ya está en `USER.md` o `cerebro/` (nicho, handle, voz) no lo vuelvas a preguntar: confírmalo.",
+        "No pidas email para los digests: todo llega por Telegram. Las 8 preguntas van por Telegram, una a la vez, con opciones numeradas.",
+        "Módulos que no vengan en este paquete (por ejemplo digest de comunidad): no los programes y avísalo."
+      ],
+      "description_override": "Configuración inicial del Autopilot F100K en un agente OpenClaw. Usar cuando alguien diga: \"configura mi autopilot\", \"quiero activar mi radar de contenido\", \"configurar rutina diaria\", \"activar mis tareas programadas\", \"setup autopilot F100K\", \"quiero recibir ideas de contenido cada mañana\", o cualquier intención de automatizar su rutina de contenido. Hace las preguntas de personalización (nicho, keywords, horario, voz) por Telegram, guarda la config en cerebro/f100k-config.json y programa los módulos elegidos como automatizaciones que entregan por Telegram. También sirve para reconfigurar o ver la config actual."
+    },
+    "storytelling-f100k": {
+      "notes": [
+        "Skill de coaching por conversación: funciona muy bien por Telegram. Haz una pregunta por mensaje y acepta respuestas por audio.",
+        "Lee `cerebro/` antes de empezar para no preguntar lo que ya está (historias guardadas, oferta, voz).",
+        "Si la historia queda lista, guárdala en `cerebro/historias/` y súmala a `cerebro/INDICE.md`, con permiso de la usuaria.",
+        "Respeta `references/seguridad.md` al pie de la letra: por Telegram también."
+      ]
+    },
+    "ux-elevacion-formula100k": {
+      "notes": [
+        "Es para mejorar el diseño de una app o landing (Next.js, Tailwind, shadcn). Solo aplica si la usuaria tiene el código en este servidor o te pasa los archivos.",
+        "Si pide revisar una página publicada, pide capturas o el link y responde con la lista de cambios concretos; no despliegues nada ni hagas push sin su ✅."
+      ]
+    },
+    "vsl-expert-f100k": {
+      "notes": [
+        "Skill de texto: corre tal cual. Oferta, precio, garantía, bonos y pruebas salen de `cerebro/`; nunca inventes testimonios.",
+        "Guarda el guion en `entregables/vsl/` (o `entregables/clientes/<nombre>/vsl.md`) y mándalo por Telegram como documento, con un resumen en el chat.",
+        "`anuncios-goat.md` ya es la referencia completa: el artifact de escritorio que menciona no viene en este paquete."
+      ],
+      "replace": [
+        [
+          "Referencia destilada del artifact `~/Documents/FORMULA100K/ARTIFACTS/f100k-anuncios-goat.html`.",
+          "Referencia destilada de la guía de anuncios GOAT de FÓRMULA 100K."
+        ]
+      ]
+    },
+    "autopilot-guiones-f100k": {
+      "notes": [
+        "Las noticias de IA del día se buscan con tu búsqueda web. Si el nicho de la usuaria (`USER.md`, `cerebro/`) no es IA, busca las noticias de SU nicho con la misma lógica.",
+        "No hay draft de Gmail: los 3 guiones llegan por Telegram en un solo mensaje (resumen) y el `.md` completo como documento, guardado en `guiones/`.",
+        "Guardar en Yapper es opcional: solo si existen `YAPPER_TOKEN` y `YAPPER_EMAIL` en el entorno. Sin ellos, dilo en una línea y sigue.",
+        "Esta skill no se programa sola: si la usuaria la quiere diaria, crea una automatización de OpenClaw con su hora y zona."
+      ],
+      "replace": [
+        [
+          "los guarda en Yapper y crea un draft de Gmail.",
+          "los entrega por Telegram y, si hay token, los guarda en Yapper."
+        ],
+        [
+          " El módulo vive en la rutina remota tu automatización.",
+          ""
+        ],
+        [
+          "**Rutina remota:** tu automatización — corre",
+          "**Automatización:** la crea tu agente — corre"
+        ]
+      ]
+    },
+    "broll-vsl-formula100k": {
+      "notes": [
+        "Genera video con el plugin de Higgsfield: solo si está conectado. Es de lo más caro por pieza: antes calcula créditos totales (clips × duración), muéstralos y espera ✅.",
+        "Las preguntas con opciones van por Telegram, numeradas. La foto de referencia sale de `cerebro/fotos/`; si está vacía, pide 1 a 3 fotos enviadas como archivo.",
+        "Sin Higgsfield: entrega la lista de escenas con su prompt en inglés, lista para pegar en Higgsfield a mano.",
+        "Los clips se descargan a `entregables/broll/` y se mandan por link o como archivo si pesan menos de 50 MB (límite de Telegram)."
+      ]
+    },
+    "calendarizador-contenido-formula100k": {
+      "notes": [
+        "Las referencias virales: con `APIFY_TOKEN` usa Apify (TikTok/IG públicos); sin token, tu búsqueda web. Transcripciones de YouTube: `transcripcion-youtube-formula100k` o la que te pegue la usuaria. Nunca navegador logueado.",
+        "El script `references/generate_calendar.py` corre con python3 sin librerías extra: úsalo con `--output-dir guiones/calendarios/`. El XLSX solo si `openpyxl` está instalado; si no, entrega el CSV.",
+        "Entrega por Telegram: la tabla resumida en el chat y los archivos como documentos."
+      ]
+    },
+    "calendarizador-urgencias-formula100k": {
+      "notes": [
+        "Tavily = tu búsqueda web: las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.",
+        "Los 5 bloques de preguntas van por Telegram, uno a la vez, con opciones numeradas. Lo que ya esté en `cerebro/` (producto, precios, fechas propias) confírmalo en vez de preguntarlo.",
+        "`scripts/build_xlsx.py` necesita `openpyxl`: si no está, entrega el calendario en `.md` y el JSON, y dilo. Guarda en `entregables/urgencias/`."
+      ]
+    },
+    "carrusel-formatos-f100k": {
+      "notes": [
+        "El render a PNG (`build.js` + `export.js`) está hecho para una Mac con Chrome. En el servidor, por defecto entrega el camino **«prompts por plataforma»**: el prompt listo para Gemini o ChatGPT de la ficha elegida, con las 3 variantes.",
+        "Si la usuaria tiene `GEMINI_API_KEY` o un modelo de imagen en OpenRouter, puedes generar las imágenes tú: costo estimado → ✅ → generar → mandar por Telegram.",
+        "Intenta `build.js` solo si `node`, `puppeteer-core` y Chrome/Chromium existen en el servidor; si falla, vuelve a los prompts sin insistir.",
+        "Las fotos de la usuaria están en `cerebro/fotos/`. Skills que menciona y no vienen en este paquete (render, clonador, ilustrado con tu cara): ofrece el prompt equivalente."
+      ],
+      "description_override": "Router del catálogo de 35 formatos de carrusel de FÓRMULA 100K (20 fichas F con referencia mirada + 15 fichas G de la guía maestra de 25 estilos). Elige el formato por objetivo, escribe el guion con el prompt de la ficha, fija el visual y la referencia, y lo entrega como prompts listos para Gemini, ChatGPT o cualquier chat (3 variantes: desde la descripción, con su marca, solo fondo) o como HTML. Usar cuando se diga \"qué formato de carrusel uso\", \"catálogo de formatos de carrusel\", \"hazme un carrusel tipo [ficha]\", \"carrusel en libreta\", \"carrusel frase partida\", \"carrusel tier list\", \"chuleta en lapicero\", \"carrusel checklist\", \"carrusel de noticias\", \"lo que nadie te dice\", \"carrusel antes y después\", \"carrusel tipo chat\", \"dame el prompt para hacerlo en Gemini/ChatGPT\", \"carrusel estilo bento/recibo/periódico/terminal\".",
+      "replace": [
+        [
+          "[describí el estilo",
+          "[describe el estilo"
+        ],
+        [
+          "[describí la escena",
+          "[describe la escena"
+        ]
+      ]
+    },
+    "carrusel-ilustrado-formula100k": {
+      "notes": [
+        "Las ilustraciones se generan con el plugin de Higgsfield: solo si está conectado, con costo estimado y ✅ antes.",
+        "Sin Higgsfield: entrega el guion slide por slide + el prompt en inglés de cada ilustración para generarlas a mano.",
+        "Las imágenes van a `entregables/` y se mandan por Telegram en orden de slide."
+      ]
+    },
+    "carrusel-viral-formula100k": {
+      "notes": [
+        "La imagen gancho: usa `GEMINI_API_KEY` del entorno (o el modelo de imagen de OpenRouter). La skill `banana` y su script no vienen en este paquete: llama a la API directo como muestra el ejemplo con curl. Costo → ✅ → generar.",
+        "Construir en Canva solo si Canva está conectado (por ejemplo vía Composio). Si no, entrega el guion y el diseño slide por slide listos para armar.",
+        "Referencias virales: búsqueda web, o Apify con `APIFY_TOKEN`. Nunca navegador logueado.",
+        "La imagen se guarda en `entregables/imagenes/` y se manda por Telegram."
+      ],
+      "replace": [
+        [
+          "API_KEY=$(python3 -c \"import json; d=json.load(open('~/.claude/settings.json')); print(d['mcpServers']['nanobanana']['env']['GOOGLE_AI_API_KEY'])\")",
+          "API_KEY=\"$GEMINI_API_KEY\""
+        ],
+        [
+          "(API key en `~/.claude/settings.json`)",
+          "(API key en la variable de entorno `GEMINI_API_KEY`)"
+        ]
+      ],
+      "description_override": "Crea carruseles virales de Instagram completos, slide por slide. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar o guionizar un carrusel. También con \"hazme un carrusel\", \"convierte esto en carrusel\", \"quiero hacer slides\", \"estructura mis diapositivas\". Conoce los 35 formatos del recetario de FÓRMULA 100K (F01–F20 y G01–G15: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después…) y elige uno por objetivo. Investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con Gemini (Nano Banana) si hay llave, lo arma en Canva si está conectado y da instrucciones precisas de producción."
+    },
+    "consejo-contenido-formula100k": {
+      "notes": [
+        "Los 7 críticos son voces que escribes tú en secuencia, en un solo mensaje (o en 2 si es muy largo): no hacen falta subagentes.",
+        "Para anclar el debate en virales reales: búsqueda web, o Apify con `APIFY_TOKEN`. Si no hubo referencia verificada, dilo; no inventes vistas.",
+        "La voz de marca del crítico sale de `cerebro/voz.md` o `cerebro/voice-guide.md` si existen."
+      ]
+    },
+    "creadora-comunidades-skool": {
+      "notes": [
+        "Las preguntas van por Telegram, una tanda a la vez. Lo que ya esté en `cerebro/` (nicho, oferta, historia) confírmalo en vez de preguntarlo.",
+        "El `.docx` de la propuesta usa `build_docx.py` y necesita `python-docx`. Si no está, entrega la propuesta en `.md` y dilo.",
+        "`brief.schema.json` es el esqueleto vacío del brief: llénalo con los datos de la clienta real que te den. Los ejemplos de la versión de escritorio no vienen en este paquete.",
+        "El documento final va a `entregables/` y se manda por Telegram como archivo."
+      ],
+      "blank_json": [
+        [
+          "brief.example.json",
+          "brief.schema.json"
+        ]
+      ],
+      "exclude": [
+        "brief.example.json"
+      ],
+      "replace_re": [
+        [
+          "siguiendo el schema de \\[`brief\\.example\\.json`\\]\\(brief\\.example\\.json\\) \\(el ejemplo está poblado con datos reales de [^—]+— usarlo como referencia ",
+          "siguiendo el esqueleto de [`brief.schema.json`](brief.schema.json) (vacío a propósito — usarlo como referencia "
+        ],
+        [
+          "\\(ver brief\\.example\\.json\\)",
+          "(ver brief.schema.json)"
+        ],
+        [
+          "Referencia validada: `~/Downloads/[^`]+`\\.",
+          "Referencia validada: una propuesta real entregada a una clienta (no incluida por confidencialidad)."
+        ],
+        [
+          "\\(ej: \\\"No apostamos\\. Creamos\\. La comunidad de las [^\\\"]+\\\"\\)",
+          "(ej: \"No improvisamos. Construimos. La comunidad de las que ya dieron el paso\")"
+        ]
+      ]
+    },
+    "guionizacion-ads-formula100k": {
+      "notes": [
+        "Skill de texto: corre tal cual. Oferta, prueba y avatar salen de `cerebro/`.",
+        "El test de ganchos con Higgsfield (virality predictor) es opcional: solo con el plugin conectado, costo y ✅ antes.",
+        "Guarda los guiones en `guiones/ads/` y mándalos por Telegram. El ejemplo de campaña de la versión de escritorio no viene en este paquete."
+      ],
+      "replace": [
+        [
+          "- [[generador-ganchos-formula100k]] toma",
+          "- `generador-ganchos-formula100k` toma"
+        ]
+      ]
+    },
+    "infografia-reel-formula100k": {
+      "notes": [
+        "Imagen base y animación salen del plugin de Higgsfield: solo si está conectado. Antes muestra el costo total (imagen + video) y espera ✅.",
+        "Para leer un artículo usa tu herramienta web; para un YouTube, `transcripcion-youtube-formula100k` o la transcripción que pegue la usuaria. Tavily/Supadata = tus herramientas web.",
+        "Sin Higgsfield: entrega el brief, el texto de la infografía y los prompts de imagen y video listos para pegar.",
+        "Todo va a `entregables/infografias/<tema>/`. El `.mp4` se manda por Telegram si pesa menos de 50 MB; si no, el link."
+      ],
+      "replace": [
+        [
+          "| `^/Users/.+\\.md$` | Ruta a guion |",
+          "| `^.+\\.md$` (archivo en el workspace) | Ruta a guion |"
+        ]
+      ]
+    },
+    "landing-alta-conversion-f100k": {
+      "notes": [
+        "Genera el `index.html` en `entregables/landings/<producto>/` y mándalo por Telegram como documento.",
+        "No despliegues en Vercel ni en ningún lado sin ✅ explícito y sin que la usuaria haya conectado su propia cuenta.",
+        "Mockups con Gemini (`GEMINI_API_KEY`) o Higgsfield solo si hay llave o plugin; costo y ✅ antes. Si no, deja los espacios marcados con el prompt de cada imagen.",
+        "Precios, bonos, garantía y testimonios salen de `cerebro/`: nunca los inventes."
+      ]
+    },
+    "miniatura-youtube-formula100k": {
+      "notes": [
+        "Motor: plugin de Higgsfield (`nano_banana_pro`) si está conectado; si no, `GEMINI_API_KEY`. Costo de las 4 variantes → ✅ → generar.",
+        "La selfie y la captura de referencia llegan por Telegram como archivo; las fotos guardadas están en `cerebro/fotos/`. El widget de subida de Higgsfield no existe aquí.",
+        "Sin ningún motor: entrega el concepto, el texto de la miniatura y el prompt listo.",
+        "Entrega en `entregables/miniaturas/` y por Telegram."
+      ]
+    },
+    "patron-ig-f100k": {
+      "notes": [
+        "Datos de la semana, en este orden: Composio con Instagram profesional (cuenta propia) o Apify con `APIFY_TOKEN`. Sin ninguno, pide capturas de estadísticas.",
+        "Transcripciones con Supadata solo si existe `SUPADATA_API_KEY` en el entorno; si no, trabaja con captions y marca la transcripción como «no disponible».",
+        "El archivo de patrones va a `cerebro/memoria/patterns_ig_<handle>.md` y se suma a `cerebro/INDICE.md`, para que guionización lo lea.",
+        "Para correrla cada lunes, crea una automatización de OpenClaw con la hora y zona de `USER.md`; el resumen llega por Telegram."
+      ],
+      "replace": [
+        [
+          "- **Supadata key:** `$SUPADATA_API_KEY`",
+          "- **Supadata key:** variable de entorno `SUPADATA_API_KEY` (nunca escrita en el archivo)"
+        ],
+        [
+          "- **Rutina remota:** tu automatización — corre cada lunes a las 08:05 AM Lima (13:05 UTC)",
+          "- **Automatización:** la crea tu agente para que corra cada lunes a la hora que elijas"
+        ]
+      ],
+      "description_override": "Módulo del Autopilot F100K para correr cada lunes: trae los videos de la cuenta de Instagram de la usuaria de los últimos 7 días (Composio o Apify), transcribe con Supadata si hay llave, calcula la mediana de views/likes/comentarios, clasifica videos virales (>1.5x mediana) y negativos (<0.7x), extrae qué funcionó y qué no, y actualiza cerebro/memoria/patterns_ig_<handle>.md para que la guionización aprenda semana a semana. Usar cuando alguien diga: \"analiza mis patrones de la semana\", \"qué patrones detectaste\", \"actualiza mi memoria de patrones IG\", \"qué me funcionó esta semana\", o cuando la automatización semanal lo invoque."
+    },
+    "storytelling-animado-f100k": {
+      "notes": [
+        "Los clips animados salen de los presets explainer del plugin de Higgsfield: solo si está conectado. El plan de clips y el costo total se aprueban con ✅ antes de generar.",
+        "Las preguntas con opciones van por Telegram, numeradas. Las previews de presets se mandan como links.",
+        "Sin Higgsfield: entrega GUION.md + la tabla de beats con el prompt de cada clip.",
+        "La composición final (`editor-video-formula100k`) no corre en este servidor: entrega GUION.md, clips y MANIFEST.md en `entregables/storytelling/` para editarlos en la compu."
+      ],
+      "description_override": "Convierte una historia cruda (una anécdota, el caso de una clienta, un error propio) en un reel 9:16 de 45-90s listo para grabar: elige el molde narrativo, escribe el guion legible, decide qué beats se ganan un clip animado y los genera con los presets explainer de Higgsfield (Claymotion, Stickman Cartoon, Editorial Motion Graphics, Watercolor Chronicle, Pixel Art y más). Entrega GUION.md + clips + MANIFEST.md sincronizado por keyword. Activar cuando alguien diga 'hazme un reel de storytelling', 'te cuento lo que me pasó y arma el video', 'cuéntalo como historia', 'quiero contar el caso de mi alumna', 'narrativa con clips animados', 'un reel donde cuento esto'. NO usar para guiones que no son historia (guionizacion-formula100k) ni para YouTube largo."
+    },
+    "transcripcion-youtube-formula100k": {
+      "notes": [
+        "`yt-transcript-mcp` no está en este servidor. Para la transcripción, en este orden: Supadata con `SUPADATA_API_KEY` si existe; tu herramienta web si el video tiene transcripción pública; o pídele a la usuaria que la pegue (YouTube → «Mostrar transcripción» → copiar).",
+        "Tavily = tu búsqueda web para verificar viralidad.",
+        "Los guiones del batch van a `guiones/` y se mandan por Telegram: resumen en el chat y el `.md` como documento."
+      ],
+      "description_override": "Convierte videos de YouTube en batches de guiones virales con FÓRMULA 100K. Usar SIEMPRE que alguien comparta una URL de YouTube y quiera extraer ideas, guiones o contenido de ese video. También con: \"transcribe este video\", \"sácame ideas de este YouTube\", \"convierte este video en guiones\", \"quiero hacer un batch de scripts de este video\", \"repurposea este video\", \"dame guiones basados en este video\", o cualquier variación que combine una URL de YouTube con intención de crear contenido nuevo. Obtiene la transcripción (Supadata, web o pegada por la usuaria) y aplica los frameworks de guionización de FÓRMULA 100K para producir varios guiones validados de un solo video."
+    },
+    "investigacion-contenido-formula100k": {
+      "notes": [
+        "**En este servidor NO se usa agent-browser ni ninguna sesión logueada**, aunque la skill diga que es fijo en el stack: IG y TikTok pueden bloquear la cuenta. Salta el PASO 0 (preflight de sesiones) y el Paso 1.5/1.6 con navegador.",
+        "Motores aquí: 1) tu búsqueda web (lo que la skill llama Tavily); 2) Apify con `APIFY_TOKEN` para buscar reels y TikToks públicos por keyword o por cuenta, con vistas reales; 3) vidIQ solo si está conectado; 4) links, captions o capturas que mande la usuaria.",
+        "La COMPUERTA DE VERIFICACIÓN sigue igual de estricta: si Apify no corrió, las métricas y URLs de redes van como `[NO VERIFICADO]`. Nunca inventes vistas.",
+        "Las secciones de MCP para Claude Desktop no aplican. Entrega por Telegram y guarda en `informes/`."
+      ],
+      "description_override": "Investigación de tendencias e ideas de contenido viral con la metodología FORMULA 100K. Usar SIEMPRE que se pida investigar tendencias, encontrar ideas de contenido, cazar temas virales, qué funciona en mi nicho, investigar a la competencia, encontrar ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, buscar referencias virales por keyword, o 'no sé de qué hablar', 'quiero ideas para mis videos', 'búscame referencias con [keyword]'. En un agente OpenClaw usa búsqueda web + Apify (datos públicos de Instagram y TikTok con vistas reales) + vidIQ si está conectado, nunca un navegador logueado. Solo reporta lo verificado."
+    },
+    "analizador-perfiles-formula100k": {
+      "notes": [
+        "**En este servidor NO se usa agent-browser ni sesión logueada** aunque la skill lo pida primero: el PASO 2 y el 2.5 se hacen con otras fuentes.",
+        "Cuenta propia: Composio con Instagram profesional (alcance, guardados, compartidos reales). Cuentas ajenas: Apify con `APIFY_TOKEN` (datos públicos; `references/auditoria-profunda-apify.md`). Sin ninguno: pide capturas de estadísticas y de los posts.",
+        "Transcripts con Supadata solo si hay `SUPADATA_API_KEY`. Comentarios: Apify o capturas.",
+        "Lo que solo se ve con login (retención, insights de cuentas ajenas) va marcado como no disponible: no lo estimes. Informe en `informes/` y por Telegram."
+      ],
+      "description_override": "Analiza perfiles de Instagram y TikTok a profundidad. Usar SIEMPRE que se pida analizar un perfil, revisar métricas, identificar qué videos funcionan/repetir/dejar de hacer, qué genera seguidores o ventas, auditar una cuenta, diagnosticar por qué no crece, o cualquier análisis de contenido en redes. En un agente OpenClaw la captura es: Composio con Instagram profesional para la cuenta propia (métricas reales), Apify para cuentas ajenas (datos públicos, reels con transcripción) o capturas que manda la usuaria; nunca un navegador logueado. Basada en la metodología F100K para leer métricas como experta: top videos, ángulos de venta, qué dejar de hacer, vacíos en comentarios y plan de 2 semanas."
     }
   }
 }

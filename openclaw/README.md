@@ -48,7 +48,18 @@ git -C ~/f100k-skills pull --ff-only && bash ~/f100k-skills/openclaw/instalar.sh
 
 Tus archivos (`cerebro/`, `guiones/`, `ideas/`, `informes/`, `entregables/`) nunca se tocan.
 
-## Lo que NO se hace
+## ClawHub (público)
 
-**Este repo no se sube a ClawHub.** ClawHub es un catálogo público y este repo es privado: es para
-miembros de FÓRMULA 100K. En ClawHub solo irá una vitrina aparte con unas pocas skills gratis.
+Desde el 16-sep-2026 las skills de `openclaw/skills/` se publican **públicas** en ClawHub para que
+cualquier agente OpenClaw las instale sin token. Se publica **solo esa carpeta**, nunca el repo:
+
+```bash
+python3 scripts/build_openclaw.py && ./scripts/check-fugas.sh
+clawhub sync --root openclaw/skills --dry-run   # revisar qué sube
+clawhub sync --root openclaw/skills --all
+```
+
+Por ser público, `build_openclaw.py` además falla si en lo generado queda: una llave o ID personal,
+el nombre del origen del método de las fichas profundas de storytelling, o «vos» fuera de una regla
+de idioma. Convierte el voseo a tuteo (las alumnas se tutean) y no copia ejemplos con datos de clientes
+reales (`exclude` + `blank_json` en config).

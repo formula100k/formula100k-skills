@@ -77,7 +77,7 @@ Se activa cuando el usuario (o una alumna) pide:
 - `frameworks.md` — Las 35 estructuras completas, 7 pilares de valor, anatomía del guion, tríada del gancho, 10 ganchos verbales, 6 visuales, 5 textuales, 15 gatillos de viralidad, escala viral de 4 niveles
 - `ejemplos.md` — 3 ejemplos completos de diagnóstico (uno fuerte, uno débil, uno mixto)
 - Artifact educativo: `entregables/artifacts/f100k-guionizacion.html`
-- Material original: `~/Downloads/FW GUIONES/R1-R5`
+- Material original: rondas R1-R5 de guiones corregidos (no incluidas en este paquete)
 
 **Idioma:** Español neutro, sin voseo argentino. PROHIBIDO: vos, sos, tenés, podés, sabés, sentís, querés, debés, aplicás, Mostrá, Pintá, Creá, etc. USAR: tú, eres, tienes, puedes, sabes, sientes, quieres, debes, aplicas, Muestra, Pinta, Crea.
 

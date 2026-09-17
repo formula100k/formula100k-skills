@@ -219,7 +219,7 @@ Después mostrar al usuario:
 1. Lista de imágenes generadas con tamaños
 2. Preview Markdown con cada imagen embebida (o comando para abrir Finder)
 3. Costo aproximado (suma de tokens Banana + créditos Higgsfield)
-4. Próximo paso: "¿Querés que regenere algún slide específico?"
+4. Próximo paso: "¿Quieres que regenere algún slide específico?"
 
 ---
 
@@ -245,7 +245,7 @@ Si el guion menciona una captura específica que el usuario ya tiene en su carpe
 - Usarla como capa adicional sobre la foto base
 
 Si NO la tiene:
-- Pedirla explícitamente: "Para el slide 3 necesitas una captura de tu dashboard de Skool. ¿La tienes lista? Pasame la ruta."
+- Pedirla explícitamente: "Para el slide 3 necesitas una captura de tu dashboard de Skool. ¿La tienes lista? Pásame la ruta."
 
 ### Slide de URGENCIA (fondo plano permitido)
 

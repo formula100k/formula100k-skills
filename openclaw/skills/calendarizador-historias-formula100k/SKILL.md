@@ -301,8 +301,8 @@ Mostrar en chat:
 - [N] mockups a crear
 
 🚀 Próximo paso sugerido:
-- ¿Querés que pase TODOS estos guiones a imágenes con `historias-a-imagenes-nanobanana`?
-- ¿O preferís primero revisar y ajustar algún guion?
+- ¿Quieres que pase TODOS estos guiones a imágenes con `historias-a-imagenes-nanobanana`?
+- ¿O prefieres primero revisar y ajustar algún guion?
 ```
 
 ---

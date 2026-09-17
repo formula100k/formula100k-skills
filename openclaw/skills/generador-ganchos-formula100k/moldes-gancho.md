@@ -65,7 +65,7 @@ Los ejemplos son verbatim reales del corpus, sin métricas a propósito (ver pun
 
 ### 04 · Diálogo de dos voces
 `— [frase de A]  — [respuesta de B que abre el conflicto]`
-- "¿Ustedes son casados? Ven para acá. Los dos."
+- "¿Ustedes son casados? Ven aquí. Los dos."
 - "Papá, hoy llevé 20 chocolates a la escuela y solo vendí 3."
 > Entras a mitad de la escena: la primera línea ya es la segunda del diálogo. Nadie se presenta.
 > Para ventas es el más natural — la objeción se actúa en vez de explicarse.

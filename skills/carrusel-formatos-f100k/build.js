@@ -134,12 +134,29 @@ async function revisarLibre() {
   return rep.filter(x => { const k = x.tipo + x.slide + x.detalle; if (vistos.has(k)) return false; vistos.add(k); return true; });
 }
 
+// puppeteer-core NO trae navegador: usa el Chrome que ya tiene la persona. Mac, Windows y Linux:
+// con solo las rutas de /Applications, en Windows fallaba con «Cannot find module .../undefined».
 const CHROME = [
+  process.env.CHROME_PATH,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-].find(p => fs.existsSync(p));
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'BraveSoftware', 'Brave-Browser', 'Application', 'brave.exe'),
+  '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/microsoft-edge',
+].filter(Boolean).find(p => { try { return fs.existsSync(p); } catch { return false; } });
+
+if (!CHROME) {
+  console.error('No encontré Google Chrome (ni Edge, Brave o Chromium) en esta computadora.\n' +
+    'Instala Google Chrome desde google.com/chrome y vuelve a correr esto.\n' +
+    'Si lo tienes en otra carpeta, dime la ruta así:  CHROME_PATH="/ruta/a/chrome" node build.js ...');
+  process.exit(1);
+}
 
 (async () => {
   const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', defaultViewport: { width: 1080, height: 1350 } });

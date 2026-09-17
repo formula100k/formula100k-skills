@@ -275,7 +275,7 @@ json.dump(mapping,open('carrier/mapping_SECRET.json','w'),ensure_ascii=False,ind
 
 ---
 
-## PASO 7 — Generar layouts de gancho con Higgsfield (para editores)
+## PASO 7 — Generar layouts de gancho (para editores)
 
 Aplicar la **fórmula ganadora** detectada. Diseñar 6 layouts que sirvan de referencia visual a los editores (dónde va el texto amarillo + número, el objeto en mano, el contacto visual, la evidencia externa). Categorías validadas:
 - **Tutorial-relámpago** con número ("...EN 3 SEGUNDOS", teléfono en mano señalando)
@@ -289,27 +289,22 @@ Para cada layout definir: texto del overlay (amarillo bold), primeras 10 palabra
 
 **Si es la cuenta del usuario (auditoría propia):** los layouts pueden mostrar una creadora genérica de marca (pelo lacio castaño, ladrillo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
 
-Verificar saldo:
-```
-mcp__higgsfield__balance
-```
+**Motor:** Nano Banana. Por defecto **Gemini directo** (`GEMINI_API_KEY`, sección 3.1 de
+`f100k-puente`) con `aspectRatio:"9:16"` e `imageSize:"2K"`, una llamada por layout. Si no hay
+llave pero sí el plugin de Higgsfield, `generate_image` con `model:"nano_banana_pro"`,
+`aspect_ratio:"9:16"`, `resolution:"2k"` (revisa saldo antes con `mcp__higgsfield__balance`).
+Sin ningún motor, entrega los 6 prompts en inglés y dilo en la primera línea.
 
-Generar las 6 imágenes en PARALELO:
+Prompt de cada layout:
 ```
-mcp__higgsfield__generate_image
-  params: {
-    model: "nano_banana_pro",
-    aspect_ratio: "9:16",
-    resolution: "2k",
-    prompt: "Instagram reel cover frame, vertical 9:16 documentary photo. [escena con persona en acción]. [contraste visual]. [iluminación natural]. Bottom of frame has bold YELLOW text with thin black outline: \"<texto del overlay>\". Large centered text, Instagram reel style."
-  }
+"Instagram reel cover frame, vertical 9:16 documentary photo. [escena con persona en acción]. [contraste visual]. [iluminación natural]. Bottom of frame has bold YELLOW text with thin black outline: \"<texto del overlay>\". Large centered text, Instagram reel style."
 ```
 
-**Importante:** el server hace fallback silencioso a `nano_banana_2` cuando pro está ocupado — calidad equivalente, no es un problema (ver [[feedback_higgsfield_playwright]] no aplica acá pero es el mismo gotcha).
+Con Gemini son 6 llamadas seguidas, una por layout. Con Higgsfield, espera los jobs con
+`mcp__higgsfield__job_status` sync=true; si `nano_banana_pro` está ocupado hace fallback silencioso
+a `nano_banana_2`, y la calidad es equivalente: no es un problema.
 
-Esperar todos con `mcp__higgsfield__job_status` sync=true en paralelo. Total ~30-60s.
-
-**Costo estimado:** ~12-18 créditos Higgsfield (de cuenta Creator $30/mes).
+**Costo estimado:** con Gemini, 6 imágenes 2K (di el costo en dólares y espera ✅). Con Higgsfield, ~12-18 créditos.
 
 Descargar cada PNG con curl a `layouts-editores/1_<slug>.png` … `6_<slug>.png` (nombres descriptivos por formato). Verificar visualmente con `Read` un montaje de los 6 que los textos amarillos en ESPAÑOL se renderizaron bien (nano_banana a veces distorsiona español largo — si pasa, regenerar ese).
 

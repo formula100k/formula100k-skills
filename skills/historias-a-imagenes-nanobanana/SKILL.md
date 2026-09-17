@@ -7,15 +7,15 @@ description: >
   de [archivo]", "pasa este guion a imágenes con nanobanana", "genera las historias diseñadas",
   "exporta este guion a PNG", "haz las imágenes de mi secuencia de stories", o cualquier variación
   que combine un guion de historias con la intención de tener archivos visuales finales. Usa la skill
-  `banana` (Nanobanana / Gemini) Y el MCP de Higgsfield (mcp__higgsfield__*) como motores. Se conecta
+  Nano Banana (Gemini) como motor por defecto, con el MCP de Higgsfield como alternativa. Se conecta
   con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente
   la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas
   redondeadas, paleta del usuario, capas de capturas/mockups, flechas amarillas, X/✓).
-argument-hint: "<ruta al .md del guion> [--motor=banana|higgsfield|both] [--fotos=<carpeta>]"
+argument-hint: "<ruta al .md del guion> [--motor=gemini|higgsfield] [--fotos=<carpeta>]"
 metadata:
   version: "1.0.0"
   depends-on: ["guionizacion-historias-formula100k", "banana"]
-  mcp-required: ["higgsfield"]
+  mcp-optional: ["higgsfield"]
 ---
 
 # Skill: Historias a Imágenes (Nanobanana + Higgsfield)
@@ -54,7 +54,7 @@ El usuario te dará alguna combinación de:
 1. **Ruta al .md** del guion: `~/Documents/FORMULA100K/HISTORIAS/guiones/[archivo].md`
 2. **Pegado del contenido** del guion directamente
 3. **Carpeta de fotos** (opcional la primera vez, después se guarda como preset): `--fotos=<ruta>` o pregunta interactiva
-4. **Motor preferido** (opcional): `--motor=banana` | `--motor=higgsfield` | `--motor=both` (default: auto)
+4. **Motor preferido** (opcional): `--motor=gemini` | `--motor=higgsfield` (default: gemini)
 
 Si no hay carpeta de fotos guardada como preset, **pregúntala al usuario antes de proceder**:
 

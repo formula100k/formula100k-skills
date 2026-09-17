@@ -33,7 +33,7 @@ Entrega en una sola carpeta:
 ## Dependencias
 
 - **Render de PNG:** `export.js` (Puppeteer/Chrome headless) en esta carpeta. Requiere Google Chrome instalado. Primera corrida: `npm install --prefix ~/.claude/skills/carrusel-noticiero` (instala `puppeteer-core`). Si `carrusel-render-formula100k` ya tiene `node_modules`, se puede reusar su `export.js`.
-- **Portada animada:** MCP de **Higgsfield** (`generate_image` con `nano_banana_2`, luego `generate_video` con `seedance`/`kling`) + **ffmpeg** (composición). Ambos ya disponibles en el entorno del usuario.
+- **Portada animada:** la **imagen** con Nano Banana — Gemini directo (`GEMINI_API_KEY`, sección 3.1 del puente) o Higgsfield `nano_banana_2` si no hay llave; el **video** solo con Higgsfield (`generate_video` con `seedance`/`kling`), que es opcional. Composición con **ffmpeg**. Sin Higgsfield entregas la portada fija + el prompt del clip, y lo dices.
 - **Fuentes:** Google Fonts vía CDN (Anton, Caveat, Poppins). El `export.js` espera `document.fonts.ready`.
 
 ---

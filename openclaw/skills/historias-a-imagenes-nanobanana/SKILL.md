@@ -1,8 +1,8 @@
 ---
 name: historias-a-imagenes-nanobanana
-description: "Skill que convierte un guion de secuencia de historias (output de guionizacion-historias-formula100k) en imágenes terminadas listas para subir a Instagram Stories. Activar SIEMPRE que el usuario o un usuario pida: \"renderiza este guion de historias\", \"convierte este guion en imágenes\", \"diséñame las stories de [archivo]\", \"pasa este guion a imágenes con nanobanana\", \"genera las historias diseñadas\", \"exporta este guion a PNG\", \"haz las imágenes de mi secuencia de stories\", o cualquier variación que combine un guion de historias con la intención de tener archivos visuales finales. Usa la skill `banana` (Nanobanana / Gemini) Y el MCP de Higgsfield (mcp__higgsfield__*) como motores. Se conecta con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas redondeadas, paleta del usuario, capas de capturas/mockups, flechas amarillas, X/✓)."
-argument-hint: "<ruta al .md del guion> [--motor=banana|higgsfield|both] [--fotos=<carpeta>]"
-metadata: {"version": "1.0.0", "depends-on": ["guionizacion-historias-formula100k", "banana"], "mcp-required": ["higgsfield"], "openclaw": {"emoji": "🦞"}}
+description: "Skill que convierte un guion de secuencia de historias (output de guionizacion-historias-formula100k) en imágenes terminadas listas para subir a Instagram Stories. Activar SIEMPRE que el usuario o un usuario pida: \"renderiza este guion de historias\", \"convierte este guion en imágenes\", \"diséñame las stories de [archivo]\", \"pasa este guion a imágenes con nanobanana\", \"genera las historias diseñadas\", \"exporta este guion a PNG\", \"haz las imágenes de mi secuencia de stories\", o cualquier variación que combine un guion de historias con la intención de tener archivos visuales finales. Usa la skill Nano Banana (Gemini) como motor por defecto, con el MCP de Higgsfield como alternativa. Se conecta con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas redondeadas, paleta del usuario, capas de capturas/mockups, flechas amarillas, X/✓)."
+argument-hint: "<ruta al .md del guion> [--motor=gemini|higgsfield] [--fotos=<carpeta>]"
+metadata: {"version": "1.0.0", "depends-on": ["guionizacion-historias-formula100k", "banana"], "mcp-optional": ["higgsfield"], "openclaw": {"emoji": "🦞"}}
 ---
 
 ## 🦞 Corriendo en OpenClaw
@@ -11,7 +11,7 @@ metadata: {"version": "1.0.0", "depends-on": ["guionizacion-historias-formula100
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Motor de imagen, en este orden: plugin de Higgsfield (`nano_banana_2`) si está conectado; si no, `GEMINI_API_KEY` o el modelo de imagen de OpenRouter; si no hay ninguno, entrega los prompts por historia y avisa.
+> - Motor de imagen, en este orden: **Gemini directo con `GEMINI_API_KEY`** (sección 3.1 del puente) — es el mismo Nano Banana; si no hay llave, el plugin de Higgsfield (`nano_banana_2`); si no hay ninguno, entrega los prompts por historia y avisa.
 > - La skill `banana` no viene en este paquete: llama al motor disponible directo.
 > - Fotos de la usuaria: `cerebro/fotos/`. Si está vacía, pídele por Telegram 3 a 6 fotos suyas enviadas como archivo.
 > - El preset se guarda en `cerebro/preset-historias.json`, no dentro de la skill (las actualizaciones lo borrarían).
@@ -55,7 +55,7 @@ El usuario te dará alguna combinación de:
 1. **Ruta al .md** del guion: `guiones/historias/[archivo].md`
 2. **Pegado del contenido** del guion directamente
 3. **Carpeta de fotos** (opcional la primera vez, después se guarda como preset): `--fotos=<ruta>` o pregunta interactiva
-4. **Motor preferido** (opcional): `--motor=banana` | `--motor=higgsfield` | `--motor=both` (default: auto)
+4. **Motor preferido** (opcional): `--motor=gemini` | `--motor=higgsfield` (default: gemini)
 
 Si no hay carpeta de fotos guardada como preset, **pregúntala al usuario antes de proceder**:
 

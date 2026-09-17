@@ -121,7 +121,7 @@ Si falta solo el bloque ⚙️ (guion legacy):
 
 1. Inferir `fotos_necesarias_de_carpeta` del campo "Qué grabar/buscar" de cada slide
 2. Inferir `elementos_a_generar` del campo "Capa visual" cuando mencione "mockup", "captura", "dashboard"
-3. Notificar al usuario: "El guion no tiene bloque ⚙️ explícito, lo inferí del contenido. Verificá antes de generar."
+3. Notificar al usuario: "El guion no tiene bloque ⚙️ explícito, lo inferí del contenido. Verifica antes de generar."
 
 ---
 

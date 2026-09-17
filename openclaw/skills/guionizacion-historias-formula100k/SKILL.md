@@ -212,7 +212,7 @@ El **formato exacto del archivo** está en `references/output-template.md`. Síg
 Después de guardar, muestra al usuario:
 1. **Preview de la tabla slide-by-slide** en el chat (markdown)
 2. **Ruta del archivo guardado**
-3. **Próximo paso sugerido**: "¿Querés que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
+3. **Próximo paso sugerido**: "¿Quieres que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
 
 ---
 

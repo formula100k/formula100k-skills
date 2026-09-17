@@ -42,7 +42,82 @@ def split_frontmatter(text, where):
         fail(f"{where}: no empieza con frontmatter")
         return {}, text
     _, fm, body = text.split("---", 2)
-    return yaml.safe_load(fm) or {}, body.lstrip("\n")
+    try:
+        data = yaml.safe_load(fm) or {}
+    except yaml.YAMLError:
+        # Algunas skills de escritorio traen la description en una línea con ": " adentro,
+        # que no es YAML válido. Se leen las claves de primer nivel a mano.
+        data = {}
+        for m in re.finditer(r"^([A-Za-z][\w-]*):\s?(.*)$", fm, re.M):
+            data[m.group(1)] = m.group(2).strip()
+    return data, body.lstrip("\n")
+
+
+# ── Tuteo ───────────────────────────────────────────────────────────────────────────────
+# Las alumnas se tutean. Se convierten las formas de voseo dirigidas a la usuaria.
+# NO se tocan las líneas que ENSEÑAN la regla (listas de prohibidos, tablas vos→tú),
+# ni formas ambiguas con el pretérito (elegí, escribí, abrí, subí, seguí = "yo elegí").
+VOSEO = {
+    "tenés": "tienes", "podés": "puedes", "querés": "quieres", "sabés": "sabes", "sentís": "sientes",
+    "debés": "debes", "aplicás": "aplicas", "preferís": "prefieres", "usás": "usas", "mirás": "miras",
+    "escribís": "escribes", "pensás": "piensas", "decís": "dices", "necesitás": "necesitas", "hacés": "haces",
+    "generame": "genérame", "generá": "genera", "copiá": "copia", "decime": "dime", "mirá": "mira",
+    "hacé": "haz", "creá": "crea", "mandá": "manda", "contá": "cuenta", "seguime": "sígueme",
+    "pasame": "pásame", "mostrá": "muestra", "pintá": "pinta", "pegá": "pega", "decí": "di",
+    "contale": "cuéntale", "decile": "dile", "mandame": "mándame", "contame": "cuéntame",
+    "verificá": "verifica", "guardalo": "guárdalo", "seguilo": "síguelo", "combiná": "combina",
+    "completá": "completa", "agregá": "agrega", "pegalo": "pégalo", "envialo": "envíalo",
+    "abrilo": "ábrelo", "seleccioná": "selecciona", "armame": "ármame", "usá": "usa", "fijate": "fíjate",
+    "avisame": "avísame", "probá": "prueba", "revisá": "revisa", "empezá": "empieza", "llamá": "llama",
+    "indicá": "indica", "pensá": "piensa", "acá": "aquí", "generalo": "genéralo", "envialos": "envíalos",
+}
+META_LINE = re.compile(r"→|neutro|NEUTRO|voseo|argentin|PROHIBIDO|[Pp]rohibido|NUNCA|reemplaz|\(no |no vos|\| *vos|sin vos|vos/|/vos|tenés/|\"tenés\"|'tenés'", re.I)
+VOSEO_RX = re.compile(r"(?<![\wáéíóúñÁÉÍÓÚÑ])(" + "|".join(sorted(map(re.escape, VOSEO), key=len, reverse=True)) + r")(?![\wáéíóúñÁÉÍÓÚÑ])", re.I)
+
+
+def tutear(text):
+    out = []
+    for line in text.split("\n"):
+        # Fila de una tabla de equivalencias (| tenés, podés | tienes, puedes |): trae la forma de voseo
+        # y su reemplazo a la vez, así que es una regla, no una frase para la usuaria.
+        es_tabla_regla = line.lstrip().startswith("|") and any(
+            VOSEO[m.group(1).lower()] in line.lower() for m in VOSEO_RX.finditer(line))
+        if not META_LINE.search(line) and not es_tabla_regla:
+            def sub(m):
+                w = m.group(1)
+                r = VOSEO[w.lower()]
+                if w.isupper() and len(w) > 1:
+                    return r.upper()
+                return r[0].upper() + r[1:] if w[0].isupper() else r
+            line = VOSEO_RX.sub(sub, line)
+        out.append(line)
+    return "\n".join(out)
+
+
+def blank_json(value):
+    """Esqueleto vacío de un JSON de ejemplo: mismas claves, sin los datos (que pueden ser de un cliente)."""
+    if isinstance(value, dict):
+        return {k: blank_json(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [blank_json(value[0])] if value else []
+    if isinstance(value, str):
+        return ""
+    return value
+
+
+def scrub(text):
+    """Quita llaves e IDs personales que se colaron en las skills de escritorio, sin escribirlos en config."""
+    text = re.sub(r"\s*·?\s*https://claude\.ai/code/routines/trig_[A-Za-z0-9]+", "", text)
+    text = re.sub(r"sd_[a-f0-9]{16,}", "$SUPADATA_API_KEY", text)
+    text = re.sub(r"`?trig_[A-Za-z0-9]{10,}`?", "tu automatización", text)
+    return text
+
+
+SECRET_RX = re.compile(r"sd_[a-f0-9]{16,}|apify_api_[A-Za-z0-9]{10,}|tvly-[A-Za-z0-9-]{10,}|AIza[0-9A-Za-z_-]{20,}|"
+                       r"sk-(?:ant|or|proj)?-?[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|"
+                       r"hf_[A-Za-z0-9]{20,}|xox[bp]-[A-Za-z0-9-]{10,}|sk_live_[A-Za-z0-9]{10,}|trig_[A-Za-z0-9]{10,}")
+# El origen del método de las fichas profundas de storytelling no se nombra en ningún archivo público.
+ORIGEN_RX = re.compile(r"playbook|creator\s*college", re.I)
 
 
 def as_hint(v):
@@ -101,6 +176,13 @@ def build():
         dst = OUT / name
         excl = set(sc.get("exclude", []))
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns("node_modules", ".DS_Store", "__pycache__"))
+        for src_rel, dst_rel in sc.get("blank_json", []):
+            p = src / src_rel
+            if not p.exists():
+                fail(f"{name}: blank_json '{src_rel}' no existe")
+                continue
+            (dst / dst_rel).write_text(json.dumps(blank_json(json.loads(p.read_text(encoding="utf-8"))),
+                                                  ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         for rel in excl:
             p = dst / rel
             if p.exists():
@@ -110,16 +192,27 @@ def build():
 
         replaces = sc.get("replace", [])
         used = {r[0]: False for r in replaces}
+        replaces_re = sc.get("replace_re", [])
+        used_re = {r[0]: False for r in replaces_re}
         for f in dst.rglob("*"):
             if not f.is_file() or f.suffix.lower() not in TEXT_EXT:
                 continue
             t = f.read_text(encoding="utf-8", errors="strict")
+            t = scrub(t)
             for a, b in replaces:
                 if a in t:
                     used[a] = True
                     t = t.replace(a, b)
+            for a, b in replaces_re:
+                t, k = re.subn(a, b, t)
+                if k:
+                    used_re[a] = True
             t = rewrite_paths(t, cfg["path_map"], fallback)
+            t = tutear(t)
             f.write_text(t, encoding="utf-8")
+        for a, ok in used_re.items():
+            if not ok:
+                fail(f"{name}: el replace_re '{a[:50]}…' no encontró nada (¿cambió la skill?)")
         for a, ok in used.items():
             if not ok:
                 fail(f"{name}: el replace '{a[:50]}…' no encontró nada (¿cambió la skill?)")
@@ -169,8 +262,15 @@ def validate():
             rel = f.relative_to(OUT)
             if "/Users/" in t:
                 fail(f"{rel}: queda una ruta /Users/")
-            if re.search(r"(?:~|\$HOME)/(?:Documents|\.claude|\.f100k-radar)", t) and not is_puente:
+            if re.search(r"(?:~|\$HOME)/(?:Documents|Downloads|Desktop|\.claude|\.f100k-radar)", t) and not is_puente:
                 fail(f"{rel}: queda una ruta de la Mac sin mapear")
+            for m in SECRET_RX.finditer(t):
+                fail(f"{rel}: queda un secreto o ID personal ({m.group(0)[:12]}…) → reemplázalo en config")
+            if ORIGEN_RX.search(t):
+                fail(f"{rel}: nombra el origen del método de storytelling → neutralízalo en config")
+            for i, line in enumerate(t.split("\n"), 1):
+                if not META_LINE.search(line) and re.search(r"(?<![\wáéíóúñ])vos(?![\wáéíóúñ])", line):
+                    fail(f"{rel}:{i}: queda «vos» fuera de una regla de idioma → replace en config")
             if re.search(r"claude-in-chrome|agent-browser", t) and not is_puente:
                 if MARK not in (skill / "SKILL.md").read_text(encoding="utf-8"):
                     fail(f"{rel}: nombra el navegador de Claude Code y la skill no tiene bloque de equivalencia")

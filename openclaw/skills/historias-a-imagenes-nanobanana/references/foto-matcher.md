@@ -60,7 +60,7 @@ Mostrar 3 candidatos al usuario y pedir elección:
 2. cerebro/fotos/calle-tokio.jpg (Score 0.58)
 3. cerebro/fotos/parque-universal.jpg (Score 0.52)
 
-¿Cuál usamos? (responde 1, 2 o 3, o pasame la ruta de otra)"
+¿Cuál usamos? (responde 1, 2 o 3, o pásame la ruta de otra)"
 ```
 
 ---

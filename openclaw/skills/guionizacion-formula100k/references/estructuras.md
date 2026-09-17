@@ -1675,7 +1675,7 @@ que todos me miraban. Ahí toqué fondo."
 Transformación: "Empecé sin saber nada. Caminatas, comida más
 consciente, un grupo de apoyo. No fue rápido. Pero fue real."
 
-CTA: "Si estás en ese punto donde sentís que ya no podés más... te
+CTA: "Si estás en ese punto donde sientes que ya no puedes más... te
 prometo que se puede. Comenta 'quiero cambiar' si este video te tocó. No
 estás solo."
 

@@ -268,6 +268,20 @@
       "notes": [
         "Guarda en `guiones/historias/` respetando al pie de la letra `references/output-template.md`: otra skill lo parsea.",
         "Entrega por Telegram el resumen de la secuencia y el `.md` completo como documento."
+      ],
+      "replace": [
+        [
+          "pídela a Cheva si no la tienes",
+          "pídela a quien la tenga si no la tienes"
+        ],
+        [
+          "TESIS, 100K, CHEVA, CLUB",
+          "TESIS, 100K, CLUB, tu marca"
+        ],
+        [
+          "Responde **CHEVA** y te mando el banco",
+          "Responde **BANCO** y te lo mando"
+        ]
       ]
     },
     "historias-a-imagenes-nanobanana": {
@@ -353,6 +367,10 @@
         [
           "a `/SEGUNDO CEREBRO/ROADMAPS/<carpeta>/`",
           "a `cerebro/roadmaps/<carpeta>/`"
+        ],
+        [
+          "(el usuario + dev + Cheva)",
+          "(el usuario + dev + equipo)"
         ]
       ]
     },

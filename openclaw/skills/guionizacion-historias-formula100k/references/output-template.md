@@ -79,7 +79,7 @@ mood: [breve frase mood, ej: "viaje + autoridad + cercanía"]
 ## 📝 Notas de producción
 
 - [Nota 1: ej. "El slide 3 puede grabarse en el mismo escenario del slide 1 si haces un giro de cámara"]
-- [Nota 2: ej. "Para slide 4 necesitas captura del dashboard del Banco de Historias — pídela a Cheva si no la tienes"]
+- [Nota 2: ej. "Para slide 4 necesitas captura del dashboard del Banco de Historias — pídela a quien la tenga si no la tienes"]
 - [Nota 3: ej. "Si no tienes mockup del GPT, abre el GPT en pantalla completa y graba un screen recording de 5s"]
 
 ---

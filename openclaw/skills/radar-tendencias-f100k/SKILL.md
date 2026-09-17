@@ -11,8 +11,8 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - La config no vive en la carpeta oculta de la Mac: léela de `cerebro/f100k-config.json`. Si no existe, créala con el nicho y las palabras clave de `USER.md` y `cerebro/`, y confírmala por Telegram. No mandes a correr rutina-maestra.
-> - Señal de TikTok con Apify (`clockworks/tiktok-scraper`) solo si hay `APIFY_TOKEN`. Sin token, detecta con búsqueda web y dilo en la primera línea.
-> - Tavily = tu búsqueda web.
+> - Señal de TikTok con Apify (`clockworks~tiktok-scraper`) solo si hay `APIFY_TOKEN`. Sin token, detecta con búsqueda web y dilo en la primera línea.
+> - Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{"query":"…","max_results":5}'` (sección 2 del puente).
 > - La «FASE 5 — email de alerta» NO manda correo: la alerta va por Telegram con el mismo formato. Si no hay tendencia real y la automatización no pide informe diario, no mandes nada.
 
 ---
@@ -39,7 +39,7 @@ Extraer: `niche`, `keywords`, `email`
 
 ### Señal 1 — TikTok: volumen de publicación acelerado
 
-Buscar con Apify `clockworks/tiktok-scraper` para cada keyword:
+Buscar con Apify `clockworks~tiktok-scraper` para cada keyword:
 ```json
 {
   "searchQueries": ["[keyword]"],

@@ -10,7 +10,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Paso 1 · data real: comentarios de sus Reels más vistos con Composio (su Instagram profesional) o Apify (`apify/instagram-comment-scraper`, costo → ✅). Los DMs los pega o los manda en captura ella por Telegram: no los leas por tu cuenta aunque haya conexión. Competencia: Apify con los 3 @ que te dé.
+> - Paso 1 · data real: comentarios de sus Reels más vistos con Composio (su Instagram profesional) o Apify (`apify~instagram-comment-scraper`, costo → ✅). Los DMs los pega o los manda en captura ella por Telegram: no los leas por tu cuenta aunque haya conexión. Competencia: Apify con los 3 @ que te dé.
 > - Si el formato ganador es una miniapp, constrúyela con `constructor-miniapps-f100k`; si es un bot o agente, descríbelo en el briefing, no lo despliegues.
 > - El briefing va a `entregables/lead-magnets/` y se manda por Telegram como documento. Los `[[...]]` son notas internas de la versión de escritorio: ignóralos.
 

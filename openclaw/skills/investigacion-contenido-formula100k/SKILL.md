@@ -242,7 +242,7 @@ agent-browser close --all
 
 **Si el atajo falla** (0 resultados o captcha bloqueante):
 1. **Primero** sospechar sesión caducada → correr el chequeo del **Paso 0** y re-loguear TikTok. Es la causa más común.
-2. Si la sesión está fresca y aun así falla → bajar a `apify/tiktok-scraper` con la keyword como query
+2. Si la sesión está fresca y aun así falla → bajar a `apify~tiktok-scraper` con la keyword como query
 3. Si Apify tampoco aplica, pedir al usuario que loguee TikTok en la ventana headed y reintentar
 
 ### Paso 2 — Buscar tendencias con Tavily MCP

@@ -81,7 +81,7 @@ Conservar igual. → lista `brand_candidates`.
 
 ### Carril C — Virales SIN cara/competidor (TikTok via Apify, filtrado duro)
 
-Usar `mcp__apify__call-actor` con `clockworks/tiktok-scraper`. Para cada keyword en `config.radar_sources.faceless_virals`:
+Usar `mcp__apify__call-actor` con `clockworks~tiktok-scraper`. Para cada keyword en `config.radar_sources.faceless_virals`:
 ```json
 {
   "searchQueries": ["[keyword]"],

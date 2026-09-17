@@ -10,7 +10,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Meta Ads Library: navegador del agente **sin iniciar sesión** (es pública). Nunca entres con el Facebook de la usuaria. Si la página no carga, pide captcha o corta la lista, pasa a Apify `apify/facebook-ads-library-scraper` (costo → ✅).
+> - Meta Ads Library: navegador del agente **sin iniciar sesión** (es pública). Nunca entres con el Facebook de la usuaria. Si la página no carga, pide captcha o corta la lista, pasa a Apify `apify~facebook-ads-library-scraper` (costo → ✅).
 > - TikTok Creative Center: navegador del agente en modo público. Lo que solo se ve con cuenta de TikTok Business (algunos CTR/CVR) va como «no disponible»: no lo estimes.
 > - No descargues los .mp4: guarda la URL del anuncio y un screenshot de su tarjeta en la biblioteca. Para leer el gancho visual, mira ese screenshot; si hace falta el video entero, que la usuaria lo abra.
 > - Landings de los anuncios: tu herramienta web o el navegador del agente.
@@ -175,7 +175,7 @@ OUTPUT: markdown crudo, una sección por marca. No analices — yo lo proceso en
 ```
 
 **Cuando la biblioteca no carga, pide captcha o corta resultados:**
-- Caer a Apify (`apify/facebook-ads-library-scraper`) con la query de marca o keyword
+- Caer a Apify (`apify~facebook-ads-library-scraper`) con la query de marca o keyword
 
 **Por qué la fecha de inicio importa más que cualquier otra métrica:**
 - Meta no muestra impresiones para anuncios fuera de UE/política, así que **el tiempo activo es el único proxy público de "esto está convirtiendo"**
@@ -231,9 +231,9 @@ OUTPUT: markdown crudo, una sección por industria/keyword.
 - ✅ Cuando se quiere data estructurada para clustering automático
 
 **Actors útiles:**
-- `apify/facebook-ads-library-scraper` — Meta Ads Library, query por brand o keyword, retorna JSON con video URLs
-- `apify/tiktok-ads-scraper` — TikTok ads con captions, métricas, URLs descargables
-- `clockworks/tiktok-scraper` — videos orgánicos (no ads) si se quiere validar tendencia
+- `apify~facebook-ads-library-scraper` — Meta Ads Library, query por brand o keyword, retorna JSON con video URLs
+- `apify~tiktok-ads-scraper` — TikTok ads con captions, métricas, URLs descargables
+- `clockworks~tiktok-scraper` — videos orgánicos (no ads) si se quiere validar tendencia
 
 **Flujo Apify:**
 1. `fetch-actor-details` → ver input schema del actor

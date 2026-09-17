@@ -10,7 +10,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - La «Opción A — agent-browser» NO corre aquí. Comentarios, en este orden: 1) Composio con Instagram profesional conectado (comentarios de los posts propios, sin límite de scraping); 2) Apify con `APIFY_TOKEN` (`apify/instagram-comment-scraper`, `clockworks/tiktok-scraper`), diciendo antes el costo estimado; 3) si no hay ninguno, pide por Telegram capturas de los comentarios de sus 5 a 7 últimos posts.
+> - La «Opción A — agent-browser» NO corre aquí. Comentarios, en este orden: 1) Composio con Instagram profesional conectado (comentarios de los posts propios, sin límite de scraping); 2) Apify con `APIFY_TOKEN` (`apify~instagram-comment-scraper`, `clockworks~tiktok-scraper`), diciendo antes el costo estimado; 3) si no hay ninguno, pide por Telegram capturas de los comentarios de sus 5 a 7 últimos posts.
 > - Si ninguna fuente corrió, no armes el digest con temas supuestos: dilo en la primera línea del mensaje. Cada tema lleva al menos una cita real de un comentario.
 > - La «FASE 5 — email del viernes» no manda correo: el mismo formato va por Telegram y se guarda en `informes/digest-comunidad-AAAA-MM-DD.md`.
 > - Para que «el Calendario Semanal del lunes las tenga en cuenta», agrega las 5 ideas al final de `ideas/banco.md` (es de donde lee `calendario-semanal-f100k`). Sin eso, esa línea del mensaje es falsa: no la pongas.
@@ -61,7 +61,7 @@ Output: markdown crudo, una sección por post.
 
 ### Opción B — Vía Apify (si no hay sesión agent-browser)
 
-Usar Apify con actor `apify/instagram-comment-scraper` o equivalente:
+Usar Apify con actor `apify~instagram-comment-scraper` o equivalente:
 ```json
 {
   "username": "[ig_handle sin @]",
@@ -70,7 +70,7 @@ Usar Apify con actor `apify/instagram-comment-scraper` o equivalente:
 }
 ```
 
-Para TikTok usar `clockworks/tiktok-scraper` en modo perfil:
+Para TikTok usar `clockworks~tiktok-scraper` en modo perfil:
 ```json
 {
   "profiles": ["[tiktok_handle sin @]"],

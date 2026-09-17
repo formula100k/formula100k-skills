@@ -1,4 +1,4 @@
-# Los 35 formatos de carrusel de FÓRMULA 100K (índice)
+# Los 37 formatos de carrusel de FÓRMULA 100K (índice)
 
 > Lo mantiene el equipo de FÓRMULA 100K y llega con cada actualización del paquete: no lo edites.
 > La ficha completa (anatomía, prompt de guion, visual detallado, prompts por herramienta) vive en la skill
@@ -44,3 +44,5 @@
 | **G13** | De A a B con antesala | Guardado · Venta | M25 | S28 barra de progreso (la barra NO avanza en la antesala:… | A | 2 arreglos | quien está en A no falla por falta de pasos, falla porque cree que el problema es suyo; la antesala le quita la culpa. |
 | **G14** | Antes / después | Venta | M26 | S1 dos fotos reales apiladas con rótulo fijo (o S20 doble… | A | 2 arreglos | el rótulo que no cambia hace que el ojo solo compare las fotos, y la foto fea del inicio es la que conecta (la referencia, con el mismo texto en las… |
 | **G15** | Preguntas frecuentes en chat | Venta | M27 | S22 chat / DM con burbujas | A | 1 arreglo | responde objeciones de venta en el formato donde de verdad se hacen (el DM) y se lee como conversación, no como anuncio. |
+| **G16** | Vitrina de lo que construiste (N cosas que hice) | Comentario · Guardado | M28 | S29 fondo de color plano + pantalla en marco (captura o… | A | salió a la primera | cada slide es PRUEBA, no promesa: la pantalla funcionando convence de que tú también puedes, y el CTA regala justo lo que falta para hacerlo (los… |
+| **G17** | Hilo de tuits: comando → resultado | Guardado · Compartido | M1 + pausa de like a mitad | S27 tuit sobre fondo blanco (avatar + nombre + ✓) | A | 2 arreglos | el tuit con avatar se lee como consejo de una persona, no como anuncio, y cada par da la recompensa en el siguiente swipe. La pausa de like a mitad… |

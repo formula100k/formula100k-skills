@@ -122,7 +122,7 @@ Para Instagram: `https://www.instagram.com/usuario/`
 
 Extraer mínimo los últimos 20-30 videos.
 
-**C. Apify · `apify/instagram-reel-scraper` (OPCIONAL, solo si el usuario lo pidió en PASO 1.5)**
+**C. Apify · `apify~instagram-reel-scraper` (OPCIONAL, solo si el usuario lo pidió en PASO 1.5)**
 
 Activar este módulo cuando:
 - El usuario respondió SÍ a la pregunta de auditoría profunda en el PASO 1
@@ -131,7 +131,7 @@ Activar este módulo cuando:
 
 Proceso de 2 pasadas (instrucciones completas en `references/auditoria-profunda-apify.md`):
 
-1. **Pasada 1** — `mcp__apify__call-actor` con `apify/instagram-reel-scraper` + `{username:[usuario], resultsLimit:60}` para obtener metadata de 60 reels SIN transcript. Costo ~$0.16.
+1. **Pasada 1** — `mcp__apify__call-actor` con `apify~instagram-reel-scraper` + `{username:[usuario], resultsLimit:60}` para obtener metadata de 60 reels SIN transcript. Costo ~$0.16.
 2. **Ordenar por `commentsCount` descendente** y elegir top 5-10.
 3. **Pasada 2** — re-llamar al actor pasando las URLs específicas + `includeTranscript: true`. Costo ~$0.24.
 4. Output cruza con el análisis de patrones de CTA (ver `references/auditoria-profunda-apify.md` → sección "Análisis de patrones de CTA" y la memoria [[feedback-ctas-guiones]]).

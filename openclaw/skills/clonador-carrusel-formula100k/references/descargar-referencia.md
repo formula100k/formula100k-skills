@@ -26,7 +26,7 @@ agent-browser primero).
 
 ### 1.1 Obtener las URLs de imagen del carrusel
 
-Usar el MCP de Apify. Cargar el tool con ToolSearch (`select:mcp__apify__call-actor,mcp__apify__fetch-actor-details,mcp__apify__get-dataset-items`) y llamar al actor **`apify/instagram-scraper`**:
+Usar el MCP de Apify. Cargar el tool con ToolSearch (`select:mcp__apify__call-actor,mcp__apify__fetch-actor-details,mcp__apify__get-dataset-items`) y llamar al actor **`apify~instagram-scraper`**:
 
 Input mínimo:
 ```json

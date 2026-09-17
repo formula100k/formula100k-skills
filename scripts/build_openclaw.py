@@ -105,6 +105,17 @@ def blank_json(value):
     return value
 
 
+# Apify por Composio pide el actor con virgulilla (`clockworks~tiktok-scraper`). Las skills de
+# escritorio lo escriben con barra porque el MCP de Apify sí la acepta; aquí se normaliza para que
+# el agente no reciba un «no encontrado» mudo.
+# El lookbehind evita tocar una URL del Store (apify.com/clockworks/tiktok-scraper), donde la barra sí va.
+ACTOR_RX = re.compile(r"(?<![\w./~-])((?:clockworks|apify|compass|bebity|dtrungtin)/[a-z0-9][a-z0-9-]*)\b")
+
+
+def normalizar_actores(text):
+    return ACTOR_RX.sub(lambda m: m.group(1).replace("/", "~"), text)
+
+
 def scrub(text):
     """Quita llaves e IDs personales que se colaron en las skills de escritorio, sin escribirlos en config."""
     text = re.sub(r"\s*·?\s*https://claude\.ai/code/routines/trig_[A-Za-z0-9]+", "", text)
@@ -199,6 +210,7 @@ def build():
                 continue
             t = f.read_text(encoding="utf-8", errors="strict")
             t = scrub(t)
+            t = normalizar_actores(t)
             for a, b in replaces:
                 if a in t:
                     used[a] = True
@@ -230,11 +242,14 @@ def build():
             oc["requires"] = {"env": sc["requires_env"]}
         meta["openclaw"] = oc
         data["metadata"] = meta
-        skill_md.write_text(emit_frontmatter(data) + block(sc["notes"]) + body, encoding="utf-8")
+        skill_md.write_text(normalizar_actores(emit_frontmatter(data) + block(sc["notes"]) + body), encoding="utf-8")
 
     for p in PUENTE.iterdir():
         if p.is_dir():
             shutil.copytree(p, OUT / p.name)
+            for f in (OUT / p.name).rglob("*"):
+                if f.is_file() and f.suffix.lower() in TEXT_EXT:
+                    f.write_text(normalizar_actores(f.read_text(encoding="utf-8")), encoding="utf-8")
 
 
 def validate():
@@ -268,6 +283,8 @@ def validate():
                 fail(f"{rel}: queda un secreto o ID personal ({m.group(0)[:12]}…) → reemplázalo en config")
             if ORIGEN_RX.search(t):
                 fail(f"{rel}: nombra el origen del método de storytelling → neutralízalo en config")
+            for m in ACTOR_RX.finditer(t):
+                fail(f"{rel}: actor de Apify con barra ({m.group(1)}) → va con virgulilla")
             for i, line in enumerate(t.split("\n"), 1):
                 if not META_LINE.search(line) and re.search(r"(?<![\wáéíóúñ])vos(?![\wáéíóúñ])", line):
                     fail(f"{rel}:{i}: queda «vos» fuera de una regla de idioma → replace en config")

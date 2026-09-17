@@ -12,7 +12,7 @@ metadata: {"version": "1.0.0", "depends-on": ["mcp__claude_ai_Tavily__*"], "open
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Tavily = tu búsqueda web: las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.
+> - Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{"query":"…","max_results":5}'` (sección 2 del puente). Las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.
 > - Los 5 bloques de preguntas van por Telegram, uno a la vez, con opciones numeradas. Lo que ya esté en `cerebro/` (producto, precios, fechas propias) confírmalo en vez de preguntarlo.
 > - `scripts/build_xlsx.py` necesita `openpyxl`: si no está, entrega el calendario en `.md` y el JSON, y dilo. Guarda en `entregables/urgencias/`.
 

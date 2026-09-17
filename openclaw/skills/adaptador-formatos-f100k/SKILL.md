@@ -11,7 +11,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Paso 1 SIN navegador logueado. Link de Instagram: Apify con `APIFY_TOKEN` (`apify/instagram-scraper` con la URL del post trae caption, autor, vistas, miniatura y comentarios). TikTok: `clockworks/tiktok-scraper` con la URL. YouTube: tu navegador o tu herramienta web sobre la página pública, y la transcripción con `transcripcion-youtube-formula100k` si está.
+> - Paso 1 SIN navegador logueado. Link de Instagram: Apify con `APIFY_TOKEN` (`apify~instagram-scraper` con la URL del post trae caption, autor, vistas, miniatura y comentarios). TikTok: `clockworks~tiktok-scraper` con la URL. YouTube: tu navegador o tu herramienta web sobre la página pública, y la transcripción con `transcripcion-youtube-formula100k` si está.
 > - El «frame» del Paso 1 es la miniatura (`displayUrl`/cover) que devuelve Apify: mírala. No descargues el video ni saques cuadros con ffmpeg en el servidor.
 > - Sin `APIFY_TOKEN`, o si el post es privado: pide por Telegram 2 o 3 capturas (primer cuadro con el texto en pantalla + comentarios) o una grabación de pantalla corta. La regla de la skill se mantiene: si no puedes confirmar la mecánica, lo dices y no la adivinas.
 > - «Cerrar el navegador y borrar capturas» no aplica aquí; las capturas que mande la usuaria no se guardan salvo que lo pida (entonces en `ideas/formatos/`).

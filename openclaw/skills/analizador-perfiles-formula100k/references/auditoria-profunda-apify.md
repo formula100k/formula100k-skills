@@ -18,7 +18,7 @@ Por default NO se ejecuta. La skill sigue usando agent-browser + Supadata para a
 
 ## Costo aproximado
 
-`apify/instagram-reel-scraper` cobra por evento:
+`apify~instagram-reel-scraper` cobra por evento:
 - $0.0026 por reel (metadata)
 - $0.001 por arranque del actor
 - $0.048 por minuto de audio transcrito (solo si `includeTranscript: true`)
@@ -45,7 +45,7 @@ Llamar al actor con N reels SIN transcript para tener el ranking por comentarios
 }
 ```
 
-Tool: `mcp__apify__call-actor` con `actor: "apify/instagram-reel-scraper"`.
+Tool: `mcp__apify__call-actor` con `actor: "apify~instagram-reel-scraper"`.
 
 Esperar a que termine (típico: 30-90 segundos para 60 reels). Luego `mcp__apify__get-dataset-items` con campos:
 

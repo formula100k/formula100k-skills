@@ -61,7 +61,7 @@ Para cada post extraer:
 
 ### Opción B — TikTok vía Apify
 
-Usar Apify `clockworks/tiktok-scraper` en modo perfil:
+Usar Apify `clockworks~tiktok-scraper` en modo perfil:
 ```json
 {
   "profiles": ["[tiktok_handle sin @]"],

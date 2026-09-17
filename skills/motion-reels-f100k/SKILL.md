@@ -261,8 +261,9 @@ Guardar como variables de texto para usarlas en el HTML del Paso 5.
 #### Fuente remota (YouTube / Instagram / TikTok) → Supadata API
 
 ```bash
+[ -z "$SUPADATA_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && set -a && . "$HOME/.config/f100k/secrets.env" && set +a
 curl -s "https://api.supadata.ai/v1/transcript?url=ENCODED_URL&lang=es" \
-  -H "x-api-key: sd_8ff1f1f233fc19cb14b5b86277ae2d6b" \
+  -H "x-api-key: $SUPADATA_API_KEY" \
   | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
@@ -1263,7 +1264,7 @@ El timeline GSAP concatena todos los bloques en orden cronológico por `START_S`
 
 | Error | Acción |
 |-------|--------|
-| Supadata devuelve 401 | Verificar API key: `sd_8ff1f1f233fc19cb14b5b86277ae2d6b` |
+| Supadata devuelve 401 | Verificar `SUPADATA_API_KEY` en `~/.config/f100k/secrets.env` (o en las variables de la rutina) |
 | Supadata sin timestamps | Video privado → descargar con yt-dlp + Whisper local |
 | `uvx` no encontrado | `brew install uv` y reintentar |
 | Whisper produce alucinaciones | Re-correr con `--temperature 0.2` o modelo `medium` |

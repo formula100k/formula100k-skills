@@ -257,8 +257,9 @@ Guardar `SAFE_PILL_CSS`, `SAFE_CARD_CSS`, `SAFE_FLOAT_CSS` para usar en el Paso 
 ### Si es URL de YouTube (Supadata API):
 
 ```bash
+[ -z "$SUPADATA_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && set -a && . "$HOME/.config/f100k/secrets.env" && set +a
 curl -s "https://api.supadata.ai/v1/transcript?url=$VIDEO_SRC&lang=es" \
-  -H "x-api-key: sd_8ff1f1f233fc19cb14b5b86277ae2d6b" \
+  -H "x-api-key: $SUPADATA_API_KEY" \
   > "$DEST/raw_transcript.json"
 
 python3 -c "

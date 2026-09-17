@@ -11,7 +11,7 @@ Qué hace, por cada skill listada en openclaw/config.json:
   3. Inserta al inicio del cuerpo el bloque «🦞 Corriendo en OpenClaw» con las notas de esa skill.
   4. Reescribe el frontmatter: description ≤1024 caracteres (estándar AgentSkills) y metadata
      en una sola línea JSON, con {"openclaw": {"requires": {"env": [...]}}} solo si la skill lo declara.
-  5. Copia la skill puente openclaw/puente/f100k-openclaw.
+  5. Copia la skill puente openclaw/puente/f100k-puente.
   6. Valida y sale con 1 si algo no cumple.
 """
 import json
@@ -152,7 +152,7 @@ def rewrite_paths(text, path_map, fallback):
 
 def block(notes):
     out = [MARK, "", "> Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.",
-           "> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.",
+           "> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.",
            "> Lo específico de esta skill:", ">"]
     out += [f"> - {n}" for n in notes]
     out += ["", "---", "", ""]
@@ -252,7 +252,7 @@ def validate():
         oc = (data.get("metadata") or {}).get("openclaw")
         if not isinstance(oc, dict):
             fail(f"{skill.name}: metadata.openclaw no parsea como objeto")
-        is_puente = skill.name == "f100k-openclaw"
+        is_puente = skill.name == "f100k-puente"
         if not is_puente and MARK not in body:
             fail(f"{skill.name}: falta el bloque «Corriendo en OpenClaw»")
         for f in skill.rglob("*"):

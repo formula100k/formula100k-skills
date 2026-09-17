@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - **En este servidor NO se usa agent-browser ni sesión logueada** aunque la skill lo pida primero: el PASO 2 y el 2.5 se hacen con otras fuentes.

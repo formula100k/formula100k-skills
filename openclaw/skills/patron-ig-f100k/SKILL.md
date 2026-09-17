@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Datos de la semana, en este orden: Composio con Instagram profesional (cuenta propia) o Apify con `APIFY_TOKEN`. Sin ninguno, pide capturas de estadísticas.

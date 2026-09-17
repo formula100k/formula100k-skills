@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Skill de coaching por conversación: funciona muy bien por Telegram. Haz una pregunta por mensaje y acepta respuestas por audio.

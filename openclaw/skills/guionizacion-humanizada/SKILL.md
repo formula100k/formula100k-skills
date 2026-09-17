@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - PASO 1 abre Instagram con el navegador: aquí NO. Construye el Voice Guide con lo que haya en `cerebro/` y pide por Telegram de 6 a 8 captions o transcripciones de sus mejores posts (o un audio hablando como le habla a su audiencia). Si hay `APIFY_TOKEN`, puedes bajar captions públicos de su perfil con un actor de Instagram.

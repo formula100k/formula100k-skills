@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Las referencias virales: con `APIFY_TOKEN` usa Apify (TikTok/IG públicos); sin token, tu búsqueda web. Transcripciones de YouTube: `transcripcion-youtube-formula100k` o la que te pegue la usuaria. Nunca navegador logueado.

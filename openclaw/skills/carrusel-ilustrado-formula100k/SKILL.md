@@ -8,7 +8,7 @@ metadata: {"version": "2.0.0", "modelo": "nano_banana_2", "formato": "4:5 — 10
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Las ilustraciones se generan con el plugin de Higgsfield: solo si está conectado, con costo estimado y ✅ antes.

@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - El render a PNG (`build.js` + `export.js`) está hecho para una Mac con Chrome. En el servidor, por defecto entrega el camino **«prompts por plataforma»**: el prompt listo para Gemini o ChatGPT de la ficha elegida, con las 3 variantes.

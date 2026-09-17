@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - `yt-transcript-mcp` no está en este servidor. Para la transcripción, en este orden: Supadata con `SUPADATA_API_KEY` si existe; tu herramienta web si el video tiene transcripción pública; o pídele a la usuaria que la pegue (YouTube → «Mostrar transcripción» → copiar).

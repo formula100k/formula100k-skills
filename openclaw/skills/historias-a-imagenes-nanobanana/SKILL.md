@@ -8,7 +8,7 @@ metadata: {"version": "1.0.0", "depends-on": ["guionizacion-historias-formula100
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Motor de imagen, en este orden: plugin de Higgsfield (`nano_banana_2`) si está conectado; si no, `GEMINI_API_KEY` o el modelo de imagen de OpenRouter; si no hay ninguno, entrega los prompts por historia y avisa.

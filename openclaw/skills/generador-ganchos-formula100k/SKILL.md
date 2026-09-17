@@ -8,7 +8,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Los clips (Nano Banana + Seedance) y el `virality_predictor` son de Higgsfield: úsalos solo si el plugin de Higgsfield está conectado, y antes di el costo en créditos y espera ✅.

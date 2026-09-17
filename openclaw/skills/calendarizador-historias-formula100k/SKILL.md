@@ -8,7 +8,7 @@ metadata: {"version": "1.0.0", "depends-on": ["guionizacion-historias-formula100
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Guarda el calendario en `guiones/historias/calendarios/` y los guiones en `guiones/historias/`.

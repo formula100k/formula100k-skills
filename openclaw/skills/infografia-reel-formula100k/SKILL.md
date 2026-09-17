@@ -8,7 +8,7 @@ metadata: {"version": "1.0.0", "depends-on": [], "mcp-required": ["higgsfield"],
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Imagen base y animación salen del plugin de Higgsfield: solo si está conectado. Antes muestra el costo total (imagen + video) y espera ✅.

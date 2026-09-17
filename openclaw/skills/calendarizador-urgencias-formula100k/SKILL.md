@@ -9,7 +9,7 @@ metadata: {"version": "1.0.0", "depends-on": ["mcp__claude_ai_Tavily__*"], "open
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Tavily = tu búsqueda web: las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.

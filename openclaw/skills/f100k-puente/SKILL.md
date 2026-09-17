@@ -1,5 +1,5 @@
 ---
-name: f100k-openclaw
+name: f100k-puente
 description: "Puente para correr las skills de FÓRMULA 100K dentro de un agente OpenClaw (PapayaClaw u otro servidor). Léela SIEMPRE antes de usar cualquier skill F100K en este agente, y cada vez que una skill nombre una herramienta de Claude Code (agent-browser, claude-in-chrome, mcp__..., AskUserQuestion, subagentes, Task), una ruta de la Mac (~/Documents, ~/.claude, ~/.f100k-radar) o diga que se entregue por email. Traduce cada herramienta a su equivalente en el servidor, dice dónde se guarda cada archivo dentro del workspace, cómo leer el segundo cerebro de la usuaria y las reglas de seguridad: nada público sin ✅, todo se entrega por Telegram y nunca se entra logueada a Instagram desde el servidor."
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---

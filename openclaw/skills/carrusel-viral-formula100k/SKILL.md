@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La imagen gancho: usa `GEMINI_API_KEY` del entorno (o el modelo de imagen de OpenRouter). La skill `banana` y su script no vienen en este paquete: llama a la API directo como muestra el ejemplo con curl. Costo → ✅ → generar.

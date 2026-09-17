@@ -9,7 +9,7 @@ metadata: {"version": "1.0.0", "mcp-required": ["higgsfield"], "openclaw": {"emo
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - Los clips animados salen de los presets explainer del plugin de Higgsfield: solo si está conectado. El plan de clips y el costo total se aprueban con ✅ antes de generar.

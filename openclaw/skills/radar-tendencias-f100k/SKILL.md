@@ -7,7 +7,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 ## 🦞 Corriendo en OpenClaw
 
 > Esta versión corre en un agente OpenClaw (servidor + Telegram), no en Claude Code.
-> **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
+> **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
 > - La config no vive en la carpeta oculta de la Mac: léela de `cerebro/f100k-config.json`. Si no existe, créala con el nicho y las palabras clave de `USER.md` y `cerebro/`, y confírmala por Telegram. No mandes a correr rutina-maestra.

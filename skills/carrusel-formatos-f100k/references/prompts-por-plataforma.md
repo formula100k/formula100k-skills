@@ -90,7 +90,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~10% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~10% a los lados y nada importante en el 9% de abajo.
 FONDO: dos fotos personales de celular apiladas a sangre, cada una el 50% del alto, sin separador; fotos NO producidas (casa, carro, playa) y de colores distintos entre la de arriba y la de abajo.
 PALETA (usa SOLO estos colores): #FFFFFF = texto, con sombra negra difusa · #000000 = sombra del texto al 50%
 TIPOGRAFÍA:
@@ -138,7 +138,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~10% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~10% a los lados y nada importante en el 9% de abajo.
 FONDO: dos fotos personales de celular apiladas a sangre, cada una el 50% del alto, sin separador; fotos NO producidas (casa, carro, playa) y de colores distintos entre la de arriba y la de abajo.
 PALETA (usa SOLO estos colores): #FFFFFF = texto, con sombra negra difusa · #000000 = sombra del texto al 50%
 TIPOGRAFÍA:
@@ -252,7 +252,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: arriba (0-50%) foto de las personas del caso con degradado a negro en el borde inferior; abajo (50-100%) foto del resultado (local, producto, logo) con degradado a negro al pie.
 PALETA (usa SOLO estos colores): #FEFDFD = texto de arriba · #ECF735 = texto de abajo, el golpe · #050105 = degradados
 TIPOGRAFÍA:
@@ -302,7 +302,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: arriba (0-50%) foto de las personas del caso con degradado a negro en el borde inferior; abajo (50-100%) foto del resultado (local, producto, logo) con degradado a negro al pie.
 PALETA (usa SOLO estos colores): #FEFDFD = texto de arriba · #ECF735 = texto de abajo, el golpe · #050105 = degradados
 TIPOGRAFÍA:
@@ -420,7 +420,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso en instrucción y resultado; el cierre en celeste #67C1F5.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #000000 = texto · #131313 = caja de la captura del chat · #E53935 = subrayado a mano bajo el comando · #67C1F5 = fondo del cierre · #FFD33F = sticker amarillo del cierre · #F42484 = sticker rosa del cierre
 TIPOGRAFÍA:
@@ -469,7 +469,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso en instrucción y resultado; el cierre en celeste #67C1F5.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #000000 = texto · #131313 = caja de la captura del chat · #E53935 = subrayado a mano bajo el comando · #67C1F5 = fondo del cierre · #FFD33F = sticker amarillo del cierre · #F42484 = sticker rosa del cierre
 TIPOGRAFÍA:
@@ -584,7 +584,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: foto cenital de una libreta abierta sostenida por una mano (abajo a la derecha, ~15% del alto) sobre mesa de madera cálida desenfocada, con un objeto amarillo desenfocado arriba a la izquierda.
 PALETA (usa SOLO estos colores): #D2C0A7 = papel crema con renglones tenues · #040000 = tinta · #DDBA41 = resaltador mostaza, franja completa · #764D29 = madera
 TIPOGRAFÍA:
@@ -633,7 +633,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: foto cenital de una libreta abierta sostenida por una mano (abajo a la derecha, ~15% del alto) sobre mesa de madera cálida desenfocada, con un objeto amarillo desenfocado arriba a la izquierda.
 PALETA (usa SOLO estos colores): #D2C0A7 = papel crema con renglones tenues · #040000 = tinta · #DDBA41 = resaltador mostaza, franja completa · #764D29 = madera
 TIPOGRAFÍA:
@@ -754,7 +754,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: cuadrícula 2×2 de cuadrantes iguales: arriba a la izquierda tu foto; arriba a la derecha bloque negro; abajo dos imágenes metafóricas desaturadas con UN acento de color.
 PALETA (usa SOLO estos colores): #000000 = bloque de texto · #FFFFFF = texto principal · #BBBBBB = itálicas del bloque
 TIPOGRAFÍA:
@@ -806,7 +806,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: cuadrícula 2×2 de cuadrantes iguales: arriba a la izquierda tu foto; arriba a la derecha bloque negro; abajo dos imágenes metafóricas desaturadas con UN acento de color.
 PALETA (usa SOLO estos colores): #000000 = bloque de texto · #FFFFFF = texto principal · #BBBBBB = itálicas del bloque
 TIPOGRAFÍA:
@@ -929,7 +929,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: hoja de cuaderno espiral FOTOGRAFIADA a sangre (papel gris cálido, no blanco): espiral a la izquierda, margen rojo vertical, renglones azul pálido.
 PALETA (usa SOLO estos colores): #C5BAB4 = papel · #010286 = tinta azul bolígrafo · #D32F2F = subrayado a mano bajo 1 palabra
 TIPOGRAFÍA:
@@ -980,7 +980,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: hoja de cuaderno espiral FOTOGRAFIADA a sangre (papel gris cálido, no blanco): espiral a la izquierda, margen rojo vertical, renglones azul pálido.
 PALETA (usa SOLO estos colores): #C5BAB4 = papel · #010286 = tinta azul bolígrafo · #D32F2F = subrayado a mano bajo 1 palabra
 TIPOGRAFÍA:
@@ -1099,7 +1099,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: hoja rayada fotografiada con espiral a la izquierda y margen rojo vertical a ~12% del ancho.
 PALETA (usa SOLO estos colores): #CDC8CA = papel · #B2B4BF = renglones · #A31536 = margen y subrayados · #19115F = tinta azul marino
 TIPOGRAFÍA:
@@ -1151,7 +1151,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: hoja rayada fotografiada con espiral a la izquierda y margen rojo vertical a ~12% del ancho.
 PALETA (usa SOLO estos colores): #CDC8CA = papel · #B2B4BF = renglones · #A31536 = margen y subrayados · #19115F = tinta azul marino
 TIPOGRAFÍA:
@@ -1270,7 +1270,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
 FONDO: foto real con luz natural, un poco inclinada, de una página de agenda a sangre; slides 1-2 con cabecera impresa de casillas «D · M · A» y recuadro redondeado con renglones; slides 3-4 solo renglones.
 PALETA (usa SOLO estos colores): #B3B4B3 = papel gris frío con sombra · #0A0A08 = tinta · #8E8F8E = líneas impresas
 TIPOGRAFÍA:
@@ -1319,7 +1319,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
 FONDO: foto real con luz natural, un poco inclinada, de una página de agenda a sangre; slides 1-2 con cabecera impresa de casillas «D · M · A» y recuadro redondeado con renglones; slides 3-4 solo renglones.
 PALETA (usa SOLO estos colores): #B3B4B3 = papel gris frío con sombra · #0A0A08 = tinta · #8E8F8E = líneas impresas
 TIPOGRAFÍA:
@@ -1437,7 +1437,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: la MISMA foto tuya en todas las slides (plano medio, contrapicado, mirada fuera de cámara, pared lisa), ocupando todo el lienzo.
 PALETA (usa SOLO estos colores): #FEFEFE = tarjeta · #000000 = tinta · #D15771 = acento rosa: círculo del paso, chispas (o tu color de marca) · #F4E7B8 = resaltador pálido · #F7CAAC = recuadro de remate
 TIPOGRAFÍA:
@@ -1487,7 +1487,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: la MISMA foto tuya en todas las slides (plano medio, contrapicado, mirada fuera de cámara, pared lisa), ocupando todo el lienzo.
 PALETA (usa SOLO estos colores): #FEFEFE = tarjeta · #000000 = tinta · #D15771 = acento rosa: círculo del paso, chispas (o tu color de marca) · #F4E7B8 = resaltador pálido · #F7CAAC = recuadro de remate
 TIPOGRAFÍA:
@@ -1608,7 +1608,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: una foto distinta de tu vida real a sangre en cada slide (gimnasio, museo, oficina), luz ambiente, algo oscura.
 PALETA (usa SOLO estos colores): #FBFCFB = texto, con sombra negra difusa · #2B2B2B = dominante oscuro de las fotos
 TIPOGRAFÍA:
@@ -1657,7 +1657,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: una foto distinta de tu vida real a sangre en cada slide (gimnasio, museo, oficina), luz ambiente, algo oscura.
 PALETA (usa SOLO estos colores): #FBFCFB = texto, con sombra negra difusa · #2B2B2B = dominante oscuro de las fotos
 TIPOGRAFÍA:
@@ -1781,7 +1781,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: fotos REALES de archivo a sangre en orden cronológico: foto escolar de niña → familia → adolescente → adulta trabajando → adulta con su producto.
 PALETA (usa SOLO estos colores): #FFFFFF = texto con sombra suave · #36302F = dominante cálido de las fotos de archivo
 TIPOGRAFÍA:
@@ -1831,7 +1831,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: fotos REALES de archivo a sangre en orden cronológico: foto escolar de niña → familia → adolescente → adulta trabajando → adulta con su producto.
 PALETA (usa SOLO estos colores): #FFFFFF = texto con sombra suave · #36302F = dominante cálido de las fotos de archivo
 TIPOGRAFÍA:
@@ -1949,7 +1949,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto a sangre de espaldas caminando (calle, playa o campo), luz natural suave, sin que se vea la cara; ocupa el 100% del slide.
 PALETA (usa SOLO estos colores): #C9A27A = tira kraft · #F4B6C2 = tira rosa · #111111 = letra · #E85C8A = garabatos rosas
 TIPOGRAFÍA:
@@ -2000,7 +2000,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto a sangre de espaldas caminando (calle, playa o campo), luz natural suave, sin que se vea la cara; ocupa el 100% del slide.
 PALETA (usa SOLO estos colores): #C9A27A = tira kraft · #F4B6C2 = tira rosa · #111111 = letra · #E85C8A = garabatos rosas
 TIPOGRAFÍA:
@@ -2119,7 +2119,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto en plano medio, centrada, con mucho cielo o pared lisa arriba (al menos el 35% superior libre).
 PALETA (usa SOLO estos colores): #FFD60A = trazo y letra amarilla · #FFFFFF = respaldo si el cielo es claro · #111111 = sombra del trazo al 25%
 TIPOGRAFÍA:
@@ -2168,7 +2168,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto en plano medio, centrada, con mucho cielo o pared lisa arriba (al menos el 35% superior libre).
 PALETA (usa SOLO estos colores): #FFD60A = trazo y letra amarilla · #FFFFFF = respaldo si el cielo es claro · #111111 = sombra del trazo al 25%
 TIPOGRAFÍA:
@@ -2285,7 +2285,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: set de grabación con fondo de papel continuo morado saturado, luz de estudio suave de frente, boom de micrófono entrando por arriba a la derecha.
 PALETA (usa SOLO estos colores): #6B2FD6 = fondo morado · #FFFFFF = hoja del rotafolio · #1A1A1A = marcador negro · #FFE45C = resaltador amarillo
 TIPOGRAFÍA:
@@ -2334,7 +2334,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: set de grabación con fondo de papel continuo morado saturado, luz de estudio suave de frente, boom de micrófono entrando por arriba a la derecha.
 PALETA (usa SOLO estos colores): #6B2FD6 = fondo morado · #FFFFFF = hoja del rotafolio · #1A1A1A = marcador negro · #FFE45C = resaltador amarillo
 TIPOGRAFÍA:
@@ -2453,7 +2453,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco puro #FFFFFF en portada; blanco o gris muy claro #F4F4F5 en el resto, sin texturas.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #0A0A0A = titular · #FF3D7F = inicio del degradado · #FF8A00 = fin del degradado · #71717A = contador y texto chico
 TIPOGRAFÍA:
@@ -2503,7 +2503,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco puro #FFFFFF en portada; blanco o gris muy claro #F4F4F5 en el resto, sin texturas.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #0A0A0A = titular · #FF3D7F = inicio del degradado · #FF8A00 = fin del degradado · #71717A = contador y texto chico
 TIPOGRAFÍA:
@@ -2622,7 +2622,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF con 3-4 detalles mínimos (estrellitas, nubecitas) en azul claro.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1E2A5A = titular azul oscuro · #6E8FD8 = subtítulo azul claro · #FFD66B = amarillo del personaje y resaltados · #EEF3FF = recuadro de información
 TIPOGRAFÍA:
@@ -2670,7 +2670,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF con 3-4 detalles mínimos (estrellitas, nubecitas) en azul claro.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1E2A5A = titular azul oscuro · #6E8FD8 = subtítulo azul claro · #FFD66B = amarillo del personaje y resaltados · #EEF3FF = recuadro de información
 TIPOGRAFÍA:
@@ -2787,7 +2787,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
 FONDO: gris muy claro #F3F3F3 liso.
 PALETA (usa SOLO estos colores): #F3F3F3 = fondo · #E63637 = fila S · #F47D2A = fila A · #FAC430 = fila B · #73BB4F = fila C · #000000 = titular
 TIPOGRAFÍA:
@@ -2835,7 +2835,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
 FONDO: gris muy claro #F3F3F3 liso.
 PALETA (usa SOLO estos colores): #F3F3F3 = fondo · #E63637 = fila S · #F47D2A = fila A · #FAC430 = fila B · #73BB4F = fila C · #000000 = titular
 TIPOGRAFÍA:
@@ -2954,7 +2954,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: negro #000000 a sangre.
 PALETA (usa SOLO estos colores): #000000 = fondo · #F1E3CD = titular crema · #C8552A = subtítulo y cifras naranja quemado · #FFFFFF = nombres y nota
 TIPOGRAFÍA:
@@ -3002,7 +3002,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: negro #000000 a sangre.
 PALETA (usa SOLO estos colores): #000000 = fondo · #F1E3CD = titular crema · #C8552A = subtítulo y cifras naranja quemado · #FFFFFF = nombres y nota
 TIPOGRAFÍA:
@@ -3120,7 +3120,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: gris claro liso #E3E3E3.
 PALETA (usa SOLO estos colores): #E3E3E3 = fondo · #19181A = tinta y líneas · #7A7A7A = paréntesis honestos
 TIPOGRAFÍA:
@@ -3167,7 +3167,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: gris claro liso #E3E3E3.
 PALETA (usa SOLO estos colores): #E3E3E3 = fondo · #19181A = tinta y líneas · #7A7A7A = paréntesis honestos
 TIPOGRAFÍA:
@@ -3285,7 +3285,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
 FONDO: slides 1 y 3 negro #000000; slide 2 blanco (el mismo sistema invertido); slide 4 póster crema #FAF1EA.
 PALETA (usa SOLO estos colores): #000000 = fondo · #FFFFFF = etiquetas sobre negro · #E02424 = tachón X · #FAF1EA = póster de la oferta · #181007 = tinta café del póster
 TIPOGRAFÍA:
@@ -3337,7 +3337,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
 FONDO: slides 1 y 3 negro #000000; slide 2 blanco (el mismo sistema invertido); slide 4 póster crema #FAF1EA.
 PALETA (usa SOLO estos colores): #000000 = fondo · #FFFFFF = etiquetas sobre negro · #E02424 = tachón X · #FAF1EA = póster de la oferta · #181007 = tinta café del póster
 TIPOGRAFÍA:
@@ -3458,7 +3458,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: foto oscura desenfocada con velo degradado igual en todas (gris claro arriba → casi negro abajo).
 PALETA (usa SOLO estos colores): #9B9C9F = velo arriba · #12141A = velo abajo · #FCFCFB = texto · #806B43 = toques cálidos de las ilustraciones
 TIPOGRAFÍA:
@@ -3511,7 +3511,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: foto oscura desenfocada con velo degradado igual en todas (gris claro arriba → casi negro abajo).
 PALETA (usa SOLO estos colores): #9B9C9F = velo arriba · #12141A = velo abajo · #FCFCFB = texto · #806B43 = toques cálidos de las ilustraciones
 TIPOGRAFÍA:
@@ -3634,7 +3634,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: portada: foto editorial a sangre con degradado negro en el tercio inferior; internas: blanco con cuadrícula de puntos gris muy tenue; cierre gris claro.
 PALETA (usa SOLO estos colores): #000000 = portada · #F42A2A = píldora URGENTE · #FAED0A = última línea del titular · #FFFFFF = internas · #33BC44 = CTA
 TIPOGRAFÍA:
@@ -3686,7 +3686,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: portada: foto editorial a sangre con degradado negro en el tercio inferior; internas: blanco con cuadrícula de puntos gris muy tenue; cierre gris claro.
 PALETA (usa SOLO estos colores): #000000 = portada · #F42A2A = píldora URGENTE · #FAED0A = última línea del titular · #FFFFFF = internas · #33BC44 = CTA
 TIPOGRAFÍA:
@@ -3806,7 +3806,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: gris cálido liso #F3F3F1 en todas.
 PALETA (usa SOLO estos colores): #F3F3F1 = fondo · #000000 = tinta · #AE102E = rojo de marca: cursor, detalles (o tu color de marca)
 TIPOGRAFÍA:
@@ -3854,7 +3854,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: gris cálido liso #F3F3F1 en todas.
 PALETA (usa SOLO estos colores): #F3F3F1 = fondo · #000000 = tinta · #AE102E = rojo de marca: cursor, detalles (o tu color de marca)
 TIPOGRAFÍA:
@@ -3973,7 +3973,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: fotos reales tuyas con tu comunidad o en un evento, a sangre; en internas degradado de tu color de marca desde el pie hasta ~60% del alto.
 PALETA (usa SOLO estos colores): #E9729C = rosa claro (o tu color de marca) · #CC2A72 = magenta del degradado · #FF63C1 = texto en arco de portada · #FFFFFF = texto · #2A1215 = bloque oscuro de «lo que te dicen»
 TIPOGRAFÍA:
@@ -4024,7 +4024,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: fotos reales tuyas con tu comunidad o en un evento, a sangre; en internas degradado de tu color de marca desde el pie hasta ~60% del alto.
 PALETA (usa SOLO estos colores): #E9729C = rosa claro (o tu color de marca) · #CC2A72 = magenta del degradado · #FF63C1 = texto en arco de portada · #FFFFFF = texto · #2A1215 = bloque oscuro de «lo que te dicen»
 TIPOGRAFÍA:
@@ -4143,7 +4143,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: azul marino liso #001274 en todas.
 PALETA (usa SOLO estos colores): #001274 = fondo · #00C182 = verde acento · #FFFFFF = texto y fichas de íconos
 TIPOGRAFÍA:
@@ -4189,7 +4189,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: azul marino liso #001274 en todas.
 PALETA (usa SOLO estos colores): #001274 = fondo · #00C182 = verde acento · #FFFFFF = texto y fichas de íconos
 TIPOGRAFÍA:
@@ -4304,7 +4304,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: degradado cálido que avanza por slide: amarillo → naranja claro → naranja.
 PALETA (usa SOLO estos colores): #FFDD55 = portada · #FDB368 = slides 2-3 · #FFA554 = slides 4-5 · #EF9B50 = brochazo detrás del término · #D32300 = óvalo a mano · #1A1A1A = definición y ejemplo
 TIPOGRAFÍA:
@@ -4351,7 +4351,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: degradado cálido que avanza por slide: amarillo → naranja claro → naranja.
 PALETA (usa SOLO estos colores): #FFDD55 = portada · #FDB368 = slides 2-3 · #FFA554 = slides 4-5 · #EF9B50 = brochazo detrás del término · #D32300 = óvalo a mano · #1A1A1A = definición y ejemplo
 TIPOGRAFÍA:
@@ -4467,7 +4467,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: la MISMA escena tuya (una selfie con carácter) a sangre en todas, cada vez más oscurecida y desenfocada detrás del contenido.
 PALETA (usa SOLO estos colores): #21201C = fondo oscuro metálico · #0C0C0B = sombra más densa · #FFFFFF = texto · #9D7552 = calidez de la foto
 TIPOGRAFÍA:
@@ -4516,7 +4516,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: la MISMA escena tuya (una selfie con carácter) a sangre en todas, cada vez más oscurecida y desenfocada detrás del contenido.
 PALETA (usa SOLO estos colores): #21201C = fondo oscuro metálico · #0C0C0B = sombra más densa · #FFFFFF = texto · #9D7552 = calidez de la foto
 TIPOGRAFÍA:
@@ -4637,7 +4637,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco roto #FAFAFA.
 PALETA (usa SOLO estos colores): #FAFAFA = fondo · #5A199C = morado de marca: bordes, frase clave (o tu color de marca) · #10061C = tinta · #FFD60A = resaltado de los [HUECOS]
 TIPOGRAFÍA:
@@ -4689,7 +4689,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco roto #FAFAFA.
 PALETA (usa SOLO estos colores): #FAFAFA = fondo · #5A199C = morado de marca: bordes, frase clave (o tu color de marca) · #10061C = tinta · #FFD60A = resaltado de los [HUECOS]
 TIPOGRAFÍA:
@@ -4811,7 +4811,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: rosa empolvado liso #F7ECE8 en todas.
 PALETA (usa SOLO estos colores): #F7ECE8 = fondo · #EDBB4C = amarillo de píldoras y corte · #000000 = tinta
 TIPOGRAFÍA:
@@ -4857,7 +4857,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: rosa empolvado liso #F7ECE8 en todas.
 PALETA (usa SOLO estos colores): #F7ECE8 = fondo · #EDBB4C = amarillo de píldoras y corte · #000000 = tinta
 TIPOGRAFÍA:
@@ -4973,7 +4973,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~11% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~11% a los lados y nada importante en el 9% de abajo.
 FONDO: crema #FAF8F5 liso, mucho aire; la misma composición en todas las frases.
 PALETA (usa SOLO estos colores): #FAF8F5 = fondo · #3B2F2F = texto · #C2562B = LA palabra resaltada · #8C7B6B = número y firma
 TIPOGRAFÍA:
@@ -5021,7 +5021,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~11% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~11% a los lados y nada importante en el 9% de abajo.
 FONDO: crema #FAF8F5 liso, mucho aire; la misma composición en todas las frases.
 PALETA (usa SOLO estos colores): #FAF8F5 = fondo · #3B2F2F = texto · #C2562B = LA palabra resaltada · #8C7B6B = número y firma
 TIPOGRAFÍA:
@@ -5139,7 +5139,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto real a sangre, en pausa y no posada (mirando a un lado, con una taza, en tu lugar de trabajo), con degradado negro de abajo hacia arriba del 0% al 75% en la mitad inferior para que el texto se lea.
 PALETA (usa SOLO estos colores): #0B0B0B = oscurecido de la foto · #FFFFFF = texto · #FEEB9D = parte clave, etiqueta y garabatos · #111111 = texto de la etiqueta
 TIPOGRAFÍA:
@@ -5189,7 +5189,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: tu foto real a sangre, en pausa y no posada (mirando a un lado, con una taza, en tu lugar de trabajo), con degradado negro de abajo hacia arriba del 0% al 75% en la mitad inferior para que el texto se lea.
 PALETA (usa SOLO estos colores): #0B0B0B = oscurecido de la foto · #FFFFFF = texto · #FEEB9D = parte clave, etiqueta y garabatos · #111111 = texto de la etiqueta
 TIPOGRAFÍA:
@@ -5310,7 +5310,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: portada: pantalla de chat (fondo #EDE6DC, barra superior #1F2C34); slides de respuesta: nota del celular color crema #FFFDF4 con la barra amarilla de «Notas» arriba.
 PALETA (usa SOLO estos colores): #EDE6DC = fondo del chat · #1F2C34 = barra del chat · #FFFFFF = burbuja de la pregunta · #FFFDF4 = hoja de nota · #1C1C1E = texto · #FFD60A = acento de la app de notas · #8E8E93 = hora y fecha
 TIPOGRAFÍA:
@@ -5356,7 +5356,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: portada: pantalla de chat (fondo #EDE6DC, barra superior #1F2C34); slides de respuesta: nota del celular color crema #FFFDF4 con la barra amarilla de «Notas» arriba.
 PALETA (usa SOLO estos colores): #EDE6DC = fondo del chat · #1F2C34 = barra del chat · #FFFFFF = burbuja de la pregunta · #FFFDF4 = hoja de nota · #1C1C1E = texto · #FFD60A = acento de la app de notas · #8E8E93 = hora y fecha
 TIPOGRAFÍA:
@@ -5474,7 +5474,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: neutro claro #FAFAFA en todas las slides; la antesala (slides 2-4) en crema #F5F0E8 para que se note que todavía no empiezan los pasos.
 PALETA (usa SOLO estos colores): #FAFAFA = fondo de los pasos · #F5F0E8 = fondo de la antesala · #18181B = texto · #6D28D9 = acento: barra, chip del paso · #E4E4E7 = barra vacía · #71717A = texto de apoyo
 TIPOGRAFÍA:
@@ -5520,7 +5520,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: neutro claro #FAFAFA en todas las slides; la antesala (slides 2-4) en crema #F5F0E8 para que se note que todavía no empiezan los pasos.
 PALETA (usa SOLO estos colores): #FAFAFA = fondo de los pasos · #F5F0E8 = fondo de la antesala · #18181B = texto · #6D28D9 = acento: barra, chip del paso · #E4E4E7 = barra vacía · #71717A = texto de apoyo
 TIPOGRAFÍA:
@@ -5632,7 +5632,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: dos fotos REALES apiladas 50/50 a sangre que muestran LA MISMA COSA en dos momentos (cocina casera ↔ cocina industrial, bolsita con sticker ↔ empaque de marca).
 PALETA (usa SOLO estos colores): #4F7A93 = píldora azul acero · #FFFFFF = texto
 TIPOGRAFÍA:
@@ -5680,7 +5680,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: dos fotos REALES apiladas 50/50 a sangre que muestran LA MISMA COSA en dos momentos (cocina casera ↔ cocina industrial, bolsita con sticker ↔ empaque de marca).
 PALETA (usa SOLO estos colores): #4F7A93 = píldora azul acero · #FFFFFF = texto
 TIPOGRAFÍA:
@@ -5797,7 +5797,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: pantalla de chat: fondo #EDE6DC con patrón de garabatos al 6% de opacidad, barra superior #1F2C34 con avatar y nombre.
 PALETA (usa SOLO estos colores): #EDE6DC = fondo del chat · #1F2C34 = barra superior · #FFFFFF = burbuja de la clienta · #D9FDD3 = burbuja tuya (o tu color de marca al 20%) · #111111 = texto · #8696A0 = hora y vistos
 TIPOGRAFÍA:
@@ -5845,7 +5845,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~5% a los lados y nada importante en el 9% de abajo.
 FONDO: pantalla de chat: fondo #EDE6DC con patrón de garabatos al 6% de opacidad, barra superior #1F2C34 con avatar y nombre.
 PALETA (usa SOLO estos colores): #EDE6DC = fondo del chat · #1F2C34 = barra superior · #FFFFFF = burbuja de la clienta · #D9FDD3 = burbuja tuya (o tu color de marca al 20%) · #111111 = texto · #8696A0 = hora y vistos
 TIPOGRAFÍA:
@@ -5964,7 +5964,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
 PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
 TIPOGRAFÍA:
@@ -6016,7 +6016,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: azul rey plano #0E3BB2 en todas las slides del medio y en el cierre; la portada es tu foto real a sangre.
 PALETA (usa SOLO estos colores): #0E3BB2 = fondo único de la serie · #F1F0C2 = titulares y texto, crema · #1C1815 = marco de la pantalla · #F49AC8 = estrellas-sticker rosas con borde crema · #FFFFFF = interior de la pantalla si la app es clara
 TIPOGRAFÍA:
@@ -6140,7 +6140,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso en todas las slides.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
 TIPOGRAFÍA:
@@ -6190,7 +6190,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso en todas las slides.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #1D181E = texto · #8E8E93 = tu usuario en gris claro · #1D9BF0 = ✓ de verificado junto al avatar · #E0245E = corazón de la pausa de like
 TIPOGRAFÍA:
@@ -6312,7 +6312,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: papel gris muy claro #F2F2F3 con textura fina de grano.
 PALETA (usa SOLO estos colores): #F2F2F3 = fondo de papel · #DAD9D7 = filas alternas de la tabla · #111111 = cabecera de la tabla y titular · #FFFFFF = texto de la cabecera y filas claras · #6B6B6B = detalle secundario de cada fila
 TIPOGRAFÍA:
@@ -6361,7 +6361,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: papel gris muy claro #F2F2F3 con textura fina de grano.
 PALETA (usa SOLO estos colores): #F2F2F3 = fondo de papel · #DAD9D7 = filas alternas de la tabla · #111111 = cabecera de la tabla y titular · #FFFFFF = texto de la cabecera y filas claras · #6B6B6B = detalle secundario de cada fila
 TIPOGRAFÍA:
@@ -6486,7 +6486,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF o hueso #FAFAEE; una o dos slides de concepto van en negro #161616. Un solo color de acento (amarillo #F4E04A o el tuyo) y SIEMPRE como trazo de resaltador detrás de texto negro, nunca como color de letra sobre blanco.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #161616 = texto y slides de concepto · #FAFAEE = hueso para variar sin romper · #F4E04A = único acento: trazo de resaltador detrás del texto negro, círculos detrás de las caras y palabras clave sobre fondo oscuro (o tu color de marca) · #6A6964 = fotos en blanco y negro
 TIPOGRAFÍA:
@@ -6535,7 +6535,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF o hueso #FAFAEE; una o dos slides de concepto van en negro #161616. Un solo color de acento (amarillo #F4E04A o el tuyo) y SIEMPRE como trazo de resaltador detrás de texto negro, nunca como color de letra sobre blanco.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #161616 = texto y slides de concepto · #FAFAEE = hueso para variar sin romper · #F4E04A = único acento: trazo de resaltador detrás del texto negro, círculos detrás de las caras y palabras clave sobre fondo oscuro (o tu color de marca) · #6A6964 = fotos en blanco y negro
 TIPOGRAFÍA:
@@ -6594,9 +6594,9 @@ TIPOGRAFÍA:
 - titular de portada: Poppins 700, 80 px; 3 renglones flotantes, alineaciones distintas
 - nota chica: Poppins 400, 26 px
 PORTADA: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-SLIDES DEL MEDIO: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima; si hace falta, una nota chica al pie en negro.
+SLIDES DEL MEDIO: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima.
 CIERRE: una foto tuya grande, el texto de qué vas a compartir en 2 renglones de colores y tu nombre de usuario chico y centrado abajo.
-ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 EVITA: fotos de banco de imágenes; más de 5 fotos por slide; texto sobre una zona con mucho detalle.
 ```
 
@@ -6633,9 +6633,9 @@ TIPOGRAFÍA:
 - titular de portada: Poppins 700, 80 px; 3 renglones flotantes, alineaciones distintas
 - nota chica: Poppins 400, 26 px
 PORTADA: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-SLIDES DEL MEDIO: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima; si hace falta, una nota chica al pie en negro.
+SLIDES DEL MEDIO: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima.
 CIERRE: una foto tuya grande, el texto de qué vas a compartir en 2 renglones de colores y tu nombre de usuario chico y centrado abajo.
-ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 EVITA: fotos de banco de imágenes; más de 5 fotos por slide; texto sobre una zona con mucho detalle.
 TUS FOTOS: en el HTML pon una <img src="fotos/foto-1.jpg">, fotos/foto-2.jpg… por slide, en orden. Guarda tus fotos con esos nombres, en una carpeta fotos/ junto al archivo.
 
@@ -6654,7 +6654,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: crema #F6F3D8 cuando el collage no cubre todo; si la slide lleva una foto grande, va a sangre y el crema solo asoma en los bordes.
 PALETA (usa SOLO estos colores): #F6F3D8 = crema de fondo · #E4321F = rojo de texto y estrellas · #1F2FE0 = azul de texto y estrellas · #2FA84F = verde de texto · #67C1F5 = celeste de texto · #111111 = nota chica al pie
 TIPOGRAFÍA:
@@ -6662,7 +6662,7 @@ TIPOGRAFÍA:
 - titular de portada: estilo Poppins (700), letra de ~6% del alto; 3 renglones flotantes, alineaciones distintas
 - nota chica: estilo Poppins (400), letra de ~2% del alto
 COMPOSICIÓN DE ESTA SLIDE: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 EVITA: fotos de banco de imágenes; más de 5 fotos por slide; texto sobre una zona con mucho detalle.
 TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
@@ -6678,7 +6678,7 @@ Texto exacto: "[TEXTO DE LA PORTADA]".
 Mantén esta composición y cambia solo colores y letra:
 FONDO: crema #F6F3D8 cuando el collage no cubre todo; si la slide lleva una foto grande, va a sangre y el crema solo asoma en los bordes.
 COMPOSICIÓN: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-ELEMENTOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 ```
 **C · Solo fondo, sin texto**
 ```
@@ -6688,7 +6688,7 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 **Seguir con el slide N**
 ```
 Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
-Composición de esta slide: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima; si hace falta, una nota chica al pie en negro.
+Composición de esta slide: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima.
 (Si es la última slide, la composición es: una foto tuya grande, el texto de qué vas a compartir en 2 renglones de colores y tu nombre de usuario chico y centrado abajo.)
 TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
@@ -6704,7 +6704,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: crema #F6F3D8 cuando el collage no cubre todo; si la slide lleva una foto grande, va a sangre y el crema solo asoma en los bordes.
 PALETA (usa SOLO estos colores): #F6F3D8 = crema de fondo · #E4321F = rojo de texto y estrellas · #1F2FE0 = azul de texto y estrellas · #2FA84F = verde de texto · #67C1F5 = celeste de texto · #111111 = nota chica al pie
 TIPOGRAFÍA:
@@ -6712,7 +6712,7 @@ TIPOGRAFÍA:
 - titular de portada: estilo Poppins (700), letra de ~6% del alto; 3 renglones flotantes, alineaciones distintas
 - nota chica: estilo Poppins (400), letra de ~2% del alto
 COMPOSICIÓN DE ESTA SLIDE: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS GRÁFICOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 EVITA: fotos de banco de imágenes; más de 5 fotos por slide; texto sobre una zona con mucho detalle.
 TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
 Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
@@ -6727,7 +6727,7 @@ colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripció
 Texto exacto: "[TEXTO DE LA PORTADA]".
 FONDO: crema #F6F3D8 cuando el collage no cubre todo; si la slide lleva una foto grande, va a sangre y el crema solo asoma en los bordes.
 COMPOSICIÓN: tu selfie a sangre ocupando la mitad izquierda; el titular repartido en 3 renglones flotantes (cada uno con su color y su alineación) sobre las zonas libres de la foto; 2-3 estrellas de 5 puntas rojas pegadas en las esquinas.
-ELEMENTOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos
+ELEMENTOS: estrellas de 5 puntas como firma visual · fotos de carrete, nunca de sesión · un color por renglón, rotando · cada slide se lee en 2 segundos · si el guion trae una nota chica, va al pie en negro; si no te doy ese texto, no pongas ninguna nota
 ```
 **C · Solo fondo, sin texto**
 ```
@@ -6737,7 +6737,7 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 **Seguir con el slide N**
 ```
 Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
-Composición: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima; si hace falta, una nota chica al pie en negro.
+Composición: de 2 a 5 fotos TUYAS recortadas en rectángulos ladeados 2-6 grados, superpuestas sobre el crema (una más grande que las demás, del 35-50% del alto); el nombre de esa cosa en 1-3 renglones sobre una zona lisa de las fotos, cada renglón de un color; 1-2 estrellas encima.
 (Si es la última slide, la composición es: una foto tuya grande, el texto de qué vas a compartir en 2 renglones de colores y tu nombre de usuario chico y centrado abajo.)
 TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
@@ -6770,7 +6770,7 @@ ELEMENTOS GRÁFICOS: una sola letra manuscrita en todo el carrusel · un solo co
 EVITA: cifras copiadas de internet como si fueran verdad; más de un tipo de letra; recuadros o cajas de color.
 ```
 
-> OJO: esta ficha lleva más de ~25 palabras por slide. Los modelos de imagen fallan tildes y listas largas: usa la VARIANTE C (fondo sin texto) y pon el texto con la opción HTML.
+> Este soporte se le da bien al modelo de imagen: la letra manuscrita sobre papel sale limpia aunque el texto sea largo. Pide la slide completa con la variante A y revisa palabra por palabra (los acentos y las palabras cortas son lo que falla).
 
 ### 1 · Guion (cualquier chat)
 ```
@@ -6822,7 +6822,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
 FONDO: papel hueso #E3DED3 con textura de fibra muy fina, sin renglones.
 PALETA (usa SOLO estos colores): #E3DED3 = papel · #A8241E = tinta roja, único color del carrusel
 TIPOGRAFÍA:
@@ -6870,7 +6870,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
 FONDO: papel hueso #E3DED3 con textura de fibra muy fina, sin renglones.
 PALETA (usa SOLO estos colores): #E3DED3 = papel · #A8241E = tinta roja, único color del carrusel
 TIPOGRAFÍA:
@@ -6926,14 +6926,14 @@ PALETA (usa SOLO estos colores): #FFFFFF = fondo · #111111 = titular · #4A4A4A
 TIPOGRAFÍA:
 - titular (la excusa): Inter 700, 58 px; centrado, 1-2 renglones
 - pie de cada lado: Inter 400, cursiva, 28 px
-PORTADA: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+PORTADA: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 SLIDES DEL MEDIO: idéntica a la portada con otra excusa y otro objeto: la composición no cambia en todo el carrusel. En la penúltima, los pies llevan una señal al inicio (advertencia de un lado, corazón del otro).
 CIERRE: una sola ilustración centrada partida al medio (un lado sin el hábito, el otro con el hábito), el titular arriba con la frase que nombra lo invisible y una línea en cursiva al pie.
 ELEMENTOS GRÁFICOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
-EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica.
+EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica. Tampoco dejes que el modelo escriba números o palabras dentro de las ilustraciones.
 ```
 
-> Cada slide lleva poco texto (máx. ~22 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+> OJO: esta ficha mezcla dibujo y texto, y ahí los modelos de imagen inventan cifras dentro del dibujo. Pide SOLO las dos ilustraciones con la VARIANTE C (sin texto) y pon el titular y los pies con la opción HTML.
 
 ### 1 · Guion (cualquier chat)
 ```
@@ -6964,11 +6964,11 @@ PALETA (usa SOLO estos colores): #FFFFFF = fondo · #111111 = titular · #4A4A4A
 TIPOGRAFÍA:
 - titular (la excusa): Inter 700, 58 px; centrado, 1-2 renglones
 - pie de cada lado: Inter 400, cursiva, 28 px
-PORTADA: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+PORTADA: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 SLIDES DEL MEDIO: idéntica a la portada con otra excusa y otro objeto: la composición no cambia en todo el carrusel. En la penúltima, los pies llevan una señal al inicio (advertencia de un lado, corazón del otro).
 CIERRE: una sola ilustración centrada partida al medio (un lado sin el hábito, el otro con el hábito), el titular arriba con la frase que nombra lo invisible y una línea en cursiva al pie.
 ELEMENTOS GRÁFICOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
-EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica.
+EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica. Tampoco dejes que el modelo escriba números o palabras dentro de las ilustraciones.
 
 CÓMO LO ENTREGAS:
 - UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
@@ -6985,15 +6985,15 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso; el color lo ponen solo las dos ilustraciones.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #111111 = titular · #4A4A4A = pies en cursiva · #923634 = tono cálido dominante de las ilustraciones
 TIPOGRAFÍA:
 - titular (la excusa): estilo Inter (700), letra de ~4% del alto; centrado, 1-2 renglones
 - pie de cada lado: estilo Inter (400), cursiva, letra de ~2% del alto
-COMPOSICIÓN DE ESTA SLIDE: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+COMPOSICIÓN DE ESTA SLIDE: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 ELEMENTOS GRÁFICOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
-EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica.
+EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica. Tampoco dejes que el modelo escriba números o palabras dentro de las ilustraciones.
 El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
 Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
@@ -7005,13 +7005,13 @@ Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nom
 Texto exacto: "[TEXTO DE LA PORTADA]".
 Mantén esta composición y cambia solo colores y letra:
 FONDO: blanco #FFFFFF liso; el color lo ponen solo las dos ilustraciones.
-COMPOSICIÓN: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+COMPOSICIÓN: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 ELEMENTOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
 ```
 **C · Solo fondo, sin texto**
 ```
 Genera SOLO EL FONDO de un slide de carrusel, imagen vertical 4:5, SIN NINGÚN TEXTO, letra, número ni logo.
-dos ilustraciones limpias del mismo objeto sobre fondo blanco puro, mismo ángulo y mismo tamaño, sin texto, sin personas reconocibles, estilo editorial simple, formato 4:5
+dos ilustraciones limpias del MISMO objeto sobre fondo blanco puro, una al lado de la otra, mismo ángulo y mismo tamaño: la de la izquierda muestra el objeto descuidado y la de la derecha el mismo objeto atendido, con una sola diferencia visible entre las dos; sin texto, sin números, sin personas reconocibles, estilo editorial simple, formato 4:5
 Deja libre de objetos la zona donde irá el texto: el titular de arriba y los pies.
 Paleta: #FFFFFF = fondo · #111111 = titular · #4A4A4A = pies en cursiva · #923634 = tono cálido dominante de las ilustraciones.
 ```
@@ -7032,15 +7032,15 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
 FONDO: blanco #FFFFFF liso; el color lo ponen solo las dos ilustraciones.
 PALETA (usa SOLO estos colores): #FFFFFF = fondo · #111111 = titular · #4A4A4A = pies en cursiva · #923634 = tono cálido dominante de las ilustraciones
 TIPOGRAFÍA:
 - titular (la excusa): estilo Inter (700), letra de ~4% del alto; centrado, 1-2 renglones
 - pie de cada lado: estilo Inter (400), cursiva, letra de ~2% del alto
-COMPOSICIÓN DE ESTA SLIDE: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+COMPOSICIÓN DE ESTA SLIDE: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 ELEMENTOS GRÁFICOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
-EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica.
+EVITA: cuerpos, dietas o salud; imágenes que no sean comparables; consecuencias que no puedas sostener; ilustraciones que finjan ser evidencia científica. Tampoco dejes que el modelo escriba números o palabras dentro de las ilustraciones.
 Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
@@ -7051,13 +7051,13 @@ Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición
 colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
 Texto exacto: "[TEXTO DE LA PORTADA]".
 FONDO: blanco #FFFFFF liso; el color lo ponen solo las dos ilustraciones.
-COMPOSICIÓN: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco de 60 px; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
+COMPOSICIÓN: titular centrado arriba (5-12% del alto) con la excusa tal como la dice tu cliente ideal; debajo, dos ilustraciones del MISMO objeto lado a lado, mismo tamaño y mismo ángulo, del 20% al 72% del alto, separadas por un hueco estrecho, como una quinta parte del ancho de cada una; bajo cada una, un pie en cursiva de una línea que dice qué se está viendo.
 ELEMENTOS: mismo encuadre y mismo tamaño en las dos imágenes · una sola variable cambiada entre izquierda y derecha · pies que empiezan con «Tu…» · mucho blanco alrededor
 ```
 **C · Solo fondo, sin texto**
 ```
 Crea una imagen vertical 4:5 que sirva de FONDO para un slide. Importante: SIN texto, letras, números, logos ni marcas de agua.
-dos ilustraciones limpias del mismo objeto sobre fondo blanco puro, mismo ángulo y mismo tamaño, sin texto, sin personas reconocibles, estilo editorial simple, formato 4:5
+dos ilustraciones limpias del MISMO objeto sobre fondo blanco puro, una al lado de la otra, mismo ángulo y mismo tamaño: la de la izquierda muestra el objeto descuidado y la de la derecha el mismo objeto atendido, con una sola diferencia visible entre las dos; sin texto, sin números, sin personas reconocibles, estilo editorial simple, formato 4:5
 Deja vacía la zona de el titular de arriba y los pies: ahí pondré el texto después.
 Colores: #FFFFFF = fondo · #111111 = titular · #4A4A4A = pies en cursiva · #923634 = tono cálido dominante de las ilustraciones.
 ```
@@ -7155,7 +7155,7 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ```
 Genera la PORTADA de un carrusel de Instagram.
 Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: gris muy claro #F4F5F7 en todas las slides.
 PALETA (usa SOLO estos colores): #F4F5F7 = fondo · #111111 = texto · #8A8A8A = cabecera y numeración · #1C1C1C = marco del celular · #F06FA8 = acento de la portada (o tu color de marca)
 TIPOGRAFÍA:
@@ -7206,7 +7206,7 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ```
 Crea la imagen de la PORTADA de un carrusel de Instagram.
 Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
 FONDO: gris muy claro #F4F5F7 en todas las slides.
 PALETA (usa SOLO estos colores): #F4F5F7 = fondo · #111111 = texto · #8A8A8A = cabecera y numeración · #1C1C1C = marco del celular · #F06FA8 = acento de la portada (o tu color de marca)
 TIPOGRAFÍA:
@@ -7261,7 +7261,7 @@ Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palab
 ```
 LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 40 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
 FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien escribe · #AC8EE0 = globos de tus respuestas · #111111 = texto de los globos · #E01B12 = trazo rojo a mano
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien te escribe, con texto negro · #6C46DA = globos tuyos, en degradado desde #B091EF y con la letra BLANCA · #111111 = texto de los globos grises · #E01B12 = trazo rojo a mano
 TIPOGRAFÍA:
 - texto de los globos: la del chat (no se retoca) 400, 40 px
 - fecha dentro de la captura: la del chat 400, MAYÚSCULAS, 24 px
@@ -7272,7 +7272,7 @@ ELEMENTOS GRÁFICOS: cero texto propio en las slides · trazo rojo irregular, he
 EVITA: capturas inventadas; publicar sin permiso; dejar visibles nombres, fotos de perfil, teléfonos o direcciones.
 ```
 
-> Cada slide lleva poco texto (máx. ~0 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+> OJO: esta ficha NO se genera con un modelo de imagen: sus slides son capturas REALES tuyas. Lo único que se le pide al modelo es marcarlas (o lo haces tú con el dedo en el celular).
 
 ### 1 · Guion (cualquier chat)
 ```
@@ -7299,7 +7299,7 @@ GUION:
 
 LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 40 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
 FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien escribe · #AC8EE0 = globos de tus respuestas · #111111 = texto de los globos · #E01B12 = trazo rojo a mano
+PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien te escribe, con texto negro · #6C46DA = globos tuyos, en degradado desde #B091EF y con la letra BLANCA · #111111 = texto de los globos grises · #E01B12 = trazo rojo a mano
 TIPOGRAFÍA:
 - texto de los globos: la del chat (no se retoca) 400, 40 px
 - fecha dentro de la captura: la del chat 400, MAYÚSCULAS, 24 px
@@ -7323,31 +7323,15 @@ Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide 
 ### 4 · Gemini (Nano Banana)
 **A · Con tu captura (la adjuntas en el mismo mensaje)**
 ```
-Genera la PORTADA de un carrusel de Instagram.
-Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
-FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien escribe · #AC8EE0 = globos de tus respuestas · #111111 = texto de los globos · #E01B12 = trazo rojo a mano
-TIPOGRAFÍA:
-- texto de los globos: estilo la del chat (no se retoca) (400), letra de ~3% del alto
-- fecha dentro de la captura: estilo la del chat (400), MAYÚSCULAS, letra de ~2% del alto
-COMPOSICIÓN DE ESTA SLIDE: una captura real de la conversación centrada, con 2 o 3 mensajes visibles, y un círculo rojo a mano alrededor del dato que se va a repetir en todo el carrusel. Sin título, sin logo, sin texto propio.
-ELEMENTOS GRÁFICOS: cero texto propio en las slides · trazo rojo irregular, hecho a mano, no un círculo perfecto · orden cronológico para que el patrón se descubra solo · nombres, fotos y teléfonos tapados
-EVITA: capturas inventadas; publicar sin permiso; dejar visibles nombres, fotos de perfil, teléfonos o direcciones.
-TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
-El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
-Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
-Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Te subo una captura REAL de una conversación mía, con los datos personales ya tapados.
+No reescribas, no redibujes ni completes ningún mensaje: la captura se queda EXACTAMENTE como está.
+Lo único que tienes que hacer es añadir encima una marca a mano en rojo #E01B12 alrededor de: "[QUÉ HAY QUE MARCAR]".
+El trazo va irregular, como hecho con el dedo o con un marcador: un óvalo abierto o un subrayado, nunca un círculo perfecto ni una forma vectorial.
+Devuélveme la misma imagen vertical 4:5, sin marco ni franjas blancas, sin marcas de agua y sin ningún texto nuevo.
 ```
 **B · Con tu marca**
 ```
-Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
-Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
-Texto exacto: "[TEXTO DE LA PORTADA]".
-Mantén esta composición y cambia solo colores y letra:
-FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-COMPOSICIÓN: una captura real de la conversación centrada, con 2 o 3 mensajes visibles, y un círculo rojo a mano alrededor del dato que se va a repetir en todo el carrusel. Sin título, sin logo, sin texto propio.
-ELEMENTOS: cero texto propio en las slides · trazo rojo irregular, hecho a mano, no un círculo perfecto · orden cronológico para que el patrón se descubra solo · nombres, fotos y teléfonos tapados
+Igual que la anterior, pero el trazo va en el color de mi marca: [ACENTO #hex]. Mismo trazo a mano, misma captura intacta.
 ```
 **C · Solo fondo, sin texto**
 ```
@@ -7356,11 +7340,7 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 **Seguir con el slide N**
 ```
-Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
-Composición de esta slide: otra captura del mismo hilo o de otra fecha, en orden cronológico; si es corta, pega 2 o 3 capturas una debajo de otra dejando aire blanco entre ellas; el trazo rojo marca SIEMPRE el mismo dato (a veces círculo, a veces subrayado).
-(Si es la última slide, la composición es: la última captura, sin slide de CTA: el significado lo pone el caption en una sola frase.)
-TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
-Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Ahora te subo la siguiente captura real. Márcala igual que la anterior: mismo trazo rojo a mano sobre "[QUÉ HAY QUE MARCAR]", la captura intacta y sin texto nuevo.
 ```
 **Arreglar una palabra**
 ```
@@ -7370,30 +7350,15 @@ En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[p
 ### 5 · ChatGPT (Imágenes)
 **A · Con tu captura (la adjuntas en el mismo mensaje)**
 ```
-Crea la imagen de la PORTADA de un carrusel de Instagram.
-Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
-FORMATO: imagen vertical 4:5. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
-FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-PALETA (usa SOLO estos colores): #FFFFFF = fondo · #F1F1F3 = globos de quien escribe · #AC8EE0 = globos de tus respuestas · #111111 = texto de los globos · #E01B12 = trazo rojo a mano
-TIPOGRAFÍA:
-- texto de los globos: estilo la del chat (no se retoca) (400), letra de ~3% del alto
-- fecha dentro de la captura: estilo la del chat (400), MAYÚSCULAS, letra de ~2% del alto
-COMPOSICIÓN DE ESTA SLIDE: una captura real de la conversación centrada, con 2 o 3 mensajes visibles, y un círculo rojo a mano alrededor del dato que se va a repetir en todo el carrusel. Sin título, sin logo, sin texto propio.
-ELEMENTOS GRÁFICOS: cero texto propio en las slides · trazo rojo irregular, hecho a mano, no un círculo perfecto · orden cronológico para que el patrón se descubra solo · nombres, fotos y teléfonos tapados
-EVITA: capturas inventadas; publicar sin permiso; dejar visibles nombres, fotos de perfil, teléfonos o direcciones.
-TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
-Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
-Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
-Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+Te subo una captura REAL de una conversación mía, con los datos personales ya tapados.
+No reescribas, no redibujes ni completes ningún mensaje: la captura se queda EXACTAMENTE como está.
+Lo único que tienes que hacer es añadir encima una marca a mano en rojo #E01B12 alrededor de: "[QUÉ HAY QUE MARCAR]".
+El trazo va irregular, como hecho con el dedo o con un marcador: un óvalo abierto o un subrayado, nunca un círculo perfecto ni una forma vectorial.
+Devuélveme la misma imagen vertical 4:5, sin marco ni franjas blancas, sin marcas de agua y sin ningún texto nuevo.
 ```
 **B · Con tu marca**
 ```
-Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
-colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
-Texto exacto: "[TEXTO DE LA PORTADA]".
-FONDO: blanco #FFFFFF; lo único que se ve es la captura de la conversación.
-COMPOSICIÓN: una captura real de la conversación centrada, con 2 o 3 mensajes visibles, y un círculo rojo a mano alrededor del dato que se va a repetir en todo el carrusel. Sin título, sin logo, sin texto propio.
-ELEMENTOS: cero texto propio en las slides · trazo rojo irregular, hecho a mano, no un círculo perfecto · orden cronológico para que el patrón se descubra solo · nombres, fotos y teléfonos tapados
+Igual que la anterior, pero el trazo va en el color de mi marca: [ACENTO #hex]. Mismo trazo a mano, misma captura intacta.
 ```
 **C · Solo fondo, sin texto**
 ```
@@ -7402,11 +7367,184 @@ Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o 
 ```
 **Seguir con el slide N**
 ```
-Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
-Composición: otra captura del mismo hilo o de otra fecha, en orden cronológico; si es corta, pega 2 o 3 capturas una debajo de otra dejando aire blanco entre ellas; el trazo rojo marca SIEMPRE el mismo dato (a veces círculo, a veces subrayado).
-(Si es la última slide, la composición es: la última captura, sin slide de CTA: el significado lo pone el caption en una sola frase.)
-TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+Te subo la siguiente captura real. Márcala igual que la anterior: mismo trazo rojo a mano sobre "[QUÉ HAY QUE MARCAR]", sin tocar los mensajes ni añadir texto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G25 · Yo de antes / yo de ahora (una creencia por slide)
+
+**Ejemplo:** @dramyshah · https://www.instagram.com/p/DcL5tGSFcnN/ · 10.864 likes · 114 comentarios · 10 slides (cazada por mecánica; es de salud: se mira el molde, no lo que afirma)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 70 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+PALETA (usa SOLO estos colores): #000000 = aire de la costura y velo · #FFFFFF = todo el texto
+TIPOGRAFÍA:
+- rótulo fijo («yo de antes:» / «yo de ahora:»): Urbanist 400, minúsculas, 34 px; en itálica, en su propio renglón, opacidad 90%
+- la creencia: Urbanist 400, minúsculas, 54 px; centrada, 2 renglones como mucho; en negrita 700 solo la palabra que cambia
+- titular de portada: Urbanist 400, minúsculas, 54 px
+PORTADA: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+SLIDES DEL MEDIO: el MISMO rótulo en las dos mitades de todas las slides: arriba «yo de antes:» + lo que pensabas, abajo «yo de ahora:» + lo que haces hoy. Solo cambian las fotos y las dos frases. Cada frase, máximo 8 palabras, con una sola palabra en negrita.
+CIERRE: las dos mitades sin rótulo: arriba la pregunta («¿cuál de estas te pasa todavía?») y abajo la orden corta («comenta el número»).
+ELEMENTOS GRÁFICOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+EVITA: convertirlo en antes/después de resultados (cifras, pantallazos de ventas): aquí el «ahora» es una decisión, no un número. Tampoco cambies el rótulo entre slides.
+```
+
+> Cada slide lleva poco texto (máx. ~8 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «yo de antes / yo de ahora» de [6-8] slides sobre [TEMA: ej. cómo me relaciono con publicar].
+Rótulo fijo para todas: propón 3 opciones del tipo «yo de antes: / yo de ahora:» que suenen a mí.
+Slides: una situación concreta por slide (la que provoca la escena: un video con pocas vistas, la página en blanco, decir el precio).
+  - Arriba: lo que yo pensaba o hacía, en máximo 8 palabras y en pasado.
+  - Abajo: lo que hago hoy, en máximo 8 palabras y en presente. Una decisión, no una cifra.
+Ordena de la situación más común a la más íntima.
+Para cada slide dime qué foto mía va arriba y cuál abajo (pueden ser dos fotos cualquiera mías: no tienen que probar nada).
+Cierre: «¿cuál de estas te pasa todavía?» + comenta el número.
+Solo creencias que yo te dé; si falta una, déjala como [FALTA DATO]. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G25 (Yo de antes / yo de ahora (una creencia por slide)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 70 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+PALETA (usa SOLO estos colores): #000000 = aire de la costura y velo · #FFFFFF = todo el texto
+TIPOGRAFÍA:
+- rótulo fijo («yo de antes:» / «yo de ahora:»): Urbanist 400, minúsculas, 34 px; en itálica, en su propio renglón, opacidad 90%
+- la creencia: Urbanist 400, minúsculas, 54 px; centrada, 2 renglones como mucho; en negrita 700 solo la palabra que cambia
+- titular de portada: Urbanist 400, minúsculas, 54 px
+PORTADA: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+SLIDES DEL MEDIO: el MISMO rótulo en las dos mitades de todas las slides: arriba «yo de antes:» + lo que pensabas, abajo «yo de ahora:» + lo que haces hoy. Solo cambian las fotos y las dos frases. Cada frase, máximo 8 palabras, con una sola palabra en negrita.
+CIERRE: las dos mitades sin rótulo: arriba la pregunta («¿cuál de estas te pasa todavía?») y abajo la orden corta («comenta el número»).
+ELEMENTOS GRÁFICOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+EVITA: convertirlo en antes/después de resultados (cifras, pantallazos de ventas): aquí el «ahora» es una decisión, no un número. Tampoco cambies el rótulo entre slides.
+TUS FOTOS: en el HTML pon una <img src="fotos/foto-1.jpg">, fotos/foto-2.jpg… por slide, en orden. Guarda tus fotos con esos nombres, en una carpeta fotos/ junto al archivo.
+TU NOMBRE: donde va el usuario o la firma escribe exactamente «[TU @USUARIO]». No inventes otro nombre.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 70 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+PALETA (usa SOLO estos colores): #000000 = aire de la costura y velo · #FFFFFF = todo el texto
+TIPOGRAFÍA:
+- rótulo fijo («yo de antes:» / «yo de ahora:»): estilo Urbanist (400), minúsculas, letra de ~3% del alto; en itálica, en su propio renglón, opacidad 90%
+- la creencia: estilo Urbanist (400), minúsculas, letra de ~4% del alto; centrada, 2 renglones como mucho; en negrita 700 solo la palabra que cambia
+- titular de portada: estilo Urbanist (400), minúsculas, letra de ~4% del alto
+COMPOSICIÓN DE ESTA SLIDE: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+ELEMENTOS GRÁFICOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+EVITA: convertirlo en antes/después de resultados (cifras, pantallazos de ventas): aquí el «ahora» es una decisión, no un número. Tampoco cambies el rótulo entre slides.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU NOMBRE: donde va el usuario o la firma escribe exactamente «[TU @USUARIO]». No inventes otro nombre.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+COMPOSICIÓN: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+ELEMENTOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: el MISMO rótulo en las dos mitades de todas las slides: arriba «yo de antes:» + lo que pensabas, abajo «yo de ahora:» + lo que haces hoy. Solo cambian las fotos y las dos frases. Cada frase, máximo 8 palabras, con una sola palabra en negrita.
+(Si es la última slide, la composición es: las dos mitades sin rótulo: arriba la pregunta («¿cuál de estas te pasa todavía?») y abajo la orden corta («comenta el número»).)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU NOMBRE: donde va el usuario o la firma escribe exactamente «[TU @USUARIO]». No inventes otro nombre.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+PALETA (usa SOLO estos colores): #000000 = aire de la costura y velo · #FFFFFF = todo el texto
+TIPOGRAFÍA:
+- rótulo fijo («yo de antes:» / «yo de ahora:»): estilo Urbanist (400), minúsculas, letra de ~3% del alto; en itálica, en su propio renglón, opacidad 90%
+- la creencia: estilo Urbanist (400), minúsculas, letra de ~4% del alto; centrada, 2 renglones como mucho; en negrita 700 solo la palabra que cambia
+- titular de portada: estilo Urbanist (400), minúsculas, letra de ~4% del alto
+COMPOSICIÓN DE ESTA SLIDE: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+ELEMENTOS GRÁFICOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+EVITA: convertirlo en antes/después de resultados (cifras, pantallazos de ventas): aquí el «ahora» es una decisión, no un número. Tampoco cambies el rótulo entre slides.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU NOMBRE: donde va el usuario o la firma escribe exactamente «[TU @USUARIO]». No inventes otro nombre.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.
+COMPOSICIÓN: las dos mitades con una foto tuya cada una; arriba «mi yo de antes» y abajo «vs. mi yo de ahora», sin rótulo extra; tu usuario chico arriba a la izquierda y «desliza ›» arriba a la derecha.
+ELEMENTOS: rótulo idéntico en todas las slides (anáfora visual) · la costura negra separando las dos mitades · velo solo del lado del texto, para que la foto se siga viendo
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (dos fotos tuyas a sangre, una arriba y otra abajo, partidas por la mitad, con una línea fina de aire negro en la costura; sobre cada foto un velo negro que arranca opaco en el borde donde vive el texto y se desvanece hacia el centro.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: el MISMO rótulo en las dos mitades de todas las slides: arriba «yo de antes:» + lo que pensabas, abajo «yo de ahora:» + lo que haces hoy. Solo cambian las fotos y las dos frases. Cada frase, máximo 8 palabras, con una sola palabra en negrita.
+(Si es la última slide, la composición es: las dos mitades sin rótulo: arriba la pregunta («¿cuál de estas te pasa todavía?») y abajo la orden corta («comenta el número»).)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU NOMBRE: donde va el usuario o la firma escribe exactamente «[TU @USUARIO]». No inventes otro nombre.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```
 **Arreglar una palabra**
 ```

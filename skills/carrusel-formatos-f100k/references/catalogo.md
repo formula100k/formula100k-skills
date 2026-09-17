@@ -2,7 +2,7 @@
 
 > Catálogo de formatos de carrusel de FÓRMULA 100K. Lo mantiene el equipo y llega con cada actualización del paquete.
 >
-> Versión 2.1 · 17-sep-2026 · **44 fichas** (G16–G24 se sumaron el 17-sep: vitrina, hilo de tuits, ranking en tabla, explicador de tendencia, collage de gustos, día por día en papel, la excusa y lo que no se ve, reporte del mes y capturas con círculo rojo). Versión 2 · 14-sep-2026 · 35 fichas: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
+> Versión 2.2 · 17-sep-2026 · **45 fichas** (G16–G25 se sumaron el 17-sep: vitrina, hilo de tuits, ranking en tabla, explicador de tendencia, collage de gustos, día por día en papel, la excusa y lo que no se ve, reporte del mes, capturas con círculo rojo y yo de antes / yo de ahora). Versión 2 · 14-sep-2026 · 35 fichas: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
 > de la Guía de Formatos del Grimorio + 2 mecánicas que solo vivían en la guía maestra de 25 estilos).
 > La v1 dejaba fuera 13 carruseles del Grimorio y 16 de los 25 estilos: ahora cada uno tiene su lugar
 > (ver «AUDITORÍA DE COBERTURA» al final).
@@ -72,6 +72,7 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M31 | La excusa y su efecto invisible (A│B) | Compartido + guardado |
 | M32 | Reporte del mes (una ficha igual por ítem, con su demo) | Comentario + autoridad |
 | M33 | Capturas que cuentan una historia (patrón marcado a mano) | Alcance + conexión |
+| M34 | Yo de antes / yo de ahora, una creencia por slide (rótulo fijo) | Comentario + conexión |
 
 ### Soportes (dónde vive)
 
@@ -111,6 +112,7 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S32 | Ficha de revista + celular con el ejemplo en movimiento | A |
 | S33 | Capturas reales de conversación + trazo rojo a mano | A |
 | S34 | Collage de fotos propias + tipografía a color | A |
+| S35 | Pantalla partida con rótulo fijo «antes / ahora» sobre tus fotos | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -615,16 +617,16 @@ No uses marcas registradas en los recortes ni afirmaciones de salud sin respaldo
 
 ---
 
-## LAS 24 FICHAS G (lo que la v1 dejó fuera + 9 sumadas el 17-sep)
+## LAS 25 FICHAS G (lo que la v1 dejó fuera + 10 sumadas el 17-sep)
 
 G01–G13 vienen de la **Guía de Formatos del Grimorio** (carruseles con `soporte: 'carrusel'`); su
 anatomía completa vive en `references/grimorio-carruseles.md`, que se regenera con
 `scripts/sincronizar-grimorio.mjs` y FALLA si el Grimorio suma un carrusel que aquí no está mapeado.
 G14 y G15 son mecánicas que solo vivían dentro de la guía maestra de 25 estilos (estilos 15 y 14).
-G16–G24 se sumaron el 17-sep-2026 desde carruseles reales: mirados slide por slide y convertidos en ficha.
+G16–G25 se sumaron el 17-sep-2026 desde carruseles reales: mirados slide por slide y convertidos en ficha.
 G16 trae además una 2ª referencia anclada (carpetas de escritorio) que usa su misma mecánica con otro soporte.
 El VISUAL detallado y los prompts por plataforma (Claude · Gemini · ChatGPT · HTML en cualquier chat)
-de las 44 fichas están en `references/prompts-por-plataforma.md`.
+de las 45 fichas están en `references/prompts-por-plataforma.md`.
 
 Cuatro carruseles del Grimorio NO son ficha nueva porque su mecánica ya estaba:
 `carrusel-paso-a-paso` → M2 (F04, F08, F09) · `carrusel-comparativo` → M9 (F18, con maqueta A│B en S20) ·
@@ -1113,6 +1115,28 @@ Ayúdame a armarlo como carrusel de [8-19] slides:
 Sin texto propio en las slides. Si una captura no aporta al patrón, dime que la saque. Tutea.
 ```
 - **Fabrica:** `capturas-tutorial-formula100k` (limpiar y tapar datos) + `carrusel-formatos-f100k` (HTML S33: el trazo rojo).
+
+---
+
+### G25 · Yo de antes / yo de ahora (una creencia por slide)
+- **Mecánica:** M34 · **Soporte:** S35 pantalla partida con rótulo fijo sobre tus fotos (variante con objetos sobre fondo blanco) · **Motor:** A (tus fotos reales)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @dramyshah · **10.864 likes** · 114 comentarios · 10 slides · https://www.instagram.com/p/DcL5tGSFcnN/ (cazada por mecánica; es de salud: mírala por el molde, no por lo que afirma) · la misma mecánica en mentalidad, en video: @lifewithlellian https://www.instagram.com/p/Dch3gFaNuy8/
+- **Anatomía:** 1) portada: el rótulo desnudo («Yo de antes» arriba / «Yo de ahora» abajo) sobre dos fotos tuyas de épocas o momentos distintos · 2-N) una CREENCIA por slide: arriba lo que pensabas o hacías, abajo lo que haces hoy, con el MISMO rótulo en todas · el par no prueba nada, nombra un cambio de cabeza · cierre: «¿cuál de estas te pasa todavía?» + comenta el número.
+- **Por qué funciona:** el rótulo repetido es una anáfora visual: el ojo deja de leerlo y solo compara. Y como cada par es una creencia, no un resultado, la lectora se reconoce en el «antes» y comenta cuál es el suyo — por eso pide comentario y no guardado.
+- **Error típico:** convertirlo en un antes/después de resultados (eso es G14, y pide prueba). Aquí el «ahora» es una decisión, no una cifra. El otro error: cambiar el rótulo en cada slide; se rompe el ritmo.
+- **Prompt de guion:**
+```
+Arma un carrusel «yo de antes / yo de ahora» de [6-8] slides sobre [TEMA: ej. cómo me relaciono con publicar].
+Rótulo fijo para todas: propón 3 opciones del tipo «yo de antes: / yo de ahora:» que suenen a mí.
+Slides: una situación concreta por slide (la que provoca la escena: un video con pocas vistas, la página en blanco, decir el precio).
+  - Arriba: lo que yo pensaba o hacía, en máximo 8 palabras y en pasado.
+  - Abajo: lo que hago hoy, en máximo 8 palabras y en presente. Una decisión, no una cifra.
+Ordena de la situación más común a la más íntima.
+Para cada slide dime qué foto mía va arriba y cuál abajo (pueden ser dos fotos cualquiera mías: no tienen que probar nada).
+Cierre: «¿cuál de estas te pasa todavía?» + comenta el número.
+Solo creencias que yo te dé; si falta una, déjala como [FALTA DATO]. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S35, split horizontal sobre tus fotos) · `carrusel-render-formula100k` si quieres el collage de fotos.
 
 ---
 

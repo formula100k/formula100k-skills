@@ -108,7 +108,8 @@ def blank_json(value):
 # Apify por Composio pide el actor con virgulilla (`clockworks~tiktok-scraper`). Las skills de
 # escritorio lo escriben con barra porque el MCP de Apify sí la acepta; aquí se normaliza para que
 # el agente no reciba un «no encontrado» mudo.
-ACTOR_RX = re.compile(r"\b((?:clockworks|apify|compass|bebity|dtrungtin)/[a-z0-9][a-z0-9-]*)\b")
+# El lookbehind evita tocar una URL del Store (apify.com/clockworks/tiktok-scraper), donde la barra sí va.
+ACTOR_RX = re.compile(r"(?<![\w./~-])((?:clockworks|apify|compass|bebity|dtrungtin)/[a-z0-9][a-z0-9-]*)\b")
 
 
 def normalizar_actores(text):

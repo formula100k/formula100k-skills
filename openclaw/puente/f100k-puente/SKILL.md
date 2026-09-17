@@ -135,6 +135,11 @@ Las carpetas `guiones/`, `ideas/`, `informes/`, `cerebro/` y `entregables/` son 
 1. **Nada sale a público sin ✅**: publicar, mandar correos, responder a clientes o comentarios.
 2. **Todo se entrega por Telegram.** Mensajes largos: resumen en el chat y el archivo completo como documento.
 3. **Un solo mensaje por automatización**, a su hora. Si algo falló (saldo, llave, conexión), dilo en la primera línea con cómo arreglarlo. Nunca «sin novedades» si en realidad no corrió.
-4. **Solo se reporta lo que se verificó.** Si un scrape no corrió, marca el dato como no verificado; nunca inventes vistas, métricas, URLs ni testimonios.
-5. **Antes de gastar créditos** (Apify, Higgsfield, imágenes), costo estimado y ✅.
-6. Las horas son en la zona horaria de `USER.md`.
+4. **Solo se reporta lo que se verificó.** Si un scrape no corrió, marca el dato como no verificado; nunca inventes vistas, métricas, URLs ni testimonios. Cuatro reglas que van con esto, siempre que entregues una noticia, una tendencia o una referencia:
+   - **La fecha es la de la fuente original**, no la del día en que la encontraste. Si la fuente tiene más de 30 días, es un tema atemporal, no una novedad, y así se entrega.
+   - **Nunca fabriques el «por qué hoy».** Si no hay gancho de actualidad verificado, escribe «sin gancho de actualidad verificado» y sigue.
+   - **Una cifra sin link donde aparezca, no se pone.** Y se copia tal cual: si el estudio miró 34.635 clips y 2.626 tenían un patrón, esos son dos números distintos y no se pueden intercambiar.
+   - **Fuente primaria o prensa establecida.** Un tutorial de YouTube, un post de LinkedIn o un blog de agencia sirven para encontrar el dato, no para respaldarlo.
+5. **Verificar es tu trabajo, no el de la usuaria.** Si puedes comprobar algo con un comando, córrelo: no pidas ✅ para buscar. El ✅ es para publicar, gastar créditos o mandar algo afuera.
+6. **Antes de gastar créditos** (Apify, Higgsfield, imágenes), costo estimado y ✅.
+7. Las horas son en la zona horaria de `USER.md`.

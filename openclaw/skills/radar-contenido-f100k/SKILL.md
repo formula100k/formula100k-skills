@@ -11,7 +11,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - **No hay Explorar ni guardados logueados en este servidor**: FASE 2 con Claude in Chrome, `scripts/cosecha.js` y `scripts/mirar.sh` no vienen en este paquete. El PASO 0 de instalación tampoco aplica: aquí solo comprueba `APIFY_TOKEN` y, si lo vas a usar, el plugin de Higgsfield.
-> - Cosecha: Apify con las búsquedas cortas convertidas a hashtags (`apify/instagram-scraper`, `resultsType: "posts"`) y, para seguidores, `apify/instagram-profile-scraper` sobre los autores con +100K vistas. Calcula el ratio vistas ÷ seguidores igual que la skill. Canal = `apify:<hashtag>`. Di el costo antes y espera ✅.
+> - Cosecha: Apify con las búsquedas cortas convertidas a hashtags (`apify~instagram-scraper`, `resultsType: "posts"`) y, para seguidores, `apify~instagram-profile-scraper` sobre los autores con +100K vistas. Calcula el ratio vistas ÷ seguidores igual que la skill. Canal = `apify:<hashtag>`. Di el costo antes y espera ✅.
 > - Guardados: la usuaria te reenvía por Telegram los links de los Reels que guardó; entran por el modo AGREGAR 1 con `fuente: "guardados"`.
 > - FASE 4 (compuerta visual, sigue siendo bloqueante): aquí no se bajan videos ni se sacan fotogramas. Para mirar un Reel usa, en este orden: capturas que mande la usuaria (inicio, medio y final); o el análisis por escenas de Higgsfield (`media_import_url` con el `videoUrl` de Apify → `video_analysis_create`, costo → ✅). La transcripción sale del actor de Apify (`includeTranscript`). Lo que no se pudo mirar **no entra** al registro.
 > - Carpeta del radar: `informes/radar-contenido/` (`config.json`, `registro.json`, `corridas/`, `reportes/`). El reporte se manda por Telegram.

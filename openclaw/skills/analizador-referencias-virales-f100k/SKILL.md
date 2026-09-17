@@ -12,7 +12,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - El motor es Apify con `APIFY_TOKEN`. Sin token: no hay métricas; pide los links y las capturas de vistas a la usuaria, o marca todo `[NO VERIFICADO — scrape no corrió]` como dice el PASO 4.5.
-> - Transcripción: Supadata solo si existe `SUPADATA_API_KEY`. Si no, usa el campo de transcripción/subtítulos que devuelva el actor de Apify (`apify/instagram-reel-scraper` con `includeTranscript: true` para Reels); si tampoco hay, aplica el fallback `[sin transcripción]` del PASO 3.
+> - Transcripción: Supadata solo si existe `SUPADATA_API_KEY`. Si no, usa el campo de transcripción/subtítulos que devuelva el actor de Apify (`apify~instagram-reel-scraper` con `includeTranscript: true` para Reels); si tampoco hay, aplica el fallback `[sin transcripción]` del PASO 3.
 > - Antes de lanzar los actores di el costo estimado de la tabla COSTOS y espera ✅. Corre las keywords una tras otra, no en paralelo.
 > - Si una URL no la cubre Apify, se pide la captura: nunca navegador logueado. El archivo va a `informes/` y la tabla resumida al chat de Telegram.
 
@@ -103,8 +103,8 @@ Si el input contiene **URLs específicas** de TikTok/IG (el usuario ya cazó las
 En su lugar:
 1. Un **slot de salida por cada URL entregada** (no las mezcles con búsqueda por keyword salvo que el usuario lo pida).
 2. Para cada URL, extraer las métricas reales de ESE video:
-   - **TikTok:** `clockworks/tiktok-scraper` con `{ "postURLs": ["<url>"] }` (NO `searchQueries`).
-   - **Instagram:** `apify/instagram-scraper` con `{ "directUrls": ["<url>"], "resultsType": "posts" }`.
+   - **TikTok:** `clockworks~tiktok-scraper` con `{ "postURLs": ["<url>"] }` (NO `searchQueries`).
+   - **Instagram:** `apify~instagram-scraper` con `{ "directUrls": ["<url>"], "resultsType": "posts" }`.
    - Si Apify no cubre la URL: pídele a la usuaria la captura con las vistas (nunca navegador logueado).
 3. Leer `playCount`/`videoPlayCount` de la respuesta = las views reales de ese video.
 4. Si el scrape de una URL falla → esa fila va `[NO VERIFICADO — scrape falló]`, nunca inventes su métrica (ver Compuerta de Verificación).
@@ -116,7 +116,7 @@ En su lugar:
 ### 1A — TikTok (si plataforma = TikTok o Ambas)
 
 Usar `fetch-actor-details` primero para verificar el schema, luego `call-actor`:
-- **Actor:** `clockworks/tiktok-scraper`
+- **Actor:** `clockworks~tiktok-scraper`
 - **waitSecs:** 45
 
 ```json
@@ -149,7 +149,7 @@ Instagram no tiene búsqueda directa por keyword → **convertir keywords a hash
 
 Regla: eliminar espacios + quitar tildes + probar 2 variantes de hashtag por keyword.
 
-- **Actor:** `apify/instagram-scraper`
+- **Actor:** `apify~instagram-scraper`
 - **waitSecs:** 45
 
 ```json

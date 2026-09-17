@@ -40,7 +40,7 @@ Extraer: `niche`, `keywords`, `email`, `voice_profile`
 
 ### Paso 2 — Apify TikTok para 7 slots
 
-Para cada keyword en `config.keywords`, buscar con Apify `clockworks/tiktok-scraper`:
+Para cada keyword en `config.keywords`, buscar con Apify `clockworks~tiktok-scraper`:
 ```json
 {
   "searchQueries": ["[keyword]"],

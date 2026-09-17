@@ -11,7 +11,7 @@ metadata: {"version": "1.1.0", "origen": "Clase de Carruseles · 11 junio 2026 �
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Referencia por enlace: Apify `apify/instagram-scraper` (costo de centavos, avisa). Si Apify falla, pídele a la usuaria una captura por slide por Telegram: nunca navegador logueado. Las capturas que mande ya son la referencia (PASO 0 A).
+> - Referencia por enlace: Apify `apify~instagram-scraper` (costo de centavos, avisa). Si Apify falla, pídele a la usuaria una captura por slide por Telegram: nunca navegador logueado. Las capturas que mande ya son la referencia (PASO 0 A).
 > - Carpeta de trabajo: `entregables/carruseles/espejo-<AAAA-MM-DD>_<tema>/` con `ref/` (lo que llamas `$SCRATCH/carrusel-ref/`), `carrusel-espejo.html` y los PNG. Sus fotos están en `cerebro/fotos/`: referéncialas con `file://` y ruta absoluta del workspace.
 > - Render: `node export.js` con el Chromium headless del servidor (1080×1350 por defecto). Esta versión busca `CHROME_PATH` y las rutas de Chromium de Linux. Necesita `puppeteer-core`; si no está, pide ✅ para `npm install` en la carpeta de la skill o manda el HTML y dilo.
 > - Mira al menos la portada y el cierre renderizados antes de entregar. Manda los PNG por Telegram en orden (como álbum o como archivos para que no pierdan calidad) y el caption aparte. Publicar en Instagram: nunca sin ✅.
@@ -64,7 +64,7 @@ En ambos casos, pedir también:
 > Este es el paso que evita el error clásico: el usuario manda un **link** en vez de una captura. La skill NO debe pedirle que haga capturas a mano — las baja sola.
 
 Seguir la receta de **`references/descargar-referencia.md`**. En resumen:
-1. **Instagram por defecto = Apify directo** (patrón F100K `feedback_ig_apify_default`). Usar el actor `apify/instagram-scraper` con `directUrls: [<link>]` y `resultsType: "details"`; de la respuesta extraer las URLs de imagen del carrusel (`images[]` o `childPosts[].displayUrl`).
+1. **Instagram por defecto = Apify directo** (patrón F100K `feedback_ig_apify_default`). Usar el actor `apify~instagram-scraper` con `directUrls: [<link>]` y `resultsType: "details"`; de la respuesta extraer las URLs de imagen del carrusel (`images[]` o `childPosts[].displayUrl`).
 2. **TikTok** → actor de scraping de TikTok slideshow / fotos (ver reference); si es video, avisar que el clonador es para carruseles de imágenes.
 3. Descargar cada imagen a una carpeta temporal del scratchpad (`curl -L -o slide-XX.jpg <url>`), **en orden**.
 4. Si Apify falla o no hay red → **fallback**: pídele a la usuaria una captura por slide, en orden, por Telegram (nunca navegador logueado).

@@ -11,7 +11,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - **Nada de Chrome logueado, yt-dlp, `sips` ni Whisper en este servidor** (PASO 0 A y PASO 1): no se bajan ni se transcriben videos aquí.
-> - Lista de Reels + estadísticas básicas: Composio con su Instagram profesional (es SU cuenta, así que es la fuente buena: vistas, guardados, compartidos, seguidores y lo que traiga de tiempo de visualización). Si Composio no está, Apify `apify/instagram-reel-scraper` con `includeTranscript: true` (solo datos públicos: vistas, likes, comentarios, caption, duración, portada) y el resto de las básicas por captura. Lo que ninguna fuente trae (por ejemplo % de no seguidores) queda `null`: nunca lo estimes.
+> - Lista de Reels + estadísticas básicas: Composio con su Instagram profesional (es SU cuenta, así que es la fuente buena: vistas, guardados, compartidos, seguidores y lo que traiga de tiempo de visualización). Si Composio no está, Apify `apify~instagram-reel-scraper` con `includeTranscript: true` (solo datos públicos: vistas, likes, comentarios, caption, duración, portada) y el resto de las básicas por captura. Lo que ninguna fuente trae (por ejemplo % de no seguidores) queda `null`: nunca lo estimes.
 > - Transcripts: el `transcript` de Apify o Supadata si hay `SUPADATA_API_KEY`. Si un Reel no tiene transcript, no es `sin_voz`: etiquétalo solo con la portada y dilo; si tampoco hay portada, no lo etiquetes.
 > - Portadas: baja la imagen de la portada (`displayUrl`/`thumbnail`) con curl a `portadas/`, sin redimensionar. Si el HTML pasa de ~10 MB, deja `portada: null` en los Reels de la línea base.
 > - Capturas avanzadas (retención y actividad en el perfil): la usuaria las manda por Telegram, como foto o archivo, con el número del Reel en el pie de foto. Léelas como imagen y copia el número tal cual.
@@ -69,10 +69,10 @@ Si tiene menos de 9 Reels o menos de 30 días publicando: no sigas. Díselo con 
 
 Carpeta de trabajo: `informes/analiza-tu-contenido/<handle>-<AAAA-MM>/` con `portadas/` y `transcripts/`.
 
-- **Lista de Reels** (code, fecha, caption, duración, portada): Composio (su cuenta) o Apify `apify/instagram-reel-scraper` con `includeTranscript: true`. Lo de abajo es la receta de escritorio con Chrome logueado: en este servidor NO se usa.
+- **Lista de Reels** (code, fecha, caption, duración, portada): Composio (su cuenta) o Apify `apify~instagram-reel-scraper` con `includeTranscript: true`. Lo de abajo es la receta de escritorio con Chrome logueado: en este servidor NO se usa.
   Probado el 15-sep-2026: `web_profile_info` da 429 y `/api/v1/clips/user/` devuelve HTML. Lo que SÍ funcionó:
   repetir la consulta GraphQL que usa la pestaña (`PolarisProfileReelsTabContentQuery_connection`) y pedir cada
-  Reel a `/api/v1/media/<PK>/info/` con el header `x-ig-www-claim`. Si falla 3 veces, `apify/instagram-reel-scraper`
+  Reel a `/api/v1/media/<PK>/info/` con el header `x-ig-www-claim`. Si falla 3 veces, `apify~instagram-reel-scraper`
   (avisa que cuesta centavos).
 - **Videos**: en este servidor NO se bajan (receta de escritorio: `yt-dlp "https://www.instagram.com/reel/<code>/"`).
   La herramienta de Chrome bloquea URLs firmadas en su salida: no intentes sacar `video_versions` por ahí.

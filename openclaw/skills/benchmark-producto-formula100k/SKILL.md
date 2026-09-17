@@ -11,7 +11,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - PASO 3 F (lo que la skill hace con agent-browser): landings, pricing, screenshots fullpage y la página About pública de Skool con el **navegador del agente sin login**. Reels del fundador o la marca → Apify (`apify/instagram-reel-scraper`, `clockworks/tiktok-scraper`). Funnels detrás de login: no; márcalos «no visible».
+> - PASO 3 F (lo que la skill hace con agent-browser): landings, pricing, screenshots fullpage y la página About pública de Skool con el **navegador del agente sin login**. Reels del fundador o la marca → Apify (`apify~instagram-reel-scraper`, `clockworks~tiktok-scraper`). Funnels detrás de login: no; márcalos «no visible».
 > - Skool: **nunca** pidas ni pongas email y contraseña en un actor de Apify (el `skool-posts-scraper` con credenciales no se usa aquí). Solo la About pública o capturas que mande la usuaria.
 > - Ads activos: la Biblioteca de Anuncios de Meta es pública (navegador del agente sin login) o Apify. Supadata/Tavily = tus herramientas web. «Activar Apify» = que la usuaria ponga `APIFY_TOKEN`; las instrucciones de Claude Desktop no aplican.
 > - Antes de Apify, suma el costo de la tabla de `references/apify-actors.md` para la profundidad elegida y espera ✅.

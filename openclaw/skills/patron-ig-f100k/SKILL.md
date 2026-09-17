@@ -40,12 +40,12 @@ Si el archivo no existe → detener y decir:
 
 ### 2A — Obtener schema del actor
 
-Usar `fetch-actor-details` (Apify MCP) con: `actorName: "apify/instagram-scraper"`
+Usar `fetch-actor-details` (Apify MCP) con: `actorName: "apify~instagram-scraper"`
 
 ### 2B — Lanzar el scraper
 
 Usar `call-actor` con:
-- `actorName: "apify/instagram-scraper"`
+- `actorName: "apify~instagram-scraper"`
 - `waitSecs: 45`
 - Input:
 ```json

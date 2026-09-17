@@ -64,7 +64,7 @@ Convierte un tema en un carrusel terminado eligiendo **una ficha** y girando 3 p
 ## Fuentes (léelas, no las copies en esta skill)
 | Archivo | Qué trae |
 |---|---|
-| `references/catalogo.md` | Las **35 fichas**: F01–F20 (referencias miradas) y G01–G15. Mecánicas M1–M27, soportes S1–S28, anatomía, error típico, **prompt de guion**, quién lo fabrica, y la auditoría de cobertura. |
+| `references/catalogo.md` | Las **37 fichas**: F01–F20 (referencias miradas) y G01–G17. Mecánicas M1–M28, soportes S1–S29, anatomía, error típico, **prompt de guion**, quién lo fabrica, y la auditoría de cobertura. |
 | `references/prompts-por-plataforma.md` | Por ficha: **referencia** (link al post real), **visual detallado** (paleta hex, tipografía, composición por slide) y prompts para Claude Code · HTML en cualquier chat · Gemini · ChatGPT, con variantes A/B/C. GENERADO desde `visual.json`. |
 | `references/grimorio-carruseles.md` | Anatomía completa de los 17 carruseles del Grimorio (G01–G13 + 4 alias). GENERADO por `scripts/sincronizar-grimorio.mjs`. |
 | `references/estilos-guia-maestra.md` | Los 25 estilos visuales con su prompt HTML (pieles y soportes S17–S28). |
@@ -84,8 +84,8 @@ Los archivos de `references/` los mantiene el equipo de FÓRMULA 100K y llegan c
 
 | Objetivo | Primero se proponen | También |
 |---|---|---|
-| Guardado | F07 chuleta · G01 checklist · G05 recursos | F18, F04, G06 glosario, G13 de A a B |
-| Comentario | F17 tier list · G03 qué tipo eres · G08 molde | F08, F14, G12 confesión, G10 frases |
+| Guardado | F07 chuleta · G01 checklist · G05 recursos | F18, F04, G06 glosario, G13 de A a B, G17 hilo de tuits |
+| Comentario | F17 tier list · G03 qué tipo eres · G16 vitrina de lo que construiste | F08, F14, G08 molde, G12 confesión, G10 frases |
 | Compartido | F01 causa y consecuencia · G10 frases · G06 glosario | F19 mapa |
 | Tiempo de permanencia | G09 swipe-reveal · F20 collage | G04 lo que nadie te dice |
 | Seguidor | F07 (slide de seguir) · F10 anáfora · F13 garabatos (post fijado) | F06 |
@@ -121,6 +121,7 @@ Rellena tú los corchetes que ya conozcas (texto de la portada, colores de su ma
 | G07 · G14 con clienta | `carrusel-caso-exito-f100k` (cifras verificadas) |
 | G11 · G10 sobre tus fotos | `carrusel-render-formula100k` |
 | F03 · G05 (capturas) | `capturas-tutorial-formula100k` + esta skill o `carrusel-render-formula100k` |
+| G16 · G17 | `capturas-tutorial-formula100k` (capturas o grabaciones reales) + esta skill · **HTML libre** S29 (fondo plano + pantalla en marco) o S27 (tuit) |
 | F09 | `carrusel-organico-f100k` o `carrusel-render-formula100k` |
 | F10, F11, F12, F15 | `carrusel-render-formula100k` (o `clonador-carrusel-formula100k` con el link) |
 | F14 | `higgsfield-carrusel-generador` (foto con tu cara) + texto en HTML |

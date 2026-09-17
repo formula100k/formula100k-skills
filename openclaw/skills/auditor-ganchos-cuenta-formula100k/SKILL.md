@@ -107,7 +107,7 @@ Instagram bloquea agent-browser sin sesión guardada — la página de reels mue
 
 ```
 mcp__apify__call-actor
-  actor: "apify/instagram-reel-scraper"
+  actor: "apify~instagram-reel-scraper"
   input: {
     "username": ["<usuario>"],
     "resultsLimit": 70,   // pool amplio para elegir top-N y bottom-N
@@ -117,7 +117,7 @@ mcp__apify__call-actor
   waitSecs: 0            // 70 reels con transcripts tarda ~2-3 min: fire-and-forget + poll
 ```
 
-Para TikTok usar `clockworks/free-tiktok-scraper` o equivalente; el resto del pipeline es idéntico.
+Para TikTok usar `clockworks~free-tiktok-scraper` o equivalente; el resto del pipeline es idéntico.
 
 Esperar a `SUCCEEDED` con `mcp__apify__get-actor-run` (waitSecs=45, repetir hasta terminal).
 

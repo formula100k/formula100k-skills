@@ -2,7 +2,7 @@
 
 > Catálogo de formatos de carrusel de FÓRMULA 100K. Lo mantiene el equipo y llega con cada actualización del paquete.
 >
-> Versión 2 · 14-sep-2026 · **35 fichas**: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
+> Versión 2.1 · 17-sep-2026 · **37 fichas** (G16 vitrina y G17 hilo de tuits se sumaron el 17-sep). Versión 2 · 14-sep-2026 · 35 fichas: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
 > de la Guía de Formatos del Grimorio + 2 mecánicas que solo vivían en la guía maestra de 25 estilos).
 > La v1 dejaba fuera 13 carruseles del Grimorio y 16 de los 25 estilos: ahora cada uno tiene su lugar
 > (ver «AUDITORÍA DE COBERTURA» al final).
@@ -66,6 +66,7 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M25 | De A a B con antesala («no es tu culpa» antes de los pasos) | Guardado + venta |
 | M26 | Antes / después | Venta |
 | M27 | Preguntas frecuentes en chat (objeciones respondidas) | Venta |
+| M28 | Vitrina de lo que construiste (N cosas, cada una con su pantalla funcionando) | Comentario + guardado |
 
 ### Soportes (dónde vive)
 
@@ -99,6 +100,7 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S26 | Periódico / portada impresa · estilo 23 | A |
 | S27 | Nota del celular / tuit · estilo 24 | A |
 | S28 | Barra de progreso / stepper · estilo 25 | A |
+| S29 | Fondo de color plano + pantalla en marco tipo tablet (captura o grabación) | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -603,14 +605,15 @@ No uses marcas registradas en los recortes ni afirmaciones de salud sin respaldo
 
 ---
 
-## LAS 15 FICHAS G (lo que la v1 dejó fuera)
+## LAS 17 FICHAS G (lo que la v1 dejó fuera + 2 sumadas el 17-sep)
 
 G01–G13 vienen de la **Guía de Formatos del Grimorio** (carruseles con `soporte: 'carrusel'`); su
 anatomía completa vive en `references/grimorio-carruseles.md`, que se regenera con
 `scripts/sincronizar-grimorio.mjs` y FALLA si el Grimorio suma un carrusel que aquí no está mapeado.
 G14 y G15 son mecánicas que solo vivían dentro de la guía maestra de 25 estilos (estilos 15 y 14).
+G16 y G17 se sumaron el 17-sep-2026 desde dos carruseles reales: mirados slide por slide y convertidos en ficha.
 El VISUAL detallado y los prompts por plataforma (Claude · Gemini · ChatGPT · HTML en cualquier chat)
-de las 35 fichas están en `references/prompts-por-plataforma.md`.
+de las 37 fichas están en `references/prompts-por-plataforma.md`.
 
 Cuatro carruseles del Grimorio NO son ficha nueva porque su mecánica ya estaba:
 `carrusel-paso-a-paso` → M2 (F04, F08, F09) · `carrusel-comparativo` → M9 (F18, con maqueta A│B en S20) ·
@@ -912,6 +915,47 @@ Slide 7: "¿Tienes otra? Escríbeme [PALABRA] por DM".
 Tutea.
 ```
 - **Fabrica:** `carrusel-formatos-f100k` (HTML S22).
+
+---
+
+### G16 · Vitrina de lo que construiste (N cosas que hice)
+- **Mecánica:** M28 · **Soporte:** S29 fondo de color plano + pantalla en marco (captura o grabación) · **Motor:** A (capturas o grabaciones reales)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @nicolebrener_digital · 18.922 likes · **23.700 comentarios** · 7 slides (3 son video) · https://www.instagram.com/p/Dcy5upWjA22/ · ojo: el original vosea («metés», «registrás») y en la slide 3 los montos no cuadran; copia la forma, no el texto
+- **Anatomía:** 1) portada con TU foto real (celebrando, en tu espacio de trabajo) + titular apilado «5 apps que [dejé de pagar] y las hice con [herramienta]» + stickers + el logo de la herramienta · 2-6) un ítem por slide sobre el MISMO fondo de color: «N. [Nombre que dice el beneficio]» + 1 línea de qué hace + la pantalla real en un marco tipo tablet que se sale por los lados (en 2 o 3 slides, la grabación de la pantalla usándose) · cierre: «Comenta [PALABRA]» entre stickers + qué te llevas («y te comparto una guía para crear las tuyas»).
+- **Por qué funciona:** cada slide es PRUEBA, no promesa: la pantalla funcionando convence de que tú también puedes, y el CTA regala justo lo que falta para hacerlo (los prompts). Por eso 23.700 comentarios con 18.900 likes: la gente comenta más de lo que da like. Los nombres venden el ahorro («sin suscripción») y el fondo único hace que el ojo solo mire la pantalla.
+- **Error típico:** mostrar maquetas bonitas que no usas o capturas vacías (sin datos): se nota y el CTA pierde fuerza. Otro: cambiar el fondo o el marco en cada slide; la serie tiene que verse como UNA colección.
+- **Prompt de guion:**
+```
+Tengo estas [N] cosas REALES que construí y uso en mi negocio: [LISTA: nombre de la herramienta/app/plantilla + qué problema me resuelve + si tengo captura o grabación].
+Escribe un carrusel vitrina de [N+2] slides:
+Slide 1 (portada): titular apilado de máx. 12 palabras del tipo "[N] [cosas] que [dejé de pagar / uso cada día] y las hice con [herramienta]" + qué foto mía usar (celebrando o trabajando, en mi espacio).
+Slides 2 a N+1: una por slide → "N. [Nombre que dice el beneficio, máx. 5 palabras]" + 1 línea de qué hace, con un dato concreto (máx. 16 palabras) + qué pantalla mostrar (con datos de ejemplo cargados, nunca vacía) y si va captura o grabación de 10-25 s.
+Ordénalas de la más útil para [mi cliente ideal] a la más curiosa.
+Última slide: "Comenta [PALABRA]" + qué le mandas por privado (los prompts, la plantilla o la guía para hacer la suya).
+Solo cosas que construí de verdad. Tutea.
+```
+- **Fabrica:** `capturas-tutorial-formula100k` (capturas y grabaciones) + `carrusel-formatos-f100k` (HTML S29) · `portada-video-carrusel-formula100k` si una slide va en video.
+
+---
+
+### G17 · Hilo de tuits: comando → resultado
+- **Mecánica:** M1 + pausa de like a mitad · **Soporte:** S27 tuit sobre fondo blanco (avatar + nombre + ✓) · **Motor:** A (capturas reales)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @marceloalaminoo · 40.120 likes · 118 comentarios · 14 slides · https://www.instagram.com/p/DdM3nuWgczR/ · ojo: sus «comandos» (/together, /skinpro, /deblur…) NO existen en ChatGPT y usa fotos de famosos; copia la forma, nunca eso
+- **Anatomía:** 1) tuit-instrucción: «Envía [tu foto/tu texto] a [herramienta] y escribe:» + el comando o prompt en bold en su propia línea + el ANTES (la foto o el texto de partida) · 2) tuit-resultado: «Va a [lo que logra]» con el verbo en bold + el DESPUÉS en el mismo marco redondeado · 3-6) otro par instrucción → resultado; a veces van lado a lado (texto a la izquierda, foto vertical a la derecha) · cada 5-6 slides (en la referencia, la 7): pausa de like sin imagen «❤️ Antes de continuar, dale like si te gusta este tipo de contenido» · penúltima: el truco más vistoso (una cuadrícula de versiones) · cierre: tuit largo con tu oferta en 3 párrafos + captura de prueba.
+- **Por qué funciona:** el tuit con avatar se lee como consejo de una persona, no como anuncio, y cada par da la recompensa en el siguiente swipe. La pausa de like a mitad pide la acción cuando el lector ya recibió valor: por eso esta referencia tiene 40.000 likes y apenas 118 comentarios (pidió like, no comentario).
+- **Error típico:** inventar atajos que no existen («escribe /skinpro»): la alumna lo prueba, no pasa nada y pierdes confianza. Escribe el prompt completo que SÍ funciona. Otro: poner el antes y el después en la misma slide (se pierde el swipe).
+- **Prompt de guion:**
+```
+Arma un carrusel tipo hilo de tuits de [8-12] slides con [3-5] trucos de [HERRAMIENTA] para [RESULTADO que quiere mi cliente ideal].
+Cada truco son 2 slides:
+- INSTRUCCIÓN: "[Sube/Pega] [qué] en [herramienta] y escribe:" + el prompt EXACTO que funciona (máx. 20 palabras, en bold, en su propia línea) + qué ANTES mostrar (captura o foto de partida).
+- RESULTADO: "Va a [verbo en bold] [lo que logra]" (máx. 20 palabras) + qué DESPUÉS mostrar, del mismo caso.
+Después del truco 2, una slide sola sin imagen: "❤️ Antes de continuar, dale like si quieres más trucos de [herramienta]".
+Ordena los trucos del más fácil al más vistoso.
+Última slide: tuit de 3 párrafos cortos → a quién ayudo + qué logran + mi oferta o CTA "Comenta [PALABRA]".
+No inventes comandos con barra (/algo) que no existan: si es un prompt, escríbelo completo. Nada de fotos de famosos ni de terceros sin permiso. Tutea.
+```
+- **Fabrica:** `capturas-tutorial-formula100k` (capturas) + `carrusel-formatos-f100k` (HTML S27).
 
 ---
 

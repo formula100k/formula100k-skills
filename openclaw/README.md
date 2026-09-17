@@ -79,7 +79,30 @@ Las skills de carruseles, video, apps e investigación piden esto en el VPS (Ubu
 | Higgsfield CLI (`npm i -g @higgsfield/cli` + `higgsfield auth login`) | Generar imágenes, clips y animaciones |
 | `npm i -g vercel` + `VERCEL_TOKEN` de la usuaria | Las apps y landings se despliegan siempre directo en su Vercel |
 | Llaves de la usuaria: `APIFY_TOKEN`; opcionales `SUPADATA_API_KEY`, `GROQ_API_KEY`/`OPENAI_API_KEY` | Datos públicos de redes, transcripts, voz |
+| **Composio con Tavily y Apify conectados** | **La búsqueda web y los datos de redes de TODAS las skills entran por aquí.** Sin esto el agente no puede investigar y va a reportar «no encontré nada» |
 | Composio con Instagram profesional | Métricas de su propia cuenta y publicar con ✅ |
 
 **No se instala:** Remotion, HyperFrames, yt-dlp, Whisper local, Playwright con su propio Chromium.
 Omitidas por ser edición de metraje grabado: `editor-video-formula100k`, `motion-youtube-f100k`, `motion-tracking-dedo-f100k`, `collage-cine-f100k`.
+
+## Si el agente dice que no encuentra algo
+
+Casi siempre no falta nada: falta mirar. Pídele por Telegram que corra esto y que te pegue la salida
+tal cual, sin resumir:
+
+```bash
+ls ~/.openclaw/workspace/skills | wc -l          # cuántas skills tiene
+ls ~/.openclaw/workspace/skills | grep radar     # ¿está la que dice que no existe?
+cat ~/.openclaw/workspace/skills/*/.f100k-version | sort -u   # con qué versión corre
+composio whoami                                   # ¿puede buscar?
+```
+
+- **Sale una lista con las skills** → estaban ahí y el agente no miró. Dile que lea la skill y repita
+  la tarea siguiéndola fase por fase.
+- **`.f100k-version` no existe** → las skills se copiaron a mano y no se pueden actualizar.
+  Instálalas otra vez con `instalar.sh` (no borra tus archivos) y vuelve a quedar todo sellado.
+- **`composio whoami` falla** → el agente no puede investigar nada. Corre `composio login` y revisa
+  que Tavily y Apify estén conectados en dashboard.composio.dev → Connect Apps.
+
+Un agente nunca debe reportar como «faltante» un archivo que ninguna skill le pidió. Si lo hace,
+recuérdale la sección 2 de `f100k-puente`.

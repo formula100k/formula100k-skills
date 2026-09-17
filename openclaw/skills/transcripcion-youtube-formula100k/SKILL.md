@@ -11,7 +11,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - `yt-transcript-mcp` no está en este servidor. Para la transcripción, en este orden: Supadata con `SUPADATA_API_KEY` si existe; tu herramienta web si el video tiene transcripción pública; o pídele a la usuaria que la pegue (YouTube → «Mostrar transcripción» → copiar).
-> - Tavily = tu búsqueda web para verificar viralidad.
+> - Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{"query":"…","max_results":5}'` (sección 2 del puente). Con eso verificas la viralidad.
 > - Los guiones del batch van a `guiones/` y se mandan por Telegram: resumen en el chat y el `.md` como documento.
 
 ---

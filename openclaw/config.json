@@ -187,7 +187,7 @@
       "notes": [
         "La config no vive en la carpeta oculta de la Mac: léela de `cerebro/f100k-config.json`. Si no existe, créala con el nicho y las palabras clave de `USER.md` y `cerebro/`, y confírmala por Telegram. No mandes a correr rutina-maestra.",
         "Señal de TikTok con Apify (`clockworks/tiktok-scraper`) solo si hay `APIFY_TOKEN`. Sin token, detecta con búsqueda web y dilo en la primera línea.",
-        "Tavily = tu búsqueda web.",
+        "Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{\"query\":\"…\",\"max_results\":5}'` (sección 2 del puente).",
         "La «FASE 5 — email de alerta» NO manda correo: la alerta va por Telegram con el mismo formato. Si no hay tendencia real y la automatización no pide informe diario, no mandes nada."
       ]
     },
@@ -449,7 +449,7 @@
     },
     "calendarizador-urgencias-formula100k": {
       "notes": [
-        "Tavily = tu búsqueda web: las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.",
+        "Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{\"query\":\"…\",\"max_results\":5}'` (sección 2 del puente). Las fechas reales del nicho salen de ahí, con su link. Si una fecha no se puede verificar, márcala `⚠️ verificar`.",
         "Los 5 bloques de preguntas van por Telegram, uno a la vez, con opciones numeradas. Lo que ya esté en `cerebro/` (producto, precios, fechas propias) confírmalo en vez de preguntarlo.",
         "`scripts/build_xlsx.py` necesita `openpyxl`: si no está, entrega el calendario en `.md` y el JSON, y dilo. Guarda en `entregables/urgencias/`."
       ]
@@ -633,7 +633,7 @@
     "transcripcion-youtube-formula100k": {
       "notes": [
         "`yt-transcript-mcp` no está en este servidor. Para la transcripción, en este orden: Supadata con `SUPADATA_API_KEY` si existe; tu herramienta web si el video tiene transcripción pública; o pídele a la usuaria que la pegue (YouTube → «Mostrar transcripción» → copiar).",
-        "Tavily = tu búsqueda web para verificar viralidad.",
+        "Tu búsqueda web es Tavily por Composio: `composio execute TAVILY_SEARCH -d '{\"query\":\"…\",\"max_results\":5}'` (sección 2 del puente). Con eso verificas la viralidad.",
         "Los guiones del batch van a `guiones/` y se mandan por Telegram: resumen en el chat y el `.md` como documento."
       ],
       "description_override": "Convierte videos de YouTube en batches de guiones virales con FÓRMULA 100K. Usar SIEMPRE que alguien comparta una URL de YouTube y quiera extraer ideas, guiones o contenido de ese video. También con: \"transcribe este video\", \"sácame ideas de este YouTube\", \"convierte este video en guiones\", \"quiero hacer un batch de scripts de este video\", \"repurposea este video\", \"dame guiones basados en este video\", o cualquier variación que combine una URL de YouTube con intención de crear contenido nuevo. Obtiene la transcripción (Supadata, web o pegada por la usuaria) y aplica los frameworks de guionización de FÓRMULA 100K para producir varios guiones validados de un solo video."

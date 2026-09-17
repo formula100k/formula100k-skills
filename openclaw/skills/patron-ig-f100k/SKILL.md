@@ -84,6 +84,7 @@ Si no hay posts en 7 días → terminar con mensaje:
 Para CADA video/reel filtrado, ejecutar:
 
 ```bash
+[ -z "$SUPADATA_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && set -a && . "$HOME/.config/f100k/secrets.env" && set +a
 curl -s -X GET "https://api.supadata.ai/v1/transcript?url=https://www.instagram.com/reel/[shortCode]/" \
   -H "x-api-key: $SUPADATA_API_KEY"
 ```

@@ -24,7 +24,7 @@ Las que la gente puede tipear en 1 segundo. Patrón observado:
 | Tipo | Ejemplos |
 |---|---|
 | Iniciales/cortas | YO, GPT, INFO, GUÍA, CASO, DEMO, ACCESO, BOMBA |
-| Con identidad | TESIS, 100K, CHEVA, CLUB |
+| Con identidad | TESIS, 100K, CLUB, tu marca |
 | De contenido | TIPS, ESTRUCTURA, LISTA, MAPA, BANCO |
 | Emocionales | LISTO, QUIERO, NECESITO, AYUDA, SÍ, AHORA |
 
@@ -137,7 +137,7 @@ Versiones cortas, listas para escribir directo en el slide final:
 4. "Responde **YO** y te mando el link automático"
 5. "Pon solo **'👀'** y te incluyo en la lista"
 6. "Comenta **CASO** y agendamos"
-7. "Responde **CHEVA** y te mando el banco"
+7. "Responde **BANCO** y te lo mando"
 
 **Con consecuencia real:**
 8. "Responde **GUÍA** antes de las 23:59 — mañana ya no la mando"

@@ -13,7 +13,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > Lo específico de esta skill:
 >
 > - Genera el `index.html` en `entregables/landings/<producto>/` y mándalo por Telegram como documento.
-> - No despliegues en Vercel ni en ningún lado sin ✅ explícito y sin que la usuaria haya conectado su propia cuenta.
+> - Despliega directo en Vercel con la cuenta de la usuaria (`VERCEL_TOKEN`) y mándale la URL. Nunca otra cuenta ni `vercel login` desde el servidor; en otras plataformas (GHL, Netlify) solo con ✅.
 > - Mockups con Gemini (`GEMINI_API_KEY`) o Higgsfield solo si hay llave o plugin; costo y ✅ antes. Si no, deja los espacios marcados con el prompt de cada imagen.
 > - Precios, bonos, garantía y testimonios salen de `cerebro/`: nunca los inventes.
 

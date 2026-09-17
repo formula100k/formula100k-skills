@@ -12,7 +12,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 >
 > - El render a PNG (`build.js` + `export.js`) está hecho para una Mac con Chrome. En el servidor, por defecto entrega el camino **«prompts por plataforma»**: el prompt listo para Gemini o ChatGPT de la ficha elegida, con las 3 variantes.
 > - Si la usuaria tiene `GEMINI_API_KEY` o un modelo de imagen en OpenRouter, puedes generar las imágenes tú: costo estimado → ✅ → generar → mandar por Telegram.
-> - Intenta `build.js` solo si `node`, `puppeteer-core` y Chrome/Chromium existen en el servidor; si falla, vuelve a los prompts sin insistir.
+> - `build.js` y `export.js` buscan Chrome en `CHROME_PATH`, `/usr/bin/google-chrome-stable` o `/usr/bin/chromium` y lanzan con `--no-sandbox`. Úsalos si `node` y `puppeteer-core` están instalados; si fallan, vuelve a los prompts sin insistir.
 > - Las fotos de la usuaria están en `cerebro/fotos/`. Skills que menciona y no vienen en este paquete (render, clonador, ilustrado con tu cara): ofrece el prompt equivalente.
 
 ---

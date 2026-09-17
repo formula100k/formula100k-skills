@@ -38,6 +38,9 @@ const OUTPUT_DIR = path.dirname(HTML_FILE);
 
 // --- Detectar Chrome en macOS ---
 const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium',
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
@@ -47,7 +50,7 @@ const CHROME_CANDIDATES = [
 const CHROME_PATH = CHROME_CANDIDATES.find(p => fs.existsSync(p));
 
 if (!CHROME_PATH) {
-  console.error('No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.');
+  console.error('No se encontró Chrome/Chromium. Define CHROME_PATH con la ruta del Chrome del servidor.');
   process.exit(1);
 }
 
@@ -55,7 +58,7 @@ if (!CHROME_PATH) {
   console.log(`Launching browser: ${path.basename(CHROME_PATH)}`);
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
-    headless: 'new',
+    headless: 'new', args: ['--no-sandbox', '--disable-dev-shm-usage'],
     defaultViewport: { width: SLIDE_W, height: SLIDE_H, deviceScaleFactor: SCALE }
   });
 

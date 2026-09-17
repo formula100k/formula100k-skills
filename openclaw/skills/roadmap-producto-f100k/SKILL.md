@@ -268,7 +268,7 @@ entregables/roadmaps/YYYY-MM-DD_<slug>-paquete-entregable/
 
 | Archivo | Uso | Audiencia |
 |---|---|---|
-| `00-ROADMAP-ORIGINAL.md` | Documento técnico de trabajo. Backward Design, fases, dependencias. | Equipo interno (el usuario + dev + Cheva) |
+| `00-ROADMAP-ORIGINAL.md` | Documento técnico de trabajo. Backward Design, fases, dependencias. | Equipo interno (el usuario + dev + equipo) |
 | `01-PLAN-MAESTRO.md/.docx` | Plan ejecutivo consolidado. Implementación + servicio + oferta + proyección + riesgos. | Stakeholders, inversores, partners. Para mandar por mail o imprimir. |
 | `02-PRESENTACION-IMPACTO.html` | Deck visual de pitch. Hero por sección, métricas grandes, paleta del producto, comparativa visual contra competencia. | Venta · presentación pública · landing previa |
 

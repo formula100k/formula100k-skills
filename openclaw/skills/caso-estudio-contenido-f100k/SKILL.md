@@ -16,7 +16,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > - Los patrones de SU cuenta: Composio si tiene Instagram profesional conectado; si no, pídele capturas de sus estadísticas por Telegram. Sin datos, sáltalo y anótalo.
 > - Todo va a `entregables/casos-de-estudio/<nicho-slug>-<AAAA-MM-DD>/`. El render usa solo la librería estándar: `python3 skills/caso-estudio-contenido-f100k/render_caso_estudio.py <carpeta>/data.json <carpeta>/index.html`.
 > - `calendario.xlsx` necesita `openpyxl`; si no está, entrega solo el CSV y dilo. Revisa el `index.html` con el navegador del agente (captura a 390 px) antes de entregarlo.
-> - Manda por Telegram el `index.html`, un `.zip` de la carpeta y el CSV. Ella lo sube a netlify.com/drop o a su Vercel; tú no despliegas salvo que conecte SU cuenta y dé ✅.
+> - Despliega la página directo en Vercel con `VERCEL_TOKEN` de la usuaria (`vercel --prod --yes --token "$VERCEL_TOKEN"`) y mándale la URL, más el CSV por Telegram. Sin token, pídele que lo conecte; el `.zip` es el último recurso.
 
 ---
 

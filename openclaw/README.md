@@ -77,6 +77,7 @@ Las skills de carruseles, video, apps e investigación piden esto en el VPS (Ubu
 | Node 20+ y `puppeteer-core` (sin bajar navegador) | `export.js` / `render.js` de las skills de carrusel |
 | `python3-pip`, `zip`, `jq`, `curl` | Scripts auxiliares y mandar carpetas por Telegram |
 | Higgsfield CLI (`npm i -g @higgsfield/cli` + `higgsfield auth login`) | Generar imágenes, clips y animaciones |
+| `npm i -g vercel` + `VERCEL_TOKEN` de la usuaria | Las apps y landings se despliegan siempre directo en su Vercel |
 | Llaves de la usuaria: `APIFY_TOKEN`; opcionales `SUPADATA_API_KEY`, `GROQ_API_KEY`/`OPENAI_API_KEY` | Datos públicos de redes, transcripts, voz |
 | Composio con Instagram profesional | Métricas de su propia cuenta y publicar con ✅ |
 

@@ -12,11 +12,11 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > **Antes de seguir, lee la skill `f100k-openclaw`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Escribe el proyecto en `entregables/landings/<producto>/` y mándalo por Telegram como `.zip`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.
+> - Escribe el proyecto en `entregables/landings/<producto>/`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.
 > - Fase 2B — capturas reales: si la app es pública, tómalas con tu navegador (Chromium) a 1440×900. Si pide login, pídele a la usuaria las capturas por Telegram como archivo; no inicies sesión con sus credenciales. Mientras no lleguen, deja los mockups CSS de la Fase 2A.
 > - Fase 3 — HyperFrames NO corre aquí (es edición de video). En su lugar ofrece un clip demo generado con el plugin de Higgsfield (image-to-video sobre las capturas, 5 a 10 s por escena): costo estimado → ✅ → generar. Si varias escenas salen en clips separados, puedes juntarlos con ffmpeg en concat simple, sin efectos ni texto. Sin Higgsfield, deja `DemoSection` con la captura principal en vez de video.
 > - Stripe: las llaves `sk_live_`/`price_` nunca van en un archivo, en el `.zip` ni en el chat. Deja `.env.example` con los nombres de las variables y dile a la usuaria que las cargue ella en Vercel.
-> - Fase 5 — deploy: solo si la usuaria conectó SU cuenta de Vercel (y de GitHub, si quiere repo) y dio ✅. Si no, entrega el `.zip` con la secuencia de comandos de la Fase 5 para que la corra en su compu.
+> - Fase 5 — deploy: **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token "$VERCEL_TOKEN"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso.
 > - Si lo que pide es una landing de venta de una sola página sin app detrás, usa `landing-alta-conversion-f100k`.
 
 ---

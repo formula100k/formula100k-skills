@@ -571,7 +571,7 @@
     "landing-alta-conversion-f100k": {
       "notes": [
         "Genera el `index.html` en `entregables/landings/<producto>/` y mándalo por Telegram como documento.",
-        "No despliegues en Vercel ni en ningún lado sin ✅ explícito y sin que la usuaria haya conectado su propia cuenta.",
+        "Despliega directo en Vercel con la cuenta de la usuaria (`VERCEL_TOKEN`) y mándale la URL. Nunca otra cuenta ni `vercel login` desde el servidor; en otras plataformas (GHL, Netlify) solo con ✅.",
         "Mockups con Gemini (`GEMINI_API_KEY`) o Higgsfield solo si hay llave o plugin; costo y ✅ antes. Si no, deja los espacios marcados con el prompt de cada imagen.",
         "Precios, bonos, garantía y testimonios salen de `cerebro/`: nunca los inventes."
       ]
@@ -660,11 +660,11 @@
     },
     "landing-producto-formula100k": {
       "notes": [
-        "Escribe el proyecto en `entregables/landings/<producto>/` y mándalo por Telegram como `.zip`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.",
+        "Escribe el proyecto en `entregables/landings/<producto>/`. **No corras `npm install` ni `npm run build` en este servidor** (Next.js no cabe en el plan Básico): el build lo hace Vercel al desplegar.",
         "Fase 2B — capturas reales: si la app es pública, tómalas con tu navegador (Chromium) a 1440×900. Si pide login, pídele a la usuaria las capturas por Telegram como archivo; no inicies sesión con sus credenciales. Mientras no lleguen, deja los mockups CSS de la Fase 2A.",
         "Fase 3 — HyperFrames NO corre aquí (es edición de video). En su lugar ofrece un clip demo generado con el plugin de Higgsfield (image-to-video sobre las capturas, 5 a 10 s por escena): costo estimado → ✅ → generar. Si varias escenas salen en clips separados, puedes juntarlos con ffmpeg en concat simple, sin efectos ni texto. Sin Higgsfield, deja `DemoSection` con la captura principal en vez de video.",
         "Stripe: las llaves `sk_live_`/`price_` nunca van en un archivo, en el `.zip` ni en el chat. Deja `.env.example` con los nombres de las variables y dile a la usuaria que las cargue ella en Vercel.",
-        "Fase 5 — deploy: solo si la usuaria conectó SU cuenta de Vercel (y de GitHub, si quiere repo) y dio ✅. Si no, entrega el `.zip` con la secuencia de comandos de la Fase 5 para que la corra en su compu.",
+        "Fase 5 — deploy: **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token \"$VERCEL_TOKEN\"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso.",
         "Si lo que pide es una landing de venta de una sola página sin app detrás, usa `landing-alta-conversion-f100k`."
       ],
       "replace": [
@@ -1318,7 +1318,7 @@
         "El SQL (`plantillas/sql/01-portero.sql`) mándalo como archivo `.sql` para que lo pegue en Supabase → SQL Editor → Run. El MCP de Supabase y `claude mcp add` no existen aquí; usa la API de Supabase solo si ella conectó un token de SU cuenta y te da ✅.",
         "Las llaves secretas (`sb_secret_`, `service_role`, `sk_live_`, `whsec_`) no se piden por Telegram: le das el nombre exacto de cada variable y ella las pega directo en Vercel → Settings → Environment Variables. Si alguna hace falta para probar en el servidor, avísale que queda en el historial del chat, guárdala solo en el `.env.local` del proyecto y pídele que borre el mensaje.",
         "`npx tsc --noEmit` y `npm run build` sí corren en el servidor (una app a la vez). Supabase local con Docker, `stripe listen` y `vercel crons run` no: las pruebas vivas se hacen en SU despliegue de prueba.",
-        "Desplegar (`vercel`, `vercel env add`) solo con SU cuenta de Vercel conectada y ✅. Si no la conectó, mándale el proyecto en `.zip` con los pasos para importarlo en vercel.com.",
+        "**Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token \"$VERCEL_TOKEN\"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso. `vercel env add` con los nombres de variables; los valores secretos los pega ella.",
         "`CONEXIONES.md` va en la raíz del proyecto y también se lo mandas por Telegram como documento, sin ningún valor secreto.",
         "Para comprobar que el dominio final no redirige (trampa 1 de publicar) usa `curl -sI` o el navegador del agente sobre su URL pública: es una web propia, no una red social."
       ]
@@ -1330,7 +1330,7 @@
         "Colores de su marca: su web pública la miras con el navegador del agente; de Instagram, pídele por Telegram capturas de su perfil y de 3 posts. Nunca entres logueada a su Instagram.",
         "`constructor-miniapps-f100k`, `ux-elevacion-formula100k` y `landing-producto-formula100k`: úsalas si están instaladas; si no, haz tú ese paso con el mismo criterio. `superpowers:brainstorming` y `superpowers:systematic-debugging` no existen aquí: acuerda el diseño con ella por Telegram en preguntas cortas y depura tú en silencio.",
         "Llaves (Fase 4): ella las pega directo en SU Vercel → Settings → Environment Variables; tú le das el nombre exacto de cada una. No pidas llaves secretas por Telegram; si una hace falta para probar en el servidor, avísale que queda en el historial, guárdala solo en el `.env.local` del proyecto y pídele que borre el mensaje.",
-        "Publicar (Fase 5) y hacer push a GitHub: solo con SU cuenta conectada y ✅. Si no, mándale el proyecto en `.zip` (sin `node_modules` ni `.env*`) con los pasos para importarlo en vercel.com."
+        "Publicar (Fase 5): **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token \"$VERCEL_TOKEN\"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso. Push a GitHub solo si conectó su cuenta."
       ],
       "replace": [
         [
@@ -1384,7 +1384,7 @@
         "Los patrones de SU cuenta: Composio si tiene Instagram profesional conectado; si no, pídele capturas de sus estadísticas por Telegram. Sin datos, sáltalo y anótalo.",
         "Todo va a `entregables/casos-de-estudio/<nicho-slug>-<AAAA-MM-DD>/`. El render usa solo la librería estándar: `python3 skills/caso-estudio-contenido-f100k/render_caso_estudio.py <carpeta>/data.json <carpeta>/index.html`.",
         "`calendario.xlsx` necesita `openpyxl`; si no está, entrega solo el CSV y dilo. Revisa el `index.html` con el navegador del agente (captura a 390 px) antes de entregarlo.",
-        "Manda por Telegram el `index.html`, un `.zip` de la carpeta y el CSV. Ella lo sube a netlify.com/drop o a su Vercel; tú no despliegas salvo que conecte SU cuenta y dé ✅."
+        "Despliega la página directo en Vercel con `VERCEL_TOKEN` de la usuaria (`vercel --prod --yes --token \"$VERCEL_TOKEN\"`) y mándale la URL, más el CSV por Telegram. Sin token, pídele que lo conecte; el `.zip` es el último recurso."
       ],
       "replace": [
         [
@@ -1752,8 +1752,8 @@
       "notes": [
         "Camino por defecto: escribe `entregables/apps/<nombre>/index.html` y mándalo por Telegram como documento (o `.zip` si son varios archivos). Eso ya es una entrega completa: se abre con doble clic.",
         "Fase 3: prueba la app abriéndola en el navegador del agente (archivo local, sin login): recorre el flujo, el camino torcido y el ancho de 390 px con screenshots. No digas que funciona sin haberla recorrido.",
-        "Fase 4 · Camino A (publicarla tú) solo si la usuaria conectó **su propia** cuenta de Vercel (`VERCEL_TOKEN` en el entorno) y te da ✅: `vercel --prod --yes --token \"$VERCEL_TOKEN\"`. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Sin token, dale el Camino B (arrastrar la carpeta en vercel.com) paso a paso por Telegram y pídele la URL para comprobarla tú.",
-        "Next.js / Supabase / Stripe: escribe el proyecto y mándalo en `.zip`. **No corras `npm install` ni `next build` en este servidor** (es pesado para el plan); si se despliega, que construya Vercel. Las llaves nunca van en los archivos que mandas.",
+        "Fase 4 · publicar: **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token \"$VERCEL_TOKEN\"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso.",
+        "Next.js / Supabase / Stripe: escribe el proyecto. **No corras `npm install` ni `next build` en este servidor** (es pesado para el plan): construye Vercel al desplegar. Las llaves nunca van en los archivos.",
         "Clonar una web de referencia: navegador del agente, solo páginas públicas."
       ],
       "replace": [

@@ -14,8 +14,8 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 >
 > - Camino por defecto: escribe `entregables/apps/<nombre>/index.html` y mándalo por Telegram como documento (o `.zip` si son varios archivos). Eso ya es una entrega completa: se abre con doble clic.
 > - Fase 3: prueba la app abriéndola en el navegador del agente (archivo local, sin login): recorre el flujo, el camino torcido y el ancho de 390 px con screenshots. No digas que funciona sin haberla recorrido.
-> - Fase 4 · Camino A (publicarla tú) solo si la usuaria conectó **su propia** cuenta de Vercel (`VERCEL_TOKEN` en el entorno) y te da ✅: `vercel --prod --yes --token "$VERCEL_TOKEN"`. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Sin token, dale el Camino B (arrastrar la carpeta en vercel.com) paso a paso por Telegram y pídele la URL para comprobarla tú.
-> - Next.js / Supabase / Stripe: escribe el proyecto y mándalo en `.zip`. **No corras `npm install` ni `next build` en este servidor** (es pesado para el plan); si se despliega, que construya Vercel. Las llaves nunca van en los archivos que mandas.
+> - Fase 4 · publicar: **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token "$VERCEL_TOKEN"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso.
+> - Next.js / Supabase / Stripe: escribe el proyecto. **No corras `npm install` ni `next build` en este servidor** (es pesado para el plan): construye Vercel al desplegar. Las llaves nunca van en los archivos.
 > - Clonar una web de referencia: navegador del agente, solo páginas públicas.
 
 ---

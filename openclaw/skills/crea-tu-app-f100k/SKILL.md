@@ -17,7 +17,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > - Colores de su marca: su web pública la miras con el navegador del agente; de Instagram, pídele por Telegram capturas de su perfil y de 3 posts. Nunca entres logueada a su Instagram.
 > - `constructor-miniapps-f100k`, `ux-elevacion-formula100k` y `landing-producto-formula100k`: úsalas si están instaladas; si no, haz tú ese paso con el mismo criterio. `superpowers:brainstorming` y `superpowers:systematic-debugging` no existen aquí: acuerda el diseño con ella por Telegram en preguntas cortas y depura tú en silencio.
 > - Llaves (Fase 4): ella las pega directo en SU Vercel → Settings → Environment Variables; tú le das el nombre exacto de cada una. No pidas llaves secretas por Telegram; si una hace falta para probar en el servidor, avísale que queda en el historial, guárdala solo en el `.env.local` del proyecto y pídele que borre el mensaje.
-> - Publicar (Fase 5) y hacer push a GitHub: solo con SU cuenta conectada y ✅. Si no, mándale el proyecto en `.zip` (sin `node_modules` ni `.env*`) con los pasos para importarlo en vercel.com.
+> - Publicar (Fase 5): **Las apps siempre se despliegan directo en Vercel** con la cuenta de la usuaria (`VERCEL_TOKEN` en el entorno): `vercel --prod --yes --token "$VERCEL_TOKEN"`, y le mandas la URL por Telegram. No hace falta pedir ✅ para desplegar. Nunca `vercel login` desde el servidor ni una cuenta que no sea suya. Si falta `VERCEL_TOKEN`, pídele que lo cree en vercel.com → Account Settings → Tokens y lo agregue al entorno del agente; el `.zip` es solo el último recurso. Push a GitHub solo si conectó su cuenta.
 
 ---
 

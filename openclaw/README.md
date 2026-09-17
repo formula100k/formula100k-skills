@@ -99,8 +99,12 @@ composio whoami                                   # ¿puede buscar?
 
 - **Sale una lista con las skills** → estaban ahí y el agente no miró. Dile que lea la skill y repita
   la tarea siguiéndola fase por fase.
-- **`.f100k-version` no existe** → las skills se copiaron a mano y no se pueden actualizar.
-  Instálalas otra vez con `instalar.sh` (no borra tus archivos) y vuelve a quedar todo sellado.
+- **`.f100k-version` no existe** → se instalaron desde **ClawHub** (`openclaw skills install @formula100k/…`),
+  que es la ruta normal de las alumnas y no deja ese sello. Para actualizar ahí:
+  `openclaw skills update --all` y reiniciar el gateway. El sello `.f100k-version` solo aparece
+  cuando se instala con `instalar.sh` desde este repo privado.
+  ⚠️ **Una corrección de este repo no llega a ClawHub sola**: hay que republicar
+  (`clawhub sync --owner formula100k --bump patch`) o la alumna sigue con la versión vieja.
 - **`composio whoami` falla** → el agente no puede investigar nada. Corre `composio login` y revisa
   que Tavily y Apify estén conectados en dashboard.composio.dev → Connect Apps.
 

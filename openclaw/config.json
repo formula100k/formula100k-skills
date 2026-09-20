@@ -286,7 +286,7 @@
     },
     "historias-a-imagenes-nanobanana": {
       "notes": [
-        "Motor de imagen, en este orden: plugin de Higgsfield (`nano_banana_2`) si está conectado; si no, `GEMINI_API_KEY` o el modelo de imagen de OpenRouter; si no hay ninguno, entrega los prompts por historia y avisa.",
+        "Motor de imagen, en este orden: **Gemini directo con `GEMINI_API_KEY`** (sección 3.1 del puente) — es el mismo Nano Banana; si no hay llave, el plugin de Higgsfield (`nano_banana_2`); si no hay ninguno, entrega los prompts por historia y avisa.",
         "La skill `banana` no viene en este paquete: llama al motor disponible directo.",
         "Fotos de la usuaria: `cerebro/fotos/`. Si está vacía, pídele por Telegram 3 a 6 fotos suyas enviadas como archivo.",
         "El preset se guarda en `cerebro/preset-historias.json`, no dentro de la skill (las actualizaciones lo borrarían).",
@@ -493,8 +493,8 @@
     },
     "carrusel-ilustrado-formula100k": {
       "notes": [
-        "Las ilustraciones se generan con el plugin de Higgsfield: solo si está conectado, con costo estimado y ✅ antes.",
-        "Sin Higgsfield: entrega el guion slide por slide + el prompt en inglés de cada ilustración para generarlas a mano.",
+        "Las ilustraciones se generan con **Gemini directo (`GEMINI_API_KEY`, sección 3.1 del puente)**; si no hay llave, con el plugin de Higgsfield. Costo estimado y ✅ antes.",
+        "Sin ningún motor: entrega el guion slide por slide + el prompt en inglés de cada ilustración para generarlas a mano.",
         "Las imágenes van a `entregables/` y se mandan por Telegram en orden de slide."
       ]
     },
@@ -574,9 +574,9 @@
     },
     "infografia-reel-formula100k": {
       "notes": [
-        "Imagen base y animación salen del plugin de Higgsfield: solo si está conectado. Antes muestra el costo total (imagen + video) y espera ✅.",
+        "**La imagen base sale de Gemini** (`GEMINI_API_KEY`, sección 3.1 del puente) o del plugin de Higgsfield si no hay llave. **La animación solo sale de Higgsfield**: sin el plugin no hay video. Antes muestra el costo total y espera ✅.",
         "Para leer un artículo usa tu herramienta web; para un YouTube, `transcripcion-youtube-formula100k` o la transcripción que pegue la usuaria. Tavily/Supadata = tus herramientas web.",
-        "Sin Higgsfield: entrega el brief, el texto de la infografía y los prompts de imagen y video listos para pegar.",
+        "Sin Higgsfield pero con Gemini: entrega la **imagen 4K terminada** + el prompt del video para animarla a mano, y dilo. Sin ninguno: el brief, el texto y los dos prompts listos para pegar.",
         "Todo va a `entregables/infografias/<tema>/`. El `.mp4` se manda por Telegram si pesa menos de 50 MB; si no, el link."
       ],
       "replace": [
@@ -596,8 +596,8 @@
     },
     "miniatura-youtube-formula100k": {
       "notes": [
-        "Motor: plugin de Higgsfield (`nano_banana_pro`) si está conectado; si no, `GEMINI_API_KEY`. Costo de las 4 variantes → ✅ → generar.",
-        "La selfie y la captura de referencia llegan por Telegram como archivo; las fotos guardadas están en `cerebro/fotos/`. El widget de subida de Higgsfield no existe aquí.",
+        "Motor: **Gemini directo con `GEMINI_API_KEY`** (sección 3.1 del puente), que es el mismo Nano Banana. Si no hay llave pero sí el plugin de Higgsfield (`nano_banana_pro`), úsalo. Costo de las 4 variantes → ✅ → generar.",
+        "La selfie y la captura de referencia llegan por Telegram como archivo; las fotos guardadas están en `cerebro/fotos/`. Con Gemini van como partes `inline_data`, **selfie primero**; no hay widget de subida.",
         "Sin ningún motor: entrega el concepto, el texto de la miniatura y el prompt listo.",
         "Entrega en `entregables/miniaturas/` y por Telegram."
       ]

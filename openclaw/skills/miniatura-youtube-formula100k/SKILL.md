@@ -1,6 +1,6 @@
 ---
 name: miniatura-youtube-formula100k
-description: "Skill especializada en generar miniaturas y portadas virales para YouTube usando las fotos del usuario. Usar SIEMPRE que alguien pida: crear una miniatura de YouTube, generar una portada para video, diseñar thumbnail, hacer la imagen de mi video de YouTube, analizar miniaturas de la competencia, optimizar mi miniatura, crear variaciones de thumbnail. Modo estrella CLONAR ESTILO: replica el estilo de UNA captura de referencia (la miniatura de otra persona) poniendo la cara del usuario y manda a generar a Higgsfield (nano_banana_pro) — activarlo cuando digan 'quiero esta miniatura con mi cara', 'clona este estilo', 'réplica esta portada usando mi foto' o adjunten una referencia + una selfie. Basada en la metodología de FORMULA 100K con análisis de competencia real."
+description: "Skill especializada en generar miniaturas y portadas virales para YouTube usando las fotos del usuario. Usar SIEMPRE que alguien pida: crear una miniatura de YouTube, generar una portada para video, diseñar thumbnail, hacer la imagen de mi video de YouTube, analizar miniaturas de la competencia, optimizar mi miniatura, crear variaciones de thumbnail. Modo estrella CLONAR ESTILO: replica el estilo de UNA captura de referencia (la miniatura de otra persona) poniendo la cara del usuario y manda a generar con Nano Banana (Gemini) — activarlo cuando digan 'quiero esta miniatura con mi cara', 'clona este estilo', 'réplica esta portada usando mi foto' o adjunten una referencia + una selfie. Basada en la metodología de FORMULA 100K con análisis de competencia real."
 argument-hint: "<palabra clave o tema del video>"
 metadata: {"version": "2.0.0", "author": "TU-HANDLE", "openclaw": {"emoji": "🦞"}}
 ---
@@ -11,8 +11,8 @@ metadata: {"version": "2.0.0", "author": "TU-HANDLE", "openclaw": {"emoji": "�
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Motor: plugin de Higgsfield (`nano_banana_pro`) si está conectado; si no, `GEMINI_API_KEY`. Costo de las 4 variantes → ✅ → generar.
-> - La selfie y la captura de referencia llegan por Telegram como archivo; las fotos guardadas están en `cerebro/fotos/`. El widget de subida de Higgsfield no existe aquí.
+> - Motor: **Gemini directo con `GEMINI_API_KEY`** (sección 3.1 del puente), que es el mismo Nano Banana. Si no hay llave pero sí el plugin de Higgsfield (`nano_banana_pro`), úsalo. Costo de las 4 variantes → ✅ → generar.
+> - La selfie y la captura de referencia llegan por Telegram como archivo; las fotos guardadas están en `cerebro/fotos/`. Con Gemini van como partes `inline_data`, **selfie primero**; no hay widget de subida.
 > - Sin ningún motor: entrega el concepto, el texto de la miniatura y el prompt listo.
 > - Entrega en `entregables/miniaturas/` y por Telegram.
 
@@ -20,7 +20,7 @@ metadata: {"version": "2.0.0", "author": "TU-HANDLE", "openclaw": {"emoji": "�
 
 # Skill: Miniatura YouTube FORMULA 100K
 
-Genera miniaturas optimizadas para YouTube usando tus fotos, con análisis de la competencia. Metodología basada en FORMULA 100K: menos es más, CTR primero. Motor de imagen principal: **Higgsfield (nano_banana_pro)** vía MCP.
+Genera miniaturas optimizadas para YouTube usando tus fotos, con análisis de la competencia. Metodología basada en FORMULA 100K: menos es más, CTR primero. Motor de imagen: **Nano Banana** — por defecto Gemini directo con `GEMINI_API_KEY`; el plugin de Higgsfield (`nano_banana_pro`) queda como alternativa si no hay llave.
 
 ---
 
@@ -28,8 +28,8 @@ Genera miniaturas optimizadas para YouTube usando tus fotos, con análisis de la
 
 | Modo | Cuándo | Motor |
 |------|--------|-------|
-| **🅐 CLONAR ESTILO** (estrella) | El usuario adjunta **una captura de referencia + su selfie** y quiere "esta miniatura con mi cara" / "clona este estilo" / "mándalo a Higgsfield" | Higgsfield `nano_banana_pro` |
-| **🅑 DESDE CERO** | No hay referencia; se diseña la miniatura con la metodología FORMULA 100K (fondo negro + amarillo u otro estilo de la tabla) | Higgsfield `nano_banana_pro` |
+| **🅐 CLONAR ESTILO** (estrella) | El usuario adjunta **una captura de referencia + su selfie** y quiere "esta miniatura con mi cara" / "clona este estilo" / "mándalo a generar" | Nano Banana (Gemini; Higgsfield si no hay llave) |
+| **🅑 DESDE CERO** | No hay referencia; se diseña la miniatura con la metodología FORMULA 100K (fondo negro + amarillo u otro estilo de la tabla) | Nano Banana (Gemini; Higgsfield si no hay llave) |
 
 - **Modo 🅐** → leer `references/clonar-estilo-higgsfield.md` y seguir ese pipeline (subir selfie + referencia, etiquetar FIRST/SECOND image, generar 4 variaciones, descargar, recomendar). El texto/logo se montan en Canva al final. Puedes saltarte el Paso 2 de investigación si la referencia ya es el estilo elegido.
 - **Modo 🅑** → seguir el PROCESO OBLIGATORIO completo de abajo.
@@ -103,14 +103,21 @@ Basado en la investigación, armar el **Brief Visual** siguiendo la metodología
 
 ---
 
-### PASO 4 — Generar con Higgsfield (nano_banana_pro)
+### PASO 4 — Generar la imagen (Nano Banana)
 
-Motor principal: **MCP de Higgsfield**, modelo `nano_banana_pro`, `resolution:"2k"`, `aspect_ratio:"16:9"`, `count:4`. Flujo completo de subida + generación + descarga en `references/clonar-estilo-higgsfield.md` (sirve para ambos modos).
+**Motor por defecto: Gemini directo** con `GEMINI_API_KEY`, modelo `gemini-3.1-flash-image-preview`
+(es Nano Banana), `aspectRatio:"16:9"`, `imageSize:"2K"`. El comando exacto, incluido cómo mandar
+la selfie y la referencia juntas, está en la **sección 3.1 de `f100k-puente`**: cópialo de ahí.
 
-**Resumen del flujo:**
-1. Subir la(s) foto(s): local → `media_upload` (presigned URL) + `curl PUT` + `media_confirm`; Apps UI → `media_upload_widget`.
-2. `generate_image` con `model:"nano_banana_pro"`, `medias[]` (selfie primero), prompt en inglés modo instrucción.
-3. `job_status(jobId, sync:true)` por cada job → tomar `results.rawUrl` → `curl` a la carpeta de entrega → `Read` para evaluar.
+**Resumen del flujo con Gemini:**
+1. Junta las fotos. No se suben a ningún lado: viajan en la misma llamada como `inline_data`.
+2. Una llamada por variante, **selfie primero** y referencia después, con el prompt en inglés en modo instrucción. Guarda cada una como `miniatura-1.png`, `miniatura-2.png`…
+3. Abre cada PNG con `Read` para evaluarla antes de entregarla.
+
+**Si no hay `GEMINI_API_KEY` pero sí el plugin de Higgsfield**, el flujo equivalente es
+`media_upload` → `generate_image` con `model:"nano_banana_pro"`, `medias[]` (selfie primero),
+`count:4` → `job_status(jobId, sync:true)` → `curl` de `results.rawUrl`. Está en
+`references/clonar-estilo-higgsfield.md`.
 
 **Modo 🅑 (desde cero) — prompt base con foto del usuario:**
 
@@ -123,9 +130,9 @@ MUST NOT INCLUDE: no text, no captions, no logos (el texto se pone en Canva).
 High-contrast YouTube thumbnail, photorealistic, professional quality, 16:9.
 ```
 
-**Modo 🅐 (clonar estilo):** usar la plantilla `FIRST/SECOND reference image` de `references/clonar-estilo-higgsfield.md`.
+**Modo 🅐 (clonar estilo):** usar la plantilla `FIRST/SECOND reference image` de `references/clonar-estilo-higgsfield.md`. Con Gemini la plantilla es la misma: cambia solo cómo viajan las fotos (dos `inline_data` en vez de `medias[]`), y el orden importa igual.
 
-**Generar 4 variaciones** (count:4 en una sola corrida) para tener opciones de iteración.
+**Generar 4 variaciones** para tener opciones de iteración: con Gemini son 4 llamadas seguidas (no hay `count`); con Higgsfield, `count:4` en una sola corrida.
 
 > El **texto del cartel, logos y burbujas** se montan SIEMPRE después en Canva, no en la generación. Imagen limpia = más nítida y editable.
 > (Histórico: la v1 usaba la API de Gemini `gemini_edit_image`/`gemini_generate_image` con fondo quemado y texto incluido — quedó deprecado en favor de Higgsfield.)

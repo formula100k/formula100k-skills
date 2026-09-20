@@ -82,8 +82,8 @@ inventes el nombre de un archivo que ninguna skill te pidió.
 | `mcp__apify__call-actor`, `fetch-actor-details`, «Apify `clockworks~tiktok-scraper`» | Apify por Composio: `composio execute APIFY_RUN_ACTOR_SYNC_GET_DATASET_ITEMS` (sección 2), o su API si existe `APIFY_TOKEN`. Si ninguna está, sigue con búsqueda web y **dilo en la primera línea** del resultado. Antes de un scrape grande, di el costo estimado. |
 | `mcp__claude_ai_Gmail__create_draft`, «envía el email», «manda el reporte al correo» | **No mandes correos.** El resultado va a la usuaria por Telegram. Gmail solo se usa (vía Composio) cuando ella lo pide, y solo como borrador. |
 | Google Calendar, Notion, Sheets | Composio, si está conectado. Si no, entrega el contenido por Telegram y dile qué conectar. |
-| `mcp__higgsfield__*`, Higgsfield, Seedance, `virality_predictor` | El plugin de Higgsfield si está instalado. Gasta créditos: **di el costo estimado y espera ✅**. Si no está, entrega el prompt o la variante en texto y avisa que no se generó. |
-| Skill `banana`, Nano Banana, Gemini imagen | `GEMINI_API_KEY` si existe, o el modelo de imagen de OpenRouter que la usuaria tenga habilitado. Costo antes, ✅ después. Si no hay ninguno, entrega los prompts. |
+| **Generar una IMAGEN**: skill `banana`, Nano Banana, `nano_banana_2`, `nano_banana_pro`, Gemini imagen, «genera la miniatura / la ilustración / el mockup / la portada / las historias» | **Gemini directo con `GEMINI_API_KEY`** (sección 3.1). Es el motor por defecto: es el mismo modelo Nano Banana, sin plugin ni login. Si no hay llave pero sí está el plugin de Higgsfield, úsalo. Si no hay ninguno, entrega el prompt en inglés listo para pegar y dilo en la primera línea. Costo estimado → ✅ → generar. |
+| **Generar VIDEO o animación**: `mcp__higgsfield__*`, Seedance, Kling, `virality_predictor`, análisis de video | **Solo el plugin de Higgsfield**, y es opcional: Gemini no genera video. Si no está instalado, entrega el prompt del clip en texto y avisa que no se generó — no lo reemplaces por una imagen fija sin decirlo. Gasta créditos: costo estimado → ✅. |
 | `AskUserQuestion`, «pregúntale con opciones» | Pregunta por Telegram con opciones numeradas (`1. … 2. … 3. …`) y espera la respuesta. |
 | Subagentes, `Task`, «despacha a LUNA/CALI/NOVA», trabajo en paralelo | Hazlo tú, en secuencia, paso por paso. |
 | Remotion, HyperFrames, motion graphics compuestos, cortar silencios o muletillas, subtítulos quemados, overlays, `colorkey`, mezclar voz o música | **No corre en este servidor.** Genera las piezas con Higgsfield (imágenes, clips, animaciones; costo → ✅) o como PNG desde HTML, y entrega una `HOJA_MONTAJE.md` con el segundo de entrada y salida de cada pieza para que ella monte en CapCut o Edits. |
@@ -109,6 +109,78 @@ inventes el nombre de un archivo que ninguna skill te pidió.
 | «Despliega en Vercel», «publica la app» | **Siempre directo en Vercel** con la cuenta de la usuaria: `vercel --prod --yes --token "$VERCEL_TOKEN"` y le mandas la URL. Sin `VERCEL_TOKEN`, pídele que lo conecte. Nunca `vercel login` ni otra cuenta. GHL, Netlify u otras plataformas: solo con ✅. |
 | «Artifact», archivo `.html` en la Mac, «ábrelo en el navegador» | Guarda el archivo en `entregables/` y mándalo por Telegram como documento. |
 | Secciones «Setup para Claude Desktop», Xpoz, `claude mcp add` | No aplican aquí. Sáltalas. |
+
+### 3.1 Generar una imagen: el comando exacto
+
+Cuando una skill diga «genera con Higgsfield`nano_banana_2`/`nano_banana_pro`», «usa el skill
+`banana`» o «manda a generar la imagen», **es esto**. Es el mismo modelo Nano Banana, pedido
+directo a Google. No necesitas plugin, ni MCP, ni iniciar sesión: solo `GEMINI_API_KEY`.
+
+Primero comprueba la llave (no la imprimas):
+
+```bash
+[ -n "$GEMINI_API_KEY" ] && echo "llave lista" || echo "falta GEMINI_API_KEY"
+```
+
+**Imagen desde cero:**
+
+```bash
+mkdir -p entregables/imagenes
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=$GEMINI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents":[{"parts":[{"text":"TU PROMPT EN INGLÉS"}]}],
+    "generationConfig":{"responseModalities":["TEXT","IMAGE"],
+      "imageConfig":{"aspectRatio":"4:5","imageSize":"2K"}}
+  }' -o /tmp/gemini.json
+
+python3 -c "
+import json,base64,sys
+d=json.load(open('/tmp/gemini.json'))
+if 'error' in d: print('ERROR:',d['error'].get('message')); sys.exit(1)
+for p in d['candidates'][0]['content']['parts']:
+    if 'inlineData' in p:
+        open('entregables/imagenes/salida.png','wb').write(base64.b64decode(p['inlineData']['data']))
+        print('Guardada: entregables/imagenes/salida.png')
+"
+```
+
+- `aspectRatio`: `"9:16"` historias y reels · `"4:5"` carrusel · `"1:1"` cuadrado · `"16:9"` miniatura de YouTube.
+- Varias variantes: repite la llamada N veces cambiando el nombre del archivo. No hay parámetro `count`.
+
+**Imagen a partir de fotos de la usuaria** (miniatura con su cara, clonar un estilo, historias con
+su foto): las fotos van como partes `inlineData` **antes** del texto, en el orden que pida la skill
+(normalmente la selfie primero y la referencia después). Arma el JSON con Python para no pelear con
+el base64 en la terminal:
+
+```bash
+python3 -c "
+import json,base64,os,urllib.request
+fotos=['cerebro/fotos/selfie.jpg','entregables/referencia.jpg']  # en el orden que pida la skill
+prompt='TU PROMPT EN INGLÉS'
+partes=[{'inline_data':{'mime_type':'image/jpeg','data':base64.b64encode(open(f,'rb').read()).decode()}} for f in fotos]
+partes.append({'text':prompt})
+body={'contents':[{'parts':partes}],'generationConfig':{'responseModalities':['TEXT','IMAGE'],'imageConfig':{'aspectRatio':'16:9','imageSize':'2K'}}}
+r=urllib.request.Request('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key='+os.environ['GEMINI_API_KEY'],
+  data=json.dumps(body).encode(),headers={'Content-Type':'application/json'})
+d=json.load(urllib.request.urlopen(r))
+for p in d['candidates'][0]['content']['parts']:
+    if 'inlineData' in p:
+        open('entregables/imagenes/salida.png','wb').write(base64.b64decode(p['inlineData']['data']))
+        print('Guardada: entregables/imagenes/salida.png')
+"
+```
+
+**Reglas de prompt** (valen para los dos casos, y son las mismas que ya traen las skills):
+prompt **en inglés**, nombra una cámara real y una focal, nunca uses «fotorrealista», «8K» ni
+«ultra detallado» (degradan el resultado), y cierra con `NEVER include any text or watermarks`
+cuando el texto se monta después.
+
+**Si falla:** el `ERROR:` que imprime el script es lo que le dices a la usuaria, tal cual. Los dos
+habituales: `API key not valid` (la llave está mal o es de otro proyecto) y una cuota agotada —
+ahí el saldo prepago de AI Studio se acabó y hay que recargarlo en el panel de Google. En ambos
+casos entrega igual el prompt en inglés para que ella lo genere a mano.
 
 ---
 

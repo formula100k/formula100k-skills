@@ -11,8 +11,8 @@ metadata: {"version": "2.0.0", "modelo": "nano_banana_2", "formato": "4:5 — 10
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Las ilustraciones se generan con el plugin de Higgsfield: solo si está conectado, con costo estimado y ✅ antes.
-> - Sin Higgsfield: entrega el guion slide por slide + el prompt en inglés de cada ilustración para generarlas a mano.
+> - Las ilustraciones se generan con **Gemini directo (`GEMINI_API_KEY`, sección 3.1 del puente)**; si no hay llave, con el plugin de Higgsfield. Costo estimado y ✅ antes.
+> - Sin ningún motor: entrega el guion slide por slide + el prompt en inglés de cada ilustración para generarlas a mano.
 > - Las imágenes van a `entregables/` y se mandan por Telegram en orden de slide.
 
 ---

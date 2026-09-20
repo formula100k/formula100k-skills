@@ -11,9 +11,9 @@ metadata: {"version": "1.0.0", "depends-on": [], "mcp-required": ["higgsfield"],
 > **Antes de seguir, lee la skill `f100k-puente`**: traduce herramientas y rutas.
 > Lo específico de esta skill:
 >
-> - Imagen base y animación salen del plugin de Higgsfield: solo si está conectado. Antes muestra el costo total (imagen + video) y espera ✅.
+> - **La imagen base sale de Gemini** (`GEMINI_API_KEY`, sección 3.1 del puente) o del plugin de Higgsfield si no hay llave. **La animación solo sale de Higgsfield**: sin el plugin no hay video. Antes muestra el costo total y espera ✅.
 > - Para leer un artículo usa tu herramienta web; para un YouTube, `transcripcion-youtube-formula100k` o la transcripción que pegue la usuaria. Tavily/Supadata = tus herramientas web.
-> - Sin Higgsfield: entrega el brief, el texto de la infografía y los prompts de imagen y video listos para pegar.
+> - Sin Higgsfield pero con Gemini: entrega la **imagen 4K terminada** + el prompt del video para animarla a mano, y dilo. Sin ninguno: el brief, el texto y los dos prompts listos para pegar.
 > - Todo va a `entregables/infografias/<tema>/`. El `.mp4` se manda por Telegram si pesa menos de 50 MB; si no, el link.
 
 ---

@@ -11,7 +11,8 @@ Qué hace, por cada skill listada en openclaw/config.json:
   3. Inserta al inicio del cuerpo el bloque «🦞 Corriendo en OpenClaw» con las notas de esa skill.
   4. Reescribe el frontmatter: description ≤1024 caracteres (estándar AgentSkills) y metadata
      en una sola línea JSON, con {"openclaw": {"requires": {"env": [...]}}} solo si la skill lo declara.
-  5. Copia la skill puente openclaw/puente/f100k-puente.
+  5. Copia las skills que solo existen en OpenClaw: el puente (openclaw/puente/) y las nativas
+     (openclaw/nativas/). Pasan por la misma validación que las demás.
   6. Valida y sale con 1 si algo no cumple.
 """
 import json
@@ -26,6 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "skills"
 OUT = ROOT / "openclaw" / "skills"
 PUENTE = ROOT / "openclaw" / "puente"
+NATIVAS = ROOT / "openclaw" / "nativas"
 CONFIG = ROOT / "openclaw" / "config.json"
 TEXT_EXT = {".md", ".json", ".txt", ".yaml", ".yml", ".py", ".sh", ".js", ".ts", ".csv", ".jsonl", ".html"}
 MARK = "## 🦞 Corriendo en OpenClaw"
@@ -244,9 +246,16 @@ def build():
         data["metadata"] = meta
         skill_md.write_text(normalizar_actores(emit_frontmatter(data) + block(sc["notes"]) + body), encoding="utf-8")
 
-    for p in PUENTE.iterdir():
-        if p.is_dir():
-            shutil.copytree(p, OUT / p.name)
+    for base in (PUENTE, NATIVAS):
+        if not base.exists():
+            continue
+        for p in base.iterdir():
+            if p.is_dir():
+                if (OUT / p.name).exists():
+                    fail(f"{p.name}: existe en {base.name}/ y también en config (duplicada)")
+                    continue
+                shutil.copytree(p, OUT / p.name,
+                                ignore=shutil.ignore_patterns("node_modules", ".DS_Store", "__pycache__"))
             for f in (OUT / p.name).rglob("*"):
                 if f.is_file() and f.suffix.lower() in TEXT_EXT:
                     f.write_text(normalizar_actores(f.read_text(encoding="utf-8")), encoding="utf-8")

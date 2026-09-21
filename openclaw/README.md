@@ -13,6 +13,7 @@ no hay rutas de una Mac, todo se entrega por Telegram).
 |---|---|
 | `skills/` | **Generado.** Lo que se instala en el agente. No lo edites a mano. |
 | `puente/f100k-puente/` | La skill puente: tabla de equivalencias Claude Code → OpenClaw. Se edita aquí. |
+| `nativas/` | Skills que solo existen en el agente (orquestan a las demás, sin versión de escritorio). Se editan aquí. Hoy: `carrusel-del-radar-f100k`. |
 | `config.json` | Qué skills entran, sus notas para el servidor, el mapeo de rutas y los archivos que no viajan. |
 | `instalar.sh` | Instala o actualiza las skills en el servidor. |
 

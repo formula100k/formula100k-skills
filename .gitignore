@@ -38,3 +38,6 @@ track-env/
 **/track-env/
 .venv/
 **/.venv/
+
+# Lockfiles que deja un npm install de prueba dentro de la carpeta generada
+openclaw/skills/**/package-lock.json

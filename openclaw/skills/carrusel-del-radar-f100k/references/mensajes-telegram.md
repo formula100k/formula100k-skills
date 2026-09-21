@@ -46,17 +46,27 @@ Arriba van las <N> slides en orden. Revisadas una por una: sin texto cortado ni 
 📝 Caption final
 <caption completo>
 
-¿Qué hago?
-1. ✅ Publícalo
-2. Corrige la slide <N>: <qué>
-3. Guárdalo, lo subo yo
+¿Qué hago? Contéstame con una de estas frases:
+• «publícalo» → lo publico en tu Instagram (no se deshace)
+• «corrige la slide <N>: <qué>»
+• «guárdalo» → te lo dejo listo para subir a mano
+```
+
+## Confirma (llegó algo que no es aprobación explícita en el ✅2)
+
+```
+🎠 Para publicar necesito que me escribas «publícalo» (o «✅ publica»). Un número o un ✅ solo no me basta, porque publicar no se deshace.
+Si prefieres, «corrige la slide <N>: <qué>» o «guárdalo».
 ```
 
 ## Recordatorio (la automatización encontró uno abierto)
 
 ```
-🎠 Tienes un carrusel esperando tu ✅ desde el <fecha>: «<tema>» (<paso: guion | slides>).
-Contéstame 1, 2, 3 o 4 en el mensaje de arriba. Hasta entonces no armo otro.
+🎠 Tienes un carrusel esperando tu ✅ desde el <fecha>: «<tema>» (<paso: guion | slides | no quedó>).
+<si paso = guion>Contéstame 1, 2, 3 o 4 en el mensaje de arriba.
+<si paso = slides>Contéstame «publícalo», «corrige la slide <N>: <qué>» o «guárdalo».
+<si paso = no quedó>Contéstame 1, 2 o 3 en el mensaje de arriba.
+Hasta entonces no armo otro.
 ```
 
 ## Falta algo (el chequeo se detuvo)

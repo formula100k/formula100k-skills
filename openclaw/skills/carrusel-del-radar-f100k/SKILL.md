@@ -110,10 +110,11 @@ de `skills/carrusel-formatos-f100k/SKILL.md`.
 
 | Entra | Condición |
 |---|---|
-| Fichas de plantilla `split`, `papel`, `datos` | siempre (F18 con fondo de Gemini: +US$0,10) |
+| Fichas de plantilla `split`, `papel`, `datos` | siempre, **menos F17** (abajo). F18 con fondo de Gemini: +US$0,10 |
 | Fichas G de **HTML libre** sin capturas ni grabaciones | siempre |
 | `garabato` (F13) y fichas que llevan su foto | solo si hay fotos en `cerebro/fotos/` |
 | Casos de éxito, capturas reales, fichas con su cara generada por IA, F05 (2 imágenes por slide) | **nunca en automático**: si el tema lo pide, lo propones en el ✅1 y esperas el material |
+| F17 tier list | **nunca en automático**: sin una imagen por ítem, la plantilla dibuja cuadros grises con la inicial y parece sin terminar (`build.js` no lo avisa) |
 
 Referencia visual de la ficha: solo la que ya trae el catálogo. **Nunca** busques una nueva por
 caption: el caption dice de qué habla un post, no cómo está construido.
@@ -159,7 +160,7 @@ Cuando conteste:
 
 Carpeta de trabajo: `entregables/carruseles/AAAA-MM-DD-<slug>/`.
 
-**Portada con Gemini** (si hay llave): el fondo de la slide 1, **sin texto dentro de la imagen**
+**Portada con Gemini** (si hay llave **y la slide 1 tiene dónde ponerlo**: `split` → `foto`, `papel` → `fondo`, `datos` → solo `cifras`, HTML libre → siempre; `tier` y `mapa` no llevan fondo, así que ahí no generes nada y el ✅1 dice costo US$0): el fondo de la slide 1, **sin texto dentro de la imagen**
 (el titular va en HTML encima). Usa el comando de la §3.1 del puente con `aspectRatio: "4:5"`,
 `imageSize: "2K"`, prompt en inglés que termine con `no text, no letters, no watermark` y deje
 **espacio limpio** donde irá el titular. Guárdala como `portada-fondo.png` en la carpeta del
@@ -198,7 +199,9 @@ largos se cortan solos.
    - `⚠ fuente` / `⚠ imagen` → no se entrega hasta resolverlo.
 2. **Mira cada PNG, uno por uno.** Revisa: texto cortado o que se sale, tildes y eñes, cuadritos en
    lugar de emoji, cara tapada por texto, contraste, líneas cruzando el texto, que el titular de la
-   portada se lea en el tamaño de miniatura. Los avisos no reemplazan mirar.
+   portada se lea en el tamaño de miniatura, y **que ninguna slide deje media página vacía** (texto
+   amontonado arriba y el resto en blanco: centra el bloque en vertical o sube el tamaño de la letra).
+   Los avisos no reemplazan mirar: nada de esto lo detecta `build.js`.
 3. Si corriges, suma 1 a `vueltas_revision`. **Máximo 2 vueltas.** Si a la tercera sigue fallando,
    manda el mensaje «no quedó» de `mensajes-telegram.md` diciendo qué slide y por qué, y deja el
    estado en `esperando_ok_guion` para que ella decida. **Nunca mandes una slide rota.**

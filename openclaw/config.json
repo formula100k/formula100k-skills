@@ -2140,6 +2140,16 @@
         ]
       ],
       "description_override": "Benchmark de producto/competencia profundo en cualquier nicho (cursos, comunidades Skool, coaching, SaaS, productos físicos). Activar SIEMPRE que se pida 'benchmark de producto', 'análisis de competencia', 'investiga a mi competencia', 'estudia el mercado de X', 'comparativa de competidores', 'mapeo competitivo', 'investigación de mercado', 'qué ofrecen otros en mi nicho', 'espía a mi competencia', 'qué gaps tiene mi nicho'. Motores: búsqueda web (discovery) + lectura de landings + navegador del agente sin login (pricing, screenshots, About pública de Skool, Biblioteca de Anuncios de Meta) + Apify (reviews, ads, reels públicos del competidor). Nunca entra con sesión a redes ni a comunidades privadas. Genera reporte HTML con resumen ejecutivo, mapa competitivo, matriz 10D, fichas del top 10, patrones, oportunidades y plan 30/60/90. NO usar para auditar UNA comunidad del cliente (auditor-formula100k), UN perfil (analizador-perfiles-formula100k) ni contenido viral (investigacion-contenido-formula100k)."
+    },
+    "animacion-dibujada-f100k": {
+      "notes": [
+        "Todo corre en el servidor, sin créditos: necesita `node`, `ffmpeg` y Chrome (`/usr/bin/google-chrome-stable`, el .deb del taller). La primera vez: `cd skills/animacion-dibujada-f100k && npm i` (playwright-core). Si falta algo, dilo en una línea y ofrece instalarlo con el prompt del taller.",
+        "Los MP4 y las hojas de contacto van a `entregables/animaciones/`. Antes de renderizar un clip, genera la hoja (`--hoja .5`), MÍRALA y corrige; luego manda el MP4 por Telegram.",
+        "Recortar fotos y detectar la cara (`recortar.swift`, `cara.swift`, `preparar-foto.mjs`) son SOLO de Mac: en el servidor no corren. Para el sticker o el títere con foto, pide a la usuaria su foto YA recortada (PNG con fondo transparente, p. ej. desde «Copiar sujeto» del iPhone) y, si quiere parpadeo, escribe tú la posición de ojos y boca en el JSON de cara mirando la foto.",
+        "La voz de prueba de `armar-corto.mjs` usa `say` (Mac). En el servidor pide la voz grabada de la usuaria (nota de voz de Telegram → `ffmpeg` a .m4a) y úsala como `voz` del plan con el `inicio` de cada escena; sin voz, arma el corto con `dur` fija por escena.",
+        "Subtítulos por palabra: mlx-whisper es solo de Mac. En el servidor, si existe `whisper` (openai-whisper) lo usa; si no, deja `\"sincronia\": \"largo\"`.",
+        "La ficha del personaje la escribes tú MIRANDO las fotos de la usuaria (`cerebro/fotos/`): pelo, piel, ropa, accesorios. Nunca pixeles la foto."
+      ]
     }
   }
 }

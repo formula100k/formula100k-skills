@@ -36,7 +36,7 @@ mkdirSync(join(dest, 'escenas'), { recursive: true });
 
 // Reemplaza «const K = …;» respetando corchetes, llaves y comillas (valores de varias líneas)
 function cambiar(src, k, valor) {
-  const m = new RegExp('const ' + k + ' = ').exec(src);
+  const m = new RegExp('^const ' + k + ' = ', 'm').exec(src);   // al inicio de línea: los comentarios también dicen «const FICHA = …»
   if (!m) throw new Error(`La constante ${k} no existe en el bloque editable`);
   let i = m.index + m[0].length, j = i, prof = 0;
   for (;;) {

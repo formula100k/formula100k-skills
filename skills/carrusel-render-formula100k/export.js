@@ -36,18 +36,24 @@ const SLIDE_H = getArg('--height', 1350);
 const SCALE = getArg('--scale', 2);
 const OUTPUT_DIR = path.dirname(HTML_FILE);
 
-// --- Detectar Chrome en macOS ---
+// --- Detectar Chrome (macOS, Linux / Claude Code en la nube) ---
+// Se puede forzar con la variable de entorno CHROME_PATH.
 const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+  '/opt/pw-browsers/chromium',
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
 ];
-const CHROME_PATH = CHROME_CANDIDATES.find(p => fs.existsSync(p));
+const CHROME_PATH = CHROME_CANDIDATES.find(p => p && fs.existsSync(p));
 
 if (!CHROME_PATH) {
-  console.error('No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.');
+  console.error('No se encontró Chrome/Chromium/Brave/Edge. Instala Google Chrome o define CHROME_PATH.');
   process.exit(1);
 }
 
@@ -56,6 +62,12 @@ if (!CHROME_PATH) {
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: 'new',
+    // En Linux como root (contenedores en la nube) Chrome exige --no-sandbox
+    // y, si hay proxy de salida (HTTPS_PROXY), pasarlo para que carguen las Google Fonts
+    args: [
+      ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
+      ...(process.env.HTTPS_PROXY ? [`--proxy-server=${process.env.HTTPS_PROXY}`] : []),
+    ],
     defaultViewport: { width: SLIDE_W, height: SLIDE_H, deviceScaleFactor: SCALE }
   });
 

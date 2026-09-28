@@ -2157,6 +2157,14 @@
         "En Telegram el wizard va una pregunta por mensaje. Al terminar, manda `slides.html` como archivo y `guion.md` como texto o archivo.",
         "No abras navegador para validar: valida el JSON del bloque `datos` con `python3 -c` o `node -e`."
       ]
+    },
+    "clips-que-venden-f100k": {
+      "notes": [
+        "Perfil: guarda `references/perfil.md` lleno en `cerebro/clips-perfil.md` y léelo de ahí; la primera vez, las 6 preguntas van una por mensaje en Telegram.",
+        "`investigar.sh` usa cookies de Chrome para bajar de Instagram: en el servidor no hay Chrome. Baja el mp4 con el `videoUrl` que devuelve Apify (`apify/instagram-scraper`, solo con `APIFY_TOKEN`) y sigue con las hojas de cuadros y whisper igual.",
+        "Sin `APIFY_TOKEN` no hay vistas reales: dilo en la primera línea y no des ninguna referencia por validada.",
+        "`render_clip.py` necesita ffmpeg y Pillow. Manda el BORRADOR.mp4 y la hoja `_preview.jpg` por Telegram y espera ✅ antes de dar el clip por terminado."
+      ]
     }
   }
 }

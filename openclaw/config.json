@@ -2150,6 +2150,13 @@
         "Subtítulos por palabra: mlx-whisper es solo de Mac. En el servidor, si existe `whisper` (openai-whisper) lo usa; si no, deja `\"sincronia\": \"largo\"`.",
         "La ficha del personaje la escribes tú MIRANDO las fotos de la usuaria (`cerebro/fotos/`): pelo, piel, ropa, accesorios. Nunca pixeles la foto."
       ]
+    },
+    "webinar-que-vende-f100k": {
+      "notes": [
+        "No necesita herramientas externas: todo es texto + un HTML. Guarda la carpeta `webinar-<slug>/` en `entregables/webinars/`.",
+        "En Telegram el wizard va una pregunta por mensaje. Al terminar, manda `slides.html` como archivo y `guion.md` como texto o archivo.",
+        "No abras navegador para validar: valida el JSON del bloque `datos` con `python3 -c` o `node -e`."
+      ]
     }
   }
 }

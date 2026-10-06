@@ -1,7 +1,7 @@
 ---
 name: carrusel-viral-formula100k
 description: >
-  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 37 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G17: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después, vitrina de lo que construiste, hilo de tuits…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con Nanobanana (Gemini API via skill banana), construye el carrusel directamente en Canva si el usuario proporciona el enlace, y da instrucciones precisas de producción.
+  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, guionizar slides, o diga "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas". Conoce los 60 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G40: frase partida, tier list, checklist, libreta, chat, antes/después, hilo de tuits, cliente en evidencia, carrusel interactivo, principiante vs. pro…) y elige uno por objetivo. Investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con Nanobanana (skill banana), construye el carrusel en Canva si el usuario da el enlace, o le pide SUS fotos, diseña las slides en HTML y las exporta en PNG con carrusel-formatos-f100k.
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -174,20 +174,33 @@ Si el usuario ya proporcionó su idea o guion junto con la solicitud inicial, ú
 Si no la proporcionó, pregunta:
 > "¿Cuál es la idea o guion que quieres convertir en carrusel? Puedes pegar el texto de un reel, describir el tema en 1-2 oraciones, o darme el mensaje central que quieres comunicar."
 
-### 0.6 — Preguntar si quiere construcción directa en Canva
+### 0.6 — Preguntar cómo quiere producirlo (Canva, HTML con sus fotos o solo guion)
 
 **Siempre preguntar esto**, ya sea que la idea haya venido en el mensaje inicial o no:
 
-> "¿Quieres que construya el carrusel directamente en tu Canva? Si es así, pásame el enlace de edición (el que termina en `/edit`) y lo armo slide por slide con tu perfil de marca. Si prefieres hacerlo tú, te entrego el guion completo con instrucciones detalladas."
+> "¿Cómo quieres que lo produzca? **(A)** Lo construyo directo en tu Canva: pásame el enlace de edición (el que termina en `/edit`). **(B)** Lo diseño en HTML con tus fotos reales y te entrego los PNG listos para subir (sin Canva ni imágenes con IA). **(C)** Te entrego el guion completo con instrucciones y lo armas tú."
 
-**Si el usuario proporciona un enlace de Canva:**
+**Si elige (A) y da un enlace de Canva:**
 → Guardar el enlace en memoria
 → Confirmar: *"✓ Link de Canva recibido. Construiré el carrusel ahí directamente después de generar el guion y la imagen del gancho."*
-→ Ejecutar PASO 6 (construcción en Canva) después de PASO 5
+→ Ejecutar PASO 5 (imagen gancho) y PASO 6.A/6.B (construcción en Canva)
 
-**Si el usuario prefiere hacerlo él:**
+**Si elige (B) — fotos reales + HTML:**
+→ Pedir SUS fotos (ver 0.7)
+→ **Omitir PASO 5** (no se genera imagen con IA: la portada es una foto suya o tipografía)
+→ Ejecutar PASO 6.E (HTML → PNG) después del OK del guion
+
+**Si elige (C) — lo hace él:**
 → Continuar con el flujo normal (guion + instrucciones detalladas)
 → Omitir PASO 6
+
+### 0.7 — Pedir SUS fotos (solo ruta B)
+
+> "Tu carrusel se ve mil veces mejor con fotos tuyas de verdad: tu cara, tu producto, tu local, tu proceso, un antes y después. Crea una carpeta llamada `fotos` y arrastra ahí 3 a 6 fotos (o arrástralas directo a esta ventana). Si hoy no tienes, no pasa nada: lo diseño solo con letra y color."
+
+- Cuando elijas el formato (PASO 3), dile **cuántas fotos necesita y de qué tipo** (ej. «1 foto tuya mirando a cámara para la portada, 2 de tu producto»).
+- **Mira cada foto con Read antes de usarla**: elige la que mejor sostiene el gancho, fíjate dónde está la cara para que el texto no la tape.
+- Si falta una foto que el formato necesita, **pídesela**. Si no la tiene: propone un formato que no lleve fotos, o resuelve esa slide con tipografía. **En la ruta B nunca inventes ni generes una foto.**
 
 ---
 
@@ -260,9 +273,9 @@ Compara la idea del usuario con los patrones encontrados:
 
 ---
 
-## PASO 3 — Elegir el FORMATO (uno de los 37) y la estructura
+## PASO 3 — Elegir el FORMATO (uno de los 60) y la estructura
 
-**Lee `references/formatos-carrusel-35.md`**: los 37 formatos del recetario de FÓRMULA 100K con su objetivo, mecánica, soporte, motor y qué tan bien los resuelve Nano Banana. No inventes un «tipo» si uno de los 37 ya lo cubre.
+**Lee `references/formatos-carrusel-35.md`**: los 60 formatos del recetario de FÓRMULA 100K con su objetivo, mecánica, soporte, motor y qué tan bien los resuelve Nano Banana. No inventes un «tipo» si uno de los 45 ya lo cubre.
 
 1. **Formato** — cruza el objetivo del PASO 1 con los patrones virales del PASO 2:
    - Si las referencias del nicho repiten una mecánica que coincide con una ficha (ej. todas son tier lists → **F17**), usa esa ficha.
@@ -358,6 +371,8 @@ Para cada slide, entrega exactamente este formato:
 ---
 
 ## PASO 5 — Generar imagen gancho con Nanobanana (Gemini)
+
+> **Ruta B (fotos reales + HTML): omite este paso.** La portada es una foto de la persona o tipografía. Salta a PASO 6.E.
 
 El slide 1 (gancho) necesita una imagen generada con IA. La herramienta es el **skill banana** (`~/.claude/skills/banana`), que usa la API de Gemini (Nano Banana 2 — `gemini-3.1-flash-image-preview`).
 
@@ -489,7 +504,7 @@ La imagen va como fondo del Slide 1 completo (aspect 4:5) o en el 60% superior (
 
 ## PASO 6 — Construir el carrusel directamente en Canva
 
-**Este paso solo se ejecuta si el usuario proporcionó un enlace de Canva editable en PASO 0.6.**
+**6.A–6.D solo se ejecutan si el usuario eligió la ruta A (Canva) en PASO 0.6.** Si eligió la ruta B (fotos + HTML), ve directo a **6.E**.
 Si el usuario eligió hacer el diseño él mismo, omitir este paso y continuar con PASO 7.
 
 ---
@@ -619,6 +634,21 @@ Usar solo si el Canva MCP connector **NO está activo** en la sesión.
 
 ---
 
+### 6.E — FLUJO SIN CANVA: fotos reales + HTML → PNG (ruta B)
+
+**Espera el OK del guion antes de fabricar.** Luego invoca `carrusel-formatos-f100k` con: la ficha elegida + el guion aprobado + el Perfil Visual de Marca + las rutas de las fotos.
+
+1. Crea la carpeta de la pieza (por defecto `~/Documents/CARRUSELES/<fecha>_<tema>/`) y copia ahí las fotos que vas a usar.
+2. Arma las slides en HTML (plantilla de la ficha o HTML libre) a **1080 × 1350 px**, con los colores y letras del perfil.
+3. La primera vez, si falta `puppeteer-core`: corre `npm install` dentro de `~/.claude/skills/carrusel-formatos-f100k` (usa el Google Chrome instalado). Si no hay Node.js, dilo en una línea y abre el `carrusel.html` en Chrome para verlo igual.
+4. Exporta con `build.js` → `slide-01.png`, `slide-02.png`…
+5. **Mira cada PNG con Read** antes de entregar: texto cortado, tildes y eñes, cara tapada por el texto, contraste.
+6. Entrega las rutas de los PNG y di: «Súbelos a Instagram en este orden como carrusel».
+
+Para cambiar algo («la letra más grande», «otra foto en la portada») edita el HTML y vuelve a exportar: no rehagas el guion.
+
+---
+
 ## PASO 7 — Entregar caption para el post
 
 Después de los slides, entrega también el caption optimizado:
@@ -652,6 +682,7 @@ Al final, entrega un resumen de acciones para que el usuario pueda producir de i
 **Imagen del gancho:**
 - [ ] Imagen generada con Nanobanana (skill banana) — guardada en `~/Documents/nanobanana_generated/`
 - [ ] Subir a Canva (si no se construyó en PASO 6)
+- [ ] Ruta B: fotos de la persona en la carpeta `fotos` (o slides resueltas con tipografía) y PNG exportados y revisados uno por uno
 
 **En Canva (1080 × 1350 px):**
 *(Si el carrusel ya fue construido en PASO 6, este paso es de verificación final)*
@@ -742,7 +773,7 @@ Incluye siempre este bloque al final del calendario:
 
 Antes de entregar, verifica:
 
-- [ ] ¿Se eligió uno de los 37 formatos (o se dijo por qué ninguno encaja) y se respeta su anatomía y su error típico?
+- [ ] ¿Se eligió uno de los 60 formatos (o se dijo por qué ninguno encaja) y se respeta su anatomía y su error típico?
 - [ ] ¿El gancho genera curiosity gap real? ¿Hay una razón urgente para deslizar?
 - [ ] ¿El gancho está validado por al menos 1-2 referencias virales encontradas en investigación?
 - [ ] ¿Cada slide tiene UNA sola idea?
@@ -774,4 +805,4 @@ Antes de entregar, verifica:
 - **Si el input es un guion de reel:** identifica el gancho verbal del reel (los primeros 3 segundos) y conviértelo en gancho visual del Slide 1. El resto del guion se distribuye en slides interiores.
 - **El calendario (PASO 9) es automático** — se entrega siempre después del guion, sin que el usuario lo pida. Es parte del entregable estándar.
 - **El Perfil Visual (PASO 0) se verifica en cada sesión.** Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
-- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (el sistema visual de la marca vive ahí) y `references/formatos-carrusel-35.md` en el PASO 3 (los 37 formatos; se regenera desde el recetario, no se edita a mano).
+- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (el sistema visual de la marca vive ahí) y `references/formatos-carrusel-35.md` en el PASO 3 (los 60 formatos; se regenera desde el recetario, no se edita a mano).

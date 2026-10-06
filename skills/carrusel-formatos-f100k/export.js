@@ -37,17 +37,29 @@ const SCALE = getArg('--scale', 2);
 const OUTPUT_DIR = path.dirname(HTML_FILE);
 
 // --- Detectar Chrome en macOS ---
+// puppeteer-core NO trae navegador: usa el que ya está instalado. Mac, Windows y Linux:
+// con solo las rutas de /Applications, en Windows moría diciendo que no hay Chrome aunque sí lo hubiera.
 const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-];
-const CHROME_PATH = CHROME_CANDIDATES.find(p => fs.existsSync(p));
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'BraveSoftware', 'Brave-Browser', 'Application', 'brave.exe'),
+  '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/microsoft-edge',
+].filter(Boolean);
+const CHROME_PATH = CHROME_CANDIDATES.find(p => { try { return fs.existsSync(p); } catch { return false; } });
 
 if (!CHROME_PATH) {
-  console.error('No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.');
+  console.error('No encontré Google Chrome (ni Edge, Brave o Chromium) en esta computadora.\n' +
+    'Instala Google Chrome desde google.com/chrome y vuelve a correr esto.\n' +
+    'Si lo tienes en otra carpeta, dime la ruta así:  CHROME_PATH="/ruta/a/chrome" node export.js ...');
   process.exit(1);
 }
 

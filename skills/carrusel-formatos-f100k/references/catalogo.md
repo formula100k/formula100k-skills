@@ -2,7 +2,8 @@
 
 > Catálogo de formatos de carrusel de FÓRMULA 100K. Lo mantiene el equipo y llega con cada actualización del paquete.
 >
-> Versión 2.1 · 17-sep-2026 · **37 fichas** (G16 vitrina y G17 hilo de tuits se sumaron el 17-sep). Versión 2 · 14-sep-2026 · 35 fichas: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
+> Versión 2.3 · 5-oct-2026 · **60 fichas** (G26–G40 se sumaron el 5-oct desde las referencias de carrusel de octubre: cliente en evidencia, desliza y pasa algo, premios, calendario en emojis, del dibujo a la foto, «soy X, obvio Y», inspiración vs. mi versión, meme de una imagen, principiante vs. pro, la frase que se escribe sola, una foto nueve publicaciones, un miedo por lámina, lo mismo en 5 niveles, se ven iguales y reto de N días).
+> Versión 2.2 · 17-sep-2026 · **45 fichas** (G16–G25 se sumaron el 17-sep: vitrina, hilo de tuits, ranking en tabla, explicador de tendencia, collage de gustos, día por día en papel, la excusa y lo que no se ve, reporte del mes, capturas con círculo rojo y yo de antes / yo de ahora). Versión 2 · 14-sep-2026 · 35 fichas: 20 F (referencias miradas el 13-sep) + 15 G (13 carruseles
 > de la Guía de Formatos del Grimorio + 2 mecánicas que solo vivían en la guía maestra de 25 estilos).
 > La v1 dejaba fuera 13 carruseles del Grimorio y 16 de los 25 estilos: ahora cada uno tiene su lugar
 > (ver «AUDITORÍA DE COBERTURA» al final).
@@ -67,6 +68,27 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M26 | Antes / después | Venta |
 | M27 | Preguntas frecuentes en chat (objeciones respondidas) | Venta |
 | M28 | Vitrina de lo que construiste (N cosas, cada una con su pantalla funcionando) | Comentario + guardado |
+| M29 | Explicador de tendencia (qué es → por qué ahora → bonus) | Guardado + seguidor |
+| M30 | Presentación por gustos (quién eres, no qué vendes) | Conexión + seguidor |
+| M31 | La excusa y su efecto invisible (A│B) | Compartido + guardado |
+| M32 | Reporte del mes (una ficha igual por ítem, con su demo) | Comentario + autoridad |
+| M33 | Capturas que cuentan una historia (patrón marcado a mano) | Alcance + conexión |
+| M34 | Yo de antes / yo de ahora, una creencia por slide (rótulo fijo) | Comentario + conexión |
+| M35 | Falso reclamo que termina en beneficios (cliente en evidencia) | Venta + comentario |
+| M36 | Secuencia cuadro a cuadro: algo se abre, se acerca o se aclara al deslizar | Tiempo de permanencia + compartido |
+| M37 | Premio por un logro chiquito (un reconocimiento por slide) | Compartido + etiquetas |
+| M38 | Calendario del mes (un emoji o una idea por día) | Guardado + compartido |
+| M39 | Del sueño dibujado a la foto real (mismo encuadre) | Conexión + compartido |
+| M40 | Identidad en una frase («soy X, obvio Y») | Compartido + comentario |
+| M41 | Pares de tableros: lo que te inspiró → lo que hiciste | Guardado + seguidor |
+| M42 | Meme gráfico de una sola imagen (el último elemento es el remate) | Compartido |
+| M43 | Duelo por rondas: una variable, dos formas de hacerlo, veredicto | Guardado + comentario |
+| M44 | Frase acumulada (una palabra más por slide, giro al final) | Compartido + tiempo de permanencia |
+| M45 | De 1 insumo a N piezas (la foto original siempre a la vista) | Guardado + venta |
+| M46 | Un miedo por slide con su respuesta corta | Compartido + conexión |
+| M47 | Escalera de niveles (lo mismo reescrito, cada nivel dice qué se agregó) | Guardado + comentario |
+| M48 | Desambiguación: tres cosas que se confunden, una ficha gemela por cada una | Guardado + compartido |
+| M49 | Reto de N días (una tarea por slide, título fijo) | Guardado + compartido |
 
 ### Soportes (dónde vive)
 
@@ -101,6 +123,27 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S27 | Nota del celular / tuit · estilo 24 | A |
 | S28 | Barra de progreso / stepper · estilo 25 | A |
 | S29 | Fondo de color plano + pantalla en marco tipo tablet (captura o grabación) | A |
+| S30 | Papel hueso + una sola letra manuscrita roja | C |
+| S31 | Blanco + dos ilustraciones idénticas lado a lado | B + A |
+| S32 | Ficha de revista + celular con el ejemplo en movimiento | A |
+| S33 | Capturas reales de conversación + trazo rojo a mano | A |
+| S34 | Collage de fotos propias + tipografía a color | A |
+| S35 | Pantalla partida con rótulo fijo «antes / ahora» sobre tus fotos | A |
+| S36 | Aviso serio en portada (señal de advertencia) + fotos oscurecidas con texto chico | A |
+| S37 | Fondo plano + un solo objeto centrado que cambia de estado slide a slide | A o C |
+| S38 | Escarapelas y medallas sobre crema | A |
+| S39 | Tarjeta blanca de calendario con un emoji por día | A |
+| S40 | Dibujo a crayón arriba + tu foto real abajo, mismo encuadre | C |
+| S41 | Nota de papel al centro de un bodegón cenital de objetos | C |
+| S42 | Cuadrícula de celdas redondeadas con rótulo arriba y pie entre llaves | A |
+| S43 | Blanco o hueso + línea con picos o fila de íconos | A |
+| S44 | Dos tarjetas lado a lado con etiqueta ✖ / ✔ y barra de navegación | A |
+| S45 | Libreta abierta al centro con letra a mano; el fondo cambia | A o C |
+| S46 | Cuadrícula de 9 + la foto original en un recuadro | B + A |
+| S47 | Foto tranquila a sangre con texto chico al centro | A |
+| S48 | Hoja con el texto reescrito + etiqueta de nivel + medidor | A |
+| S49 | Tres tarjetas gemelas + una ficha por cosa con su color | A |
+| S50 | Papel de color + tarjeta al centro + marco ilustrado en portada y cierre | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -605,15 +648,16 @@ No uses marcas registradas en los recortes ni afirmaciones de salud sin respaldo
 
 ---
 
-## LAS 17 FICHAS G (lo que la v1 dejó fuera + 2 sumadas el 17-sep)
+## LAS 25 FICHAS G (lo que la v1 dejó fuera + 10 sumadas el 17-sep)
 
 G01–G13 vienen de la **Guía de Formatos del Grimorio** (carruseles con `soporte: 'carrusel'`); su
 anatomía completa vive en `references/grimorio-carruseles.md`, que se regenera con
 `scripts/sincronizar-grimorio.mjs` y FALLA si el Grimorio suma un carrusel que aquí no está mapeado.
 G14 y G15 son mecánicas que solo vivían dentro de la guía maestra de 25 estilos (estilos 15 y 14).
-G16 y G17 se sumaron el 17-sep-2026 desde dos carruseles reales: mirados slide por slide y convertidos en ficha.
+G16–G25 se sumaron el 17-sep-2026 desde carruseles reales: mirados slide por slide y convertidos en ficha.
+G16 trae además una 2ª referencia anclada (carpetas de escritorio) que usa su misma mecánica con otro soporte.
 El VISUAL detallado y los prompts por plataforma (Claude · Gemini · ChatGPT · HTML en cualquier chat)
-de las 37 fichas están en `references/prompts-por-plataforma.md`.
+de las 60 fichas están en `references/prompts-por-plataforma.md`.
 
 Cuatro carruseles del Grimorio NO son ficha nueva porque su mecánica ya estaba:
 `carrusel-paso-a-paso` → M2 (F04, F08, F09) · `carrusel-comparativo` → M9 (F18, con maqueta A│B en S20) ·
@@ -956,6 +1000,495 @@ Ordena los trucos del más fácil al más vistoso.
 No inventes comandos con barra (/algo) que no existan: si es un prompt, escríbelo completo. Nada de fotos de famosos ni de terceros sin permiso. Tutea.
 ```
 - **Fabrica:** `capturas-tutorial-formula100k` (capturas) + `carrusel-formatos-f100k` (HTML S27).
+
+---
+
+### G18 · Ranking histórico en tabla (1 sola imagen)
+- **Mecánica:** M9 ranking · **Soporte:** S16 tabla · **Motor:** A
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @somoscosmosoficial · 13.737 likes · **523 comentarios** · 1 imagen · https://www.instagram.com/p/DdXD3Zkxw9g/ · ojo: no es carrusel, es UNA imagen que resuelve todo el dato
+- **Anatomía:** 1) es UNA sola slide: titular en mayúsculas con el rango de años entre paréntesis · 2) cabecera negra con las columnas: la unidad de tiempo y los puestos que comparas (máx. 4) · 3) una fila por año con fondo alternado, un ícono o bandera redonda por celda + el nombre en bold y el lugar en gris · cierre: al pie, línea fina con la FUENTE citada y tu logo.
+- **Por qué funciona:** el lector encuentra su año, su marca o su equipo y discute (523 comentarios con 13.700 likes: se comenta mucho para lo que se da like). Al ser una sola imagen se guarda y se reenvía como si fuera una captura de referencia.
+- **Error típico:** inventar o redondear los datos y no citar la fuente. Este formato solo funciona si el dato se puede verificar; si no, el debate se vuelve en tu contra. Segundo error: meter 10 columnas y que no se lea en el celular (máx. 4).
+- **Prompt de guion:**
+```
+Tengo estos datos históricos verificables de mi nicho: [PEGA LA TABLA O EL LINK DE LA FUENTE + AÑOS].
+Arma UNA sola imagen tipo tabla de ranking:
+Titular en mayúsculas de máx. 10 palabras + el rango de años entre paréntesis.
+Columnas (máx. 4): la unidad de tiempo + los puestos que compares.
+Una fila por año, con el nombre en bold y el detalle (ciudad, marca, categoría) en gris debajo. Dime qué ícono redondo va en cada celda (bandera, logo, foto).
+Al pie: «Fuente: [nombre real]» y una línea de contexto de máx. 25 palabras para el caption.
+No inventes ni completes datos que no estén en la fuente: lo que falte, márcalo [VERIFICAR]. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML S16 · plantilla `datos.html`).
+
+---
+
+### G19 · Explicador editorial de tendencia (+ bonus guardable)
+- **Mecánica:** M29 · **Soporte:** S18 editorial revista con un solo color de acento (alternativa: S14 collage pastel) · **Motor:** A (tus fotos y clips) o C
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @vilmanunez · likes ocultos · 281 comentarios · 8 slides (2 en video) · https://www.instagram.com/p/DdZRe0MEpzZ/ · **alternativa en collage pastel:** @juliabroome · 7.058 likes · https://www.instagram.com/p/DdUJcKPlOrc/
+- **Anatomía:** 1) portada: la pregunta «¿Qué es [la tendencia]?» con la palabra clave en cursiva de color + tu recorte · 2) la tesis en tipografía gigante («[la tendencia] no es una moda») + una caja con el reencuadre · 3-4) qué es, en 2-3 frases cortas, con UNA sola frase resaltada · 5) el concepto en una palabra gigante o en una gráfica dibujada a mano con etiquetas · 6) «por qué ahora» con el dato o el cambio que lo explica · 7) la verdad incómoda (lo que nadie dice de la tendencia) · penúltima: el BONUS guardable (lista numerada densa: 30 ganchos, 10 ideas, 8 plantillas) · cierre: «Comenta [PALABRA]» y qué recibe.
+- **Por qué funciona:** te pone como quien EXPLICA la tendencia, no como quien la sigue; y la slide-bonus le da una razón concreta para guardar y para comentar la palabra. La tesis en la slide 2 («no es una moda») es lo que convierte una noticia en una opinión que vale seguir.
+- **Error típico:** explicar la tendencia y no bajarla a qué hace el lector el lunes. Segundo: mezclar 3 colores de acento y perder el aire editorial (uno solo).
+- **Prompt de guion:**
+```
+La tendencia de mi nicho que quiero explicar es: [NOMBRE + qué está pasando + link o dato de dónde lo viste].
+Escribe un carrusel explicador de 9 slides:
+Slide 1: «¿Qué es [la tendencia]?» y qué palabra va resaltada.
+Slide 2: la tesis en máx. 8 palabras del tipo «[la tendencia] no es [lo que todos creen]» + una frase que reencuadre (máx. 20 palabras).
+Slides 3-4: qué es exactamente, en frases de máx. 20 palabras, con UNA frase para resaltar por slide.
+Slide 5: el concepto en UNA palabra gigante, o descríbeme una gráfica simple (curva, pirámide, dos columnas) con sus etiquetas.
+Slide 6: por qué ahora: el cambio real que lo explica (cita la fuente si es un dato).
+Slide 7: la verdad incómoda que casi nadie dice de esta tendencia.
+Slide 8 (la que se guarda): una lista numerada de [10-30] [ganchos/ideas/plantillas] para empezar hoy, de una línea cada uno.
+Slide 9: «Comenta [PALABRA]» + qué le mandas.
+Un solo color de acento. No inventes datos; lo que no tengas, márcalo [VERIFICAR]. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML S18) · los clips de portada con `portada-video-carrusel-formula100k`.
+
+---
+
+### G20 · Cosas que me hacen muy yo (presentación en collage)
+- **Mecánica:** M30 · **Soporte:** S34 collage de fotos propias + tipografía a color · **Motor:** A
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @t3chwithpao · 2.055 likes · 12 comentarios · 12 slides · https://www.instagram.com/p/DdSUhZCFGRj/ · ojo: lo publicó al llegar a 70K seguidores, como presentación
+- **Anatomía:** 1) portada: tu selfie a sangre + el titular repartido en 3 renglones flotantes de colores distintos («cosas / que me hacen / muy yo») + estrellas pegadas · 2-N) una cosa que te gusta por slide: 2 a 5 fotos TUYAS recortadas y ladeadas sobre fondo crema (o una foto a sangre) + el nombre de esa cosa en 1-3 renglones, cada renglón de un color · cierre: tu foto + «compartir [tu tema] :)» y tu @ chico.
+- **Por qué funciona:** te presenta por lo que amas, no por lo que vendes, y eso hace que el lector se quede (ve su propia vida en tus fotos). Es el post que explica quién eres cuando llega gente nueva de un video viral.
+- **Error típico:** usar fotos de banco o de sesión: el formato vive de que las fotos sean de tu carrete. Segundo: solo gustos personales y ninguno que roce lo que haces (la última slide debe conectar con tu tema).
+- **Prompt de guion:**
+```
+Estas son [8-10] cosas que me hacen muy yo, con las fotos que tengo de cada una: [LISTA: cosa + qué fotos tengo].
+Arma un carrusel de presentación de [N+2] slides:
+Slide 1: el titular repartido en 3 renglones cortos («cosas / que me hacen / muy yo» o una versión mía) y qué selfie usar.
+Slides 2 a N+1: una cosa por slide. Nómbrala como la diría yo hablando (máx. 6 palabras, con humor si aplica), dime cuántas fotos poner y cuál va más grande, y si lleva una nota chica al pie.
+Ordena: empieza por las más cotidianas y deja para el final 2 que tengan que ver con lo que hago.
+Última slide: «compartir [mi tema]» + mi @.
+Solo cosas verdaderas y fotos mías reales. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML S34) · `carrusel-render-formula100k` si el collage va con tus fotos maquetadas.
+
+---
+
+### G21 · Día por día en papel (la semana en 9 slides)
+- **Mecánica:** M3 lista con remate por ítem · **Soporte:** S30 papel hueso + una sola letra manuscrita roja · **Motor:** C (fondo de papel + texto en HTML)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @marceloalaminoo · 18.361 likes · 673 comentarios · 9 slides · https://www.instagram.com/p/DdUsXSxAcOx/ · ojo: en portugués y sus horarios NO tienen fuente
+- **Anatomía:** 1) portada: solo el titular manuscrito en 2 renglones a media altura, sin adornos · 2-8) un día por slide: el día en caja alta arriba + los datos concretos en una línea separados por puntos medios + 3-4 renglones de por qué · cierre: párrafo de 4 renglones con el CTA y la palabra a comentar subrayada a mano.
+- **Por qué funciona:** convierte una tabla aburrida en algo que parece la libreta de alguien que sí lo probó, y la unidad de tiempo por slide hace que el lector busque SU día (por eso se guarda y se comenta).
+- **Error típico:** repetir datos de internet como verdad («el mejor horario es 7:30»). Si no son tus números, el formato te deja expuesto: dilo desde TU prueba («esto me pasó a mí en 30 publicaciones»).
+- **Prompt de guion:**
+```
+Quiero un carrusel de [7-9] slides con una unidad de tiempo por slide (lunes a domingo, mes a mes o etapa por etapa) sobre [TEMA].
+Mis datos reales son: [PEGA TUS NÚMEROS O TU EXPERIENCIA. Si no tienes datos, dilo y el carrusel se escribe como prueba propia, no como verdad general].
+Slide 1: el titular en 2 renglones, máx. 8 palabras, escrito como si lo anotara a mano.
+Slides 2 a N: el nombre de la unidad arriba en mayúsculas + el dato concreto en una línea (sepáralo con · ) + 3 renglones de por qué, en lenguaje hablado.
+Última slide: 4 renglones con el CTA y la palabra a comentar (esa palabra va subrayada).
+Máx. 40 palabras por slide (es letra a mano). No inventes cifras: lo que no tenga fuente, escríbelo como mi experiencia. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (plantilla `papel.html` con la letra manuscrita).
+
+---
+
+### G22 · La excusa y lo que no se ve (A│B ilustrado)
+- **Mecánica:** M31 · **Soporte:** S31 blanco + dos ilustraciones idénticas lado a lado · **Motor:** B (ilustración IA) + A (texto en HTML)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @leo_fit · **82.051 likes** · 176 comentarios · 6 slides · https://www.instagram.com/p/DdFFVx9Dycl/ · contenido de salud: se copia SOLO la forma
+- **Anatomía:** 1) titular = la EXCUSA con las palabras del lector («Me da flojera [hacer X]») + dos imágenes del MISMO objeto lado a lado (izquierda sin el hábito, derecha con el hábito) + un pie en cursiva bajo cada una diciendo qué se está viendo · 2-4) otra excusa, misma composición, cambiando solo el objeto · penúltima: la comparación con señales (⚠️ / ❤️) en los pies · cierre: una sola imagen partida al medio + la frase que nombra lo invisible.
+- **Por qué funciona:** el titular es la frase exacta que el lector se dice a sí mismo, así que se siente descubierto; y al ver el efecto que NO se ve, la excusa se le cae sola. Es el formato más compartido de los que entraron el 17-sep (82K likes).
+- **Error típico:** dos imágenes que no son comparables (distinto encuadre, distinto objeto) o inventar una consecuencia que no puedes sostener. Y nunca uses este formato con cuerpos, dietas o salud: en negocio se traduce a tu perfil, tus ventas o tu lista.
+- **Prompt de guion:**
+```
+Quiero un carrusel de [5-6] slides con el molde «la excusa y lo que no se ve» para [MI CLIENTE IDEAL] sobre [TEMA DE NEGOCIO].
+Slides 1 a N-1: cada una empieza con la EXCUSA literal que dice mi cliente ideal (máx. 6 palabras, entre las que él mismo usa) y compara lo MISMO en dos estados: izquierda sin el hábito, derecha con el hábito.
+Para cada slide dime: qué objeto se ilustra (el perfil, la bandeja de mensajes, la lista, el cuaderno de números), qué cambia exactamente entre izquierda y derecha, y el pie en cursiva de cada lado (máx. 10 palabras, empezando por «Tu…»).
+Penúltima: la misma comparación con ⚠️ de un lado y ❤️ del otro.
+Última: la frase que nombra lo invisible («No todo lo que cambia [al hacer X] se ve en [lo visible]») + una línea al pie.
+Nada de salud, cuerpos ni dietas. No prometas resultados que no puedas sostener. Tutea.
+Luego dame el prompt de imagen de cada par (sin texto en la imagen): dos versiones del mismo objeto, mismo ángulo, mismo tamaño, fondo blanco.
+```
+- **Fabrica:** `banana` (las dos ilustraciones sin texto) + `carrusel-formatos-f100k` (HTML S31).
+
+---
+
+### G23 · Reporte de tendencias del mes (ficha por tendencia)
+- **Mecánica:** M32 · **Soporte:** S32 ficha de revista + celular con el ejemplo en movimiento · **Motor:** A
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @marketing.with.m · 27.446 likes · **1.151 comentarios** · 13 slides (11 en video) · https://www.instagram.com/p/DctDEXRjFis/ · ojo: en inglés y su portada usa recortes de famosas (no se copia)
+- **Anatomía:** 1) portada: «¿Qué va a ser tendencia en [mes]?» en serif con la mitad en color + tu foto (nunca recortes de famosas) · 2-N) una ficha por tendencia, SIEMPRE igual: cabecera fija (tu marca a la izquierda, la sección a la derecha), el número de ficha al margen, el nombre de la tendencia entre comillas y, en columna a la izquierda, tres rótulos en bold: «¿Qué es?» / «Por qué funciona» (viñetas) / «Para quién es» (rubros); a la derecha, un celular con el ejemplo funcionando · cierre: tu foto + pregunta + «Comenta [PALABRA]».
+- **Por qué funciona:** se lee como un informe, no como una opinión, y cada ficha le dice al lector si le sirve A ÉL («para quién es»). El ejemplo en video prueba que la tendencia existe: por eso tiene 1.151 comentarios pidiendo el recurso.
+- **Error típico:** cambiar el orden o los rótulos entre fichas (se pierde el efecto de informe) y mostrar videos de otras personas sin acreditarlas: la referencia los acredita uno por uno en el caption. Hazlo igual.
+- **Prompt de guion:**
+```
+Estas son las [5-10] tendencias de mi nicho para [MES] con el ejemplo que tengo de cada una: [LISTA: nombre + link o descripción del video].
+Arma un carrusel-reporte de [N+2] slides:
+Slide 1: «¿Qué va a ser tendencia en [mes]?» y qué foto mía usar.
+Slides 2 a N+1: una ficha por tendencia, con estos 3 bloques siempre en el mismo orden:
+  «¿Qué es?» → 2 frases de máx. 20 palabras.
+  «Por qué funciona» → 3 viñetas de máx. 12 palabras.
+  «Para quién es» → creadoras y rubros concretos.
+  Y dime qué ejemplo va en el celular (clip de 6-15 s) y a quién hay que acreditar.
+Última slide: pregunta + «Comenta [PALABRA]» + qué le mandas.
+Numera las fichas. No inventes tendencias: si una no tiene ejemplo real, fuera. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML S32) · `radar-formatos-f100k` para cazar las tendencias con prueba.
+
+---
+
+### G24 · Capturas que cuentan una historia (círculo rojo)
+- **Mecánica:** M33 · **Soporte:** S33 capturas reales de conversación + trazo rojo a mano · **Motor:** A (capturas reales)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @dulceamor.floral · **1.383.432 likes** · 3.860 comentarios · 19 slides · https://www.instagram.com/p/Dcm-xz3jFeU/ · el carrusel más visto de los que entraron el 17-sep
+- **Anatomía:** 1) cada slide es UNA captura real de conversación (a veces 2 o 3 pegadas), sobre fondo blanco, con un círculo o subrayado ROJO a mano marcando el dato que se repite · 2) las capturas van en orden de fecha, así el patrón se revela solo · 3) no hay ni una palabra escrita por ti en las slides · cierre: la última captura, sin CTA; el significado lo pone el caption en una sola frase.
+- **Por qué funciona:** el lector hace el trabajo de descubrir el patrón (el mismo cliente pidiendo lo mismo mes a mes) y eso emociona mucho más que si lo explicas. Son capturas: se leen como prueba, no como publicidad.
+- **Error típico:** publicar conversaciones sin permiso o con datos visibles (nombre, foto, teléfono). Tapa todo y pide permiso. Y jamás fabriques las capturas: aquí lo único que conmueve es que son verdad.
+- **Prompt de guion:**
+```
+Tengo estas capturas REALES de conversaciones con [clientas / mi equipo / mi familia] que repiten un mismo patrón: [DESCRIBE QUÉ SE REPITE y desde cuándo].
+Ayúdame a armarlo como carrusel de [8-19] slides:
+1) Dime en qué orden van las capturas para que el patrón se descubra solo (normalmente, orden de fecha).
+2) En cada una, qué exactamente hay que marcar con el círculo rojo (siempre el MISMO dato).
+3) Qué tengo que tapar en cada captura antes de publicar (nombres, fotos, teléfonos, direcciones).
+4) El caption: UNA sola frase que nombre lo que el lector acaba de descubrir, sin explicarlo de más.
+Sin texto propio en las slides. Si una captura no aporta al patrón, dime que la saque. Tutea.
+```
+- **Fabrica:** `capturas-tutorial-formula100k` (limpiar y tapar datos) + `carrusel-formatos-f100k` (HTML S33: el trazo rojo).
+
+---
+
+### G25 · Yo de antes / yo de ahora (una creencia por slide)
+- **Mecánica:** M34 · **Soporte:** S35 pantalla partida con rótulo fijo sobre tus fotos (variante con objetos sobre fondo blanco) · **Motor:** A (tus fotos reales)
+- **Origen:** carrusel sumado al recetario el 17-sep-2026 · **Referencia:** @dramyshah · **10.864 likes** · 114 comentarios · 10 slides · https://www.instagram.com/p/DcL5tGSFcnN/ (cazada por mecánica; es de salud: mírala por el molde, no por lo que afirma) · la misma mecánica en mentalidad, en video: @lifewithlellian https://www.instagram.com/p/Dch3gFaNuy8/
+- **Anatomía:** 1) portada: el rótulo desnudo («Yo de antes» arriba / «Yo de ahora» abajo) sobre dos fotos tuyas de épocas o momentos distintos · 2-N) una CREENCIA por slide: arriba lo que pensabas o hacías, abajo lo que haces hoy, con el MISMO rótulo en todas · el par no prueba nada, nombra un cambio de cabeza · cierre: «¿cuál de estas te pasa todavía?» + comenta el número.
+- **Por qué funciona:** el rótulo repetido es una anáfora visual: el ojo deja de leerlo y solo compara. Y como cada par es una creencia, no un resultado, la lectora se reconoce en el «antes» y comenta cuál es el suyo — por eso pide comentario y no guardado.
+- **Error típico:** convertirlo en un antes/después de resultados (eso es G14, y pide prueba). Aquí el «ahora» es una decisión, no una cifra. El otro error: cambiar el rótulo en cada slide; se rompe el ritmo.
+- **Prompt de guion:**
+```
+Arma un carrusel «yo de antes / yo de ahora» de [6-8] slides sobre [TEMA: ej. cómo me relaciono con publicar].
+Rótulo fijo para todas: propón 3 opciones del tipo «yo de antes: / yo de ahora:» que suenen a mí.
+Slides: una situación concreta por slide (la que provoca la escena: un video con pocas vistas, la página en blanco, decir el precio).
+  - Arriba: lo que yo pensaba o hacía, en máximo 8 palabras y en pasado.
+  - Abajo: lo que hago hoy, en máximo 8 palabras y en presente. Una decisión, no una cifra.
+Ordena de la situación más común a la más íntima.
+Para cada slide dime qué foto mía va arriba y cuál abajo (pueden ser dos fotos cualquiera mías: no tienen que probar nada).
+Cierre: «¿cuál de estas te pasa todavía?» + comenta el número.
+Solo creencias que yo te dé; si falta una, déjala como [FALTA DATO]. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S35, split horizontal sobre tus fotos) · `carrusel-render-formula100k` si quieres el collage de fotos.
+
+---
+
+## LAS 15 FICHAS DE OCTUBRE (G26–G40, sumadas el 5-oct-2026)
+
+Salen de las referencias de carrusel de octubre: cada una se miró lámina por lámina (o cuadro por cuadro,
+si era video) y se fabricó primero como carrusel real, en scrapbook con fotos propias: ese es el ejemplo terminado que acompaña a la ficha. Se copia la MECÁNICA, nunca el look de la cuenta.
+Tres avisos de honestidad:
+- G26, G27 y G28 se vieron como miniatura dentro de los reportes de tendencias de @yoursocialteam: las
+  métricas que figuran son las del reporte, no las de un carrusel hecho con ese formato.
+- G30, G35, G36, G38 y G39 nacen de un video: aquí se llevan a láminas.
+- Ninguna tiene todavía la prueba con Nano Banana (solo el ejemplo hecho con Claude, en scrapbook).
+
+Las piezas de octubre que NO son ficha nueva porque su mecánica ya estaba (ver auditoría):
+lista de tendencias → G23 · mockups con URL y «cosas que fabriqué» → G16 · una skill por lámina con su recurso → G05 ·
+collage «maxxing» → F20 · carnet y hábitos en scrapbook, collage del mes → G20 · meme tipográfico de una frase por lámina → G09.
+
+---
+
+### G26 · Cliente en evidencia (el falso reclamo)
+- **Mecánica:** M35 · **Soporte:** S36 aviso serio en la portada + fotos oscurecidas con texto chico · **Motor:** A (tus fotos reales)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @yoursocialteam · reporte de tendencias de carrusel donde aparece como «cliente en evidencia» · **14.762 likes** · 17.391 comentarios (son las del reporte, no las del formato) · https://www.instagram.com/p/Ddw6x4jnb9w/
+- **Anatomía:** 1) portada: «[Nombre], no me pagaste.» con una señal de advertencia y una línea chica de último aviso · 2-N) una lámina por cosa concreta que hiciste por esa persona, contada todavía con tono de reclamo («el lunes te…») sobre una foto oscurecida · penúltima: la confesión («ok, lo admito: no hay drama, solo quería que vieras todo lo que incluye») · cierre: qué vendes en una línea + comenta la palabra.
+- **Por qué funciona:** la portada promete un conflicto y nadie se va sin saber qué pasó. Cada lámina es en realidad un beneficio de tu oferta, pero se lee con atención de chisme y no con la guardia de «me están vendiendo».
+- **Error típico:** usar el nombre de una clienta real o que parezca una denuncia de verdad (el nombre es inventado, genérico o un personaje, como una herramienta). El otro: estirar el engaño sin confesar, o listar características en vez de cosas concretas que hiciste.
+- **Prompt de guion:**
+```
+Arma un carrusel «cliente en evidencia» de [6-7] slides para vender [MI OFERTA] a [MI CLIENTA IDEAL].
+Portada: «[NOMBRE INVENTADO o personaje], no me pagaste.» + una línea chica de último aviso. Dame 3 opciones de portada.
+Slides 2 a N-2: una cosa concreta por slide que mi oferta hace por la clienta, dicha como reclamo y con día o momento
+  («el lunes te armé…», «el martes te revisé…»). Máximo 16 palabras. Solo cosas que yo te confirme que incluye.
+Penúltima: la confesión en 2 renglones: no hay drama, solo quería que vieras todo lo que incluye.
+Cierre: qué vendo en una línea + «comenta [PALABRA] y te mando [REGALO]».
+Nunca uses el nombre de una persona real. Si falta un dato de la oferta, déjalo como [FALTA DATO]. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S36) · `carrusel-render-formula100k` si las fotos son tuyas trabajando.
+
+---
+
+### G27 · Desliza y pasa algo (carrusel interactivo cuadro a cuadro)
+- **Mecánica:** M36 · **Soporte:** S37 fondo plano + un solo objeto centrado que cambia de estado · **Motor:** A (emoji u objeto recortado) o C (objeto generado sin texto)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @yoursocialteam · reporte de «carruseles interactivos» (galleta de la fortuna, desliza para acercar, desliza para revelar) · **13.999 likes** · 8.629 comentarios (son las del reporte) · https://www.instagram.com/p/Dc3aKP8Ecw4/ · el de «estás ASÍ de cerca» también aparece en https://www.instagram.com/p/Dd6b1iSEWbC/
+- **Anatomía:** 1) portada: el objeto cerrado y una orden corta («ábrela», «mantén y desliza») · 2-N) el MISMO encuadre en todas las láminas y el objeto un paso más avanzado: la galleta se parte y asoma el papel, la mano y la frase se acercan, o la imagen borrosa se aclara · penúltima: el mensaje completo, que antes no se podía leer · cierre: qué hacer con ese mensaje + comenta la palabra.
+- **Por qué funciona:** si mantienes el dedo y deslizas, las láminas se animan como un cuaderno de dibujos que se hojea rápido. La gente pasa todas las láminas (y vuelve) para ver el final: es tiempo de permanencia puro, y el mensaje llega como premio.
+- **Error típico:** mover el encuadre entre láminas (se rompe la ilusión: el objeto tiene que estar clavado en el mismo punto). Pasarte de 6 pasos. Y que el premio sea una frase genérica: lo que sale de la galleta tiene que valer el viaje.
+- **Prompt de guion:**
+```
+Arma un carrusel interactivo «desliza y pasa algo» de [5-6] slides sobre [TEMA] para [MI CLIENTA IDEAL].
+Elige UNA variante y dime por qué: (a) se abre (galleta, sobre, caja) · (b) se acerca (una mano y una frase que crecen) · (c) se aclara (imagen borrosa que se define).
+Portada: el objeto cerrado + una orden de 2-4 palabras.
+Slides 2 a N-2: describe el estado del objeto en cada paso (qué cambió respecto de la anterior). Casi sin texto.
+Penúltima: el mensaje completo en máximo 16 palabras. Dame 3 opciones: tiene que ser algo que mi clienta quiera reenviar.
+Cierre: una línea que lo aterriza + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S37: la misma caja y el mismo punto en todas las slides; solo cambia el estado del objeto).
+
+---
+
+### G28 · Premios y medallas (un reconocimiento por lámina)
+- **Mecánica:** M37 · **Soporte:** S38 escarapelas y medallas sobre fondo crema · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @yoursocialteam · reporte de tendencias visuales donde aparece como «premios y medallas» · **11.237 likes** · 12.343 comentarios (son las del reporte) · https://www.instagram.com/p/Ddgii8-EaIM/
+- **Anatomía:** 1) portada: «acércate a recoger el premio que te mereces» + una cuadrícula de escarapelas · 2-N) un premio por lámina: «Premio a [un logro chiquito y específico que solo tu clienta entiende]» dentro o debajo de una medalla grande · penúltima: el premio mayor, que es justo lo que tu oferta ayuda a lograr · cierre: «etiqueta a quien se ganó el suyo» + comenta la palabra.
+- **Por qué funciona:** reconocerse en un logro mínimo da ternura y risa a la vez, y eso se manda a una amiga. Cada medalla es una etiqueta lista: «esta eres tú».
+- **Error típico:** premios genéricos («premio a la constancia»): el chiste está en el detalle. Ironía que humilla en vez de abrazar. Y ojo: son reconocimientos simbólicos, no un sorteo; no prometas premios de verdad.
+- **Prompt de guion:**
+```
+Arma un carrusel «premios» de [6-7] slides para [MI CLIENTA IDEAL] sobre [TEMA: ej. crear contenido].
+Portada: una invitación a recoger su premio, en máximo 10 palabras.
+Slides 2 a N-2: un premio por slide con la forma «Premio a [logro chiquito y muy específico]». Máximo 12 palabras.
+  Que sean cosas que ella hizo esta semana y nadie le aplaudió. Ordena de la más común a la más tierna.
+Penúltima: «Y el premio mayor: [lo que mi oferta le ayuda a lograr]».
+Cierre: «etiqueta a quien se ganó el de la slide [N]» + «comenta [PALABRA] y te mando [REGALO]».
+Nada de premios reales ni sorteos. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S38: la escarapela se dibuja en CSS o va como emoji grande).
+
+---
+
+### G29 · Calendario del mes en emojis (1 sola imagen)
+- **Mecánica:** M38 · **Soporte:** S39 tarjeta blanca de calendario con un emoji por día · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @lifestyle.debi · **10.510 likes** · 26 comentarios · 1 imagen · https://www.instagram.com/p/Dd9DzGUMfo9/
+- **Anatomía:** 1) una sola imagen: el nombre del mes en grande, la fila de los días de la semana y un emoji debajo de cada número; cada emoji es una micro tarea o un plan · 2) variante en carrusel: una lámina por semana, y cada día lleva su idea escrita y, si la tienes, la miniatura del ejemplo · cierre: en la versión de una imagen no hay; la leyenda de los emojis va en el caption y pide guardarlo.
+- **Por qué funciona:** se entiende sin leer y se guarda porque sirve todo el mes. Además invita a jugar: la gente comenta qué le toca el día de su cumpleaños o manda «el 14 somos tú y yo».
+- **Error típico:** emojis que nadie descifra sin leyenda. Empezar el mes en el día equivocado (revisa en qué día cae el 1). Y para tu propio plan de contenido, un emoji no alcanza: usa la variante por semanas, con la idea de cada día.
+- **Prompt de guion:**
+```
+Arma un calendario de [MES Y AÑO] para [MI CLIENTA IDEAL] sobre [TEMA: ej. su mes de contenido].
+Primero dime en qué día de la semana cae el 1 y cuántos días tiene el mes.
+Luego dame la tabla día por día: número · emoji · micro tarea en máximo 5 palabras.
+Repite a propósito las tareas que son rutina (el mismo emoji el mismo día de la semana) y deja días de descanso.
+Entrega también la leyenda para el caption: cada emoji y qué significa, en una sola línea, + «comenta [PALABRA] y te mando [REGALO]».
+Si quiero la versión en carrusel: una slide por semana con la idea de cada día escrita, sin depender del emoji.
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S39: una cuadrícula de 7 columnas; los emojis salen de una fuente de emojis, no se le piden a un modelo de imagen).
+
+---
+
+### G30 · Del dibujo a la foto («de algún día a día uno»)
+- **Mecánica:** M39 · **Soporte:** S40 dibujo a crayón arriba + tu foto real abajo, mismo encuadre · **Motor:** C (el dibujo se genera desde tu foto, sin texto; los rótulos van en HTML)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @stevenwommack · **594.165 reproducciones** · 2.508 comentarios · es un video que enseña a hacerlo; el formato en sí es una imagen partida · https://www.instagram.com/p/Dd4E5zGszKE/
+- **Anatomía:** 1) portada: el primer par: arriba el dibujo infantil a crayón con el rótulo «de “algún día”», abajo tu foto real del mismo lugar con «a “día uno”» · 2-N) un par por lámina con el mismo rótulo y el mismo encuadre arriba y abajo · cierre: una frase sobre haberlo imaginado antes de saber cómo + comenta la palabra.
+- **Por qué funciona:** el dibujo de crayones activa la niña que lo soñó; la foto de abajo prueba que pasó. Como el encuadre es el mismo, el ojo hace clic solo y no hace falta explicar nada.
+- **Error típico:** decir que el dibujo es tuyo de niña si lo generaste (di que lo redibujaste, o no afirmes nada). Usar fotos que no son tuyas. Encuadres que no coinciden: si arriba hay una torre a la derecha, abajo también.
+- **Prompt de guion:**
+```
+Arma un carrusel «de algún día a día uno» de [5-6] slides con mis fotos reales.
+Te paso [4] sueños que ya cumplí y la foto de cada uno: [LISTA].
+Para cada slide dame: el sueño en máximo 6 palabras (va en el pie del dibujo) y qué foto mía va abajo.
+Rótulos fijos en todas: «de “algún día”» arriba y «a “día uno”» abajo.
+Ordena del más chico al que más me costó.
+Cierre: una frase de máximo 14 palabras sobre haberlo dibujado antes de saber cómo + «comenta [PALABRA] y te mando [REGALO]».
+Para generar cada dibujo desde la foto: «Redibuja esta foto como un dibujo infantil hecho con crayones de cera sobre papel blanco: mismos elementos y mismo encuadre, trazos gruesos e irregulares, colores primarios, relleno rayado que se sale de las líneas, sin texto».
+Solo sueños que yo te dé. Tutea.
+```
+- **Fabrica:** `banana` o `higgsfield-carrusel-generador` (el dibujo a crayón desde tu foto, sin texto) + `carrusel-formatos-f100k` (HTML libre S40).
+
+---
+
+### G31 · «Soy X, obvio Y» sobre un bodegón de objetos
+- **Mecánica:** M40 · **Soporte:** S41 nota de papel al centro de un bodegón visto desde arriba · **Motor:** C (el bodegón se genera sin texto; la frase va en HTML)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @prettylittlemarketer · **12.881 likes** · 57 comentarios · 1 imagen · https://www.instagram.com/p/DdYRjlOODXc/
+- **Anatomía:** 1) una imagen o la portada: una bandeja o canasta vista desde arriba, llena de los objetos del oficio, y al centro una nota con «[lo que haces], obvio [lo que solo quien lo vive entiende]» · 2-N) en carrusel: una bandeja por tipo de persona de tu audiencia, cada una con sus objetos y su frase · cierre: «¿cuál es la tuya?» + comenta la palabra.
+- **Por qué funciona:** es una frase de identidad: quien se reconoce la comparte para decir «esta soy yo». Los objetos premian el zoom y cada uno es un guiño más.
+- **Error típico:** una frase que explica en vez de guiñar («trabajo mucho» no; «soy la modelo, la fotógrafa y la que empaca» sí). Objetos genéricos. Y pedirle la frase al modelo de imagen: va encima, en HTML.
+- **Prompt de guion:**
+```
+Arma un carrusel «soy X, obvio Y» de [1 o 7-9] slides para [MI AUDIENCIA].
+Si es de varias slides, dame [6] tipos de persona dentro de mi audiencia (ej. por rubro).
+Para cada uno: la frase «[Lo que hace], obvio [el detalle que solo ella entiende]» en máximo 14 palabras
+  + 8 objetos concretos que irían en su bandeja + una nota chica de remate de máximo 7 palabras.
+La última bandeja es la mía: [LO QUE HAGO] y el detalle que me distingue.
+Cierre: «¿cuál es la tuya?» + «comenta [PALABRA] y te mando [REGALO]».
+Para generar cada bodegón: «Foto cenital de una bandeja con [OBJETOS], luz suave de estudio, fondo de color plano, un espacio libre al centro para una nota, sin texto ni marcas».
+Tutea.
+```
+- **Fabrica:** `banana` o `higgsfield-carrusel-generador` (los bodegones, sin texto) + `carrusel-formatos-f100k` (HTML libre S41).
+
+---
+
+### G32 · Inspiración vs. mi versión (pares de cuadrículas)
+- **Mecánica:** M41 · **Soporte:** S42 cuadrícula de celdas redondeadas con rótulo arriba y pie entre llaves · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @tixrob.dsgn · **18.904 likes** · 61 comentarios · 9 slides · en el original los pares son «moodboard / branding» · https://www.instagram.com/p/DdjikdMjRVi/
+- **Anatomía:** 1) portada: una foto desenfocada a sangre y «[A] vs [B]» en dos letras distintas · 2-N) pares de láminas: primero el tablero A (lo que te inspiró), enseguida el tablero B (lo que hiciste con eso), con la misma cuadrícula y un pie con el nombre y la descripción entre llaves · cierre: la lección en una línea + comenta la palabra.
+- **Por qué funciona:** enseña criterio sin decir una palabra: el salto de un tablero al otro es la prueba. La gente va y vuelve entre el par para comparar, y lo guarda como ejemplo de proceso.
+- **Error típico:** mostrar trabajo ajeno sin crédito (lo que no es tuyo va con su usuario en el pie). Que B sea una copia de A: se copia el formato, no el tema. Celdas con texto que no se lee.
+- **Prompt de guion:**
+```
+Arma un carrusel «[A] vs [B]» de [6-8] slides con pares de tableros.
+Mis pares son: [LISTA de 3 pares: qué guardé o de dónde partí → qué hice].
+Rótulos fijos: «[A]» arriba en las slides impares y «[B]» en las pares (propón 3 parejas de rótulos que suenen a mí).
+Para cada tablero: nombre corto + descripción entre llaves de máximo 8 palabras + qué 6-9 imágenes van en las celdas.
+Portada: «[A] vs [B]». Cierre: una lección de máximo 10 palabras + «comenta [PALABRA] y te mando [REGALO]».
+Si una imagen no es mía, dime dónde va el crédito. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S42: cuadrícula con celdas de tamaños mezclados y tus imágenes reales).
+
+---
+
+### G33 · Meme de una sola imagen (gráfica o fila de íconos)
+- **Mecánica:** M42 · **Soporte:** S43 fondo blanco o hueso + una línea con picos o una fila de íconos · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @iampascio · **25.222 likes** · 107 comentarios · 1 imagen («momentos cumbre de mi vida») · https://www.instagram.com/p/DdW4yfpqIo6/ · la variante de fila de íconos («mi sistema de apoyo actual»): @leadgenman https://www.instagram.com/p/DdW12UmNhLf/
+- **Anatomía:** 1) una sola imagen: un título en minúsculas y 3-4 elementos con su etiqueta; los primeros son los esperables y el último es el remate, desproporcionado a propósito · cierre: no lleva; el caption remata en una línea y, si hay llamado, va ahí.
+- **Por qué funciona:** se lee en dos segundos y se manda sin pensar. La exageración sobre algo que solo tu nicho entiende funciona como contraseña: quien se ríe, es de las tuyas.
+- **Error típico:** más de 4 elementos. Explicar el chiste dentro de la imagen. Usar logos de marcas ajenas como íconos: mejor emojis u objetos.
+- **Prompt de guion:**
+```
+Arma un meme de UNA imagen para [MI AUDIENCIA] sobre [TEMA].
+Elige el molde: (a) gráfica de picos «momentos cumbre de mi vida» · (b) fila de íconos «lo que me sostiene esta semana:».
+Dame 5 versiones. En cada una: título en minúsculas + 3 o 4 elementos con emoji y etiqueta de máximo 6 palabras.
+Los primeros elementos son lo que cualquiera pondría; el último es el remate y tiene que ser algo que solo mi nicho entiende.
+Caption de una línea para cada versión.
+Sin cifras inventadas y sin logos de marcas. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S43: la línea de picos es un trazo SVG; los íconos son emojis grandes).
+
+---
+
+### G34 · Principiante vs. pro (duelo por rondas con veredicto)
+- **Mecánica:** M43 · **Soporte:** S44 dos tarjetas lado a lado con etiqueta ✖ / ✔ y barra de navegación abajo · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @adarshxdesign · **4.643 likes** · 1.657 comentarios · 7 slides · https://www.instagram.com/p/DdO_OYPkrfY/ · la misma mecánica en video, con dos personas y un producto cada una: @dealswithty_ · 19.667.207 reproducciones https://www.instagram.com/p/Dd7cqd8iSxf/
+- **Anatomía:** 1) portada: «[A] vs [B]» y la promesa («la misma idea: una se ignora y la otra se guarda») · 2-N) una RONDA por lámina: arriba el nombre de la variable, a la izquierda cómo lo hace A, a la derecha cómo lo hace B, y debajo de cada tarjeta un veredicto de 3-4 palabras · penúltima: el marco completo o el veredicto final · cierre: comenta la palabra.
+- **Por qué funciona:** cada ronda aísla una sola variable, así que la lectora se diagnostica sola: «yo hago la de la izquierda». El lado pro es una mini lección que se guarda, y el duelo invita a opinar.
+- **Error típico:** cambiar dos cosas en la misma ronda (ya no se sabe qué hizo la diferencia). Caricaturizar al principiante: tiene que ser lo que tu clienta hace de verdad. Rondas sin veredicto. No es G04 (mito y realidad) ni G14 (el mismo objeto en dos momentos): aquí compiten dos formas de hacer lo mismo.
+- **Prompt de guion:**
+```
+Arma un carrusel «[A] vs [B]» por rondas de [6-7] slides sobre [TEMA] para [MI CLIENTA IDEAL].
+Portada: «[A] vs [B]» + una promesa de máximo 12 palabras.
+Slides 2 a N-2: una ronda por slide. Para cada una:
+  - nombre de la variable en 1-3 palabras (ej. el gancho, el contexto, el cierre)
+  - A: cómo lo hace, con un ejemplo literal de máximo 10 palabras + veredicto de 3-4 palabras
+  - B: cómo lo hace, con un ejemplo literal de máximo 14 palabras + veredicto de 3-4 palabras
+Una sola variable cambia por ronda. A es lo que mi clienta hace hoy, sin burla.
+Penúltima: el veredicto final en una frase. Cierre: «comenta [PALABRA] y te mando [REGALO]».
+Sin cifras inventadas. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S44) · con dos personajes en vez de tarjetas: `carrusel-render-formula100k` con dos recortes tuyos.
+
+---
+
+### G35 · La frase que se escribe sola (una palabra más por lámina)
+- **Mecánica:** M44 · **Soporte:** S45 libreta abierta al centro con letra a mano; el fondo cambia · **Motor:** A (libreta en HTML) o C (fondos generados sin texto)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @kreyshnaa · **55.320 likes** · 133 comentarios · 405.388 reproducciones · es un video cuadro a cuadro: aquí se lleva a láminas · https://www.instagram.com/p/DcD8tI3Pd6l/
+- **Anatomía:** 1) portada: la libreta en blanco y una nota chica («desliza y léelo despacio») · 2-N) la misma libreta en el mismo lugar: en cada lámina aparece un tramo más de la frase y lo ya escrito se queda; una palabra clave va en otro color y el fondo cambia · penúltima: la frase completa, con la última palabra en rojo en la otra página · cierre: una línea que la aterriza + comenta la palabra.
+- **Por qué funciona:** obliga a leer al ritmo de quien escribe, y la última palabra es el giro. Al terminar queda una sola frase, que es lo que se comparte. No es G09: allá cada lámina trae un pedazo distinto; aquí la frase se acumula.
+- **Error típico:** una frase larga (máximo ~9 palabras). Mover la libreta entre láminas. Un final previsible: si la última palabra se adivina en la lámina 3, no hay giro.
+- **Prompt de guion:**
+```
+Arma un carrusel «la frase que se escribe sola» de [6-7] slides para [MI CLIENTA IDEAL].
+Dame 5 frases de máximo 9 palabras con la forma «No confundas [A] con [B]» u otra con giro en la última palabra,
+  sobre [TEMA]. Marca en cada una: la palabra que va en otro color y la palabra final (el giro).
+Con la que yo elija: parte la frase en [4-5] tramos, uno nuevo por slide (lo anterior se queda escrito).
+Portada: la libreta en blanco + una nota de 4-5 palabras.
+Cierre: una línea de máximo 12 palabras que la aterriza + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S45: la libreta es una caja fija; el texto usa una fuente manuscrita y se acumula slide a slide).
+
+---
+
+### G36 · Una foto, nueve publicaciones (lo que sale de 1 sola foto de producto)
+- **Mecánica:** M45 · **Soporte:** S46 cuadrícula de 9 + la foto original en un recuadro chico · **Motor:** B + A (las variaciones se generan desde tu foto; el texto va en HTML)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @loislillian.socials · **9.253 likes** · 132 comentarios · 438.381 reproducciones · es un video · https://www.instagram.com/p/Dc1r-T8iArD/ · en carrusel, una idea por lámina con la foto original en un recuadro: @secretsocials_ https://www.instagram.com/p/DdRtkr8Ckdw/
+- **Anatomía:** 1) portada: el problema dicho como lo diría tu clienta («necesito 9 posts para el viernes y solo tengo 1 foto») y la foto sola · 2) la respuesta: la cuadrícula de 9 completa · 3-N) los pasos o las ideas, una por lámina, siempre con la foto original chica en una esquina · cierre: con qué lo hiciste + comenta la palabra.
+- **Por qué funciona:** es un antes y después de esfuerzo, no de resultado: se ve lo poco que hacía falta. El recuadro con la foto original es lo que lo vuelve creíble, y quien vende productos lo guarda para repetirlo.
+- **Error típico:** esconder la foto original (sin ella parece una sesión cara). Mostrar productos de marcas conocidas como si fueran clientas tuyas. No decir con qué herramienta se hizo.
+- **Prompt de guion:**
+```
+Arma un carrusel «una foto, nueve publicaciones» de [6-8] slides para [MI CLIENTA IDEAL, que vende PRODUCTO].
+Te paso la foto de mi producto: [DESCRÍBELA].
+Portada: el problema en boca de mi clienta, máximo 14 palabras.
+Slide 2: una palabra de alivio + la cuadrícula.
+Dame las 9 ideas de imagen que salen de esa foto (escenario, ángulo o uso distinto en cada una), en 4-6 palabras cada una.
+Slides 3 a N-1: los pasos (máximo 10 palabras por paso) o las mejores ideas, una por slide.
+Cierre: con qué lo hice, en una línea + «comenta [PALABRA] y te mando [REGALO]».
+No cambies el producto: ni su forma, ni su color, ni su etiqueta. Tutea.
+```
+- **Fabrica:** `higgsfield-carrusel-generador` o `banana` (las variaciones desde tu foto real) + `carrusel-formatos-f100k` (HTML libre S46).
+
+---
+
+### G37 · Un miedo por lámina (pregunta en portada, respuesta corta)
+- **Mecánica:** M46 · **Soporte:** S47 foto tranquila a sangre con texto chico al centro · **Motor:** A (tus fotos reales)
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @belleviesysy · **7.610 likes** · 11 comentarios · 11 slides · https://www.instagram.com/p/Ddnc8xXiara/
+- **Anatomía:** 1) portada: la pregunta («¿qué te da tanto miedo?») sobre una foto con profundidad · 2-N) un miedo por lámina en dos renglones: el miedo, punto y coma, y la respuesta corta que lo desarma · cierre: una línea que da permiso + comenta la palabra (el original termina sin cierre).
+- **Por qué funciona:** el texto chico sobre una foto grande obliga a frenar. Cada lámina es una frase que se puede reenviar sola, y como se lee rápido la gente llega al final.
+- **Error típico:** respuestas con tono de sermón (la respuesta acompaña, no regaña). Fotos con mucho ruido donde el texto no se lee. Mezclar miedos de dos audiencias distintas. No es G12 (una confesión tuya) ni G15 (objeciones de compra en chat): aquí son los miedos de ella, dichos con calma.
+- **Prompt de guion:**
+```
+Arma un carrusel «un miedo por lámina» de [8-9] slides para [MI CLIENTA IDEAL] sobre [TEMA: ej. publicar].
+Portada: una pregunta de máximo 8 palabras: «¿Qué te da tanto miedo de [TEMA]?».
+Slides 2 a N-1: un miedo por slide con la forma «[El miedo]; [respuesta que lo desarma]». Máximo 14 palabras en total.
+  Usa los miedos que ella dice con sus palabras: [LISTA, o sácalos de mi manual de negocio].
+  Ordena del más común al más íntimo.
+Para cada slide dime qué tipo de foto mía va detrás (tranquila, con aire, sin caras de frente si no hace falta).
+Cierre: una línea que da permiso («puedes tener miedo y hacerlo igual») + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-render-formula100k` (tus fotos a sangre) o `carrusel-formatos-f100k` (HTML libre S47).
+
+---
+
+### G38 · Lo mismo en 5 niveles (reescrito nivel por nivel)
+- **Mecánica:** M47 · **Soporte:** S48 hoja con el texto reescrito + etiqueta de nivel + medidor que se llena · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @martinwang.mp4 · **424.187 reproducciones** · 13.941 likes · 1.814 comentarios · es un video: aquí se lleva a láminas · https://www.instagram.com/p/Dczr8MGgHeo/
+- **Anatomía:** 1) portada: «el mismo [gancho], 5 niveles» · 2-N) un nivel por lámina: una etiqueta con lo que se le agregó, el texto reescrito con la parte nueva resaltada y un medidor que se va llenando · cierre: «no cambió el tema, cambió cómo lo dije» + comenta la palabra.
+- **Por qué funciona:** enseña por contraste acumulado: como el tema no cambia, se ve exactamente qué hizo cada mejora. La lectora ubica en qué nivel está el suyo y lo guarda para reescribir.
+- **Error típico:** inventar las vistas de cada nivel (el original muestra contadores; si no son tuyos, usa un medidor sin cifras). Cambiar de tema entre niveles. Saltos que no dicen qué se agregó.
+- **Prompt de guion:**
+```
+Arma un carrusel «lo mismo en 5 niveles» de [7] slides sobre [QUÉ SE MEJORA: un gancho, una bio, un precio dicho en voz alta].
+Rubro del ejemplo: [RUBRO]. Punto de partida (nivel 1): [TEXTO BÁSICO].
+Para cada nivel dame: nombre de lo que se agrega en 2-4 palabras · el texto reescrito (máximo 18 palabras),
+  marcando entre ** la parte nueva · una nota de máximo 9 palabras que diga qué cambió para quien lo lee.
+Cada nivel conserva lo ganado en el anterior. El tema no cambia nunca.
+Portada: «El mismo [X], 5 niveles». Cierre: una línea de aprendizaje + «comenta [PALABRA] y te mando [REGALO]».
+Sin cifras de vistas ni resultados inventados. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S48).
+
+---
+
+### G39 · Se ven iguales, no lo son (tres cosas, tres trabajos)
+- **Mecánica:** M48 · **Soporte:** S49 tres tarjetas gemelas + una ficha por cosa, cada una con su color · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @sanjai.builds · **196.075 reproducciones** · 2.619 comentarios · es un video animado: aquí se lleva a láminas · https://www.instagram.com/p/DeEym5Ns7lb/
+- **Anatomía:** 1) portada: «se ven iguales.» sobre tres tarjetas casi idénticas · 2) el giro: «no lo son» y, en una palabra, para qué sirve cada una · 3-5) una ficha por cosa con la MISMA estructura (para quién es, de qué habla, cómo sabes que funcionó) y el ejemplo concreto a la vista · penúltima: el resumen, una línea por cosa · cierre: comenta la palabra.
+- **Por qué funciona:** nombra una confusión que la lectora ya tenía y se la ordena en tres cajones. La portada y el giro son dos láminas de pura curiosidad; las fichas gemelas hacen que comparar sea automático.
+- **Error típico:** etiquetas abstractas sin mostrar la cosa: tres fotos iguales con una palabra encima no explican nada; cada ficha tiene que enseñar el ejemplo real. Más de tres cosas. Una estructura que cambia de ficha en ficha.
+- **Prompt de guion:**
+```
+Arma un carrusel «se ven iguales, no lo son» de [7] slides para [MI CLIENTA IDEAL].
+Las tres cosas que confunde: [A], [B] y [C] (ej. tres tipos de publicación, tres herramientas, tres servicios).
+Portada: «Se ven iguales.» Slide 2: «No lo son.» + una palabra por cosa que diga su trabajo.
+Slides 3-5: una ficha por cosa con las MISMAS tres líneas, máximo 9 palabras cada una:
+  para quién es · de qué habla o qué hace · cómo sabes que funcionó.
+  Y dime qué ejemplo concreto se ve en la slide (una publicación, una pantalla, un objeto): no vale una foto genérica.
+Penúltima: resumen de una línea por cosa, con el mismo verbo al inicio.
+Cierre: «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S49) · las capturas del ejemplo con `capturas-tutorial-formula100k`.
+
+---
+
+### G40 · Reto de N días (un ítem por lámina, título fijo)
+- **Mecánica:** M49 · **Soporte:** S50 papel de color + una tarjeta al centro + marco ilustrado en portada y cierre · **Motor:** A
+- **Origen:** sumada el 5-oct-2026 · **Referencia:** @fable · **7.944 likes** · 24 comentarios · 9 slides · https://www.instagram.com/p/DdmiXXqkSMW/
+- **Anatomía:** 1) portada con marco: el nombre del reto y cuántos días dura · 2-N) el mismo título arriba en todas y UNA tarjeta al centro por día, con su imagen · cierre con marco: dónde está la lista completa + comenta la palabra.
+- **Por qué funciona:** es coleccionable: cada lámina es una casilla que se puede tachar. El título repetido arriba funciona como sello, y la gente lo guarda para empezar «el lunes» y lo manda a la amiga con quien lo haría.
+- **Error típico:** ponerle fechas o premios (envejece y se vuelve sorteo: el reto es atemporal y se empieza cuando quieras). Más de 9 días en un carrusel. Tarjetas sin imagen: lo que se colecciona es la portada de cada ítem.
+- **Prompt de guion:**
+```
+Arma un carrusel «reto de [N] días» de [N+2] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Nombre del reto: dame 3 opciones de máximo 5 palabras.
+Slides 2 a N+1: un día por slide: «Día [n]» + el nombre del ítem en máximo 4 palabras + qué imagen va en la tarjeta.
+Ordena de lo más fácil a lo más retador.
+Portada: el nombre + «[un ítem distinto cada día]». Cierre: dónde está la lista completa + «comenta [PALABRA] y te mando [REGALO]».
+Sin fechas y sin premios: se empieza cuando quieras. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S50; el marco se dibuja con SVG o emojis de temporada).
 
 ---
 

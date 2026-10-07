@@ -1,0 +1,94 @@
+<!doctype html><meta charset="utf-8">
+<!-- Nueve posts hechos con UNA sola foto. Para el «después» del reel del manotazo cuando el texto promete «solo tengo una foto».
+     Necesita junto a este archivo: foto.jpg (la foto) y recorte.png (la misma foto sin fondo, mismo tamaño).
+     Edita SOLO el bloque AJUSTES. Después: bash capturar.sh <esta carpeta> <carpeta assets del reel> -->
+<script>
+const AJUSTES = {
+  // punto principal de la foto (la cara o el producto), en fracción del ancho y del alto: [0,0] arriba a la izquierda
+  foco: [0.5, 0.4],
+  colores: { acento: "#F4D35E", papel: "#F5F0E6", tinta: "#1B1A17", rosa: "#F6D5DC", azul: "#BFD0F5" },
+  nombre: "diario de taller",          // letra manuscrita de la polaroid
+  // un título por post; *así* va en serif itálica. Sin cifras ni resultados que no puedas probar.
+  titulos: [
+    "No necesitas más fotos. *Necesitas ideas.*",   // 1 · foto a sangre
+    "Una foto, *nueve posts*",                      // 2 · recorte sobre color
+    "Tu pausa también *es contenido*",              // 3 · tarjeta tipo publicación
+    "Lo que no *publico*",                          // 4 · polaroid
+    "Publica antes de *sentirte lista*",            // 5 · blanco y negro con frase
+    "Errores que apagan *tu contenido*",            // 6 · mitad foto, mitad lista
+    "Recicla *sin que se note*",                    // 7 · recorte repetido
+    "¿Publicas y *nadie compra?*",                  // 8 · primer plano con pregunta
+    "Guárdalo *para tu próximo post*",              // 9 · tira rasgada
+  ],
+};
+</script>
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1080px;height:1350px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--tinta)}
+.post{position:absolute;inset:0;width:1080px;height:1350px;overflow:hidden;display:none}
+.post.on{display:block}
+img{position:absolute;display:block}
+.v{position:absolute;overflow:hidden}
+h1{position:absolute;font-weight:900;letter-spacing:-.045em;line-height:.95;font-size:132px}
+h1 i{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400;letter-spacing:-.03em}
+.hl i{background:var(--acento);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.oro i{color:var(--acento)}
+.tape{position:absolute;width:260px;height:70px;background:var(--rosa);opacity:.92;box-shadow:0 3px 6px rgba(0,0,0,.15)}
+.stk{filter:drop-shadow(10px 0 0 #fff) drop-shadow(-10px 0 0 #fff) drop-shadow(0 10px 0 #fff) drop-shadow(0 -10px 0 #fff) drop-shadow(0 14px 18px rgba(0,0,0,.28))}
+.papel{background:var(--papel)}
+.fila{height:96px;border:6px solid var(--papel);margin-bottom:34px;display:flex;align-items:center;padding-left:24px;gap:24px}
+.fila b{font-size:60px;color:var(--acento)}.fila span{flex:1;height:18px;background:var(--papel)}
+</style>
+<!-- data-f="ancho,x,y": la foto se pone a ese ancho y su punto de foco cae en (x,y) de su contenedor -->
+<div class="post" style="background:#000"><img src="foto.jpg" data-f="1080,540,560">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.75) 0,rgba(0,0,0,0) 46%)"></div>
+<h1 class="oro" data-t="0" style="left:60px;top:70px;width:960px;color:#fff;font-size:128px"></h1></div>
+
+<div class="post" style="background:var(--acento)"><h1 data-t="1" style="left:60px;top:70px;width:900px;font-size:190px"></h1>
+<img class="stk" src="recorte.png" data-f="1080,700,760"></div>
+
+<div class="post papel"><div style="position:absolute;left:70px;top:150px;width:940px;height:1050px;background:#fff;border:8px solid var(--tinta);border-radius:44px;box-shadow:18px 18px 0 var(--acento);transform:rotate(-2deg)">
+<div class="v" style="left:56px;top:56px;width:210px;height:210px;border-radius:50%;border:8px solid var(--tinta)"><img src="foto.jpg" data-f="700,97,97"></div>
+<div style="position:absolute;left:300px;top:96px;width:400px;height:38px;border-radius:19px;background:var(--tinta)"></div>
+<div style="position:absolute;left:300px;top:166px;width:270px;height:28px;border-radius:14px;background:#C9BFAE"></div>
+<h1 class="hl" data-t="2" style="left:56px;top:330px;width:830px;font-size:150px"></h1>
+<div style="position:absolute;left:56px;bottom:56px;display:flex;gap:40px;font-size:84px;line-height:1"><span style="color:#E5484D">♥</span><span style="width:300px;height:30px;border-radius:15px;background:#C9BFAE;align-self:center"></span></div></div></div>
+
+<div class="post" style="background:var(--rosa)"><div style="position:absolute;left:150px;top:120px;width:780px;height:940px;background:#fff;transform:rotate(-4deg);box-shadow:0 20px 40px rgba(0,0,0,.25);padding:40px 40px 0"><div class="v" style="position:relative;width:700px;height:700px"><img src="foto.jpg" data-f="1300,400,300"></div>
+<div id="nombre" style="font-family:'Bradley Hand','Marker Felt',cursive;font-size:84px;text-align:center;margin-top:36px;font-weight:700"></div></div>
+<div class="tape" style="left:410px;top:80px;transform:rotate(-7deg);background:var(--acento)"></div>
+<h1 data-t="3" style="left:60px;top:1110px;width:960px;text-align:center;font-size:120px"></h1></div>
+
+<div class="post" style="background:#000"><img src="foto.jpg" data-f="1400,620,400" style="filter:grayscale(1) contrast(1.15) brightness(.8)">
+<div style="position:absolute;left:60px;top:780px;width:960px;background:var(--papel);padding:50px 54px 60px;transform:rotate(-2deg);box-shadow:0 16px 30px rgba(0,0,0,.4)"><h1 class="hl" data-t="4" style="position:static;font-size:126px"></h1></div>
+<div class="tape" style="left:400px;top:745px;transform:rotate(-5deg)"></div></div>
+
+<div class="post" style="background:var(--tinta)"><div class="v" style="left:0;top:0;width:500px;height:1350px"><img src="foto.jpg" data-f="1500,290,520"></div>
+<h1 class="oro" data-t="5" style="left:550px;top:90px;width:500px;color:var(--papel);font-size:104px"></h1>
+<div style="position:absolute;left:550px;top:800px;width:470px"><div class="fila"><b>1</b><span style="margin-right:60px"></span></div><div class="fila"><b>2</b><span style="margin-right:120px"></span></div><div class="fila"><b>3</b><span style="margin-right:30px"></span></div></div></div>
+
+<div class="post" style="background:var(--azul)"><h1 data-t="6" style="left:60px;top:60px;width:960px;font-size:150px"></h1>
+<img class="stk" src="recorte.png" data-f="640,140,860" style="transform:rotate(-8deg)">
+<img class="stk" src="recorte.png" data-f="640,940,820" style="transform:rotate(7deg)">
+<img class="stk" src="recorte.png" data-f="860,640,700"></div>
+
+<div class="post" style="background:#000"><img src="foto.jpg" data-f="2700,680,480">
+<div style="position:absolute;left:50px;top:820px;width:980px;background:var(--acento);padding:40px 50px 54px;transform:rotate(2deg);box-shadow:0 16px 30px rgba(0,0,0,.4)"><h1 data-t="7" style="position:static;font-size:150px"></h1></div></div>
+
+<div class="post papel"><div class="v" style="left:-30px;top:330px;width:1140px;height:520px;transform:rotate(-3deg);box-shadow:0 14px 26px rgba(0,0,0,.28);border-top:16px solid #fff;border-bottom:16px solid #fff"><img src="foto.jpg" data-f="2100,880,330"></div>
+<div class="tape" style="left:60px;top:320px;transform:rotate(-24deg)"></div><div class="tape" style="left:790px;top:800px;transform:rotate(-20deg);background:var(--acento)"></div>
+<h1 class="hl" data-t="8" style="left:60px;top:70px;width:960px;text-align:center;font-size:170px"></h1></div>
+<script>
+const A = AJUSTES, n = (+location.hash.slice(1) || 1) - 1;
+Object.keys(A.colores).forEach((k) => document.documentElement.style.setProperty("--" + k, A.colores[k]));
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+document.querySelectorAll("[data-t]").forEach((h) => { h.innerHTML = esc(A.titulos[+h.dataset.t] || "").replace(/\*([^*]+)\*/g, "<i>$1</i>"); });
+document.getElementById("nombre").textContent = A.nombre || "";
+// el post 9 parte el título: lo normal arriba de la tira, lo itálico abajo
+const h9 = document.querySelector('[data-t="8"]'), it = h9.querySelector("i");
+if (it) { const b = document.createElement("h1"); b.className = "hl"; b.style.cssText = "left:60px;top:960px;width:960px;text-align:center;font-size:150px"; b.appendChild(it); h9.parentNode.appendChild(b); }
+const poner = (im) => { const [w, x, y] = im.dataset.f.split(",").map(Number), h = w * im.naturalHeight / im.naturalWidth;
+  im.style.width = w + "px"; im.style.left = (x - A.foco[0] * w) + "px"; im.style.top = (y - A.foco[1] * h) + "px"; };
+document.querySelectorAll("img[data-f]").forEach((im) => { if (im.complete && im.naturalWidth) poner(im); else im.addEventListener("load", () => poner(im)); });
+document.querySelectorAll(".post")[n].classList.add("on");
+</script>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>Reel del manotazo</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="config.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#111}
+  #root{position:relative;width:1080px;height:1920px;overflow:hidden}
+  .clip{position:absolute;inset:0;overflow:hidden}
+  .sangre{position:absolute;inset:0}
+  #negro{background-color:#000}
+  #toma{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+  /* fondo sustituto (solo cuando no hay clip) */
+  #sust-foto{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+  #sust-mancha{position:absolute;display:block;left:-360px;top:260px;width:1800px;height:1400px;border-radius:50%;filter:blur(46px)}
+  /* capa de textos e imágenes */
+  .grupo{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+  .texto{position:absolute;left:90px;width:900px;display:block;text-align:center;text-wrap:balance;line-height:1.18;letter-spacing:-.01em}
+  .texto .quien{display:inline}
+  .texto .quien.tag{padding:.02em .22em;border-radius:.14em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .tarjeta{position:absolute;display:block;overflow:visible}
+  .tarjeta .hoja{position:absolute;inset:0;overflow:hidden}
+  .tarjeta img{position:absolute;display:block}
+  .cinta{position:absolute;display:block;width:190px;height:50px;left:50%;margin-left:-95px;top:-26px;box-shadow:0 2px 5px rgba(0,0,0,.18)}
+  #rejilla{position:absolute;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start}
+  #rejilla .celda{position:relative;display:block;overflow:hidden;flex:none}
+  #rejilla .celda img{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #firma{position:absolute;left:0;width:1080px;text-align:center;display:block}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="manotazo" data-start="0" data-width="1080" data-height="1920"><!-- data-duration lo pone el script desde config.js (duracion) -->
+
+  <!-- pista 0 · la toma (el <video> lo crea el script desde config.js; si no hay clip, el fondo sustituto) -->
+  <div id="base" class="clip" data-start="0" data-duration="7" data-track-index="0">
+    <div id="negro" class="sangre"></div>
+    <div id="sust" class="sangre"></div>
+  </div>
+
+  <!-- pista 2 · textos, tarjeta «antes» y cuadrícula «después» -->
+  <div id="capa" class="clip" data-start="0" data-duration="7" data-track-index="2">
+    <div id="antes" class="grupo"></div>
+    <div id="despues" class="grupo"></div>
+    <div id="firma"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var C = window.CONFIG || {};
+  var FPS = 30, W = 1080, H = 1920;
+  var E = Object.assign({
+    fuente: "-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif",
+    peso: 800, tamano: 64, espaciado: "-.01em", color: "#FFFFFF", sombra: true,
+    fuenteQuien: null, estiloQuien: "normal", etiquetaFondo: null, etiquetaColor: null,
+    tarjetaFondo: "#FFFFFF", tarjetaBorde: 0, tarjetaRadio: 0, tarjetaGiro: 0, cinta: null,
+    separacion: 0, celdaAspecto: "1/1", celdaAjuste: "cover", celdaRadio: 0
+  }, C.estilo || {});
+  var G = Object.assign({ escala: 1.16, sacudida: 16, cuadros: 4 }, C.golpe || {});
+  var A = Object.assign({ quien: "", texto: "", imagen: null, y: 700, ancho: 520, aspecto: "1/1", ajuste: "contain", relleno: 0 }, C.antes || {});
+  var D = Object.assign({ quien: "", texto: "", imagenes: [], y: 380, ancho: 810, columnas: null, limiteInferior: 1560 }, C.despues || {});
+
+  var dur = Number(C.duracion) || 7;
+  var inicio = Number(C.clipInicio) || 0;
+  // el segundo del manotazo va en tiempo del CLIP (lo que imprime el detector); aquí pasa a tiempo del reel
+  var tGolpe = (Number(C.manotazo) || dur / 2) - inicio;
+  tGolpe = Math.max(0.2, Math.min(dur - 0.2, tGolpe));
+  tGolpe = Math.round(tGolpe * FPS) / FPS;            // cae en un cuadro exacto
+  var tCorte = Math.max(0, tGolpe - 0.004);            // margen para que el cuadro del golpe ya muestre el «después»
+
+  var root = document.getElementById("root");
+  root.setAttribute("data-duration", String(dur));
+  ["base", "capa"].forEach(function(id){ document.getElementById(id).setAttribute("data-duration", String(dur)); });
+
+  function ratio(s){ var p = String(s).split("/"); return (Number(p[0]) || 1) / (Number(p[1]) || 1); }
+  function el(tag, cls, parent){ var n = document.createElement(tag); if (cls) n.className = cls; if (parent) parent.appendChild(n); return n; }
+  var SOMBRA = "0 0 26px rgba(0,0,0,.55), 0 3px 12px rgba(0,0,0,.75), 0 0 3px rgba(0,0,0,.9), 0 1px 0 rgba(0,0,0,.6)";
+
+  function ponerTexto(parent, quien, texto, y){
+    var t = el("div", "texto", parent);
+    t.style.top = y + "px";
+    t.style.fontFamily = E.fuente; t.style.fontWeight = E.peso; t.style.fontSize = E.tamano + "px"; t.style.color = E.color; t.style.letterSpacing = E.espaciado;
+    if (E.sombra) t.style.textShadow = SOMBRA;
+    if (quien){
+      var q = el("span", "quien" + (E.etiquetaFondo ? " tag" : ""), t);
+      q.textContent = quien;
+      if (E.fuenteQuien) q.style.fontFamily = E.fuenteQuien;
+      q.style.fontStyle = E.estiloQuien;
+      if (E.etiquetaFondo){ q.style.background = E.etiquetaFondo; q.style.textShadow = "none"; }
+      if (E.etiquetaColor) q.style.color = E.etiquetaColor;
+      t.appendChild(document.createTextNode(" "));
+    }
+    t.appendChild(document.createTextNode(texto || ""));
+    return t;
+  }
+  // alto que ocupa un texto: se mide ya puesto en el DOM (síncrono)
+  function alto(n){ return Math.ceil(n.getBoundingClientRect().height); }
+
+  /* ── LA TOMA ── */
+  var base = document.getElementById("base"), sust = document.getElementById("sust");
+  var F = Object.assign({ foto: null, fotoDespues: null, mancha: "#E7B9A6", color: "#3A3A3A" }, C.fondoSustituto || {});
+  if (C.clip){
+    sust.remove();
+    var v = document.createElement("video");
+    v.id = "toma"; v.className = "clip"; v.src = C.clip; v.muted = true; v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
+    v.setAttribute("data-start", "0"); v.setAttribute("data-duration", String(dur)); v.setAttribute("data-track-index", "1");
+    if (inicio) v.setAttribute("data-media-start", String(inicio));
+    root.insertBefore(v, document.getElementById("capa"));
+    if (C.conservarAudio !== false){
+      var a = document.createElement("audio");
+      a.id = "toma-audio"; a.src = C.clip;
+      a.setAttribute("data-start", "0"); a.setAttribute("data-duration", String(dur)); a.setAttribute("data-track-index", "10");
+      a.setAttribute("data-volume", String(C.volumen == null ? 1 : C.volumen));
+      if (inicio) a.setAttribute("data-media-start", String(inicio));
+      root.appendChild(a);
+    }
+  } else {
+    sust.style.backgroundColor = F.color;
+    if (F.foto){ var f1 = el("img", "", sust); f1.id = "sust-foto"; f1.src = F.foto; f1.alt = ""; }
+    if (F.fotoDespues){ var f2 = el("img", "", sust); f2.id = "sust-foto2"; f2.src = F.fotoDespues; f2.alt = ""; f2.style.cssText = "position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block"; }
+    var m = el("div", "", sust); m.id = "sust-mancha"; m.style.background = F.mancha;
+  }
+
+  /* ── ANTES: texto + una imagen ── */
+  var gA = document.getElementById("antes");
+  var tA = ponerTexto(gA, A.quien, A.texto, A.y);
+  if (A.imagen){
+    var aw = A.ancho, ah = Math.round(aw / ratio(A.aspecto));
+    var card = el("div", "tarjeta", gA);
+    card.id = "tarjeta-antes";
+    card.style.cssText += "left:" + Math.round((W - aw) / 2) + "px;top:" + (A.y + alto(tA) + 44) + "px;width:" + aw + "px;height:" + ah + "px;";
+    var hoja = el("div", "hoja", card);
+    hoja.style.background = E.tarjetaFondo; hoja.style.borderRadius = E.tarjetaRadio + "px";
+    hoja.style.boxShadow = "0 14px 34px rgba(0,0,0,.35)";
+    var b = E.tarjetaBorde + A.relleno;
+    var im = el("img", "", hoja); im.src = A.imagen; im.alt = "";
+    im.style.cssText += "left:" + b + "px;top:" + b + "px;width:" + (aw - 2 * b) + "px;height:" + (ah - 2 * b) + "px;object-fit:" + A.ajuste + ";";
+    if (E.tarjetaGiro) card.style.rotate = E.tarjetaGiro + "deg";
+    if (E.cinta){ var ci = el("div", "cinta", card); ci.style.background = E.cinta; ci.style.rotate = "-4deg"; }
+  }
+
+  /* ── DESPUÉS: texto + cuadrícula de 1 a 9 imágenes ── */
+  var gD = document.getElementById("despues");
+  var golpe = el("div", "grupo", gD); golpe.id = "golpe";
+  var tD = ponerTexto(golpe, D.quien, D.texto, D.y);
+  var imgs = (D.imagenes || []).slice(0, 9), n = imgs.length;
+  if (n){
+    var cols = D.columnas || (n === 1 ? 1 : n <= 4 ? 2 : 3), filas = Math.ceil(n / cols);
+    var gap = E.separacion, asp = ratio(E.celdaAspecto);
+    var top = D.y + alto(tD) + 40, gw = D.ancho;
+    var cw = (gw - gap * (cols - 1)) / cols, chh = cw / asp, gh = filas * chh + gap * (filas - 1);
+    var libre = D.limiteInferior - top;                       // la cuadrícula nunca pasa de aquí
+    if (gh > libre){ var k = libre / gh; gw = Math.floor(gw * k); cw = (gw - gap * (cols - 1)) / cols; chh = cw / asp; gh = libre; }
+    cw = Math.floor(cw); chh = Math.floor(chh); gw = cw * cols + gap * (cols - 1);
+    var rej = el("div", "", golpe); rej.id = "rejilla";
+    rej.style.cssText += "left:" + Math.round((W - gw) / 2) + "px;top:" + top + "px;width:" + gw + "px;gap:" + gap + "px;";
+    rej.style.filter = "drop-shadow(0 16px 30px rgba(0,0,0,.4))";
+    imgs.forEach(function(src){
+      var c = el("div", "celda", rej);
+      c.style.width = cw + "px"; c.style.height = chh + "px"; c.style.background = E.tarjetaFondo; c.style.borderRadius = E.celdaRadio + "px";
+      var i = el("img", "", c); i.src = src; i.alt = ""; i.style.objectFit = E.celdaAjuste;
+    });
+  }
+  // el punto de giro del golpe: el centro de la cuadrícula
+  golpe.style.transformOrigin = "540px " + Math.round(D.y + (D.limiteInferior - D.y) / 2) + "px";
+
+  /* ── firma opcional ── */
+  var fi = document.getElementById("firma");
+  if (C.firma){
+    fi.textContent = C.firma; fi.style.top = (C.firmaY || 1620) + "px";
+    fi.style.fontFamily = E.fuente; fi.style.fontWeight = 700; fi.style.fontSize = "34px"; fi.style.letterSpacing = ".04em"; fi.style.color = E.color;
+    if (E.sombra) fi.style.textShadow = SOMBRA;
+  } else fi.remove();
+
+  /* ── TIMELINE ── */
+  window.__timelines = window.__timelines || {};
+  var tl = gsap.timeline({ paused: true });
+  var cuadro = 1 / FPS;
+
+  // el corte: «antes» fuera, «después» dentro, en el cuadro exacto del manotazo
+  gsap.set("#despues", { opacity: 0 });
+  tl.set("#antes", { opacity: 0 }, tCorte);
+  tl.set("#despues", { opacity: 1 }, tCorte);
+
+  // el golpe: escala que se asienta + sacudida, 3–4 cuadros
+  var nC = Math.max(2, Math.min(8, Math.round(G.cuadros)));
+  tl.fromTo("#golpe", { scale: G.escala }, { scale: 1, duration: nC * cuadro, ease: "power3.out" }, tCorte);
+  var s = G.sacudida, pasos = [s, -s * 0.7, s * 0.4, 0];
+  pasos.forEach(function(x, i){ tl.set("#golpe", { x: x, rotation: i === 3 ? 0 : (i % 2 ? -0.6 : 0.6) }, tCorte + i * cuadro); });
+
+  // fondo sustituto: un poco de vida + la mancha que cruza el cuadro en el segundo del manotazo
+  if (!C.clip){
+    if (F.foto) tl.fromTo("#sust-foto", { scale: 1.04, x: 0 }, { scale: 1.1, x: -10, duration: dur, ease: "none" }, 0);
+    if (F.fotoDespues){
+      gsap.set("#sust-foto2", { opacity: 0 });
+      tl.set("#sust-foto2", { opacity: 1 }, tCorte);
+    }
+    var ida = 5 * cuadro, vuelta = 4 * cuadro;
+    gsap.set("#sust-mancha", { opacity: 0 });
+    tl.set("#sust-mancha", { opacity: 0.96 }, tCorte - ida);
+    tl.fromTo("#sust-mancha", { x: 1500, y: 900, rotation: -28, scale: 0.8 }, { x: 0, y: 0, rotation: -18, scale: 1.25, duration: ida, ease: "power2.in" }, tCorte - ida);
+    tl.to("#sust-mancha", { x: -1700, y: -700, rotation: -8, scale: 0.9, duration: vuelta, ease: "power2.out" }, tCorte);
+    tl.set("#sust-mancha", { opacity: 0 }, tCorte + vuelta);
+  }
+
+  // el timeline dura lo mismo que el reel
+  tl.set({}, {}, dur);
+  window.__timelines["manotazo"] = tl;
+})();
+</script>
+</body>
+</html>

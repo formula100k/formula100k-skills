@@ -2157,6 +2157,13 @@
         "En Telegram el wizard va una pregunta por mensaje. Al terminar, manda `slides.html` como archivo y `guion.md` como texto o archivo.",
         "No abras navegador para validar: valida el JSON del bloque `datos` con `python3 -c` o `node -e`."
       ]
+    },
+    "guionizacion-youtube-formula100k": {
+      "notes": [
+        "Los scripts usan python3 y salen a internet (youtube.com). `transcripcion.py` necesita `pip install youtube-transcript-api`.",
+        "Desde un servidor, YouTube suele bloquear las transcripciones (RequestBlocked). En ese caso pide a la usuaria que pegue la transcripción o usa transcripcion-youtube-formula100k.",
+        "Guarda las fichas de canales nuevos en `entregables/youtube/canales/` y avisa a la usuaria para que se sumen a la skill."
+      ]
     }
   }
 }

@@ -58,6 +58,11 @@ Todo dato que aparezca en el entregable (vistas, likes, timestamps, frases textu
 
 ## PASO 1 — Metadata
 
+**Si no tienes el conector de Apify** (no aparece ninguna herramienta `mcp__apify__*`): no te detengas ni pidas que lo
+instalen. Salta al Paso 2 y descarga con `yt-dlp`. Las métricas (vistas, likes, comentarios) se las pides a la persona
+en una línea («¿cuántas reproducciones, likes y comentarios tiene?»); si no las sabe, escribe «no disponible» y omite
+el cruce de métricas. El resto del análisis no depende de ellas.
+
 **Instagram:**
 ```
 mcp__apify__call-actor
@@ -85,13 +90,25 @@ mkdir -p <SCRATCH>/viral && cd <SCRATCH>/viral
 curl -s -o reel.mp4 "<videoUrl>"
 ls -la reel.mp4    # verifica que pese >1MB; si pesa poco, la URL caducó
 ```
-Si falla, alternativa: `yt-dlp "<URL del post>" -o reel.mp4` (funciona bien para TikTok).
+Si falla, o si no hay Apify: `yt-dlp "<URL del post>" -o reel.mp4` (sirve para Instagram y TikTok; instalar con
+`brew install yt-dlp` o `pip install yt-dlp`). Si tampoco se puede, pide el archivo: «descarga el video y arrástralo aquí».
 
 ## PASO 3 — Transcripción (en background)
 
 ```bash
 whisper reel.mp4 --model small --output_format srt --output_dir .
 ```
+Si `whisper` no existe en la máquina, prueba en este orden y usa el primero que responda:
+```bash
+# whisper.cpp (brew install whisper-cpp). Modelo: el .bin que haya en ~/.cache o el que indique WHISPER_MODEL
+ffmpeg -y -loglevel error -i reel.mp4 -ar 16000 -ac 1 audio.wav
+whisper-cli -m "$WHISPER_MODEL" -l es -osrt -of reel audio.wav
+# o, sin instalar nada fijo:
+uvx --from openai-whisper whisper reel.mp4 --model small --output_format srt --output_dir .
+```
+Si ninguna transcribe, pide el texto: «pega aquí lo que dice el video». Sin tiempos exactos, los timestamps salen de
+contar los frames del Paso 4 y se avisa en el entregable que son aproximados.
+
 Lánzalo con `run_in_background: true` y sigue con el paso 4 mientras corre. Añade `--language es` o `--language en` si ya sabes el idioma (es más rápido y preciso).
 
 **Si el SRT sale vacío, con 2-3 líneas sueltas o puro ruido** ("I", "you", "Omg"), el video **no tiene narración**. Eso no es un error: es el hallazgo más importante del análisis. Cámbiate a modo 100% visual y dilo explícitamente en el entregable.
@@ -126,7 +143,7 @@ Con el SRT y los frames delante, resuelve estas seis preguntas **antes** de escr
 1. **¿Verbal o visual?** ¿El peso lo lleva lo que se dice o lo que se ve? Un video sin narración se analiza por ritmo de corte, no por frases.
 2. **¿Cuál es la tríada del gancho?** Qué se DICE / qué se MUESTRA / qué se LEE en los primeros 2 segundos. Los tres tienen que comunicar lo mismo.
 3. **¿Dónde están los loops?** Marca el segundo exacto en que se abre cada pregunta sin responder y el segundo en que se cierra. Si hay loops anidados, dibújalos.
-4. **¿Cuál es la estructura madre?** Elige UNA del catálogo de 34 en `~/.claude/skills/guionizacion-formula100k/references/estructuras.md` + los injertos secundarios.
+4. **¿Cuál es la estructura madre?** Elige UNA del catálogo de 34 en `~/.claude/skills/guionizacion-formula100k/references/estructuras.md` + los injertos secundarios. Si ese archivo no existe en la máquina, no inventes un número de catálogo: nombra la estructura con tus palabras en una línea («secreto revelado que termina en demostración») y sigue.
 5. **¿Cuál es el pilar de valor?** UNO de los 7 (Revelación, Utilidad Práctica, Validación Emocional, Desafío, Actualidad, Curaduría, Disrupción).
 6. **¿Por qué métrica está optimizado?** Cruza las métricas reales:
 
@@ -167,9 +184,22 @@ Qué sacrificó y a cambio de qué. Cómo cambiarlo si el objetivo del usuario e
 
 # 📋 Plantilla lista para reusar
 Bloque de código con los tiempos y qué va en cada uno, agnóstico de nicho.
+
+# 🛠️ Cómo aplicarla a tu negocio
+Tres pasos, en el RUBRO de quien pide (ver el anclaje de arriba; si no lo sabes, pregúntalo en una línea):
+1. Qué pones tú en cada bloque de la plantilla: una línea por bloque, con un ejemplo de su rubro.
+2. Tu versión de la tríada del gancho: qué dices, qué se ve en tus manos o en pantalla y qué se lee.
+3. Qué NO copiar: el tema, las frases y los datos del video original. Se copia la mecánica.
 ````
 
-Cierra ofreciendo el siguiente paso: adaptarlo al nicho con `guionizacion-formula100k`, o calibrarlo con `calibrador-guion-andrea` si es para Andrea.
+## PASO 7 (opcional) — Datos para el video «guion viral analizado»
+
+Solo si lo piden («hazlo video», «en formato guion analizado») y existe la skill `guion-viral-analizado-f100k`: el
+análisis ya tiene todo lo que ese formato necesita. Entrégale los bloques con su etiqueta (GANCHO, CONFIANZA, GIRO…),
+las frases verbatim con sus tiempos y de una a dos marcas por bloque (frase exacta → color → nota de máximo 7 palabras).
+Esa skill explica el formato del archivo y hace el render.
+
+Cierra ofreciendo el siguiente paso: escribir el guion ya adaptado a su rubro (con `guionizacion-formula100k` si está instalada; si no, escríbelo tú siguiendo la plantilla).
 
 ---
 

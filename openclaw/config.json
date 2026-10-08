@@ -2157,6 +2157,27 @@
         "En Telegram el wizard va una pregunta por mensaje. Al terminar, manda `slides.html` como archivo y `guion.md` como texto o archivo.",
         "No abras navegador para validar: valida el JSON del bloque `datos` con `python3 -c` o `node -e`."
       ]
+    },
+    "collage-reflexion-f100k": {
+      "notes": [
+        "Sin probar todavía en un servidor: la primera vez, saca cuadros sueltos (`skills/collage-reflexion-f100k/scripts/render <carpeta> 1.2,4.5`) antes del render completo y, si algo falla, dilo en una línea con el error.",
+        "El render sí corre aquí: necesita `node`, `ffmpeg`, Chrome y `puppeteer-core`. Chrome se indica con `CHROME=/usr/bin/google-chrome-stable` delante del comando (este script lee `CHROME`, no `CHROME_PATH`) y en Linux ya lanza con `--no-sandbox`. `puppeteer-core`: `npm i puppeteer-core` dentro de la carpeta de la pieza, o `npm install --omit=dev` en `skills/carrusel-render-formula100k`.",
+        "La voz llega por Telegram (nota de voz o audio): conviértela con `ffmpeg -i nota.ogg -ar 44100 -ac 1 voz/narracion.wav`. `say` es solo de Mac: aquí no hay voz de sistema para medir. Nunca generes ni clones la voz sin que la usuaria lo pida.",
+        "`sincronizar.mjs` transcribe con mlx-whisper, que es solo de Mac. En el servidor: si existe `whisper` (openai-whisper), transcribe con `--word_timestamps True --output_format json`, guarda el resultado como `voz/narracion.json` y corre `sincronizar.mjs` (reutiliza ese JSON si es más nuevo que el audio). Si no hay con qué transcribir, no corras `sincronizar.mjs`: el motor reparte los tiempos por estimación y avisa «tiempos ESTIMADOS»; dilo al entregar.",
+        "El recorte de persona u objeto con `recortar.swift` es solo de Mac. Pide la foto YA recortada (PNG con fondo transparente, por ejemplo con «Copiar sujeto» del iPhone). Los objetos que falten se generan con el plugin de Higgsfield solo si está conectado y con el costo aprobado con ✅.",
+        "Fuentes: `Avenir Next`, `Helvetica Neue` y `Georgia` no existen en Linux. Pon en `fuentes.web` la URL del CSS de una fuente de Google (o deja las del sistema y avisa que la letra sale distinta). Los emoji necesitan Noto Color Emoji.",
+        "Trabaja en `entregables/collage-reflexion/<nombre>/`. Fotos, clips y capturas los manda la usuaria por Telegram: nunca inventes una captura ni una cifra. Entrega el MP4 y `hoja-de-contacto.jpg` como documento; si el MP4 pasa de 50 MB, avisa."
+      ]
+    },
+    "reel-lista-que-suena-f100k": {
+      "notes": [
+        "Sin probar todavía en un servidor: saca primero los cuadros de prueba (`--cuadros auto`), MIRA `prueba/hoja.jpg` y, si algo falla, dilo en una línea con el error.",
+        "El render sí corre aquí: necesita `node`, `ffmpeg`, Chrome y `puppeteer-core`. Chrome se indica con `CHROME=/usr/bin/google-chrome-stable` delante del comando (este script lee `CHROME`, no `CHROME_PATH`) y en Linux ya lanza con `--no-sandbox`. `puppeteer-core`: `npm install puppeteer-core` dentro de la carpeta de la pieza, o `npm install --omit=dev` en `skills/carrusel-render-formula100k`.",
+        "Voz: usa la forma (a), frases sueltas en `voz/01.mp3`, `02.mp3`… La usuaria las manda por Telegram como notas de voz, una por frase y en orden (conviértelas con `ffmpeg`). `--say` es solo de Mac y `--grabada` usa mlx-whisper, que también es solo de Mac: aquí no corren. Para ver el diseño sin audio: `--estimar`.",
+        "Fuentes: `-apple-system`, `Helvetica Neue` y `Georgia` no existen en Linux y la plantilla solo admite fuentes instaladas. Usa en `fuentes` las que haya en el servidor (por ejemplo `\"Liberation Sans\"` y `\"Liberation Serif\"`) y avisa que la letra cambia. Los iconos emoji del disco necesitan Noto Color Emoji; si salen cuadritos, avisa y no entregues.",
+        "Carátulas y audios los manda la usuaria: no descargues portadas ni canciones. `mezclar.mjs` y `comprobar-mezcla.mjs` solo usan `ffmpeg` y corren aquí con los audios que ella envíe.",
+        "Trabaja en `entregables/lista-que-suena/<nombre>/`. Entrega por Telegram como documento el MP4 de voz sola, `MONTAJE.md` y `montaje.csv`, y repite el aviso de música y derechos. No publiques nada."
+      ]
     }
   }
 }

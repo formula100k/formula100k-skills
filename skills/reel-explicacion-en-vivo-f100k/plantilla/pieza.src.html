@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Explicación en vivo</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<!-- NO SE EDITA POR PIEZA. Todo lo que cambia vive en guion.json; scripts/armar.mjs mete aquí el guion (GUION),
+     la línea de tiempo ya calculada (TL) y el modo (window.MODO). -->
+<script>/*__DATOS__*/</script>
+<script>
+// Modos (los fija armar.mjs):
+//   capa=todo     maqueta: panel + una silueta donde va tu video + título de pantalla completa + subtítulos
+//   capa=fondo    solo el panel con el hueco de la tarjeta (va DEBAJO de la toma)
+//   capa=mate     blanco donde se ve la toma, negro donde no (la tarjeta que crece hasta llenar el cuadro)
+//   capa=encima   lo que va ENCIMA de la toma (título a pantalla completa y subtítulos), sobre negro
+//   capa=alfa     la transparencia de «encima»
+//   bloque=N      solo ese bloque (para sacar los paneles sueltos)
+const Q = new URLSearchParams(window.MODO || location.search);
+const CAPA = Q.get('capa') || 'todo', BLOQUE = Q.has('bloque') ? +Q.get('bloque') : -1, CON_SUBS = !Q.has('sinsubs');
+const W = 1080, H = 1920, FPS = 30, S = TL.S, D = TL.D;
+const T0 = BLOQUE >= 0 ? TL.INI_B[BLOQUE] : 0;
+var DUR = BLOQUE >= 0 ? +(TL.FIN_B[BLOQUE] - TL.INI_B[BLOQUE]).toFixed(3) : TL.TOTAL;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="paneles.js"></script>
+<script>
+// ANATOMIA: estilizada — la silueta de la maqueta es un busto de maniquí plano y la mascota es pixel art
+window.QUIETO = TL.QUIETO;
+const FRASES = [];
+GUION.bloques.forEach((bl, b) => bl.frases.forEach((f, k) => FRASES.push({ ...f, b, k })));
+const INDICE_BLOQUE = {}; GUION.bloques.forEach((bl, b) => { INDICE_BLOQUE[bl.nombre] = b; });
+const TEMA_BASE = { fondo: '#101014', tinta: '#f4f1ea', ac: '#ff7a59', gris: '#a1a1aa', panel: '#17171d', pelo: '#2c2c38' };
+const TEMA_DE = GUION.bloques.map(bl => ({ ...TEMA_BASE, ...((GUION.temas || {})[bl.tema] || {}) }));
+const TJ = { x: 60, y: 890, w: 960, h: 960, r: 44, ...(GUION.tarjeta || {}) };
+const COMPLETA = { escala: .55, y: 30, velo: .9, ...(GUION.completa || {}) };
+const SUB = { y: 1512, yCompleta: 1330, tam: 70, color: '#ffffff', borde: '#050509', ...(GUION.subtitulo || {}) };
+
+// ---------- cada panel con las frases que cubre ----------
+const INST = [], INST_DE = [];
+FRASES.forEach((f, i) => { const p = f.panel || {}, ult = INST[INST.length - 1];
+  if (p.sigue && ult && ult.b === f.b) ult.frases.push(i); else INST.push({ tipo: p.tipo, p, b: f.b, ini: i, frases: [i], queda: !!p.queda });
+  INST_DE[i] = INST[INST.length - 1]; });
+for (const q of INST) { const L = q.frases, n = L.length, N = Math.max(1, PASOS[q.tipo] ? PASOS[q.tipo](q.p) : 1), ult = L[n - 1], c = Math.max(1, N - (n - 1));
+  q.m = { n, K: (k, f = 0) => k < n - 1 ? S[L[k]] + f * D[L[k]] : S[ult] + (Math.min(k - (n - 1), c - 1) + f) / c * D[ult], D: k => k < n - 1 ? D[L[k]] : D[ult] / c }; }
+function dibuja(q, t) { const fn = PANEL[q.tipo]; if (!fn) return; const p = q.p; ctx.save();
+  if (p.dx || p.dy || p.escala) { ctx.translate(540 + (p.dx || 0), 480 + (p.dy || 0)); ctx.scale(p.escala || 1, p.escala || 1); ctx.translate(-540, -480); }
+  fn(t, p, q.m); ctx.restore(); }
+function paneles(t, i, b) { const act = INST_DE[i]; for (const q of INST) if (q.b === b && q !== act && q.queda && q.ini < act.ini) dibuja(q, t); dibuja(act, t); }
+
+// ---------- encuadres: cuánto ocupa la persona (E) y cuánto se esconde para dejar el panel solo (PF) ----------
+const suave = x => x * x * (3 - 2 * x);
+function valor(segs, t) { let v = segs.length ? segs[0].v0 : 0; for (const s of segs) { if (t < s.a) break; v = t >= s.b ? s.v1 : lerp(s.v0, s.v1, suave((t - s.a) / (s.b - s.a))); } return v; }
+const rectPersona = e => ({ x: lerp(TJ.x, 0, e), y: lerp(TJ.y, 0, e), w: lerp(TJ.w, W, e), h: lerp(TJ.h, H, e), r: lerp(TJ.r, 0, e) });
+let PF = 0;
+
+// ---------- rótulos fijos del bloque: el rubro (izquierda), «ejemplo» (derecha) y la fuente (abajo) ----------
+const PRIMERA = GUION.bloques.map((_, b) => FRASES.findIndex((f, j) => f.b === b && INST_DE[j].tipo !== 'titulo'));   // la primera frase que ya no es portada
+function rotulos(t, i, b) {
+  const bl = GUION.bloques[b], pri = PRIMERA[b]; if (pri < 0 || i < pri) return;
+  ctx.save(); ctx.globalAlpha *= (1 - E);
+  if (bl.ceja) txt(bl.ceja, 72, 172, 25, { al: 'left', peso: 800, esp: 5, col: C.ac, a: fin(t, S[pri]) });
+  let n = -1; for (let j = i; j >= pri; j--) if (FRASES[j].nota) { n = j; break; }
+  if (n < 0 && bl.nota) n = pri;
+  if (n >= 0) txt('• ' + (FRASES[n].nota || bl.nota), 1010, 172, 23, { al: 'right', peso: 600, col: C.gris, a: fin(t, S[n] + (FRASES[n].nota ? 0 : .2 * D[n])), max: 620 });
+  if (bl.fuente) txt(bl.fuente, 540, 838, 22, { peso: 600, col: C.gris, a: fin(t, S[pri] + .3 * D[pri]), max: 980 });
+  ctx.restore();
+}
+
+// ---------- mascota pixel sentada en el borde de la tarjeta (opcional: GUION.mascota) ----------
+function mascota(t, salta) {
+  const M = GUION.mascota; if (!M || !M.filas) return; const U = M.u || 7, brinco = salta ? Math.abs(Math.sin(t * 6)) * U * 1.6 : 0;
+  const filas = M.parpadeo && (t % 3.3) < .13 ? M.parpadeo : M.filas, x0 = Math.round((M.x || 930) - filas[0].length * U / 2), y0 = Math.round(TJ.y - filas.length * U - brinco);
+  filas.forEach((f, y) => { for (let x = 0; x < f.length; x++) { const col = M.paleta[f[x]]; if (col) { ctx.fillStyle = col; ctx.fillRect(x0 + x * U, y0 + y * U, U + .5, U + .5); } } });
+}
+
+// ---------- capa de abajo: el panel y el hueco de la tarjeta ----------
+function fondo(t, i, b) {
+  const bl = GUION.bloques[b];
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  if (C.brillo) glow(540, 480, 820, rgbDe(C.ac).join(','), .05);
+  ctx.save(); ctx.translate(0, PF * (H / 2 - 500));              // panel solo: baja al centro del cuadro
+  rotulos(t, i, b);
+  if (E < .001) paneles(t, i, b);
+  ctx.restore();
+  ctx.save(); ctx.globalAlpha = 1 - PF;
+  if (CAPA !== 'todo') caja(TJ.x, TJ.y, TJ.w, TJ.h, TJ.r, C.panel, C.pelo, 3);
+  if (bl.mascota && E < .001) { const q = INST_DE[i], sm = SALTO_MASCOTA[q.tipo]; mascota(t, !!sm && t > q.m.K(0, sm[0]) && t < q.m.K(0, sm[0]) + sm[1]); }
+  ctx.restore();
+}
+
+// ---------- maqueta: una silueta donde va tu video, con el mismo recorte que tendrá la toma ----------
+function siluetaDePrueba(t, i, b) {
+  const R = rectPersona(E), bl = GUION.bloques[b], yT = (bl.toma && bl.toma.y) ?? .15;
+  const sc = lerp(TJ.w / 1080, 1, E), ox = lerp(TJ.x, 0, E), oy = lerp(TJ.y - 840 * yT * (TJ.w / 1080), 0, E);
+  ctx.save(); ctx.globalAlpha = 1 - PF; ctx.beginPath(); ctx.roundRect(R.x, R.y, R.w, R.h, R.r); ctx.clip();
+  ctx.save(); ctx.translate(ox, oy); ctx.scale(sc, sc);
+  const g = ctx.createLinearGradient(0, 0, 0, 1920); g.addColorStop(0, '#2b2a33'); g.addColorStop(1, '#17161d'); ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1920);
+  ctx.strokeStyle = 'rgba(255,255,255,.035)'; ctx.lineWidth = 29; for (let k = -24; k < 34; k++) { ctx.beginPath(); ctx.moveTo(k * 101, 0); ctx.lineTo(k * 101 - 1920, 1920); ctx.stroke(); }
+  const bal = Math.sin(t * 1.7) * 7; ctx.fillStyle = '#3d3b49';
+  ctx.beginPath(); ctx.arc(540 + bal, 497, 148, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(540 - 371 + bal * .4, 711, 742, 1400, 225); ctx.fill();
+  ctx.restore(); ctx.restore();
+  ctx.save(); ctx.globalAlpha = 1 - PF;
+  caja(R.x, R.y, R.w, R.h, R.r, null, 'rgba(255,255,255,.22)', 3);
+  const yEt = R.y + 28 + E * 460;                                 // a pantalla completa la etiqueta baja: arriba va el título
+  caja(R.x + 28, yEt, 372, 58, 29, 'rgba(5,5,9,.78)'); disco(R.x + 58, yEt + 29, 9, '#ef4444');
+  txt('AQUÍ VA TU VIDEO', R.x + 80, yEt + 31, 26, { al: 'left', esp: 2, col: '#f4f1ea' });
+  txt(`toma ${b + 1}${bl.utileria ? ' · ' + bl.utileria : ''}`, 540, R.y + R.h - 44 - E * 60, 28, { peso: 700, col: 'rgba(244,241,234,.7)', max: 900 });
+  ctx.restore();
+}
+
+// ---------- subtítulos de 1 a 3 palabras ----------
+// En la maqueta se reparten por la duración estimada de cada frase. En el montaje los trae TL.subs, sacados de la voz real.
+const grupos = s => { const gr = []; let a = []; for (const p of s.split(' ')) { a.push(p); const j = a.join(' '); if (a.length >= 3 || j.length >= 13 || /[.,:?]$/.test(p)) { gr.push(j); a = []; } } if (a.length) gr.push(a.join(' ')); return gr; };
+const SUBS = TL.subs || FRASES.flatMap((f, i) => { const gr = grupos(f.txt), tot = gr.reduce((s, x) => s + x.length + 2, 0); let ac = 0;
+  return gr.map((x, k) => { const a = S[i] + D[i] * ac / tot; ac += x.length + 2; return { a, z: S[i] + D[i] * (k === gr.length - 1 ? 1.02 : ac / tot), s: x.replace(/[.,:]$/, '') }; }); });
+function subtitulo(t, b) {
+  const g = SUBS.find(o => t >= o.a && t < o.z); if (!g || !g.s) return;
+  const e = lerp(.9, 1, easeOut(prog(t, g.a, g.a + .07))), cta = GUION.palabraCta && g.s.toUpperCase().includes(GUION.palabraCta.toUpperCase()) && g.s.includes(GUION.palabraCta);
+  let tam = SUB.tam; ctx.save(); ctx.font = `800 ${tam}px ${SANS}`; while (ctx.measureText(g.s).width > 940 && tam > 30) { tam -= 3; ctx.font = `800 ${tam}px ${SANS}`; }
+  ctx.translate(540, lerp(SUB.y, SUB.yCompleta, E)); ctx.scale(e, e); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = SUB.borde; ctx.lineWidth = tam * .2; ctx.strokeText(g.s, 0, 0); ctx.fillStyle = cta ? (SUB.colorCta || TEMA_DE[b].ac) : SUB.color; ctx.fillText(g.s, 0, 0); ctx.restore();
+}
+
+// ---------- capa de arriba: el panel sobre la persona cuando está a pantalla completa + subtítulos ----------
+function encima(t, i, b) {
+  if (E >= .001) {
+    const [r, g, bb] = rgbDe(C.fondo), v = ctx.createLinearGradient(0, 0, 0, 570);
+    v.addColorStop(0, `rgba(${r},${g},${bb},${COMPLETA.velo})`); v.addColorStop(.7, `rgba(${r},${g},${bb},${COMPLETA.velo * .82})`); v.addColorStop(1, `rgba(${r},${g},${bb},0)`);
+    ctx.save(); ctx.globalAlpha = E; ctx.fillStyle = v; ctx.fillRect(0, 0, W, 570); ctx.restore();
+    const s = lerp(1, COMPLETA.escala, E);                         // al volver a la tarjeta, el título crece hasta su lugar en el panel
+    ctx.save(); ctx.translate(540, lerp(0, COMPLETA.y, E)); ctx.scale(s, s); ctx.translate(-540, 0); paneles(t, i, b); ctx.restore();
+  }
+  if (CON_SUBS) subtitulo(t, b);
+}
+
+if (TL.fotos) { const ks = Object.keys(TL.fotos), todas = ks.flatMap(k => TL.fotos[k]);
+  cargarFotos(todas).then(ims => { let j = 0; for (const k of ks) { FOTOS[k] = ims.slice(j, j + TL.fotos[k].length); j += TL.fotos[k].length; } }); }
+
+function draw(frame) {
+  const t = T0 + frame / FPS;
+  let i = 0; while (i < FRASES.length - 1 && t >= S[i + 1]) i++;
+  const b = FRASES[i].b; C = TEMA_DE[b]; E = valor(TL.segE, t); PF = valor(TL.segP, t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  if (CAPA === 'mate') { const R = rectPersona(E); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1 - PF; caja(R.x, R.y, R.w, R.h, R.r, '#fff'); return; }
+  if (CAPA === 'encima' || CAPA === 'alfa') {
+    ctx.clearRect(0, 0, W, H); encima(t, i, b); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    if (CAPA === 'alfa') { ctx.globalCompositeOperation = 'source-in'; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); }
+    else { const im = ctx.getImageData(0, 0, W, H), px = im.data; for (let k = 3; k < px.length; k += 4) if (px[k]) px[k] = 255; ctx.putImageData(im, 0, 0); }   // color sin multiplicar por su transparencia
+    ctx.globalCompositeOperation = 'destination-over'; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); return;
+  }
+  fondo(t, i, b);
+  if (CAPA === 'todo') { siluetaDePrueba(t, i, b); encima(t, i, b); }
+}
+arrancar(draw);
+</script>
+</body>
+</html>

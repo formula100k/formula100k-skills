@@ -14,7 +14,6 @@ export const SKILL = join(AQUI, '..');
 const hermana = (skill, ...resto) => [join(SKILL, '..'), join(homedir(), '.claude', 'skills')].map(b => join(b, skill, ...resto)).find(existsSync) || join(SKILL, '..', skill, ...resto);
 export const NUCLEO = hermana('animacion-dibujada-f100k', 'nucleo', 'nucleo.js');
 export const RENDERIZAR = hermana('animacion-dibujada-f100k', 'scripts', 'renderizar.mjs');
-const ARMAR_NUCLEO = hermana('reel-explicado-animado-f100k', 'scripts', 'armar.mjs');
 export const FPS = 30;
 export const TIPOS = ['titulo', 'contador', 'puntos', 'rejilla', 'ramas', 'escudo', 'barra', 'reloj', 'fichas', 'lista', 'mosaico', 'comentario', 'voz', 'pastillas', 'frase'];
 
@@ -24,7 +23,7 @@ export const arg = (n, def) => { const a = process.argv.find(x => x === '--' + n
 export const carpetaDe = () => { const c = process.argv.slice(2).find(a => !a.startsWith('--')); if (!c) { console.error('Falta la carpeta de la pieza (la que tiene guion.json).'); process.exit(1); } return resolve(c); };
 export const dos = n => String(n).padStart(2, '0');
 
-for (const [f, que] of [[RENDERIZAR, 'animacion-dibujada-f100k'], [ARMAR_NUCLEO, 'reel-explicado-animado-f100k']])
+for (const [f, que] of [[RENDERIZAR, 'animacion-dibujada-f100k'], [NUCLEO, 'animacion-dibujada-f100k']])
   if (!existsSync(f)) { console.error(`Falta la skill ${que} (se usa su motor de dibujo). Debe estar instalada junto a esta o en ~/.claude/skills. Instálala y vuelve a correr.`); process.exit(1); }
 
 // ---------- el guion ----------
@@ -115,7 +114,10 @@ export function armar(dir, G, TL, modo, nombre = 'pieza') {
   writeFileSync(src, readFileSync(join(SKILL, 'plantilla', 'pieza.src.html'), 'utf8')
     .replace('/*__DATOS__*/', () => datos)
     .replace('<script src="paneles.js"></script>', () => '<script>\n' + readFileSync(join(SKILL, 'plantilla', 'paneles.js'), 'utf8') + '\n</script>'));
-  sh('node', [ARMAR_NUCLEO, src, out]);            // mete el núcleo de dibujo (animacion-dibujada-f100k)
+  // mete el núcleo de dibujo (animacion-dibujada-f100k) dentro de la pieza, para que el HTML no dependa de nada
+  const conNucleo = readFileSync(src, 'utf8').replace('<script src="../nucleo/nucleo.js"></script>', () => '<script>\n' + readFileSync(NUCLEO, 'utf8') + '\n</script>');
+  if (conNucleo.includes('../nucleo/nucleo.js')) { console.error('No pude meter el núcleo de dibujo en la pieza.'); process.exit(1); }
+  writeFileSync(out, conNucleo);
   execFileSync('rm', [src]);
   return out;
 }

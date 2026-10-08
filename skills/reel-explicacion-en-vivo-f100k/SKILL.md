@@ -13,14 +13,13 @@ Mira primero `ejemplo/muestra.jpg` (hoja de cuadros de una panadería: tres bloq
 
 ## Antes de empezar: lo que necesita (compruébalo primero)
 
-Esta skill no dibuja sola: usa el motor de otras dos skills, que deben estar instaladas **junto a esta** (en la misma carpeta de skills) o en `~/.claude/skills`.
+Esta skill no dibuja sola: usa el motor de otra skill, que debe estar instalada **junto a esta** (en la misma carpeta de skills) o en `~/.claude/skills`.
 
 | Skill | Qué usa de ella | ¿Viene en el paquete de FÓRMULA 100K? |
 |---|---|---|
 | `animacion-dibujada-f100k` | `nucleo/nucleo.js` y `scripts/renderizar.mjs` | Sí. La primera vez: `npm i` dentro de su carpeta (instala `playwright-core`) |
-| `reel-explicado-animado-f100k` | `scripts/armar.mjs` | **Todavía no.** Sin ella, `maqueta.mjs`, `tomas-de-prueba.mjs` y `montar.mjs` se detienen con «Falta la skill reel-explicado-animado-f100k» |
 
-Si falta `reel-explicado-animado-f100k`, **dilo y detente**: no la sustituyas por otro script ni inventes el paso. Mientras tanto sí puedes dejar listo el guion por bloques (`guion.json`) y la elección de paneles (pasos 1 a 3).
+Si falta `animacion-dibujada-f100k`, **dilo y detente**: no la sustituyas por otro script ni inventes el paso.
 
 Además: Node 18+, ffmpeg, Google Chrome, `say` (solo macOS; es la voz de la maqueta y de las tomas de prueba) y, para el montaje, `uvx` (transcribe con mlx-whisper, solo Mac con chip Apple).
 

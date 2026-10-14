@@ -53,7 +53,23 @@ Esta skill transforma una idea o guion en un carrusel de Instagram completamente
 
 Este paso se ejecuta SIEMPRE, al principio de cada sesión. El perfil visual garantiza que todos los carruseles tengan coherencia de marca.
 
-### 0.1 — Verificar si existe un perfil configurado
+### 0.0 — Primero, su manual de identidad visual
+
+Busca `mi-marca/marca.md` como dice `references/mi-marca.md` (dónde buscarlo, cómo leerlo y qué significa cada campo).
+
+**Si existe:** arma el Perfil Visual de Marca (formato del PASO 0.4) a partir del manual, sin preguntar nada de lo que ya trae:
+- Nombre de marca → `firma.usuario` · Estilo y tono visual → `esencia.rasgos` y la prosa del manual
+- Fondo y fondo de slides interiores → `color.lienzo` · Texto → `color.tinta` · Énfasis y CTA → `color.acento` · Secundario → `color.segundo` (si no hay, `color.acento`)
+- Fuentes de títulos y de cuerpo → `letra.titulares` y `letra.apoyo` (en Canva, sus nombres `canva`) · Elemento de énfasis → `letra.resalta_con`
+- Uso de imágenes → `imagenes.tipo` y `imagenes.tratamiento` · Elementos decorativos → `firma.elemento`
+- Estructura del Slide 1 y CTA visual → `carruseles.portada` y `carruseles.cierre`
+- Nunca usar → `color.prohibidos` e `imagenes.nunca`
+
+Confírmalo en una línea («✓ Tu manual de identidad visual: …») y ve directo al PASO 0.5. En este caso `references/design_profile.md` no se usa.
+
+**Si no existe:** sigue con el 0.1. `design_profile.md` queda como respaldo para quien todavía no tiene su manual.
+
+### 0.1 — Verificar si existe un perfil configurado (respaldo)
 
 Lee el archivo `references/design_profile.md`.
 
@@ -71,7 +87,7 @@ Lee el archivo `references/design_profile.md`.
 
 Explicar al usuario:
 
-> "Para crear carruseles con tu estilo visual consistente, necesito conocer tu identidad de marca. Tienes dos opciones:
+> "Para crear carruseles con tu estilo visual consistente, necesito conocer tu identidad de marca. Lo más completo es armar tu manual de identidad visual en formula100k.app/identidad-visual (unos 15 minutos) y ponerlo en una carpeta `mi-marca` de tu proyecto: así todas tus skills lo leen. Si prefieres seguir ahora, tienes dos opciones:
 >
 > **Opción A — Compartir referencias visuales** *(recomendada)*
 > Sube 1-3 screenshots de carruseles que representen tu estilo (pueden ser tuyos o de inspiración). Analizaré los colores, tipografía, layout y jerarquía visual.

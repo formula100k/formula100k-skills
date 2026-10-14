@@ -60,6 +60,14 @@ Los archivos de `references/` los mantiene el equipo de FÓRMULA 100K y llegan c
 
 **Voz:** tuteo siempre (tú, tienes, sube, comenta). Nunca voseo, tampoco en los textos de las slides.
 
+## Su marca (antes del flujo)
+Busca su manual de identidad visual `mi-marca/marca.md` como dice `references/mi-marca.md`.
+- **Si existe**, úsalo en todo el flujo sin repreguntar:
+  - Paso 1: si trae `carruseles.estilo` (`papel`, `garabato`, `split` o `datos`), incluye entre las 3 fichas propuestas una que se fabrique con esa plantilla, si sirve al objetivo. El objetivo manda.
+  - Paso 3: rellena los corchetes de marca de los prompts con sus valores exactos (hex de `color.*`, letras `canva` o `google_font`, `firma.usuario`).
+  - Paso 6: en `spec.json`, `handle` = `firma.usuario`; `acento` (split) y `color` (garabato) = `color.acento`. En HTML libre, `:root` con `color.lienzo`, `color.tinta`, `color.acento` y `color.segundo`, y sus letras de Google Fonts. Lo que pida el estilo de la ficha (composición, soporte, decoración) se respeta; el color y la letra son los suyos. Portada y cierre cumplen `carruseles.portada` y `carruseles.cierre`.
+- **Si no existe**, pregunta su color y su @ solo cuando haga falta (papel no lleva color propio) y ofrece en una línea armar su manual en formula100k.app/identidad-visual.
+
 ---
 
 ## Flujo

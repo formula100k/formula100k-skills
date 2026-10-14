@@ -39,7 +39,7 @@ Cargar SIEMPRE estos archivos antes de generar:
 3. `references/prompt-builder.md` — fórmula universal del prompt nano_banana_2 + plantillas por arquetipo
 4. `references/animation-presets.md` — prompts de seedance_2_0 / kling3_0 por arquetipo
 5. `references/input-pipeline.md` — cómo procesar tema/URL artículo/URL YouTube → brief estandarizado
-6. `references/brandkit.md` — paleta, tipografía, watermark, reglas de copy
+6. `references/brandkit.md` — paleta, tipografía, watermark, reglas de copy. **Antes, busca su manual de identidad visual** (`references/mi-marca.md`): si existe, sus colores, letras, tratamiento de imagen, movimiento y @ mandan sobre la paleta por mood
 7. `references/word-substitution.md` — sanitización del brief: triggers NSFW + palabras largas propensas a romperse en video
 
 No es opcional.

@@ -30,7 +30,7 @@ Las **36 apps** del artifact `f100k-catalogo-apps-ia.html`. Úsalo en **Fase 0**
 - **#9 Headshots profesionales IA** — *Profesionales, LinkedIn.* 10 selfies → 100 retratos pro. Pago único. Dif: Avanzada. Llaves: Replicate/Fal, Supabase, Stripe. *(Costo por trabajo: avísale.)*
 - **#10 Quitar/cambiar fondo de producto** — *E-commerce, tiendas.* Foto producto → fondo de estudio. Dif: Media. Llaves: API remove-bg + imagen, Supabase, Stripe.
 - **#11 Rediseño de interiores por foto** — *Inmobiliaria, deco, hogar.* Foto de cuarto → rediseñado en estilo X. Dif: Media. Llaves: API imagen img2img, Supabase, Stripe.
-- **#12 Generador de logos + branding** — *Negocios nuevos, emprendedoras.* Preguntas → logos + kit de marca. Dif: Media. Llaves: API imagen, Supabase, Stripe.
+- **#12 Generador de logos + branding** — *Negocios nuevos y marcas que recién empiezan.* Preguntas → logos + kit de marca. Dif: Media. Llaves: API imagen, Supabase, Stripe.
 - **#13 Avatares y retratos IA personalizados** — *Creadoras, marca personal.* Entrena tu cara → fotos tuyas en cualquier escena. Dif: Avanzada. Llaves: Replicate/Fal, Supabase, Stripe. *(Costo por trabajo.)*
 - **#31 Rediseña tu cuarto por foto** — *Deco, inmobiliaria.* Foto de espacio → 3-4 rediseños por estilo. Antes/después compartible. Dif: Media. Llaves: API imagen, Supabase, Stripe.
 

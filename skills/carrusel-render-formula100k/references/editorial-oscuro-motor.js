@@ -10,6 +10,9 @@ function b64(file){
   } catch(e){ return null; }
 }
 const PHOTO = b64('_orig25.jpg');
+// El acento es el de la persona: color.acento de su mi-marca/marca.md (o el de brandkit.md).
+// Pásalo así: ACENTO="#rrggbb" node editorial-oscuro-motor.js
+const ACENTO = process.env.ACENTO || '#ffffff';
 
 // ---------- brand icons (inline SVG squircles) ----------
 const IC = {
@@ -72,9 +75,9 @@ html,body{width:1080px;height:1350px}
 .cta{position:absolute;left:70px;right:70px;top:330px;z-index:6;text-shadow:0 4px 26px rgba(0,0,0,.8)}
 .cta .k{font:800 128px/0.95 -apple-system;letter-spacing:-5px}
 .cta .s{margin-top:28px;font:italic 500 58px/1.18 Georgia,serif;color:#f3efe7}
-.cta .word{color:#F0B24A}
+.cta .word{color:${ACENTO}}
 .ctabox{position:absolute;left:70px;right:70px;bottom:200px;padding:34px 40px;border-radius:22px;
-  background:rgba(10,8,4,.55);backdrop-filter:blur(4px);border:1px solid rgba(240,178,74,.4);z-index:6}
+  background:rgba(10,8,4,.55);backdrop-filter:blur(4px);border:1px solid color-mix(in srgb, ${ACENTO} 40%, transparent);z-index:6}
 .ctabox p{font:600 38px/1.35 -apple-system;color:#f6efe1}
 `;
 

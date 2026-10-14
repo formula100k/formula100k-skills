@@ -99,7 +99,7 @@ Devolver al usuario un resumen corto y honesto del ADN ("esto es lo que hace el 
 
 Antes de reproducir, **decidir qué se conserva y qué se mejora**. El estilo se clona; los errores NO se clonan. Aplicar la capa de mejora (detalle en `references/capa-mejora-f100k.md`):
 
-**Conservar** lo que da identidad: paleta, familia tipográfica, mood, layout base, tratamiento de foto.
+**Conservar** lo que da identidad: familia tipográfica, mood, layout base, tratamiento de foto. La **paleta** del referente se conserva solo si la persona no tiene su manual de identidad visual (ver PASO 3).
 
 **Mejorar SIEMPRE (no negociable):**
 1. **Gancho** → reescribir la portada con un patrón validado F100K (vacío de información, contraste, número, error común). Ver `references/capa-mejora-f100k.md`.
@@ -115,9 +115,16 @@ Mostrar al usuario una tabla de 2 columnas: **"Lo que copiamos del referente" / 
 
 ### PASO 3 — Recibir tema, marca y fotos
 
+**Primero, su manual de identidad visual.** Busca `mi-marca/marca.md` como dice `references/mi-marca.md`.
+
+- **Si existe:** la paleta clonada **se reemplaza por la suya**: fondo → `color.lienzo`, texto → `color.tinta`, acento → `color.acento`, segundo color → `color.segundo`. Las letras del referente se cambian por las suyas (`letra.titulares` y `letra.apoyo`) cuando cumplen el mismo papel (titular pesado, manuscrita, serif). Se respetan sus `color.prohibidos`, `imagenes.nunca`, `carruseles.portada`, `carruseles.cierre` y su firma (`firma.usuario`, `firma.elemento`). Lo que se clona es el sistema: layout, ritmo, decoración y tratamiento de foto.
+  - **Excepción:** si la persona pide quedarse con la paleta o las letras del referente («quiero esos colores»), hazle caso en esta pieza y díselo en una línea.
+  - Muestra en la tabla del PASO 2 una fila «Paleta: la tuya (de tu manual)».
+- **Si no existe:** pregunta lo de siempre (abajo). Puede sobrescribir 1 acento de la paleta clonada. Menciona en una línea que puede armar su manual en formula100k.app/identidad-visual para que la próxima vez salga con su marca sin preguntar.
+
 Confirmar:
 - **Tema/idea** del carrusel propio (1 frase).
-- **Marca:** handle, nombre, color de marca si lo tiene (puede sobrescribir 1 acento de la paleta clonada).
+- **Marca** (solo si no hay manual): handle, nombre, color de marca si lo tiene (puede sobrescribir 1 acento de la paleta clonada).
 - **Fotos** del usuario si el referente usa persona (analizar luz/fondo como en `carrusel-render`). Si no hay fotos y el estilo las requiere, ofrecer: (a) usar foto del usuario, (b) sustituir por bloque tipográfico/forma.
 
 ---
@@ -143,7 +150,7 @@ Escribir un único archivo `carrusel-espejo.html` con N elementos `.slide` (uno 
 Reglas técnicas de render (igual que el resto de skills de carrusel):
 - Cada slide es un `<section class="slide">` de **1080×1350px** exactos (o el ratio detectado: 4:5 / 1:1 / 9:16).
 - Fuentes vía **Google Fonts CDN** — elegir las más cercanas a las del referente (p. ej. serif display → `Playfair Display` / `DM Serif Display`; sans geométrica → `Poppins` / `Space Grotesk` / `Inter`; condensada → `Bebas Neue` / `Archivo`).
-- Paleta clonada en `:root` como variables.
+- Paleta en `:root` como variables: la de su manual si existe; si no, la clonada.
 - Reproducir layout, decoración y tratamiento de foto detectados.
 - Aplicar la capa de mejora del PASO 2 (jerarquía, 1 idea/slide, contraste).
 - **Fotos del usuario:** insertar con `object-fit: cover` en el contenedor que el estilo pida (cutout, polaroid, círculo, fondo). Rutas locales con `file://` absoluto.
@@ -187,3 +194,4 @@ node export.js /ruta/al/carrusel-espejo.html --width 1080 --height 1350 --scale 
 5. **Formato fijo** al ratio del referente; PNG a scale 2.
 6. **Si no hay Chrome**, decirlo y entregar el HTML para que el usuario lo abra/exporte manual.
 7. Si el usuario quiere el estilo scrapbook del usuario en vez del clonado → derivar a `carrusel-render-formula100k`.
+8. **Si existe `mi-marca/marca.md`, la paleta y las letras son las suyas, no las del referente**, salvo que pida lo contrario para esa pieza.

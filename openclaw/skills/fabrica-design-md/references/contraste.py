@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Mide contraste WCAG entre colores. Uso:
-   python3 contraste.py "#050509" "#f4f1ea" "#F0B24A" ...
+   python3 contraste.py "#fff8ec" "#2b2118" "#ff8a3d" ...
 El PRIMER color es el fondo; los demás se miden contra él.
 También avisa si un color sirve como RELLENO (texto oscuro/claro encima)."""
 import sys

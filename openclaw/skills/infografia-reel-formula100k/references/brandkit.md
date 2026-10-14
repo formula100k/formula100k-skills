@@ -4,6 +4,25 @@ Reglas universales que se aplican a TODOS los arquetipos y se inyectan en los pr
 
 ---
 
+## PRIMERO: SU MANUAL DE IDENTIDAD VISUAL
+
+Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe:
+
+- **Paleta:** el mood de abajo sigue eligiendo la composición y la atmósfera, pero los colores son los suyos:
+  fondo → `color.lienzo`, texto principal → `color.tinta`, detalles y acento → `color.acento`, apoyo → `color.segundo`.
+  En el prompt, escribe los hex exactos. Los acentos **semánticos** (verde = bueno, rojo = malo) se quedan solo
+  si el arquetipo compara bueno contra malo, y nunca si son de sus `color.prohibidos`.
+- **Tipografía:** hook y sub-hook con el estilo de su `letra.titulares`; pills y bullets con el de su `letra.apoyo`
+  (descríbelas en el prompt por su forma: «sans gruesa redonda», «serif itálica», «a mano»).
+- **Imagen:** respeta `imagenes.tipo`, `imagenes.tratamiento` e `imagenes.nunca`; la textura de `movimiento.textura`
+  orienta el material de la imagen base.
+- **Animación:** en el Paso 6, el carácter de `movimiento.caracter` (duración, frenado, rebote, de dónde entra, cómo
+  sale) y `movimiento.nunca` van en el prompt de animación.
+- **Watermark:** `firma.usuario`.
+
+Si no hay manual, usa la paleta del mood como siempre, y menciona en una línea que puede armar su manual en
+formula100k.app/identidad-visual para que sus infografías salgan con su marca.
+
 ## PALETA POR MOOD
 
 ### `clinico_dramatico` (default para A1, A2)

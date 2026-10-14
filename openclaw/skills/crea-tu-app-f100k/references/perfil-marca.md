@@ -2,6 +2,23 @@
 
 Objetivo: en **menos de 5 preguntas** (una a la vez), sacar lo justo para que la app se vea TUYA, no genérica. Si la alumna no sabe algo, dale defaults bonitos y sigue. **Nunca la bloquees por la marca.**
 
+## Si tiene su manual de identidad visual
+
+Si existe `mi-marca/marca.md` (cómo buscarlo y leerlo: `references/mi-marca.md`), el perfil sale de ahí y solo preguntas
+el nombre de la app y el logo:
+
+| En `PERFIL-MARCA.md` | Sale de su manual |
+|---|---|
+| Colores: primario | `color.acento` |
+| Colores: secundario | `color.segundo` (si no hay, deriva uno del acento) |
+| Colores: fondo · texto | `color.lienzo` · `color.tinta` (ya cumplen contraste: no los cambies) |
+| Tono | `esencia.rasgos` y `esencia.le_habla_a` |
+| Tipografía sugerida | `letra.titulares` y `letra.apoyo` (`google_font`; si trae `archivo`, su `canva`) |
+| Referencia visual | `firma.usuario` y «manual de identidad visual» |
+| Lo que nunca va | `color.prohibidos` |
+
+Si no hay manual, sigue con las preguntas de abajo.
+
 ## Las preguntas (una a la vez)
 
 1. **Nombre de la app.** "¿Cómo quieres que se llame tu app?" Si no sabe, propón 2-3 nombres a partir de lo que hace (cortos, fáciles, memorables).

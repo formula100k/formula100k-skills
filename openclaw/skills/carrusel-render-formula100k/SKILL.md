@@ -1,6 +1,6 @@
 ---
 name: carrusel-render-formula100k
-description: "Renderiza un guion de carrusel a slides PNG terminados (1080×1350, exportados a 2x), listos para subir a Instagram. Estilo por defecto EDITORIAL OSCURO (foto real de la usuaria, sans pesada + serif itálica, acento dorado); alternativo SCRAPBOOK (crema, Caveat + Poppins, post-its, washi tape, stickers) si lo pide. Integra fotos reales de la usuaria (polaroid, hero, cutout, tira de fotomatón). Escribe el HTML y lo exporta a PNG con el Chromium headless del servidor. Activar SIEMPRE que pida: \"renderiza este carrusel\", \"exporta este guion a PNG\", \"convierte este guion en slides\", \"diséñame el carrusel\", \"hazme las imágenes del carrusel\", \"genera las slides en mi estilo\", \"carrusel con mi foto\", \"usa mis fotos\", o pase un guion con Slide 1 / Slide 2 queriendo los archivos visuales. También con el resultado de carrusel-viral-formula100k. NO escribe el guion: para eso está carrusel-viral-formula100k."
+description: "Renderiza un guion de carrusel a slides PNG terminados (1080×1350, exportados a 2x), listos para subir a Instagram, con la marca de la usuaria: lee primero su manual de identidad visual (mi-marca/marca.md) para colores, letras y handle. Dos estilos: SCRAPBOOK (papel con textura, post-its, washi tape, stickers) o EDITORIAL CON FOTO (foto real de la usuaria, sans pesada + serif itálica, su acento en la palabra clave). Integra fotos reales de la usuaria (polaroid, hero, cutout, tira de fotomatón). Escribe el HTML y lo exporta a PNG con el Chromium headless del servidor. Activar SIEMPRE que pida: \"renderiza este carrusel\", \"exporta este guion a PNG\", \"convierte este guion en slides\", \"diséñame el carrusel\", \"hazme las imágenes del carrusel\", \"genera las slides en mi estilo\", \"carrusel con mi foto\", \"usa mis fotos\", o pase un guion con Slide 1 / Slide 2 queriendo los archivos visuales. NO escribe el guion: para eso está carrusel-viral-formula100k."
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---
 
@@ -13,7 +13,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 > - Cómo renderizar en el servidor: en la carpeta de esta skill corre `npm install --omit=dev` una sola vez (solo instala `puppeteer-core`, no baja navegador). Luego `CHROME_PATH="$(command -v chromium || command -v chromium-browser || command -v google-chrome)" node export.js <html> --width 1080 --height 1350 --scale 2`. Si el Chromium del agente es el de Playwright, la ruta es `~/.cache/ms-playwright/chromium-*/chrome-linux/chrome`. Esta versión del script ya busca `CHROME_PATH` y rutas de Linux y lanza con `--no-sandbox`.
 > - Si no hay Node o `puppeteer-core` no instala: abre el HTML en tu navegador (Chromium del agente) con ventana de 1080×1350 y toma captura de cada `.slide`. Si tampoco puedes, entrega el `.html` por Telegram y dilo en la primera línea.
 > - Fuentes en Linux: `-apple-system`, `Helvetica` y `Georgia` no existen en el servidor y el render sale con otra letra. En el `<head>` carga de Google Fonts `Inter` (800) y `Gelasio` (tiene las medidas de Georgia) y ponlas primero en cada `font-family`. Los stickers emoji necesitan la fuente Noto Color Emoji instalada; si salen cuadritos, avisa y no entregues.
-> - Estilo por defecto: EDITORIAL OSCURO (así lo dice `brandkit.md`, aunque otras partes digan scrapbook). Scrapbook solo si ella lo pide.
+> - Marca y estilo: primero su manual de identidad visual `mi-marca/marca.md` (en su workspace o en `cerebro/`; cómo leerlo en `references/mi-marca.md`). Si no hay manual, la tabla «Mi marca» de `brandkit.md`. No hay estilo por defecto: scrapbook o editorial con foto según su manual o lo que pida.
 > - Handle, palabra del CTA y oferta: sácalos de `USER.md` y `cerebro/`. Donde la skill diga «Comenta 100K» o «cierra vendiendo F100K», usa SU palabra clave y SU oferta; pregunta en una línea si no están.
 > - Fotos: `cerebro/fotos/`. Copia la elegida a la carpeta del carrusel con nombre simple para que el `<img>` use ruta relativa. Las capturas «CAPTURA REAL» tienen que mandarlas ella: nunca las inventes.
 > - Entrega: los PNG por Telegram como archivo (documento, no foto, para que no se compriman), en orden `slide-01…`. Guarda todo en `entregables/carruseles/`.
@@ -22,7 +22,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 # Skill: Carrusel Render Fórmula 100K
 
-Toma un guion estructurado de carrusel y produce los slides como imágenes PNG listas para Instagram, aplicando el brandkit visual de FÓRMULA 100K con el handle, la oferta y las fotos de la usuaria.
+Toma un guion estructurado de carrusel y produce los slides como imágenes PNG listas para Instagram, con los colores, las letras y el @ de la persona, en estilo scrapbook o editorial (`brandkit.md`).
 
 ---
 
@@ -43,10 +43,14 @@ Triggers típicos:
 
 ## PROCESO OBLIGATORIO
 
-### Paso 1 — Leer el brandkit
-Antes de escribir HTML, leer `brandkit.md` para conocer:
-- Paleta de colores
-- Tipografías
+### Paso 1 — Leer su marca y el brandkit
+1. **Primero, su manual de identidad visual.** Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe, sus colores, letras, tratamiento de imágenes, reglas de portada y cierre, firma y prohibidos mandan sobre todo lo demás. Confírmalo en una línea y no repreguntes lo que ya trae.
+2. **Si no hay manual:** usa la tabla «Mi marca» de `brandkit.md` (formato de siempre).
+3. **Si tampoco:** ofrece armarlo en formula100k.app/identidad-visual o pregunta en un solo mensaje fondo, texto, acento, letra de títulos y @.
+
+Después lee `brandkit.md` para conocer:
+- Cómo pasan los valores de su marca a cada estilo
+- Qué estilo usar (scrapbook o editorial con foto)
 - Reglas de composición
 - Decoración (stickers, tape, post-its, doodles)
 - Handle e identidad
@@ -91,7 +95,7 @@ Confirmar con el usuario o usar default.
 - Slides intermedios = rotar entre composiciones B/C/D
 - Slide final = cierre con CTA + "guárdalo para después" + handle
 - Cada slide: `<div class="slide sN">...</div>` consecutivos, todos 1080×1350px
-- Tipografías Google Fonts vía CDN (Caveat + Poppins)
+- Tipografías Google Fonts vía CDN: las de su manual (`letra.titulares` y `letra.apoyo`); sin manual, Caveat + Poppins
 - Texto en pantalla suficientemente grande para leer en feed móvil (mínimo 26px cuerpo, títulos 100px+)
 - Subrayados y garabatos como SVG inline
 - Stickers emoji rotados con `transform`
@@ -159,7 +163,8 @@ O en formato libre. La skill debe ser flexible: si el usuario pasa el guion en o
 
 ## REFERENCIAS
 
-- `brandkit.md` — paleta, tipografías, decoración, handle
+- `references/mi-marca.md` — cómo buscar y leer su manual de identidad visual (`mi-marca/marca.md`)
+- `brandkit.md` — cómo se aplica su marca, los dos estilos, decoración y handle
 - `references/composiciones.md` — patrones de layout asimétrico
 - `references/fotos-reales.md` — patrones CSS para integrar fotos del usuario (polaroid, hero, cutout, photo strip)
 - `references/ejemplo-completo.html` — carrusel "Chisme Silicon Valley" como referencia canónica del estilo

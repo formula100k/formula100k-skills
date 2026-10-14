@@ -1,12 +1,12 @@
 ---
 name: carrusel-render-formula100k
 description: >
-  Skill para renderizar guiones de carrusel a slides PNG terminados, listos para subir a Instagram, usando el brandkit visual de Andrea Vega (FÓRMULA 100K) — estilo scrapbook/collage con paleta crema, tipografías Caveat + Poppins, post-its, washi tape y stickers. Soporta integrar FOTOS REALES del usuario (polaroid, hero background, cutout). Activar SIEMPRE que el usuario pida: "renderiza este carrusel", "exporta este guion a PNG", "convierte este guion en slides", "diséñame el carrusel", "hazme las imágenes del carrusel", "genera las slides en mi estilo", "carrusel con mi foto", "usa mis fotos", o cualquier solicitud que combine un guion de carrusel (slide 1 / slide 2 / etc.) con la intención de tener archivos visuales listos. También activar cuando le pasen el output de la skill carrusel-viral-formula100k y quiera renderizarlo. NO usar para generar el guion — para eso está carrusel-viral-formula100k.
+  Skill para renderizar guiones de carrusel a slides PNG terminados, listos para subir a Instagram, con la marca de quien la usa (lee su manual de identidad visual mi-marca/marca.md) en uno de dos estilos: scrapbook/collage (post-its, washi tape, stickers) o editorial con su foto real. Soporta integrar FOTOS REALES del usuario (polaroid, hero background, cutout). Activar SIEMPRE que el usuario pida: "renderiza este carrusel", "exporta este guion a PNG", "convierte este guion en slides", "diséñame el carrusel", "hazme las imágenes del carrusel", "genera las slides en mi estilo", "carrusel con mi foto", "usa mis fotos", o cualquier solicitud que combine un guion de carrusel (slide 1 / slide 2 / etc.) con la intención de tener archivos visuales listos. También activar cuando le pasen el output de la skill carrusel-viral-formula100k y quiera renderizarlo. NO usar para generar el guion — para eso está carrusel-viral-formula100k.
 ---
 
 # Skill: Carrusel Render Fórmula 100K
 
-Toma un guion estructurado de carrusel y produce los slides como imágenes PNG listas para Instagram, aplicando el brandkit visual de Andrea Vega.
+Toma un guion estructurado de carrusel y produce los slides como imágenes PNG listas para Instagram, con los colores, las letras y el @ de la persona, en estilo scrapbook o editorial (`brandkit.md`).
 
 ---
 
@@ -27,10 +27,14 @@ Triggers típicos:
 
 ## PROCESO OBLIGATORIO
 
-### Paso 1 — Leer el brandkit
-Antes de escribir HTML, leer `brandkit.md` para conocer:
-- Paleta de colores
-- Tipografías
+### Paso 1 — Leer su marca y el brandkit
+1. **Primero, su manual de identidad visual.** Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe, sus colores, letras, tratamiento de imágenes, reglas de portada y cierre, firma y prohibidos mandan sobre todo lo demás. Confírmalo en una línea y no repreguntes lo que ya trae.
+2. **Si no hay manual:** usa la tabla «Mi marca» de `brandkit.md` (formato de siempre).
+3. **Si tampoco:** ofrece armarlo en formula100k.app/identidad-visual o pregunta en un solo mensaje fondo, texto, acento, letra de títulos y @.
+
+Después lee `brandkit.md` para conocer:
+- Cómo pasan los valores de su marca a cada estilo
+- Qué estilo usar (scrapbook o editorial con foto)
 - Reglas de composición
 - Decoración (stickers, tape, post-its, doodles)
 - Handle e identidad
@@ -75,7 +79,7 @@ Confirmar con el usuario o usar default.
 - Slides intermedios = rotar entre composiciones B/C/D
 - Slide final = cierre con CTA + "guárdalo para después" + handle
 - Cada slide: `<div class="slide sN">...</div>` consecutivos, todos 1080×1350px
-- Tipografías Google Fonts vía CDN (Caveat + Poppins)
+- Tipografías Google Fonts vía CDN: las de su manual (`letra.titulares` y `letra.apoyo`); sin manual, Caveat + Poppins
 - Texto en pantalla suficientemente grande para leer en feed móvil (mínimo 26px cuerpo, títulos 100px+)
 - Subrayados y garabatos como SVG inline
 - Stickers emoji rotados con `transform`
@@ -143,7 +147,8 @@ O en formato libre. La skill debe ser flexible: si el usuario pasa el guion en o
 
 ## REFERENCIAS
 
-- `brandkit.md` — paleta, tipografías, decoración, handle
+- `references/mi-marca.md` — cómo buscar y leer su manual de identidad visual (`mi-marca/marca.md`)
+- `brandkit.md` — cómo se aplica su marca, los dos estilos, decoración y handle
 - `references/composiciones.md` — patrones de layout asimétrico
 - `references/fotos-reales.md` — patrones CSS para integrar fotos del usuario (polaroid, hero, cutout, photo strip)
 - `references/ejemplo-completo.html` — carrusel "Chisme Silicon Valley" como referencia canónica del estilo

@@ -59,6 +59,7 @@ Objetivo: que la alumna salga con **una** app elegida, que sea buena para SU neg
 
 Objetivo: capturar un **mini-perfil de marca** para que la app no salga genérica.
 
+0. **Primero, su manual de identidad visual.** Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe, llena con él lo que ya trae (colores, tipografía, tono, referencia visual; ver la tabla en `references/perfil-marca.md`) y pregunta **solo** lo que no trae: el nombre de la app y el logo. Si no existe, sigue con el punto 1 y menciona en una línea que puede armar su manual en formula100k.app/identidad-visual.
 1. Sigue `references/perfil-marca.md` para capturar, **una pregunta a la vez**: nombre de la app, colores, tono y logo.
 2. Si no tiene marca definida, ofrécele 2–3 paletas bonitas listas y que elija una. No la bloquees por esto.
 3. Si tiene Instagram/web, ofrécele "saco tus colores de ahí" (su web pública la miras con el navegador del agente; de Instagram, pídele capturas por Telegram).
@@ -146,4 +147,5 @@ No reinventes lo que estas skills ya hacen. Tu trabajo es el **orden, la narraci
 ## Referencias
 
 - `references/catalogo-apps.md` — las 36 apps del Catálogo de Apps IA: para qué nicho sirve cada una, qué construye, su stack y qué llaves necesita. Úsalo en Fase 0 para recomendar.
+- `references/mi-marca.md` — cómo buscar y leer su manual de identidad visual (`mi-marca/marca.md`).
 - `references/perfil-marca.md` — cómo capturar y guardar la marca de la alumna (Fase 1).

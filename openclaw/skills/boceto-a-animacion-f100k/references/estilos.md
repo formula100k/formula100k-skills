@@ -16,7 +16,7 @@ estilos en un reel se ve como un banco de imágenes.
 | Algo íntimo, un proceso creativo, «así lo pensé» | `lapiz-vivo` | el trazo sigue siendo tuyo |
 | Historia, oficio, algo antiguo o con peso moral | `grabado-tenebrista` | el claroscuro le da gravedad |
 | Juego, humor, algo que se arma pieza por pieza | `plastilina` | el stop-motion da risa sin chiste |
-| Marca F100K, láminas de clase, la comunidad | `noche-dorada` | es la identidad del DESIGN.md |
+| Su propia marca, láminas de clase, su comunidad | `noche-de-marca` | usa los colores de `mi-marca/marca.md` |
 
 Ofrece **3** candidatos con una línea de por qué, y recomienda uno.
 
@@ -93,16 +93,16 @@ physically handmade.
 ```
 Movimiento que le va: `stop-motion at 12 fps, slightly jittery, objects squash and stretch`.
 
-## `noche-dorada`
-*F100K. Colores del DESIGN.md: negro `#050509`, crema `#f4f1ea`, UN dorado `#F0B24A`.*
+## `noche-de-marca`
+*Sus colores. Lee `mi-marca/marca.md`: `color.tinta` (fondo oscuro), `color.lienzo` (claro) y `color.acento` (UN solo acento). Si no tiene manual, pregúntale sus colores o sugiérele armarlo en formula100k.app/identidad-visual. Abajo, `[OSCURO]`, `[CLARO]` y `[ACENTO]` se reemplazan por esos hex.*
 
 ```
-Minimal luxury graphic scene. Background: deep ink black (#050509) with a very soft warm
-radial glow behind the subject. Objects are rendered in matte cream (#f4f1ea) with fine gold
-(#F0B24A) edges and one gold highlight on the hero element only. Thin elegant gold line work,
+Minimal luxury graphic scene. Background: deep dark ([OSCURO]) with a very soft warm
+radial glow behind the subject. Objects are rendered in matte light tone ([CLARO]) with fine accent
+([ACENTO]) edges and one accent highlight on the hero element only. Thin elegant accent line work,
 subtle film grain, calm cinematic lighting, generous negative space. No other colors.
 ```
-Gold solo en UN elemento. Si todo brilla dorado, deja de ser la firma.
+El acento va solo en UN elemento. Si todo brilla con el acento, deja de ser la firma.
 
 ---
 

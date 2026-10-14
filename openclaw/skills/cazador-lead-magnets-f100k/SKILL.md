@@ -140,7 +140,7 @@ Escala de tangibilidad (de menor a mayor intención de uso inmediato):
 
 ### Nivel 1 — PDF / Checklist (techo bajo)
 1. **"10 cosas que revisar antes de publicar un reel"** — Dolor: miedo a publicar y fallar
-2. **"50 términos de IA para emprendedoras digitales"** — Dolor: sentirse fuera de la conversación
+2. **"50 términos de IA para dueñas de negocio"** — Dolor: sentirse fuera de la conversación
 
 ### Nivel 2 — Plantilla rellenable
 3. **Notion "Calendario de contenido 30 días con casillas de tracking"** — Dolor: no saber qué publicar mañana

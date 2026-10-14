@@ -347,7 +347,7 @@ Una vez detectados los patrones, generar las **30-50 ideas propias** para el usu
 - **Cluster del que viene:** Ángulo "vender sin mostrar la cara" + Hook pregunta + Meat demo de app
 - **Hook propuesto (verbal):** "¿Y si te dijera que las mujeres que ganan $10K/mes en Instagram NO muestran la cara en 7 de cada 10 videos?"
 - **Hook visual:** Pantalla dividida — izquierda: contador de seguidores subiendo · derecha: cara cubierta con post-it que dice "no necesito esto"
-- **Meat:** Demo de [TU APP] generando 30 guiones en 2 minutos + screenshot de DM "ya cerré 3 clientes esta semana"
+- **Meat:** Demo de su producto resolviendo el problema en pantalla + captura real de un mensaje de clienta (con permiso)
 - **CTA:** "Comenta YO y te mando GRATIS los 5 ganchos que usé para llegar a $10K/mes sin mostrar mi cara"
 - **Variantes H×M×C planeadas:** 8 hooks × 3 meats × 2 CTAs = 48 anuncios producibles
 - **Plataforma:** Instagram Reels Ads + TikTok Spark Ads
@@ -397,7 +397,7 @@ Cuando el usuario elige X ideas y dice "guionízame estas", entrar en modo guion
 ## BLOQUE M (3 meats producibles)
 
 ### Meat 1 — Demostración de app
-- Voz: "Esto es [TU APP]. Le metes el tema, te da 30 guiones. Listos para grabar sin mostrar la cara."
+- Voz: "Esto es [su producto]. [Qué le das] y [qué te devuelve], en [tiempo real]."
 - Visual: screen recording del producto · 6s
 - Master Script puntos cubiertos: N/A (es demo)
 

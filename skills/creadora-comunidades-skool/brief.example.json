@@ -1,25 +1,25 @@
 {
-  "cliente": "PODER INVERSIONISTA",
-  "subtitle": "Propuesta integral de Comunidad Skool — Las Creadoras de Riqueza",
-  "tagline": "No apostamos. Construimos. La comunidad de las Creadoras de Riqueza.",
+  "cliente": "RAÍZ PATRIMONIAL",
+  "subtitle": "Propuesta integral de Comunidad Skool — Las Constructoras de Patrimonio",
+  "tagline": "No apostamos. Construimos. La comunidad de las Constructoras de Patrimonio.",
 
   "s1_resumen": {
     "que_es": "Una comunidad Skool para mujeres profesionales latinoamericanas (25-45 años, con ingresos propios y patrimonio en construcción) que quieren dejar atrás el miedo financiero y empezar a construir un ecosistema patrimonial sólido: bolsa, bienes raíces, garantía hipotecaria y startups.",
     "por_que_ahora": [
-      "Se apalanca del libro Libera tu Poder Inversionista (Editorial Planeta, segundo semestre 2026).",
-      "La fundadora cuenta con una charla TEDx sobre educación financiera y empoderamiento femenino.",
+      "Se apalanca del libro [título de su libro] ([editorial], [fecha]).",
+      "La fundadora cuenta con una charla pública sobre educación financiera y empoderamiento femenino.",
       "El benchmark revela un vacío claro: nadie habla directamente a la mujer profesional latinoamericana con dinero pero con miedo."
     ],
-    "tesis": "El mercado vende información a personas SIN dinero (invierte desde $20, primer paso). Poder Inversionista vende ACCIÓN ACOMPAÑADA a mujeres que YA tienen dinero pero NO toman acción. Ese giro de avatar es la oportunidad central de la categoría."
+    "tesis": "El mercado vende información a personas SIN dinero (invierte desde $20, primer paso). Raíz Patrimonial vende ACCIÓN ACOMPAÑADA a mujeres que YA tienen dinero pero NO toman acción. Ese giro de avatar es la oportunidad central de la categoría."
   },
 
   "s2_brief": {
     "identidad_fundadora": [
       "Administradora con +15 años de experiencia corporativa (transnacional en Perú y Panamá).",
-      "Charla TEDx publicada sobre educación financiera y empoderamiento femenino.",
+      "Charla pública publicada sobre educación financiera y empoderamiento femenino.",
       "Historia personal: de +30K en deudas de tarjeta a ecosistema proyectado a $4MM al jubilarse.",
       "Portafolio actual diversificado: bienes raíces, bolsa, garantía hipotecaria, startups.",
-      "Libro próximo: Libera tu Poder Inversionista (Editorial Planeta, H2 2026)."
+      "Libro próximo: [título de su libro] ([editorial], [fecha])."
     ],
     "avatar_descripcion": "Mujer Profesional Latinoamericana de 25 a 45 años, con ingresos propios y capacidad de ahorro, que consume contenido financiero constantemente pero no toma acción.",
     "como_se_ve_hoy": [
@@ -61,9 +61,9 @@
   },
 
   "s4_identidad": {
-    "nombre_explicacion": "Poder Inversionista. Se apalanca del libro próximo a publicarse, tiene narrativa aspiracional y habla de identidad (convertirte en una mujer inversionista), no solo de aprender finanzas.",
-    "manifiesto": "Las mujeres ya construimos.\nLo demostramos cuando estudiamos, trabajamos, lideramos equipos,\nsostenemos hogares, levantamos empresas, cargamos generaciones.\n\nConstruir pide pausa, paciencia y orden.\nExactamente lo mismo que pide construir patrimonio.\n\nDurante décadas, el mundo masculino del dinero\nnos hizo creer que invertir era apostar.\n\nLas mujeres no apostamos. Construimos.\nNo aceleramos. Planificamos.\nNo competimos. Construimos juntas.\nNo medimos en likes. Medimos en décadas.\n\nBienvenida a Poder Inversionista.",
-    "mito_de_origen": "Durante años, muchas mujeres profesionales latinoamericanas hicieron todo bien: estudiaron, trabajaron duro, construyeron carreras, sostuvieron empresas, levantaron equipos. Construyeron legados invisibles que nadie nunca contó.\n\nPero cuando se acercaban al mundo de las inversiones, ese mundo les hablaba en masculino: con jerga, con bravuconería, con la lógica del todo o nada, con la estética del Lamborghini y el monitor lleno de gráficos.\n\nHasta que un día algo se hizo claro: el problema nunca fue su capacidad. El problema fue que nadie les había recordado que YA ERAN CONSTRUCTORAS. Poder Inversionista nació para abrir ese espacio.",
+    "nombre_explicacion": "Raíz Patrimonial. Se apalanca del libro próximo a publicarse, tiene narrativa aspiracional y habla de identidad (convertirte en una mujer inversionista), no solo de aprender finanzas.",
+    "manifiesto": "Las mujeres ya construimos.\nLo demostramos cuando estudiamos, trabajamos, lideramos equipos,\nsostenemos hogares, levantamos empresas, cargamos generaciones.\n\nConstruir pide pausa, paciencia y orden.\nExactamente lo mismo que pide construir patrimonio.\n\nDurante décadas, el mundo masculino del dinero\nnos hizo creer que invertir era apostar.\n\nLas mujeres no apostamos. Construimos.\nNo aceleramos. Planificamos.\nNo competimos. Construimos juntas.\nNo medimos en likes. Medimos en décadas.\n\nBienvenida a Raíz Patrimonial.",
+    "mito_de_origen": "Durante años, muchas mujeres profesionales latinoamericanas hicieron todo bien: estudiaron, trabajaron duro, construyeron carreras, sostuvieron empresas, levantaron equipos. Construyeron legados invisibles que nadie nunca contó.\n\nPero cuando se acercaban al mundo de las inversiones, ese mundo les hablaba en masculino: con jerga, con bravuconería, con la lógica del todo o nada, con la estética del Lamborghini y el monitor lleno de gráficos.\n\nHasta que un día algo se hizo claro: el problema nunca fue su capacidad. El problema fue que nadie les había recordado que YA ERAN CONSTRUCTORAS. Raíz Patrimonial nació para abrir ese espacio.",
     "contraste": [
       {"ellos": "Apuestan", "nosotras": "CONSTRUIMOS"},
       {"ellos": "Aceleran", "nosotras": "Planificamos"},
@@ -74,7 +74,7 @@
       {"ellos": "Miden en likes", "nosotras": "Medimos en décadas"},
       {"ellos": "Riesgo = adrenalina", "nosotras": "Riesgo = matemática, no emoción"}
     ],
-    "identidad_miembros": "Las miembros se llaman LAS INVERSIONISTAS PODEROSAS (uso completo) o LAS INVERSIONISTAS (uso cotidiano). Ni alumnas, ni estudiantes: Inversionistas Poderosas.",
+    "identidad_miembros": "Las miembros se llaman LAS CONSTRUCTORAS DE PATRIMONIO (uso completo) o LAS CONSTRUCTORAS (uso cotidiano). Ni alumnas, ni estudiantes: Constructoras de Patrimonio.",
     "valores": [
       "Claridad antes que complejidad.",
       "Acción antes que perfección.",
@@ -97,7 +97,7 @@
   },
 
   "s5_vehiculo": {
-    "nombre_metodo": "El Método Poder Inversionista",
+    "nombre_metodo": "El Método Raíz Patrimonial",
     "promesa_central": "Un sistema femenino de construcción patrimonial diseñado para mujeres profesionales que tienen mucho que cuidar, mucho que construir y poca tolerancia para la lógica del casino masculino. En 12 meses te lleva de tener dinero parado en el banco a tener tu primer ECOSISTEMA PATRIMONIAL estructurado.",
     "tesis_fundacional": "Las mujeres ya construimos: carreras, empresas, hogares, equipos, comunidades. Construir pide pausa, paciencia y orden — exactamente lo mismo que pide construir patrimonio.",
     "leyes": [
@@ -121,7 +121,7 @@
       {"fase": "Fase 1", "identidad": "La Asustada", "como_se_siente": "Tengo dinero, tengo años trabajados, y aun así tengo miedo de mover un dólar.", "necesita": "Calma · Validación · Reescritura de narrativa"},
       {"fase": "Fase 2", "identidad": "La Aprendiz", "como_se_siente": "Ya entiendo lo básico. Pero todavía tiemblo al ejecutar.", "necesita": "Método claro · Tutoriales · Buddy · Quick wins"},
       {"fase": "Fase 3", "identidad": "La Constructora", "como_se_siente": "Ya invertí. Ya armé portafolio. Ahora estoy construyendo mi ecosistema.", "necesita": "Workshops avanzados · Expertas · Hot Seats · Plan a 10 años"},
-      {"fase": "Fase 4", "identidad": "La Inversionista Poderosa", "como_se_siente": "Ya no necesito que me guíen. Las nuevas vienen a preguntarme cómo lo hago.", "necesita": "Espacio para liderar · Inner Circle · Programa Legado"}
+      {"fase": "Fase 4", "identidad": "La Constructora de Patrimonio", "como_se_siente": "Ya no necesito que me guíen. Las nuevas vienen a preguntarme cómo lo hago.", "necesita": "Espacio para liderar · Inner Circle · Programa Legado"}
     ]
   },
 
@@ -145,7 +145,7 @@
       {"componente": "Toolkit completo", "entrega": "Plantillas + calculadoras + checklists + roadmaps"},
       {"componente": "Wealth Letters", "entrega": "Newsletter privada semanal con análisis curado"},
       {"componente": "Inner Circle Deal Flow", "entrega": "Acceso a oportunidades de inversión privadas (planes anuales)"},
-      {"componente": "Acceso anticipado al libro", "entrega": "Libera tu Poder Inversionista — capítulos exclusivos"}
+      {"componente": "Acceso anticipado al libro", "entrega": "[título de su libro] — capítulos exclusivos"}
     ],
     "valor_vs_precio": [
       {"componente": "Classroom + 35 clases pregrabadas", "valor": "$1,200"},
@@ -183,7 +183,7 @@
     {
       "modulo": "M0", "modulo_titulo": "START HERE", "modulo_total": "4 videos · 16 min",
       "videos": [
-        {"codigo": "M0.1", "titulo": "Bienvenida personal", "duracion": "3-5 min", "formato": "TH", "hook": "Si llegaste hasta aquí, quiero que sepas algo: este NO es otro curso de finanzas más.", "promesa": "Entiende por qué Poder Inversionista existe y qué la hace distinta.", "estructura": "1) Historia personal corta 2) Por qué creé esta comunidad 3) Para quién SÍ y para quién NO es 4) Próximo paso"},
+        {"codigo": "M0.1", "titulo": "Bienvenida personal", "duracion": "3-5 min", "formato": "TH", "hook": "Si llegaste hasta aquí, quiero que sepas algo: este NO es otro curso de finanzas más.", "promesa": "Entiende por qué Raíz Patrimonial existe y qué la hace distinta.", "estructura": "1) Historia personal corta 2) Por qué creé esta comunidad 3) Para quién SÍ y para quién NO es 4) Próximo paso"},
         {"codigo": "M0.2", "titulo": "Tour de la comunidad", "duracion": "5-7 min", "formato": "SC", "hook": "Te muestro todos los espacios que vas a habitar dentro y cómo usarlos para no perderte.", "promesa": "Sabes navegar Skool y conoces dónde está cada cosa.", "estructura": "1) Classroom 2) Foro 3) Calendario 4) Leaderboard 5) Cómo pedir ayuda"}
       ]
     },
@@ -256,7 +256,7 @@
   ],
 
   "s12_foro": [
-    {"categoria": "Anuncios", "proposito": "Comunicación oficial de la fundadora y del equipo", "publica": "Solo Truelany + admins", "tipo_post": "Avisos importantes, calendario, novedades"},
+    {"categoria": "Anuncios", "proposito": "Comunicación oficial de la fundadora y del equipo", "publica": "Solo la fundadora + admins", "tipo_post": "Avisos importantes, calendario, novedades"},
     {"categoria": "Preséntate", "proposito": "Espacio del Bautizo de Inversionista — primer post de toda miembro nueva", "publica": "Nuevas miembros", "tipo_post": "Su Money Story + meta a 1 año + qué busca de la comunidad"},
     {"categoria": "Money Wins", "proposito": "Hilo de victorias semanales (chicas o grandes)", "publica": "Todas", "tipo_post": "Logros: abrí cuenta / hice primera inversión / leí libro"},
     {"categoria": "Mi Progreso", "proposito": "Updates personales mensuales — vinculado al Check-in", "publica": "Todas", "tipo_post": "Reporte: qué hice / qué aprendí / dónde me trabé / qué necesito"},
@@ -266,20 +266,20 @@
   ],
 
   "s13_complementos": {
-    "onboarding": "Bloque 1 · Bienvenida\nBienvenida a Poder Inversionista. Aquí construyes patrimonio junto a otras Inversionistas Poderosas con el mismo objetivo.\n\nBloque 2 · Propósito personal\n¿Qué te motivó a unirte? ¿Qué resultado quieres en 90 días? ¿Qué obstáculo quieres superar?\n\nBloque 3 · Mapa\nFase 1 Asustada → Fase 2 Aprendiz → Fase 3 Constructora → Fase 4 Inversionista Poderosa\n\nBloque 4 · Kit\nGuía de inicio · Manual · Plantilla Money Story · Accesos\n\nBloque 5 · Primer desafío\nPublica tu Money Story en el canal Preséntate.\n\nBloque 6 · Próximos pasos\nVe el video de bienvenida · Completa propósito · Descarga kit · Realiza desafío · Únete al Investment Club.",
+    "onboarding": "Bloque 1 · Bienvenida\nBienvenida a Raíz Patrimonial. Aquí construyes patrimonio junto a otras Constructoras de Patrimonio con el mismo objetivo.\n\nBloque 2 · Propósito personal\n¿Qué te motivó a unirte? ¿Qué resultado quieres en 90 días? ¿Qué obstáculo quieres superar?\n\nBloque 3 · Mapa\nFase 1 Asustada → Fase 2 Aprendiz → Fase 3 Constructora → Fase 4 Constructora de Patrimonio\n\nBloque 4 · Kit\nGuía de inicio · Manual · Plantilla Money Story · Accesos\n\nBloque 5 · Primer desafío\nPublica tu Money Story en el canal Preséntate.\n\nBloque 6 · Próximos pasos\nVe el video de bienvenida · Completa propósito · Descarga kit · Realiza desafío · Únete al Investment Club.",
     "posts_fijados": [
-      "🏗️ Bienvenida a Poder Inversionista\n\nLas mujeres no apostamos. Construimos. Y eso es lo que vas a hacer aquí.\n\nAquí vas a encontrar:\n→ Método claro para construir patrimonio sin vivir pegada a la pantalla\n→ Comunidad de Inversionistas Poderosas como tú\n→ Mentoría semanal + Hot Seats + Money Brunch presencial\n\nTu primer paso: ve a la categoría Preséntate y comparte tu Money Story.",
-      "🎯 Reto 21 Días · De cero a primera inversión\n\nEste reto es la puerta de entrada a tu vida como Inversionista Poderosa.\n\nEsto es lo que vas a hacer:\n1. Día 1-7: elige broker y abre cuenta\n2. Día 8-14: investiga tu primer ETF\n3. Día 15-21: ejecuta tu primera inversión\n\nPublica en #money-wins con la captura de tu primera compra. Te esperan badge + Nivel 2.",
-      "🏛️ Cultura de Poder Inversionista\n\nEste espacio tiene reglas simples:\n\n✅ No apostamos. Construimos.\n✅ No competimos. Construimos juntas.\n✅ No medimos en likes. Medimos en décadas.\n\n❌ No toleramos: trading agresivo, picks calientes, ego financiero, comparaciones tóxicas.\n\nAquí tu ambición es legítima. Bienvenida."
+      "🏗️ Bienvenida a Raíz Patrimonial\n\nLas mujeres no apostamos. Construimos. Y eso es lo que vas a hacer aquí.\n\nAquí vas a encontrar:\n→ Método claro para construir patrimonio sin vivir pegada a la pantalla\n→ Comunidad de Constructoras de Patrimonio como tú\n→ Mentoría semanal + Hot Seats + Money Brunch presencial\n\nTu primer paso: ve a la categoría Preséntate y comparte tu Money Story.",
+      "🎯 Reto 21 Días · De cero a primera inversión\n\nEste reto es la puerta de entrada a tu vida como Constructora de Patrimonio.\n\nEsto es lo que vas a hacer:\n1. Día 1-7: elige broker y abre cuenta\n2. Día 8-14: investiga tu primer ETF\n3. Día 15-21: ejecuta tu primera inversión\n\nPublica en #money-wins con la captura de tu primera compra. Te esperan badge + Nivel 2.",
+      "🏛️ Cultura de Raíz Patrimonial\n\nEste espacio tiene reglas simples:\n\n✅ No apostamos. Construimos.\n✅ No competimos. Construimos juntas.\n✅ No medimos en likes. Medimos en décadas.\n\n❌ No toleramos: trading agresivo, picks calientes, ego financiero, comparaciones tóxicas.\n\nAquí tu ambición es legítima. Bienvenida."
     ],
     "leaderboard": [
       {"nivel": 1, "nombre": "La Asustada", "criterio": "Entras así. Sin requisitos."},
       {"nivel": 2, "nombre": "La Aprendiz", "criterio": "Completas Money Story + reto Primera Inversión."},
       {"nivel": 3, "nombre": "La Constructora", "criterio": "Tienes portafolio v1 presentado + segundo activo en marcha."},
-      {"nivel": 4, "nombre": "La Inversionista Poderosa", "criterio": "Plan a 10 años presentado + Hot Seat liderado + 6 meses activos."},
+      {"nivel": 4, "nombre": "La Constructora de Patrimonio", "criterio": "Plan a 10 años presentado + Hot Seat liderado + 6 meses activos."},
       {"nivel": 5, "nombre": "La Mentora", "criterio": "Buddy de al menos 3 miembros nuevas + caso de éxito documentado."}
     ],
-    "vsl": "Bloque 1 · Tu historia no termina donde te perdiste. Tienes dinero. Tienes años trabajados. Y aun así, todo sigue quieto en el banco.\n\nBloque 2 · Bienvenida. Yo soy Truelany. Pasé de +30K en deudas a un ecosistema patrimonial proyectado a $4MM. No por talento — por método.\n\nBloque 3 · La mayoría intenta cursos sueltos de inversión y termina exactamente donde empezó: con miedo y sin acción.\n\nBloque 4 · Por eso creé el Método Poder Inversionista. Tres Leyes (Pausa · Paciencia · Orden) que filtran toda decisión.\n\nBloque 5 · Dentro vas a experimentar la primera compra real, el primer plan a 10 años, la primera vez que decides sin pedir permiso.\n\nBloque 6 · Mujeres como tú ya lo están viviendo. Profesionales, madres, ejecutivas que pasaron de cuenta dormida a portafolio activo.\n\nBloque 7 · Esto no es un curso. No es motivación. Es un sistema operativo de construcción patrimonial.\n\nBloque 8 · Si estás lista para construir, haz clic ahora.",
+    "vsl": "Bloque 1 · Tu historia no termina donde te perdiste. Tienes dinero. Tienes años trabajados. Y aun así, todo sigue quieto en el banco.\n\nBloque 2 · Bienvenida. Yo soy la fundadora. Pasé de +30K en deudas a un ecosistema patrimonial proyectado a $4MM. No por talento — por método.\n\nBloque 3 · La mayoría intenta cursos sueltos de inversión y termina exactamente donde empezó: con miedo y sin acción.\n\nBloque 4 · Por eso creé el Método Raíz Patrimonial. Tres Leyes (Pausa · Paciencia · Orden) que filtran toda decisión.\n\nBloque 5 · Dentro vas a experimentar la primera compra real, el primer plan a 10 años, la primera vez que decides sin pedir permiso.\n\nBloque 6 · Mujeres como tú ya lo están viviendo. Profesionales, madres, ejecutivas que pasaron de cuenta dormida a portafolio activo.\n\nBloque 7 · Esto no es un curso. No es motivación. Es un sistema operativo de construcción patrimonial.\n\nBloque 8 · Si estás lista para construir, haz clic ahora.",
     "cancelacion": "Bloque 1 · Si estás viendo esto, probablemente estás en un momento difícil. Lo entiendo.\n\nBloque 2 · No llegaste aquí por impulso. Entraste porque viste algo real en ti.\n\nBloque 3 · Lo que más cuesta no es la membresía. Es tener que reconstruir el momentum desde cero.\n\nBloque 4 · ¿Y si en lugar de salir, simplemente bajamos el ritmo esta semana?\n\nBloque 5 · Escríbeme directamente. Puedo ayudarte a rediseñar tu camino dentro.\n\nBloque 6 · Si decides quedarte, es porque tú lo decidiste. Y si decides salir, la puerta siempre va a estar abierta."
   },
 
@@ -316,6 +316,6 @@
   "s16_roadmap": [
     {"mes": "Mes 1", "tema": "CIMIENTOS", "subtema": "Identidad y producción base", "bullets": ["Cerrar identidad de marca: paleta, tipografías, logo final.", "Producir portada principal + 7 portadas de módulo.", "Grabar M0 completo (4 videos cortos).", "Grabar las 5 clases de M1 (Mentalidad).", "Diseñar plantillas críticas: Punto de Partida, Auditoría de Narrativas.", "Redactar About Page final + estructura del Classroom en Skool.", "Configurar categorías del foro."]},
     {"mes": "Mes 2", "tema": "CONTENIDO CORE", "subtema": "Producción educativa principal + beta cerrada", "bullets": ["Grabar las 6 clases de M2 (Primeras Inversiones).", "Grabar las 5 clases de M3 (Construcción de Portafolio).", "Construir comparador de brokers, calculadoras, checklist anti-estafa.", "Calendarizar ritmo semanal completo.", "Reclutar 5 expertas para Office Hours rotativos.", "Beta cerrada con 10-20 alumnas de confianza por 4 semanas."]},
-    {"mes": "Mes 3", "tema": "LANZAMIENTO", "subtema": "Apertura pública + ventas", "bullets": ["Grabar M4 (Ecosistema) y M5 (Wealth & Life Design).", "Finalizar VSL + secuencia de bienvenida (5 emails).", "Activar campañas orgánicas en IG + LinkedIn de Truelany.", "Abrir cohorte pública con Reto 21 Días arrancando juntas.", "Primer Money Brunch presencial (Lima)."]}
+    {"mes": "Mes 3", "tema": "LANZAMIENTO", "subtema": "Apertura pública + ventas", "bullets": ["Grabar M4 (Ecosistema) y M5 (Wealth & Life Design).", "Finalizar VSL + secuencia de bienvenida (5 emails).", "Activar campañas orgánicas en IG + LinkedIn de la fundadora.", "Abrir cohorte pública con Reto 21 Días arrancando juntas.", "Primer Money Brunch presencial (Lima)."]}
   ]
 }

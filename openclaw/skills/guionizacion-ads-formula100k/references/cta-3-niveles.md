@@ -75,7 +75,7 @@ Un CTA fuerte tiene 6 bloques. Si falta uno, baja la conversión.
 
 - "Si estás cansada de quemarte creando contenido que no vende, agenda tu llamada de diagnóstico en el link. Solo abro 8 espacios esta semana."
 
-- "Si llevas más de 3 meses publicando sin convertir, entra a F100K hoy con $280 USD por todo el año — solo el precio de lanzamiento, no se repite."
+- "Si ya probaste tres dietas y recuperaste el peso, entra a Plato Claro hoy con [precio] por las 8 semanas — solo el precio de lanzamiento, no se repite."
 
 **Métrica clave:** Cost per application (CPA) o cost per booking.
 
@@ -103,7 +103,7 @@ Un CTA fuerte tiene 6 bloques. Si falta uno, baja la conversión.
 
 **Ejemplos F100K:**
 
-- "Únete a F100K hoy por $280 USD al año — el precio de lanzamiento se cierra el domingo a medianoche. Adentro tienes YapperMethod, las 33 estructuras y las 8 sesiones en vivo del mes. Link en la bio."
+- "Únete a Plato Claro hoy por [precio] — el precio de lanzamiento se cierra el domingo a medianoche. Adentro tienes el plan de 8 semanas, el recetario y las sesiones en vivo de cada semana. Link en la bio."
 
 - "Asegura tu cupo en F100K por $47 USD al mes — el precio sube a $97 USD a partir del 1 de junio. Pagas, entras, y empiezas a publicar guiones tuyos en 24 horas."
 

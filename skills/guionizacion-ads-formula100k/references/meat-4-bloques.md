@@ -76,7 +76,7 @@ Para ads muy cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+
 **Función:** Presentar tu mecanismo/sistema/método con NOMBRE. Es el corazón del ad. Aquí el avatar entiende QUÉ es distinto.
 
 **Reglas:**
-- El vehículo único TIENE NOMBRE PROPIO. No "mi método" → "FÓRMULA 100K", "El sistema 7×3×7", "El Framework GOAT", "YapperMethod", etc.
+- El vehículo único TIENE NOMBRE PROPIO. No "mi método" → "Plato Claro", "El sistema 7×3×7", "El Método del Plato Dividido", etc.
 - Explica QUÉ es diferente — no CÓMO funciona (el cómo se vende DENTRO del producto).
 - Inserta 1 dato concreto: número de alumnas, resultado promedio, tiempo, mecanismo único.
 - NO listes features. Lista TRANSFORMACIONES.
@@ -91,7 +91,7 @@ Para ads muy cortos (15s), comprimes 1+2 en una sola línea y das prioridad a 3+
 
 **Ejemplos F100K (con vehículo único del usuario):**
 
-- "Por eso construí FÓRMULA 100K — la única comunidad para creadoras que vende creando contenido orientado a venta, no a vanidad. Adentro tienes acceso a YapperMethod (genera guiones en 30 segundos con tu voz), el calendario plug-and-play, y las 33 estructuras virales que usé para llegar a $100K/mes sin equipo."
+- "Por eso armé Plato Claro — el programa para comer sin contar calorías, no otra dieta. Adentro tienes el plan de 8 semanas, el recetario con lo que ya hay en tu cocina y las sesiones en vivo de cada semana. [Tu resultado real, con su número]."
 
 - "La diferencia es El ADN F100K: en lugar de enseñarte a 'crear contenido', te enseña a estructurar cada video como una unidad que VENDE. Tienes apps, frameworks y skills — las tres capas que necesitas para escalar sin quemarte."
 

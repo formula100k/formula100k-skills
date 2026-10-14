@@ -39,7 +39,7 @@ export const FORMATOS: FormatoDef[] = [
     nombre: 'Cara completa',
     descripcion: 'Talking-head 9:16 a pantalla completa con overlays en los tercios.',
     cuandoUsar: [
-      'el video es sólo Andrea hablando a cámara',
+      'el video es sólo la persona hablando a cámara',
       'no hay screen recordings en la carpeta',
       'el contenido es opinión, storytelling o enseñanza sin demo',
     ],

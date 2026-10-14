@@ -17,6 +17,7 @@ como PNG y se pega con overlay.
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -30,8 +31,14 @@ FUENTES = [
     "C:/Windows/Fonts/arialbd.ttf",                             # Windows
     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",   # Linux
 ]
-DORADO = (240, 178, 74, 255)   # #F0B24A del DESIGN.md de F100K
-TINTA = (5, 5, 9, 255)         # #050509
+def _hex(h, defecto):
+    h = (h or defecto).lstrip('#')
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16), 255)
+
+# El acento y la tinta de su marca (color.acento y color.tinta de mi-marca/marca.md).
+# Se pasan por entorno: ACENTO=#2e7d6f TINTA=#14141a python componer.py ...
+DORADO = _hex(os.environ.get('ACENTO'), '#2E7D6F')
+TINTA = _hex(os.environ.get('TINTA'), '#14141A')
 
 # Geometría del split: dos paneles 9:16 de 500x889 con 26 px de aire entre ellos
 PANEL_W, PANEL_H = 500, 889

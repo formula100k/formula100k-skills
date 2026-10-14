@@ -140,7 +140,7 @@ def build(data: dict, out_path: Path) -> None:
         ("Gatillo", "Dimensión", "Qué hace", "Ejemplo"),
         ("Urgencia táctica", "Tiempo", "Impone deadline real para forzar decisión.", "Cohorte cierra el día X a las 23:59"),
         ("Escasez cruda", "Cantidad", "Limita el volumen disponible.", "Solo N plazas / cap operativo real"),
-        ("Prueba social", "Social", "Valida con el comportamiento de la mayoría.", "127 emprendedoras ya entraron esta semana"),
+        ("Prueba social", "Social", "Valida con el comportamiento de la mayoría.", "[N] personas ya entraron esta semana (con tu número real)"),
         ("Exclusividad", "Contexto", "Restringe el acceso para generar estatus.", "App exclusiva solo dentro del producto"),
         ("Aversión a la pérdida", "Psicología", "Enfoca en lo que se PIERDE si no actúa.", "Sigues 6 meses más con la misma historia"),
     ]

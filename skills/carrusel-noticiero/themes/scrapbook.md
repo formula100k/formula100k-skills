@@ -1,7 +1,7 @@
 # Tema: scrapbook (default)
 
 Estilo visual del CUERPO (slides 2-8) del carrusel noticiero. Paleta crema, tipografías
-Caveat + Poppins, post-its, washi tape y stickers emoji. Es el brandkit de Andrea Vega.
+Caveat + Poppins, post-its, washi tape y stickers emoji. Si tiene `mi-marca/marca.md`, sus colores y letras mandan sobre estos.
 
 **Cómo usarlo:** copia el bloque HTML completo de abajo a `<carpeta>/carrusel.html`, y reemplaza
 SOLO el copy marcado con `‹…›`. NO toques el `<style>` (está probado). Cada slide ya trae su

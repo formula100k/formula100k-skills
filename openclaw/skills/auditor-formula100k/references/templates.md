@@ -10,7 +10,7 @@
 
 ```markdown
 # AUDITORÍA [SKOOL | CONTENIDO] · [NOMBRE CLIENTE]
-> Realizada por Andrea Vega · F100K · [FECHA]
+> Realizada por [TU NOMBRE] · [FECHA]
 > Versión: v[N]
 
 ---
@@ -169,7 +169,7 @@ Estos son los 3 pasos para esta semana. Si solo haces estos 3, el siguiente trim
 
 ---
 
-*Documento generado el [FECHA] por Andrea Vega · FÓRMULA 100K*
+*Documento generado el [FECHA] por [TU NOMBRE]*
 ```
 
 ---
@@ -279,7 +279,7 @@ SCORE GLOBAL,X/50,,,
 
 ---
 
-*Andrea Vega · FÓRMULA 100K · [fecha]*
+*[TU NOMBRE] · [fecha]*
 ```
 
 ---

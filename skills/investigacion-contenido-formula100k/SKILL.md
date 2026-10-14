@@ -211,7 +211,7 @@ agent-browser close --all
 **Cómo elegir el ganador por keyword (decisión rápida en 3 criterios):**
 1. **Match al pattern**: que el caption empiece literal o muy cerca del pattern (no solo lo mencione)
 2. **Vistas**: ≥50K idealmente; si nada llega a 50K, tomar el de más vistas
-3. **Nicho-fit**: que el creador no sea de un nicho hostil al avatar (ej. para el usuario evitar gaming hardcore o nichos masculinos muy específicos si el video es para mujeres emprendedoras)
+3. **Nicho-fit**: que el creador no sea de un nicho hostil al avatar (ej. si su avatar son mujeres, evitar creadores de gaming hardcore o nichos masculinos muy específicos)
 
 **Output esperado de esta búsqueda:**
 

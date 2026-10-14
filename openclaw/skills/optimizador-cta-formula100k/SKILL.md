@@ -1,6 +1,6 @@
 ---
 name: optimizador-cta-formula100k
-description: "Skill especializada en analizar, diagnosticar y mejorar llamados a la acción (CTAs) de guiones de video usando los patrones de FORMULA 100K de Andrea Vega. Usar SIEMPRE que alguien pida: mejorar un CTA, revisar un llamado a la acción, optimizar el final de un guion, hacer que un CTA genere más comentarios, crear variaciones de un llamado a la acción, o cuando comparta un guion y quiera que el CTA funcione mejor. También activar cuando digan: \"¿cómo remato este guion?\", \"el CTA no está funcionando\", \"quiero que genere más engagement\", \"mejora este final\"."
+description: "Skill especializada en analizar, diagnosticar y mejorar llamados a la acción (CTAs) de guiones de video usando los patrones de FORMULA 100K. Usar SIEMPRE que alguien pida: mejorar un CTA, revisar un llamado a la acción, optimizar el final de un guion, hacer que un CTA genere más comentarios, crear variaciones de un llamado a la acción, o cuando comparta un guion y quiera que el CTA funcione mejor. También activar cuando digan: \"¿cómo remato este guion?\", \"el CTA no está funcionando\", \"quiero que genere más engagement\", \"mejora este final\"."
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---
 
@@ -56,7 +56,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Optimizador de CTAs — FORMULA 100K
 
-Esta skill analiza cualquier llamado a la acción de un guion y produce versiones mejoradas usando los patrones probados de Andrea Vega que han generado los mayores volúmenes de comentarios en sus videos.
+Esta skill analiza cualquier llamado a la acción de un guion y produce versiones mejoradas usando los patrones probados de FÓRMULA 100K que han generado los mayores volúmenes de comentarios en sus videos.
 
 ---
 

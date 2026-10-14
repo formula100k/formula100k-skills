@@ -542,16 +542,8 @@
       ],
       "replace_re": [
         [
-          "siguiendo el schema de \\[`brief\\.example\\.json`\\]\\(brief\\.example\\.json\\) \\(el ejemplo está poblado con datos reales de [^—]+— usarlo como referencia ",
-          "siguiendo el esqueleto de [`brief.schema.json`](brief.schema.json) (vacío a propósito — usarlo como referencia "
-        ],
-        [
           "\\(ver brief\\.example\\.json\\)",
           "(ver brief.schema.json)"
-        ],
-        [
-          "Referencia validada: `~/Downloads/[^`]+`\\.",
-          "Referencia validada: una propuesta real entregada a una clienta (no incluida por confidencialidad)."
         ],
         [
           "\\(ej: \\\"No apostamos\\. Creamos\\. La comunidad de las [^\\\"]+\\\"\\)",
@@ -889,10 +881,6 @@
         "Entrega: `slide-01.png … slide-08.png` por Telegram como archivo, en orden, más las piezas de la portada. Guarda en `entregables/carruseles/`. No publiques nada."
       ],
       "replace": [
-        [
-          "Es el brandkit de Andrea Vega.",
-          "Es el brandkit scrapbook de FÓRMULA 100K."
-        ],
         [
           "const CHROME_CANDIDATES = [",
           "const CHROME_CANDIDATES = [\n  process.env.CHROME_PATH,\n  '/usr/bin/chromium',\n  '/usr/bin/chromium-browser',\n  '/usr/bin/google-chrome',\n  '/usr/bin/google-chrome-stable',"
@@ -1557,10 +1545,6 @@
           "(or the user's own course or community)"
         ],
         [
-          "Genera artifacts educativos consistentes con los 7 ya creados para la comunidad de Andrea Vega.",
-          "Genera artifacts educativos con un mismo sistema reconocible."
-        ],
-        [
           "que ayuda a las alumnas a entender un concepto del manual de FÓRMULA 100K.",
           "que ayuda a las alumnas a entender un concepto de su curso, su comunidad o del manual de FÓRMULA 100K."
         ],
@@ -1844,10 +1828,6 @@
       ],
       "replace": [
         [
-          "Metodología de Andrea Vega. Un radar",
-          "Metodología FÓRMULA 100K. Un radar"
-        ],
-        [
           "## PASO 0 · Comprobar la instalación (primera vez, y cuando algo falle)",
           "## PASO 0 · Comprobar la instalación (versión de escritorio: en este servidor solo comprueba `APIFY_TOKEN` y el plugin de Higgsfield)"
         ],
@@ -1926,14 +1906,6 @@
         [
           "~/Documents/FORMULA100K/ADS-REFERENCIAS/",
           "informes/ads-referencias/"
-        ],
-        [
-          "Demo de la app YapperMethod generando 30 guiones en 2 minutos",
-          "Demo de [TU APP] generando 30 guiones en 2 minutos"
-        ],
-        [
-          "\"Esto es YapperMethod. Le metes el tema",
-          "\"Esto es [TU APP]. Le metes el tema"
         ],
         [
           "\"Tatiana cerró 3 clientes en una semana.",
@@ -2113,10 +2085,6 @@
         [
           "3. Visita instagram.com/[handle]/reels/ → top 9 reels con URL+caption+views",
           "3. Reels del competidor → NO en el navegador: Apify con el @handle (top 9 con URL+caption+views)"
-        ],
-        [
-          "*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` · F100K · Andrea Vega*",
-          "*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` · FÓRMULA 100K*"
         ],
         [
           "NO usar: vos, sos, tenés,",

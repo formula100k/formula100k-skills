@@ -69,7 +69,7 @@ con Tavily para el nicho específico del usuario.
 
 1. `references/anatomia-urgencia.md` — Motor biológico, 5 gatillos de decisión, anatomía F100K, reglas de oro
 2. `references/pool-semanal-templates.md` — Templates de razones semanales por TIPO de activo del producto
-3. `references/ejemplos-briefs-rellenos.md` — Briefs ya rellenados (F100K, Lab Sol, L'Atelier Adriana) como referencia
+3. `references/ejemplos-briefs-rellenos.md` — Briefs ya rellenados (tres negocios ficticios: repostería, nutrición y cerámica) como referencia
 
 ---
 
@@ -96,7 +96,7 @@ Una sola pregunta de texto libre con este formato. Si falta info, repreguntar:
 Cuéntame de tu producto (3 líneas máximo):
 1. NOMBRE y QUÉ es (curso/comunidad/SaaS/servicio 1:1/producto físico/membresía)
 2. PRECIO (mensual / anual / único) — todos los puntos de entrada
-3. ¿Tiene OFERTA DE LANZAMIENTO o precio especial que NO se repite? (ej: "$280 anual de lanzamiento")
+3. ¿Tiene OFERTA DE LANZAMIENTO o precio especial que NO se repite? (ej: "[precio] anual de lanzamiento")
 ```
 
 ### Bloque B — NICHO / AUDIENCIA
@@ -353,4 +353,4 @@ Ver plantilla completa en `references/anatomia-urgencia.md` sección "Template d
 Ejemplos de invocación:
 - `/calendarizador-urgencias-formula100k`
 - `/calendarizador-urgencias-formula100k FÓRMULA 100K`
-- `/calendarizador-urgencias-formula100k Lab de Sol Traverso`
+- `/calendarizador-urgencias-formula100k Plato Claro`

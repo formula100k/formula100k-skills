@@ -6,129 +6,88 @@
 
 ---
 
-## EJEMPLO 1 — FÓRMULA 100K (Andrea Vega)
+## EJEMPLO 1 — Dulce Fiesta (repostería, ficticio)
 
 **A. Producto**
-- Nombre: FÓRMULA 100K
-- Tipo: Comunidad Skool + formación + sesiones en vivo
-- Precios: $47/mes · $560/año · $280/año (descuento ÚNICO de lanzamiento — no se repite jamás)
+- Nombre: Dulce Fiesta
+- Tipo: Pasteles por encargo + taller presencial de decoración
+- Precios: [TUS PRECIOS]
 
 **B. Nicho**
-- Rubro: Marketing / Contenido / Marca personal
-- Geo: LATAM + España + USA hispano
+- Rubro: Repostería
+- Geo: Su ciudad (entrega local)
 - Idioma: Español neutro
-- Avatar: Mujer 25-45, creadora de contenido o emprendedora, ya intentó vender online sin un sistema, busca facturar de forma estable con su marca personal
+- Avatar: Mamá que organiza el cumpleaños de su hija en casa y quiere un pastel que salga bien en las fotos sin pasar la noche horneando
 
 **C. Activos seleccionados**
-- ✅ Sesiones en vivo recurrentes (el usuario + equipo, semanales)
-- ✅ Cohortes con onboarding sincronizado (día 1 de cada mes)
-- ✅ Comunidad activa (Skool, 1600+ miembras)
-- ✅ Drops de módulos nuevos
-- ✅ App exclusiva: YapperMethod (NO se vende suelta — F100K es la única puerta)
-- ✅ Acceso a consultoras del equipo
-- ✅ Casos de éxito públicos (testimonios reales)
-- ✅ Hot seat / auditorías personalizadas
+- ✅ Cupos reales por fecha (la cocina hace [N] pasteles por fin de semana)
+- ✅ Drops de sabores de temporada
+- ✅ Casos de éxito públicos (fotos de fiestas con permiso de la clienta)
 
 **D. Calendario propio**
-- Aniversario F100K: abril (verificar día exacto)
-- Política de subida de precio: 31 dic verificar con equipo
-- Black Friday: 27-30 nov 2026 — única excepción del año para reactivar el $280
+- Temporadas fuertes: Día de la Madre, Navidad, regreso a clases
+- Fecha límite de pedidos: [N] días antes de la entrega
 
 **E. Reglas y tono**
-- Idioma: español neutro (NO vos / tenés / acá)
-- Exclusiones: NO inventar plazas falsas, NO usar urgencia agresiva tipo "última oportunidad" si no es verdad
+- Idioma: español neutro, cercano
+- Exclusiones: NO inventar cupos agotados, NO prometer entrega el mismo día si no se puede
 
 ---
 
-## EJEMPLO 2 — Lab de Ventas Orgánicas (Sol Traverso)
+## EJEMPLO 2 — Plato Claro (nutricionista, ficticio)
 
 **A. Producto**
-- Nombre: Lab de Ventas Orgánicas (metodología "Afiliado Estratega IA")
-- Tipo: Comunidad Skool + formación + sesiones en vivo (en construcción 2026-05)
-- Precios: a definir (en reposicionamiento — auditoría completada 2026-05-05)
+- Nombre: Plato Claro
+- Tipo: Programa grupal de 8 semanas + consultas 1 a 1
+- Precios: [TUS PRECIOS]
 
 **B. Nicho**
-- Rubro: Marketing / Afiliación / IA aplicada a contenido
-- Geo: LATAM + España
-- Idioma: Español neutro / argentino
-- Avatar: Persona que vende productos de afiliados o cursos online, le cuesta hacer ventas sin pagar tráfico, busca sistematizar venta orgánica con IA
-
-**C. Activos seleccionados**
-- ✅ Sesiones en vivo recurrentes
-- ✅ Comunidad activa
-- ✅ Drops de módulos nuevos
-- ✅ Casos de éxito públicos (afiliadas que cerraron ventas)
-- ✅ Hot seat / auditorías de perfiles
-
-**D. Calendario propio**
-- Lanzamiento metodología: a definir
-- Auditorías ya hechas: 11 TikToks ya analizados como casos públicos
-
-**E. Reglas y tono**
-- Idioma: español rioplatense suave
-- Exclusiones: NO comparar con la competencia directa, NO usar "ganar dinero fácil"
-
----
-
-## EJEMPLO 3 — L'Atelier DigitAI (Adriana)
-
-**A. Producto**
-- Nombre: L'Atelier DigitAI
-- Tipo: Formación + Continuum (membresía continua) + High Ticket separados
-- Precios: 3 tier — Formación / Continuum (membresía) / High Ticket 1:1
-
-**B. Nicho**
-- Rubro: IA aplicada a marketing y servicios profesionales
-- Geo: Francia (re-foco exclusivo según auditoría v3 mayo 2026)
-- Idioma: Francés (pero el calendario puede generarse en español neutro como working doc)
-- Avatar: Profesional francófona 30-50, freelance/consultora, quiere usar IA sin saber programar, factura medio-alto
-
-**C. Activos seleccionados**
-- ✅ Sesiones en vivo recurrentes
-- ✅ Cohortes con onboarding sincronizado
-- ✅ Comunidad activa
-- ✅ Drops de módulos nuevos (M6 nuevo Campañas+Ads, M7 partido en Continuum + High Ticket)
-- ✅ Bonos / sesiones 1-on-1 (en tier High Ticket)
-- ✅ Acceso a equipo / consultores
-- ✅ Hot seat / auditorías personalizadas
-
-**D. Calendario propio**
-- Reorganización mayo 2026: venta sube, IA al final desbloqueada
-- Lanzamiento M6 (Campañas+Ads): a definir
-
-**E. Reglas y tono**
-- Idioma: francés (output principal), español neutro working
-- Exclusiones: NO mencionar otras herramientas IA directas (ChatGPT/Claude por nombre), NO promesas de "automatizar al 100%"
-
----
-
-## EJEMPLO 4 — Founders Lab (Felipe Londoño con RAM)
-
-**A. Producto**
-- Nombre: Founders Lab
-- Tipo: Comunidad + formación (co-fundado con RAM)
-- Precios: a definir
-
-**B. Nicho**
-- Rubro: Modelos de negocio con IA / Emprendimiento tech
-- Geo: LATAM + USA hispano
+- Rubro: Nutrición
+- Geo: LATAM, en línea
 - Idioma: Español neutro
-- Avatar: Founder/emprendedor que está construyendo un negocio nuevo con IA, busca validar modelo de negocio antes de escalar
+- Avatar: Mujer de 30 a 45 que ya probó tres dietas, recuperó el peso y quiere comer sin contar calorías
 
 **C. Activos seleccionados**
 - ✅ Sesiones en vivo recurrentes
-- ✅ Cohortes con onboarding sincronizado
+- ✅ Cohortes con inicio sincronizado (el día 1 de cada mes)
 - ✅ Comunidad activa
-- ✅ Casos de éxito públicos
-- ✅ Acceso a equipo (10 referentes verificados, calendario v2 mayo 2026)
-- ✅ Hot seat de los referentes
+- ✅ Bonos / sesiones 1 a 1
 
 **D. Calendario propio**
-- 10 referentes ya verificados — drops calendarizables
+- Inicio de cohortes: el día 1 de cada mes
+- Fechas sensibles: enero y regreso de vacaciones
 
 **E. Reglas y tono**
 - Idioma: español neutro
-- Exclusiones: NO over-promesa de "te haces millonario", sí hablar de validación rigurosa
+- Exclusiones: NO prometer kilos en plazos, NO antes y después sin permiso
+
+---
+
+## EJEMPLO 3 — Taller Raíz (estudio de cerámica, ficticio)
+
+**A. Producto**
+- Nombre: Taller Raíz
+- Tipo: Clases presenciales de cerámica + venta de piezas en tienda en línea
+- Precios: [TUS PRECIOS]
+
+**B. Nicho**
+- Rubro: Cerámica artesanal
+- Geo: Su ciudad (clases) + envíos nacionales (piezas)
+- Idioma: Español neutro
+- Avatar: Persona de 25 a 40 que trabaja frente a una pantalla y busca algo que hacer con las manos los fines de semana
+
+**C. Activos seleccionados**
+- ✅ Cupos reales por clase (el taller tiene [N] tornos)
+- ✅ Drops de colecciones nuevas
+- ✅ Casos de éxito públicos (piezas de alumnas con permiso)
+
+**D. Calendario propio**
+- Horneadas: cada [N] semanas (las piezas salen en tanda)
+- Temporada de regalos: noviembre y diciembre
+
+**E. Reglas y tono**
+- Idioma: español neutro
+- Exclusiones: NO inventar escasez, NO «última pieza» si quedan más
 
 ---
 

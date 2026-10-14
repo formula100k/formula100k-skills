@@ -1,7 +1,7 @@
 # Anatomía de la Urgencia — Metodología FÓRMULA 100K
 
 > Referencial cargado por la skill `calendarizador-urgencias-formula100k`.
-> Fuente: Grimorio 100K Arsenal Estratégico 2026 + iteración de Andrea Vega.
+> Fuente: Grimorio 100K Arsenal Estratégico 2026.
 
 ---
 
@@ -44,7 +44,7 @@ Limita el volumen disponible para elevar valor y competencia.
 
 ### Gatillo 3 — Prueba social · SOCIAL
 Valida la decisión basándose en el comportamiento de la mayoría.
-- "127 emprendedoras ya entraron esta semana"
+- "[N] personas ya entraron esta semana" (con su número real)
 - "Las primeras 50 plazas se llenaron en 4 horas"
 - Captura real del crecimiento de la comunidad
 

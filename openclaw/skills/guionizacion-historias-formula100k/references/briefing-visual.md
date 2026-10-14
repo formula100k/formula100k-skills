@@ -1,6 +1,6 @@
 # BRIEFING VISUAL — PALETA Y REGLAS DE DISEÑO
 
-Reglas extraídas del análisis de 11 secuencias reales de Andrea Vega (FÓRMULA 100K).
+Reglas extraídas del análisis de 11 secuencias reales de historias que venden (método FÓRMULA 100K).
 Estas son las reglas que debe seguir el diseño visual de cada slide para que sienta "del estilo de la marca".
 
 ---

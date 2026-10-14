@@ -99,7 +99,7 @@ Cada competidor se evalúa en estas 10 dimensiones. Escala 0-5 + nota cualitativ
 | Score | Criterio |
 |-------|----------|
 | 5 | Avatar nombrado, situación específica, lenguaje propio del avatar |
-| 4 | Avatar claro pero genérico (ej: "emprendedoras") |
+| 4 | Avatar claro pero genérico (ej: "mujeres", "emprendedores") |
 | 3 | Avatar implícito por el lenguaje |
 | 2 | Apela a "todos" |
 | 1 | Confuso a quién le habla |

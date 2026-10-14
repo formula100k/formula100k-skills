@@ -45,7 +45,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Auditor FÓRMULA 100K
 
-Skill que ejecuta auditorías profesionales con la metodología de Andrea Vega (F100K) para tus clientes en 2 dominios: **comunidades de Skool** y **estrategia de contenido**. Aplica el Framework Maestro de 5 fases con voz F100K (directa, polarizadora, español neutro).
+Skill que ejecuta auditorías profesionales con la metodología FÓRMULA 100K para tus clientes en 2 dominios: **comunidades de Skool** y **estrategia de contenido**. Aplica el Framework Maestro de 5 fases con voz F100K (directa, polarizadora, español neutro).
 
 ---
 

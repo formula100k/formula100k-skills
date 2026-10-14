@@ -92,7 +92,7 @@ Pedir todos los inputs antes de arrancar. No improvisar.
 
 ### Inputs requeridos
 
-1. **Nicho / vertical** (ej: "Skool comunidades de marketing digital en español", "Coaching de finanzas personales high-ticket", "Cursos de IA para emprendedoras")
+1. **Nicho / vertical** (ej: "Skool comunidades de marketing digital en español", "Coaching de finanzas personales high-ticket", "Cursos de IA para nutricionistas")
 2. **Tipo de producto** del cliente (selección):
    - Comunidad Skool
    - Curso digital (Hotmart/Teachable/Kajabi/etc.)

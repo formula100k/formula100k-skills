@@ -32,7 +32,7 @@ Esta es la estructura EXACTA que debe seguir el reporte principal (`01-REPORTE-C
 
 ### Movimiento #1 recomendado (esta semana)
 
-> [Frase única y específica del movimiento que cambia más con menos esfuerzo. Por ejemplo: "Subir el precio anual de $280 a $397 con descuento de fundadores — el rango $280 está saturado y deja $97/cliente sobre la mesa."]
+> [Frase única y específica del movimiento que cambia más con menos esfuerzo. Por ejemplo: "Subir el precio anual de [precio actual] a [precio nuevo] con descuento de fundadores — el rango actual está saturado y deja [diferencia] por cliente sobre la mesa."]
 
 ---
 
@@ -302,4 +302,4 @@ Ver `screenshots/` con capturas fullpage de los top [N].
 
 ---
 
-*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` · F100K · Andrea Vega*
+*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` *

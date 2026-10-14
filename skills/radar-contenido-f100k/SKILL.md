@@ -5,7 +5,7 @@ description: "Radar de contenido de FÓRMULA 100K: monta y corre un sistema que 
 
 # Radar de contenido · FÓRMULA 100K
 
-Metodología de Andrea Vega. Un radar **no busca ideas**: vigila una señal en el tiempo y avisa cuando
+Metodología FÓRMULA 100K. Un radar **no busca ideas**: vigila una señal en el tiempo y avisa cuando
 **se repite**. Esta skill vigila **formatos**, es decir, cómo se arma un video, independiente del tema.
 
 > **Formato ≠ tema.** «Vigilia con la hora en pantalla contra un rival» es un formato: sirve para una

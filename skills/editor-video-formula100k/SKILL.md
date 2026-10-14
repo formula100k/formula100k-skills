@@ -161,18 +161,18 @@ confirmado "desaparece" del render.
 
    Header del AskUserQuestion: `"Gancho textual"`. Pregunta literal: `"¿Cuál usamos como header del reel? Aparece sobre la cara los primeros 8s."`. multiSelect: false.
 
-5. Si Andrea elige una variante distinta a la actual, **reescribir el header del MANIFEST.md** preservando todo lo demás:
+5. Si el usuario elige una variante distinta a la actual, **reescribir el header del MANIFEST.md** preservando todo lo demás:
    - Solo tocar las dos líneas que empiezan con `- **Línea 1:**` y `- **Línea 2:**` dentro de la sección `## Header`.
    - NO tocar el resto del archivo.
    - Si la sección `## Header` no existía, agregarla inmediatamente después del frontmatter (`# Reel — ...` + metadata).
 
-6. Si Andrea elige "Otro" (input libre del AskUserQuestion), interpretar su texto como un nuevo `Línea 1 / Línea 2` y aplicarlo. Si pide variaciones ("dame 3 más"), volver a invocar `guionizacion-formula100k` con feedback específico y repetir el paso 4.
+6. Si el usuario elige "Otro" (input libre del AskUserQuestion), interpretar su texto como un nuevo `Línea 1 / Línea 2` y aplicarlo. Si pide variaciones ("dame 3 más"), volver a invocar `guionizacion-formula100k` con feedback específico y repetir el paso 4.
 
 7. Solo cuando el header esté confirmado y guardado en el MANIFEST, continuar con el pipeline de render abajo.
 
 **Si `guionizacion-formula100k` no está disponible:** generar las 3 variantes aplicando estas reglas a mano sobre el transcript, pero avisar al usuario: "para mejor calidad de gancho instala `guionizacion-formula100k`".
 
-**Re-renders y atajo de skip:** si Andrea explícitamente dice "renderiza tal cual", "no toques el header", "el header está bien", "skip", o invoca con `/render <carpeta> --skip-hook`, saltar este paso. Por default — incluso en re-render — se pregunta.
+**Re-renders y atajo de skip:** si el usuario explícitamente dice "renderiza tal cual", "no toques el header", "el header está bien", "skip", o invoca con `/render <carpeta> --skip-hook`, saltar este paso. Por default — incluso en re-render — se pregunta.
 
 ---
 
@@ -209,9 +209,9 @@ MANIFEST — y ofrecerle el más cercano de los cinco elegibles.
 3. Leer `captions.json` si existe y contar cuántas señales de `cuandoUsar`
    aparecen en el transcript, de los siete formatos.
 4. Si las señales dominantes apuntan a `faceless` o `noticiero`, **no
-   recomendar ese id**: avisar a Andrea en texto plano que el contenido pide
+   recomendar ese id**: avisar al usuario en texto plano que el contenido pide
    ese formato pero que el catálogo todavía no lo soporta desde este
-   pipeline, y dejar que ella decida entre los cinco elegibles con el
+   pipeline, y dejar que decida entre los cinco elegibles con el
    `AskUserQuestion` del paso siguiente (si el video no tiene cámara en
    absoluto, decirlo explícitamente — ninguno de los cinco elegibles fue
    pensado para eso, y es preferible que el usuario lo sepa antes de un render
@@ -562,7 +562,7 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 | Keyword     | Archivo                                       | Ancho | Duración | Posición |
 |-------------|-----------------------------------------------|-------|----------|----------|
 | deteniendo  | `IA/T1_G1_perfeccion_tachada_0000-0012.png`   | 480   | 2.4      | bottom   |
-| Japer       | `IA/T2_G1_yappermethod_ideas_0012-0027.png`   | 480   | 2.4      | bottom   |
+| Japer       | `IA/T2_G1_ideas_0012-0027.png`   | 480   | 2.4      | bottom   |
 | Cloud       | `IA/T3_G1_auto_edicion_claude_0027-0042.png`  | 480   | 2.4      | top      |
 
 ## B-roll
@@ -866,7 +866,7 @@ npx tsx scripts/render.ts \
 # Cita con wipe
 npx tsx scripts/render.ts \
   --composition motion-quote \
-  --props '{"quote": "El contenido que vende no es el más bonito, es el más claro.", "author": "Andrea Vega"}' \
+  --props '{"quote": "El contenido que vende no es el más bonito, es el más claro.", "author": "@tuhandle"}' \
   --out "$DEST/IA/quote-overlay.mp4"
 
 # Lista reveal (duración auto según numero de items)

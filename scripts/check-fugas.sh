@@ -62,7 +62,7 @@ andrea_hits=$(grep -rniE --exclude-dir=node_modules --exclude-dir=remotion-templ
                 --binary-files=without-match 'andrea' $TARGETS 2>/dev/null \
               | grep -vE "$EXCLUDE" | grep -vF "$ALLOW" \
               | awk '{ orig = $0
-                       gsub(/[Aa]ndrea [VvEe][a-zA-Z]*/, "", $0)
+                       gsub(/[Aa]ndrea ([Vv]ega|[Ee]strategas?)/, "", $0)
                        if (tolower($0) ~ /andrea/) print orig }')
 if [ -n "$andrea_hits" ]; then
   FAIL=1
@@ -72,6 +72,14 @@ if [ -n "$andrea_hits" ]; then
   echo "   (Atribuir la metodología a 'Andrea Vega' / 'Andrea Estratega' completos sí está bien.)"
   echo "$andrea_hits" | sed 's/^/   /' | head -25
 fi
+
+check "colores de la marca personal" \
+  '#F0B24A|240, *178, *74' \
+  "Ese dorado es la firma de la dueña del repo. Usa los colores de mi-marca/marca.md o uno neutro."
+
+check "datos del negocio de la dueña o de sus clientas" \
+  'YapperMethod|Truelany|Sol Traverso|Poder Inversionista|\$280 USD|\$560 al a' \
+  "Los ejemplos van con negocios ficticios y [placeholders]; nunca precios ni nombres reales."
 
 check "memorias personales" \
   '\[\[(user|feedback|project|reference)_[a-z_]*andrea[a-z_]*\]\]|patterns_ig_andrea|reference_andrea' \

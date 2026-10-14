@@ -122,7 +122,7 @@ Seguir este orden y confirmar con el usuario antes de pasar a cada pieza:
 **Vehículo único → Descripción → About Page → Onboarding → Posts Fijados → Leaderboard → Categorías Foro → VSL → Video Cancelación**
 
 ### 12. PROPUESTA INTEGRAL FINAL (.docx)
-Este es el **formato de entrega final** para clientes (Skool premium: Truelany, Adriana, Barbara, Ana Romero, Florencia, Felipe, Sol, Aaron Khaleb, etc.). NO se entrega como chat ni como pieza suelta — se entrega como UN documento .docx con las 16 secciones consolidadas.
+Este es el **formato de entrega final** para clientes de comunidades Skool premium. NO se entrega como chat ni como pieza suelta — se entrega como UN documento .docx con las 16 secciones consolidadas.
 
 Brief consolidado (preguntar lo que falte, NO inventar):
 1. Nombre de la fundadora + identidad (historia personal, autoridad real, libros/TEDx/medios, portafolio o credenciales)
@@ -148,7 +148,7 @@ Ver estructura detallada en [propuesta-integral.md](propuesta-integral.md).
 
 1. Recolectar el brief completo en conversación (sección por sección, una pregunta a la vez, NO formularios).
 2. Confirmar con la usuaria que está todo bien antes de generar.
-3. Volcar el brief consolidado a un archivo `brief.json` siguiendo el schema de [`brief.example.json`](brief.example.json) (el ejemplo está poblado con datos reales de Poder Inversionista — usarlo como referencia de estructura).
+3. Volcar el brief consolidado a un archivo `brief.json` siguiendo el schema de [`brief.example.json`](brief.example.json) (el ejemplo es un caso ficticio, «Raíz Patrimonial» — usarlo como referencia de estructura).
 4. Ejecutar:
    ```bash
    python3 ~/.claude/skills/creadora-comunidades-skool/build_docx.py /ruta/a/brief.json

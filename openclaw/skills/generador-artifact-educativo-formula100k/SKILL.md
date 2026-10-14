@@ -20,7 +20,7 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 # Generador de Artifacts Educativos · FÓRMULA 100K
 
-Genera artifacts educativos con un mismo sistema reconocible. Cada artifact es una miniapp HTML standalone con 3 vistas (Guía / Flashcards / Examen) que ayuda a las alumnas a entender un concepto de su curso, su comunidad o del manual de FÓRMULA 100K.
+Genera artifacts educativos consistentes con los 7 ya creados para una comunidad de alumnas. Cada artifact es una miniapp HTML standalone con 3 vistas (Guía / Flashcards / Examen) que ayuda a las alumnas a entender un concepto de su curso, su comunidad o del manual de FÓRMULA 100K.
 
 ## Cuándo usar esta skill
 
@@ -33,7 +33,7 @@ Se activa cuando el usuario pide:
 
 ## Contexto crítico antes de empezar
 
-**Usuario:** creador/a de contenido con comunidad propia. Audiencia: emprendedoras hispanas, creadoras de contenido.
+**Usuario:** creador/a de contenido con comunidad propia. Audiencia: la de su comunidad (pregúntala si no la conoces).
 
 **Restricción técnica:** Los artifacts deben funcionar SIN suscripción paga de Claude. Por eso son HTML standalone, no artifacts de claude.ai.
 

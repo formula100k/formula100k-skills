@@ -128,7 +128,7 @@ NO escribir ningún audio sin estos datos. Hacer las preguntas UNA por UNA.
 - **Cero corporativismo**: no "estimada", no "le agradezco", no "es un placer"
 - **Frases cortas** (audio se procesa más lento que texto)
 - **Cero clichés** ("transforma tu vida", "el momento es ahora", "no esperes más")
-- **Mencionar dinero específico** si ya hay confianza ("son $560 al año, no $560 al mes" — anclar el alivio)
+- **Mencionar dinero específico** si ya hay confianza ("son [precio] al año, no [precio] al mes" — anclar el alivio, con su precio real)
 - **No prometer lo que no puedes cumplir** — ni en privado
 - **Cerrar con sonrisa audible**
 

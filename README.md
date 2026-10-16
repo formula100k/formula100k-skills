@@ -16,9 +16,16 @@ Cubren: guionización, calendarios de contenido e historias, audios de venta, VS
 
 ## Cómo instalar (3 minutos)
 
-### Paso 1 — Asegúrate de tener Claude Code
+### Paso 1 — Asegúrate de tener Claude Code y Git
 
-Si aún no lo tienes, instálalo desde [claude.com/claude-code](https://claude.com/claude-code).
+Si aún no tienes Claude Code, instálalo desde [claude.com/claude-code](https://claude.com/claude-code).
+
+También necesitas **Git** instalado en tu computadora: Claude Code lo usa para descargar el marketplace. Si al agregar el marketplace te sale `Command 'git' not found`, es esto.
+
+- **Windows:** descárgalo de [git-scm.com/download/win](https://git-scm.com/download/win) e instálalo con las opciones por defecto.
+- **Mac:** abre la Terminal y escribe `git --version`. Si no lo tienes, el Mac te ofrece instalarlo; acepta.
+
+Después de instalarlo, cierra y vuelve a abrir Claude Code.
 
 ### Paso 2 — Agrega el marketplace
 

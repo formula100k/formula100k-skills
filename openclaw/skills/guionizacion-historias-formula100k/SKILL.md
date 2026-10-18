@@ -1,6 +1,6 @@
 ---
 name: guionizacion-historias-formula100k
-description: "Skill para crear guiones de SECUENCIAS DE HISTORIAS de Instagram (3-6 stories) usando la metodología FÓRMULA 100K. Activar cuando el usuario o un usuario pida: \"guioniza una historia\", \"arma una secuencia de stories para vender X\", \"estructura mis historias\", \"necesito un guion de stories\", \"haz una secuencia de historias para mi lanzamiento\", \"escribe stories para [oferta]\", \"diseña la secuencia de historias del jueves\", o cualquier variación que combine intención de vender/comunicar con el formato historias de IG. Genera UNA secuencia completa con: categoría detectada (Urgencia/One-Shot/ Lead Magnet/Libre/Encuestas), estructura de guion (1 de 24 disponibles), copy slide-by-slide, formato audiovisual por slide (🎥/📸 con uno de los 15 formatos), y briefing visual de diseño (paleta, capas, capturas, emojis). Guarda el output en guiones/historias/ como .md listo para ser tomado por la skill historias-a-imagenes-nanobanana."
+description: "Skill para crear guiones de SECUENCIAS DE HISTORIAS de Instagram (3-6 stories) usando la metodología FÓRMULA 100K. Activar cuando el usuario o un usuario pida: \"guioniza una historia\", \"arma una secuencia de stories para vender X\", \"estructura mis historias\", \"necesito un guion de stories\", \"haz una secuencia de historias para mi lanzamiento\", \"escribe stories para [oferta]\", \"diseña la secuencia de historias del jueves\", o cualquier variación que combine intención de vender/comunicar con el formato historias de IG. Genera UNA secuencia completa con: categoría detectada (Urgencia/One-Shot/ Lead Magnet/Libre/Encuestas), estructura de guion (1 de 24 disponibles), copy slide-by-slide, formato audiovisual por slide (🎥/📸 con uno de los 15 formatos), y briefing visual de diseño (paleta, capas, capturas, emojis). Guarda el output en entregables/ como .md listo para ser tomado por la skill historias-a-imagenes-nanobanana."
 argument-hint: "<idea, oferta o objetivo de la secuencia>"
 metadata: {"version": "1.0.0", "openclaw": {"emoji": "🦞"}}
 ---
@@ -13,6 +13,27 @@ metadata: {"version": "1.0.0", "openclaw": {"emoji": "🦞"}}
 >
 > - Guarda en `guiones/historias/` respetando al pie de la letra `references/output-template.md`: otra skill lo parsea.
 > - Entrega por Telegram el resumen de la secuencia y el `.md` completo como documento.
+
+---
+
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `entregables/`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `entregables/`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
 
 ---
 
@@ -195,7 +216,7 @@ Al final del archivo, agrega una sección con:
 
 ## OUTPUT
 
-Guarda en: `guiones/historias/`
+Guarda en: `entregables/`
 
 Nombre del archivo:
 ```

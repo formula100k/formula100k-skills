@@ -159,7 +159,7 @@ Versiones cortas, listas para escribir directo en el slide final:
 **Suaves / no presionados:**
 19. "Si esto te resonó, respóndeme y lo conversamos sin compromiso"
 20. "Te leo en privado si quieres descargar esto sin hablarlo en público"
-21. "Si no quieres comentar acá, respóndeme este story y lo vemos en corto"
+21. "Si no quieres comentar aquí, respóndeme este story y lo vemos en corto"
 
 **Con curiosidad/regalo escondido:**
 22. "Responde **'sí'** si quieres lo que preparé ayer 🎁"

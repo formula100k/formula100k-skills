@@ -1,6 +1,6 @@
 ---
 name: optimizador-cta-formula100k
-description: "Skill especializada en analizar, diagnosticar y mejorar llamados a la acción (CTAs) de guiones de video usando los patrones de FORMULA 100K. Usar SIEMPRE que alguien pida: mejorar un CTA, revisar un llamado a la acción, optimizar el final de un guion, hacer que un CTA genere más comentarios, crear variaciones de un llamado a la acción, o cuando comparta un guion y quiera que el CTA funcione mejor. También activar cuando digan: \"¿cómo remato este guion?\", \"el CTA no está funcionando\", \"quiero que genere más engagement\", \"mejora este final\"."
+description: "Skill especializada en analizar, diagnosticar y mejorar llamados a la acción (CTAs) de guiones de video usando los patrones de FÓRMULA 100K. Usar SIEMPRE que alguien pida: mejorar un CTA, revisar un llamado a la acción, optimizar el final de un guion, hacer que un CTA genere más comentarios, crear variaciones de un llamado a la acción, o cuando comparta un guion y quiera que el CTA funcione mejor. También activar cuando digan: \"¿cómo remato este guion?\", \"el CTA no está funcionando\", \"quiero que genere más engagement\", \"mejora este final\"."
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---
 
@@ -12,6 +12,27 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 >
 > - Skill de solo texto: corre tal cual.
 > - La oferta, el lead magnet y la palabra clave de cada CTA salen de `cerebro/`. Si no están, pregúntalas por Telegram antes de proponer.
+
+---
+
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `entregables/`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `entregables/`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
 
 ---
 
@@ -56,7 +77,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Optimizador de CTAs — FORMULA 100K
 
-Esta skill analiza cualquier llamado a la acción de un guion y produce versiones mejoradas usando los patrones probados de FÓRMULA 100K que han generado los mayores volúmenes de comentarios en sus videos.
+Esta skill analiza cualquier llamado a la acción de un guion y produce versiones mejoradas usando patrones de llamado a la acción que invitan a comentar con una palabra clave.
 
 ---
 

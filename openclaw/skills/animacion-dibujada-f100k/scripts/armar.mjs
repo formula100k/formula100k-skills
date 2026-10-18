@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // armar.mjs — copia un estilo a tu carpeta de trabajo como UN solo archivo (con el núcleo adentro),
 // para que funcione con doble clic desde cualquier lugar.
-// Uso: node armar.mjs <estilo> <destino.html>      ej. node armar.mjs libreta-a-mano ~/Desktop/animaciones/gancho.html
+// Uso: node armar.mjs <estilo> <destino.html>      ej. node armar.mjs libreta-a-mano ~/Documents/mis-animaciones/animaciones/gancho.html
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

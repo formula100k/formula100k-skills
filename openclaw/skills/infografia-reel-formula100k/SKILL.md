@@ -18,6 +18,24 @@ metadata: {"version": "1.0.0", "depends-on": [], "mcp-required": ["higgsfield"],
 
 ---
 
+## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
+
+Corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje. Si existe `entregables/`, los textos suenan a ella.
+- **Tu marca, en este orden:** 1) `entregables/` (colores, letra, estilo visual y @); 2) si no está, su manual de identidad visual `mi-marca/marca.md` (cómo buscarlo y leerlo: `references/mi-marca.md`); 3) si no hay ninguno, la paleta por mood de `references/brandkit.md`, y pregunta su @ si la pieza lleva watermark. Colores, letra y @handle siempre son los suyos: su marca manda sobre la paleta de la skill.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe). Nunca escribas dentro de la carpeta de esta skill (con el plugin no es `skills/…`).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → deja el prompt de la imagen base y el de la animación listos para cuando conecte la cuenta.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no está instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
 # Skill: Infografía-Reel FÓRMULA 100K
 
 Convierte un tema, idea, URL de artículo o URL de video en una infografía animada en formato reel
@@ -39,7 +57,7 @@ Cargar SIEMPRE estos archivos antes de generar:
 3. `references/prompt-builder.md` — fórmula universal del prompt nano_banana_2 + plantillas por arquetipo
 4. `references/animation-presets.md` — prompts de seedance_2_0 / kling3_0 por arquetipo
 5. `references/input-pipeline.md` — cómo procesar tema/URL artículo/URL YouTube → brief estandarizado
-6. `references/brandkit.md` — paleta, tipografía, watermark, reglas de copy. **Antes, busca su manual de identidad visual** (`references/mi-marca.md`): si existe, sus colores, letras, tratamiento de imagen, movimiento y @ mandan sobre la paleta por mood
+6. `references/brandkit.md` — paleta, tipografía, watermark, reglas de copy. **Antes, busca su marca en este orden:** `entregables/`; si no está, su manual de identidad visual `mi-marca/marca.md` (cómo buscarlo y leerlo: `references/mi-marca.md`). Si existe alguno, sus colores, letras, tratamiento de imagen, movimiento y @ mandan sobre la paleta por mood
 7. `references/word-substitution.md` — sanitización del brief: triggers NSFW + palabras largas propensas a romperse en video
 
 No es opcional.
@@ -155,7 +173,7 @@ mcp__higgsfield__generate_image({
 
 Polling con `job_status` cada 10–15s. Cuando termina, **descarga el .png** a:
 ```
-entregables/infografias/<slug-tema>/01_imagen_base.png
+entregables/
 ```
 
 ### Paso 5 — Mostrar imagen al usuario y aprobar
@@ -192,7 +210,7 @@ FURminator, anti-flea, deshedding) → fallback automático a `kling3_0` con pro
 
 Polling. Cuando termina, descarga el .mp4 a:
 ```
-entregables/infografias/<slug-tema>/02_reel.mp4
+entregables/
 ```
 
 ### Paso 7 — Entregar al usuario
@@ -221,14 +239,14 @@ Usuario: confirmado
 
 Skill:
   → Generando imagen con nano_banana_2 (job abc-123)
-  → Imagen lista en /FORMULA100K/INFOGRAFIAS/bebidas-rinones/01_imagen_base.png
+  → Imagen lista en entregables/
   → ¿Confirmamos antes de animar?
 
 Usuario: sí
 
 Skill:
   → Animando con seedance_2_0 (job def-456)
-  → Reel listo en /FORMULA100K/INFOGRAFIAS/bebidas-rinones/02_reel.mp4
+  → Reel listo en entregables/
   → Caption sugerido: "5 bebidas para limpiar tus riñones de forma natural 🌿"
   → Hashtags: #saludrenal #limpiezanatural #saludholistica
 ```
@@ -239,7 +257,7 @@ Skill:
 
 1. **Idioma**: El usuario escribe en español NEUTRO, no argentino. Aplica reemplazos vos→tú, tenés→tienes,
    acá→aquí, mirá→mira en TODO copy generado. Si el input es en inglés, mantener inglés.
-2. **Output**: SIEMPRE en `entregables/infografias/<slug-tema>/`.
+2. **Output**: SIEMPRE en `entregables/`.
    Estructura por carpeta: `01_imagen_base.png`, `02_reel.mp4`, `brief.yaml`, `prompts.md`.
 3. **No mockear el watermark** — agrégalo opcionalmente sólo si el usuario pide su handle (`@usuario`).
 4. **No inventar datos** — si el tema requiere datos verificables (estadísticas, propiedades médicas),

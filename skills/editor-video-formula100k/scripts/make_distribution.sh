@@ -36,7 +36,7 @@ echo "Sincronizando recursos-de-video-formula100k..."
 rsync -a --delete --exclude='.DS_Store' \
   "$SKILLS/recursos-de-video-formula100k/" "$DIST/recursos-de-video-formula100k/"
 
-# Estos archivos viven en $DIST (los editás ahí directo, NO en ~/.claude/skills/):
+# Estos archivos viven en $DIST (los editas ahí directo, NO en ~/.claude/skills/):
 for f in \
   instalar.sh \
   instalar.ps1 \

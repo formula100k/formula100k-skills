@@ -4,6 +4,26 @@ description: >
   Skill para humanizar guiones, textos y scripts para que no suenen escritos por IA. Usar SIEMPRE que alguien pida: humanizar un texto, hacer que suene más natural, quitarle el tono de IA, reescribir con mi voz, adaptar a mi estilo, hacer sonar más humano, revisar que no parezca IA, aplicar mi tono, o escribir como yo escribo. También activar cuando digan "esto suena muy de IA", "necesito que suene mío", "ponle mi estilo", "humaniza este guion" o cualquier variación que implique personalizar el tono y voz de un texto para que refleje la forma auténtica de comunicarse del usuario.
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viene en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu voz.** Tu Voice Guide vive en `~/Documents/mi-contenido/mi-voz.md` (ver PASO 0). Si no existe, se arma en el PASO 1.
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca** (colores, letra y @handle, si el texto los necesita), en este orden: `~/Documents/mi-contenido/mi-marca.md` → su manual de identidad visual `mi-marca/marca.md` → si no hay ninguno, pregúntaselos. Su marca manda sobre cualquier ejemplo de esta skill.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe). Nada se guarda dentro de la carpeta de la skill: con el plugin, se reemplaza en cada actualización.
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no tienes instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -49,7 +69,7 @@ Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona 
 
 > ⚠️ **La voz es la del usuario, nunca la de otra creadora.** Si esta skill trae un archivo
 > `references/ejemplo-voice-guide.md`, es SOLO una muestra de cómo se ve un Voice Guide bien
-> hecho (construido sobre una cuenta pública, a modo de ejemplo). **Nunca escribas en esa voz.**
+> hecho (una cuenta inventada, a modo de ejemplo). **Nunca escribas en esa voz.**
 > Sirve para entender el formato; el contenido sale del análisis del perfil del usuario.
 > Si el archivo no está, no lo busques: pasa directo al PASO 1.
 
@@ -57,12 +77,15 @@ Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona 
 
 ## PASO 0 — Verificar si el Voice Guide del usuario existe
 
-Antes de hacer cualquier cosa, revisa si existe `references/Voice_Guide.md` (el del usuario)
-Y tiene contenido de análisis real.
+Antes de hacer cualquier cosa, busca el Voice Guide del usuario, en este orden, y quédate con el primero que
+exista Y tenga contenido de análisis real:
 
 ```
-Ruta: <directorio de esta skill>/references/Voice_Guide.md
+1. ~/Documents/mi-contenido/mi-voz.md
+2. references/Voice_Guide.md dentro de la carpeta de esta skill (versiones viejas de la skill lo guardaban ahí)
 ```
+
+Si lo encuentras en el 2 y no en el 1, cópialo a `~/Documents/mi-contenido/mi-voz.md` para que no se pierda al actualizar la skill.
 
 **Si el archivo NO existe o está vacío → ir al PASO 1 (Análisis de Instagram).**
 **Si ya tiene el análisis completo → confirmar de quién es (el encabezado lleva el @) y, si es del usuario, saltar al PASO 2 (Humanización).**
@@ -103,7 +126,7 @@ Abre los **6-8 posts que tengan más engagement** (los que más likes y comentar
 
 ### 1.3 — Generar el Voice Guide
 
-Con todo lo que analizaste, crea el archivo `references/Voice_Guide.md` con esta estructura:
+Con todo lo que analizaste, crea el archivo `~/Documents/mi-contenido/mi-voz.md` con esta estructura:
 
 ```markdown
 # Voice Guide — [NOMBRE DEL USUARIO]
@@ -141,13 +164,13 @@ Con todo lo que analizaste, crea el archivo `references/Voice_Guide.md` con esta
 [2-3 captions completos copiados literalmente para referencia]
 ```
 
-Guarda este archivo en `references/Voice_Guide.md` dentro de la carpeta de esta skill.
+Guarda este archivo en `~/Documents/mi-contenido/mi-voz.md` (crea la carpeta si no existe). Así lo leen también las demás skills y agentes.
 
 ---
 
 ## PASO 2 — Humanización del texto
 
-Lee el `references/Voice_Guide.md` completo antes de empezar.
+Lee el Voice Guide completo (`~/Documents/mi-contenido/mi-voz.md`) antes de empezar.
 
 ### 2.1 — Diagnóstico rápido del texto recibido
 

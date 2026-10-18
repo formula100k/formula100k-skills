@@ -1,4 +1,6 @@
-# Guía de Ilustraciones — Estilo Xiaohei para F100K
+# Guía de Ilustraciones — Estilo Xiaohei
+
+> Donde los prompts de ejemplo dicen *orange* o `#F59E0B`, pon el color de acento de la persona (de `~/Documents/mi-contenido/mi-marca.md` o de su manual `mi-marca/marca.md`). Los ejemplos son genéricos: cámbialos por su rubro.
 
 Referencia rápida para la skill `carrusel-ilustrado-formula100k`.
 Cada tipo de ilustración incluye: descripción, cuándo usarlo, 3 ejemplos de F100K, y descripción en inglés para el prompt de Higgsfield.
@@ -14,7 +16,7 @@ Cuando el contenido explica un proceso que tiene pasos ordenados y necesita que 
 
 **Ejemplos F100K**
 1. "Los 5 pasos para crear un reel viral: idea → gancho → guion → grabación → publicación" — Xiaohei caminando sobre una línea con 5 círculos numerados
-2. "Cómo funciona el Segundo Cerebro F100K: captura → organiza → usa → publica" — Xiaohei subiendo una escalera de 4 peldaños, cada uno con un ícono
+2. "Cómo funciona tu sistema de notas: captura → organiza → usa → publica" — Xiaohei subiendo una escalera de 4 peldaños, cada uno con un ícono
 3. "El proceso de calendarización semanal: investigar virales → asignar formatos → guionizar → producir → publicar" — Xiaohei en una cinta transportadora con cajas etiquetadas
 
 **Descripción para prompt (inglés)**
@@ -36,9 +38,9 @@ Cuando quieres mostrar que algo está compuesto de partes que trabajan juntas. I
 **Señales en el guion:** "el sistema tiene X partes", "las herramientas que uso son", "el stack es", "los módulos son", "todo funciona junto"
 
 **Ejemplos F100K**
-1. "El stack de contenido F100K: Claude Code + Higgsfield + Canva + CapCut" — Xiaohei al centro con 4 cajas flotando alrededor conectadas por líneas delgadas
+1. "Tu caja de herramientas: [herramienta 1] + [herramienta 2] + [herramienta 3] + [herramienta 4]" — Xiaohei al centro con 4 cajas flotando alrededor conectadas por líneas delgadas
 2. "Los 3 pilares del Segundo Cerebro: ADN de marca + banco de ideas + calendario" — Xiaohei sosteniendo un triángulo con cada pilar en un vértice
-3. "El ecosistema F100K: Skool + formula100k.app + Skills + Consola de Contenido" — Xiaohei parado en el centro de un diagrama de Venn con 4 círculos entrelazados
+3. "Tu ecosistema: comunidad + sitio + curso + boletín" — Xiaohei parado en el centro de un diagrama de Venn con 4 círculos entrelazados
 
 **Descripción para prompt (inglés)**
 ```
@@ -60,7 +62,7 @@ Cuando quieres mostrar la transformación que produce tu método o el contraste 
 **Señales en el guion:** "antes vs. después", "sin [método] vs. con [método]", "el error que cometes", "lo que cambia cuando", "la diferencia entre"
 
 **Ejemplos F100K**
-1. "Antes de F100K: publicas sin sistema. Después: pipeline automatizado." — izquierda Xiaohei rodeado de papeles caóticos, derecha Xiaohei frente a una línea ordenada de publicaciones
+1. "Antes: publicas sin sistema. Después: un proceso que se repite." — izquierda Xiaohei rodeado de papeles caóticos, derecha Xiaohei frente a una línea ordenada de publicaciones
 2. "Sin Segundo Cerebro vs. Con Segundo Cerebro" — izquierda Xiaohei con cabeza llena de interrogantes, derecha Xiaohei con diagrama organizado saliendo de su cabeza
 3. "Tu perfil de Skool antes y después de la auditoría" — izquierda Xiaohei mirando una pantalla vacía, derecha Xiaohei mirando una pantalla llena de íconos de personas
 
@@ -85,7 +87,7 @@ Cuando quieres que el lector se identifique con el personaje. El lector ES Xiaoh
 **Señales en el guion:** "tú cuando", "eso que sientes cuando", "en el día 1 eras", "después de X meses ya eres", "te reconoces en esto"
 
 **Ejemplos F100K**
-1. "Tú el lunes antes de F100K" — Xiaohei sentado en el suelo, papeles cayendo encima, brazos levantados en desesperación
+1. "Tú el lunes sin plan" — Xiaohei sentado en el suelo, papeles cayendo encima, brazos levantados en desesperación
 2. "Tú después de implementar el sistema" — Xiaohei de pie sobre una pila de teléfonos, brazo derecho levantado, estrella naranja encima
 3. "Tú mirando el reloj a las 11pm sin haber publicado nada" — Xiaohei mirando un reloj gigante con aguja apuntando a las 11, expresión de pánico (cabeza inclinada)
 
@@ -158,7 +160,7 @@ Cuando tu contenido tiene una jerarquía clara: niveles, fases, capas que se con
 
 **Ejemplos F100K**
 1. "Las 3 capas del contenido viral: emoción (base) → información (medio) → CTA (cima)" — Xiaohei en la cima de una pirámide de 3 bloques, brazo extendido señalando hacia arriba
-2. "Los niveles de F100K: Skills → Segundo Cerebro → Consola de Contenido → Comunidad" — Xiaohei construyendo el último bloque sobre una torre de 4 niveles
+2. "Los niveles de tu método: base → práctica → sistema → comunidad" — Xiaohei construyendo el último bloque sobre una torre de 4 niveles
 3. "La jerarquía de tus ingresos digitales: audiencia → comunidad → producto → membresía" — Xiaohei sosteniendo un signo de estrella naranja encima de la estructura piramidal completa
 
 **Descripción para prompt (inglés)**
@@ -183,7 +185,7 @@ Cuando quieres mostrar un journey, un roadmap, o la secuencia de estados por los
 
 **Ejemplos F100K**
 1. "El journey de tu audiencia: extraño → seguidor → fan → cliente → evangelista" — Xiaohei viajando en una bicicleta simple por un camino ondulado con 5 banderas de colores
-2. "El roadmap de F100K en 90 días: semana 1 configuración → semanas 2-4 primeras publicaciones → mes 2 consistencia → mes 3 resultados" — Xiaohei con mochila caminando por un mapa estilo videojuego retro con 4 zonas
+2. "Tu ruta de 90 días: semana 1 configuración → semanas 2-4 primeras publicaciones → mes 2 consistencia → mes 3 resultados" — Xiaohei con mochila caminando por un mapa estilo videojuego retro con 4 zonas
 3. "Tu camino como creadora: primera publicación → primeros 100 seguidores → primera venta → negocio digital" — Xiaohei en el punto de partida mirando hacia adelante, camino visible con puntos de decisión
 
 **Descripción para prompt (inglés)**

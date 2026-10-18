@@ -4,7 +4,7 @@ Usa este formato EXACTO para entregar el reporte de LAB. Sustituye los `[placeho
 
 El reporte se entrega DOS veces:
 1. **Resumen en chat** (versión condensada — bloque al final del mensaje)
-2. **Archivo completo** guardado en `ideas/lab-ganchos/YYYY-MM-DD_<slug>/LAB.md` (versión completa abajo)
+2. **Archivo completo** guardado en `entregables/` (versión completa abajo)
 
 ---
 
@@ -140,7 +140,7 @@ Una sola acción concreta a ejecutar HOY:
 
 ## 📦 ARTEFACTOS GUARDADOS
 
-Carpeta: `ideas/lab-ganchos/[YYYY-MM-DD_slug]/`
+Carpeta: `entregables/]/`
 
 - `LAB.md` — este reporte
 - `variant-1.png` ... `variant-N.png` — imágenes generadas (Nanobanana)
@@ -205,7 +205,7 @@ Al final del mensaje en el chat, entrega este bloque corto:
   · V2: [URL]
   · V3: [URL]
 
-📦 Archivos: /FORMULA100K/LAB-GANCHOS/[YYYY-MM-DD_slug]/
+📦 Archivos: entregables/]/
 
 🚀 Siguiente paso: graba la ganadora con el brief de LAB.md.
    Cuando tengas el .mp4, pásalo por evaluador-ganchos-formula100k.

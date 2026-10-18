@@ -19,7 +19,7 @@ Ejemplos válidos:
 - `2026-05-07_one-shot_caso-brenda-39-sesiones.md`
 - `2026-05-09_urgencia_ultimo-dia-banco-historias.md`
 
-Ruta completa: `~/Documents/FORMULA100K/HISTORIAS/guiones/[NOMBRE].md`
+Ruta completa: `~/Documents/mi-contenido/historias/guiones/[NOMBRE].md`
 
 ---
 

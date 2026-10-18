@@ -15,7 +15,7 @@ if (!clip || clip.startsWith("--") || !existsSync(clip)) {
   process.exit(1);
 }
 const correr = (cmd, a) => spawnSync(cmd, a, { encoding: "utf8", maxBuffer: 1 << 28 });
-if (correr("ffmpeg", ["-version"]).status !== 0) { console.error("Falta ffmpeg (instálalo con: brew install ffmpeg)."); process.exit(1); }
+if (correr("ffmpeg", ["-version"]).status !== 0) { console.error("Falta ffmpeg (Mac: brew install ffmpeg · Windows: winget install -e --id Gyan.FFmpeg)."); process.exit(1); }
 
 // datos del clip
 const sonda = correr("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=r_frame_rate,width,height,duration:format=duration", "-of", "json", clip]);

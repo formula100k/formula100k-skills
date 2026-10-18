@@ -201,7 +201,7 @@ Todos los valores en escala 0-100 antes de aplicar pesos.
 |-------|-------|---------------|
 | 85-100 | TOP — graba esta YA | Variante ganadora con margen claro |
 | 70-84 | Viable | Graba pero anota ajustes menores del template |
-| 50-69 | Mediocre | Si TODAS las variantes caen aquí, re-diseña el guion antes de re-correr el lab |
+| 50-69 | Mediocre | Si TODAS las variantes caen aquí, rediseña el guion antes de re-correr el lab |
 | <50 | Reconstruir | El concepto base no funciona; cuestiona la promesa del video |
 
 ---
@@ -239,6 +239,6 @@ El Virality Predictor es un modelo. Hay que evitar dos sesgos:
 - [ ] Curva de Default Mode revisada por variante (debe ser <50 idealmente, alarma si >55)
 - [ ] Ranking con tie-breakers aplicados
 - [ ] Brief de producción de la ganadora listo para grabar
-- [ ] Carpeta `/FORMULA100K/LAB-GANCHOS/YYYY-MM-DD_tema/` con todos los artefactos
+- [ ] Carpeta `entregables/` con todos los artefactos
 - [ ] LAB.md guardado siguiendo `output-template.md`
 - [ ] Links a dashboards de Higgsfield incluidos

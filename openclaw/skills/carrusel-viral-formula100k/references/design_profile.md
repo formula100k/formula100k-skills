@@ -3,8 +3,10 @@
 [PERFIL NO CONFIGURADO]
 
 La primera vez que pidas un carrusel, la skill te hace el setup de TU marca (PASO 0.2): le pasas 1-3 capturas de
-carruseles con tu estilo o respondes 5 preguntas, y guarda aquí tu perfil. Desde ahí, todos tus carruseles salen
-con tus colores, tu letra y tu rubro.
+carruseles con tu estilo o respondes 5 preguntas, y guarda tu perfil en `entregables/`
+(nunca dentro de la carpeta de la skill, que se reemplaza al actualizar el plugin). Desde ahí, todos tus carruseles
+salen con tus colores, tu letra y tu rubro.
 
-> **Este archivo es el respaldo.** Si tienes tu manual de identidad visual en `mi-marca/marca.md`, la skill lo
-> lee primero y este perfil no se usa. Lo armas en formula100k.app/identidad-visual.
+> **Este archivo es el respaldo.** La skill busca primero `entregables/` y después tu manual
+> de identidad visual `mi-marca/marca.md`; si tienes alguno, este perfil no se usa. El manual lo armas en
+> formula100k.app/identidad-visual.

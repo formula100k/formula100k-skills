@@ -42,7 +42,16 @@ Cualquier gesto brusco hacia la cámara sirve: un chasquido cerca del lente, tap
 
 ## Flujo paso a paso
 
-`SKILL` = `~/.claude/skills/reel-manotazo-f100k`. `SALIDA` = la carpeta de trabajo de esta pieza.
+`SKILL` = la carpeta de esta skill (la que tiene este `SKILL.md`; con el plugin no está en `~/.claude/skills`). `SALIDA` = la carpeta de trabajo de esta pieza.
+
+**0. Su negocio y su marca.** Los textos y los colores son los de la persona, nunca los del ejemplo.
+- **Negocio y voz:** `~/Documents/mi-contenido/mi-negocio.md` (rubro, clienta, oferta) y `~/Documents/mi-contenido/mi-voz.md`
+  (cómo habla). De ahí salen el dolor del «antes» y la respuesta del «después». Si no existen, pregúntale rubro, clienta
+  y qué le resuelve, en un solo mensaje.
+- **Marca**, en este orden: `~/Documents/mi-contenido/mi-marca.md` → su manual de identidad visual `mi-marca/marca.md` →
+  si no hay ninguno, copia `references/marca.md` a `~/Documents/mi-contenido/mi-marca.md`, pregunta lo que falte en un
+  solo mensaje y déjaselo escrito.
+- **Su marca manda sobre el estilo:** los colores y la letra de `config.js` y de `posts.html` son de muestra; van con los suyos.
 
 **1. Copia la plantilla.**
 
@@ -65,7 +74,7 @@ node "$SKILL/scripts/detectar-manotazo.mjs" "$SALIDA/assets/clip.mp4" --salida "
 
 Imprime el segundo, los otros candidatos y las dos líneas para `config.js`. Deja `revision/manotazo-cuadros.jpg` con tres cuadros: el anterior, el del manotazo y el siguiente. **Míralo con Read.** El cuadro del centro debe ser el momento en que la mano entra o tapa el cuadro (o el primer cuadro de la segunda toma). Si eligió otro movimiento, acota la búsqueda con `--desde 2.5 --hasta 4.5` o usa uno de los otros candidatos. El script no busca en el primer segundo ni en el último medio segundo.
 
-**4. Pon las imágenes.** La imagen «antes» y las del «después» van en `assets/`. Si pesan mucho, redúcelas (`sips -Z 1000 imagen.png --out assets/despues-1.jpg -s format jpeg`). Borra de `assets/` las de ejemplo que no uses.
+**4. Pon las imágenes.** La imagen «antes» y las del «después» van en `assets/`. Si pesan mucho, redúcelas (`node "$SKILL/scripts/sistema.mjs" achicar imagen.png assets/despues-1.jpg 1000`). Borra de `assets/` las de ejemplo que no uses.
 
 **5. Llena `config.js`.** Como mínimo: `clip: "assets/clip.mp4"`, `manotazo`, `duracion`, los dos textos y las rutas de las imágenes. `index.html` no se toca.
 
@@ -82,11 +91,33 @@ Lint debe dar 0 errores (los avisos `nested_structure_needs_subcomposition` se a
 
 ```bash
 hyperframes render --output reel-manotazo.mp4
-bash "$SKILL/scripts/hoja-de-contacto.sh" reel-manotazo.mp4
+node "$SKILL/scripts/hoja-de-contacto.mjs" reel-manotazo.mp4     # en Mac también: bash "$SKILL/scripts/hoja-de-contacto.sh" reel-manotazo.mp4
 ffprobe -v error -show_entries stream=codec_type,duration -of compact reel-manotazo.mp4
 ```
 
 Mira la hoja (4 cuadros por segundo) con Read: el cambio cae en el manotazo y la cuadrícula no se sale del cuadro. `ffprobe` debe listar una pista `audio` además de la de `video`.
+
+## Música, marca y serie
+
+Detalle común a todas las skills de animación: `references/ritmo-y-serie.md`. Lo propio de este reel:
+
+- **Música: el golpe fuerte va en el manotazo.** Aquí el momento grande ya está grabado, así que no se mueve la
+  animación: se mueve el arranque de la pista. Con el MP4 ya renderizado:
+  ```bash
+  node "$SKILL/scripts/golpes.mjs" analizar "$SALIDA/assets/pista.mp3" --salida "$SALIDA/golpes.json"
+  node "$SKILL/scripts/golpes.mjs" alinear "$SALIDA/golpes.json" <manotazo − clipInicio>     # imprime musica.inicio
+  node "$SKILL/scripts/golpes.mjs" mezclar reel-manotazo.mp4 "$SALIDA/assets/pista.mp3" reel-con-musica.mp4 --inicio <ese número> --volumen 0.8
+  ```
+  Si el clip lleva tu voz y quieres conservarla, agrega `--con-voz` y baja `--volumen` a 0.25; si no, pon
+  `conservarAudio: false` antes de renderizar. La pista la trae la persona (propia o libre de derechos). Si va a usar
+  un audio de Instagram, no mezcles nada: dile en qué segundo cae el manotazo (`manotazo − clipInicio`) para que
+  alinee ahí el golpe fuerte al publicar. La plantilla no lee `musica` de `config.js`: son esos tres comandos.
+- **Marca.** De su `mi-marca.md` o de su manual (ver el paso 0). Color y Letra → `estilo` · Movimiento → `golpe` (`escala`, `sacudida`, `cuadros`: con rebote o
+  corte seco) y cuánto se sostiene cada mitad (`manotazo` y `duracion`). No hay entradas con dirección ni desenfoque.
+- **Serie.** Para varios reels del mismo formato, escribe antes `BIBLIA.md` (letra y color de los textos, forma de
+  la tarjeta y de la cuadrícula, golpe, música y momentos obligados: mismo encuadre, manotazo en el mismo segundo,
+  misma firma) y declara qué se toma de cada referencia. Revisa cada reel contra esa lista mirando sus cuadros.
+- **Efectos de otras librerías:** `references/efectos-open-source.md`. `node "$SKILL/scripts/probar-golpes.mjs"` prueba el detector.
 
 ## Campos de `config.js`
 
@@ -129,13 +160,13 @@ No rellenes la cuadrícula con la misma imagen nueve veces sin cambiarla: se not
 ```bash
 TRABAJO="$SALIDA/posts-de-una-foto" && mkdir -p "$TRABAJO" && cp "$SKILL/posts-de-una-foto/posts.html" "$TRABAJO/"
 cp "$SALIDA/assets/antes.jpg" "$TRABAJO/foto.jpg"
-# la misma foto sin fondo (en Mac). Sin Mac: quítale el fondo con Higgsfield (remove_background) o a mano
-swift ~/.claude/skills/animacion-dibujada-f100k/scripts/recortar.swift "$TRABAJO/foto.jpg" "$TRABAJO/recorte.png"
+# la misma foto sin fondo (Mac y Windows; usa los ayudantes de animacion-dibujada-f100k, que viene en el mismo plugin). Si no sale bien: quítale el fondo con Higgsfield (remove_background) o a mano
+node "$SKILL/scripts/sistema.mjs" recortar "$TRABAJO/foto.jpg" "$TRABAJO/recorte.png"
 ```
 
 1. **Mira `recorte.png` con Read** antes de seguir: la persona o el producto completo, sin pedazos de fondo.
 2. **Edita el bloque `AJUSTES` de `posts.html`** y nada más: `foco` (dónde está la cara o el producto, en fracción del ancho y del alto), `colores` (los de la marca de quien publica), `nombre` y los nueve `titulos`. Los títulos son posts creíbles de esa persona, de su rubro, sin cifras ni resultados inventados; `*así*` va en itálica.
-3. **Captura:** `bash "$SKILL/posts-de-una-foto/capturar.sh" "$TRABAJO" "$SALIDA/assets"`. Deja `despues-1.jpg` … `despues-9.jpg` y una hoja para revisar.
+3. **Captura:** `node "$SKILL/posts-de-una-foto/capturar.mjs" "$TRABAJO" "$SALIDA/assets"` (en Mac también sirve `bash "$SKILL/posts-de-una-foto/capturar.sh"` con los mismos argumentos). Deja `despues-1.jpg` … `despues-9.jpg` y una hoja para revisar.
 4. **Mira `hoja-posts.jpg` con Read**, post por post. Qué revisar: ningún recorte corta el cuerpo en un punto raro ni deja en primer plano algo que no es el tema (pasó con un zoom a un vaso que encuadraba el escote); la cara o el producto se reconoce en los nueve; ningún título tapa la cara. Si un post queda mal, mueve `foco` o cambia los números `data-f="ancho,x,y"` de esa lámina y vuelve a capturar.
 
 Los títulos de la plantilla son de muestra: di cuáles pusiste y que se pueden cambiar.

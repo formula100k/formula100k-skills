@@ -10,10 +10,10 @@ Reescribir la portada con uno de estos patrones validados (no copiar el del refe
 - **Contraste:** "Dejé de [X] y empecé a [Y]. Esto pasó."
 - **Número + promesa:** "5 errores que matan tu [resultado]"
 - **Error común:** "Si haces esto en tus carruseles, estás perdiendo alcance"
-- **Identificación:** "Te pasa que [situación]? No es tu culpa."
+- **Identificación:** "Si [situación], no es tu culpa: es [causa real]."
 - **Resultado específico:** "Cómo hice [resultado medible] en [tiempo]"
 
-Reglas del gancho: concreto, una sola promesa, sin relleno, frena el scroll en < 1s de lectura.
+Reglas del gancho: afirmación directa (no pregunta retórica), concreto, una sola promesa, sin relleno, frena el scroll en < 1s de lectura. Los ejemplos y el vocabulario salen del rubro de la persona (`entregables/`), no de marketing.
 
 ## 2. Legibilidad
 
@@ -40,10 +40,11 @@ S(n+1) CTA                  → acción clara
 
 Si el referente mete slides de relleno (puro adorno, sin avanzar la idea) → eliminar.
 
-## 5. CTA F100K
+## 5. CTA
 
-- Comentario de **1-2 sílabas** (ej. "Comenta 100K") + "guárdalo para después" 📌.
-- O el CTA propio de la marca del usuario si lo tiene definido.
+- Comentario de **una palabra clave corta ligada al tema** (ej. en un carrusel de recetas: "Comenta CENA"). Nunca «YO» ni «guárdalo» como CTA.
+- O el CTA propio de la persona si está en `entregables/` o en su manual (`carruseles.cierre`).
+- Si promete enviar algo (guía, plantilla), que exista: pregúntale qué entrega. No inventes regalos.
 - Posición clara, alto contraste, sin competir con otros elementos.
 
 ## 6. Detalles de oficio

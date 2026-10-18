@@ -8,6 +8,7 @@ import { createRequire } from 'node:module';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { chrome, comoUrl } from './sistema.mjs';
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const [guionArg, salida] = process.argv.slice(2);
@@ -27,13 +28,13 @@ const CANDIDATAS = [1390, 1300, 1210, 330, 420, 1120, 510, 1030, 600, 940, 690, 
 let chromium; for (const b of [join(aqui, '..') + '/', process.cwd() + '/']) { try { chromium = createRequire(b)('playwright-core').chromium; break; } catch {} }
 if (!chromium) { console.error('Falta playwright-core: corre `npm i` en la carpeta de la skill.'); process.exit(1); }
 let nav; const flags = { args: ['--allow-file-access-from-files', ...(process.platform === 'linux' ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])] }   // en un servidor Linux (root) Chrome necesita --no-sandbox;
-try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch(flags); }
+try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch({ ...flags, ...(chrome() ? { executablePath: chrome() } : {}) }); }
 
 const filas = [];
 for (const [i, e] of escenas.entries()) {
   if (!existsSync(rel(e.pieza))) { console.error(`No encuentro la pieza: ${e.pieza}`); process.exit(1); }
   const pag = await nav.newPage(); const errores = []; pag.on('pageerror', x => errores.push(x.message));
-  await pag.goto('file://' + rel(e.pieza) + '?render');
+  await pag.goto(comoUrl(rel(e.pieza), '?render'));
   await pag.evaluate(() => document.fonts && document.fonts.ready);
   try { await pag.evaluate(() => window.LISTO); } catch {}
   const info = await pag.evaluate(() => ({ FRAMES: window.FRAMES, FPS: window.FPS, QUIETO: typeof window.QUIETO === 'number' ? window.QUIETO : 1.4 }));

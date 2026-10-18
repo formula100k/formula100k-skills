@@ -34,7 +34,7 @@ test('un estilo sólo publica formatos que hoy se pueden renderizar', () => {
 test('todo prompt trae las tres partes', () => {
   for (const e of ESTILOS) {
     const p = construirPrompt(e.id);
-    assert.match(p, /bootstrap/, `${e.id}: falta la parte de instalación`);
+    assert.match(p, /editar\.mjs --revisar/, `${e.id}: falta la parte de instalación`);
     assert.match(p, /sem[áa]ntico/i, `${e.id}: falta el recorte semántico`);
     assert.match(p, new RegExp(e.referencia), `${e.id}: falta el formato`);
     // Sin MANIFEST el prompt describe un estilo pero no produce nada: el

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Parse the keyword-based MANIFEST.md (FORMULA 100K reel-viral preset) → cues.json.
+Parse the keyword-based MANIFEST.md (reel-viral preset) → cues.json.
 
 Usage:
   manifest_to_cues.py <DEST_FOLDER> [--out cues.json]
@@ -189,7 +189,7 @@ def parse_formato(text: str) -> dict:
 
     # Esquina cámara: sólo se emite la clave si el valor es válido. Ausente,
     # vacío o desconocido → se omite y el formato usa su propio default (hoy
-    # 'tr' en pip.tsx), en vez de forzar uno acá. Un campo vacío en el
+    # 'tr' en pip.tsx), en vez de forzar uno aquí. Un campo vacío en el
     # MANIFEST (`- **Esquina cámara:**` sin nada después) se parsea como
     # cadena vacía, no como None (el `**` de cierre del bold queda como
     # "valor" hasta que `_clean_inline` lo limpia) — se trata igual que
@@ -387,6 +387,171 @@ def warn_missing_keywords(cue_kind: str, cues: list[dict], blob: str) -> int:
     return missing
 
 
+# ── Secciones exclusivas del formato `noticiero` ────────────────────────
+# Las lee sólo el modo `news` de render.ts. En cualquier otro MANIFEST estas
+# secciones no existen y los parsers devuelven vacío, así que no afectan a los
+# demás formatos.
+
+DEFAULT_NEWS_BRAND = 'NOTICIAS'
+DEFAULT_CHYRON_DURATION = 4.0
+DEFAULT_CARD_DURATION = 4.0
+
+# Tipos de tarjeta que entiende NewsHorizontal.tsx (CardRouter).
+TIPOS_TARJETA = ('title', 'bignum', 'list', 'leaderboard', 'shot')
+
+# Dentro de la celda `Campos` los pares van separados por `;` y las listas por
+# `//`. No se usa `|` porque es el separador de columnas de la tabla Markdown.
+_SEP_CAMPOS = ';'
+_SEP_ITEMS = '//'
+
+
+def _campos(celda: str) -> dict:
+    """`clave=valor; clave=valor` → dict. Claves en minúscula, sin acentos."""
+    out: dict = {}
+    for trozo in celda.split(_SEP_CAMPOS):
+        if '=' not in trozo:
+            continue
+        k, _, v = trozo.partition('=')
+        k = _normalize_match(_clean_inline(k)).replace(' ', '')
+        v = _clean_inline(v)
+        if k and v:
+            out[k] = v
+    return out
+
+
+def parse_news_brand(text: str) -> str:
+    m = re.search(r'^\s*[-*]?\s*\*{0,2}\s*Marca\s*\*{0,2}\s*:\s*(.+?)\s*$',
+                  text, re.IGNORECASE | re.MULTILINE)
+    return _clean_inline(m.group(1)) if m else DEFAULT_NEWS_BRAND
+
+
+def parse_news_ticker(text: str) -> list[str]:
+    """`## Ticker` — una viñeta por titular rotativo de la barra inferior."""
+    sec = _section(text, 'Ticker', 'Titulares')
+    if not sec:
+        return []
+    items = []
+    for line in sec.splitlines():
+        line = line.strip()
+        if line.startswith(('-', '*')):
+            v = _clean_inline(line[1:])
+            if v:
+                items.append(v)
+    return items
+
+
+def parse_news_chyrons(text: str) -> list[dict]:
+    """`## Chyrons` — tabla `Keyword | Kicker | Título | Duración | Offset`."""
+    sec = _section(text, 'Chyrons', 'Chyron')
+    if not sec:
+        return []
+    cues: list[dict] = []
+    for cells in _table_rows(sec):
+        keyword = _cell(cells, 0)
+        kicker = _cell(cells, 1)
+        title = _cell(cells, 2)
+        if not keyword or not title:
+            continue
+        cues.append({
+            'keyword': keyword,
+            'kicker': kicker or 'NOVEDAD',
+            'title': title,
+            'duration': _to_float(_cell(cells, 3), DEFAULT_CHYRON_DURATION),
+            'offset': _to_float(_cell(cells, 4), 0.0),
+        })
+    return cues
+
+
+def parse_news_cards(text: str) -> list[dict]:
+    """`## Tarjetas` — tabla `Keyword | Tipo | Campos | Duración | Offset`.
+
+    `Campos` es `clave=valor; clave=valor`; las listas usan `//`. Cada tipo
+    lee sus propias claves y una fila con tipo desconocido se descarta con
+    aviso (a diferencia de un valor de columna raro, aquí el tipo decide qué
+    componente se dibuja: caer a uno por defecto sería dibujar otra cosa).
+    """
+    sec = _section(text, 'Tarjetas', 'Cards')
+    if not sec:
+        return []
+    cues: list[dict] = []
+    for cells in _table_rows(sec):
+        keyword = _cell(cells, 0)
+        tipo = _cell(cells, 1).lower().strip()
+        if not keyword or not tipo:
+            continue
+        if tipo not in TIPOS_TARJETA:
+            print(f'[warn] tarjeta: tipo desconocido {tipo!r} '
+                  f'(keyword {keyword!r}) — fila descartada', file=sys.stderr)
+            continue
+        f = _campos(_cell(cells, 2))
+        base = {
+            'kind': tipo,
+            'keyword': keyword,
+            'duration': _to_float(_cell(cells, 3), DEFAULT_CARD_DURATION),
+            'offset': _to_float(_cell(cells, 4), 0.0),
+        }
+
+        if tipo == 'title':
+            if not f.get('titulo'):
+                print(f'[warn] tarjeta title sin `titulo=` (keyword '
+                      f'{keyword!r}) — fila descartada', file=sys.stderr)
+                continue
+            base.update(eyebrow=f.get('eyebrow', 'NOVEDAD'),
+                        title=f['titulo'])
+            if f.get('subtitulo'):
+                base['subtitle'] = f['subtitulo']
+
+        elif tipo == 'bignum':
+            if not f.get('a'):
+                print(f'[warn] tarjeta bignum sin `a=` (keyword {keyword!r}) '
+                      f'— fila descartada', file=sys.stderr)
+                continue
+            base['to'] = f['a']
+            for clave, prop in (('de', 'from'), ('unidad', 'unit'),
+                                ('pie', 'caption')):
+                if f.get(clave):
+                    base[prop] = f[clave]
+
+        elif tipo == 'list':
+            items = [i for i in (_clean_inline(x) for x in
+                                 f.get('items', '').split(_SEP_ITEMS)) if i]
+            if not items:
+                print(f'[warn] tarjeta list sin `items=` (keyword '
+                      f'{keyword!r}) — fila descartada', file=sys.stderr)
+                continue
+            base.update(title=f.get('titulo', ''), items=items)
+
+        elif tipo == 'leaderboard':
+            filas = []
+            for fila in f.get('filas', '').split(_SEP_ITEMS):
+                partes = [_clean_inline(x) for x in fila.split(':')]
+                partes = [x for x in partes if x]
+                if len(partes) >= 2:
+                    r = {'name': partes[0], 'metric': partes[1]}
+                    if len(partes) > 2:
+                        r['sub'] = partes[2]
+                    filas.append(r)
+            if not filas:
+                print(f'[warn] tarjeta leaderboard sin `filas=` (keyword '
+                      f'{keyword!r}) — fila descartada', file=sys.stderr)
+                continue
+            base.update(title=f.get('titulo', ''), rows=filas)
+
+        else:  # shot
+            if not f.get('archivo'):
+                print(f'[warn] tarjeta shot sin `archivo=` (keyword '
+                      f'{keyword!r}) — fila descartada', file=sys.stderr)
+                continue
+            base['src'] = _strip_code(f['archivo'])
+            if f.get('titulo'):
+                base['title'] = f['titulo']
+            if f.get('pie'):
+                base['caption'] = f['pie']
+
+        cues.append(base)
+    return cues
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('dest', help='Folder con MANIFEST.md (y opcionalmente captions.json)')
@@ -410,6 +575,14 @@ def main() -> int:
         **parse_formato(text),
     }
 
+    # Secciones del noticiero. Se emiten siempre (vacías en otros formatos):
+    # render.ts sólo las mira en modo `news`, y un cues.json con listas vacías
+    # es más fácil de inspeccionar que uno con claves que aparecen y desaparecen.
+    cues['newsBrand'] = parse_news_brand(text)
+    cues['newsTicker'] = parse_news_ticker(text)
+    cues['newsChyrons'] = parse_news_chyrons(text)
+    cues['newsCards'] = parse_news_cards(text)
+
     # Optional sanity check: warn if any keyword doesn't appear in captions.json.
     captions_path = dest / 'captions.json'
     if captions_path.exists():
@@ -422,6 +595,8 @@ def main() -> int:
                 warn_missing_keywords('emphasis', cues['emphasisCues'], blob)
                 + warn_missing_keywords('overlay', cues['overlayCues'], blob)
                 + warn_missing_keywords('broll', cues['brollCues'], blob)
+                + warn_missing_keywords('chyron', cues['newsChyrons'], blob)
+                + warn_missing_keywords('tarjeta', cues['newsCards'], blob)
             )
             if missing:
                 print(f'[warn] {missing} keyword(s) sin match — esos cues '
@@ -442,6 +617,12 @@ def main() -> int:
     print(f'  brollCues:    {len(cues["brollCues"])}', file=sys.stderr)
     print(f'  hookCue:      {"yes — " + cues["hookCue"]["src"] if cues["hookCue"] else "no"}',
           file=sys.stderr)
+    if cues['formato'] == 'noticiero':
+        print(f'  newsTicker:   {len(cues["newsTicker"])}', file=sys.stderr)
+        print(f'  newsChyrons:  {len(cues["newsChyrons"])}', file=sys.stderr)
+        print(f'  newsCards:    {len(cues["newsCards"])}'
+              f' ({sum(1 for c in cues["newsCards"] if c["kind"] == "shot")} capturas)',
+              file=sys.stderr)
     print(f'  formato:      {cues["formato"]} · tema {cues["tema"]} · '
           f'subtítulos {"on" if cues["subtitulos"] else "off"}', file=sys.stderr)
     return 0

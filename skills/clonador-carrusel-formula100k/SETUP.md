@@ -1,40 +1,40 @@
-# Skill ESPEJO — Instalación (regalo exclusivo · Clase de Carruseles 11 jun 2026)
+# Skill ESPEJO — Cómo se usa
 
-Esta skill clona el estilo de cualquier carrusel a partir de una **captura de pantalla**, lo mejora con la metodología FÓRMULA 100K y te renderiza las slides en PNG listas para subir.
+Esta skill clona el estilo de cualquier carrusel a partir de una **captura de pantalla** (o de un enlace),
+lo mejora con la metodología FÓRMULA 100K y te renderiza las slides en PNG listas para subir, con tus colores,
+tu letra y tu @.
 
-## 1. Instala la skill en Claude Code
+## 1. Instalación
 
-1. Descomprime esta carpeta `clonador-carrusel-formula100k`.
-2. Cópiala dentro de tu carpeta de skills de Claude Code:
-   - **Mac:** `~/.claude/skills/`
-   - **Windows:** `C:\Users\TU_USUARIO\.claude\skills\`
-3. Reinicia Claude Code. Listo: ya reconoce la skill.
+La skill viene en el plugin de FÓRMULA 100K: al instalar el plugin en Claude Code ya la tienes.
 
-## 2. Requisitos para renderizar (una sola vez)
-
-El render usa el **Chrome** que ya tienes instalado + una librería ligera.
+La primera vez que exporte, la skill corre `npm install` dentro de su propia carpeta (instala `puppeteer-core`;
+no descarga ningún navegador: usa tu Google Chrome). Si prefieres hacerlo tú, abre una terminal en la carpeta
+de la skill y corre una sola vez:
 
 ```bash
-cd clonador-carrusel-formula100k
 npm install
 ```
 
-(Instala `puppeteer-core`. No descarga ningún navegador: usa tu Chrome del sistema.)
+Necesitas **Node.js** y **Google Chrome** (sirven también Edge, Brave o Chromium).
 
-Necesitas tener instalado **Google Chrome** (o Brave / Edge / Chromium).
+## 2. Tu marca (una sola vez)
+
+La skill busca tu identidad en este orden: `~/Documents/mi-contenido/mi-marca.md` (colores, letras, estilo
+visual, @, tono) y, si no está, tu manual de identidad visual `mi-marca/marca.md` (el que armas en
+formula100k.app/identidad-visual). Tu negocio sale de `~/Documents/mi-contenido/mi-negocio.md` (rubro, avatar,
+oferta). Si no hay nada, te pregunta tu color principal, tu letra y tu @ en un solo mensaje.
 
 ## 3. Úsala
 
-En Claude Code, pásale una captura de un carrusel que te guste y di:
+En Claude Code, pásale una captura (o el enlace) de un carrusel que te guste y di:
 
-> "Clona este carrusel para mi tema: [tu idea]. Mi marca es @____. Aquí va mi foto."
+> "Clona este carrusel para mi tema: [tu idea]. Aquí va mi foto."
 
 La skill:
-1. Lee la captura y extrae el ADN de estilo.
+1. Lee la referencia y extrae el ADN de estilo.
 2. Te muestra qué copia y qué mejora.
 3. Escribe el guion mejorado slide por slide.
-4. Construye el HTML y exporta los PNG finales.
+4. Construye el HTML y exporta los PNG finales en `~/Documents/mi-contenido/carruseles/`.
 
----
-
-Esta skill es parte del arsenal de FÓRMULA 100K. El flujo completo (investigación viral + render en tu estilo + variantes infinitas) vive dentro de la comunidad → https://www.skool.com/formula-100k
+Si le pasas un enlace y no tienes el conector de Apify, te pedirá capturas: es normal.

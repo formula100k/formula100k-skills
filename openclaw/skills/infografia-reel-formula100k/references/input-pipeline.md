@@ -13,7 +13,7 @@ Aplicar regex al input recibido:
 |---|---|---|
 | `^(https?://(www\.)?(youtube\.com\|youtu\.be)/...)` | URL YouTube | Path A — Transcribir |
 | `^https?://...` (cualquier otra URL) | URL Artículo | Path B — Extraer |
-| `^.+\.md$` (archivo en el workspace) | Ruta a guion | Path C — Parsear |
+| Ruta local que termina en `.md` | Ruta a guion | Path C — Parsear |
 | (cualquier otro texto) | Tema libre | Path D — Investigar |
 
 ---
@@ -144,7 +144,7 @@ Si falla alguna validación, ajustar automáticamente:
 
 Antes de generar la imagen, guardar el brief como YAML en:
 ```
-entregables/infografias/<slug-tema>/brief.yaml
+entregables/
 ```
 
 Esto permite:

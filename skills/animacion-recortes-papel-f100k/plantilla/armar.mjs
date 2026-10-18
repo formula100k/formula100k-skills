@@ -2,14 +2,17 @@
 // Arma index.html y tiempos.js a partir de config.js y de la voz.
 //   node armar.mjs             usa assets/voz.(wav|mp3|m4a) si existe; si no, calcula los tiempos sin voz
 //   node armar.mjs --voz-ia    genera una voz de IA provisional (Kokoro, local) y la usa
+// Corre igual en Mac y en Windows: lo que cambia entre los dos pasa por sistema.mjs.
 //   node armar.mjs --sin-voz   ignora cualquier audio y calcula los tiempos por largo de palabra
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import vm from "node:vm";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { npx, pythonConPaquetes, transcribir } from "./sistema.mjs";
 
-const DIR = path.dirname(new URL(import.meta.url).pathname);
+const DIR = path.dirname(fileURLToPath(import.meta.url));
 const A = (f) => path.join(DIR, f);
 const args = process.argv.slice(2);
 const aviso = (m) => console.log("  ⚠ " + m);
@@ -41,20 +44,15 @@ fs.mkdirSync(A("assets"), { recursive: true });
 fs.writeFileSync(A("guion.txt"), guion + "\n");
 
 /* ── voz ── */
-const hf = (a, opt = {}) => spawnSync("npx", ["hyperframes", ...a], { cwd: DIR, encoding: "utf8", ...opt });
+const hf = (a, opt = {}) => npx(["hyperframes", ...a], { cwd: DIR, ...opt });
 let voz = null;
 if (!args.includes("--sin-voz")) {
   if (args.includes("--voz-ia")) {
     const env = { ...process.env };
     if (!env.HYPERFRAMES_PYTHON) {
-      const venv = path.join(os.homedir(), ".cache", "f100k-voz");
-      const py = path.join(venv, "bin", "python");
-      if (!fs.existsSync(py)) {
-        console.log("  Instalando la voz local (una sola vez, ~1 min)…");
-        execFileSync("python3", ["-m", "venv", venv], { stdio: "inherit" });
-        execFileSync(py, ["-m", "pip", "install", "-q", "kokoro-onnx", "soundfile"], { stdio: "inherit" });
-      }
-      env.HYPERFRAMES_PYTHON = py;
+      console.log("  Preparando la voz local (la primera vez tarda ~1 min)…");
+      try { env.HYPERFRAMES_PYTHON = pythonConPaquetes(path.join(os.homedir(), ".cache", "f100k-voz"), ["kokoro-onnx", "soundfile"]); }
+      catch (e) { console.error(e.message + "\nAlternativa: graba la voz o usa --sin-voz."); process.exit(1); }
     }
     const v = C.voz || {};
     const r = hf(["tts", "guion.txt", "-v", v.id || "ef_dora", "-l", v.idioma || "es", "-s", String(v.velocidad || 1), "-o", "assets/voz.wav", "--json"], { env });
@@ -76,8 +74,17 @@ if (voz) {
   const tj = A("assets/transcript.json");
   if (!fs.existsSync(tj) || fs.statSync(tj).mtimeMs < fs.statSync(A(voz)).mtimeMs) {
     console.log("  Transcribiendo la voz para sacar los tiempos…");
-    const r = hf(["transcribe", voz, "-l", (C.voz && C.voz.idioma) || "es", "-m", "large-v3", "--json"]);
-    if (r.status !== 0 || !fs.existsSync(tj)) { console.error("No se pudo transcribir:\n" + (r.stdout || "") + (r.stderr || "")); process.exit(1); }
+    const idioma = (C.voz && C.voz.idioma) || "es";
+    fs.rmSync(tj, { force: true });
+    const r = hf(["transcribe", voz, "-l", idioma, "-m", "large-v3", "--json"]);
+    if (r.status !== 0 || !fs.existsSync(tj)) {
+      // plan B: el Whisper de sistema.mjs (el mismo de las otras skills), pasado al formato de transcript.json
+      const t = transcribir(A(voz), { dir: A("assets/.transcripcion"), idioma });
+      if (!t.ok) { console.error("No se pudo transcribir:\n" + (r.stdout || "") + (r.stderr || "") + "\n" + t.error); process.exit(1); }
+      const palabras = JSON.parse(fs.readFileSync(t.archivo, "utf8")).segments.flatMap((s) => s.words || []).map((w) => ({ text: w.word.trim(), start: w.start, end: w.end }));
+      fs.writeFileSync(tj, JSON.stringify(palabras));
+      fs.rmSync(A("assets/.transcripcion"), { recursive: true, force: true });
+    }
   }
   const raw = JSON.parse(fs.readFileSync(tj, "utf8"));
   const W = (Array.isArray(raw) ? raw : raw.words || []).map((w) => {

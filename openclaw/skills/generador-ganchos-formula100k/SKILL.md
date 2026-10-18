@@ -19,6 +19,27 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `entregables/`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `entregables/`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -71,10 +92,10 @@ Lab pre-grabación: diseña N variantes de gancho (composición + texto), las pr
 
 ## Relación con otras skills
 
-- **Entrada típica:** output de [[guionizacion-formula100k]] (guion completo)
-- **Salida típica:** brief que el usuario graba; opcionalmente el video final se pasa por [[evaluador-ganchos-formula100k]] para validar post-grabación
-- **NO confundir con** [[evaluador-ganchos-formula100k]] — esa juzga un gancho YA grabado; esta GENERA opciones nuevas
-- **NO confundir con** [[carrusel-viral-formula100k]] — esa es para slides estáticos de carrusel
+- **Entrada típica:** output de `guionizacion-formula100k` (guion completo)
+- **Salida típica:** brief que el usuario graba; opcionalmente el video final se pasa por `evaluador-ganchos-formula100k` para validar post-grabación
+- **NO confundir con** `evaluador-ganchos-formula100k` — esa juzga un gancho YA grabado; esta GENERA opciones nuevas
+- **NO confundir con** `carrusel-viral-formula100k` — esa es para slides estáticos de carrusel
 
 ## Contexto crítico
 
@@ -92,9 +113,9 @@ Lab pre-grabación: diseña N variantes de gancho (composición + texto), las pr
 - 4 estructuras de copy: Curiosidad / Dolor / Resultado / Susurro
 - Test del 1 Segundo
 
-Si necesitas detalles de un framework, consulta `skills/evaluador-ganchos-formula100k/criterios.md`.
+Si necesitas detalles de un framework, consulta `criterios.md` de la skill `evaluador-ganchos-formula100k` (está en la carpeta hermana `../evaluador-ganchos-formula100k/`, junto a la de esta skill).
 
-**Output siempre va a:** `ideas/lab-ganchos/YYYY-MM-DD_tema/`
+**Output siempre va a:** `entregables/`
 
 ## Flujo paso a paso
 
@@ -160,7 +181,7 @@ Usa `mcp__higgsfield__generate_image` con `nano_banana_2`:
 - Prompt: descripción detallada de la composición visual (Paso 3.2) + texto del gancho integrado en pantalla + estilo "Instagram reel first frame, 9:16, high contrast"
 - Aspecto: 9:16 (vertical reel)
 - Calidad: 2K mínimo
-- Si el usuario está en una variante con su rostro, considera usar referencia de [[feedback_avatar_imagen]] (banana skill / sus fotos), no Higgsfield Soul
+- Si el usuario está en una variante con su rostro, usa sus fotos reales como referencia, no una cara generada desde cero
 
 **4.2 — Animar imagen a clip de 3s**
 
@@ -225,7 +246,7 @@ Sigue EXACTAMENTE `output-template.md`. El reporte debe incluir:
 - `variant-1.mp4` ... `variant-N.mp4` → clips de test (descarga desde Higgsfield)
 - `predictor-jobs.json` → mapping de variante → job_id del predictor (para reabrir dashboards después)
 
-Carpeta destino: `ideas/lab-ganchos/YYYY-MM-DD_<slug-del-tema>/`
+Carpeta destino: `entregables/`
 
 ### Paso 8: Cerrar con call-to-action
 
@@ -236,10 +257,10 @@ Termina con UNA acción concreta:
 
 - **NO uses voseo argentino.** Español neutro siempre. Aplica al texto del gancho Y a la conversación con el usuario.
 - **NO repitas la misma Forma Visual en dos variantes** salvo que el usuario lo pida explícitamente. El valor de testear N variantes es cubrir hipótesis distintas.
-- **NO uses imágenes de bancos de stock** (Shutterstock, Getty, Unsplash, Pexels, Pixabay, etc.) — referencia [[feedback_no_stock_imagenes]]. La imagen base se genera con Nanobanana o sale de las fotos reales del usuario.
+- **NO uses imágenes de bancos de stock** (Shutterstock, Getty, Unsplash, Pexels, Pixabay, etc.). La imagen base se genera con Nanobanana o sale de las fotos reales del usuario.
 - **NO inventes los scores del Predictor.** Si una corrida falla, dilo. No rellenes con números.
 - **NO entregues una sola variante.** Mínimo 2. Si solo hay presupuesto/tiempo para 1, esto no es el lab — usa la skill `evaluador-ganchos-formula100k` directamente.
-- **NO uses Higgsfield Soul del usuario** para generar su cara — referencia [[feedback_avatar_imagen]]. Si una variante necesita el rostro del usuario, generar con la skill `banana` usando sus fotos reales como referencia y subir el resultado a Higgsfield para animar.
+- **NO generes la cara del usuario desde cero.** Si una variante necesita su rostro, parte de sus fotos reales como referencia en `generate_image`.
 - **NO ejecutes en serie las llamadas al Predictor.** Lanza las N en paralelo.
 - **NO bloquees todo el flujo si una variante falla.** Reintenta una vez; si falla de nuevo, entrega ranking parcial.
 - **NO sobreescribas el veredicto del Predictor con tu opinión.** Si la variante ganadora por score es la que "menos te gusta", entrega la ganadora igual con disclaimer si hace falta. El usuario decide al final.

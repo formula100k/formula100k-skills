@@ -96,7 +96,7 @@ Para cada reel del top:
 
 ## Análisis de patrones de CTA
 
-Después de extraer los reels, cruzar todos los CTAs contra esta tabla (ver también [[feedback-ctas-guiones]] en memoria):
+Después de extraer los reels, cruzar todos los CTAs contra esta tabla:
 
 | Patrón | Pregunta a responder |
 |---|---|

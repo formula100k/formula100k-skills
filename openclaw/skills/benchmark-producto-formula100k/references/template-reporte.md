@@ -302,4 +302,4 @@ Ver `screenshots/` con capturas fullpage de los top [N].
 
 ---
 
-*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k` *
+*Reporte generado el [fecha] con la skill `benchmark-producto-formula100k`*

@@ -48,29 +48,29 @@ const defaults: CreaContenidoViralProps = {
 const badgeDefaults: BadgeSlideProps = {
   badgeNumber: 1,
   title: 'Este método cambia todo',
-  subtitle: 'Fórmula 100K',
+  subtitle: 'Paso a paso',
   accentColor: '#F59E0B',
 };
 
 const statDefaults: StatCounterProps = {
   value: 100,
-  label: 'estudiantes',
-  suffix: 'K',
+  label: 'pedidos entregados',
+  suffix: '+',
   accentColor: '#F59E0B',
 };
 
 const quoteDefaults: QuoteCardProps = {
   quote: 'El contenido que vende no es el más bonito, es el más claro.',
-  author: '@tuhandle',
+  author: 'Una clienta feliz',
   accentColor: '#F59E0B',
 };
 
 const listDefaults: ListRevealProps = {
   title: 'Lo que aprenderás',
   items: [
-    'Crear contenido que vende',
-    'Automatizar con IA',
-    'Construir tu comunidad',
+    'Elegir tus flores de temporada',
+    'Armar el ramo en 3 pasos',
+    'Hacer que dure más días',
   ],
   accentColor: '#F59E0B',
 };
@@ -78,7 +78,7 @@ const listDefaults: ListRevealProps = {
 const newsDefaults: NewsHorizontalProps = {
   videoSrc: '',
   transcript: [],
-  brand: 'F100K NEWS',
+  brand: 'NOTICIAS',
   ticker: [],
   chyrons: [],
   cards: [],
@@ -138,7 +138,7 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={merged}
       />
 
-      {/* ── FÓRMULA 100K NEWS — horizontal 1920×1080 ── */}
+      {/* ── Noticiero — horizontal 1920×1080 ── */}
       <Composition
         id="news-horizontal"
         component={NewsHorizontal}

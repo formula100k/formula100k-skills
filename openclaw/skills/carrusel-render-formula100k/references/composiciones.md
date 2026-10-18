@@ -80,9 +80,9 @@ Reglas para que cada slide se sienta diferente y no parezca plantilla.
 - Doodle subrayado terracota bajo el título (SVG)
 - Cuerpo introductorio centrado (3 líneas Poppins)
 - Lista de 3-4 puntos con flechas →
-- CTA en bloque rojo sólido con "Comenta '100K' y te enseño cómo 🚀" (peso 800, rotación -1°)
+- CTA en bloque rojo sólido con "Comenta '[PALABRA]' y te enseño cómo 🚀" (la palabra sale del tema) (peso 800, rotación -1°)
 - Frase tipo nota: "📌 Guárdalo para cuando..." (Caveat 42px, rotación -2°)
-- Handle abajo izquierda completo: "@tuhandle · Fórmula 100K"
+- Handle abajo izquierda completo: "@tuhandle"
 - 2-3 stickers (📌 🤫 🔥)
 - 2 tapes superiores
 

@@ -138,7 +138,7 @@ Para que si el usuario pide "regenera solo el slide 3", no haya que parsear todo
 
 ## EJEMPLO REAL DE PARSER
 
-Input: `guiones/historias/2026-05-06_lead-magnet_gpt-primer-segundo.md`
+Input: `entregables/`
 
 Output esperado:
 

@@ -4,6 +4,27 @@ description: "Dado un keyword, busca los videos más virales en TikTok e Instagr
 argument-hint: [keyword(s) + plataforma — ej. "colon irritable, SII | ambas"]
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -255,10 +276,10 @@ Debajo de la tabla:
 - 💡 **Patrón dominante de gancho verbal:** (ej. "70% usan condicional 'Si tienes/sientes'")
 - ⚠️ URLs que no pudieron transcribirse (si aplica)
 
-### Guardado en Obsidian (siempre, aunque el usuario no lo pida)
+### Guardado en tu carpeta (siempre, aunque el usuario no lo pida)
 
 ```
-~/Documents/Vault-F100K/03-INVESTIGACION/refs-virales-[keyword-slug]-[YYYY-MM-DD].md
+~/Documents/mi-contenido/investigacion/refs-virales-[keyword-slug]-[YYYY-MM-DD].md
 ```
 
 Formato del archivo:
@@ -305,7 +326,7 @@ Para cada ref: {
 |---------------------|--------|------------|
 | `calendarizador-contenido-formula100k` Modo D | Después de extraer keywords del brief | Refs enriquecidas para mapear a slots del calendario |
 | `investigacion-contenido-formula100k` | Para validar viralidad real de un tema | Refs con gancho identificado para la investigación |
-| Standalone | Cuando se pide "analiza virales de X" directamente | Tabla completa en chat + guardado Obsidian |
+| Standalone | Cuando se pide "analiza virales de X" directamente | Tabla completa en chat + archivo guardado |
 
 ---
 
@@ -329,5 +350,5 @@ Para cada ref: {
 - ✅ Mezclar TikTok + IG siempre que sea posible.
 - ✅ Máximo 2 videos del mismo @handle en la tabla.
 - ✅ Si los resultados son en inglés, mencionar que la keyword tiene más tracción en inglés y sugerir alternativas en español.
-- ✅ Guardar siempre en Obsidian.
+- ✅ Guardar siempre el archivo en `~/Documents/mi-contenido/investigacion/`.
 - ✅ Si el nicho es muy específico (<20K views en todos los resultados), bajar el umbral y avisar — no inventar contenido.

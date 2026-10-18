@@ -65,7 +65,7 @@ Los ejemplos son verbatim reales del corpus, sin métricas a propósito (ver pun
 
 ### 04 · Diálogo de dos voces
 `— [frase de A]  — [respuesta de B que abre el conflicto]`
-- "¿Ustedes son casados? Ven para acá. Los dos."
+- "¿Ustedes son casados? Vengan aquí. Los dos."
 - "Papá, hoy llevé 20 chocolates a la escuela y solo vendí 3."
 > Entras a mitad de la escena: la primera línea ya es la segunda del diálogo. Nadie se presenta.
 > Para ventas es el más natural — la objeción se actúa en vez de explicarse.
@@ -159,13 +159,10 @@ Los ejemplos son verbatim reales del corpus, sin métricas a propósito (ver pun
 
 ## PROCEDENCIA
 
-Minado de `~/Documents/FORMULA100K/1000-GANCHOS/data/dataset/fichas.jsonl`: 1.313 fichas de TikTok
+Minado de un corpus propio de 1.313 fichas de TikTok
 → 692 virales en español → 516 con gancho legible. Detección por regex sobre la primera línea;
 comparación de cada familia contra el resto del corpus con Mann-Whitney sobre el outlier normalizado
 por creador; ninguna sobrevive Bonferroni.
-
-Vista completa con métricas, verbatim y links a los reels: guía **1000 Ganchos** del grimorio,
-pestaña **🧲 15 moldes**.
 
 **Prohibido en esta skill:** multiplicadores de vistas ("×42"), porcentajes de mejora y
 comparaciones viral-vs-flop del estudio original — esa parte se auditó y resultó fabricada.

@@ -2,8 +2,7 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {loadFont as loadAnton} from '@remotion/google-fonts/Anton';
 
-// Pack F100K — display de impacto para el HEADER (gancho), igual que el resto de
-// skills de edición (motion-reels/reel-memes usan 'F100K Display' = Anton).
+// Letra de impacto para el HEADER (gancho): Anton.
 const {fontFamily: ANTON} = loadAnton('normal', {
   weights: ['400'],
   subsets: ['latin'],

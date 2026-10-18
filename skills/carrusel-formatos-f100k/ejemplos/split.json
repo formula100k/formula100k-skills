@@ -7,13 +7,13 @@
       "tipo": "partida",
       "estilo": "fino",
       "arriba": {
-        "foto": "fotos/foto-3.jpg",
-        "texto": "[dejé de …]",
+        "foto": "fotos/foto-1.jpg",
+        "texto": "dejé de [lo de antes]",
         "pos": "arriba"
       },
       "abajo": {
-        "foto": "fotos/foto-4.jpg",
-        "texto": "[y pasó …]",
+        "foto": "fotos/foto-2.jpg",
+        "texto": "y pasó [lo que pasó]",
         "pos": "arriba"
       }
     },
@@ -21,21 +21,21 @@
       "tipo": "partida",
       "estilo": "titular",
       "arriba": {
-        "foto": "fotos/foto-5.jpg",
-        "texto": "[Cómo empezó…]"
+        "foto": "fotos/foto-3.jpg",
+        "texto": "Así empezó…"
       },
       "abajo": {
-        "foto": "fotos/foto-2.jpg",
-        "texto": "[Y lo que logró]"
+        "foto": "fotos/foto-4.jpg",
+        "texto": "[y tu resultado real aquí]"
       }
     },
     {
       "tipo": "habito",
       "titulo": "revisa tu número cada lunes",
       "fotos": [
+        "fotos/foto-5.jpg",
         "fotos/foto-6.jpg",
-        "fotos/foto-7.jpg",
-        "fotos/foto-8.jpg"
+        "fotos/foto-7.jpg"
       ],
       "bloque": {
         "normal": "no a ojo. saber cuánto necesitas para pagar, comer y vivir.",

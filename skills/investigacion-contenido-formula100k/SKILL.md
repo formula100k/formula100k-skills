@@ -3,6 +3,27 @@ name: investigacion-contenido-formula100k
 description: "Investigación de tendencias e ideas de contenido viral con la metodología FORMULA 100K. Usar SIEMPRE que se pida investigar tendencias, encontrar ideas de contenido, cazar temas virales, qué funciona en mi nicho, investigar a la competencia, encontrar ganchos visuales, validar ideas, preguntas de la audiencia, outliers de YouTube para convertir en reels, buscar referencias virales por keyword, cazar 1 ejemplo viral por cada item de un framework (7 pilares, 35 estructuras, 10 ganchos), o 'no sé de qué hablar', 'quiero ideas para mis videos', 'buscame referencias con [keyword]'. Stack de 4 motores juntos: (1) agent-browser SIEMPRE para entrar logueada a Instagram/TikTok/YouTube y extraer captions, ganchos verbatim, métricas y reels reales; (2) Tavily MCP para tendencias web y validación cruzada; (3) vidIQ MCP para outliers reales de YouTube; (4) Supadata MCP para landings sin login. agent-browser nunca es fallback, es fijo en el stack."
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -85,7 +106,9 @@ Cuatro motores trabajan SIEMPRE juntos, no se excluyen. Cada uno tiene su zona d
 
 ---
 
-## PASO 0 — PREFLIGHT: SALUD DE SESIONES (correr SIEMPRE antes de investigar)
+## PASO 0 — PREFLIGHT: SALUD DE SESIONES (solo si `agent-browser` está instalado)
+
+**Si `agent-browser` no está instalado, salta este paso** y trabaja con Apify o con la búsqueda web de Claude, como dice el bloque «En tu compu» de arriba.
 
 **Por qué existe este paso:** el síntoma #1 de "el agent-browser no funciona en TikTok" NO es un bug del navegador — es que la **sesión guardada caducó**. TikTok expira el login en pocos días; cuando eso pasa, agent-browser carga el muro de login o resultados a medias y parece que "no entra". Chequear la sesión ANTES ahorra el corte a mitad de investigación.
 
@@ -124,7 +147,6 @@ EOF
 
 **Detección de login wall a mitad de búsqueda** (si el Paso 1.6 devuelve 0 resultados): correr el `eval` de verificación de arriba. Si dice "login wall", volver al re-login. NO asumir que TikTok cambió el DOM antes de descartar sesión caducada.
 
-> **Nota — el error "Bun not found" NO es de esta skill ni del agent-browser.** Sale del plugin de memoria `claude-mem` (un Stop hook que necesita Bun). Es ruido inofensivo y no bloquea la investigación. Se arregla instalando Bun una sola vez: `brew install oven-sh/bun/bun`. Ver la guía HTML de arreglo si reaparece.
 
 ---
 
@@ -422,7 +444,7 @@ OUTPUT: markdown crudo, una sección por cuenta/búsqueda/hashtag. No analizar �
 
 **Flujo de conversión OUTLIER YOUTUBE → REEL F100K:**
 
-1. **Keywords del nicho** (preguntar al usuario si no está claro). Ejemplos para su mundo: "vender curso digital", "comunidad Skool", "creadora de contenido sin mostrar cara", "monetizar Instagram mujer", "high ticket coaching", "marca personal IA".
+1. **Keywords del nicho** (preguntar al usuario si no está claro). Salen de SU rubro. Ejemplos de forma: "[producto] casero", "[servicio] para principiantes", "[problema del avatar] solución", "monetizar Instagram mujer", "high ticket coaching", "marca personal IA".
 2. **Llamar `outlier_detection`** con esas keywords → quedarse con los top 5-10 outliers (mejor multiplicador de views vs promedio).
 3. **Para cada outlier seleccionado**, ejecutar en paralelo:
    - `video_transcript` → texto completo

@@ -71,7 +71,7 @@ supadata_scrape(url="https://www.instagram.com/reel/SHORTCODE/")
 **Qué hacer con ellas:** Cada objeción es un video de refutación. También son los argumentos exactos a usar en contenido de venta para desarmar resistencias.
 
 **Ejemplo:**
-- Comentario: "sí pero eso solo funciona si ya tienes plata para invertir"
+- Comentario: "sí pero eso solo funciona si ya tienes dinero para invertir"
 - → Video idea: "Cómo hacer X sin inversión inicial (para quienes empiezan desde cero)"
 - → También usar en ventas: incluir este argumento y refutarlo en el guion del próximo reel de venta
 

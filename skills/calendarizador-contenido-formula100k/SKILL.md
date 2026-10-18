@@ -4,6 +4,27 @@ description: "Arma calendarios de contenido semanales (Lunes-Domingo) en CSV y X
 argument-hint: [pega guiones, ideas o enlaces — o describe lo que quieres calendarizar]
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -81,8 +102,8 @@ Distribución de los 7 días según el **propósito del calendario** (los 4 modo
 ## OUTPUTS
 
 Carpeta de salida según tipo de pieza:
-- **REELS:** `~/Documents/FORMULA100K/CALENDARIOS/`
-- **CARRUSELES:** `~/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/`
+- **REELS:** `~/Documents/mi-contenido/calendarios/`
+- **CARRUSELES:** `~/Documents/mi-contenido/calendarios/carruseles/`
 
 Genera **3 archivos** por sesión:
 1. `calendario_[modo]_[YYYY-MM-DD].csv` — CSV separado por comas, encoding UTF-8 (solo modo reels)
@@ -105,7 +126,7 @@ Señales para detectar tipo CARRUSELES:
 - Usuario menciona explícitamente "carrusel", "carruseles", "slides", "diapositivas"
 - Input incluye estructura "SLIDE 1 / SLIDE 2 / …" o "Slide 1: … Slide 2: …"
 - Usuario pasa archivos `.md` generados por la skill `carrusel-viral-formula100k`
-- Carpeta de origen es `~/Documents/FORMULA100K/CARRUSELES/`
+- Carpeta de origen es `~/Documents/mi-contenido/carruseles/`
 
 Si no hay señales explícitas → asumir **REELS**.
 
@@ -251,21 +272,23 @@ Si el guion ya trae CTA, respétalo (solo verifica que coincida con el tipo del 
 
 Ejecutar el script Python `generate_calendar.py` (ubicado en `references/generate_calendar.py`) pasando los datos como JSON via stdin. El argumento `--tipo-pieza` cambia el esquema de columnas y el layout del Excel:
 
+`<carpeta de esta skill>` es la carpeta donde está este `SKILL.md` (con el plugin no vive en `~/.claude/skills/`). Pon la ruta real entre las comillas.
+
 **Modo REELS:**
 ```bash
-python3 ~/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+uv run --with openpyxl python "<carpeta de esta skill>/references/generate_calendar.py" \
   --tipo-pieza "reels" \
   --modo "[modo]" \
-  --output-dir "~/Documents/FORMULA100K/CALENDARIOS/" \
+  --output-dir "$HOME/Documents/mi-contenido/calendarios/" \
   --data-json '<JSON_DATA>'
 ```
 
 **Modo CARRUSELES:**
 ```bash
-python3 ~/.claude/skills/calendarizador-contenido-formula100k/references/generate_calendar.py \
+uv run --with openpyxl python "<carpeta de esta skill>/references/generate_calendar.py" \
   --tipo-pieza "carruseles" \
   --modo "[modo]" \
-  --output-dir "~/Documents/FORMULA100K/CARRUSELES/CALENDARIO DE CARRUSELES/" \
+  --output-dir "$HOME/Documents/mi-contenido/calendarios/carruseles/" \
   --output-name "00_CALENDARIO_CARRUSELES" \
   --data-json '<JSON_DATA>'
 ```
@@ -311,7 +334,7 @@ Notas clave del modo carruseles:
 - Campo `guion` debe traer los slides separados con `\n\n` o títulos `SLIDE N — …`. El script calcula la altura de fila automáticamente.
 - El script NO genera CSV para tipo carruseles (los saltos de línea internos del guion rompen Excel CSV); solo XLSX.
 
-El script genera los archivos automáticamente. Si Python no tiene `openpyxl` instalado, intenta `pip install openpyxl --quiet` antes; si falla, generar solo CSV (reels) o avisar (carruseles).
+El script genera los archivos automáticamente. `uv run --with openpyxl` trae Python y la librería de Excel sin instalar nada a mano, igual en Mac y en Windows. **Si no hay `uv`:** prueba con `python3` (Mac) o `python` (Windows); sin `openpyxl` el script entrega solo el CSV. Si tampoco hay Python, escribe tú el CSV con la herramienta de archivos (abre en Excel y en Google Sheets) y dilo.
 
 ### PASO 7 · Mostrar preview en chat
 
@@ -333,8 +356,8 @@ Imprimir tabla markdown con los 7 días. Truncar GUION a primeras 80 caracteres 
 | Lunes | ... | ... | ... | ... | ... |
 | ... | | | | | |
 
-📁 CSV: ~/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].csv
-📊 XLSX: ~/Documents/FORMULA100K/CALENDARIOS/calendario_[modo]_[fecha].xlsx
+📁 CSV: ~/Documents/mi-contenido/calendarios/calendario_[modo]_[fecha].csv
+📊 XLSX: ~/Documents/mi-contenido/calendarios/calendario_[modo]_[fecha].xlsx
 
 📌 Distribución real: X viral / Y valor / Z venta
 ✅ Listo para producir

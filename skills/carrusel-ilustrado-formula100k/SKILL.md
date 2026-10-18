@@ -7,13 +7,32 @@ metadata:
   version: "2.0.0"
   modelo: "nano_banana_2"
   formato: "4:5 — 1080×1350px"
-  estilo: "Xiaohei hand-drawn · fondo blanco · acentos naranja F100K"
+  estilo: "Xiaohei hand-drawn · fondo blanco · un color de acento (el de la persona)"
   render: "HTML + Chrome headless — PNG finales sin Canva"
+---
+
+## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
+
+Corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o su ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje. Si existe `~/Documents/mi-contenido/mi-voz.md`, los textos suenan a ella.
+- **Tu marca, en este orden:** 1) `~/Documents/mi-contenido/mi-marca.md` (colores, letra, estilo visual y @); 2) si no está, su manual de identidad visual `mi-marca/marca.md` (búscalo en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; del YAML usa `color.acento`, `color.tinta`, `color.lienzo`, `letra.titulares`, `letra.apoyo` y `firma.usuario`); 3) si no hay ninguno, pregunta en un solo mensaje su color de acento, su letra y su @ (o que arme su manual en formula100k.app/identidad-visual).
+- **Tu marca manda sobre el estilo de esta skill.** Su color de acento reemplaza al naranja `#F59E0B` de muestra en las ilustraciones y en el HTML; su letra reemplaza a Inter; su @ o su marca va en `.brand`. De esta skill toma la estructura, la jerarquía y el oficio (figura Xiaohei, fondo blanco, acento mínimo); el color y la letra son los suyos.
+- **La carpeta de esta skill.** `references/` y `scripts/capturar.mjs` están en la carpeta donde vive este `SKILL.md`. Con el plugin esa carpeta no es `~/.claude/skills/…`: más abajo, `{carpeta-skill}` es esa ruta real. Nunca escribas archivos de la persona dentro de ella.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó. Sin Higgsfield ni otra herramienta de imagen, entrega los slides en HTML y tipografía y deja el prompt de cada ilustración listo para cuando conecte la cuenta. Nunca inventes una métrica ni un enlace.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no está instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+- **CTA.** «Comenta PALABRA» con una palabra ligada al tema y a un regalo o una oferta suya. Nunca «guárdalo» como CTA ni «YO».
+- **Sin pasos de más.** No preguntes por Canva ni entregues calendario, horarios de publicación o estadísticas salvo que te lo pida.
+
 ---
 
 # Skill: Carrusel Ilustrado — Fórmula 100K
 
-Genera carruseles de Instagram (5-8 slides) con ilustraciones estilo Xiaohei: figura sólida negra, fondo blanco puro, line art hand-drawn, acentos mínimos en naranja F100K (#F59E0B). Cada slide recibe el tipo de ilustración más efectivo para el concepto que comunica.
+Genera carruseles de Instagram (5-8 slides) con ilustraciones estilo Xiaohei: figura sólida negra, fondo blanco puro, line art hand-drawn, acentos mínimos en el color de la persona (si no lo ha definido, naranja #F59E0B). Cada slide recibe el tipo de ilustración más efectivo para el concepto que comunica.
 
 ---
 
@@ -70,7 +89,7 @@ Determinar cuántos slides (recomendado: 5-8) y asignar a cada uno:
 - **Propósito** (hook / desarrollo / CTA / conclusión)
 - **Concepto central** que debe comunicar
 
-**Estructura tipo recomendada para carrusel educativo/venta F100K:**
+**Estructura tipo recomendada para carrusel educativo o de venta:**
 
 | Slide | Propósito | Tipo recomendado |
 |-------|-----------|-----------------|
@@ -114,7 +133,7 @@ related to the slide concept].
 COMPOSITION: Subject occupies 45-55% of frame. Large white space around subject.
 [DESCRIBE any props, arrows, labels, or annotation elements in the illustration].
 
-ACCENTS: Minimal use of orange #F59E0B for emphasis annotations only. 
+ACCENTS: Minimal use of [su color de acento en HEX; si no tiene, orange #F59E0B] for emphasis annotations only. 
 Maximum 2 accent elements total. No other colors.
 
 STYLE: Eccentric and creative but clean. Not cute, not kawaii. 
@@ -223,7 +242,7 @@ Esperar los resultados y anotar el job_id de cada generación.
 Para cada job_id:
 1. Llamar `mcp__higgsfield__job_status` hasta que el status sea "completed"
 2. Obtener la URL de la imagen generada
-3. Descargar a: `~/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug-del-tema]/`
+3. Descargar a: `~/Documents/mi-contenido/recursos-video/[YYYY-MM-DD]_carrusel-ilustrado-[slug-del-tema]/`
    - Naming: `slide-01-[tipo].png`, `slide-02-[tipo].png`, etc.
 
 Si alguna imagen no refleja el estilo Xiaohei correctamente (fondos de color, sombras, kawaii):
@@ -254,13 +273,9 @@ Si algún slide muestra una pantalla de app, generarla primero como HTML indepen
 </body></html>
 ```
 
-Capturar con Chrome headless:
+Capturar (corre igual en Mac y en Windows):
 ```bash
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-"$CHROME" --headless=new --no-sandbox --disable-gpu \
-  --window-size=1080,1350 \
-  --screenshot="$DIR/mockup-[nombre].png" \
-  "file://$DIR/mockup-[nombre].html" 2>/dev/null
+node "{carpeta-skill}/scripts/capturar.mjs" "$DIR/mockup-[nombre].html" "$DIR/mockup-[nombre].png"
 ```
 
 #### 6b — Template HTML para slides de ilustración
@@ -270,6 +285,7 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 <html><head><meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
+:root { --acento:#F59E0B; /* su color de acento (mi-marca.md o manual); #F59E0B solo si no tiene */ }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-ui,sans-serif;
        overflow:hidden; display:flex; flex-direction:column; align-items:center;
@@ -277,23 +293,23 @@ body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-
 
 /* ELEMENTOS FIJOS */
 .brand { position:absolute; top:44px; left:52px; font-size:24px; font-weight:900;
-         color:#F59E0B; letter-spacing:-0.5px; }
+         color:var(--acento); letter-spacing:-0.5px; }
 .slide-num { position:absolute; top:44px; right:52px; font-size:24px; font-weight:700;
              color:#D1D5DB; letter-spacing:2px; }
 
 /* TIPOGRAFÍA */
-.eyebrow { font-size:28px; font-weight:700; color:#F59E0B; letter-spacing:4px;
+.eyebrow { font-size:28px; font-weight:700; color:var(--acento); letter-spacing:4px;
            text-transform:uppercase; margin-bottom:16px;
            display:flex; align-items:center; gap:10px; align-self:flex-start; }
-.eyebrow::before { content:''; width:28px; height:4px; background:#F59E0B;
+.eyebrow::before { content:''; width:28px; height:4px; background:var(--acento);
                    border-radius:4px; display:block; }
 .lead { font-size:52px; font-weight:500; color:#9CA3AF; text-align:center; margin-bottom:32px; }
 .headline { font-size:88px; font-weight:900; color:#111827; text-align:center;
             line-height:1.0; margin-bottom:20px; }
 .headline span { position:relative; display:inline-block; }
 .headline span::after { content:''; position:absolute; bottom:-6px; left:0; right:0;
-                         height:8px; background:#F59E0B; border-radius:4px; z-index:-1; }
-.headline em { font-style:normal; color:#F59E0B; }
+                         height:8px; background:var(--acento); border-radius:4px; z-index:-1; }
+.headline em { font-style:normal; color:var(--acento); }
 .subtext { font-size:44px; font-weight:400; color:#9CA3AF; text-align:center; line-height:1.4; }
 
 /* ILUSTRACIÓN */
@@ -303,7 +319,7 @@ body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-
 /* INDICADOR DE SLIDES (paginación) */
 .dot-row { display:flex; gap:10px; justify-content:center; margin-top:44px; }
 .dot { width:10px; height:10px; border-radius:50%; background:#E5E7EB; }
-.dot.active { background:#F59E0B; width:28px; border-radius:10px; }
+.dot.active { background:var(--acento); width:28px; border-radius:10px; }
 
 /* BROWSER FRAME (para slides con mockups) */
 .browser { margin-top:32px; width:960px; border-radius:16px; overflow:hidden;
@@ -361,7 +377,7 @@ body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-
   <div class="slide-num" style="color:#374151;">07 / 07</div>
   <img class="illustration sm" src="slide-07-role-status-cta.png">
   <div class="headline" style="color:#fff;">Título<br>CTA.</div>
-  <div class="url" style="font-size:36px;font-weight:700;color:#F59E0B;text-align:center;">app.dominio.com</div>
+  <div class="url" style="font-size:36px;font-weight:700;color:var(--acento);text-align:center;">app.dominio.com</div>
   <div class="subtext" style="font-size:24px;">Texto secundario o acceso</div>
 </body>
 ```
@@ -369,17 +385,11 @@ body { width:1080px; height:1350px; background:#fff; font-family:'Inter',system-
 #### 6d — Capturar TODOS los renders en paralelo
 
 ```bash
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 DIR="[RUTA_SALIDA]"
-
-for i in 01 02 03 04 05 06 07; do
-  "$CHROME" --headless=new --no-sandbox --disable-gpu \
-    --window-size=1080,1350 \
-    --screenshot="$DIR/CARRUSEL-$i.png" \
-    "file://$DIR/render-$i.html" 2>/dev/null &
-done
-wait
-ls -lh "$DIR"/CARRUSEL-*.png
+# Un PNG final por slide (1080 × 1350): render-NN.html → CARRUSEL-NN.png
+node "{carpeta-skill}/scripts/capturar.mjs" "$DIR/render-01.html" "$DIR/CARRUSEL-01.png"
+node "{carpeta-skill}/scripts/capturar.mjs" "$DIR/render-02.html" "$DIR/CARRUSEL-02.png"
+# … una línea por slide
 ```
 
 #### 6e — Verificar renders
@@ -396,14 +406,14 @@ Leer cada `CARRUSEL-NN.png` con el tool Read para confirmar que la imagen, tipog
 | Font | Inter Black 900 para headline, 700 para eyebrow, 400 para subtext |
 | Headline | 88px (reducir a 72px si el texto es largo) |
 | Lead (intro superior) | 52px, #9CA3AF |
-| Eyebrow | 28px, #F59E0B, letter-spacing 4px, uppercase |
+| Eyebrow | 28px, `var(--acento)`, letter-spacing 4px, uppercase |
 | Subtext | 44px, #9CA3AF |
-| Acento principal | #F59E0B |
+| Acento principal | `var(--acento)`: su color (si no tiene, #F59E0B) |
 | Texto principal | #111827 |
-| Brand fijo | top-left, 24px, #F59E0B |
+| Brand fijo | top-left, 24px, `var(--acento)`, con su @ o su marca |
 | Slide num | top-right, 24px, #D1D5DB |
 | Padding | 60px todos los lados |
-| Dot-row paginación | siempre al fondo del slide, dot activo = pill naranja |
+| Dot-row paginación | siempre al fondo del slide, dot activo = pill del color de acento |
 
 ---
 
@@ -418,7 +428,7 @@ Mantener en TODOS los slides:
 - **Piernas**: delgadas, de palo — NO anatomía realista
 - **Tono**: excéntrico y profesional — NUNCA kawaii, NUNCA cute, NUNCA infantil
 - **Espacio blanco**: abundante — el sujeto ocupa máximo 55% del frame
-- **Color de acento**: naranja #F59E0B (F100K) — máximo 2 elementos por slide
+- **Color de acento**: el de la persona (si no tiene, naranja #F59E0B) — máximo 2 elementos por slide
 - **Texto en imagen**: NINGUNO — la ilustración va limpia; todo el texto lo pone el HTML del slide en el PASO 6 (esta skill no usa Canva)
 
 ---
@@ -426,7 +436,7 @@ Mantener en TODOS los slides:
 ## CARPETA DE SALIDA
 
 ```
-~/Documents/FORMULA100K/RECURSOS VIDEOS/[YYYY-MM-DD]_carrusel-ilustrado-[slug]/
+~/Documents/mi-contenido/recursos-video/[YYYY-MM-DD]_carrusel-ilustrado-[slug]/
 │
 │  ── ASSETS FUENTE ──
 ├── slide-01-role-status.png          ← ilustraciones Higgsfield
@@ -456,6 +466,6 @@ Mantener en TODOS los slides:
 ## REFERENCIA RÁPIDA
 
 Consultar `references/guia-ilustraciones.md` para:
-- Ejemplos concretos de F100K por cada tipo de ilustración
+- Ejemplos concretos por cada tipo de ilustración (cámbialos por el rubro de la persona)
 - Tabla de elementos visuales con descripción en inglés para el prompt
 - Galería de combinaciones de tipos por formato de contenido

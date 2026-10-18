@@ -4,6 +4,27 @@ description: "Benchmark de producto/competencia profundo en cualquier nicho (cur
 argument-hint: "[nicho o vertical a investigar]"
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -47,9 +68,9 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 Skill que ejecuta benchmarks profesionales del mercado para el usuario y sus clientes de F100K. Orquesta múltiples MCPs para mapear competidores, identificar patrones del mercado y devolver oportunidades estratégicas accionables.
 
-**Entregable garantizado:** un reporte **HTML autocontenido navegable** de 15-30 páginas (el documento maestro y entregable principal) + matriz `.csv` + resumen ejecutivo `.md` de 1 página + fichas/oportunidades `.md` para edición rápida, todo guardado en `~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`.
+**Entregable garantizado:** un reporte **HTML autocontenido navegable** de 15-30 páginas (el documento maestro y entregable principal) + matriz `.csv` + resumen ejecutivo `.md` de 1 página + fichas/oportunidades `.md` para edición rápida, todo guardado en `~/Documents/mi-contenido/benchmarks/YYYY-MM-DD_nicho/`.
 
-> ⚠️ **REPORTE PRINCIPAL = HTML.** El reporte maestro (`01-REPORTE-COMPLETO.html`) DEBE entregarse como archivo HTML autocontenido con Tailwind CDN + estética F100K (paleta crema, Caveat para titulares, post-its y washi tape), navegable con tabla de contenidos sticky. No generar el reporte completo en .md — sólo los archivos secundarios (`00-RESUMEN-EJECUTIVO.md`, `03-FICHAS-COMPETIDORES.md`, `04-OPORTUNIDADES.md`) son markdown. Ver `references/template-reporte-html.md` para el esqueleto exacto.
+> ⚠️ **REPORTE PRINCIPAL = HTML.** El reporte maestro (`01-REPORTE-COMPLETO.html`) DEBE entregarse como archivo HTML autocontenido con Tailwind CDN y un estilo de cuaderno (paleta crema, Caveat para titulares, post-its), o con los colores de la persona si los conoces, navegable con tabla de contenidos sticky. No generar el reporte completo en .md — sólo los archivos secundarios (`00-RESUMEN-EJECUTIVO.md`, `03-FICHAS-COMPETIDORES.md`, `04-OPORTUNIDADES.md`) son markdown. Ver `references/template-reporte-html.md` para el esqueleto exacto.
 
 ---
 
@@ -253,7 +274,7 @@ agent-browser captura lo que Apify y Supadata no ven, especialmente:
 
 Guardar el raw scraped de cada competidor en:
 ```
-~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw/{competidor}.md
+~/Documents/mi-contenido/benchmarks/YYYY-MM-DD_nicho/raw/{competidor}.md
 ```
 
 ---
@@ -352,7 +373,7 @@ El reporte principal SIEMPRE se entrega como **HTML autocontenido** (single file
 
 - El usuario y sus clientes lo revisan en navegador (doble-click → se abre)
 - Permite tablas comparativas con scoring visual, barras de progreso, cards de fichas, navegación sticky
-- Renderiza estética F100K (paleta crema, Caveat para titulares, post-its, washi tape, chips)
+- Renderiza un estilo de cuaderno (paleta crema, Caveat para titulares, post-its, chips) o los colores de la persona
 - Es portable: un solo archivo se manda por email/WhatsApp y abre en cualquier laptop
 
 ### Estructura del HTML (secciones obligatorias)
@@ -385,7 +406,7 @@ El reporte principal SIEMPRE se entrega como **HTML autocontenido** (single file
 
 ### Archivos a entregar
 
-Guardar en `~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`:
+Guardar en `~/Documents/mi-contenido/benchmarks/YYYY-MM-DD_nicho/`:
 
 1. `00-RESUMEN-EJECUTIVO.md` (1 página, lectura de 3 min — markdown)
 2. **`01-REPORTE-COMPLETO.html`** ⭐ (el documento maestro, autocontenido)
@@ -396,25 +417,9 @@ Guardar en `~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/`:
 7. `raw/` (carpeta con scrapes originales)
 8. `screenshots/` (si aplica)
 
-### 🧠 Espejo obligatorio en Segundo Cerebro
+### 🧠 Copia en tu Segundo Cerebro (opcional)
 
-Después de generar los archivos en `/FORMULA100K/BENCHMARKS/`, **SIEMPRE** copiar los `.md` + `.csv` + `raw/` (todo MENOS el `.html`) a:
-
-```
-~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/
-```
-
-Comando:
-```bash
-mkdir -p "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho" && \
-cp ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.md \
-   ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/*.csv \
-   "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/" && \
-cp -r ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/raw \
-   "~/Documents/SEGUNDO CEREBRO/BENCHMARKS/YYYY-MM-DD_nicho/"
-```
-
-Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md` viven en el Segundo Cerebro para que el usuario pueda buscar/leer/citarlos como notas y para que skills futuras puedan consumirlos como input.
+Si la persona tiene un Segundo Cerebro y te dio su ruta, ofrece copiar ahí los `.md`, el `.csv` y la carpeta `raw/` (todo menos el `.html`) para que pueda buscarlos y citarlos como notas. Si no tiene, no crees la carpeta.
 
 ---
 
@@ -459,4 +464,4 @@ Por qué: el HTML se queda en `/FORMULA100K/` para verlo en navegador; los `.md`
    - Top 3 oportunidades
    - Ruta absoluta de la carpeta
    - Próximo paso sugerido (ej: "¿Construimos la oferta con `constructor-ofertas-f100k` aplicando la oportunidad #1?")
-3. **Abrir el reporte HTML automáticamente** en el navegador del usuario: `open ~/Documents/FORMULA100K/BENCHMARKS/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html`
+3. **Abrir el reporte HTML** en el navegador del usuario: en Mac `open "$HOME/Documents/mi-contenido/benchmarks/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html"`, en Windows `start "" "$HOME/Documents/mi-contenido/benchmarks/YYYY-MM-DD_nicho/01-REPORTE-COMPLETO.html"`

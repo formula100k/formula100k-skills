@@ -1,208 +1,100 @@
 > ⚠️ **ESTO ES UN EJEMPLO, NO TU VOICE GUIDE.**
-> Es una muestra de cómo se ve un Voice Guide bien hecho, construido sobre una cuenta
-> pública de referencia. **Nunca escribas en esta voz ni copies estas frases.**
+> Es una muestra inventada de cómo se ve un Voice Guide bien hecho, para una cuenta
+> ficticia de repostería. **Nunca escribas en esta voz ni copies estas frases.**
 > Tu Voice Guide real se genera en el PASO 1 de la skill, a partir de TU perfil, y se
-> guarda como `references/Voice_Guide.md`.
+> guarda como `~/Documents/mi-contenido/mi-voz.md`.
 
 ---
 
-# Voice Guide — Andrea Estratega
-*Generado el: 20 de marzo de 2026*
-*Basado en análisis de 8 posts de @andreaestratega — incluyendo los de 68.7M, 24.3M, 9.2M, 8.2M y 5.7M vistas*
+# Voice Guide — [Nombre de la cuenta]
+*Generado el: [fecha]*
+*Basado en el análisis de [N] publicaciones de [@cuenta]: las [N] con más alcance y las [N] más recientes*
 
 ---
 
 ## Tono general
 
-Directa, táctica y educativa. No habla para inspirar — habla para enseñar algo concreto. Su tono es el de alguien que ya resolvió el problema y te lo explica sin rodeos, como lo haría una mentora que va al punto. No hay calidez forzada ni motivación genérica. La autoridad viene de los resultados y del conocimiento práctico, no del entusiasmo.
+Cercana, práctica y un poco obsesiva con el detalle. No habla para inspirar: habla para que te salga bien a la primera. Suena como la amiga que ya quemó tres tandas de galletas y te cuenta qué cambió en la cuarta.
 
 ---
 
-## Estructura de caption (99% consistente en TODOS los posts)
+## Estructura del texto de la publicación
 
-Esta es la fórmula que usa en prácticamente cada publicación:
+La fórmula que repite en casi todas:
 
 ```
-[🔵] [Emoji contextual] Frase gancho (1-2 oraciones máximo)
+[Emoji] Frase gancho (1 o 2 oraciones)
 
-[Emoji de expansión] Consecuencia, mecanismo o "el por qué" (1 oración)
+[Emoji] El porqué o la consecuencia (1 oración)
 
-💬 Comenta "KEYWORD" y te [beneficio específico].
+💬 Comenta "PALABRA" y te [beneficio concreto].
 
-#Hashtag1 #Hashtag2 #Hashtag3
+#Etiqueta1 #Etiqueta2 #Etiqueta3
 ```
 
-**Importante:** Los captions son CORTOS. Nunca párrafos largos. Máximo 4 líneas de texto real.
+**Importante:** textos cortos. Máximo 4 líneas reales.
 
 ---
 
-## Cómo inicia sus textos
+## Cómo abre
 
-Siempre una de estas 5 aperturas — elegir según lo que mejor funcione para el tema:
+Una de estas aperturas, según el tema:
 
-1. **Pregunta directa al dolor:** "¿Estás creando contenido pero no estás vendiendo?"
-2. **Revelación simple:** "Muchos videos se vuelven virales por algo simple: rompen el patrón en el primer segundo."
-3. **Entusiasmo por algo concreto:** "Este gancho es increíble, utiliza una interrupción de patrón con algo tan simple como la Fanta cayéndose, ¡y tiene todo el sentido!"
-4. **Mito que desmonta:** "Muchas personas creen que necesitan mucho contenido para crecer. Pero con una sola foto puedes crear múltiples piezas."
-5. **Tendencia con urgencia:** "Un formato que está explotando este año es el formato test."
+1. **Pregunta directa al dolor:** «¿Tu bizcocho se hunde en el centro?»
+2. **Revelación simple:** «El problema casi nunca es la harina: es la temperatura.»
+3. **Entusiasmo por algo concreto:** «Esta crema aguanta dos horas fuera de la nevera y te explico por qué.»
+4. **Mito que desmonta:** «No necesitas batidora de pie para un merengue firme.»
+5. **Lo que cambió:** «Dejé de engrasar el molde y mis bizcochos crecieron parejos.»
 
-**Lo que NUNCA hace al inicio:** Presentarse, contextualizar, agradecer, hablar de "hoy quiero compartir contigo..."
-
----
-
-## Cómo cierra sus textos
-
-Siempre con CTA de palabra clave en los comentarios:
-
-- `Comenta "INFO" y te explico paso a paso cómo funciona el sistema para convertir contenido en ventas reales.`
-- `Comenta "100K" y te paso las fichas que uso para analizar contenido viral.`
-- `Escribe "100k" y te paso las fichas que uso para analizar ganchos virales.`
-- `Comenta "VIRAL" y te envío 30 formatos virales que puedes usar en tu contenido.`
-- `Comenta "PROMPTS" y te digo cómo acceder a mi bot con prompts listos para copiar y usar.`
-
-**Patrón:** Siempre es `Comenta/Escribe "[KEYWORD]" y te [verbo] [beneficio tangible y específico].`
+**Lo que NUNCA hace al abrir:** presentarse, dar contexto, agradecer, decir «hoy quiero compartir contigo».
 
 ---
 
-## Vocabulario y frases características
+## Cómo cierra
 
-Estas son sus palabras y frases exactas — usarlas tal cual:
+Siempre con una palabra clave ligada al tema de la publicación:
 
-- **"contenido que vende"** (vs. "contenido que hace ruido")
-- **"deja de ser ruido y empieza a vender"**
-- **"fichas de viralidad"**
-- **"ganchos virales"** / **"hook viral"**
-- **"interrupción de patrón"**
-- **"gatillo de desafío"**
-- **"sistema detrás"** (como en "el problema es no tener un sistema detrás")
-- **"ordenar tu mensaje, tu oferta y tu estructura"**
-- **"experta en contenido $100K mes"** (su etiqueta de autoridad)
-- **"Fórmula 100K"**
-- **"está explotando este año"**
-- **"tiene todo el sentido"**
-- **"paso a paso"**
+- `Comenta "MERENGUE" y te paso la tabla de temperaturas.`
+- `Comenta "MOLDE" y te envío la guía de medidas.`
 
 ---
 
-## Expresiones y quirks de escritura
+## Palabras y giros que usa
 
-- **Contraste directo:** "No es X, es Y." → "El problema casi nunca es el contenido en sí, es no tener un sistema detrás"
-- **"Pero con..."** para invertir una creencia: "Muchas personas creen X. Pero con una sola foto puedes Y."
-- **Explicación psicológica directa:** "tu cerebro quiere resolverla para demostrar que puede"
-- **Usa "muchas personas" en lugar de "tú"** cuando habla de un error común (no señala directamente al lector)
-- **Dice "crecer" no "hacer crecer tu cuenta"**
-- **Siempre menciona los resultados con números:** 100K, 41.1 mil seguidores, millones de vistas
+- «a la primera», «parejo», «sin miedo», «te explico por qué»
+- Verbos de cocina concretos: «templar», «montar», «reposar»
+- Tutea siempre. Frases cortas. Un dato técnico por publicación, traducido en su primera mención.
 
----
+## Palabras que NO usa
 
-## Uso de emojis
-
-**Siempre empieza con 🔵** — es su marca visual de identidad en todos los captions.
-
-Después usa UN emoji contextual según el tema:
-- 🤯 para datos sorprendentes o revelaciones
-- 🔥 para algo que está funcionando muy bien
-- 📱 para temas de plataforma/app
-- 🚀 para crecimiento, acción
-- 😮 para datos contra-intuitivos
-- ✏️ para formatos o herramientas de contenido
-
-**💬 siempre antes del CTA** — sin excepción.
-
-**Emojis que NO usa:** corazones ❤️ como bullet, estrellas ⭐, palmas 👏, caritas genéricamente positivas 😊.
-
-**Cantidad:** máximo 3-4 emojis por caption. Nunca uno por oración.
+- «increíble», «brutal», «te vuelo la cabeza»
+- Diminutivos en serie («cosita», «truquito»)
+- Jerga de marketing
 
 ---
 
-## Estructura de oraciones
+## Ritmo
 
-- **Muy cortas.** Una idea por oración. Punto. Siguiente.
-- **Sin subordinadas largas** — no usa "el cual", "debido a que", "en el sentido de que"
-- **No usa listas con guiones** en los captions
-- **Párrafos de 1-2 líneas máximo**
-- **Salto de línea entre cada bloque**
-- Contrasta oraciones largas con golpes cortos: "Cuando ordenas tu mensaje, tu oferta y tu estructura, el contenido deja de ser ruido y empieza a vender. Eso es exactamente lo que trabajamos en Fórmula 100K."
+- Oraciones de 6 a 12 palabras.
+- Una idea por línea.
+- Un emoji al inicio de cada bloque, nunca en medio de la frase.
 
 ---
 
-## Puntuación y formato
+## Antes y después (cómo se nota la voz)
 
-- **Punto final en cada oración.** Siempre.
-- **¡Exclamaciones! con moderación** — solo cuando algo genuinamente lo merece
-- **Sin puntos suspensivos...**
-- **Sin guiones largos** — en los captions
-- **Sin MAYÚSCULAS** en el texto del caption (solo en las diapositivas visuales)
-- **Comillas dobles "así"** para las keywords del CTA
-- **3 hashtags al final**, siempre. Sin más, sin menos.
+**Texto genérico:**
+> «En este video te voy a enseñar algunos consejos útiles para mejorar tus bizcochos.»
+
+**Con su voz:**
+> «¿Se te hunde el bizcocho en el centro? No es la harina: abriste el horno antes del minuto 25.»
 
 ---
 
-## Lo que NUNCA dice (señales de IA a evitar)
+## Lista de control antes de entregar un texto con esta voz
 
-Estas palabras y frases no aparecen en ninguno de sus posts. Si aparecen, suena artificial:
-
-- "es importante destacar"
-- "sin lugar a dudas"
-- "en conclusión"
-- "es fundamental"
-- "definitivamente"
-- "indudablemente"
-- "por supuesto"
-- "sin duda alguna"
-- "en este sentido"
-- "hoy quiero compartir contigo"
-- "espero que te sea de utilidad"
-- "¡Hola a todos!" / "¡Hola chicos!"
-- "para lograr el éxito"
-- "tu voz importa"
-- "eres suficiente"
-- Hablar a "todos ustedes" o "toda la comunidad"
-- "no olvides de"
-
----
-
-## Ejemplos de captions reales (copiados textual)
-
-**Post 1 — Pinned carrusel (todo lo que aprendes en la comunidad)**
-> andreaestratega 🔵 ¿Estás creando contenido pero no estás vendiendo?
->
-> El problema casi nunca es el contenido en sí, es no tener un sistema detrás
->
-> 🚀 Cuando ordenas tu mensaje, tu oferta y tu estructura, el contenido deja de ser ruido y empieza a vender. Eso es exactamente lo que trabajamos en Fórmula 100K.
->
-> 💬 Comenta "INFO" y te explico paso a paso cómo funciona el sistema para convertir contenido en ventas reales.
->
-> #MarketingDigital #ContenidoQueVende #Fórmula100K
-
-**Post 2 — Reel 68.7M vistas**
-> andreaestratega 🔵 🤯 Muchos videos se vuelven virales por algo simple: rompen el patrón en el primer segundo.
->
-> 💬 Escribe "100K" y te paso las fichas que uso para analizar contenido viral.
->
-> #GanchosVirales #CreacionDeContenido #ContenidoViral
-
-**Post 3 — Reel 9.2M vistas**
-> andreaestratega 🔵 🔥 Este gancho es increíble, utiliza una interrupción de patrón con algo tan simple como la Fanta cayéndose, ¡y tiene todo el sentido!
->
-> 💬 Comenta "100K" y te paso una de mis fichas de viralidad.
->
-> #Viralidad #Engagement #MarketingDeContenidos
-
-**Post 4 — Carrusel "Cliente: Solo tengo una foto de mi producto"**
-> andreaestratega 🔵 😮 Muchas personas creen que necesitan mucho contenido para crecer. Pero con una sola foto puedes crear múltiples piezas.
->
-> 💬 Comenta "PROMPTS" y te digo cómo acceder a mi bot con prompts listos para copiar y usar.
->
-> #CreacionDeContenido #ContenidoViral #MarketingDigital
-
----
-
-## Notas extra para humanización
-
-- Sus captions **no empiezan nunca con presentación**. Arrancan directo con la idea.
-- El 🔵 azul al inicio es su sello — siempre va primero.
-- Cuando habla de resultados de alumnos, usa datos concretos: "41.1 mil seguidores", "de cero a millones de vistas".
-- No dice "mi audiencia" — dice "muchas personas" o habla al lector de forma directa.
-- El tono es de mentora que ya lo vivió, no de coach que da ánimo.
-- Sus posts más virales (60M+) tienen los captions MÁS CORTOS — 2 oraciones + CTA. La brevedad es parte de la estrategia.
+- [ ] Abre con una de las 5 aperturas
+- [ ] Tiene un dato concreto y verificable de la propia persona
+- [ ] No promete resultados que la persona no haya dicho
+- [ ] Cierra con una palabra clave ligada al tema
+- [ ] No usa ninguna palabra de la lista prohibida

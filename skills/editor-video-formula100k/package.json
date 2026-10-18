@@ -1,0 +1,10 @@
+{
+  "name": "editor-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Editor de video: corta silencios y repeticiones y monta el formato que elijas.",
+  "scripts": {
+    "postinstall": "node scripts/preparar.mjs",
+    "revisar": "node scripts/editar.mjs --revisar"
+  }
+}

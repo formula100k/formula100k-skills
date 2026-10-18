@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Orquestador cross-platform del editor de video FÓRMULA 100K.
+"""Orquestador del editor de video. Corre igual en Mac y en Windows.
+
+No se llama directo: lo lanza `scripts/editar.mjs`, que trae Python y sus
+librerías con uv.
 
 Uso:
-    python render.py <DEST_FOLDER> <SOURCE_VIDEO>
+    python render.py <DEST_FOLDER> <SOURCE_VIDEO> [--solo-corte] [--recortar] [flags del corte]
 
 Produce $DEST_FOLDER/BORRADOR_AUTO.mp4 a partir de:
     $DEST_FOLDER/MANIFEST.md   (keyword-based)
     $SOURCE_VIDEO              (.mov o .mp4 sin editar)
 
-Funciona en macOS y Windows. En Mac usa mlx-whisper; en Windows faster-whisper.
+Transcribe con mlx-whisper en Mac con chip Apple y con faster-whisper en
+Windows y en Mac con procesador Intel.
 """
 
 from __future__ import annotations
@@ -54,18 +58,43 @@ def copy_or_link(src: Path, dst: Path) -> None:
             shutil.copy2(src, dst)
 
 
+def despacho_por_formato(formato: str | None) -> tuple[list[str], bool, str]:
+    """Qué modo de `render.ts` monta este formato.
+
+    Devuelve `(flags_de_modo, admite_extras, etiqueta_humana)`.
+
+    `noticiero` es horizontal 1920×1080 y usa la composición
+    `news-horizontal`, con su propio juego de cues (ticker, chyrons,
+    tarjetas). El resto de los formatos comparten `reel-viral`, que es el
+    default de render.ts cuando no se le pasa `--mode`.
+
+    `admite_extras` es False para noticiero porque los flags de canvas y
+    pizarra son de formatos verticales: render.ts los ignoraría, pero
+    mandarlos sugeriría que hacen algo.
+    """
+    if formato == 'noticiero':
+        return ['--mode', 'news'], False, 'news-horizontal (1920×1080)'
+    return [], True, 'reel-viral (1080×1920)'
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('dest', help='Carpeta con MANIFEST.md (output va aquí también)')
     ap.add_argument('source', help='Ruta al video fuente (.mov / .mp4)')
-    args = ap.parse_args()
+    ap.add_argument('--solo-corte', action='store_true',
+                    help='Corta y transcribe, y se detiene antes del montaje')
+    ap.add_argument('--recortar', action='store_true',
+                    help='Rehace el corte aunque ya exista')
+    # Lo que no conoce este script va tal cual al corte (--min-silence,
+    # --semantic-level, --no-semantic, --guion…).
+    args, flags_corte = ap.parse_known_args()
 
     dest = Path(args.dest).expanduser().resolve()
     source = Path(args.source).expanduser().resolve()
 
     if not dest.is_dir():
         fail(f'No encuentro la carpeta destino: {dest}')
-    if not (dest / 'MANIFEST.md').is_file():
+    if not args.solo_corte and not (dest / 'MANIFEST.md').is_file():
         fail(f'No encuentro {dest / "MANIFEST.md"}')
     if not source.is_file():
         fail(f'No encuentro el video fuente: {source}')
@@ -78,15 +107,26 @@ def main() -> int:
     captions = dest / 'captions.json'
 
     # Paso A — Cortar silencios + transcribir (idempotente)
+    if args.recortar:
+        for viejo in (cut_video, captions, dest / 'edl.json', dest / 'corte.json'):
+            if viejo.exists():
+                viejo.unlink()
     if cut_video.exists() and captions.exists():
-        step('1/4', '_source_cut.mov y captions.json ya existen, salteando corte.')
+        step('1/4', '_source_cut.mov y captions.json ya existen: no vuelvo a cortar '
+                    '(usa --recortar para rehacer el corte).')
     else:
         step('1/4', 'Cortando silencios + transcribiendo...')
-        subprocess.run(
+        r = subprocess.run(
             [sys.executable, str(script_dir / 'cut_silences_and_fillers.py'),
-             str(source), str(dest)],
-            check=True,
+             str(source), str(dest), *flags_corte],
         )
+        if r.returncode != 0:
+            fail('El corte no terminó. El mensaje de arriba dice por qué.', r.returncode)
+
+    if args.solo_corte:
+        stderr('Corte listo. Falta el montaje.')
+        print(str(cut_video))
+        return 0
 
     # Paso B — MANIFEST.md → cues.json
     step('2/4', 'Parseando MANIFEST.md → cues.json')
@@ -152,8 +192,8 @@ def main() -> int:
     # `_source_cut.mov` ni entre sí.
     #
     # El cutout se busca por nombre porque es un artefacto derivado que la
-    # alumna genera con `hyperframes remove-background`; el lienzo lo deja
-    # `pizarra-explicativa-f100k`. Los dos son opcionales: sin ellos el
+    # usuaria genera con un quita-fondos de video; el lienzo es un video de
+    # trazos con transparencia. Los dos son opcionales: sin ellos el
     # formato avisa y cae a fullscreen (ver pizarra.tsx), no rompe.
     def _primer_archivo(patrones: list[str]) -> Path | None:
         vistos: list[Path] = []
@@ -167,14 +207,14 @@ def main() -> int:
         Chrome —y por lo tanto Remotion— **no** respeta el alfa de un .mov
         HEVC: se comprobó decodificando un frame contra un fondo rojo y el
         rojo no aparecía por ningún lado, el frame salía opaco entero. Y el
-        entregable de `pizarra-explicativa-f100k` es justamente un .mov HEVC
-        con alfa (su formato ligero, ~100 MB frente a los 4 GB del ProRes).
+        formato ligero habitual de un lienzo con transparencia es justamente
+        un .mov HEVC con alfa.
         O sea: el insumo natural de este formato es ilegible para el motor
         de render sin convertirlo antes.
 
         VP9 en .webm sí lo respeta (mismo experimento, rojo visible). Así que
-        se convierte una vez y se cachea junto al original: la alumna deja el
-        .mov que le dio la otra skill y esto se ocupa solo.
+        se convierte una vez y se cachea junto al original: se deja el
+        .mov tal cual y esto se ocupa solo.
         """
         if origen.suffix.lower() == '.webm':
             return origen
@@ -194,7 +234,7 @@ def main() -> int:
     pizarra_args: list[str] = []
     if (cues_json := dest / 'cues.json').is_file():
         try:
-            formato_pedido = json.loads(cues_json.read_text()).get('formato')
+            formato_pedido = json.loads(cues_json.read_text(encoding='utf-8')).get('formato')
         except (json.JSONDecodeError, OSError):
             formato_pedido = None
     else:
@@ -218,17 +258,31 @@ def main() -> int:
             pizarra_args += [flag, nombre]
 
     # Paso D — Render con npx tsx
-    step('4/4', 'Renderizando reel-viral...')
+    #
+    # El modo lo decide el formato: `noticiero` es horizontal 1920×1080 y usa
+    # la composición `news-horizontal`, con su propio juego de cues (ticker,
+    # chyrons, tarjetas). El resto de los formatos comparten la composición
+    # vertical `reel-viral`, que es el default de render.ts cuando no se pasa
+    # `--mode`. Los flags de canvas/pizarra son de formatos verticales, así
+    # que no se pasan en modo news (render.ts los ignoraría, pero mandarlos
+    # sugeriría que hacen algo).
+    modo_arg, usa_extras, etiqueta = despacho_por_formato(formato_pedido)
+    extra_args = [*canvas_arg, *pizarra_args] if usa_extras else []
+
+    step('4/4', f'Renderizando {etiqueta}...')
     out = dest / 'BORRADOR_AUTO.mp4'
     # En Windows npx es npx.cmd
+    if not (template_dir / 'node_modules' / 'remotion').is_dir():
+        fail('Falta instalar el motor de montaje. Corre: node '
+             f'"{script_dir / "preparar.mjs"}"')
     npx = 'npx.cmd' if sys.platform == 'win32' else 'npx'
     subprocess.run(
         [npx, 'tsx', 'scripts/render.ts',
+         *modo_arg,
          '--video', '_source_cut.mov',
          '--transcript', str(captions),
          '--cues', str(dest / 'cues.json'),
-         *canvas_arg,
-         *pizarra_args,
+         *extra_args,
          '--out', str(out)],
         cwd=str(template_dir),
         check=True,

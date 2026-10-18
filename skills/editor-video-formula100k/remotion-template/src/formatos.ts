@@ -8,7 +8,11 @@
 
 export type CapaId =
   | 'header' | 'emphasis' | 'overlay' | 'broll'
-  | 'hook' | 'captions' | 'sfx';
+  | 'hook' | 'captions' | 'sfx'
+  // Exclusivas del modo `news` (noticiero): barra de titulares rotativos,
+  // rótulo lower-third y tarjetas (título / número / lista / ranking /
+  // captura). No tienen equivalente en los formatos verticales.
+  | 'ticker' | 'chyron' | 'card';
 
 /** Modo de `scripts/render.ts` que sabe montar este formato. */
 export type ModoRender = 'reel' | 'tutorial' | 'news';
@@ -39,7 +43,7 @@ export const FORMATOS: FormatoDef[] = [
     nombre: 'Cara completa',
     descripcion: 'Talking-head 9:16 a pantalla completa con overlays en los tercios.',
     cuandoUsar: [
-      'el video es sólo la persona hablando a cámara',
+      'el video es sólo una persona hablando a cámara',
       'no hay screen recordings en la carpeta',
       'el contenido es opinión, storytelling o enseñanza sin demo',
     ],
@@ -72,7 +76,7 @@ export const FORMATOS: FormatoDef[] = [
     descripcion: 'Screen recording a pantalla completa con la cámara en un recuadro.',
     cuandoUsar: [
       'hay un screen recording largo en la carpeta',
-      'el guion dice "te muestro", "mira esto", "acá se ve"',
+      'el guion dice "te muestro", "mira esto", "aquí se ve"',
       'es un tutorial o demo de una app',
     ],
     dimensiones: {w: 1080, h: 1920},
@@ -142,8 +146,8 @@ export const FORMATOS: FormatoDef[] = [
     dimensiones: {w: 1920, h: 1080},
     composicion: 'news-horizontal',
     modo: 'news',
-    capas: ['overlay', 'broll', 'sfx'],
-    capasDefault: {overlay: true, broll: true, sfx: true},
+    capas: ['ticker', 'chyron', 'card', 'sfx'],
+    capasDefault: {ticker: true, chyron: true, card: true, sfx: true},
     temaDefault: 'default',
   },
 ];

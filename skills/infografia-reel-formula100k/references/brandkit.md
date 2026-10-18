@@ -4,9 +4,12 @@ Reglas universales que se aplican a TODOS los arquetipos y se inyectan en los pr
 
 ---
 
-## PRIMERO: SU MANUAL DE IDENTIDAD VISUAL
+## PRIMERO: SU MARCA
 
-Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe:
+Búscala en este orden:
+1. `~/Documents/mi-contenido/mi-marca.md` (su ficha de marca). Si existe, sus colores, letras, estilo visual y @
+   reemplazan a los de este archivo igual que abajo (fondo, texto, acento, apoyo, letras y watermark).
+2. Si no está: su manual de identidad visual `mi-marca/marca.md`, como dice `references/mi-marca.md`. Si existe:
 
 - **Paleta:** el mood de abajo sigue eligiendo la composición y la atmósfera, pero los colores son los suyos:
   fondo → `color.lienzo`, texto principal → `color.tinta`, detalles y acento → `color.acento`, apoyo → `color.segundo`.
@@ -20,7 +23,7 @@ Busca `mi-marca/marca.md` como dice `references/mi-marca.md`. Si existe:
   sale) y `movimiento.nunca` van en el prompt de animación.
 - **Watermark:** `firma.usuario`.
 
-Si no hay manual, usa la paleta del mood como siempre, y menciona en una línea que puede armar su manual en
+Si no hay ficha ni manual, usa la paleta del mood como siempre, y menciona en una línea que puede armar su manual en
 formula100k.app/identidad-visual para que sus infografías salgan con su marca.
 
 ## PALETA POR MOOD

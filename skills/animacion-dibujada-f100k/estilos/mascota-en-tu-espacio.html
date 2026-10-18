@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mascota pixel en tu espacio</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw;image-rendering:pixelated}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const MASCOTA = 'gato';      // la principal: gato (gatito con lentes) | iman (atraer) | bolsa (vender) | reel (contenido)
+                             //               | estrella (skill) | hoja (guion) | libro (guía) | lupa (analizar) | micro (audio)
+const PAREJA = 'hoja';       // una segunda que la acompaña (misma lista). '' = va sola
+const ACCION = 'camina';     // camina (van y vienen SIN salirse de la mesa) | salta | baila
+// La mesa: una línea entre dos puntos del video donde hay superficie libre. De ahí no salen.
+// Mídela sobre un cuadro real del video (ver SKILL.md, «Mascotas sobre tu video»). x: 0 a 1080 · y: 0 arriba, 1920 abajo.
+const MESA = { x: 380, y: 1690, x2: 880, y2: 1825 };   // si la mesa se ve inclinada, y2 es distinta de y
+const TAMANO = 6;            // tamaño de cada pixel. 6 = chiquita (unos 96 px). No pases de 9: acompaña, no distrae
+const FONDO = 'verde';       // 'verde' = para entregar (se le quita el verde en el editor)
+                             // 'cuadro.jpg' = una foto del video al lado de la pieza, SOLO para revisar dónde pisan
+const COLORES = {            // ninguno puede ser verde
+  contorno: '#1b1630', gato: '#8d93c4', gato2: '#6f75a8',
+  acento: '#ffd84d', acento2: '#f0b429',   // el color de SU marca: cámbialo por el suyo (este es de muestra)
+  papel: '#fff6e0', doblez: '#d9cfb8', cristal: '#bfe9ff', madera: '#a0683a',
+  tapa: '#b79cff', lomo: '#8a6fe0', rosa: '#ff8fb1', rojo: '#ff5a5f',
+  gris: '#c9c6d9', gris2: '#5b5873', mejilla: '#ff7fa0',
+};
+const DUR = 4;               // segundos. Entre 3 y 6: es un cameo, no compañía de todo el reel
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ANATOMIA: estilizada — mascotas pixel en grilla de 16: objetos y animalitos con ojitos; las patas son bloques
+const VERDE = FONDO === 'verde' || new URLSearchParams(location.search).has('verde');
+window.VERDE = VERDE;
+let CUADRO = null;
+if (!VERDE) cargarFotos([FONDO]).then(([im]) => { CUADRO = im; });
+const num = (v, d) => Number.isFinite(v) ? v : d;
+
+const U = clamp(num(TAMANO, 6), 3, 14);
+const C = COLORES, K = C.contorno;
+// la mesa: una línea de (AX, AY) a (BX, BY). Las mascotas NUNCA salen de ahí.
+const AX = num(MESA.x, 380), AY = num(MESA.y, 1690), BX = num(MESA.x2, AX), BY = num(MESA.y2, AY);
+const LARGO = Math.hypot(BX - AX, BY - AY);
+const SENTIDO = BX >= AX ? 1 : -1;
+
+// ---- las mascotas: cada una ES el símbolo de su concepto ----
+// Para agregar una: su forma en una grilla de 16 (dentro), sus colores (color), la fila de abajo del cuerpo (b),
+// los ojos y las patas. El contorno oscuro se calcula solo. Si no se reconoce a 96 px, simplifícala.
+const R = (x, y, x0, x1, y0, y1) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+const pip = (pts, x, y) => { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+const EST = (() => { const p = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? 3.7 : 7.6; p.push([8 + Math.cos(a) * d, 7.2 + Math.sin(a) * d]); } return p; })();
+const dLupa = (x, y) => Math.hypot(x + .5 - 7.5, y + .5 - 6.5);
+const mango = (x, y) => R(x, y, 11, 12, 10, 11) || R(x, y, 12, 13, 11, 12) || R(x, y, 13, 14, 12, 13);
+const asa = (x, y) => (x === 5 && (y === 2 || y === 3)) || (x === 10 && (y === 2 || y === 3)) || (y === 1 && x >= 6 && x <= 9);
+const pies = (a, b) => [[a, 2, 1, K, 0], [b, 2, 1, K, 1]];
+const TIPOS = {
+  // gatito con lentes grandes
+  gato: { b: 12, patas: pies(4, 10),
+    dentro: (x, y) => R(x, y, 2, 13, 3, 8) || R(x, y, 3, 12, 9, 12) || R(x, y, 2, 5, 2, 2) || R(x, y, 10, 13, 2, 2) || R(x, y, 2, 4, 1, 1) || R(x, y, 11, 13, 1, 1) || (y === 0 && (x === 3 || x === 12)) || (x === 14 && y >= 9 && y <= 11) || (x === 13 && y === 11),
+    color: (x, y) => (y === 1 && (x === 3 || x === 12)) ? C.rosa : x >= 13 ? C.gato2 : (y >= 9 && x >= 6 && x <= 9) ? '#ffffff' : C.gato,
+    cara: (c, p) => {
+      for (const x0 of [3, 9]) { c(x0, 4, K, 4, 4); c(x0 + 1, 5, C.cristal, 2, 2); }
+      c(7, 5, K, 2, 1);
+      if (p) { c(5, 6, K); c(10, 6, K); } else { c(5, 5, K, 1, 2); c(10, 5, K, 1, 2); }
+      c(7, 7, C.rosa, 2, 1);
+    } },
+  // el método: atraer = imán, vender = bolsa, contenido = reel
+  iman: { b: 11, ojos: [6, 9], oy: 2, mo: 2, bo: 2, boca: [7, 2], mej: [4, 11], patas: pies(4, 10),
+    dentro: (x, y) => R(x, y, 3, 12, 1, 11) && !R(x, y, 6, 9, 5, 11) && !((x === 3 || x === 12) && y === 1),
+    color: (x, y) => y >= 9 ? C.gris : C.rojo },
+  bolsa: { b: 12, ojos: [6, 9], oy: 6, boca: [7, 2], mej: [5, 10], patas: pies(5, 9),
+    dentro: (x, y) => R(x, y, 3, 12, 4, 12) || asa(x, y),
+    color: (x, y) => y < 4 ? C.gris2 : y === 4 ? C.mejilla : C.rosa },
+  reel: { b: 12, ojos: [6, 9], oy: 2, boca: [7, 2], mej: [5, 10], patas: pies(5, 9),
+    dentro: (x, y) => R(x, y, 4, 11, 0, 12),
+    color: (x, y) => (x === 4 || x === 11 || y === 0 || y === 12) ? C.gris2 : y === 10 ? (x <= 8 ? C.acento : C.gris) : (x === 10 && (y === 7 || y === 8)) ? C.rojo : C.tapa },
+  estrella: { b: 12, ojos: [6, 9], oy: 6, boca: [7, 2], mej: [5, 10], patas: pies(3, 11),
+    dentro: (x, y) => pip(EST, x + .5, y + .5),
+    color: (x, y) => y >= 10 ? C.acento2 : C.acento },
+  hoja: { b: 12, ojos: [6, 9], oy: 4, boca: [7, 2], mej: [5, 10], patas: pies(5, 9),
+    dentro: (x, y) => R(x, y, 3, 12, 1, 12) && x - y < 10,
+    color: (x, y) => x - y === 9 ? C.doblez : (y === 9 && x >= 5 && x <= 10) || (y === 11 && x >= 5 && x <= 8) ? C.acento2 : C.papel },
+  libro: { b: 12, ojos: [7, 10], oy: 5, boca: [8, 2], mej: [6, 11], patas: pies(4, 10),
+    dentro: (x, y) => R(x, y, 2, 13, 2, 12),
+    color: (x, y) => x <= 3 ? C.lomo : y >= 11 ? C.papel : (x === 12 && y <= 5) ? C.acento : C.tapa },
+  lupa: { b: 11, ojos: [5, 9], oy: 5, boca: [7, 1], mej: [4, 10], patas: pies(4, 9),
+    dentro: (x, y) => dLupa(x, y) <= 5.6 || mango(x, y),
+    color: (x, y) => dLupa(x, y) <= 5.6 ? (dLupa(x, y) > 4.6 ? C.acento : ((x === 5 && y === 3) || (x === 4 && y === 4) ? '#ffffff' : C.cristal)) : C.madera },
+  micro: { b: 12, ojos: [6, 9], oy: 5, boca: [7, 2], mej: [5, 10], patas: pies(5, 9),
+    dentro: (x, y) => R(x, y, 5, 10, 1, 8) || (x >= 6 && x <= 9 && (y === 0 || y === 9)) || R(x, y, 7, 8, 10, 11) || R(x, y, 5, 10, 12, 12),
+    color: (x, y) => y <= 3 ? ((x + y) % 2 ? C.gris : C.gris2) : y <= 9 ? C.rosa : C.gris2 },
+};
+// se calcula una vez por mascota: las celdas del cuerpo y su contorno
+function prepara(nombre) {
+  if (!TIPOS[nombre]) console.warn(`[mascota-pixel] no conozco la mascota «${nombre}»: usé el gato.`);
+  const tp = TIPOS[nombre] || TIPOS.gato, celdas = [];
+  for (let y = -1; y <= 16; y++) for (let x = -1; x <= 16; x++) {
+    if (tp.dentro(x, y)) celdas.push([x, y, tp.color(x, y)]);
+    else if (tp.dentro(x - 1, y) || tp.dentro(x + 1, y) || tp.dentro(x, y - 1) || tp.dentro(x, y + 1)) celdas.push([x, y, K]);
+  }
+  return { tp, celdas, alto: tp.b + 3 };                     // alto = filas desde arriba hasta el piso
+}
+const LISTA = [MASCOTA, PAREJA].filter(n => typeof n === 'string' && n.trim()).map(n => prepara(n.trim().toLowerCase()));
+
+function mascota(m, gx, gy, o) {
+  const tp = m.tp, x0 = Math.round(gx - 8 * U), y0 = Math.round(gy - (m.alto + o.alt) * U);
+  const c = (x, y, col, w = 1, h = 1) => { ctx.fillStyle = col; const xx = o.dir < 0 ? 16 - x - w : x; ctx.fillRect(x0 + xx * U, y0 + y * U, w * U, h * U); };
+  for (const [x, y, col] of m.celdas) c(x, y, col);
+  // patas: la que se levanta sube un pixel
+  for (const [px, pw, ph, col, grupo] of tp.patas) { const yy = tp.b + 3 - ph - (o.arriba === grupo ? 1 : 0);
+    if (col !== K) c(px - 1, yy, K, pw + 2, ph); c(px, yy, col, pw, ph); }
+  // carita
+  if (tp.cara) return tp.cara(c, o.parpadea);
+  for (const ex of tp.ojos) { if (o.parpadea) c(ex, tp.oy + 1, K); else c(ex, tp.oy, K, 1, 2); }
+  if (!tp.sinMej) for (const mx of tp.mej) c(mx, tp.oy + (tp.mo ?? 2), C.mejilla);
+  if (!tp.sinBoca) c(tp.boca[0], tp.oy + (tp.bo ?? 3), K, tp.boca[1], 1);
+}
+// la sombra la pega a la mesa. Sobre verde va sólida: una transparencia deja mancha al quitar el verde.
+function sombra(gx, gy, alt) {
+  const w = (10 - Math.min(alt, 3) * 1.6) * U;
+  ctx.fillStyle = VERDE ? '#3b3530' : 'rgba(0,0,0,.26)';
+  if (!VERDE) ctx.fillRect(Math.round(gx - w / 2), Math.round(gy - U * .5), Math.round(w), U);
+  ctx.fillRect(Math.round(gx - w / 2 + U), Math.round(gy - U * .5), Math.round(w - 2 * U), U);
+}
+function destello(gx, gy, alto, k) {              // puf de pixeles al aparecer y al irse
+  if (k <= 0 || k >= 1) return;
+  const cy = gy - alto * U / 2, s = Math.max(2, Math.round(U * 1.4 * (1 - k)));
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + .4, d = (3 + k * 7) * U;
+    ctx.fillStyle = i % 2 ? '#ffffff' : C.acento;
+    ctx.fillRect(Math.round(gx + Math.cos(a) * d - s / 2), Math.round(cy + Math.sin(a) * d - s / 2), s, s); }
+}
+function nota(x, y, a) {                          // notita musical pixel
+  if (VERDE && a < .35) return;                   // sobre verde no se desvanece: se apaga de golpe
+  const u = Math.max(3, Math.round(U * .8));
+  ctx.save(); if (!VERDE) ctx.globalAlpha *= clamp(a);
+  const r = (cx, cy, w, h, col, m) => { ctx.fillStyle = col; ctx.fillRect(Math.round(x + cx * u) - m, Math.round(y + cy * u) - m, w * u + 2 * m, h * u + 2 * m); };
+  for (const [col, m] of [[K, 2], [C.acento, 0]]) { r(2, 0, 1, 5, col, m); r(0, 4, 2, 2, col, m); r(3, 0, 2, 1, col, m); r(4, 1, 1, 1, col, m); }
+  ctx.restore();
+}
+const ACC = ['camina', 'salta', 'baila'].includes(ACCION) ? ACCION : (console.warn(`[mascota-pixel] no conozco la acción «${ACCION}»: usé salta.`), 'salta');
+const SEP = LARGO > 0 ? 12 * U / LARGO : 0;        // media separación entre las dos, en fracción de la mesa
+if (ACC === 'camina' && LARGO < U * 40) console.warn(`[mascota-pixel] la mesa mide ${Math.round(LARGO)} px: es corta para caminar. Usa salta o baila, o alarga MESA.`);
+
+// dónde está y qué hace la mascota i en el segundo t (s = 0 extremo izquierdo de la mesa, 1 = derecho)
+function estado(i, tq) {
+  const ta = Math.max(0, tq - .3), n = LISTA.length;
+  let s = n > 1 ? clamp(.5 + (i ? SEP : -SEP)) : .5, alt = 0, dir = 1, arriba = -1, dx = 0;
+  if (ACC === 'camina' && LARGO > U * 6) {
+    // van y vienen SIN salirse de la mesa; si son dos, dan la vuelta juntas (no se cruzan)
+    const margen = n > 1 ? Math.min(SEP, .45) : 0, tramo = 1 - 2 * margen;
+    const u = .15 + ta * 130 / (LARGO * tramo), m = ((u % 2) + 2) % 2;
+    s = margen + (m <= 1 ? m : 2 - m) * tramo + (n > 1 ? (i ? margen : -margen) : 0); dir = (m <= 1 ? 1 : -1) * SENTIDO; arriba = (Math.floor(ta / .167) + i) % 2;
+  } else if (ACC === 'baila') {
+    const k = Math.floor(ta / .375) + i;
+    dx = (k % 2 ? 1 : -1) * U * 1.5; alt = (ta % .375) < .1875 ? 1 : 0; dir = k % 4 < 2 ? 1 : -1; arriba = k % 2;
+  } else if (ACC === 'salta') {
+    const p = ((Math.max(0, ta - i * .22) % .75) / .75) / .6;
+    alt = p < 1 ? Math.round(4 * p * (1 - p) * 3) : 0;
+  }
+  const gx = Math.round((lerp(AX, BX, s) + dx) / (U / 2)) * (U / 2), gy = Math.round(lerp(AY, BY, s));
+  return { gx, gy, alt, dir, arriba, parpadea: ((tq + i * .7) % 2.4) > 2.2 };
+}
+
+arrancar(frame => {
+  const t = frame / FPS, tq = Math.floor(t * 12) / 12;          // se mueve «a doces»: se siente pixel art
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.imageSmoothingEnabled = true;
+  if (VERDE) { ctx.fillStyle = '#00FF00'; ctx.fillRect(0, 0, W, H); }
+  else if (CUADRO) fotoCover(CUADRO, 0, 0, W, H, .5, .5);
+  ctx.imageSmoothingEnabled = false;
+  const esc = Math.max(0, back(prog(t, 0, .3)) * (1 - easeOut(prog(t, DUR - .3, DUR))));
+  const todas = LISTA.map((m, i) => ({ m, e: estado(i, tq) })).sort((a, b) => a.e.gy - b.e.gy);
+  for (const { m, e } of todas) { destello(e.gx, e.gy, m.alto, prog(t, 0, .35)); destello(e.gx, e.gy, m.alto, prog(t, DUR - .35, DUR)); }
+  if (esc <= 0) return;
+  for (const { m, e } of todas) {
+    ctx.save();
+    ctx.translate(e.gx, e.gy); ctx.scale(esc, esc); ctx.translate(-e.gx, -e.gy);
+    sombra(e.gx, e.gy, e.alt);                                  // la sombra entra y se va con la mascota
+    mascota(m, e.gx, e.gy, e);
+    ctx.restore();
+  }
+  if (ACC === 'baila' && t > .3 && t < DUR - .3 && LISTA.length) {
+    const ta = Math.max(0, tq - .3), n = Math.floor(ta / .375), e0 = estado(0, .3);
+    for (let k = Math.max(0, n - 2); k <= n; k++) { const edad = ta - k * .375; if (edad < 0 || edad >= .9 || k % 2) continue;
+      nota(e0.gx + (k % 4 ? 8 : -12) * U, e0.gy - (LISTA[0].alto + 2) * U - edad * U * 9, 1 - edad / .9); }
+  }
+});
+</script>
+</body>
+</html>

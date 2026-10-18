@@ -1,6 +1,6 @@
 ---
 name: radar-tendencias-f100k
-description: "Módulo del Autopilot F100K que detecta tendencias emergentes ANTES de que lleguen al pico, dando 24-72h de ventana para publicar primero. Corre junto al radar diario de lunes a viernes. Usar cuando alguien diga: \"qué está despegando en mi nicho\", \"detectar tendencias emergentes\", \"qué va a ser viral pronto\", \"ejecutar radar tendencias\", \"dame las tendencias del día\", o cuando el schedule automático lo invoque. Si no hay tendencia emergente real, NO envía email (sin spam). Requiere cerebro/f100k-config.json."
+description: "Radar que detecta tendencias emergentes ANTES de que lleguen al pico, dando 24-72h de ventana para publicar primero. Usar cuando alguien diga: \"qué está despegando en mi nicho\", \"detectar tendencias emergentes\", \"qué va a ser viral pronto\", \"ejecutar radar tendencias\", \"dame las tendencias del día\", o cuando el schedule automático lo invoque. Si no hay tendencia emergente real, lo dice y no inventa una. Toma el rubro y las keywords del pedido, de la ficha del negocio o de cerebro/f100k-config.json si existe."
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---
 
@@ -17,21 +17,45 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
-# Skill: Radar de Tendencias Emergentes — Autopilot F100K
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `entregables/`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `entregables/`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
+# Skill: Radar de Tendencias Emergentes
 
 La diferencia entre ser el primero y ser el décimo en hablar de algo es 48 horas. Este módulo detecta lo que está despegando AHORA en tu nicho para que publiques antes de la ola, no después.
 
 ---
 
-## FASE 1 — CARGAR CONFIG
+## FASE 1 — DATOS DE LA PERSONA
 
-```bash
-cat cerebro/f100k-config.json
-```
+Necesitas: `niche` (su rubro), `keywords` (de 3 a 5), `voice_profile` (cómo habla) y, solo si quiere el resultado por correo, `email`.
 
-Si no existe → detener e instruir a correr `/rutina-maestra-formula100k`.
+Búscalos en este orden y detente en el primero que los tenga:
 
-Extraer: `niche`, `keywords`, `email`
+1. Lo que venga en el pedido (si te llamó un agente, usa lo que te pasó).
+2. `cerebro/f100k-config.json`, si existe.
+3. La ficha `entregables/` (y `entregables/` para `voice_profile`), o su Manual o Segundo Cerebro.
+4. Si no hay nada: pregunta rubro y de 3 a 5 keywords en un solo mensaje.
+
+**No te detengas porque falte el archivo de configuración.** Si la persona quiere dejar sus datos fijos, guárdalos tú en `cerebro/f100k-config.json`.
 
 ---
 
@@ -116,7 +140,9 @@ Voz: [voice_profile]
 
 ---
 
-## FASE 5 — EMAIL DE ALERTA (solo si nivel ≥ DESPEGANDO)
+## FASE 5 — ENTREGA (solo si nivel ≥ DESPEGANDO)
+
+**Entrega.** Por defecto muestra el resultado en el chat y guárdalo en `entregables/`. Crea además el borrador de correo solo si hay `email` y el conector de Gmail está conectado; si no, no lo menciones como error.
 
 Usar `mcp__claude_ai_Gmail__create_draft`:
 
@@ -124,7 +150,7 @@ Usar `mcp__claude_ai_Gmail__create_draft`:
 
 **Asunto:**
 - Si CALIENTE: `🔥 URGENTE — tendencia confirmada en tu nicho: [tema]`
-- Si DESPEGANDO: `⚠️ Tendencia emergente detectada — [tema] | Autopilot F100K`
+- Si DESPEGANDO: `⚠️ Tendencia emergente detectada — [tema]`
 
 **Cuerpo:**
 
@@ -167,6 +193,6 @@ EVIDENCIA:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⏰  Actúa rápido — las tendencias tienen ventana corta.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Autopilot F100K · fórmula100k.app
+Tu radar de contenido
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

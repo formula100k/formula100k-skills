@@ -1,6 +1,27 @@
 ---
 name: constructor-ofertas-f100k
-description: Skill especializada en construir OFERTAS IRRESISTIBLES, LEAD MAGNETS e INFOPRODUCTOS LOW-TICKET aplicando la Ecuación de Valor (Hormozi), la fórmula M-A-G-I-C para nombres, bonificaciones apiladas y garantías. Activar SIEMPRE que el usuario o un usuario pida "haz mi oferta más irresistible", "diseña mi oferta", "construye una oferta para X", "crea un lead magnet", "necesito un infoproducto low-ticket", "qué bonos pongo", "cómo apilo bonos", "qué garantía uso", "qué precio le pongo", "cómo justifico el precio", "estructura mi oferta para Skool", "estructura mi oferta para venta", "haz un name para mi programa", "MAGIC para mi oferta", "cómo escalo el valor percibido", o cualquier variación que combine intención de vender con la necesidad de estructurar la oferta. NO usar para escribir el VSL/landing/email — para eso está `vsl-expert-f100k`. NO usar para audios de venta — para eso está `audios-venta-f100k`. Sí se complementa con esas dos: primero se construye la oferta aquí, después se vende allá.
+description: "Skill especializada en construir OFERTAS IRRESISTIBLES, LEAD MAGNETS e INFOPRODUCTOS LOW-TICKET aplicando la Ecuación de Valor (Hormozi), la fórmula M-A-G-I-C para nombres, bonificaciones apiladas y garantías. Activar SIEMPRE que el usuario o un usuario pida \"haz mi oferta más irresistible\", \"diseña mi oferta\", \"construye una oferta para X\", \"crea un lead magnet\", \"necesito un infoproducto low-ticket\", \"qué bonos pongo\", \"cómo apilo bonos\", \"qué garantía uso\", \"qué precio le pongo\", \"cómo justifico el precio\", \"estructura mi oferta para Skool\", \"estructura mi oferta para venta\", \"haz un name para mi programa\", \"MAGIC para mi oferta\", \"cómo escalo el valor percibido\", o cualquier variación que combine intención de vender con la necesidad de estructurar la oferta. NO usar para escribir el VSL/landing/email — para eso está `vsl-expert-f100k`. NO usar para audios de venta — para eso está `audios-venta-f100k`. Sí se complementa con esas dos: primero se construye la oferta aquí, después se vende allá."
+---
+
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
@@ -53,7 +74,7 @@ Construye ofertas irresistibles que justifican precios elevados y disparan conve
 | 3 | **Infoproducto Low-Ticket** | Para tripwire o producto de entrada ($7-$97) |
 | 4 | **Stack de bonos + garantías** | Para retocar / mejorar una oferta existente sin reconstruirla |
 
-Trabaja en español neutro (NO argentino — ver [[feedback_espanol_neutro]]). Tono estratégico, comercial y directo. Nunca inventa métricas, precios ni autoridad — si falta info, la pide en el brief.
+Trabaja en español neutro. Tono estratégico, comercial y directo. Nunca inventa métricas, precios ni autoridad — si falta info, la pide en el brief.
 
 ---
 
@@ -146,10 +167,10 @@ Formatos recomendados (en este orden de facilidad/conversión):
 - Automatizaciones (Notion, Make, GPTs)
 
 **FASE 4 — Lanzamiento**
-Oferta con Ecuación de Valor + mínimo 3 bonos + garantía + lead magnet previo. Pasar a [[vsl-expert-f100k]] para el copy.
+Oferta con Ecuación de Valor + mínimo 3 bonos + garantía + lead magnet previo. Pasar a `vsl-expert-f100k` para el copy.
 
 **FASE 5 — Escala**
-Métricas: conversión de landing, CPL, conversión a oferta principal. Orgánico primero, ads para escalar lo que YA convierte. Para los ads ver [[reference_anuncios_goat_hormozi]].
+Métricas: conversión de landing, CPL, conversión a oferta principal. Orgánico primero, ads para escalar lo que YA convierte.
 
 ---
 
@@ -208,8 +229,8 @@ Después de las respuestas: **confirmar con un resumen y preguntar "¿Continúo?
 - **Siempre asignar valor monetario en USD** a cada elemento
 - **Siempre generar 3 opciones de nombre M-A-G-I-C** (alta/media/baja intensidad)
 - **Brief completo antes de generar** — sin excepción
-- **Español neutro siempre** — ver [[feedback_espanol_neutro]]
-- **Si el contexto es comunidad Skool**, derivar a [[creadora-comunidades-skool]] para integrar el vehículo único
+- **Español neutro siempre**
+- **Si el contexto es comunidad Skool**, derivar a `creadora-comunidades-skool` para integrar el vehículo único
 - **Nunca inventar prueba social, resultados, números** — pedirlos en el brief
 
 ---
@@ -226,6 +247,6 @@ Las plantillas completas de entrega están en [templates.md](templates.md):
 
 ## Output
 
-Guardar siempre en `~/Documents/FORMULA100K/OFERTAS/YYYY-MM-DD_<slug-de-oferta>.md`. Si la oferta es para un cliente, usar `~/Documents/FORMULA100K/CLIENTES/<nombre>/oferta.md`.
+Guardar siempre en `~/Documents/mi-contenido/ofertas/YYYY-MM-DD_<slug-de-oferta>.md`. Si la oferta es para un cliente, usar `~/Documents/mi-contenido/clientes/<nombre>/oferta.md`.
 
-Después de entregar la oferta, ofrecer pasar a [[vsl-expert-f100k]] para escribir el VSL/landing, o a [[audios-venta-f100k]] para los audios de cierre.
+Después de entregar la oferta, ofrecer pasar a `vsl-expert-f100k` para escribir el VSL/landing, o a `audios-venta-f100k` para los audios de cierre.

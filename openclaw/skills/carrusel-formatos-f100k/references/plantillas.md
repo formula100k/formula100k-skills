@@ -3,21 +3,21 @@
 Todas se diseñan a 1080×1350 y se exportan al doble (2160×2700, como las otras skills de carrusel). Se arman con:
 
 ```bash
-node skills/carrusel-formatos-f100k/build.js /ruta/spec.json [carpeta-salida]
+node "<carpeta de esta skill>/build.js" /ruta/spec.json [carpeta-salida]
 ```
 
 `build.js` inyecta el JSON en la plantilla, abre la página, espera fuentes + imágenes +
 autofit, imprime avisos (`⚠ no-cabe`, `⚠ letra-chica`, `⚠ fuente`, `⚠ imagen`) y exporta con
-el `export.js` de `carrusel-render-formula100k` → `slide-01.png`, `slide-02.png`…
+el `export.js` de esta skill → `slide-01.png`, `slide-02.png`…
 `--sin-png` solo revisa.
 
 **Marcado de texto** (cualquier campo de texto):
 `**negrita**` · `*itálica*` · `==resaltador==` · `__subrayado rojo__` · `\n` salto de línea.
 
-**Fotos**: ruta (absoluta o relativa al spec) · `{ "src": "...", "foco": "50% 20%" }` · `{ "color": "#333" }`.
+**Fotos**: ruta (mejor relativa al spec, p. ej. `fotos/foto-1.jpg`) · `{ "src": "...", "foco": "50% 20%" }` · `{ "color": "#333" }`.
 
 Campos comunes: `"plantilla"`, `"handle"` (firma), y `"slides": [...]`.
-Ejemplos completos que ya renderizan: `ejemplos/split.json`, `ejemplos/papel.json`, `ejemplos/datos.json`, `ejemplos/garabato.json`.
+Ejemplos completos que ya renderizan: `ejemplos/split.json`, `ejemplos/papel.json`, `ejemplos/datos.json`, `ejemplos/garabato.json` y, para HTML libre, `ejemplos/libre.html`. Para scrapbook con textura y fotos reales, el kit de `kit/` (ver `kit/LEEME.md`).
 
 ---
 
@@ -93,10 +93,12 @@ Contrato (build.js lo revisa):
 - cada slide es un `<section class="slide">` de exactamente **1080×1350**;
 - fuentes de Google Fonts con `<link>`; nunca `-apple-system` (en Chrome headless cae a Times);
 - nada de texto fuera del slide; la decoración que sangra a propósito va dentro de un elemento con `data-sangra`;
-- imágenes con ruta absoluta `file://` o relativa al HTML.
+- imágenes con ruta relativa al HTML (`fotos/foto-1.jpg`): funciona igual en Mac y en Windows;
+- letra de 28 px o más y ningún texto a menos de 80 px de la orilla izquierda o derecha (40 px arriba y abajo);
+  una excepción decidida (un número de página diminuto a propósito) va dentro de un elemento con `data-libre`.
 
 ```bash
-node skills/carrusel-formatos-f100k/build.js <carpeta>/carrusel.html
+node "<carpeta de esta skill>/build.js" <carpeta>/carrusel.html
 ```
-Avisa `⚠ no-cabe` (texto que se sale o se corta, slide de otro tamaño), `⚠ fuente` (familia que no cargó con
-su peso real, o `-apple-system`), `⚠ imagen`.
+Avisa `⚠ no-cabe` (texto que se sale o se corta, slide de otro tamaño), `⚠ letra-chica`, `⚠ margen`, `⚠ fuente`
+(familia que no cargó con su peso real, o `-apple-system`), `⚠ imagen`. `--escala 1` exporta a 1080×1350 exactos. Ejemplo que renderiza: `ejemplos/libre.html`.

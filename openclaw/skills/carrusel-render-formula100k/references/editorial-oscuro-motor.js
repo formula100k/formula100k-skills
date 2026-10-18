@@ -94,7 +94,7 @@ function appBg(){return `<div class="bg" style="background-image:url('${PHOTO}')
 
 function cover(){
   return `<div class="slide">${coverBg()}
-   <div class="eyebrow">Mi stack de IA</div>
+   <div class="eyebrow">[Tu tema]</div>
    <div class="handle">@tuhandle</div>
    <div class="h1">
      <div class="a">Las 6 apps</div>
@@ -139,13 +139,13 @@ function appSlide(app,idx){
 
 function cta(){
   return `<div class="slide">${coverBg()}
-   <div class="eyebrow">Mi stack de IA</div>
+   <div class="eyebrow">[Tu tema]</div>
    <div class="handle">@tuhandle</div>
    <div class="cta">
      <div class="k">¿Quieres<br>el stack?</div>
      <div class="s">Comenta <span class="word">“APP”</span> y te mando<br>la guía completa por DM 👽</div>
    </div>
-   <div class="ctabox"><p>💜 En <b>FÓRMULA 100K</b> te enseño a crear tus propias apps de contenido con IA — sin saber programar.</p></div>
+   <div class="ctabox"><p>💜 En <b>[TU OFERTA]</b> te enseño [tu promesa, con tus palabras].</p></div>
   </div>`;
 }
 

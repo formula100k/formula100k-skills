@@ -1,35 +1,50 @@
 ---
 name: radar-virales-f100k
 description: >
-  Módulo del Autopilot F100K que corre diariamente: caza el HECHO más reaccionable del día —un lanzamiento de IA, una movida de marketing de una marca grande, o un formato viral SIN cara— evitando a propósito reaccionar a creadores del mismo nicho (eso le entrega la audiencia a un competidor). Elige 1 ganador con scoring + filtro de exclusión, genera un guion de reacción listo para grabar con la voz del usuario donde ÉL es el intérprete del hecho, y envía todo por email. Usar cuando alguien diga: "corre mi radar", "qué hay viral hoy", "dame el viral del día", "ejecutar radar diario", "qué puedo reaccionar hoy", o cuando el schedule automático lo invoque. Requiere config en ~/.f100k-radar/config.json — si no existe, instruir a correr /rutina-maestra-formula100k primero.
+  Radar diario: caza el HECHO más reaccionable del día —un lanzamiento de IA, una movida de marketing de una marca grande, o un formato viral SIN cara— evitando a propósito reaccionar a creadores del mismo nicho (eso le entrega la audiencia a un competidor). Elige 1 ganador con scoring + filtro de exclusión, genera un guion de reacción listo para grabar con la voz del usuario donde ÉL es el intérprete del hecho, y lo entrega en el chat (y por correo si está configurado). Usar cuando alguien diga: "corre mi radar", "qué hay viral hoy", "dame el viral del día", "ejecutar radar diario", "qué puedo reaccionar hoy", o cuando el schedule automático lo invoque. Toma el rubro y las keywords del pedido, de la ficha del negocio o de ~/.f100k-radar/config.json si existe.
 ---
 
-# Skill: Radar Diario de Virales — Autopilot F100K
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
 
-Cada mañana, este skill hace el trabajo de detective por ti: escanea TikTok y las noticias del día, elige EL viral más aprovechable para tu nicho, y te entrega un guion de reacción listo para grabar. Solo tienes que abrir el email y grabar.
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
 
 ---
 
-## FASE 1 — CARGAR CONFIG
+# Skill: Radar Diario de Virales
 
-### Paso 1 — Leer config del usuario
+Cada mañana, este skill hace el trabajo de detective por ti: escanea TikTok y las noticias del día, elige EL viral más aprovechable para tu nicho, y te entrega un guion de reacción listo para grabar. Solo tienes que leerlo y grabar.
 
-```bash
-cat ~/.f100k-radar/config.json
-```
+---
 
-Si el archivo no existe o da error → detener y decir:
-> "No encontré tu configuración del Autopilot. Corre `/rutina-maestra-formula100k` primero para hacer el setup inicial — toma ~3 minutos."
+## FASE 1 — DATOS DE LA PERSONA
 
-Extraer y guardar en memoria de trabajo:
-- `niche` → nicho del usuario
-- `keywords` → array de keywords de búsqueda
-- `email` → destino del digest
-- `voice_profile` → perfil de voz
-- `radar_sources` → las 3 listas de queries de la FASE 2 (`ai_launches`, `brand_marketing`, `faceless_virals`)
-- `radar_exclusion` → el filtro que descarta creadores del mismo nicho
+Necesitas: `niche` (su rubro), `keywords` (de 3 a 5), `voice_profile` (cómo habla) y, solo si quiere el resultado por correo, `email`.
 
-**Si `radar_sources` o `radar_exclusion` no están en el config** (configs creados antes de la v1.1 del radar), NO detenerse: derivarlos en el momento a partir de `niche` y `keywords`, y avisar al usuario en una línea que se usaron valores derivados y que puede fijarlos corriendo `/rutina-maestra-formula100k` de nuevo.
+Búscalos en este orden y detente en el primero que los tenga:
+
+1. Lo que venga en el pedido (si te llamó un agente, usa lo que te pasó).
+2. `~/.f100k-radar/config.json`, si existe.
+3. La ficha `~/Documents/mi-contenido/mi-negocio.md` (y `~/Documents/mi-contenido/mi-voz.md` para `voice_profile`), o su Manual o Segundo Cerebro.
+4. Si no hay nada: pregunta rubro y de 3 a 5 keywords en un solo mensaje.
+
+**No te detengas porque falte el archivo de configuración.** Si la persona quiere dejar sus datos fijos, guárdalos tú en `~/.f100k-radar/config.json`.
+
+Las tres listas de búsqueda de la FASE 2 (`radar_sources`) y el filtro `radar_exclusion` salen del config si existe. Si no, derívalos en el momento a partir de `niche` y `keywords`:
 
 - `ai_launches` → "lanzamiento inteligencia artificial [niche]", "nuevo modelo IA OpenAI Google Anthropic Meta", "nueva herramienta IA [niche]"
 - `brand_marketing` → "campaña marketing viral marca grande", "caso de marketing empresa", "jugada marketing marca redes sociales"
@@ -108,7 +123,7 @@ Evaluar los candidatos sobrevivientes contra estos criterios:
 |----------|------|--------------|
 | Sin-competidor / autoridad propia | 35% | ¿El protagonista es un HECHO (IA, marca, formato) y no un creador a seguir? ¿el usuario queda como intérprete, no como comentarista de un par? Máximo si no hay nadie a quién irse a seguir. |
 | Potencial de reacción / opinión | 30% | ¿Puede agregar una lectura que nadie está dando? ¿Genera debate? |
-| Aplicabilidad a "crear contenido que vende" | 20% | ¿Se puede aterrizar en qué significa esto para que su audiencia venda con contenido? (ángulo F100K) |
+| Aplicabilidad a "crear contenido que vende" | 20% | ¿Se puede aterrizar en qué significa esto para que su audiencia venda con contenido? (el ángulo de su negocio) |
 | Frescura + viralidad | 15% | Publicado en últimas 24-48h · views/autoridad del medio |
 
 Asignar puntuación del 1-10 a cada candidato y elegir el TOP 1.
@@ -151,7 +166,7 @@ Punto 3: "Lo que yo haría diferente / lo que aprendí de esto es..."
 
 [CTA — 45-55s]
 Pregunta de engagement que invite a comentar.
-Patrón CTA ganador F100K:
+Patrón de CTA:
 "¿Tú qué opinas de esto? Comenta [PALABRA DE 1-2 SÍLABAS] y te cuento [promesa de valor extra]."
 ```
 
@@ -166,7 +181,9 @@ Reglas del guion:
 
 ## FASE 5 — ENVIAR EMAIL DIGEST
 
-### Paso 5 — Crear email con Gmail MCP
+### Paso 5 — Entregar
+
+**Entrega.** Por defecto muestra el resultado en el chat y guárdalo en `~/Documents/mi-contenido/investigacion/`. Crea además el borrador de correo solo si hay `email` y el conector de Gmail está conectado; si no, no lo menciones como error.
 
 Usar `mcp__claude_ai_Gmail__create_draft` con:
 
@@ -174,9 +191,9 @@ Usar `mcp__claude_ai_Gmail__create_draft` con:
 
 **Asunto:**
 ```
-🔥 Radar F100K — [día abreviado, fecha] | [primeras 40 chars del título del viral]
+🔥 Tu radar — [día abreviado, fecha] | [primeras 40 chars del título del viral]
 ```
-Ejemplo: `🔥 Radar F100K — Jue 29 May | OpenAI lanzó algo que cambia todo para creadores`
+Ejemplo: `🔥 Tu radar — Jue 29 May | [título del hecho]`
 
 **Cuerpo (plain text con separadores visuales):**
 
@@ -224,15 +241,14 @@ Mejor hora para publicar: dentro de las próximas 6-12h (el viral está caliente
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Autopilot F100K · fórmula100k.app
+Tu radar de contenido
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ### Paso 6 — Confirmar en terminal
 
 ```
-✅ Radar enviado a [config.email]
+✅ Radar listo: [ruta del archivo] (y borrador de correo si aplica)
 📊 Viral del día: [título, primeras 50 chars]
 🕐 [hora actual]
-💰 Costo Apify estimado: ~$0.40
 ```

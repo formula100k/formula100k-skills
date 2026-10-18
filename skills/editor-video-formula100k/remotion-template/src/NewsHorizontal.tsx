@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AbsoluteFill,
   Audio,
+  Img,
   OffthreadVideo,
   Sequence,
   interpolate,
@@ -12,7 +13,7 @@ import {
 } from 'remotion';
 
 // ────────────────────────────────────────────────────────────────────────
-// FÓRMULA 100K NEWS — composición horizontal 1920×1080 (broadcast bulletin)
+// NOTICIERO — composición horizontal 1920×1080 (broadcast bulletin)
 //
 // Todo gráfico vive en el TERCIO INFERIOR para no tapar la cara de quien habla
 // (centro en talking-head) ni la burbuja de cámara (arriba-centro en
@@ -37,7 +38,11 @@ type BigNumCard = {kind: 'bignum'; keyword: string; from?: string; to: string; u
 type Row = {name: string; metric: string; sub?: string};
 type LeaderboardCard = {kind: 'leaderboard'; keyword: string; title: string; rows: Row[]; duration?: number; offset?: number};
 type ListCard = {kind: 'list'; keyword: string; title: string; items: string[]; duration?: number; offset?: number};
-type NewsCard = TitleCard | BigNumCard | LeaderboardCard | ListCard;
+// Captura de pantalla real, en caja "over-the-shoulder" arriba a la derecha
+// (lo que hace un noticiero real). Vive FUERA del tercio inferior, así que
+// convive con el chyron en vez de excluirlo — ver `cardActive` más abajo.
+type ShotCard = {kind: 'shot'; keyword: string; src: string; title?: string; caption?: string; duration?: number; offset?: number};
+type NewsCard = TitleCard | BigNumCard | LeaderboardCard | ListCard | ShotCard;
 
 export type NewsHorizontalProps = {
   videoSrc: string;
@@ -123,7 +128,7 @@ const VideoLayer: React.FC<{videoSrc: string}> = ({videoSrc}) => (
 );
 
 // ════════════════════════════════════════════════════════════════════════
-// CAPA: bug superior izquierdo "● EN VIVO · F100K NEWS"
+// CAPA: bug superior izquierdo "● EN VIVO · <marca>"
 // ════════════════════════════════════════════════════════════════════════
 const NewsBug: React.FC<{brand: string; fps: number}> = ({brand, fps}) => {
   const frame = useCurrentFrame();
@@ -171,6 +176,17 @@ const NewsBug: React.FC<{brand: string; fps: number}> = ({brand, fps}) => {
 // ════════════════════════════════════════════════════════════════════════
 // CAPA: barra de noticias inferior persistente con ticker rotativo
 // ════════════════════════════════════════════════════════════════════════
+const marcaArriba = (brand: string): string => {
+  const t = brand.trim();
+  const i = t.lastIndexOf(' ');
+  return i > 0 ? t.slice(0, i) : t;
+};
+const marcaAbajo = (brand: string): string => {
+  const t = brand.trim();
+  const i = t.lastIndexOf(' ');
+  return i > 0 ? t.slice(i + 1) : '';
+};
+
 const NewsBar: React.FC<{brand: string; ticker: string[]; fps: number}> = ({brand, ticker, fps}) => {
   const frame = useCurrentFrame();
   const enter = spring({frame: frame - 4, fps, config: {stiffness: 170, damping: 24}});
@@ -211,12 +227,17 @@ const NewsBar: React.FC<{brand: string; ticker: string[]; fps: number}> = ({bran
           clipPath: 'polygon(0 0, 100% 0, 92% 100%, 0% 100%)',
         }}
       >
-        <span style={{color: NAVY, fontWeight: 900, fontSize: 40, lineHeight: 1, letterSpacing: 1}}>
-          FÓRMULA 100K
+        {/* La marca sale del MANIFEST (`- **Marca:**`). Se parte en dos
+            renglones por su último espacio: "MI FLORERÍA NOTICIAS" →
+            "MI FLORERÍA" arriba y "NOTICIAS" abajo. */}
+        <span style={{color: NAVY, fontWeight: 900, fontSize: 40, lineHeight: 1, letterSpacing: 1, textTransform: 'uppercase', whiteSpace: 'nowrap'}}>
+          {marcaArriba(brand)}
         </span>
-        <span style={{color: NAVY, fontWeight: 800, fontSize: 26, letterSpacing: 8, opacity: 0.85}}>
-          N E W S
-        </span>
+        {marcaAbajo(brand) ? (
+          <span style={{color: NAVY, fontWeight: 800, fontSize: 26, letterSpacing: 8, opacity: 0.85, textTransform: 'uppercase', whiteSpace: 'nowrap'}}>
+            {marcaAbajo(brand)}
+          </span>
+        ) : null}
       </div>
       {/* franja del ticker */}
       <div
@@ -582,6 +603,86 @@ const ListView: React.FC<{c: ListCard; fps: number}> = ({c, fps}) => {
   );
 };
 
+// ════════════════════════════════════════════════════════════════════════
+// TARJETA: captura de pantalla en caja "over-the-shoulder" (arriba derecha)
+//
+// A diferencia del resto de las tarjetas, esta NO vive en el tercio inferior:
+// va sobre la pared vacía a la derecha del sujeto, como el recuadro que un
+// noticiero pone junto al presentador. Por eso no compite con el chyron y
+// los dos pueden verse juntos (ver `cardActive` en la composición).
+// ════════════════════════════════════════════════════════════════════════
+const SHOT_W = 620;
+const SHOT_H = 392;
+
+const ShotView: React.FC<{c: ShotCard; fps: number}> = ({c, fps}) => {
+  const enter = useEnter(0, fps);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        right: 60,
+        top: 128,
+        width: SHOT_W,
+        opacity: enter,
+        transform: `translateX(${interpolate(enter, [0, 1], [90, 0])}px)`,
+        fontFamily: 'Arial, sans-serif',
+        borderRadius: 16,
+        overflow: 'hidden',
+        border: `2px solid ${CYAN}`,
+        boxShadow: '0 24px 70px rgba(0,0,0,0.6)',
+        background: NAVY,
+      }}
+    >
+      {c.title ? (
+        <div
+          style={{
+            background: `linear-gradient(135deg, ${CYAN} 0%, ${BLUE} 100%)`,
+            color: NAVY,
+            fontWeight: 900,
+            fontSize: 26,
+            letterSpacing: 1.5,
+            padding: '10px 20px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {c.title.toUpperCase()}
+        </div>
+      ) : null}
+      <div
+        style={{
+          height: SHOT_H,
+          background: '#050814',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Img
+          src={resolveSrc(c.src)}
+          style={{width: '100%', height: '100%', objectFit: 'contain'}}
+        />
+      </div>
+      {c.caption ? (
+        <div
+          style={{
+            background: NAVY2,
+            borderTop: `2px solid rgba(56,189,248,0.35)`,
+            color: WHITE,
+            fontWeight: 700,
+            fontSize: 26,
+            padding: '12px 20px',
+            lineHeight: 1.2,
+          }}
+        >
+          {c.caption}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 // ── resolución de cues a frames ──────────────────────────────────────────
 type Resolved<T> = {cue: T; startF: number; endF: number};
 
@@ -595,6 +696,19 @@ function resolveCards(cards: NewsCard[], transcript: Word[], fps: number): Resol
     out.push({cue: c, startF: Math.round(start * fps), endF: Math.round((start + dur) * fps)});
   }
   out.sort((a, b) => a.startF - b.startF);
+
+  // Clamp POR ZONA, no global: las tarjetas `shot` viven arriba a la derecha
+  // y el resto en el tercio inferior, así que una de cada zona PUEDE (y debe)
+  // verse a la vez. Lo que no puede es que dos de la MISMA zona se solapen —
+  // se dibujarían una encima de la otra. Mismo criterio que el clamp por lado
+  // de `versus`.
+  const zona = (r: Resolved<NewsCard>) => (r.cue.kind === 'shot' ? 'shot' : 'lower');
+  for (const z of ['shot', 'lower'] as const) {
+    const grupo = out.filter((r) => zona(r) === z);
+    for (let i = 0; i < grupo.length - 1; i++) {
+      if (grupo[i].endF > grupo[i + 1].startF) grupo[i].endF = grupo[i + 1].startF;
+    }
+  }
   return out;
 }
 
@@ -625,6 +739,8 @@ const CardRouter: React.FC<{c: NewsCard; fps: number}> = ({c, fps}) => {
       return <LeaderboardView c={c} fps={fps} />;
     case 'list':
       return <ListView c={c} fps={fps} />;
+    case 'shot':
+      return <ShotView c={c} fps={fps} />;
     default:
       return null;
   }
@@ -647,8 +763,12 @@ export const NewsHorizontal: React.FC<NewsHorizontalProps> = ({
   const resolvedChyrons = React.useMemo(() => resolveChyrons(chyrons, transcript, fps), [chyrons, transcript, fps]);
 
   const frame = useCurrentFrame();
-  // un card activo oculta el chyron para no competir en el tercio inferior
-  const cardActive = resolvedCards.some((r) => frame >= r.startF && frame < r.endF);
+  // Un card activo oculta el chyron para no competir en el tercio inferior.
+  // `shot` queda fuera: vive arriba a la derecha, así que el chyron sigue
+  // visible debajo — que es justo como se ve un noticiero real.
+  const cardActive = resolvedCards.some(
+    (r) => r.cue.kind !== 'shot' && frame >= r.startF && frame < r.endF
+  );
 
   return (
     <AbsoluteFill style={{backgroundColor: '#000'}}>

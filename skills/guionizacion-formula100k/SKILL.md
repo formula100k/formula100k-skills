@@ -4,6 +4,27 @@ description: >
   Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 35 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado. Incluye una capa de OFICIO a nivel de frase (resbaladero, especificidad, verbo filmable, cadencia, kill-list de muletillas) y un pase de reescritura obligatorio, para que el guion no salga plano ni genérico.
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `~/Documents/mi-contenido/mi-marca.md`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `~/Documents/mi-contenido/mi-voz.md`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `~/.claude/skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -182,7 +203,7 @@ Antes de entregar el guion final, pásalo por el **Chequeo Neuro** (no le pide n
 
 Devuelve el bloque corto de salida (ver `rubrica-neuro.md`): veredicto por regla + **el arranque ya reescrito** para clavar los primeros 2s (resultado-primero / visual antes de s2). Si alguna regla sale BAJO, aplica su instrucción de reescritura sobre el guion antes de entregarlo.
 
-> Esto es una **predicción heurística sobre texto**, no la medición real. La medición real (correr `tribe v2` sobre el video grabado) vive en `remix-viral-formula100k`; ambas usan el mismo vocabulario.
+> Esto es una **predicción heurística sobre texto**, no la medición real. La medición real se hace aparte, sobre el video ya grabado.
 
 ### Paso 7.5 — Pase de voz (OPCIONAL — se ofrece, no se asume)
 
@@ -263,8 +284,7 @@ Elegir uno principal:
 ## LA ZONA POST-GANCHO — dos beats, en este orden
 
 Ambos son **Pasos del protocolo LA APUESTA**, el marco que une el valor con el gancho:
-`VALOR ESPERADO = (MAGNITUD × CREDIBILIDAD) ÷ COSTO`. La guía completa está en el Grimorio 100K
-(«LA APUESTA»). Todo lo que necesitas para aplicarlo está aquí abajo, self-contained.
+`VALOR ESPERADO = (MAGNITUD × CREDIBILIDAD) ÷ COSTO`. Todo lo que necesitas para aplicarlo está aquí abajo, self-contained.
 
 ```
 seg 0-3    GANCHO                    → la promesa   (magnitud)

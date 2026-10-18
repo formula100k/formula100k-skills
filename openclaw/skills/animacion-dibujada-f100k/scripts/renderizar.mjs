@@ -21,6 +21,7 @@ import { writeFileSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { chrome, comoUrl } from './sistema.mjs';
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 let chromium;
@@ -58,12 +59,12 @@ if (!pieza || !salida) { console.error('uso: node renderizar.mjs pieza.html <sal
 let nav;
 // --allow-file-access-from-files: las fotos locales no «ensucian» el canvas y se puede exportar cada cuadro
 const flags = { args: ['--allow-file-access-from-files', ...(process.platform === 'linux' ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])] }   // en un servidor Linux (root) Chrome necesita --no-sandbox;
-try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch(flags); }
+try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch({ ...flags, ...(chrome() ? { executablePath: chrome() } : {}) }); }
 const pag = await nav.newPage();
 const errores = [];
 pag.on('pageerror', e => errores.push(e.message));
 pag.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errores.push(m.text()); });   // avisos de autoajuste y de las piezas
-await pag.goto('file://' + resolve(pieza) + '?render' + (op('--verde') ? '&verde' : ''));
+await pag.goto(comoUrl(pieza, '?render' + (op('--verde') ? '&verde' : '')));
 await pag.evaluate(() => document.fonts && document.fonts.ready);
 try { await pag.evaluate(() => window.LISTO); } catch (e) { console.error('La pieza no pudo cargar sus fotos:', e.message); await nav.close(); process.exit(1); }
 const info = await pag.evaluate(() => {

@@ -236,6 +236,117 @@ function fotoCover(im, x, y, w, h, fx = .5, fy = .4) {
   ctx.drawImage(im, (im.width - sw) * fx, (im.height - sh) * fy, sw, sh, x, y, w, h);
 }
 
+// ---------- movimiento con oficio (puras: entra el tiempo, sale el valor) ----------
+// Una entrada nunca es lineal: se pasa y asienta (resorte), llega y frena seco (aterriza) o toma impulso (anticipa).
+// resorte: 0→1 que se pasa de largo y se asienta. rebote = cuántas veces oscila · amortigua = qué tan pronto se calma.
+function resorte(t, o = {}) {
+  const { rebote = 1.5, amortigua = 5 } = o; t = clamp(t);
+  return 1 - Math.exp(-amortigua * t) * Math.cos(rebote * 2 * Math.PI * t) * (1 - t);
+}
+// aterriza: 0→1 que sale disparado y frena seco al llegar (sin rebote).
+const aterriza = t => 1 - Math.pow(1 - clamp(t), 5);
+// anticipa: 0→1 que primero retrocede `cuanto` (toma impulso durante `impulso` del tiempo) y después sale y aterriza.
+function anticipa(t, cuanto = .12, impulso = .3) {
+  t = clamp(t);
+  return t < impulso ? -cuanto * (1 - Math.cos(t / impulso * Math.PI)) / 2 : lerp(-cuanto, 1, aterriza((t - impulso) / (1 - impulso)));
+}
+// escalonado: el avance 0→1 de la pieza i de n cuando el conjunto va en t (0→1): entran en cascada.
+// solape 0 = una termina y empieza la otra · .5 = cada una arranca a la mitad de la anterior · 1 = todas juntas.
+function escalonado(i, n, t, solape = .5) {
+  const d = 1 / (1 + (n - 1) * (1 - solape));
+  return clamp((t - i * d * (1 - solape)) / d);
+}
+// caer: la y de algo que se suelta en `desde` y rebota en `piso` (px). t en SEGUNDOS desde que se suelta.
+// Fórmula cerrada (sin estado): cada rebote sube `elastico` de la velocidad del anterior; después se queda en el piso.
+function caer(t, o = {}) {
+  const { desde = 0, piso = 600, gravedad = 4200, rebotes = 3, elastico = .45 } = o, h = piso - desde;
+  if (t <= 0 || h <= 0) return t <= 0 ? desde : piso;
+  const T = Math.sqrt(2 * h / gravedad); let v = gravedad * T;
+  if (t < T) return desde + gravedad * t * t / 2;
+  t -= T;
+  for (let k = 0; k < rebotes; k++) { v *= elastico; const d = 2 * v / gravedad; if (t < d) return piso - (v * t - gravedad * t * t / 2); t -= d; }
+  return piso;
+}
+
+// ---------- textura: acuarela, pincel y grano ----------
+// Semilla fija y sin BOIL: la mancha no hierve; se mueve solo si tú cambias `crece` o `p`.
+// acuarela: mancha de una forma cerrada (circle, roundRect, tus puntos). Un halo húmedo, un lavado translúcido,
+// capas adentro que dejan sus marcas de agua, más pigmento en la orilla y motas. crece 0→1 = el agua se abre.
+//   o.capas (4) · o.alpha (.8) · o.borde (14 px de irregularidad) · o.orilla (.35) · o.semilla · o.crece (1)
+function acuarela(pts, color, o = {}) {
+  const { capas = 4, alpha = .8, semilla = 1, borde = 14, orilla = .35, crece = 1 } = o;
+  if (crece <= 0 || alpha <= 0 || pts.length < 3) return;
+  let cx = 0, cy = 0; for (const p of pts) { cx += p[0]; cy += p[1]; } cx /= pts.length; cy /= pts.length;
+  const base = resample(pts, 16, true), amb = ctx.globalAlpha * clamp(alpha), g = aterriza(crece), fuerza = clamp(crece * 1.6 - .6);
+  // la misma forma con otro borde, otro tamaño y un poco corrida: así ninguna capa calza con la anterior
+  const forma = (k, tam, corre) => { const dx = (hash2(k, semilla * 3 + 1) - .5) * corre, dy = (hash2(k, semilla * 3 + 2) - .5) * corre;
+    return base.map(([x, y]) => { const [jx, jy] = jit(x, y, semilla * 7.31 + k * 3.7, borde * (k ? 1.5 : 1)); return [cx + dx + (jx - cx) * tam * g, cy + dy + (jy - cy) * tam * g]; }); };
+  const orillaP = forma(0, 1, 0);
+  ctx.save(); ctx.fillStyle = ctx.strokeStyle = color; ctx.lineJoin = 'round';
+  ctx.globalAlpha = amb * .16; tracePath(forma(9, 1.035, borde), true); ctx.fill();                 // halo húmedo
+  tracePath(orillaP, true); ctx.clip();
+  ctx.globalAlpha = amb * .62; ctx.fill();                                                           // lavado
+  ctx.globalAlpha = amb * .2;
+  for (let k = 1; k < capas; k++) { tracePath(forma(k, .97 - .1 * k * (1 - .25 * hash2(k, semilla)), borde * 4), true); ctx.fill(); }   // marcas de agua
+  if (orilla > 0 && fuerza > 0) {                                                                    // el pigmento se junta en la orilla
+    tracePath(orillaP, true);
+    ctx.globalAlpha = amb * orilla * .45 * fuerza; ctx.lineWidth = borde * 3; ctx.stroke();
+    ctx.globalAlpha = amb * orilla * fuerza; ctx.lineWidth = Math.max(3, borde * .55); ctx.stroke();
+    const r = rng(semilla * 977 + 13), xs = orillaP.map(p => p[0]), ys = orillaP.map(p => p[1]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), m = Math.min(x1 - x0, y1 - y0);
+    ctx.globalAlpha = amb * orilla * .22 * fuerza;
+    for (let i = 0; i < 14; i++) { ctx.beginPath(); ctx.ellipse(lerp(x0, x1, r()), lerp(y0, y1, r()), m * (.05 + r() * .16), m * (.04 + r() * .1), r() * 3.14, 0, Math.PI * 2); ctx.fill(); }
+  }
+  ctx.restore();
+}
+// pincel: brochazo sobre una línea de puntos (con 3 o 4 basta: la curva se suaviza sola). Muchas cerdas finas:
+// unas cargan más pintura, la presión cambia el ancho y la brocha se seca hacia el final y en las orillas
+// (deja vetas). p 0→1 = se pinta sola.
+//   o.w (60) · o.col · o.alpha · o.seco (0 = llena, .35, 1 = casi seca) · o.presion (.35) · o.semilla · o.p (1)
+function pincel(pts, o = {}) {
+  const { w = 60, col = '#111', alpha = 1, semilla = 1, seco = .35, presion = .35, p = 1 } = o;
+  if (p <= 0 || alpha <= 0 || pts.length < 2) return;
+  const P = [];                                           // la línea, suavizada (Catmull-Rom) y a pasos de ~8 px
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[Math.max(0, i - 1)], b = pts[i], c = pts[i + 1], d = pts[Math.min(pts.length - 1, i + 2)];
+    const m = Math.max(1, Math.ceil(Math.hypot(c[0] - b[0], c[1] - b[1]) / 8));
+    for (let k = 0; k < m; k++) { const u = k / m, u2 = u * u, u3 = u2 * u;
+      P.push([0, 1].map(e => .5 * (2 * b[e] + (c[e] - a[e]) * u + (2 * a[e] - 5 * b[e] + 4 * c[e] - d[e]) * u2 + (3 * b[e] - a[e] - 3 * c[e] + d[e]) * u3))); }
+  }
+  P.push(pts[pts.length - 1]);
+  const N = P.length, n = Math.max(2, Math.round(N * clamp(p))), cerdas = Math.max(6, Math.min(44, Math.round(w / 2.6)));
+  const nor = P.map((_, i) => { const a = P[Math.max(0, i - 1)], b = P[Math.min(N - 1, i + 1)], L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [-(b[1] - a[1]) / L, (b[0] - a[0]) / L]; });
+  ctx.save(); ctx.strokeStyle = col; ctx.lineCap = 'butt'; ctx.lineJoin = 'round';
+  const a0 = ctx.globalAlpha * alpha, grosor = w / cerdas * 1.25;
+  for (let j = 0; j < cerdas; j++) {
+    const u = j / (cerdas - 1) - .5, orilla = Math.abs(u) * 2, carga = hash2(j, semilla * 31 + 5);
+    const entra = Math.round(hash2(j, semilla * 7 + 3) * 3 * orilla * orilla), sale = n - Math.round(hash2(j + 9, semilla * 7 + 4) * (2 + 10 * orilla));
+    ctx.globalAlpha = a0 * (.62 + .38 * carga); ctx.lineWidth = grosor * (.8 + .5 * hash2(j + 40, semilla * 17 + 1));
+    ctx.beginPath(); let pintando = false;
+    for (let i = entra; i < sale; i++) {
+      const f = i / (N - 1), ancho = (1 - presion + presion * 2 * vnoise(f * 4 + semilla * 3.1, 3.3)) * Math.min(1, f * 10 + .55, (1 - f) * 7 + .45);
+      // vetas secas: manchas largas que agarran varias cerdas vecinas; más hacia el final del trazo y en las orillas
+      if (vnoise(i * .045 + semilla * 5.3, j * .42 + semilla) * .75 + hash2(j, semilla + 77) * .12 + seco * (f * f * .5 + orilla * orilla * .32) > .72) { pintando = false; continue; }
+      const d = u * w * ancho, x = P[i][0] + nor[i][0] * d, y = P[i][1] + nor[i][1] * d;
+      if (pintando) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+      pintando = true;
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+// grano: grano de papel SOLO sobre lo ya pintado (el fondo transparente sigue transparente). Va al final del cuadro
+// o justo antes del texto si lo quieres nítido. El mosaico se pinta una vez por semilla.
+const GRANOS_DE_PAPEL = {};
+function grano(alfa = .14, semilla = 3) {
+  let m = GRANOS_DE_PAPEL[semilla];
+  if (!m) { m = GRANOS_DE_PAPEL[semilla] = document.createElement('canvas'); m.width = m.height = 256;
+    const g = m.getContext('2d'), r = rng(semilla * 131 + 7);
+    for (let i = 0; i < 9000; i++) { g.fillStyle = r() < .55 ? `rgba(40,25,10,${.25 + r() * .55})` : `rgba(255,255,255,${.25 + r() * .55})`; g.fillRect(r() * 256, r() * 256, 1 + r() * 1.7, 1 + r() * 1.7); } }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = alfa; ctx.globalCompositeOperation = 'source-atop';
+  ctx.fillStyle = ctx.createPattern(m, 'repeat'); ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.restore();
+}
+
 // ---------- arranque ----------
 window.FRAMES = FRAMES; window.FPS = FPS;
 function arrancar(draw) {

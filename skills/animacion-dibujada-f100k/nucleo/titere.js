@@ -8,7 +8,7 @@
 //
 //   const p = crearTitere(img, { cara, ancho: 520, estilo, partes, gestos, colores })
 //     img     : Image o canvas con fondo transparente (sale de preparar-foto.mjs)
-//     cara    : el JSON de cara.swift, o ojos/boca escritos a mano; null = sin parpadeo ni boca
+//     cara    : el JSON de preparar-foto.mjs (cara, ojos y boca), o ojos/boca escritos a mano; null = sin parpadeo ni boca
 //     ancho   : ancho en pixeles del video
 //     estilo  : 'foto' (tal cual) | 'sticker' (borde blanco liso) | 'recorte-papel' (borde blanco irregular,
 //               grano de papel, sombra corrida y movimiento a 12 cuadros por segundo). sticker: true = 'sticker'.

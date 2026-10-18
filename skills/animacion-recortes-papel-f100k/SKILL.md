@@ -19,14 +19,24 @@ Lo que lo hace reconocible:
 
 ## 1. Del tema al mundo (hazlo antes de tocar archivos)
 
-1. **Rubro y marca.** Identifica el rubro real de la persona, su usuario y su color de marca (de su perfil, de su Segundo
-   Cerebro, o pregúntalo en una línea). Los ejemplos y el vocabulario salen de ese rubro.
+1. **Rubro y marca.** El negocio y la marca son los de la persona, nunca los de un ejemplo de esta skill.
+   - **Negocio** (rubro, a quién le vende, qué vende): `~/Documents/mi-contenido/mi-negocio.md`; su voz, en
+     `~/Documents/mi-contenido/mi-voz.md`. Si no existen, pregunta rubro, cliente y oferta en un solo mensaje.
+   - **Marca** (color, letra y movimiento), en este orden: `~/Documents/mi-contenido/mi-marca.md` → su manual de
+     identidad visual `mi-marca/marca.md` (de ahí salen el acento, el fondo, la tinta y su @) → si no hay ninguno, copia
+     `references/marca.md` de esta skill a `~/Documents/mi-contenido/mi-marca.md`, pregunta lo que falte en un solo
+     mensaje y déjaselo escrito.
+   - **Su marca manda sobre el estilo:** los colores de `config.js` son de muestra; el `tema` y el `usuario` van con los suyos.
+   Los ejemplos y el vocabulario salen de su rubro.
 2. **Una sola idea.** Escríbela en una frase. Si necesita dos, son dos videos.
 3. **Elige el mundo.** Un lugar físico donde esa idea se pueda VER. Las piezas que ya existen arman una **tienda**
    (fachada, vitrina, mostrador, caja, clientas, fila): sirve para todo lo que trate de atraer, atender, vender, cobrar o
    perder clientes. Si la idea pide otro mundo (un consultorio, una cocina, un tribunal), revisa primero si se arma con las
-   piezas genéricas (lista, medidor, numeros, etiqueta, sello, globo, imagen); si no, dilo antes de seguir: hacer piezas
-   nuevas es editar `motor.js`.
+   piezas genéricas (lista, medidor, numeros, etiqueta, sello, globo, imagen); si no, dibuja de 3 a 5 piezas propias
+   para ese video en `window.MUNDO`, al final de `config.js` (ver «Mundo propio»). `motor.js` no se edita.
+   **Si es una serie, cada video lleva su propio mundo:** lo que se repite es la marca (voz, acento, mascotas), no el
+   escenario. Antes de armar, compara con el video anterior: ni el mismo lugar, ni la misma escena de apertura, ni las
+   mismas piezas protagonistas.
 4. **Escribe el guion: una frase por escena, de 5 a 7 escenas.** Cada frase:
    - dura entre 2 y 5 segundos al decirla (de 6 a 16 palabras);
    - nombra algo que se pueda mostrar con una pieza;
@@ -45,12 +55,13 @@ Lo que lo hace reconocible:
 ## 2. Flujo
 
 ```bash
-SKILL=~/.claude/skills/animacion-recortes-papel-f100k
+SKILL=<la carpeta de esta skill>                 # la que tiene este SKILL.md (con el plugin no está en ~/.claude/skills)
 DEST=<carpeta de salida>/<nombre-de-la-pieza>     # nunca dentro de la skill
 mkdir -p "$DEST" && cp -R "$SKILL/plantilla/." "$DEST/" && cd "$DEST"
 ```
 
-1. **Llena `config.js`.** Es lo único que se edita. `motor.js`, `motor.css` y `armar.mjs` no se tocan (`mascotas.js` solo para dibujar un objeto nuevo); `index.html` y
+1. **Llena `config.js`.** Es lo único que se edita, incluidas las piezas propias del video (`window.MUNDO`, al final).
+   `motor.js`, `motor.css` y `armar.mjs` no se tocan (`mascotas.js` solo para dibujar un objeto nuevo); `index.html` y
    `tiempos.js` los escribe `armar.mjs`.
 2. **Pon la voz** (ver «La voz») y arma:
    ```bash
@@ -72,7 +83,8 @@ mkdir -p "$DEST" && cp -R "$SKILL/plantilla/." "$DEST/" && cd "$DEST"
    ffmpeg -y -loglevel error -i <nombre>.mp4 -vf "fps=1/1.5,scale=300:-1,tile=8x2" -frames:v 1 hoja.jpg
    ```
 7. Entrega la ruta del MP4 y di qué le falta: si la voz es la provisional, que hay que grabarla; no trae música ni
-   efectos de sonido (se ponen en la edición); y que el audio no lo escuchaste, solo lo sincronizaste por tiempos.
+   efectos de sonido salvo que hayas mezclado una pista (ver «Música, marca y serie»); y que el audio no lo
+   escuchaste, solo lo sincronizaste por tiempos.
 
 ## 3. La voz
 
@@ -142,6 +154,33 @@ Combinaciones que ya están probadas (copia las coordenadas de `plantilla/config
 - **Repartir o resumir:** `numeros` con `etiquetas` + `minis`, o una `lista`.
 - **Cierre con CTA:** `regalo` + `comentario` + `personaje`.
 
+## Mundo propio (`window.MUNDO`)
+
+Cuando la idea no pasa en una tienda, el lugar se dibuja para ese video sin tocar el motor. Al final de `config.js`:
+
+```js
+window.MUNDO = function (h) {
+  const { el, pz, entra, menea, mascota, parpadea, PEGATINA } = h;   // ayudas del motor
+  return {
+    // { x, y, ancho, en }  → se usa en una escena como { tipo: "copiadora", x: 300, y: 700, en: "copia" }
+    copiadora(ctx, o) {
+      const w = o.ancho || 420, i = pz(ctx, o, w, w * 0.8, 330, 700);
+      el("pp", i, `inset:0;background:#DDD;border:8px solid var(--tinta);border-radius:18px`);
+      entra(i, o.entrada || "sube", ctx.cuando(o.en, 0.2));
+    },
+  };
+};
+```
+
+- Cada pieza es una función `(ctx, o)`: `o` es lo que escribiste en la escena y `ctx.cuando(o.en, def)` devuelve el
+  segundo en que se dice esa palabra. Lo que devuelve `MUNDO` se suma al catálogo: un nombre repetido reemplaza a la pieza de fábrica.
+- Ayudas que recibe: `tl, el, pz, pop, sube, cae, lado, golpe, salto, menea, entra, mascota, parpadea, esc, marca, color,
+  hex, cabe, PEGATINA`. Antes de usarlas, mira cómo las usan las piezas de `motor.js`.
+- **De 3 a 5 piezas nuevas por video**, cada una con su movimiento propio (la máquina, el mueble, el objeto que hace de
+  protagonista). Las genéricas (lista, sello, etiqueta, globo, comentario) acompañan, no cargan el video.
+- Cambia también la paleta de fondos por escena respecto al video anterior de la serie.
+- Prueba final: pon la hoja de cuadros junto a la del video anterior. Si a primera vista parecen el mismo video, no está listo.
+
 ## 6. Mascotas pixel
 
 Viven en `mascotas.js`. Cada una se dibuja en una rejilla (1 unidad = 1 pixel) como lista de rectángulos
@@ -156,6 +195,28 @@ Viven en `mascotas.js`. Cada una se dibuja en una rejilla (1 unidad = 1 pixel) c
   falta forma, no detalle. Un hueco de 1 o 2 pixeles se llena de contorno: márcalo con `"_"`.
 - **Si la pieza trata de otra cosa que no es contenido** (un producto, una clínica), el protagonista no tiene por qué
   ser el reel: dibuja otro cuerpo en `BASES` o usa una `persona` con su objeto.
+
+## Música, marca y serie
+
+Detalle común a todas las skills de animación: `references/ritmo-y-serie.md`. Lo propio de esta plantilla:
+
+- **Música: aquí manda la voz.** Los cortes y cada pieza siguen a las palabras, así que **no** se ajustan a los golpes
+  de una pista (se desfasarían de la voz). La música va debajo, más baja, sobre el MP4 ya renderizado:
+  ```bash
+  node golpes.mjs mezclar <nombre>.mp4 assets/pista.mp3 <nombre>-con-musica.mp4 --con-voz --volumen 0.25
+  ```
+  Para que el primer cambio de escena coincida con un golpe fuerte, mide la pista y alinea su arranque con el segundo
+  de ese corte (los imprime `armar.mjs`): `node golpes.mjs analizar assets/pista.mp3` y
+  `node golpes.mjs alinear golpes.json <segundo del corte>` da el `--inicio`. Los demás cortes caerán donde caiga la
+  voz. La pista la trae la persona (propia o libre de derechos); si la música se pone en Instagram, entrega solo con voz.
+- **Marca.** De su `mi-marca.md` (o de su manual): Color → `tema` · Letra → no se cambia (letras del sistema) · Movimiento → el estilo es a
+  saltos y con entradas fijas por pieza (`entrada` en `imagen` y `mascota`); `cola` es cuánto se sostiene el final.
+  Frenado, rebote y desenfoque no se configuran: si la marca pide otra cosa, dilo al entregar.
+- **Serie.** Para varios videos, escribe antes `BIBLIA.md` (paleta del `tema`, mundo, qué mascota es cada personaje
+  y qué lleva, música y momentos obligados: mismo encabezado, misma escena del error en fondo `noche`, mismo cierre) y
+  declara qué se toma de cada referencia. Revisa cada video contra esa lista mirando sus cuadros.
+- **Efectos de otras librerías:** `references/efectos-open-source.md`. Agregar uno es editar `motor.js`.
+  `node scripts/probar-golpes.mjs` (en la skill) prueba el detector.
 
 ## 7. Reglas
 
@@ -180,9 +241,10 @@ Viven en `mascotas.js`. Cada una se dibuja en una rejilla (1 unidad = 1 pixel) c
 - **Cortes corridos respecto a la voz:** la grabación no dice el guion tal cual. `armar.mjs` avisa si coinciden menos del 70 % de las palabras.
 - **Fuentes:** solo del sistema. No importes fuentes externas: en el render se caen y sale Times.
 - **Cuadro en negro en el render pero no en el snapshot:** alguien puso un fondo en la raíz o en un `.clip`. El fondo va en `.fondo`.
-- **`--voz-ia` falla al instalar:** necesita `python3`. Alternativa: graba la voz o usa `--sin-voz` para bocetar.
+- **Un ticket o papel que «se imprime» y no aparece:** animar `height` no se pinta en la primera escena. Revélalo con `clipPath: inset(...)`.
+- **`--voz-ia` falla al instalar:** necesita `uv` (en Windows; `winget install astral-sh.uv`) o `python3` (en Mac). Alternativa: graba la voz o usa `--sin-voz` para bocetar.
 
 ## Skills hermanas
 
-`reel-manotazo-f100k` (problema y solución en 7 segundos, con una toma tuya a cámara) y `animacion-dibujada-f100k`
-(clips y cortos dibujados cuadro a cuadro).
+`reel-manotazo-f100k` (problema y solución en 7 segundos, con una toma tuya a cámara, sin voz) y `animacion-dibujada-f100k`
+(clips y cortos dibujados cuadro a cuadro; también trae los ayudantes de Mac y Windows que usa esta plantilla).

@@ -61,7 +61,7 @@ Las 4 plantillas que esta skill puede entregar. Usar el campo `[entre corchetes]
 - [Métricas: N alumnos, N transformaciones, etc.]
 
 ### Siguiente paso
-Pasar a [[vsl-expert-f100k]] con este documento para escribir el VSL/landing.
+Pasar a `vsl-expert-f100k` con este documento para escribir el VSL/landing.
 
 ---
 
@@ -127,7 +127,7 @@ Pasar a [[vsl-expert-f100k]] con este documento para escribir el VSL/landing.
   3. [bono 3 + valor]
 - **Garantía:** [tipo + redacción]
 - **Lead Magnet previo:** [conectar con plantilla 2]
-- **Copy del checkout:** pasar a [[vsl-expert-f100k]]
+- **Copy del checkout:** pasar a `vsl-expert-f100k`
 
 ### Fase 5 — Escala
 - **Métricas:** conversión de landing · CPL · conversión a upsell

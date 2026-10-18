@@ -89,7 +89,7 @@ export const BrollLayer: React.FC<{
   // `BrollCue` ni en `ResolvedBroll`: siempre valía undefined y siempre caía
   // a 900. Era un error de tipos y una promesa falsa en la documentación.
   // Si algún día hace falta el ancho por fila, hay que agregar la columna al
-  // parser, al tipo y acá — no basta con volver a poner `cue.width`.
+  // parser, al tipo y aquí — no basta con volver a poner `cue.width`.
   const imgWidth = 900;
   const isPanel = encuadre === 'panel';
 

@@ -10,10 +10,9 @@ Cómo incluir fotos personales (el usuario u otra) en los slides sin romper el b
 
 | Carpeta | Cuándo usar |
 |---|---|
-| `cerebro/fotos` | 3-5 fotos curadas del usuario, default si no especifica otra. Tags conocidos. Más rápido. |
-| `cerebro/fotos` | Pool grande sin tags. Variedad de poses/contextos. Usar cuando haga falta variedad. |
+| `entregables/` | Sus fotos reales: de frente, trabajando, su producto, capturas de resultados. `mis-fotos/usadas.json` (si existe) dice cuáles ya salieron en otra pieza: usa primero las que no. |
 
-> Si ninguna de las dos carpetas existe en la máquina del usuario, **pregúntale dónde tiene sus fotos**. No inventes rutas.
+> Si la carpeta no existe o está vacía, **créala, ábrela y pídele de 10 a 20 fotos**. No inventes rutas ni uses fotos de muestra.
 
 **Antes de usar una foto:**
 1. `Read` la foto para verificar qué muestra (cara, pose, fondo, vestuario)
@@ -224,7 +223,7 @@ Cuando el usuario pasa una carpeta, NO leer las 45 fotos. Estrategia:
    - **Para hero** → vertical, persona centrada, espacio negativo arriba/abajo para texto
    - **Para cutout** → cualquier selfie con cara despejada
    - **Para strip** → varias fotos del mismo "set" (mismo outfit/lugar) si están disponibles
-4. Si ninguna calza, pedirle al usuario más fotos o sugerir generar una nueva con la skill `banana`
+4. Si ninguna calza, pedirle al usuario más fotos o sugerir generar una nueva con IA (Higgsfield u otra herramienta de imagen que tenga conectada), usando sus fotos reales como referencia (ver `references/portada-gancho-visual.md`)
 
 ---
 

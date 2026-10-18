@@ -1,6 +1,6 @@
 ---
 name: capturas-tutorial-formula100k
-description: "Genera CAPTURAS UI tipo tutorial (cards de paso numerado, code blocks tipo terminal macOS con botón Copiar, callouts info/warning/success, screenshot frames, atajos de teclado, links, comparison antes/después, listas) con la estética F100K (fondo crema, círculos coral, DM Serif Display, Inter, JetBrains Mono). Render HTML+CSS+Puppeteer → PNG transparente o crema, 1920×1080. NO usa Nanobanana ni Higgsfield (la IA rompe el texto; HTML es pixel-perfect). Activar cuando pidan \"diséñame una captura tipo tutorial\", \"imagen del comando\", \"renderiza un terminal con este comando\", \"card de paso 1/2/3\", \"callout warning/info/success\", \"tarjeta de atajo Cmd+V\", \"comparison antes/después\", \"imagen UI para mi landing/artifact/carrusel\", \"overlays UI para mi video tutorial\", \"convierte este guion en capturas tutorial\". 2 modos: STANDALONE (PNGs sueltos) y BATCH (MANIFEST_UI.yml). También la invoca recursos-de-video-formula100k. NO renderiza video (editor-video-formula100k). NO usa stock."
+description: "Genera CAPTURAS UI tipo tutorial (cards de paso numerado, code blocks tipo terminal macOS con botón Copiar, callouts info/warning/success, screenshot frames, atajos de teclado, links, comparison antes/después, listas) con un estilo editorial claro (fondo crema, círculos coral, DM Serif Display, Inter, JetBrains Mono) que puedes cambiar por los colores de la persona. Render HTML+CSS+Puppeteer → PNG transparente o crema, 1920×1080. NO usa Nanobanana ni Higgsfield (la IA rompe el texto; HTML es pixel-perfect). Activar cuando pidan \"diséñame una captura tipo tutorial\", \"imagen del comando\", \"renderiza un terminal con este comando\", \"card de paso 1/2/3\", \"callout warning/info/success\", \"tarjeta de atajo Cmd+V\", \"comparison antes/después\", \"imagen UI para mi landing/artifact/carrusel\", \"overlays UI para mi video tutorial\", \"convierte este guion en capturas tutorial\". 2 modos: STANDALONE (PNGs sueltos) y BATCH (MANIFEST_UI.yml). También la invoca recursos-de-video-formula100k. NO renderiza video (editor-video-formula100k). NO usa stock."
 allowed-tools: "Bash, Read, Write, Edit, AskUserQuestion"
 metadata: {"openclaw": {"emoji": "🦞"}}
 ---
@@ -19,9 +19,26 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
+## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
+
+Corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca, en este orden:** 1) `entregables/` (colores, letra, estilo visual y @); 2) si no está, su manual de identidad visual `mi-marca/marca.md` (búscalo en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; del YAML usa `color.acento`, `color.lienzo`, `color.tinta`, `letra.titulares` y `letra.apoyo`); 3) si no hay ninguno, usa el estilo de la skill tal cual y, si la pieza lleva su marca, pregunta en un solo mensaje su color principal y su letra.
+- **Tu marca manda sobre el estilo de esta skill.** Si tiene colores o letras, escribe un CSS con sus valores en `entregables/` (ver «Vestir con su marca» más abajo) y pásalo con `--marca` en cada render. Del estilo de la skill toma la estructura y el oficio; el color y la letra son los suyos.
+- **La carpeta de esta skill.** `scripts/render.mjs`, `templates/` y `node_modules/` están en la carpeta donde vive este `SKILL.md`. Con el plugin esa carpeta no es `skills/…`: más abajo, `{carpeta-skill}` es esa ruta real. Nunca escribas archivos de la persona dentro de ella.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó. Nunca inventes una métrica ni un enlace.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no está instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
 # Capturas Tutorial — FÓRMULA 100K
 
-Skill que genera **capturas UI tipo tutorial** con la estética F100K: terminales macOS, cards de paso, callouts, screenshot frames, keyboard shortcuts, comparisons. Output: PNG.
+Skill que genera **capturas UI tipo tutorial** de estilo editorial claro: terminales macOS, cards de paso, callouts, screenshot frames, keyboard shortcuts, comparisons. Output: PNG.
 
 **No usa IA generativa** para estos assets. Render = HTML + CSS + Puppeteer → PNG. Razón: Nanobanana/Higgsfield rompen texto de terminal y comandos; HTML garantiza que el `curl -fSL ...` exacto aparezca legible.
 
@@ -43,12 +60,12 @@ Skill que genera **capturas UI tipo tutorial** con la estética F100K: terminale
 - B-roll real cazado de internet → `recursos-de-video-formula100k` modo WEB
 - Carruseles completos de Instagram con foto + texto sobrepuesto → `carrusel-render-formula100k`
 - Stories de Instagram → `historias-a-imagenes-nanobanana`
-- Generar el video final → `editor-video-formula100k`
+- Montar el video final → `editor-video-formula100k` (si no lo tienes, entrega los PNG sueltos)
 - Generar el guion del tutorial (texto) → `guionizacion-formula100k`
 
 ## Regla de modo PURO
 
-Cuando el usuario pide "capturas-tutorial" / "modo UI" / "solo estilo tutorial" para un video, asumir **modo PURO**: TODOS los overlays del reel son de los 8 tipos de esta skill (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`). NO mezclar con pixel-mascot IA, NO complementar con WEB, NO generar `HOOK_*.png`. Si un cue del transcript no es léxicamente "tutorial" (ej: una frase de storytelling, una declaración, un CTA), convertirlo al tipo más cercano — típicamente `callout` variant `info` para declaraciones/facts o `callout` variant `success` para CTAs/cierres. Razón: la consistencia visual completa del estilo capturas-tutorial es lo que el usuario valida; el cambio de capa entre captura UI y mascot pixel rompe el flow del viewer.
+Cuando el usuario pide "capturas-tutorial" / "modo UI" / "solo estilo tutorial" para un video, asumir **modo PURO**: TODOS los overlays del reel son de los 8 tipos de esta skill (`step`, `terminal`, `callout`, `screenshot`, `keys`, `link`, `comparison`, `list`). NO mezclar con pixel-mascot IA, NO complementar con WEB, NO generar `HOOK_*.png`. Si un cue del transcript no es léxicamente "tutorial" (ej: una frase de storytelling, una declaración, un CTA), convertirlo al tipo más cercano — típicamente `callout` variant `info` para declaraciones/facts o `callout` variant `success` para CTAs/cierres. Razón: la consistencia visual completa del estilo capturas-tutorial es lo que el usuario valida; el cambio de capa entre captura UI y mascot pixel rompe el flow del viewer (las preferencias de la persona).
 
 ## Catálogo de tipos (9)
 
@@ -71,10 +88,10 @@ Cuando el guion/transcript mencione UNA skill, slash command, prompt, o cualquie
 **Defaults del template** (si no se especifican en `data`):
 - `popup_header`: `"Skills disponibles"`
 - `icon_active` + `name_active` + `desc_active`: la skill que está siendo invocada (en español, descripción corta de 1 línea)
-- `icon_2`, `name_2`, `icon_3`, `name_3`: otras 2 skills del catálogo F100K para que el popup se vea poblado (sin descripción visible)
+- `icon_2`, `name_2`, `icon_3`, `name_3`: otras 2 skills para que el popup se vea poblado (sin descripción visible)
 - `typed`: typically igual a `name_active` (lo que se está escribiendo en el input)
 
-**Catálogo de iconos sugeridos para skills F100K** (usar como `icon_active`/`icon_2`/`icon_3`):
+**Catálogo de iconos sugeridos** (usar como `icon_active`/`icon_2`/`icon_3`):
 - 📝 guionización · 🎬 carrusel · 🎯 optimizador-cta · 🧠 estrategia · 🚀 lanzamiento · 📊 analizador · 🎨 diseño · 🔍 investigación · 📅 calendario · ✨ historias · 🎙️ audio · 🎥 video
 
 ## Sistema visual (tokens)
@@ -99,19 +116,46 @@ RADIUS
   card 20px · terminal 14px · callout 12px · key 8px
 ```
 
+### Vestir con su marca
+
+Los valores de arriba son el estilo de partida. Si la persona tiene marca (`mi-marca.md` o su manual), escribe `entregables/` solo con las variables que cambian y pásalo en cada render con `--marca`:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=<Su+Letra>:wght@400;600;700&display=swap');
+:root {
+  --coral:           <su acento>;          /* círculos de paso, botón Copiar, prompt $ */
+  --coral-dark:      <su acento, más oscuro>;
+  --coral-soft:      <su acento, más claro>;
+  --terminal-prompt: <su acento>;
+  --bg-cream:        <su lienzo>;          /* fondo con --bg cream */
+  --bg-cream-soft:   <su lienzo, más claro>;
+  --ink:             <su tinta>;
+  --font-display:    '<Su letra de títulos>', serif;
+  --font-body:       '<Su letra de apoyo>', sans-serif;
+}
+```
+
+```bash
+node "{carpeta-skill}/scripts/render.mjs" --type step --out paso_1.png --marca entregables/ --data '{...}'
+```
+
+Mantén el contraste (tinta sobre lienzo, texto blanco sobre el acento) y deja la terminal oscura.
+
 ## Pipeline
 
 ### MODO 1 — STANDALONE (input directo)
 
 Para capturas sueltas pegables en landings, artifacts, carruseles, threads, etc.
 
-**Paso 1.** Bootstrap (idempotente):
+**Paso 1.** Dependencias. Si falta `node_modules/` dentro de la carpeta de esta skill, corre una vez:
 
 ```bash
-bash skills/capturas-tutorial-formula100k/scripts/install.sh
+cd "{carpeta-skill}" && npm install
 ```
 
-Instala puppeteer + js-yaml en `node_modules/` local de la skill. Solo corre completo la primera vez.
+(En Mac también sirve `bash "{carpeta-skill}/scripts/install.sh"`, que hace lo mismo y comprueba que quedó bien.)
+
+Instala puppeteer-core, js-yaml y sharp en la carpeta de la skill. Para dibujar usa el Google Chrome que ya está en la compu: no descarga otro navegador.
 
 **Paso 2.** Preguntar al usuario el contenido. Si no es obvio, usar `AskUserQuestion` para confirmar:
 - ¿Qué tipo? (step / terminal / callout / etc.)
@@ -122,7 +166,7 @@ Instala puppeteer + js-yaml en `node_modules/` local de la skill. Solo corre com
 **Paso 3.** Renderizar:
 
 ```bash
-node skills/capturas-tutorial-formula100k/scripts/render.mjs \
+node "{carpeta-skill}/scripts/render.mjs" \
   --type <tipo> \
   --out <ruta_archivo.png> \
   --data '<JSON>' \
@@ -151,7 +195,7 @@ node render.mjs --type keys --out atajo_cmdv.png \
 
 # Screenshot enmarcado
 node render.mjs --type screenshot --out captura_exito.png \
-  --data '{"frame":"mac","title":"Terminal","image":"entregables/capturas/captura.png","caption":"Cuando termina vas a ver Claude Code successfully installed"}'
+  --data '{"frame":"mac","title":"Terminal","image":"entregables/","caption":"Cuando termina vas a ver Claude Code successfully installed"}'
 
 # Comparison antes/después
 node render.mjs --type comparison --out compare.png \
@@ -167,14 +211,14 @@ node render.mjs --type link --out link_claude.png \
 
 # Claude input simulando invocación de skill (popup + slash command + cursor)
 node render.mjs --type claude-input --out skill_invoke.png \
-  --data '{"popup_header":"Skills · F100K","icon_active":"📝","name_active":"guionizacion-formula100k","desc_active":"Crea guiones virales con tu voz y estrategia.","icon_2":"🎬","name_2":"carrusel-viral-formula100k","icon_3":"🎯","name_3":"optimizador-cta-formula100k","typed":"guionizacion-formula100k"}'
+  --data '{"popup_header":"Skills","icon_active":"📝","name_active":"guionizacion-formula100k","desc_active":"Crea guiones virales con tu voz y estrategia.","icon_2":"🎬","name_2":"carrusel-viral-formula100k","icon_3":"🎯","name_3":"optimizador-cta-formula100k","typed":"guionizacion-formula100k"}'
 ```
 
 **Markdown ligero soportado en `body`/`text`**: `**negrita**` y `` `código inline` ``. No se acepta HTML directo (se escapa por seguridad).
 
 **Paso 4.** Validación visual: leer el PNG generado con la tool `Read` y confirmar contra el contenido pedido. Si el texto está clipeado / el comando se cortó / el ícono no se ve → ajustar `data` o `width` y regenerar.
 
-**Paso 5.** Entregar al usuario: `open <ruta>` para abrirlo en macOS.
+**Paso 5.** Entregar al usuario y abrir el archivo: en Mac `open "<ruta>"`, en Windows `start "" "<ruta>"`.
 
 ---
 
@@ -215,12 +259,12 @@ recursos:
 **Comando:**
 
 ```bash
-node skills/capturas-tutorial-formula100k/scripts/render.mjs \
-  --manifest entregables/recursos-video/2026-05-22_claude-install/MANIFEST_UI.yml \
-  --out entregables/recursos-video/2026-05-22_claude-install/USER/
+node "{carpeta-skill}/scripts/render.mjs" \
+  --manifest entregables/ \
+  --out entregables/
 ```
 
-**IMPORTANTE — destino:** los PNGs van a `USER/`, **NO** a una subcarpeta `UI/`. Razón: `editor-video-formula100k` solo lee tres carpetas (`IA/`, `USER/`, `WEB/`) y consolida todos los overlays en UNA sola tabla `## Overlays` del MANIFEST.md principal. Las capturas tutorial conviven con los screenshots manuales del usuario en `USER/` — el editor las distingue por el prefijo del filename (`r<NN>_<tipo>_*` viene de batch UI; `T<N>_*` viene de captura manual).
+**Destino:** los PNG van a `USER/`, **NO** a una subcarpeta `UI/`. Razón: `editor-video-formula100k` solo lee tres carpetas (`IA/`, `USER/`, `WEB/`) y consolida todos los overlays en UNA sola tabla `## Overlays` del MANIFEST.md principal. Las capturas tutorial conviven con los screenshots manuales de la persona en `USER/`; el editor las distingue por el prefijo del nombre (`r<NN>_<tipo>_*` viene de batch UI; `T<N>_*` viene de captura manual). Si no usa ese editor, quedan ahí listas para el suyo.
 
 Si el modo de invocación es `--out` explícito a otra carpeta, el default del script ya cambió a `USER/` (sibling al manifest), así que basta con omitir el flag y queda donde toca.
 
@@ -301,7 +345,7 @@ Extraer: lista de teclas en orden de la frase.
 - `"ve a"` · `"entra a"` · `"abre (el navegador|chrome|safari) en"`
 - Cualquier URL `https?://\S+` mencionada en el audio.
 
-Extraer: URL completa. Si el usuario dice solo el dominio (`"entra a formula100k.app"`), reconstruir.
+Extraer: URL completa. Si el usuario dice solo el dominio (`"entra a tusitio.com"`), reconstruir.
 
 ### `comparison`
 - `"esto (NO|sí)"` con contraste · `"antes,? \w+ → ahora,?"` · `"no hagas X, haz Y"` · `"el error es,? .* lo correcto es"`
@@ -339,7 +383,7 @@ Estos defaults se incluyen en el MANIFEST.md como sugerencia. El editor-video lo
 
 ## Reglas obligatorias
 
-1. **NO 9:16 para overlays**: por preferencia del usuario. Default: 16:9 o 1:1.
+1. **NO 9:16 para piezas que van encima de un video.** Por defecto: 16:9 o 1:1.
 2. **NO emojis decorativos** dentro de los textos salvo que el contenido los requiera (ej: el ícono del callout sí, un 🔥 al final de un body NO).
 3. **NO inventar comandos / URLs / nombres de archivo**: si el usuario dice "el comando de install", pedirle el comando exacto antes de renderizar.
 4. **Markdown ligero solamente**: `**bold**` y `` `code` ``. Cualquier otro HTML se escapa.
@@ -350,11 +394,11 @@ Estos defaults se incluyen en el MANIFEST.md como sugerencia. El editor-video lo
 
 | Error | Acción |
 |---|---|
-| `puppeteer` falla al arrancar (sandbox) | Ya pasamos `--no-sandbox`. Si igual falla, `brew install chromium` y reintentar. |
+| `puppeteer` falla al arrancar (sandbox) | Ya pasamos `--no-sandbox`. Si dice que no encuentra Chrome, instala Google Chrome o define `CHROME_PATH` con su ruta. |
 | Fonts no cargan (sin internet) | El render espera `document.fonts.ready` — si timeout >10s, el PNG sale con fallback genérico. Sugerir reintentar con conexión. |
 | Comando muy largo se sale del terminal | Aumentar `width` a 1280 o 1440. Si sigue sin caber, partirlo con `\` y newlines en el JSON. |
 | Screenshot inválido / no encontrado | Validar `image` exists antes de renderizar. Si no, omitir el cue. |
-| `js-yaml` no instalado para modo manifest | Correr `install.sh`. |
+| `js-yaml` o `puppeteer-core` no instalados | Corre `npm install` dentro de la carpeta de esta skill. |
 
 ## Atajos conversacionales
 
@@ -365,10 +409,11 @@ Estos defaults se incluyen en el MANIFEST.md como sugerencia. El editor-video lo
 
 ## Integración con otras skills
 
-- **[[recursos-de-video-formula100k]]** invoca esta skill en modo BATCH cuando detecta video tutorial. Pasa el MANIFEST_UI.yml ya armado.
-- **[[editor-video-formula100k]]** consume los PNGs de `USER/` (donde van tanto los screenshots manuales como las capturas UI tutorial generadas por esta skill en modo BATCH) y los compone sobre el video como overlays, igual que ya hace con los pixel-mascots de IA/.
-- **[[generador-artifact-educativo-formula100k]]** puede invocar esta skill en modo STANDALONE para insertar capturas tipo tutorial dentro de un artifact HTML.
-- **[[carrusel-render-formula100k]]** puede usar capturas individuales (terminal, callout) como elemento de un slide.
+- **`recursos-de-video-formula100k`** invoca esta skill en modo BATCH cuando detecta video tutorial. Pasa el MANIFEST_UI.yml ya armado.
+- **`editor-video-formula100k`** consume los PNG de `USER/` (screenshots manuales y capturas UI de esta skill en modo BATCH) y los compone sobre el video como overlays.
+- **`generador-artifact-educativo-formula100k`** puede invocar esta skill en modo STANDALONE para insertar capturas tipo tutorial dentro de un artifact HTML.
+- **`agente-produccion-f100k`** la llama para los guiones de tutorial.
+- **`carrusel-render-formula100k`** puede usar capturas individuales (terminal, callout) como elemento de un slide.
 
 ## Roadmap (futuro, no implementado)
 

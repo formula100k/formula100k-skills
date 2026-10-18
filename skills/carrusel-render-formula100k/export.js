@@ -4,7 +4,8 @@
  *
  * Uso:
  *   node export.js /ruta/al/carrusel.html
- *   node export.js /ruta/al/carrusel.html --width 1080 --height 1350 --scale 2
+ *   node export.js /ruta/al/carrusel.html --width 1080 --height 1350 --scale 1
+ *   (--scale 1 = 1080×1350, el tamaño de Instagram; --scale 2 solo si piden más resolución)
  *
  * Outputs: slide-01.png, slide-02.png, ... en la misma carpeta del HTML.
  */
@@ -33,21 +34,33 @@ function getArg(name, def) {
 
 const SLIDE_W = getArg('--width', 1080);
 const SLIDE_H = getArg('--height', 1350);
-const SCALE = getArg('--scale', 2);
+const SCALE = getArg('--scale', 1);
 const OUTPUT_DIR = path.dirname(HTML_FILE);
 
-// --- Detectar Chrome en macOS ---
-const CHROME_CANDIDATES = [
+// --- Detectar el navegador (Mac, Windows o Linux) ---
+const os = require('os');
+const CASA = os.homedir();
+const PF = process.env.PROGRAMFILES || 'C:/Program Files';
+const PF86 = process.env['PROGRAMFILES(X86)'] || 'C:/Program Files (x86)';
+const CHROME_CANDIDATES = process.platform === 'win32' ? [
+  path.join(PF, 'Google/Chrome/Application/chrome.exe'),
+  path.join(PF86, 'Google/Chrome/Application/chrome.exe'),
+  process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'Google/Chrome/Application/chrome.exe'),
+  path.join(CASA, 'AppData/Local/Google/Chrome/Application/chrome.exe'),
+  path.join(PF86, 'Microsoft/Edge/Application/msedge.exe'),
+  path.join(PF, 'Microsoft/Edge/Application/msedge.exe'),
+] : process.platform === 'darwin' ? [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  path.join(CASA, 'Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),
   '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
   '/Applications/Chromium.app/Contents/MacOS/Chromium',
   '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser',
   '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
-];
-const CHROME_PATH = CHROME_CANDIDATES.find(p => fs.existsSync(p));
+] : ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'];
+const CHROME_PATH = (process.env.CHROME_PATH && fs.existsSync(process.env.CHROME_PATH)) ? process.env.CHROME_PATH : CHROME_CANDIDATES.find(p => p && fs.existsSync(p));
 
 if (!CHROME_PATH) {
-  console.error('No se encontró Chrome/Chromium/Brave/Edge en /Applications. Instala Google Chrome.');
+  console.error('No se encontró Google Chrome. Instálalo y vuelve a correr esto (o define CHROME_PATH con su ruta).');
   process.exit(1);
 }
 
@@ -60,7 +73,7 @@ if (!CHROME_PATH) {
   });
 
   const page = await browser.newPage();
-  await page.goto('file://' + HTML_FILE, { waitUntil: 'networkidle0' });
+  await page.goto(require('url').pathToFileURL(HTML_FILE).href, { waitUntil: 'networkidle0' });
 
   // Esperar que Google Fonts terminen de cargar
   await page.evaluate(() => document.fonts.ready);

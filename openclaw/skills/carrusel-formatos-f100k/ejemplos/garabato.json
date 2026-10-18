@@ -41,7 +41,7 @@
           "rot": -2
         },
         {
-          "texto": "[a qué te dedicas]",
+          "texto": "lo que haces",
           "x": 40,
           "y": 400,
           "w": 330,
@@ -61,7 +61,7 @@
           }
         },
         {
-          "texto": "lentes de repuesto, siempre",
+          "texto": "tu detalle de siempre",
           "x": 740,
           "y": 880,
           "w": 320,

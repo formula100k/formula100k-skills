@@ -29,8 +29,8 @@ ANTHROPIC_VERSION = "2023-06-01"
 DEFAULT_MODEL = "claude-opus-4-8"
 DEFAULT_MAX = 4   # tope de conceptos por video (no saturar)
 
-SYSTEM = """Eres el director visual de un reel educativo de FÓRMULA 100K (creación de contenido con IA, español neutro).
-Lees el transcript de un video y detectas los momentos donde quien habla INTRODUCE UN CONCEPTO NUEVO que se entendería mejor con un apoyo visual: una skill, una herramienta, un sistema, un framework, una metáfora, un "modo", un flujo de pasos.
+SYSTEM = """Eres el director visual de un reel educativo (español neutro). El tema y el rubro son los de quien habla: sácalos del transcript y no asumas que el video trata de marketing, redes o IA.
+Lees el transcript de un video y detectas los momentos donde quien habla INTRODUCE UN CONCEPTO NUEVO que se entendería mejor con un apoyo visual: una herramienta, un método, un sistema, un framework, una metáfora, un "modo", un flujo de pasos.
 
 Para CADA concepto que de verdad merezca apoyo visual (no para todo), decides cómo representarlo:
 - "card": concepto simple, textual o numérico → una infografía/tarjeta HTML (un título, 2-3 bullets, o un número con label). Barato e instantáneo.

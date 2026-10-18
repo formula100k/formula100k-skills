@@ -16,6 +16,26 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viene en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu voz.** Tu Voice Guide vive en `entregables/` (ver PASO 0). Si no existe, se arma en el PASO 1.
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca** (colores, letra y @handle, si el texto los necesita), en este orden: `entregables/` → su manual de identidad visual `mi-marca/marca.md` → si no hay ninguno, pregúntaselos. Su marca manda sobre cualquier ejemplo de esta skill.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe). Nada se guarda dentro de la carpeta de la skill: con el plugin, se reemplaza en cada actualización.
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no tienes instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -61,7 +81,7 @@ Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona 
 
 > ⚠️ **La voz es la del usuario, nunca la de otra creadora.** Si esta skill trae un archivo
 > el ejemplo de la versión de escritorio (no incluido aquí), es SOLO una muestra de cómo se ve un Voice Guide bien
-> hecho (construido sobre una cuenta pública, a modo de ejemplo). **Nunca escribas en esa voz.**
+> hecho (una cuenta inventada, a modo de ejemplo). **Nunca escribas en esa voz.**
 > Sirve para entender el formato; el contenido sale del análisis del perfil del usuario.
 > Si el archivo no está, no lo busques: pasa directo al PASO 1.
 
@@ -69,12 +89,15 @@ Esta skill adapta cualquier texto al tono, voz y estilo genuino de **la persona 
 
 ## PASO 0 — Verificar si el Voice Guide del usuario existe
 
-Antes de hacer cualquier cosa, revisa si existe `cerebro/voice-guide.md` (el del usuario)
-Y tiene contenido de análisis real.
+Antes de hacer cualquier cosa, busca el Voice Guide del usuario, en este orden, y quédate con el primero que
+exista Y tenga contenido de análisis real:
 
 ```
-Ruta: cerebro/voice-guide.md
+1. entregables/
+2. cerebro/voice-guide.md dentro de la carpeta de esta skill (versiones viejas de la skill lo guardaban ahí)
 ```
+
+Si lo encuentras en el 2 y no en el 1, cópialo a `entregables/` para que no se pierda al actualizar la skill.
 
 **Si el archivo NO existe o está vacío → ir al PASO 1 (Análisis de Instagram).**
 **Si ya tiene el análisis completo → confirmar de quién es (el encabezado lleva el @) y, si es del usuario, saltar al PASO 2 (Humanización).**
@@ -115,7 +138,7 @@ Abre los **6-8 posts que tengan más engagement** (los que más likes y comentar
 
 ### 1.3 — Generar el Voice Guide
 
-Con todo lo que analizaste, crea el archivo `cerebro/voice-guide.md` con esta estructura:
+Con todo lo que analizaste, crea el archivo `entregables/` con esta estructura:
 
 ```markdown
 # Voice Guide — [NOMBRE DEL USUARIO]
@@ -153,13 +176,13 @@ Con todo lo que analizaste, crea el archivo `cerebro/voice-guide.md` con esta es
 [2-3 captions completos copiados literalmente para referencia]
 ```
 
-Guarda este archivo en `cerebro/voice-guide.md` dentro de tu workspace.
+Guarda este archivo en `entregables/` (crea la carpeta si no existe). Así lo leen también las demás skills y agentes.
 
 ---
 
 ## PASO 2 — Humanización del texto
 
-Lee el `cerebro/voice-guide.md` completo antes de empezar.
+Lee el Voice Guide completo (`entregables/`) antes de empezar.
 
 ### 2.1 — Diagnóstico rápido del texto recibido
 

@@ -1605,7 +1605,7 @@ No era el aceite. Nunca fue el aceite.
 
 ¿Cuántos lotes llevas cambiando de aceite? Comenta el número. 👇"
 
-*Qué cambió:* el resultado de apertura es **un objeto que se puede poner frente a la cámara** ("ocho meses en el mostrador y sigue duro"), no una sensación ("me siento mejor que nunca"). Los dos fracasos ahora cuestan plata con cifra, que es lo que los vuelve creíbles. Y la revelación no es un consejo: es un instrumento con precio. Lo barato de la solución después de lo caro del error es el golpe.
+*Qué cambió:* el resultado de apertura es **un objeto que se puede poner frente a la cámara** ("ocho meses en el mostrador y sigue duro"), no una sensación ("me siento mejor que nunca"). Los dos fracasos ahora cuestan dinero con cifra, que es lo que los vuelve creíbles. Y la revelación no es un consejo: es un instrumento con precio. Lo barato de la solución después de lo caro del error es el golpe.
 
 Análisis detallado del guion propuesto:
 
@@ -1770,7 +1770,7 @@ Ejemplo aplicado:
 
 Abrí con el mejor pan del barrio y sin saber cuánto me costaba hacerlo. Vendía el croissant a cuatro mil. Me costaba cuatro mil doscientos.
 
-Pensé que era falta de gente. Metí seis millones en pauta y en un toldo nuevo. Entró más gente. Perdí más plata, más rápido.
+Pensé que era falta de gente. Metí seis millones en pauta y en un toldo nuevo. Entró más gente. Perdí más dinero, más rápido.
 
 Mi hija dejó de pedirme que la recogiera del colegio porque ya se sabía la respuesta. Eso sí fue lo peor.
 
@@ -2900,7 +2900,7 @@ Lección estratégica
 **Objetivo principal:\
 ** Describir un proceso (una relación, una cuenta, un negocio, un hábito, una salud, etc.) como una secuencia de **5 etapas numeradas y visibles en pantalla** que empeoran (o evolucionan) de forma progresiva, de modo que el espectador se ubique a sí mismo en una etapa y no pueda irse hasta saber su número. Cierra con pregunta-diagnóstico que dispara comentarios masivos.
 
-> **Origen / referencia viral:** @frans.guerrero "Las etapas de la comunicación en una relación" — 1.9M views, 166K likes, 55s (jun 2026). Mismo esqueleto usado por decenas de nichos: etapas de un burnout, de una cuenta muerta, de una deuda, de una amistad que se enfría.
+> **Origen / referencia viral:** un reel de «las etapas de…» con muy buen alcance en el nicho de relaciones. Mismo esqueleto usado por decenas de nichos: etapas de un burnout, de una cuenta muerta, de una deuda, de una amistad que se enfría.
 
 ## **🧠 Psicología detrás**
 

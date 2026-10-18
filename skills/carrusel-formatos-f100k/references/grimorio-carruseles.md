@@ -1,7 +1,6 @@
 # Carruseles de la Guía de Formatos del Grimorio
 
-> GENERADO por `scripts/sincronizar-grimorio.mjs` el 2026-09-14. No lo edites a mano: corre el script.
-> Fuente: `lib/formatos-catalogo.ts` (origin/main del Grimorio), 17 formatos con `soporte: 'carrusel'`.
+> Los 17 formatos de carrusel de la Guía de Formatos del Grimorio de FÓRMULA 100K.
 > Aquí vive la ANATOMÍA (el guion). El SOPORTE, el MOTOR y quién lo fabrica están en la ficha G del catálogo.
 
 | Grimorio | Nombre | En el catálogo |
@@ -134,7 +133,7 @@
 
 **Por qué funciona.** El glosario combate la sensación de estar perdido: genera altísimo guardado (material de consulta) y compartidos hacia principiantes. Te posiciona como traductor/autoridad accesible.
 
-**Cómo aplicarlo.** "Diccionario F100K: 10 palabras de marketing que toda creadora debe dominar" como lead magnet.
+**Cómo aplicarlo.** "Diccionario de [tu rubro]: 10 palabras que toda [tu avatar] debe dominar" como regalo descargable.
 
 ## G07 · Carrusel Mini-Caso de Estudio
 

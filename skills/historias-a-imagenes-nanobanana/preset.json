@@ -1,11 +1,10 @@
 {
-  "fotos_folder": "~/Documents/MI ADN VISUAL",
-  "fotos_folder_alternativa": "~/Documents/MIS SELFIES",
-  "default_motor": "higgsfield",
+  "fotos_folder": "~/Documents/mi-contenido/mis-fotos",
+  "default_motor": "auto",
   "default_model": "nano_banana_2",
   "default_resolution": "2k",
   "default_aspect_ratio": "9:16",
-  "output_folder_definitivo": "~/Documents/FORMULA100K/stories",
+  "output_folder_definitivo": "~/Documents/mi-contenido/historias/imagenes",
   "last_used": "",
-  "notas": "MI ADN VISUAL: 3-5 fotos curadas y tageadas del usuario (default). MIS SELFIES: pool grande sin tags, para variedad. Si ninguna de las dos carpetas existe, PREGUNTA al usuario dónde tiene sus fotos — no inventes una ruta. Output PNG final va a ~/Documents/FORMULA100K/stories/ para subir directo a IG."
+  "notas": "Valores por defecto. El preset de la persona se guarda en ~/Documents/mi-contenido/historias/preset.json (nunca en la carpeta de la skill). Fotos: ~/Documents/mi-contenido/mis-fotos/; si no existe o está vacía, PREGUNTA dónde tiene sus fotos, no inventes una ruta. default_motor auto = el que esté disponible (Higgsfield o Gemini directo). Output PNG final va a ~/Documents/mi-contenido/historias/imagenes/ para subir directo a IG."
 }

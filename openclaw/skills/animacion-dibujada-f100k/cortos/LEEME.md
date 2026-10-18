@@ -4,10 +4,12 @@ Un corto es una fila de escenas. Cada escena es una pieza de la skill (cualquier
 y con su frase cambiada). `corto.mjs` las renderiza en paralelo, las une con transiciones, quema los subtítulos
 y le pone la voz y la música. Un corto de 40 s tarda ~15-25 s en salir (la primera vez; con `--solo` o sin cambios, ~9 s).
 
+`$SKILL` es la carpeta de esta skill (la que tiene el `SKILL.md`).
+
 ```
-node scripts/hoja-corto.mjs guion.json hoja.jpg      # 1. revisar el corto entero ANTES (≈10 s)
-node scripts/corto.mjs guion.json corto.mp4          # 2. renderizar
-node scripts/corto.mjs guion.json corto.mp4 --solo 3 # 3. si cambiaste solo la escena 3 (las demás salen de la caché)
+node "$SKILL/scripts/hoja-corto.mjs" guion.json hoja.jpg      # 1. revisar el corto entero ANTES (≈10 s)
+node "$SKILL/scripts/corto.mjs" guion.json corto.mp4          # 2. renderizar
+node "$SKILL/scripts/corto.mjs" guion.json corto.mp4 --solo 3 # 3. si cambiaste solo la escena 3 (las demás salen de la caché)
 ```
 
 ## El guion (`guion.json`, rutas relativas a él)
@@ -54,16 +56,19 @@ node scripts/corto.mjs guion.json corto.mp4 --solo 3 # 3. si cambiaste solo la e
 
 ## Voz provisional (solo para probar)
 
-Para probar tiempos sin grabar: `say -v Paulina -r 198 -o 01.aiff "la frase"` (voces en español: `say -v '?' | grep es_`).
+Para probar tiempos sin grabar: `node "$SKILL/scripts/sistema.mjs" voz "la frase" 01.wav --ritmo 198` (voces en español de la computadora: `node "$SKILL/scripts/sistema.mjs" voces`).
+En Mac usa `say`; en Windows, la voz en español que tenga instalada. Si no hay ninguna, el comando lo dice: graba la voz.
 **El corto real lleva la voz grabada de la persona**: la voz de sistema suena robótica y no se publica.
-Lo más fácil: escribe un plan de escenas y corre `node scripts/armar-corto.mjs plan.json <carpeta>`; arma escenas, voz de prueba y `guion.json` (formato en el comentario inicial de ese script).
+Lo más fácil: escribe un plan de escenas y corre `node "$SKILL/scripts/armar-corto.mjs" plan.json <carpeta>`; arma escenas, voz de prueba y `guion.json` (formato en el comentario inicial de ese script).
 
 ## Subtítulos por palabra: qué necesita
 
-Busca, en este orden: **mlx-whisper** (Apple Silicon, vía `uvx`, modelo `mlx-community/whisper-large-v3-turbo`; primero sin internet, desde la caché)
-y **openai-whisper** (`whisper` en la terminal, modelo `small`). La transcripción queda en caché en `.corto-tmp/` (no se repite si la voz no cambia).
-Si no hay ninguno, el corto sale igual con subtítulos por largo y lo avisa. Para instalar el rápido en Mac: `brew install uv` y la primera
-corrida descarga el modelo (~1,6 GB, una sola vez). Se usa `--condition-on-previous-text False`: evita que Whisper se trabe repitiendo frases.
+Transcribe la voz con Whisper en la computadora (lo decide `scripts/sistema.mjs`): **mlx-whisper** en Mac con chip Apple (modelo
+`mlx-community/whisper-large-v3-turbo`; primero sin internet, desde la caché) y **faster-whisper** en Windows y en Mac Intel (modelo
+`large-v3-turbo`; en una compu lenta, `F100K_WHISPER_MODELO=small`). Los dos corren con `uv` (si falta: `brew install uv` en Mac, `winget install astral-sh.uv` en Windows).
+Si la persona ya tenía **openai-whisper** (`whisper` en la terminal), queda de último recurso. La transcripción queda en caché en
+`.corto-tmp/` (no se repite si la voz no cambia). Si nada transcribe, el corto sale igual con subtítulos por largo y lo avisa.
+La primera corrida descarga el modelo (~1,6 GB, una sola vez). Se pide no encadenar el texto anterior: evita que Whisper se trabe repitiendo frases.
 
 ## Música de prueba
 

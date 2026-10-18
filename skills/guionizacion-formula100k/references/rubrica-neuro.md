@@ -5,7 +5,7 @@
 > en **6 reglas aplicables sobre el TEXTO de un guion**, para predecir y arreglar ANTES de grabar.
 >
 > ⚠️ Esto es una **predicción heurística sobre texto**, no la medición real. La medición real (correr
-> tribe v2 sobre el video grabado) vive en la skill `remix-viral-formula100k` (`medicion-tribe-v2.md`).
+> tribe v2 sobre el video grabado) se hace aparte y no es parte de esta skill.
 > Usan el mismo vocabulario a propósito: lo que predices al escribir se lee igual que lo que mides al grabar.
 
 ## Las 5 regiones que mide tribe v2 (para traducir su lenguaje)
@@ -76,7 +76,7 @@ Scores clave que devuelve: `viral_potential/overall`, `hook_score` (ventana 0-3s
 ---
 
 ## Tabla síntoma → regla → variable (puente con REMIX VIRAL)
-Conecta los hallazgos neuro con las 7 variables del Mapa en T de `remix-viral-formula100k`:
+Conecta los hallazgos neuro con las 7 variables del Mapa en T del análisis de un video ya grabado:
 
 | Síntoma (predicho o medido) | Regla neuro | Variable T a atacar |
 |---|---|---|

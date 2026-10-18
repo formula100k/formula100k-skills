@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * CLI para renderizar la composición horizontal "FÓRMULA 100K NEWS" (1920×1080).
+ * CLI para renderizar la composición horizontal del noticiero (1920×1080).
  *
  *   tsx scripts/render_news.ts \
  *     --video _source_cut.mov \
@@ -80,7 +80,7 @@ async function main() {
   const inputProps = {
     videoSrc: args.video,
     transcript,
-    brand: (cues.brand as string) ?? 'F100K NEWS',
+    brand: (cues.brand as string) ?? 'NOTICIAS',
     ticker: (cues.ticker as string[]) ?? [],
     chyrons: (cues.chyrons as unknown[]) ?? [],
     cards: (cues.cards as unknown[]) ?? [],

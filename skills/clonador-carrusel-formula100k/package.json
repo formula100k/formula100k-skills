@@ -1,8 +1,8 @@
 {
-  "name": "carrusel-render-formula100k",
+  "name": "clonador-carrusel-formula100k",
   "version": "1.0.0",
   "private": true,
-  "description": "Render carousel scripts to PNG slides using the creator's FORMULA 100K brandkit",
+  "description": "Clona el estilo de un carrusel de referencia y lo exporta a PNG con la marca de la creadora",
   "main": "export.js",
   "scripts": {
     "export": "node export.js"

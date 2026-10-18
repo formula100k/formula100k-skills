@@ -56,11 +56,11 @@ Mostrar 3 candidatos al usuario y pedir elección:
 ```
 "Para el slide 1 ('la creadora caminando en escenario amplio') tengo estos 3 candidatos:
 
-1. /Users/.../fotos/playa-japon-2026-04.jpg (Score 0.65)
-2. /Users/.../fotos/calle-tokio.jpg (Score 0.58)
-3. /Users/.../fotos/parque-universal.jpg (Score 0.52)
+1. ~/.../fotos/playa-japon-2026-04.jpg (Score 0.65)
+2. ~/.../fotos/calle-tokio.jpg (Score 0.58)
+3. ~/.../fotos/parque-universal.jpg (Score 0.52)
 
-¿Cuál usamos? (responde 1, 2 o 3, o pasame la ruta de otra)"
+¿Cuál usamos? (responde 1, 2 o 3, o pásame la ruta de otra)"
 ```
 
 ---

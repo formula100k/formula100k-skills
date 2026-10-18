@@ -296,6 +296,9 @@
     },
   };
 
+  // Piezas propias del mundo de ESTE video (window.MUNDO en config.js)
+  if (window.MUNDO) Object.assign(P, window.MUNDO({ tl, el, pz, pop, sube, cae, lado, golpe, salto, menea, entra, mascota, parpadea, esc, marca, color, hex, cabe, PEGATINA }));
+
   /* ── escenas ── */
   const cabs = document.getElementById("cabs"), subs = document.getElementById("subs");
   const grupos = [];

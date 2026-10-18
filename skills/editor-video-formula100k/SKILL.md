@@ -1,357 +1,196 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado por el usuario + un MANIFEST.md (keyword-based: header, énfasis, overlays, B-roll) y produce un BORRADOR_AUTO.mp4 listo para retoque. Corta silencios, muletillas y repeticiones (transcribe word-level) y compone uno de 5 formatos elegibles — fullscreen, split, pip, versus, pizarra — de un catálogo de 7 (faceless/noticiero: aún no); subtítulos según formato. Sincroniza por keyword sobre el transcript (no por timestamp), sobrevive al corte de silencios. Renderiza local con Remotion (gratis). OPCIÓN EXTRA: motion graphics animados (HyperFrames, HTML+GSAP) como overlays o B-roll. Activar cuando el usuario diga 'edita este video', 'auto-edita', 'monta el video', 'renderiza', '/render <carpeta>', '/edita <carpeta>', 'genera un motion graphic', 'overlay animado', o combine una carpeta con MANIFEST.md con intención de producir el .mp4 final. Output: $DEST/BORRADOR_AUTO.mp4. macOS (Homebrew) y Windows (winget); primera vez instala dependencias vía bootstrap."
+description: "Toma un video grabado (hablando a cámara) y lo deja cortado y montado: quita silencios, muletillas y palabras repetidas, y con una llave de Anthropic también las frases reformuladas y los arranques en falso (corte fino). Después lo monta en el formato que elijas: fullscreen, split, pip, versus, pizarra o noticiero, con gancho en texto, cajas de énfasis, subtítulos, imágenes y B-roll anclados a lo que dices. Lee tu negocio y tu marca (mi-contenido o tu manual de identidad visual) para que el gancho y los gráficos suenen y se vean como tú. Extra: motion graphics animados como overlay o B-roll. Activar con 'edita este video', 'córtale los silencios', 'monta mi video', 'auto-edita', 'renderiza', 'cámbiale el formato', 'genera un motion graphic', 'overlay animado', '/edita <video>' o '/render <carpeta>', o cuando haya una carpeta con MANIFEST.md lista para producir el video. Entrega BORRADOR_AUTO.mp4. Funciona en Mac y en Windows; se corre con Node y uv, sin instalar Python aparte."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 
-# Editor de Video Auto — FÓRMULA 100K
+# Editor de video
 
-Pipeline automatizado: toma una grabación del usuario + un `MANIFEST.md` (keyword-based) y produce `BORRADOR_AUTO.mp4` listo para retoque fino en CapCut/Premiere.
+Toma una grabación tuya hablando a cámara y entrega `BORRADOR_AUTO.mp4`: el video ya cortado y montado, listo para publicar o para un retoque final en tu editor de siempre.
 
-El preset visual default es **"Crea contenido viral"** — el formato `fullscreen` del catálogo (ver `## Catálogo de formatos` más abajo; hay otros 4) — talking-head 9:16 a 30fps con:
-- Header persistente (2 líneas) grande, con trazo negro, debajo del cuarto superior
-- **Imagen gancho** tipo pixel-avatar mascot en una esquina superior durante los primeros ~2.5s (sin tapar la cara)
-- Caja blanca de énfasis en la zona inferior (anclada a keywords del transcript)
-- Overlays gráficos en el **tercio inferior** (muy por debajo del rostro, `bottom: 520`) — **pixel-avatar mascot** generado, **screenshots** del usuario, o **capturas UI tutorial** (anclados a keywords, NUNCA tapan la cara, ni cuando quien habla se acerca a cámara)
-- B-roll **videos** fullscreen estilo `monitor-photo` / **imágenes** en el tercio inferior (`bottom: 520`), igual que overlays — nunca tapan la cara
-- **SFX "pop"** dispara automáticamente al aparecer cada imagen (hook, overlays, B-roll)
-- **Sin subtítulos** — default de `fullscreen` (y también de `noticiero`); la cara y los gráficos llevan todo el peso visual. `split`, `pip` y `faceless` los traen encendidos por default.
+Hace dos trabajos, en este orden:
 
-**Diferencia clave con la versión anterior:** los cues se anclan por **keyword** sobre el transcript del video cortado, no por timestamp. Eso significa que `_source_cut.mov` puede regenerarse cuantas veces haga falta sin tener que remapear nada — los keywords resuelven contra el `captions.json` del corte vigente.
+1. **Corta.** Transcribe palabra por palabra y quita silencios, muletillas («eh», «em») y palabras repetidas pegadas («que que», «y, y, y»). Con una llave de Anthropic hace además el **corte fino**: quita las frases que dijiste mal y repetiste con otras palabras, y los arranques en falso.
+2. **Monta.** Compone el formato elegido con un `MANIFEST.md`: gancho en texto, cajas de énfasis, subtítulos, imágenes y B-roll. Todo se ancla a **palabras de lo que dices**, no a segundos, así que puedes volver a cortar sin rehacer nada.
 
 ## Cuándo activar
 
-Cuando el usuario:
-- Pide auto-edición: "edita", "monta", "compón", "renderiza", "auto-edita"
-- Usa atajos `/render <carpeta>` o `/edita <carpeta>`
-- Acaba de correr `recursos-de-video-formula100k` y la skill cazadora dejó un `MANIFEST.md`
+- «Edita este video», «córtale los silencios», «monta mi video», «auto-edita», «renderiza».
+- «Cámbiale el formato», «ponle subtítulos», «pásalo a pantalla dividida».
+- «Genera un motion graphic», «overlay animado».
+- Atajos: `/edita <video>` y `/render <carpeta>`.
+- Cuando `recursos-de-video-formula100k` acaba de dejar una carpeta con `MANIFEST.md`.
 
-Requisitos:
-- Una carpeta `$DEST` con `MANIFEST.md` (típicamente `/FORMULA100K/RECURSOS VIDEOS/<fecha>_<slug>/`)
-- La ruta del video fuente (`.mov`/`.mp4`) — del campo `**Video fuente:**` del MANIFEST o pedirla al usuario
+No es para:
 
-## NO activar para
+| Si piden… | Usa |
+|---|---|
+| Cazar recursos web o generar imágenes para el video | `recursos-de-video-formula100k` |
+| Gráficos sueltos | `graficos-de-video-formula100k` |
+| Carruseles | `carrusel-render-formula100k` |
+| Historias | `historias-a-imagenes-nanobanana` |
+| Miniaturas | `miniatura-youtube-formula100k` |
+| Animaciones sin video grabado | las skills de animación |
 
-- Cazar recursos web / generar IA → `recursos-de-video-formula100k`
-- Gráficos sueltos → `graficos-de-video-formula100k`
-- Carruseles → `carrusel-render-formula100k`
-- Stories → `historias-a-imagenes-nanobanana`
-- Miniaturas → `miniatura-youtube-formula100k`
+## Dónde vive esta skill
 
-## Requisitos previos (precondición)
+Los comandos de abajo usan `$SKILL`: la **carpeta de esta skill**, la que contiene este `SKILL.md`. No la supongas en `~/.claude/skills/`: si la skill vino con el plugin, vive en otra ruta. Fíjala una vez al empezar con la ruta real (`SKILL="<carpeta de esta skill>"`) y úsala en todos los comandos.
 
-La skill funciona en **macOS** (Apple Silicon o Intel) y **Windows 10/11**. Cada plataforma tiene una sola precondición: un gestor de paquetes que la skill usa para instalar todo lo demás. Si lo tienes, el bootstrap se encarga del resto solo.
+En Windows los comandos corren en la terminal de Claude Code (Git Bash): `~` y las rutas con `/` funcionan igual que en Mac.
 
-### En macOS — Homebrew
+## Antes de empezar: tu negocio y tu marca
 
-**Homebrew** debe estar instalado ANTES de usar la skill por primera vez. El bootstrap NO lo instala automáticamente.
+Lee esto **antes** de proponer el gancho, las cajas de énfasis o cualquier gráfico:
 
-Verificar si Homebrew está instalado:
-```bash
-command -v brew
-```
+- **Tu negocio y tu voz.** Rubro, avatar y oferta salen de `~/Documents/mi-contenido/mi-negocio.md`; cómo hablas, de `~/Documents/mi-contenido/mi-voz.md`. El gancho y las cajas se escriben con esas palabras y para esa clienta, nunca con vocabulario de marketing si su rubro es otro.
+- **Tu marca.** Búscala en este orden y quédate con la primera que exista:
+  1. `~/Documents/mi-contenido/mi-marca.md`.
+  2. Su manual de identidad visual, `mi-marca/marca.md` (dónde buscarlo y cómo leerlo: `references/mi-marca.md` de esta skill).
+  3. Si no hay ninguno, pregunta en **un solo mensaje**: «¿Cuál es tu color principal (o un HEX)?, ¿qué letra te gusta (o "no sé")? y ¿cuál es tu @?». Mientras no responda, sigue con los valores de fábrica de la skill; no la bloquees.
+- **Si falta `mi-negocio.md` o `mi-voz.md`**, pregunta en una línea su rubro y a quién le habla, o sácalo de lo que dice en el video. Si aun así no hay datos, usa marcadores (`[TU OFERTA]`) en vez de inventar.
+- Al cargar la marca, confírmalo en una línea («✓ Tu marca: acento `#______`, letra ______, @______») y no repreguntes lo que ya trae.
 
-Si no responde nada, instalar con el comando oficial:
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+**Tu marca manda sobre el estilo de esta skill.** Los colores, las letras y los ejemplos que trae la skill son de fábrica, no una marca:
 
-Después de instalar Homebrew, seguir las instrucciones que imprime al final (suelen pedir agregar `brew` al PATH con dos comandos `echo >> ~/.zprofile` + `eval`).
+- El **acento** de los motion graphics (`accentColor`) y de los clips animados sale de su marca. Nunca uses colores de su lista de prohibidos.
+- Si su manual trae `reels.formato` o `reels.subtitulos`, úsalos como formato y subtítulos recomendados (ella decide igual en el paso 3).
+- El **tema** (`default` o `crema-editorial`) se elige por el que más se parece a su paleta. El montaje base no toma colores del MANIFEST: si su paleta no se parece a ninguno, díselo y pon su color en lo que sí lo acepta (motion graphics, imágenes, clips animados).
+- En `noticiero`, `Marca` lleva el nombre de su negocio.
+- Si para una pieza pide otra cosa («hazlo en negro»), hazle caso en esa pieza y no toques sus archivos de marca.
+- Nunca mezcles su marca con colores, letras o el @ de otra cuenta, aunque vengan de una referencia.
 
-### En Windows — winget
+## Lo que necesita la compu
 
-**winget** (Windows Package Manager) debe estar disponible. Viene preinstalado en **Windows 10 build 1809+** y **Windows 11**, así que en la práctica casi todo el mundo ya lo tiene.
+Node 18 o más nuevo, ffmpeg (con ffprobe) y uv. **Python no se instala aparte**: uv lo trae con sus librerías la primera vez. El motor de montaje (Remotion) vive dentro de esta skill.
 
-Verificar en PowerShell:
-```powershell
-winget --version
-```
-
-Si no aparece nada o da error:
-1. Abre **Microsoft Store**
-2. Busca **"App Installer"** (de Microsoft) e instala/actualiza
-3. Cierra y vuelve a abrir PowerShell
-
-Alternativa manual si Microsoft Store no funciona: https://github.com/microsoft/winget-cli/releases/latest
-
-Una vez que tu gestor de paquetes esté listo (`brew` en Mac, `winget` en Windows), **la skill se auto-configura sola** la primera vez que la corras.
-
-## Primera vez: bootstrap automático
-
-La primera vez que invocas `/render <carpeta>` o `/edita <carpeta>`, el wrapper ejecuta el bootstrap correspondiente a tu plataforma y se encarga del resto.
-
-### macOS
-
-`render.sh` invoca `bootstrap.sh`:
-- Verifica Homebrew (si falta, aborta con instrucciones claras)
-- Instala vía `brew`: Node 18+, ffmpeg, yt-dlp, uv (para `uvx mlx-whisper`)
-- Corre `npm install` dentro de `remotion-template/` (baja Remotion y sus deps)
-- Genera el SFX `pop.wav` con ffmpeg
-
-Para correrlo manualmente:
-```bash
-bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh
-```
-
-Sólo verificar sin instalar:
-```bash
-bash ~/.claude/skills/editor-video-formula100k/scripts/bootstrap.sh --check
-```
-
-### Windows
-
-`render.ps1` invoca `bootstrap.ps1`:
-- Verifica winget (si falta, aborta con instrucciones)
-- Instala vía `winget`: Node 18+, Python 3.10+, ffmpeg, yt-dlp
-- Instala `faster-whisper` vía `pip` (alternativa de Whisper para Windows; en Mac se usa `mlx-whisper` que es nativo de Apple Silicon)
-- Corre `npm install` dentro de `remotion-template/`
-
-Para correrlo manualmente desde PowerShell (en la carpeta de la skill):
-```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\bootstrap.ps1"
-```
-
-Sólo verificar sin instalar:
-```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\bootstrap.ps1" -Check
-```
-
-**Importante en Windows:** después de la primera instalación de Node o Python, cerrar y volver a abrir PowerShell para que el PATH se actualice.
-
-Tarda ~5-8 min en máquina limpia, **sólo la primera vez**. Las invocaciones siguientes saltean el bootstrap.
-
-## Paso 0 — Confirmar el gancho textual (OBLIGATORIO antes del render)
-
-Antes de invocar `render.sh` / `render.ps1`, el agente **SIEMPRE** debe revisar y ofrecer variantes del header del MANIFEST. El header es el **gancho textual** del reel — vive sobre la cara de quien habla los primeros 8 segundos y carga el 80% del trabajo de retención. No se renderiza ciegamente lo que está en el MANIFEST; se valida con el usuario, aunque nunca lo haya pedido.
-
-Esta regla aplica incluso si:
-- El MANIFEST viene recién generado por `recursos-de-video-formula100k` (sí, ese flujo ya pregunta en Paso 3.5 — pero al saltar a `/render` directamente o en un re-render posterior, esa elección puede no haber pasado).
-- El usuario invoca con `/render <carpeta>` o "edita este video" sin mencionar el header.
-- El header existente "parece bien".
-
-**Aviso — el header puede no llegar a renderizarse.** Este paso corre antes
-del Paso 0.5 (elección de formato), así que todavía no se sabe qué formato
-va a usarse. Si termina siendo `split`, `pip` o `faceless`, el header que
-El usuario acaba de confirmar aquí **no se renderiza** — esos formatos no
-incluyen la capa `header` (ver `### Reglas por sección` → "Alcance por
-formato"). No es un bug de este paso, es trabajo que se descarta cuando el
-Paso 0.5 elige otro formato. No se reordenan los pasos por esto (harían
-falta ambos: no se puede proponer un buen header sin saber si va a existir,
-pero tampoco conviene elegir formato antes de tener transcript real en
-algunos casos) — sólo quede advertido para no sorprenderse si el header
-confirmado "desaparece" del render.
-
-**Flujo:**
-
-1. Leer `$DEST/MANIFEST.md` y extraer `## Header` → `Línea 1` + `Línea 2`. Si falta el header, marcar el actual como vacío (no abortar).
-
-2. Si `captions.json` ya existe (re-render), leerlo para tener el transcript real. Si no, leer el campo `**Video fuente:**` y avisar que las variantes se generan sobre la promesa del MANIFEST (sin transcript todavía).
-
-3. **Invocar la skill `guionizacion-formula100k`** pidiéndole 3 variantes de gancho textual aplicando su framework "Gancho Textual del Top 1%":
-   - Cada variante en formato `Línea 1` / `Línea 2`
-   - 3-5 palabras por línea
-   - Sentence case (NO all caps)
-   - Estilos diversos: una declaración punzante, una con contraste/contraintuitivo, una con número fuerte o promesa concreta
-
-4. Mostrar al usuario con `AskUserQuestion` **siempre 4 opciones** en este orden:
-   - **Opción 1 (Recomendada solo si no hay nada mejor):** "Conservar el actual — `<L1 actual>` / `<L2 actual>`"
-   - **Opción 2:** Variante 1 — `<L1>` / `<L2>` (estilo: declaración punzante)
-   - **Opción 3:** Variante 2 — `<L1>` / `<L2>` (estilo: contraste / contraintuitivo)
-   - **Opción 4:** Variante 3 — `<L1>` / `<L2>` (estilo: número fuerte / promesa concreta)
-
-   Header del AskUserQuestion: `"Gancho textual"`. Pregunta literal: `"¿Cuál usamos como header del reel? Aparece sobre la cara los primeros 8s."`. multiSelect: false.
-
-5. Si el usuario elige una variante distinta a la actual, **reescribir el header del MANIFEST.md** preservando todo lo demás:
-   - Solo tocar las dos líneas que empiezan con `- **Línea 1:**` y `- **Línea 2:**` dentro de la sección `## Header`.
-   - NO tocar el resto del archivo.
-   - Si la sección `## Header` no existía, agregarla inmediatamente después del frontmatter (`# Reel — ...` + metadata).
-
-6. Si el usuario elige "Otro" (input libre del AskUserQuestion), interpretar su texto como un nuevo `Línea 1 / Línea 2` y aplicarlo. Si pide variaciones ("dame 3 más"), volver a invocar `guionizacion-formula100k` con feedback específico y repetir el paso 4.
-
-7. Solo cuando el header esté confirmado y guardado en el MANIFEST, continuar con el pipeline de render abajo.
-
-**Si `guionizacion-formula100k` no está disponible:** generar las 3 variantes aplicando estas reglas a mano sobre el transcript, pero avisar al usuario: "para mejor calidad de gancho instala `guionizacion-formula100k`".
-
-**Re-renders y atajo de skip:** si el usuario explícitamente dice "renderiza tal cual", "no toques el header", "el header está bien", "skip", o invoca con `/render <carpeta> --skip-hook`, saltar este paso. Por default — incluso en re-render — se pregunta.
-
----
-
-## Paso 0.5 — Proponer el formato (antes del render)
-
-Después de confirmar el gancho textual y antes de invocar `render.sh`, proponer
-el formato de edición. Se salta si el MANIFEST ya declara `**Formato:**` con
-**uno de los cinco ids válidos** (`fullscreen`, `split`, `pip`, `versus`,
-`pizarra`) y el usuario dice
-"renderiza tal cual", o si se invoca con `--skip-formato`. Un MANIFEST real
-puede traer `- **Formato:** 1920×1080` (texto libre, no un id) — el parser lo
-descarta por inválido y cae al default en silencio; si la regla de salto sólo
-mirara "¿existe el campo?" el agente nunca preguntaría en ese caso. Por eso
-la condición es sobre el **valor**, no sobre la presencia del campo.
-
-**Sólo cinco formatos son elegibles hoy: `fullscreen`, `split`, `pip`, `versus`,
-`pizarra`.**
-`faceless` y `noticiero` están en el catálogo (`formatos.ts`) pero
-`render.py` no tiene forma de invocarlos todavía — ver el porqué en
-`## Catálogo de formatos`. **Nunca escribir** `- **Formato:** faceless` ni
-`- **Formato:** noticiero` en el MANIFEST: el render caería en silencio a
-`fullscreen` con las dimensiones equivocadas (vertical en vez del horizontal
-que promete `noticiero`, por ejemplo). Si las señales del video apuntan a uno
-de esos dos, decírselo al usuario **en palabras** — no como campo del
-MANIFEST — y ofrecerle el más cercano de los cinco elegibles.
-
-**Flujo:**
-
-1. Leer `remotion-template/src/formatos.ts` para tener los siete formatos con
-   su campo `cuandoUsar` — se lee para reconocer señales, no para elegir
-   directamente entre los siete (sólo cinco son elegibles, ver arriba).
-2. Inventariar `$DEST`: ¿hay una carpeta `CANVAS/` con screen recordings?
-   ¿el video fuente tiene cara o es sólo audio?
-3. Leer `captions.json` si existe y contar cuántas señales de `cuandoUsar`
-   aparecen en el transcript, de los siete formatos.
-4. Si las señales dominantes apuntan a `faceless` o `noticiero`, **no
-   recomendar ese id**: avisar al usuario en texto plano que el contenido pide
-   ese formato pero que el catálogo todavía no lo soporta desde este
-   pipeline, y dejar que decida entre los cinco elegibles con el
-   `AskUserQuestion` del paso siguiente (si el video no tiene cámara en
-   absoluto, decirlo explícitamente — ninguno de los cinco elegibles fue
-   pensado para eso, y es preferible que el usuario lo sepa antes de un render
-   de varios minutos que igual va a mostrar algo raro).
-5. Mostrar con `AskUserQuestion` el formato recomendado **entre los cinco
-   elegibles**, con su razón concreta (qué señal lo disparó), más la o las
-   alternativas más cercanas — también elegibles. Header: `"Formato"`.
-   Pregunta: `"¿Con qué formato lo edito?"`.
-6. Escribir `- **Formato:** <id>` en el MANIFEST (siempre uno de los cinco
-   elegibles), debajo de la metadata de cabecera, y continuar con el
-   pipeline.
-
-**Nunca elegir en silencio.** Un render de un minuto de video tarda 3-5
-minutos; equivocarse de formato sin preguntar cuesta más que la pregunta.
-
----
-
-## Pipeline (un solo comando)
-
-**macOS:**
-```bash
-bash ~/.claude/skills/editor-video-formula100k/scripts/render.sh "$DEST" "$VIDEO_PATH"
-```
-
-**Windows (PowerShell):**
-```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\.claude\skills\editor-video-formula100k\scripts\render.ps1" "$DEST" "$VIDEO_PATH"
-```
-
-Lo que hace el wrapper internamente (idéntico en ambas plataformas — la lógica vive en `render.py`):
-
-1. **Corte de silencios + transcripción** (`cut_silences_and_fillers.py`) — sólo si `_source_cut.mov` y `captions.json` no existen aún. Produce:
-   - `_source_cut.mov` — video cortado **agresivamente** en dos capas: primero un **pase semántico con Claude** (ver abajo) que entiende el transcript y borra tomas falladas/equivocaciones/repeticiones reformuladas; luego el motor local que limpia silencios > ~0.20s, muletillas `eh/em/uhh/...` y **repeticiones consecutivas** ("y, y, y…", "que que", "porque porque") colapsadas a la última ocurrencia. Padding de 60ms al final de cada palabra para que no se corte la cola.
-   - Tunables vía flags: `--min-silence 0.08`, `--pad 0.06`, `--no-dedupe`, `--dedupe-max-gap 1.2`, `--no-semantic`, `--semantic-model`, `--guion`, `--semantic-max-drop`.
-   - `edl.json` — mapping orig→nuevo tiempo. Lo usa el remap de captions, no es debug.
-   - `captions.json` — word-timestamps del transcript original **remapeados** al timeline del corte vía `edl.json`. No se re-transcribe el video cortado (eso introducía alucinaciones de Whisper y drift fonético tipo "reels"→"reales"). Una sola transcripción = fuente de verdad.
-
-### Corte por comprensión (pase semántico con Claude)
-
-El motor local solo compara **strings**: borra muletillas, palabras idénticas pegadas y reinicios de frase que se PARECEN. No entiende lo que dices, así que dejaba pasar el caso real: te equivocas y reformulas la idea con **otras palabras**, o repites con una respiración en medio. El pase semántico arregla justo eso.
-
-**Cómo funciona:** antes del corte local, el transcript indexado palabra-por-palabra (con su guion opcional como referencia) se manda a Claude, que razona como editor humano — *"arrancó mal aquí, lo volvió a decir bien allá → me quedo con la buena"* — y devuelve los rangos de índices a borrar. Se eliminan esas palabras y el resto del pipeline (silencios, EDL, captions, render) sigue igual.
-
-**Requisito:** exportar la API key de Anthropic antes del render:
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-```
-Sin key, el pase se salta **automáticamente** y corre solo el motor local (con un aviso). Nunca rompe el render.
-
-**Guion opcional (máxima precisión):** si dejas un `guion.txt` en la carpeta `$DEST` (o pasas `--guion ruta.txt`), Claude lo usa como norte de lo que querías decir. No es obligatorio — sin guion igual limpia bien.
-
-**Seguridad (no sobre-borra):** si Claude propone borrar más del 40% del video (`--semantic-max-drop`), se descarta su sugerencia y corre solo el motor local. Una toma buena jamás se pierde por error del modelo. El llamado se hace por HTTP nativo (sin SDK), así que no agrega dependencias.
-
-**Flags:** `--no-semantic` (desactiva el pase), `--semantic-model claude-haiku-4-5` (más barato/rápido; default `claude-opus-4-8` por calidad), `--guion ruta.txt`, `--semantic-max-drop 0.4`, `--semantic-level conservador|ajustado`.
-
-**`--semantic-level`** (default `conservador`) — qué tan agresivo es el pase:
-
-- `conservador` — sólo tomas falladas literales. Es el default y el seguro.
-- `ajustado` — además recorta preámbulos de arranque, divagaciones tangenciales y re-enunciados redundantes, protegiendo gancho, pasos, datos y CTA. Recorta ≈2-3× más.
-
-Usá `ajustado` cuando grabaste limpio y el reel te quedó largo y flojo: sobre video sin tropiezos el default corta ~6% y no alcanza. `collage-cine-f100k` ya lo exige siempre por esa razón.
-
-### Director de conceptos (ilustrar lo que se explica) — OPCIONAL
-
-Un segundo pase de Claude que NO corta: lee el transcript y detecta **momentos de concepto nuevo** (una skill, una herramienta, un sistema, una metáfora, un "modo") que se entenderían mejor con un apoyo visual, y propone cómo ilustrarlos. **Híbrido:**
-- **`card`** — concepto simple/numérico → una infografía/tarjeta HTML (gratis, instantánea).
-- **`imagen`** — concepto rico o "visualizable" (ej. *representar una skill* como una escena/objeto) → imagen generada con Higgsfield **nano_banana**.
-
-**Activar cuando** el usuario diga "ilustra los conceptos", "agrégale visuales a lo que explico", "representa la skill que menciono", o como paso extra antes del render. Flujo:
+Antes de editar por primera vez, o si algo falla, corre la revisión:
 
 ```bash
-# 1. Proponer (corre sobre el captions.json del corte ya hecho; necesita ANTHROPIC_API_KEY)
-[ -z "$ANTHROPIC_API_KEY" ] && [ -f "$HOME/.config/f100k/secrets.env" ] && source "$HOME/.config/f100k/secrets.env"
-python3 "$HOME/.claude/skills/editor-video-formula100k/scripts/concept_director.py" \
-  "$DEST/captions.json" --out "$DEST/concept_proposals.json" --max 4
+node "$SKILL/scripts/editar.mjs" --revisar
 ```
 
-`concept_proposals.json` = lista de `{keyword, concepto, tipo, prompt_visual, t_hint}`. El `keyword` ya viene **anclado** (verificado contra el transcript), así sobrevive a re-cortes.
+Responde una lista con ✓ y ✗, el comando que arregla cada ✗ (con Homebrew en Mac y winget en Windows), qué transcriptor va a usar y si el corte fino está encendido. Si falta el motor de montaje:
 
-2. **CHECKPOINT humano (antes de gastar créditos):** mostrar las propuestas con `AskUserQuestion`. El usuario aprueba, edita el `prompt_visual`, cambia `tipo`, o descarta. **No se genera ninguna imagen sin su OK.**
+```bash
+node "$SKILL/scripts/preparar.mjs"
+```
 
-3. **Generar el visual de cada propuesta aprobada:**
-   - `tipo: card` → generar la infografía con la skill `graficos-de-video-formula100k` (o una card HTML) → guardar en `$DEST/IA/concepto_<slug>.png`.
-   - `tipo: imagen` → generar con el **MCP de Higgsfield** (`mcp__higgsfield__generate_image`, modelo `nano_banana`) usando `prompt_visual` (9:16 o 1:1) → descargar a `$DEST/IA/concepto_<slug>.png`. Si **no hay créditos** Higgsfield, **degradar a `card`** automáticamente (avisar) — el reel no se queda sin el apoyo visual.
+Si prefieres instalar todo de una vez con el gestor de paquetes, la skill trae también `scripts/bootstrap.sh` (Mac, necesita Homebrew) y `scripts/bootstrap.ps1` (Windows, necesita winget); con `--check` (o `-Check` en Windows) solo revisan sin instalar. Homebrew no se instala solo: si `command -v brew` no responde nada, instálalo con el comando oficial de brew.sh. En Windows, winget viene con Windows 10 (1809 o más nuevo) y 11; si falta, instala «App Installer» desde Microsoft Store.
 
-4. **Agregar filas al MANIFEST** ancladas por keyword (respetan las reglas: nunca tapan la cara):
-   ```markdown
-   ## Overlays
-   | Keyword  | Archivo                      | Ancho | Duración | Posición |
-   |----------|------------------------------|-------|----------|----------|
-   | council  | IA/concepto_council.png      | 900   | 2.6      | bottom   |
-   ```
-   (Para un apoyo más protagonista usar `## B-roll` con el mismo archivo y `Estilo = monitor-photo`.)
+**La primera edición tarda más**: se descarga Python y el modelo que transcribe la voz (pesa más de 1 GB). El navegador que dibuja cada cuadro se baja con `node "$SKILL/scripts/preparar.mjs" --navegador`; si no se hizo, baja solo en el primer montaje. Un comando largo se corre en segundo plano y se revisa hasta que termine: no se cancela ni se repite. Avísale a la persona antes de empezar para que no piense que se trabó. Las siguientes ya no descargan nada.
 
-**Flag/guardarraíles:** `--max N` (tope de conceptos, default 4, para no saturar). Sin `ANTHROPIC_API_KEY` el pase escribe `[]` y se salta (no bloquea). El video original nunca se toca; los conceptos son overlays sobre el corte.
+| Compu | Transcribe con |
+|---|---|
+| Mac con chip Apple (M1 o más nuevo) | mlx-whisper |
+| Windows y Mac con procesador Intel | faster-whisper (más lento: usa el procesador) |
 
-2. **MANIFEST.md → cues.json** (`manifest_to_cues.py`) — parsea las secciones Header, Énfasis, Overlays, B-roll del MANIFEST y emite `cues.json`. Si `captions.json` existe, avisa con `[warn]` si alguna keyword no aparece en el transcript.
+¿Quieres comprobar que todo funciona sin grabar nada? `node "$SKILL/scripts/toma-de-prueba.mjs" "<carpeta>"` fabrica una toma de prueba con la voz de la compu, pausas largas y una frase repetida; edítala como cualquier video.
 
-3. **Setup de `public/`** — hard-link de `WEB/`, `IA/` y `_source_cut.mov` dentro del template Remotion para que `staticFile()` los resuelva.
+## El corte fino y la llave de Anthropic
 
-4. **Render** (`scripts/render.ts` con `tsx`) — bundlea con `@remotion/bundler`, selecciona la composición `reel-viral`, infiere `durationInFrames` del último `word.end`, llama `renderMedia()` con codec h264. Output: `$DEST/BORRADOR_AUTO.mp4`.
+Dilo siempre claro, antes y después de editar:
 
-Tiempo típico: ~3-5 min por minuto de video fuente en Apple Silicon. El render es 1080×1920 @ 30fps.
+| | Sin llave | Con llave |
+|---|---|---|
+| Silencios y pausas | ✓ se cortan | ✓ se cortan |
+| Muletillas («eh», «em») | ✓ | ✓ |
+| Palabra repetida pegada («que que») | ✓ | ✓ |
+| Frase reiniciada con las mismas palabras | a veces | ✓ |
+| Frase mal dicha y repetida **con otras palabras** | ✗ se queda | ✓ se quita |
+| Arranques en falso y autocorrecciones | ✗ se quedan | ✓ se quitan |
 
----
+**La edición nunca falla por no tener llave**: simplemente corre sin el corte fino y lo avisa (`semantic OFF`).
+
+**Dónde se saca la llave.** En console.anthropic.com, con una cuenta de la persona: menú «API keys» → «Create key». Empieza con `sk-ant-`. Es de pago por uso y aparte de la suscripción de Claude: hay que cargarle saldo en «Billing». Cada video hace una sola llamada.
+
+**Dónde se guarda.** En un archivo propio, no en la configuración de la terminal:
+
+```
+~/.editor-video/llave-anthropic.txt
+```
+
+Crea la carpeta y el archivo vacío y ábrelo para que la persona pegue la llave ella misma (`open -e` en Mac, `notepad` en Windows). **No le pidas que pegue la llave en el chat** y nunca la escribas en un comando, un MANIFEST, un archivo de la carpeta del video ni en `~/Documents/mi-contenido/`.
+
+⚠️ No pongas `ANTHROPIC_API_KEY` en `~/.zshrc`, `~/.bashrc` ni en las variables de entorno de Windows: Claude Code la tomaría también para sí y empezaría a cobrar por uso en vez de usar el plan de la persona. Por eso el archivo.
+
+**Seguridad (no sobre-borra):** si el corte fino propone borrar más del 40 % del video, se descarta su sugerencia y queda solo el corte local. Una toma buena no se pierde por un error del modelo.
+
+El modelo del corte fino se cambia con la variable `EDITOR_MODELO_CORTE` o con `--semantic-model <modelo>` (por ejemplo, uno más económico).
+
+## Flujo completo
+
+`EDITAR` es `node "$SKILL/scripts/editar.mjs"`.
+
+### Paso 1 · Cortar y transcribir
+
+```bash
+node "$SKILL/scripts/editar.mjs" "<ruta del video>" --solo-corte
+```
+
+Trabaja en `~/Documents/mis-videos-editados/<nombre-del-video>/` (cámbialo con `--carpeta "<carpeta>"`; si `recursos-de-video-formula100k` ya dejó una carpeta con `MANIFEST.md`, usa esa). Deja ahí:
+
+- `_source_cut.mov`: el video cortado.
+- `captions.json`: cada palabra con su tiempo en el video ya cortado. Se transcribe una sola vez el original y se remapea al corte; no se vuelve a transcribir el video cortado.
+- `edl.json`: qué tramo del original quedó en dónde.
+- `corte.json`: el resumen del corte. Su campo `corte_fino` dice si ocurrió: `ok` o `nothing` (corrió), `no_key` (sin llave), `api_fail` (la llamada falló), `aborted_overbudget` (se descartó por seguridad) o `apagado`.
+
+Si la persona tiene el guion de lo que quiso decir, guárdalo como `guion.txt` en esa carpeta **antes** de cortar: el corte fino lo usa de referencia.
+
+### Paso 2 · Leer lo que quedó
+
+Lee `captions.json` y arma el texto completo. Revisa:
+
+- Lo que imprimió el corte: cuántos tramos quedaron, la duración antes y después, y la línea `semantic`.
+- Si `corte.json` no dice `ok` ni `nothing` (o el registro dice `semantic OFF` o `la llamada a Claude falló`), **el corte fino no ocurrió**. Dilo con esas palabras, señala las frases repetidas o reformuladas que veas en el texto y ofrece el paso de la llave. No des a entender que quedó limpio.
+- Con el corte fino activo, busca igual repeticiones y autocorrecciones que se hayan escapado.
+
+Al entregar, di qué no se pudo cortar y que tú no oíste el audio: la persona debe verlo una vez.
+
+### Paso 3 · Gancho, formato y MANIFEST
+
+Con el texto a la vista (y su negocio, su voz y su marca ya leídos):
+
+1. **Gancho en texto** (solo formato `fullscreen`): propón 3 variantes de dos líneas, de 3 a 5 palabras cada una (el montaje las muestra en mayúsculas): una declaración directa, una con contraste y una con promesa concreta sacada de lo que dice el video. Pregunta cuál con `AskUserQuestion` («¿Cuál usamos como gancho? Aparece sobre tu cara los primeros 8 segundos»), con la opción de no poner ninguno. Si el MANIFEST ya trae un `## Header`, la primera opción es **conservar el actual** y las otras tres son las variantes. Si la persona tiene la skill `guionizacion-formula100k`, úsala para las variantes; si no, escríbelas tú. Si elige «Otro», usa su texto como `Línea 1` / `Línea 2`; si pide más, propón otras 3.
+2. **Formato**: recomienda uno con su razón (qué viste en el video o en la carpeta que lo pide; si su manual trae `reels.formato`, ese es el punto de partida) y ofrece las alternativas cercanas con `AskUserQuestion` («¿Con qué formato lo edito?»). **Nunca elijas en silencio**: equivocarse cuesta un render de varios minutos. Mira el catálogo de abajo; cada formato dice qué material necesita. Las señales de cada formato están en el campo `cuandoUsar` de `remotion-template/src/formatos.ts`.
+3. **Énfasis**: 2 a 4 cajas de texto en los momentos fuertes, ancladas a palabras que sí están en `captions.json`.
+4. Escribe `MANIFEST.md` en la carpeta de trabajo (formato más abajo). Si ya existe, cambia solo lo que se decidió (las dos líneas del `## Header`, el `- **Formato:**`) y no toques el resto.
+
+No inventes cifras, precios ni resultados en el gancho ni en las cajas: usa solo lo que la persona dice en el video o te dio.
+
+**Saltar preguntas.** Si la persona dice «renderiza tal cual», «el gancho está bien» o «no toques el formato», o usa `/render <carpeta> --skip-hook` o `--skip-formato`, salta esa pregunta. Por defecto, incluso al volver a renderizar, se pregunta.
+
+### Paso 4 · Montar
+
+```bash
+node "$SKILL/scripts/editar.mjs" "<ruta del video>"
+```
+
+Como el corte ya existe, no lo repite: lee el MANIFEST, arma `cues.json` y renderiza `BORRADOR_AUTO.mp4` en la carpeta de trabajo. Si usaste `--carpeta` en el paso 1, repítelo aquí. Con `/render <carpeta>`, el video fuente sale del campo `**Video fuente:**` del MANIFEST; si no está, pídelo.
+
+Antes de entregar: mide la duración con `ffprobe`, saca dos o tres cuadros con `ffmpeg` y míralos (que el texto se lea, que nada tape la cara, que los colores sean los de su marca), y lee los `[warn]` que haya impreso: no los des por buenos sin decirlos.
+
+Tiempo típico: de 3 a 5 minutos de render por minuto de video en una Mac con chip Apple; más en Windows o Intel.
+
+### Atajo: todo de una
+
+Sin MANIFEST en la carpeta, el mismo comando sin `--solo-corte` crea uno básico (formato `fullscreen`, subtítulos encendidos) y entrega el video de corrido. Con `--formato <id>` eliges el formato de ese MANIFEST básico. Sirve para una prueba rápida; para un video que se va a publicar, sigue los 4 pasos.
 
 ## Catálogo de formatos
 
-El registro vive en `remotion-template/src/formatos.ts` — esa es la fuente de
-verdad. Esta tabla es un resumen; si difieren, manda el código.
+| Formato | Qué es | Material que necesita además de tu video | Subtítulos |
+|---|---|---|---|
+| `fullscreen` | Tú a pantalla completa (9:16) con gancho, énfasis y gráficos en los tercios | Nada | apagados |
+| `split` | Lienzo arriba (40 %) y tu cara abajo (60 %) | Imágenes o clips para el lienzo | encendidos |
+| `pip` | Grabación de pantalla de fondo y tu cámara en un recuadro | Una grabación de pantalla en `CANVAS/` | encendidos |
+| `versus` | Cuadro partido en dos (antes/ahora) con tu cámara en la costura | Dos imágenes o clips, uno por lado | encendidos |
+| `noticiero` | Horizontal 16:9 con barra de noticias, rótulos y capturas | Nada (capturas, si quieres) | no tiene |
+| `pizarra` | Trazos a mano que se dibujan detrás de ti | Un video de trazos con transparencia y tu recorte sin fondo | encendidos |
 
-| Formato | Qué es | Subtítulos | Tema default | Elegible desde `- **Formato:**` |
-|---|---|---|---|---|
-| `fullscreen` | Talking-head 9:16 + overlays en los tercios | apagados | `default` | ✅ |
-| `split` | Canvas arriba 40% / cara abajo 60% | encendidos | `crema-editorial` | ✅ |
-| `pip` | Screen-rec de lienzo + cámara en recuadro | encendidos | `default` | ✅ |
-| `versus` | Cuadro partido A/B + cámara en la costura | encendidos | `crema-editorial` | ✅ |
-| `pizarra` | Trazos a mano que se dibujan detrás de ti | encendidos | `default` | ✅ |
-| `faceless` | Screen-rec + cards sobre voz en off | encendidos | `default` | ❌ |
-| `noticiero` | 16:9 con barra de noticias y chyrons | apagados | `default` | ❌ |
+`fullscreen` y `noticiero` salen solo con tu video. `split`, `pip` y `versus` necesitan que la persona aporte imágenes, capturas o una grabación de pantalla: si no las tiene, dilo y propón `fullscreen`. **`pizarra` es avanzado**: este editor no dibuja los trazos; ofrécelo solo si la persona ya tiene ese video con transparencia o tiene la skill `pizarra-explicativa-f100k`, que lo produce. Si tienes skills de animación, sus clips sirven como imágenes y B-roll de cualquier formato.
 
-**Los siete formatos existen en el catálogo, pero hoy sólo cinco se activan
-desde el MANIFEST.** `remotion-template/src/formatos/index.ts` sólo registra
-componente para `fullscreen`, `split`, `pip`, `versus` y `pizarra`. `faceless` (modo `tutorial`) y
-`noticiero` (modo `news`, horizontal 1920×1080) están definidos en
-`formatos.ts` y tienen su composición Remotion registrada en `Root.tsx`, pero
-`render.py` **nunca pasa `--mode`** al invocar `render.ts` — siempre corre en
-modo `reel`. Si el MANIFEST declara `- **Formato:** noticiero` o `faceless`,
-el despachador de React no encuentra componente para ese id, cae a
-`fullscreen` con un `console.warn` (se imprime en la terminal del render,
-igual que cualquier otro `[warn]` — ver **Degradaciones** abajo), y el
-resultado — para `noticiero` — es un
-video **vertical** 1080×1920 en vez del horizontal prometido. No escribas
-`- **Formato:** faceless` ni `- **Formato:** noticiero` en un MANIFEST de este
-pipeline esperando que el render los use: hoy no existe un `/render` que los
-invoque. Cablear el modo por formato es trabajo de una tarea aparte, no de
-esta.
+Existe un séptimo formato en el código (`faceless`, solo voz) que **no** se puede pedir desde el MANIFEST: nunca escribas `- **Formato:** faceless`.
 
-Se declara en el MANIFEST con hasta seis campos opcionales (sólo tienen
-efecto real para `fullscreen`, `split`, `pip`, `versus` y `pizarra`):
+El formato y sus opciones van en la cabecera del MANIFEST:
 
 ```markdown
 - **Formato:** split
@@ -362,186 +201,73 @@ efecto real para `fullscreen`, `split`, `pip`, `versus` y `pizarra`):
 - **Etiqueta B:** AHORA
 ```
 
-Un MANIFEST sin ellos renderiza exactamente como antes del catálogo.
+Solo `Formato` es necesario, y tiene que ser uno de los ids de la tabla (un texto libre como `1920×1080` se descarta y cae al de fábrica). Temas: `default` y `crema-editorial`. Un formato o tema desconocido cae al de fábrica y avisa con `[warn]`; subtítulos sin `captions.json` se apagan. Nunca rompe el render.
 
-**Para `versus`:** el cuadro se parte en dos mitades de 960 px y la cámara va
-en un círculo sobre la costura. Cada fila de la tabla de B-roll declara en qué
-mitad vive con una columna extra **`Lado`** (`a` = arriba, `b` = abajo):
+### `split`
+
+El lienzo de arriba muestra los overlays y el B-roll. Si en un momento no hay nada que mostrar, el panel queda con el color de fondo del tema, sin aviso: reparte el material a lo largo del video. La columna `Posición` de los overlays se ignora (el lienzo es una sola zona), así que dos overlays al mismo tiempo se dibujan uno encima del otro. El encuadre de la cara está fijo en el código (`split.tsx`): no se ajusta desde el MANIFEST.
+
+### `pip`
+
+Deja la grabación de pantalla en `CANVAS/` dentro de la carpeta de trabajo; toma el primer video por orden alfabético y avisa cuál eligió. Sin `CANVAS/`, avisa y muestra tu cámara a pantalla completa, con subtítulos y sin gancho. `Esquina cámara` dice dónde va tu recuadro: `tl`, `tr`, `bl`, `br` (de fábrica `tr`, arriba a la derecha, porque abajo viven los subtítulos). No lleva gancho ni cajas de énfasis. Un B-roll de **video** tapa también tu recuadro mientras dura: si quieres seguir en cuadro, usa imágenes. Los overlays y las imágenes de B-roll rozan un poco el recuadro (entre 10 y 15 %), aun en una esquina de arriba.
+
+### `versus`
+
+El cuadro se parte en dos mitades y tu cámara va en un círculo sobre la costura. Cada fila de B-roll dice en qué mitad vive con la columna `Lado` (`a` arriba, `b` abajo; sin `Lado`, cae en `a`):
 
 ```markdown
 | Keyword | Archivo | Duración | Estilo | Lado |
 |---|---|---|---|---|
-| antes | captura-vieja.png | 4 | clean | a |
-| ahora | captura-nueva.png | 4 | clean | b |
+| antes | USER/vitrina-vieja.png | 4 | clean | a |
+| ahora | USER/vitrina-nueva.png | 4 | clean | b |
 ```
 
-Una fila sin `Lado` (o con cualquier otro valor) cae en el lado `a`. `Etiqueta
-A` y `Etiqueta B` rotulan cada mitad; se emiten **sólo si vienen las dos** —
-con una sola, el render avisa con `[warn]` y usa ANTES/AHORA. Se ignoran fuera
-de `versus`, igual que `Esquina cámara` fuera de `pip`.
+`Etiqueta A` y `Etiqueta B` rotulan cada mitad (si falta una, usa ANTES/AHORA). Al preparar las imágenes, **el contenido huye de la costura**: la de arriba lleva lo importante arriba (su borde inferior lo muerde el círculo de cámara) y la de abajo, abajo (su franja superior es para el subtítulo y el énfasis). Deja libre la esquina superior izquierda de cada mitad para la etiqueta. El subtítulo y el énfasis comparten banda: mientras hay un énfasis, el subtítulo que lo pisaría no se muestra. Si las imágenes son texto denso, apaga los subtítulos con `- **Subtítulos:** off`.
 
-⚠️ El clamp de B-roll («cada cue termina donde empieza el siguiente») es **por
-lado** justamente por este formato: si fuera global, el cue del lado B cortaría
-al del lado A y las dos mitades nunca se verían juntas — que es el formato
-entero. Los demás formatos no notan la diferencia porque todo cae en `a`.
+### `noticiero`
 
-**Zonas muertas de la card (medidas en un render real, no teoría).** En `versus`
-el frame ya está ocupado por el cromo del formato, así que una card que use todo
-su lienzo se pisa sola. Al diseñar las imágenes de B-roll para este formato:
-
-- **Esquina superior izquierda de cada mitad (~100 px de alto):** ahí se dibuja
-  la etiqueta-chip (`Etiqueta A` / `Etiqueta B`). Deja ese borde libre.
-- **Franja bajo la cámara (~1200-1380 px del frame, o sea el tercio superior de
-  la mitad B):** ahí viven el subtítulo y el énfasis. La card del lado **b**
-  debe llevar su contenido **abajo**.
-- **Borde inferior de la mitad A (~210 px):** lo muerde el círculo de cámara.
-  La card del lado **a** debe llevar su contenido **arriba**.
-
-Regla corta: **el contenido huye de la costura** — la card de arriba empuja
-hacia arriba, la de abajo empuja hacia abajo. Si tus cards son texto denso y no
-querés rediseñarlas, apagá los subtítulos con `- **Subtítulos:** off`.
-
-**Subtítulo y énfasis comparten banda y se excluyen.** Los dos se anclan debajo
-de la cámara (no en el tercio inferior, que en este formato es cuerpo de card).
-Mientras un énfasis está activo, el subtítulo que lo pisaría **se descarta** —
-es la misma regla que ya rige entre énfasis y overlay en `fullscreen`, sólo que
-acá el que cede es el subtítulo.
-
-**Para `pizarra`:** es un formato de **montaje**, no un motor — no dibuja
-nada, apila dos insumos que ya producen otras skills:
-
-| Insumo | Lo produce | Dónde dejarlo |
-|---|---|---|
-| **lienzo** — los trazos a mano, con alfa | `pizarra-explicativa-f100k` | `$DEST/*lienzo*.webm` (o `.mov`), o `$DEST/PIZARRA/` |
-| **cutout** — vos recortada, con alfa | `hyperframes remove-background` | `$DEST/*cutout*.webm` |
+Horizontal 1920×1080. Si tu video es vertical, lo recorta a la banda central: se pierden el techo y el piso del encuadre. **Compruébalo antes de montar** sacando un cuadro:
 
 ```bash
-# el cutout: local, gratis, sin pantalla verde, sobre cualquier pared
-npx hyperframes remove-background "$DEST/_source_cut.mov" \
-  -o "$DEST/cutout.webm" --quality balanced
+ffmpeg -ss 8 -i "<video>" -frames:v 1 -vf "scale=1920:-1,crop=1920:1080" "<carpeta>/prueba-16x9.png"
 ```
 
-Los dos se descubren solos por nombre y **no se declaran en el MANIFEST**: al
-MANIFEST le alcanza con `- **Formato:** pizarra`. Si falta cualquiera de los
-dos, el render avisa con `[warn]` y cae a `fullscreen` — nunca rompe.
+Si se corta la cabeza, ese video no sirve para este formato. Tiene sus propias secciones de MANIFEST (más abajo).
 
-⚠️ **El alfa de un `.mov` HEVC no lo lee Chrome, y por lo tanto tampoco
-Remotion.** Se comprobó decodificando un frame contra un fondo rojo: con
-`.webm` VP9 el rojo se ve a través; con `.mov` HEVC el frame sale opaco entero
-y el lienzo desaparece. Y resulta que el entregable de
-`pizarra-explicativa-f100k` es justamente un `.mov` HEVC (su formato ligero,
-~100 MB frente a los 4 GB del ProRes). El pipeline lo resuelve solo:
-**convierte el lienzo a VP9/webm la primera vez y cachea el resultado** junto
-al original. Si podés elegir, pedile el lienzo directamente en `.webm`
-(`hyperframes render . --format webm`) y te ahorrás la conversión.
+### `pizarra`
 
-**`pizarra` no admite B-roll.** No es un olvido: el lienzo YA es el apoyo
-visual del formato, y un B-roll encima taparía exactamente lo que se viene a
-mostrar. Sus capas son `emphasis`, `captions` y `sfx`.
+Apila tres capas: tu video, un **lienzo** de trazos con transparencia (`*lienzo*.webm` o `.mov`, o cualquier video en `PIZARRA/`) y tu **recorte** sin fondo (`*cutout*.webm`). Los encuentra por el nombre; al MANIFEST le basta `- **Formato:** pizarra`. El recorte se saca, local y gratis, sin pantalla verde, con:
 
-**Dónde caben los trazos.** El sujeto ocupa el frame de la cintura para abajo.
-Medido sobre la máscara alfa de una toma real: de `y=0` a `y≈480` el frame está
-**libre del todo**, entre 480 y 720 quedan libres los costados, y de 720 hacia
-abajo cualquier trazo queda tapado. Diseñá el lienzo dentro de esos primeros
-~700 px.
+```bash
+npx hyperframes remove-background "<carpeta>/_source_cut.mov" -o "<carpeta>/mi_cutout.webm" --quality balanced
+```
 
-**Limitación conocida:** donde la ropa oscura toca el fondo oscuro, el matting
-puede dejar una banda tenue. Si molesta, subí a `--quality best` en
-`remove-background`; si la toma tiene mala luz y el recorte sale sucio de
-verdad, el fallback probado es `split` (pizarra arriba, cara abajo) — que es
-exactamente el modo Paneles de `collage-cine-f100k`.
+Si falta cualquiera de los dos, avisa y cae a `fullscreen`. No admite B-roll: el lienzo ya es el apoyo visual.
 
-**Para `pip`:** dejar el screen recording en `$DEST/CANVAS/`. El pipeline toma
-el primer video de esa carpeta **por orden alfabético** como lienzo y avisa
-con `[warn]` cuál eligió (útil si dejaste más de uno ahí sin darte cuenta).
-Sin la carpeta, avisa y usa la cámara a pantalla completa — pero **no** se ve
-como `fullscreen`: `pip` sigue sin montar `Header`, `HookImage` ni
-`EmphasisLayer` (ese componente nunca los incluye, con o sin lienzo — no
-están en sus `capas` de `formatos.ts`) y los subtítulos siguen encendidos
-(default de `pip`). El resultado es la cámara a pantalla completa, sin
-header ni gancho visual, con subtítulos — no esperes que el header
-confirmado en el Paso 0 aparezca sólo porque falta `CANVAS/`.
+- El alfa de un `.mov` HEVC no lo lee el navegador del montaje: el editor convierte el lienzo a `.webm` la primera vez y lo guarda junto al original. Si puedes, pide el lienzo directamente en `.webm`.
+- **Dónde caben los trazos:** tu cuerpo ocupa la mitad de abajo del cuadro. De arriba hasta unos 480 px el cuadro está libre; entre 480 y 720 quedan libres los costados; de 720 hacia abajo el recorte tapa los trazos. Diseña el lienzo dentro de los primeros ~700 px.
+- Donde la ropa oscura toca un fondo oscuro, el recorte puede dejar una banda tenue: sube a `--quality best`. Si la toma tiene mala luz y el recorte sale sucio, usa `split` (pizarra arriba, cara abajo).
 
-**`Esquina cámara` (sólo aplica a `pip`)** — dónde va el recuadro de cámara:
-`tl`, `tr`, `bl`, `br`. Default **`tr`** (arriba a la derecha): abajo viven
-los subtítulos, los overlays y el B-roll de imagen, así que ahí la cámara
-queda tapada.
+## Formato del MANIFEST.md
 
-**Dos limitaciones conocidas de `pip`** — para no descubrirlas en un render:
-- El B-roll de **video** ocupa el frame completo, recuadro de cámara
-  incluido. Durante esa ventana el formato deja de verse como pip. Si
-  necesitas que la cámara siga visible, usa una imagen en vez de un video.
-- Los overlays y el B-roll de imagen solapan parcialmente el recuadro
-  incluso con la esquina superior (medido: ~10% y ~15% del recuadro). Es
-  tolerable, pero conviene saberlo al elegir la esquina.
-
-**Dos limitaciones conocidas de `split`** — alcance que quedó fuera de esta
-ronda, no bugs a arreglar:
-- El encuadre vertical de la cara está **hardcodeado** en `split.tsx`
-  (`objectPosition: 'center 20%'`) — no es ajustable desde el MANIFEST,
-  aunque el spec original lo prometía. Si el encuadre por defecto no sirve
-  para un video puntual, hoy no hay override; hay que tocar el código.
-- Si el canvas superior no tiene ni B-roll ni overlays en un momento dado,
-  `split` **no avisa** — el panel simplemente queda pintado con el color de
-  fondo del tema (`tema.fondo`). A diferencia de `pip` (que sí avisa cuando
-  le falta el lienzo), `split` no tiene forma de detectar "canvas vacío" y
-  quedarse callado ahí es esperado, no un bug.
-
-### Catálogo de estilos (lo que ve la alumna)
-
-`remotion-template/src/estilos.ts` es el registro de **estilos** — lo que la
-alumna elige — frente a `formatos.ts`, que es lo que el render sabe componer.
-Hoy son 1:1, pero el tipo ya distingue `resuelvePor: 'formato' | 'skill'`
-porque a futuro un estilo podrá resolverlo otra skill (`collage-cine-f100k`,
-`motion-reels-f100k`) sin que ella note la diferencia.
-
-`construirPrompt(id)` compone el prompt que se copia de la vitrina: tres
-partes fijas (instalación → recorte semántico → estilo) más el paso del
-MANIFEST y los requisitos duros de ese estilo. El texto de las dos primeras
-partes es una constante compartida: si cambia el instalador, cambia en un
-solo lugar.
-
-**Regla dura, la que ya costó caro con `faceless`/`noticiero`:** un estilo no
-entra a `ESTILOS` hasta que su render salga bien de punta a punta. Hay un test
-que lo fija (`estilos.test.ts` verifica que todo estilo apunte a un formato
-realmente elegible desde el MANIFEST). Vale más un catálogo de cuatro honesto
-que uno de cinco con una promesa falsa.
-
-**Los cinco demos** salen del mismo clip fuente a propósito — la comparación
-honesta es el argumento de venta del catálogo. Viven en
-`FORMULA100K/RECURSOS VIDEOS/2026-08-19_demos-estilos/DEMOS/`, junto al
-MANIFEST con el que se produjo cada uno. **No se commitean a esta skill**
-(son ~175 MB); los consume la vitrina del Grimorio, que es trabajo aparte.
-
----
-
-**Degradaciones:** formato desconocido cae a `fullscreen`; tema desconocido cae
-al del formato; subtítulos sin `captions.json` se apagan. Todas avisan con
-`[warn]` y ninguna aborta el render.
-
----
-
-## Formato del MANIFEST.md (keyword-based)
-
-Todos los cues se anclan a **keywords del transcript**. El parser busca la primera ocurrencia de la keyword (case-insensitive, tolerante a acentos y puntuación) en `captions.json` y dispara el cue ahí.
-
-### Esqueleto mínimo
+Todo se ancla a **palabras del transcript** (columna `Keyword`). El editor busca la primera vez que aparece (sin importar mayúsculas, tildes ni puntuación) y dispara ahí. Los ejemplos son de un negocio ficticio: cámbialos por el rubro y las palabras de la persona.
 
 ```markdown
-# Reel — <título corto>
+# Reel — Ramos que duran más
 
-- **Video fuente:** ~/Downloads/IMG_1969.MOV
-- **Fecha:** 2026-05-13
+- **Video fuente:** ~/Downloads/ramos.mov
+- **Formato:** fullscreen
+- **Subtítulos:** on
 
 ## Header
 
-- **Línea 1:** Publica todos
-- **Línea 2:** los días sin perfección
-- **Esconder después:** 8   <!-- opcional. Default 8s. Pon 0 si querés que se quede todo el video. -->
+- **Línea 1:** Tu ramo dura
+- **Línea 2:** el doble así
+- **Esconder después:** 8
 
 ## Gancho visual
 
-- **Archivo:** `IA/HOOK_perfeccion_tachada.png`
+- **Archivo:** `USER/ramo-marchito.png`
 - **Posición:** right
 - **Inicio:** 0.3
 - **Duración:** 2.2
@@ -550,447 +276,259 @@ Todos los cues se anclan a **keywords del transcript**. El parser busca la prime
 
 ## Énfasis
 
-| Keyword     | Texto en caja blanca   | Duración |
-|-------------|------------------------|----------|
-| perfección  | Olvida la perfección   | 1.6      |
-| japer       | Yapper Method          | 1.8      |
-| automatizar | Automatiza todo        | 1.6      |
-| comenta     | Comenta 100K           | 2.0      |
+| Keyword        | Texto en caja blanca  | Duración |
+|----------------|-----------------------|----------|
+| agua tibia     | Agua tibia, no fría   | 1.6      |
+| corte diagonal | Corta en diagonal     | 1.8      |
 
 ## Overlays
 
-| Keyword     | Archivo                                       | Ancho | Duración | Posición |
-|-------------|-----------------------------------------------|-------|----------|----------|
-| deteniendo  | `IA/T1_G1_perfeccion_tachada_0000-0012.png`   | 480   | 2.4      | bottom   |
-| Japer       | `IA/T2_G1_ideas_0012-0027.png`   | 480   | 2.4      | bottom   |
-| Cloud       | `IA/T3_G1_auto_edicion_claude_0027-0042.png`  | 480   | 2.4      | top      |
+| Keyword     | Archivo                 | Ancho | Duración | Posición |
+|-------------|-------------------------|-------|----------|----------|
+| el florero  | `USER/florero.png`      | 480   | 2.4      | bottom   |
 
 ## B-roll
 
-| Keyword     | Archivo                                | Duración | Estilo        |
-|-------------|----------------------------------------|----------|---------------|
-| internet    | `WEB/google/pinterest_clip.mp4`        | 3.0      | monitor-photo |
+| Keyword        | Archivo                  | Duración | Estilo        |
+|----------------|--------------------------|----------|---------------|
+| en la tienda   | `USER/tienda.mp4`        | 3.0      | monitor-photo |
 ```
+
+Los archivos van en subcarpetas de la carpeta de trabajo: `USER/` (lo que aporta la persona), `IA/` (lo generado) o `WEB/` (lo descargado). Solo esas tres se copian al montaje. Las fotos son siempre de la persona: nunca uses fotos de muestra, caras inventadas ni piezas de otras creadoras.
+
+### Qué sección existe en cada formato
+
+| Sección | fullscreen | split | pip | versus | pizarra | noticiero |
+|---|---|---|---|---|---|---|
+| Header (gancho en texto) | ✓ | — | — | — | — | — |
+| Gancho visual | ✓ | — | — | — | — | — |
+| Énfasis | ✓ | ✓ | — | ✓ | ✓ | — |
+| Overlays | ✓ | ✓ | ✓ | — | — | — |
+| B-roll | ✓ | ✓ | ✓ | ✓ (con `Lado`) | — | — |
+| Subtítulos | opcional | ✓ | ✓ | ✓ | ✓ | — |
+
+Una sección que el formato no usa se ignora sin avisar. Si el gancho «desapareció», casi siempre es porque el formato no es `fullscreen`.
 
 ### Reglas por sección
 
-**Alcance por formato.** No todas estas secciones del MANIFEST existen en
-los siete formatos — cada uno declara sus propias `capas` en `formatos.ts`.
-`Header` y `Gancho visual` (hook) **sólo existen en `fullscreen`**:
-escribirlas en el MANIFEST de `split` o `pip` no hace nada, se ignoran en
-silencio (ni siquiera avisan con `[warn]`). `Énfasis` existe en `fullscreen`
-y **también en `split`** (no en `pip`). `Overlays` existe en `fullscreen`,
-`split` y `pip`. `B-roll` y el SFX de "pop" existen en los tres, y también
-en `versus` (con su columna extra `Lado`). **`pizarra` no admite ninguna de
-las cuatro**: sus capas son sólo `emphasis`, `captions` y `sfx` — el lienzo
-ya es su apoyo visual. Los formatos elegibles hoy desde el MANIFEST son
-`fullscreen`, `split`, `pip`, `versus` y `pizarra` (ver
-`## Catálogo de formatos`).
+- **Header.** Dos líneas en letra grande con trazo negro. Vive los primeros 8 segundos y se quita; `Esconder después: 0` lo deja todo el video. Sigue visible sobre el B-roll mientras está en su ventana.
+- **Gancho visual.** Una imagen tipo sticker en una esquina superior los primeros segundos. De fábrica: `Posición=right`, `Inicio=0.3`, `Duración=2.2`, `Ancho=360`, `Rotación=3`. No cubre la cara.
+- **Énfasis.** Columnas `Keyword | Texto | Duración | Offset` (de fábrica 1.6 s y 0). Caja blanca en la parte baja. Mayúscula solo al inicio, nunca todo en mayúsculas. Mientras hay un énfasis, los overlays se esconden.
+- **Overlays.** Columnas `Keyword | Archivo | Ancho | Duración | Posición` (de fábrica 420 px, 2.0 s, `bottom`). `bottom` va en el tercio inferior, a la altura del pecho; `top`, con su borde de abajo al ras del cabello, por encima de la cabeza (sirve para capturas de pantalla y llamadas). Nunca tapan la cara.
+- **B-roll.** Columnas `Keyword | Archivo | Duración | Estilo` (de fábrica 3.0 s, `monitor-photo`; el otro estilo es `clean`). Un **video** ocupa la pantalla completa; una **imagen** va en la parte baja a 900 px de ancho (esta tabla no tiene columna `Ancho`). Dos B-roll seguidos no se enciman: el primero termina donde empieza el segundo.
+- **Subtítulos.** `- **Subtítulos:** on|off` los fuerza. Van de 3 en 3 palabras y cortan en las pausas; la palabra que coincide con un énfasis se resalta.
+- Cada imagen que aparece suena con un «pop» corto.
 
-**Header** — Líneas 1 y 2. Funciona como **gancho de los primeros 8 segundos** (default) y luego desaparece para dejar la cara de quien habla limpia. **Anton (pack F100K, `F100K Display`) 92px en MAYÚSCULAS**, blanco con trazo negro 6px (`WebkitTextStroke`), sombra suave, centrado horizontal, anclado a `paddingTop: 280` (debajo del cuarto superior para no chocar con la frente de quien habla). Override en MANIFEST con `Esconder después: N` (segundos del timeline ya cortado). Para que se quede todo el video pasa `Esconder después: 0`.
+### Secciones del formato noticiero
 
-**Gancho visual** — Imagen tipo sticker (UN solo archivo) que aparece en los primeros segundos en una esquina superior. Columnas: `Archivo | Posición | Inicio | Duración | Ancho | Rotación`. Defaults: `Posición=right`, `Inicio=0.3s`, `Duración=2.2s`, `Ancho=360px`, `Rotación=3°`. Anclado a `top: 340px` para no chocar con el header. Spring drop desde fuera del frame + wobble sutil + fade out. NO cubre la cara centrada (zona segura x≥640 si position=right).
+Solo las lee `- **Formato:** noticiero`, que a su vez ignora las de arriba.
 
-**Énfasis** — Columnas (en orden): `Keyword | Texto | Duración | Offset`. Defaults: `Duración = 1.6s`, `Offset = 0`. La caja blanca aparece en la parte inferior del frame (`bottom: 220`), Inter 800 84px, sombra suave + sombra base estilo "stack". Mientras hay énfasis activo, los overlays se ocultan automáticamente para no superponerse.
+- `- **Marca:** FLORES NOTICIAS` — el nombre del noticiero (usa el de su negocio). Sale junto a «● EN VIVO» y en el bloque de la barra inferior, partido en dos renglones por su último espacio. De fábrica: `NOTICIAS`.
+- `## Ticker` — una viñeta por titular; rotan solos cada 5 segundos en la barra inferior.
+- `## Chyrons` — el rótulo de cada noticia. Columnas `Keyword | Kicker | Título | Duración | Offset` (de fábrica `NOVEDAD`, 4 s).
+- `## Tarjetas` — columnas `Keyword | Tipo | Campos | Duración | Offset`. `Campos` es `clave=valor` separado por `;` y las listas internas por `//`.
 
-**Overlays** — Columnas: `Keyword | Archivo | Ancho | Duración | Posición`. Defaults: `Ancho = 420px`, `Duración = 2.0s`, `Posición = bottom`. El path es relativo a `$DEST/` (ej. `IA/...` o `USER/...`).
+| Tipo | Campos | Obligatorio |
+|---|---|---|
+| `title` | `eyebrow`, `titulo`, `subtitulo` | `titulo` |
+| `bignum` | `de`, `a`, `unidad`, `pie` | `a` |
+| `list` | `titulo`, `items` (separados por `//`) | `items` |
+| `leaderboard` | `titulo`, `filas` (`Nombre : Dato : Detalle` separadas por `//`) | `filas` |
+| `shot` | `archivo`, `titulo`, `pie` | `archivo` |
 
-- **`Posición: bottom` (default)** — Renderiza en el **tercio inferior** (`bottom: 520`), zona pecho/manos. MUY por debajo del rostro.
-- **`Posición: top`** — Renderiza en la **zona superior al ras del cabello** (`bottom: 1100` ≈ 820px desde arriba en 1920px). El BORDE INFERIOR del overlay toca el hairline de quien habla — nunca flotando en el espacio vacío arriba. Usar para UI tutorial, terminal, callouts que se ubican encima de la cabeza.
+```markdown
+- **Formato:** noticiero
+- **Marca:** NUTRICIÓN NOTICIAS
 
-Regla dura: los overlays NUNCA tapan la cara, independientemente de la posición. Spring de entrada + float loop sutil. Si hay un énfasis activo en cualquier frame mientras el overlay vive, se oculta (opacity 0) porque el énfasis (`bottom: 220`) compite por la atención.
+## Ticker
 
-**Excepción — formato `split`:** la columna `Posición` se ignora. El canvas
-superior de `split` es una sola zona, no un frame completo con tercios — el
-overlay se centra y se escala para caber dentro del panel. `top`/`bottom`
-sólo tienen efecto en los formatos que usan el frame completo (`fullscreen`,
-`pip`, `noticiero`). Consecuencia: en `split`, si dos overlays coinciden en
-el tiempo, se dibujan **uno encima del otro** en el mismo punto (el panel no
-tiene tercios donde separarlos).
+- Nueva guía de porciones para la lonchera
+- Taller de etiquetas este sábado
 
-**B-roll** — Columnas: `Keyword | Archivo | Duración | Estilo`. Defaults: `Duración = 3.0s`, `Estilo = monitor-photo`. **Videos (.mp4/.mov/.webm)** → fullscreen con `object-fit: cover`; el estilo `monitor-photo` añade `rotate(-1.2deg)` + gradiente radial blanco al 8%. **Imágenes (.png/.jpg/.gif)** → se renderizan en la parte inferior (`bottom: 520`), centradas, a **900 px fijos** — la tabla de B-roll no tiene columna `Ancho`, a diferencia de la de Overlays. Igual que los overlays, nunca tapan la cara. El header **sigue visible** sobre el B-roll mientras esté en su ventana (≤ `hideAfter`).
+## Chyrons
 
-### Sincronización por keyword
+| Keyword              | Kicker  | Título                     | Duración | Offset |
+|----------------------|---------|----------------------------|----------|--------|
+| la nueva guía        | Novedad | Guía de porciones          | 4.5      | 0      |
 
-Cada cue resuelve su `t_start` así:
-```
-t_start = findKeywordTime(transcript, keyword) + (startOffset || 0)
-t_end   = t_start + duration
-```
+## Tarjetas
 
-`findKeywordTime` normaliza (lowercase, sin acentos, sin puntuación) y busca la primera coincidencia parcial en el transcript. Si la keyword no aparece, el cue se descarta silenciosamente (y `manifest_to_cues.py` ya habrá avisado con `[warn]`).
-
-**Dos trampas que ya mordieron a dos implementadores, por no ser obvias al escribir un MANIFEST:**
-
-1. **La keyword engancha otra palabra por substring.** El match es "contiene",
-   no palabra completa — una keyword corta como `es` matchea dentro de
-   `esto`, `eso`, `estamos`, y el cue dispara ahí en vez de donde la
-   escribiste pensando. Usa keywords distintivas (frases de 2-3 palabras, no
-   una sola palabra corta y común).
-2. **El overlay dura menos del mínimo visible y el filtro lo elimina.** Si un
-   overlay choca con un `## Énfasis` y, tras desplazarlo, le quedan menos de
-   1.2s despejados, se descarta por completo — sin ningún `[warn]`, porque su
-   keyword sí matcheó. Si un overlay "no aparece" en el render y su keyword
-   está bien escrita, revisa si un énfasis se lo está comiendo.
-
-### Reglas de oro de la composición
-
-1. El **header funciona como gancho** — vive los primeros 8s (default) y luego se quita. Si se necesita persistente, override con `Esconder después: 0` en el MANIFEST.
-2. **Emphasis excluye overlay** — el énfasis (`bottom: 220`) y el overlay (`bottom: 520`) viven ambos en el tercio inferior; si coinciden en un frame compiten por la atención visual; gana el emphasis y el overlay se oculta con `opacity: 0` durante toda la ventana de emphasis solapada.
-3. **La cara de quien habla queda libre** — ni emphasis ni overlays se renderizan en la mitad central del frame.
-4. **Subtítulos según el formato.** `fullscreen` y `noticiero` los mantienen apagados por default; `split`, `pip` y `faceless` los traen encendidos (ver `### Subtítulos` abajo). Se fuerzan con `**Subtítulos:** on|off` en el MANIFEST.
-5. **Sentence case** en cajas blancas — NUNCA all caps.
-
-### Subtítulos
-
-Ya no están desactivados de forma global: cada formato define si los trae
-encendidos (ver `## Catálogo de formatos`). `fullscreen` los mantiene
-**apagados** por default, así que los reels de cara siguen comportándose como
-siempre.
-
-Se fuerzan en cualquier sentido con `**Subtítulos:** on|off` en el MANIFEST.
-
-Se agrupan de a 3 palabras y cortan antes si hay una pausa mayor a 0.6s, así el
-subtítulo respeta la respiración. La palabra que coincide con una keyword de
-`## Énfasis` se resalta con una caja de color (`cajaFondo`/`cajaTexto` del
-tema — en `crema-editorial` es el amarillo marcador), no con el acento.
-
-El color y trazo del texto del subtítulo son tokens propios del tema
-(`captionTexto`/`captionTrazo` en `temas.ts`), separados de `texto`/
-`trazoTexto` porque el subtítulo no siempre cae sobre el mismo fondo que el
-resto del tema: en `split`, el subtítulo (`SEAM_TOP = 800`) cae **sobre el
-panel de video**, no sobre el papel crema, así que `crema-editorial` usa
-blanco con trazo negro para el subtítulo aunque su texto normal (`texto`)
-sea casi negro y sin trazo.
-
----
-
-## Clips de apoyo generados (Clip Director) — opcional, antes del render
-
-Paso opcional para **generar B-roll a medida del guion** con IA (Higgsfield) e inyectarlo al
-MANIFEST, en vez de solo cazar recursos sueltos con `recursos-de-video-formula100k`. Usa el
-**Clip Director**, el mismo motor que `reel-faceless-f100k`.
-
-**Cuándo:** el usuario dice "genera clips de apoyo", "b-roll a medida del guion", "clips
-generados para este video", o tras transcribir un video **16:9** largo (YouTube) que necesita
-apoyo visual en conceptos/datos/ejemplos.
-
-**Cómo (auto-propone → el usuario aprueba):**
-
-1. **Transcript.** Requiere `captions.json` (ya lo produce el Paso 1 del pipeline). Si aún no
-   existe, correr primero el corte/transcripción, o usar el guion.
-2. **Invocar el Clip Director** siguiendo `../reel-faceless-f100k/reference/clip-director.md`
-   con `modo=support`, `formato=16:9`. El Director lee `captions.json`, detecta los momentos
-   que piden apoyo (concepto/dato/ejemplo → `visual_type`) y **auto-propone** un plan donde
-   cada segmento trae un `keyword` **verbatim** del transcript (8-15 palabras) como ancla.
-3. **Aprobación.** Mostrar la tabla propuesta y preguntar con `AskUserQuestion`:
-   "¿Genero estos N clips de apoyo? / ajustar algunos / ninguno". El usuario puede agregar o
-   quitar marcas.
-4. **Generar.** Higgsfield `generate_video` con `aspect_ratio="16:9"` (lotes ≤8, poll
-   `job_status(sync:true)`, declinar presets, anti-NSFW — ver la receta `broll` del reference).
-   Descargar a `$DEST/IA/broll_generado/clipNN.mp4`:
-   `curl -L "<url>" -o "$DEST/IA/broll_generado/clipNN.mp4"`.
-5. **Inyectar al MANIFEST.** Añadir una fila por clip a la sección `## B-roll` del MANIFEST
-   (formato exacto en "Formato del MANIFEST.md" abajo):
-
-   ```markdown
-   ## B-roll
-   | Keyword                          | Archivo                          | Duración | Estilo        |
-   |----------------------------------|----------------------------------|----------|---------------|
-   | los tres errores que cometía     | IA/broll_generado/clip01.mp4     | 4s       | monitor-photo |
-   ```
-
-   Si la sección `## B-roll` no existe en el MANIFEST, crearla con ese encabezado. La keyword
-   debe existir en `captions.json` (el parser avisa con `[warn]` si no).
-6. **Render normal.** Continuar con el pipeline de abajo: `manifest_to_cues.py` resuelve las
-   keywords y el render coloca cada clip como B-roll fullscreen por su ventana y vuelve a la
-   cara de quien habla (regla de B-roll existente — los clips son **apoyo**, no reemplazan la toma).
-
-**Degradación:** si `mcp__higgsfield__balance` es 0, el Director degrada a cards/pixel o
-sugiere cazar recursos reales con `recursos-de-video-formula100k` (ver reference §6). No falla.
-
----
-
-## Atajos conversacionales
-
-- `/render <carpeta>` → pipeline completo. Auto-detecta el video fuente desde `**Video fuente:**` del MANIFEST. **Antes de renderizar siempre corre el Paso 0** (confirmación de gancho textual con 3 variantes).
-- `/edita <carpeta>` → equivalente.
-- `/render <carpeta> --skip-hook` → saltea el Paso 0. Úsalo cuando el usuario ya confirmó el header en una invocación previa de esta misma sesión, cuando explícitamente dijo "renderiza tal cual", o cuando se está iterando solo sobre énfasis/overlays sin tocar el header.
-- `/render <carpeta> --skip-formato` → saltea el Paso 0.5. Úsalo cuando el MANIFEST ya trae `**Formato:**` declarado y el usuario dijo "renderiza tal cual", o cuando se está iterando sin cambiar de formato.
-- `/setup` → corre el bootstrap correspondiente a la plataforma para instalar/verificar dependencias (`bootstrap.sh` en Mac, `bootstrap.ps1` en Windows).
-
-Para invocación natural ("edita este video"), preguntar al usuario por la carpeta DEST si no es obvia y luego correr el Paso 0 antes del pipeline. La skill detecta la plataforma automáticamente: en Mac llama `render.sh`, en Windows llama `render.ps1`. El usuario no necesita elegir.
-
----
-
-## Iteración
-
-**Cambiar un cue:**
-1. Editar la fila correspondiente en `MANIFEST.md` (cambiar keyword, texto, duración, o el archivo)
-2. Re-correr `render.sh` (el corte se saltea porque `_source_cut.mov` ya existe; el render reusa los assets de `public/`)
-
-**Re-cortar con regla diferente** (más/menos agresivo, otros fillers, etc.):
-1. Opciones rápidas vía flags al invocar `cut_silences_and_fillers.py` manualmente:
-   - `--min-silence 0.05` para cortar aún más apretado (default 0.08)
-   - `--min-silence 0.15` para más respiración entre frases
-   - `--pad 0.09` si todavía sientes que se cortan las colas de las palabras (default 0.06)
-   - `--pad 0.03` si quieres un ritmo más apretado (sacrificando algo de naturalidad)
-   - `--no-dedupe` si querés conservar repeticiones intencionales ("muy, muy bueno")
-   - `--dedupe-max-gap 0.6` para colapsar solo repeticiones muy seguidas
-2. Para cambiar la lista de muletillas: editar `FILLER_REGEX` en el script
-3. Borrar `_source_cut.mov` y `captions.json` del DEST
-4. Re-correr `render.sh` (re-genera el corte y los captions, los keywords se re-resuelven contra el nuevo transcript)
-
-**Cambiar estética visual** (tamaños, posiciones, animaciones, fuente):
-1. Editar `remotion-template/src/CreaContenidoViral.tsx`
-2. Re-correr `render.sh` (saltea corte, regenera cues + render)
-
-**Probar un solo cambio en cues sin re-bundlear nada de Python:**
-```bash
-cd ~/.claude/skills/editor-video-formula100k/remotion-template
-npx tsx scripts/render.ts \
-  --video _source_cut.mov \
-  --transcript "$DEST/captions.json" \
-  --cues "$DEST/cues.json" \
-  --out "$DEST/BORRADOR_AUTO.mp4"
+| Keyword          | Tipo  | Campos                                                        | Duración | Offset |
+|------------------|-------|---------------------------------------------------------------|----------|--------|
+| tres cambios     | list  | titulo=Los 3 cambios; items=Más fibra // Menos azúcar // Agua | 4.5      | 0      |
+| en la etiqueta   | shot  | archivo=USER/etiqueta.png; titulo=La etiqueta; pie=Dónde mirar | 6        | 0      |
 ```
 
----
+Los rótulos y las tarjetas `title`, `bignum`, `list` y `leaderboard` comparten el tercio inferior (la tarjeta esconde el rótulo mientras dura). La tarjeta `shot` va arriba a la derecha, en una caja de 620×392: recorta la captura a la zona que importa antes de usarla, porque una pantalla completa no se lee a ese tamaño. Una fila con un tipo desconocido o sin su campo obligatorio se descarta con `[warn]`. Los números de `bignum` y `leaderboard` salen de la persona: no los inventes.
 
-## GOTCHAS conocidos de `CreaContenidoViral.tsx` — NO repetir
+### Dos trampas de las keywords
 
-> **Historial:** bugs encontrados en producción (2026-06-05). Ambos ya corregidos en el TSX. Si en el futuro se refactoriza el template, respetar estas reglas.
+1. **La keyword engancha otra palabra.** La búsqueda es «contiene»: `es` aparece dentro de `esto` y `estamos`. Usa frases de 2 o 3 palabras, no una palabra corta y común.
+2. **El overlay no aparece aunque la keyword esté bien.** Si choca con un énfasis y le queda menos de 1.2 s libre, se descarta sin avisar. Muévelo a otra palabra o acorta el énfasis.
 
-### ❌ NUNCA poner `<Header>` dentro de una `<Sequence>` de B-roll
+Si `[warn]` dice que una keyword no está en el transcript, cámbiala por palabras que sí estén en `captions.json` (el transcriptor a veces escribe distinto un nombre propio).
 
-**Bug:** si agregas `<Header .../>` dentro de la Sequence de cada b-roll (para asegurar que el header sea visible encima de las imágenes), el header **reaparece en cada b-roll** aunque ya haya pasado el `hideAfter`. Causa: dentro de `<Sequence>`, `useCurrentFrame()` devuelve el frame **relativo** al inicio de la Sequence (empieza desde 0), no el frame global. Entonces `frame/fps = 0 < hideAfter=8` → siempre verdadero → header visible en cada imagen.
+## Cambiar algo después
 
-**Fix correcto:** el `<Header>` existe UNA SOLA VEZ fuera de todas las Sequences (CAPA 1 en el JSX raíz). Ahí `useCurrentFrame()` sí devuelve el frame global y el `hideAfter` funciona correctamente.
+- **Otro formato, otro gancho, otra caja:** edita `MANIFEST.md` y corre de nuevo el comando del paso 4. No vuelve a cortar ni a transcribir.
+- **Otro corte:** agrega `--recortar` y las banderas que quieras:
 
-### ❌ NUNCA dejar que dos entradas de B-roll se solapen en tiempo
+| Bandera | Para qué |
+|---|---|
+| `--semantic-level ajustado` | Corte fino más apretado: también quita preámbulos, divagaciones y frases que repiten la idea. Protege gancho, pasos, datos y llamado a la acción. De fábrica es `conservador` (solo tomas falladas). Úsalo cuando grabaste limpio y el video quedó largo y flojo. |
+| `--no-semantic` | Apaga el corte fino aunque haya llave. |
+| `--min-silence 0.15` | Deja más respiración entre frases (de fábrica 0.08; `0.05` aprieta más). |
+| `--pad 0.09` | Si se comen el final de las palabras (de fábrica 0.06; `0.03` da un ritmo más apretado). |
+| `--no-dedupe` | Conserva repeticiones a propósito («muy, muy bueno»). |
+| `--dedupe-max-gap 0.6` | Solo junta repeticiones muy seguidas. |
+| `--no-phrase-dedupe` | Conserva las frases reiniciadas. |
+| `--guion "<ruta>.txt"` | Guion de referencia para el corte fino (o deja `guion.txt` en la carpeta). |
+| `--semantic-max-drop 0.6` | El corte fino se descarta si quiere borrar más de esa parte del video (de fábrica 0.4). |
 
-**Bug:** si `broll[i].end > broll[i+1].start`, ambos `BrollLayer` se renderizan simultáneamente con sus imágenes en `bottom: 520` → se superponen visualmente.
+- **Otras muletillas:** edita `FILLER_REGEX` en `scripts/cut_silences_and_fillers.py`.
+- **Otro modelo de voz:** variable `EDITOR_WHISPER_MODELO` (`small` o `medium` en una compu lenta o con poco internet, `large-v3` para más precisión; de fábrica `large-v3-turbo`).
+- **Estética** (tamaños, posiciones, letra): los componentes están en `remotion-template/src/` (el formato `fullscreen` vive en `CreaContenidoViral.tsx`). Los temas, en `temas.ts`.
 
-**Fix correcto:** `resolveBroll` ya incluye un paso de sort + clamp al final:
-```typescript
-for (let i = 0; i < resolved.length - 1; i++) {
-  if (resolved[i].end > resolved[i + 1].start) {
-    resolved[i] = {...resolved[i], end: resolved[i + 1].start};
-  }
-}
-```
-Al editar el TSX, asegurarse de que este clamp persista.
+## Opcional: ilustrar lo que explicas (director de conceptos)
 
-### ⚠️ `--mode tutorial` (`scripts/render.ts`) ahora renderiza los captions cinéticos en MAYÚSCULAS
-
-**Cambio de comportamiento, no un bug — pero nadie lo declaró.** Al mudar los
-subtítulos de `TutorialFaceless.tsx` a la capa compartida `layers/Captions.tsx`
-(reuso con `fullscreen`/`split`/`pip`), el componente que se borró **no** tenía
-`textTransform: uppercase`; el compartido **sí** lo aplica siempre, sin forma
-de apagarlo por prop. Cualquier render que use `--mode tutorial` (la ruta que
-consume `reel-faceless-f100k`, documentada en el docstring de
-`scripts/render.ts`) ahora muestra los captions en mayúsculas donde antes
-salían en el casing original del transcript. Si algo consumía ese output
-esperando el casing anterior, hay que ajustarlo ahí — este pipeline no expone
-`--mode tutorial` desde su propio flujo de MANIFEST (ver `## Catálogo de
-formatos`: `render.py` nunca pasa `--mode`).
-
----
-
-## Errores y fallbacks
-
-| Error | Acción |
-|-------|--------|
-| (Mac) `bootstrap.sh` reporta Homebrew faltante | Instalar Homebrew con el comando oficial y reintentar |
-| (Win) `bootstrap.ps1` reporta winget faltante | Instalar/actualizar "App Installer" desde Microsoft Store y reabrir PowerShell |
-| (Mac) `bootstrap.sh` falla al instalar Remotion (npm cache corrupto) | El script usa `--cache=/tmp/npm-cache-<user>`. Si persiste: `sudo chown -R 501:20 ~/.npm` o borrar `~/.npm` |
-| (Win) `node` o `python` no se reconocen después de bootstrap | Cerrar PowerShell y abrir una ventana nueva para que el PATH se actualice |
-| `manifest_to_cues.py` reporta keywords sin match | La keyword no aparece en `captions.json`. Editar el MANIFEST con una palabra que sí esté en el transcript |
-| `semantic OFF: falta ANTHROPIC_API_KEY` | El pase por comprensión se saltó. Exportar `ANTHROPIC_API_KEY` y re-correr (borrando antes `_source_cut.mov` y `captions.json`) para activar el corte semántico |
-| `semantic: la llamada a Claude falló` | Red caída o key inválida. El render sigue con el motor local. Verificar conexión / key y re-cortar si querés el pase semántico |
-| `semantic: Claude propuso borrar >40%` | Sugerencia descartada por el guard de seguridad. Si el video de verdad tiene mucho descarte, subir `--semantic-max-drop` (ej. `0.6`) y re-cortar |
-| Remotion falla con "Can only download URLs starting with http:// or https://" | El path del asset salió de `public/`. Verificar que `WEB/`/`IA/` y `_source_cut.mov` estén linkeados/copiados al template (lo hace `render.py`) |
-| Carpeta destino sin `MANIFEST.md` | Necesita correr antes `recursos-de-video-formula100k` o armar el MANIFEST a mano |
-
----
-
-## Estructura de archivos generados (en $DEST)
-
-```
-$DEST/
-├── MANIFEST.md              ← editado por el usuario (no se modifica en render)
-├── CANVAS/                  ← opcional, sólo formato pip: screen recording del lienzo
-├── _source_cut.mov          ← video cortado (sin silencios/muletillas)
-├── edl.json                 ← mapping orig→nuevo tiempo (debugging)
-├── captions.json            ← word-timestamps del video cortado
-├── cues.json                ← input para Remotion (regenerado cada render)
-├── BORRADOR_AUTO.mp4        ← OUTPUT FINAL
-├── WEB/                     ← recursos web (no se toca)
-└── IA/                      ← recursos generados con IA (no se toca)
-```
-
----
-
----
-
-## Motion Graphics Nativos — Remotion (Nueva Opción)
-
-El template de Remotion incluye 4 composiciones standalone listas para usar como overlays, intros o B-roll animado. No requieren HyperFrames ni dependencias adicionales — ya están compiladas dentro del template.
-
-### Las 4 composiciones
-
-| ID | Componente | Props principales | Duración | Mejor para |
-|----|-----------|-------------------|----------|-----------|
-| `motion-badge` | `BadgeSlide` | `badgeNumber`, `title`, `subtitle?`, `accentColor?` | 90f (3s) | Intro de punto numerado, paso de tutorial |
-| `motion-stat` | `StatCounter` | `value`, `label`, `suffix?`, `accentColor?` | 60f (2s) | Métricas, logros, números impactantes |
-| `motion-quote` | `QuoteCard` | `quote`, `author?`, `accentColor?` | 90f (3s) | Testimonios, frases de autoridad |
-| `motion-list` | `ListReveal` | `items[]`, `title?`, `accentColor?` | 30+12×n frames | Beneficios, pasos, listas de resultados |
-
-### Cómo renderizar
+Un pase extra de Claude que **no corta**: lee el transcript, encuentra los momentos en que explicas algo nuevo (una herramienta, un método, una metáfora) que se entendería mejor con un apoyo visual, y propone cómo mostrarlo. Actívalo cuando digan «ilustra lo que explico» o «agrégale visuales». Necesita la llave de Anthropic; sin ella escribe una lista vacía y no bloquea nada.
 
 ```bash
-cd ~/.claude/skills/editor-video-formula100k/remotion-template
-
-# Badge numerado
-npx tsx scripts/render.ts \
-  --composition motion-badge \
-  --props '{"badgeNumber": 1, "title": "Este método cambia todo", "subtitle": "F100K"}' \
-  --out "$DEST/IA/badge-overlay.mp4"
-
-# Contador animado
-npx tsx scripts/render.ts \
-  --composition motion-stat \
-  --props '{"value": 50000, "label": "seguidores ganados", "suffix": "+"}' \
-  --out "$DEST/IA/stat-overlay.mp4"
-
-# Cita con wipe
-npx tsx scripts/render.ts \
-  --composition motion-quote \
-  --props '{"quote": "El contenido que vende no es el más bonito, es el más claro.", "author": "@tuhandle"}' \
-  --out "$DEST/IA/quote-overlay.mp4"
-
-# Lista reveal (duración auto según numero de items)
-npx tsx scripts/render.ts \
-  --composition motion-list \
-  --props '{"title": "Lo que vas a aprender", "items": ["Crear contenido que vende", "Automatizar con IA", "Construir tu comunidad"]}' \
-  --out "$DEST/IA/list-overlay.mp4"
+ANTHROPIC_API_KEY="$(grep -o 'sk-ant-[A-Za-z0-9_-]*' ~/.editor-video/llave-anthropic.txt 2>/dev/null)" \
+  uv run --no-project --python 3.12 --with certifi python "$SKILL/scripts/concept_director.py" \
+  "<carpeta>/captions.json" --out "<carpeta>/concept_proposals.json" --max 4
 ```
 
-> Para todos los clips motion nativos usar `Ancho: 1080` y `Duración` = duración del clip en el MANIFEST.
+`concept_proposals.json` trae una lista de `{keyword, concepto, tipo, prompt_visual, t_hint}` con la keyword ya verificada contra el transcript.
 
-### Principios de animación (Emil Kowalski)
+1. **Pregunta antes de gastar créditos:** muestra las propuestas con `AskUserQuestion`. La persona aprueba, cambia el `prompt_visual` o el `tipo`, o descarta. No se genera nada sin su sí.
+2. **Genera cada propuesta aprobada**, con los colores y la letra de su marca:
+   - `card` (concepto simple o numérico) → una tarjeta con `graficos-de-video-formula100k` o una tarjeta HTML → `<carpeta>/IA/concepto_<slug>.png`.
+   - `imagen` (concepto que se puede ver) → el conector de Higgsfield (`generate_image`), en 9:16 o 1:1 → `<carpeta>/IA/concepto_<slug>.png`. Sin créditos o sin conector, haz una `card` y avísalo.
+3. Agrégalas al MANIFEST como overlays (o como B-roll con estilo `monitor-photo` si deben ser protagonistas), ancladas a su keyword.
 
-Todas las composiciones siguen estas reglas que producen motion UI de alta calidad:
-- Solo se animan `transform` y `opacity` — nunca `width`/`height` directamente
-- Spring values para UI: stiffness 280-320, damping 26-32 (sin bounce exagerado)
-- Máximo 300ms por transición individual de UI
-- Entradas con ease-out feel (spring que decelera suavemente)
-- Sin `ease-in` — se siente abrupto al espectador
+## Opcional: clips de apoyo generados
 
-### HyperFrames vs Remotion nativo — cuándo usar cada uno
+Para un video largo (por ejemplo, 16:9 de YouTube) que necesita apoyo visual en conceptos, datos o ejemplos. Solo si la skill `reel-faceless-f100k` está instalada junto a esta:
 
-| Aspecto | HyperFrames | Remotion nativo |
-|---------|-------------|-----------------|
-| Setup | Node >= 22, `npx hyperframes` | Ya instalado en el template |
-| Estilos visuales | 8 temas predefinidos (Swiss Pulse, Velvet, etc.) | 4 composiciones optimizadas para reel |
-| Flexibilidad | Alta — cualquier HTML/CSS/GSAP | Media — props definidas por composición |
-| Velocidad de render | Headless browser (Puppeteer) | Render nativo React + Remotion |
-| Mejor para | Diseños custom complejos, mockups, tipografía cinética | Badges, stats, quotes, listas |
+1. Con `captions.json` listo, sigue `../reel-faceless-f100k/reference/clip-director.md` (ruta relativa a la carpeta de esta skill) con `modo=support` y `formato=16:9`. Propone un plan donde cada clip trae una keyword copiada tal cual del transcript.
+2. Pregunta con `AskUserQuestion`: «¿Genero estos N clips de apoyo? / ajustar algunos / ninguno».
+3. Genera con Higgsfield (`generate_video`, `aspect_ratio="16:9"`) y descarga a `<carpeta>/IA/broll_generado/clipNN.mp4`.
+4. Agrega una fila por clip en `## B-roll` (créala si no existe). Los clips son apoyo: el video vuelve a tu cara al terminar cada uno.
 
-### Técnicas de motion disponibles (todas las opciones)
+Sin créditos de Higgsfield, propone tarjetas o recursos reales con `recursos-de-video-formula100k`. No falla.
 
-| Técnica | Herramienta | Comando |
-|---------|-------------|---------|
-| Badge numerado deslizante | Remotion nativo | `--composition motion-badge` |
-| Contador animado | Remotion nativo | `--composition motion-stat` |
-| Cita con wipe horizontal | Remotion nativo | `--composition motion-quote` |
-| Lista reveal con stagger | Remotion nativo | `--composition motion-list` |
-| Typing effect | HyperFrames | `npx hyperframes render` |
-| Browser mockup con pasos | HyperFrames | `npx hyperframes render` |
-| CSS 3D card flip | HyperFrames | `npx hyperframes render` |
-| Partículas procedurales | HyperFrames | `npx hyperframes render` |
-| Audio-reactive | HyperFrames | `npx hyperframes render` |
+## Gráficos animados incluidos
 
----
+El motor trae cuatro piezas animadas que se renderizan sueltas y se usan como overlay o B-roll (con `Ancho: 1080` y la duración del clip). No necesitan nada más que el motor de montaje:
 
-## Motion Graphics Animados — HyperFrames (Opción Extra)
-
-En lugar de imágenes estáticas como overlays, se puede generar un clip `.mp4` animado con HyperFrames. Estos clips son 1080×1920 (9:16) y se usan exactamente igual que cualquier otro overlay o B-roll en el MANIFEST.
-
-### Cuándo usar HyperFrames vs imagen estática
-
-| Imagen estática (default) | Clip HyperFrames animado |
-|--------------------------|--------------------------|
-| El recurso ya está generado | Quieres entrada animada |
-| Cue simple: aparece y desaparece | Badge/título que desliza desde la izquierda |
-| Pixel avatar, screenshot de app | Browser mockup con pasos en cascada |
-| | Contador que sube de 0 al valor final |
-| | Texto que se escribe solo (typing effect) |
-| | Cualquiera de los 8 estilos visuales |
-
-### Prerequisito
+| Composición | Datos | Para |
+|---|---|---|
+| `motion-badge` | `badgeNumber`, `title`, `subtitle`, `accentColor` | Punto numerado, paso de un tutorial |
+| `motion-stat` | `value`, `label`, `suffix`, `accentColor` | Un número que sube |
+| `motion-quote` | `quote`, `author`, `accentColor` | Una frase o testimonio |
+| `motion-list` | `title`, `items[]`, `accentColor` | Lista que aparece punto por punto |
 
 ```bash
-node --version  # necesita Node.js >= 22
-# No instalar nada más — se usa via npx hyperframes
+cd "$SKILL/remotion-template"
+npx tsx scripts/render.ts --composition motion-list \
+  --props '{"title":"Lo que vas a aprender","items":["Elegir la flor","Armar el ramo","Hacerlo durar"],"accentColor":"<acento de su marca>"}' \
+  --out "<carpeta>/IA/lista.mp4"
 ```
 
-### Flujo para generar un clip animado
+`accentColor` es siempre el acento de su marca. Los datos que pongas (números, citas, nombres) salen de la persona: no los inventes.
 
-1. Editar `~/Documents/f100k-overlays/index.html` con el contenido del overlay (o crear nuevo proyecto)
-2. Previsualizar: `npx hyperframes preview`
-3. Renderizar: `npx hyperframes render --output $DEST/IA/nombre-overlay.mp4`
-4. Agregar al MANIFEST:
+Se animan solo `transform` y `opacity`, con resortes firmes (rigidez 280-320, amortiguación 26-32), transiciones de menos de 300 ms y entradas que frenan al final.
+
+## Extra: motion graphics a medida (HyperFrames)
+
+Para algo más elaborado que las cuatro piezas (texto que se escribe solo, una ventana de navegador con pasos, tarjetas que giran, partículas, algo que reacciona al audio), arma un clip 1080×1920 con HyperFrames (HTML + GSAP) y úsalo como cualquier overlay o B-roll. Necesita Node 22 o más nuevo; se usa con `npx hyperframes`, sin instalar nada más. Si tienes las skills `hyperframes`, síguelas.
+
+1. Crea un proyecto en `<carpeta>/IA/motion-<nombre>/` con su `index.html`.
+2. Previsualiza: `npx hyperframes preview`.
+3. Renderiza: `npx hyperframes render --output "<carpeta>/IA/<nombre>.mp4"`.
+4. Agrégalo al MANIFEST con `Ancho: 1080` y `Duración` igual a la del clip:
 
 ```markdown
 ## Overlays
 
-| Keyword | Archivo | Ancho | Duración |
-|---------|---------|-------|----------|
-| claude  | IA/badge-overlay.mp4 | 1080 | 8.0 |
+| Keyword     | Archivo                 | Ancho | Duración |
+|-------------|-------------------------|-------|----------|
+| tres pasos  | IA/pasos-overlay.mp4    | 1080  | 8.0      |
 ```
 
-> Para clips HyperFrames usar `Ancho: 1080` y `Duración` = duración exacta del clip.
+**El estilo lo pone su marca:** fondo, texto y acento de su paleta, sus letras y, si su manual trae `movimiento.*`, su ritmo de animación (duración, frenado, rebote, de dónde entra y cómo sale). Sin marca, elige un estilo que vaya con su rubro y díselo. Ejemplo de pedido:
 
-### 8 estilos visuales disponibles
-
-| Estilo | Mood | Mejor para |
-|--------|------|-----------|
-| Swiss Pulse | Clínico, preciso | SaaS, datos, métricas |
-| Velvet Standard | Premium, atemporal | Lujo, empresarial |
-| Deconstructed | Industrial, raw | Tech, glitch, punk |
-| Maximalist Type | Ruidoso, cinético | Lanzamientos, hype |
-| Data Drift | Futurista, inmersivo | IA, ML, tech |
-| Soft Signal | Íntimo, cálido | Wellness, historias personales |
-| Folk Frequency | Cultural, vívido | Comunidad, consumidor |
-| Shadow Cut | Oscuro, cinemático | Revelaciones dramáticas |
-
-### Prompts rápidos
-
-**Badge + título (el estilo del reel de referencia):**
 ```
-Usando HyperFrames, crea overlay 1080×1920 con badge naranja (#F59E0B)
-"#1 Skill de Claude Code", título blanco "Esta herramienta cambia todo",
-badge entra desde la izquierda expo.out, título sube con fade. Duración 8s.
-Fondo #0d0d0d. Guarda en ~/Documents/f100k-overlays/ y renderiza el .mp4.
+Usando HyperFrames, crea un overlay 1080×1920 con una etiqueta en <acento de su marca>
+«Paso 1», un título en <color de texto de su marca> «<frase de su video>», la etiqueta entra
+desde la izquierda y el título sube con un fundido. Duración 8 s. Fondo <fondo de su marca>.
+Guárdalo en <carpeta>/IA/motion-paso1/ y renderiza el .mp4.
 ```
 
-**Browser con 3 pasos:**
+| | Piezas incluidas (Remotion) | HyperFrames |
+|---|---|---|
+| Preparación | Ya vienen en el motor | Node 22 o más nuevo, `npx hyperframes` |
+| Libertad | Media: datos fijos por pieza | Alta: cualquier HTML, CSS o GSAP |
+| Mejor para | Pasos, números, citas, listas | Diseños a medida, maquetas, tipografía en movimiento |
+
+## Errores comunes
+
+| Mensaje | Qué hacer |
+|---|---|
+| `No puedo editar todavía. Falta: …` | Instala lo que lista, con el comando que indica, y vuelve a correr. |
+| `Falta instalar el motor de montaje` | `node "$SKILL/scripts/preparar.mjs"` |
+| `semantic OFF` | No hay llave: no hubo corte fino. No es un error. Dilo y ofrece ponerla. |
+| `corte fino: la API respondió 401` | La llave está mal copiada o fue borrada. Revisa el archivo de la llave. |
+| `corte fino: la API respondió 400` o `403` con un texto de saldo o crédito | La cuenta no tiene saldo: se carga en «Billing» de console.anthropic.com. |
+| `semantic: Claude propuso borrar >40%` | Sugerencia descartada por seguridad. Si el video de verdad tiene mucho descarte, `--recortar --semantic-max-drop 0.6`. |
+| `no detecté voz en el video` | El archivo no tiene audio o no se oye a nadie hablar. |
+| `mlx-whisper no pudo transcribir` | Corre de nuevo con `EDITOR_TRANSCRIPCION=faster` delante del comando. |
+| `[warn] keyword … no aparece` | Cambia esa keyword por palabras que estén en `captions.json`. |
+| Remotion dice «Can only download URLs starting with http:// or https://» | Un archivo del MANIFEST está fuera de `USER/`, `IA/` o `WEB/`. Muévelo a una de esas tres. |
+| `npm install` falla por la caché de npm (Mac) | Borra `~/.npm` y corre de nuevo `preparar.mjs`. |
+| En Windows, un programa recién instalado «no existe» | Cierra Claude Code y ábrelo de nuevo: la terminal no ve lo instalado hasta reiniciar. |
+| El render se queda en 0 % un rato la primera vez | Está descargando el navegador de montaje. Espera. |
+
+## Archivos de la carpeta de trabajo
+
 ```
-Usando HyperFrames, crea overlay 1080×1920 con browser mockup oscuro.
-3 pasos numerados con badges amarillos que aparecen cada 0.8s.
-URL: "formula100k.app/skills". Duración 10s. Fondo #0d0d0d.
+<carpeta>/
+├── MANIFEST.md          ← lo que se edita para cambiar el montaje
+├── guion.txt            ← opcional, referencia para el corte fino
+├── USER/  IA/  WEB/     ← imágenes y clips del montaje
+├── CANVAS/              ← solo pip: la grabación de pantalla
+├── _source_cut.mov      ← el video cortado
+├── captions.json        ← cada palabra con su tiempo
+├── edl.json             ← qué tramo del original quedó dónde
+├── corte.json           ← resumen del corte y si hubo corte fino
+├── cues.json            ← se rehace en cada montaje
+└── BORRADOR_AUTO.mp4    ← el video final
 ```
 
----
+El video original nunca se modifica.
+
+## Para quien toque el código
+
+- `remotion-template/src/formatos.ts` es la fuente de verdad del catálogo de formatos; si esta guía y el código difieren, manda el código. `estilos.ts` es el catálogo de estilos que se ofrece a las alumnas (con `construirPrompt(id)` para el prompt que se copia); un estilo no entra ahí hasta que su render salga bien de punta a punta (lo vigila `estilos.test.ts`).
+- Pruebas: `cd "$SKILL/remotion-template" && npm test` (TypeScript) y `cd "$SKILL/scripts" && python3 -m unittest test_manifest_formato test_semantic_clean`.
+- **Nunca pongas `<Header>` dentro de una `<Sequence>` de B-roll**: dentro de una `Sequence`, `useCurrentFrame()` cuenta desde 0 y el gancho reaparece en cada B-roll aunque ya pasó su tiempo. El `<Header>` vive una sola vez, fuera de todas las `Sequence`.
+- **Nunca dejes que dos B-roll se solapen**: `resolveBroll` ordena y recorta cada uno hasta el inicio del siguiente. En `versus` ese recorte es **por lado**; si fuera global, las dos mitades nunca se verían juntas.
+- El modo `tutorial` de `scripts/render.ts` (el que usa `reel-faceless-f100k`) muestra los subtítulos en mayúsculas porque comparte la capa `layers/Captions.tsx`.
+- Para probar un cambio de cues sin pasar por Python:
+
+```bash
+cd "$SKILL/remotion-template"
+npx tsx scripts/render.ts --video _source_cut.mov \
+  --transcript "<carpeta>/captions.json" --cues "<carpeta>/cues.json" \
+  --out "<carpeta>/BORRADOR_AUTO.mp4"
+```
 
 ## Diferencias con otras skills
 
-| Aspecto | recursos-de-video | editor-video (esta) | graficos-de-video |
-|---------|-------------------|---------------------|-------------------|
-| Output principal | MANIFEST.md + WEB/ + IA/ | BORRADOR_AUTO.mp4 | PNG scrapbook sueltos |
-| Necesita MANIFEST | ❌ (lo genera) | ✅ (lo consume) | ❌ |
-| Necesita Remotion | ❌ | ✅ | ❌ |
-| Edita video | ❌ | ✅ | ❌ |
-| Caza web | ✅ | ❌ | ❌ |
-| Tiempo típico | 3-8 min | 4-8 min | 1-2 min |
+| | recursos-de-video | editor-video (esta) | graficos-de-video |
+|---|---|---|---|
+| Entrega | MANIFEST.md + WEB/ + IA/ | BORRADOR_AUTO.mp4 | PNG sueltos |
+| Necesita MANIFEST | No (lo genera) | Sí (lo usa o lo crea) | No |
+| Edita video | No | Sí | No |
+| Busca en la web | Sí | No | No |

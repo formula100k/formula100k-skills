@@ -6,19 +6,36 @@ description: >
   pida: "renderiza este guion de historias", "convierte este guion en imágenes", "diséñame las stories
   de [archivo]", "pasa este guion a imágenes con nanobanana", "genera las historias diseñadas",
   "exporta este guion a PNG", "haz las imágenes de mi secuencia de stories", o cualquier variación
-  que combine un guion de historias con la intención de tener archivos visuales finales. Usa la skill
-  Nano Banana (Gemini) como motor por defecto, con el MCP de Higgsfield como alternativa. Se conecta
+  que combine un guion de historias con la intención de tener archivos visuales finales. Usa Nano Banana
+  por el motor que la persona tenga: el conector de Higgsfield o Gemini directo; sin ninguno entrega los
+  prompts y una versión en HTML. Se conecta
   con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente
   la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas
-  redondeadas, paleta del usuario, capas de capturas/mockups, flechas amarillas, X/✓).
+  redondeadas, paleta de su marca, capas de capturas/mockups, flechas amarillas, X/✓).
 argument-hint: "<ruta al .md del guion> [--motor=gemini|higgsfield] [--fotos=<carpeta>]"
 metadata:
   version: "1.0.0"
-  depends-on: ["guionizacion-historias-formula100k", "banana"]
+  depends-on: ["guionizacion-historias-formula100k"]
   mcp-optional: ["higgsfield"]
 ---
 
-# Skill: Historias a Imágenes (Nanobanana + Higgsfield)
+## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
+
+Corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `~/Documents/mi-contenido/mi-negocio.md`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje. Si existe `~/Documents/mi-contenido/mi-voz.md`, los textos suenan a ella.
+- **Tu marca, en este orden:** 1) `~/Documents/mi-contenido/mi-marca.md` (colores, letra, estilo visual y @); 2) si no está, su manual de identidad visual `mi-marca/marca.md` (búscalo en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; del YAML usa `color.acento`, `color.segundo`, `color.prohibidos`, `imagenes.*` y `firma.usuario`); 3) si no hay ninguno, usa el sistema visual de IG de la skill y pregunta su @ si la historia lo lleva. Su acento reemplaza al azul de la palabra clave y a los resaltados de muestra; nunca uses sus colores prohibidos.
+- **Fotos.** Sus fotos reales viven en `~/Documents/mi-contenido/mis-fotos/` (o la carpeta que te diga). Nunca uses fotos de muestra ni caras inventadas.
+- **Dónde guardar.** Todo lo que generes va dentro de `~/Documents/mi-contenido/` (crea la subcarpeta si no existe). Nunca escribas dentro de la carpeta de esta skill: con el plugin esa carpeta no es `~/.claude/skills/…` y se reemplaza en cada actualización.
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó. Sin Higgsfield ni Gemini, entrega las historias en HTML (su foto de fondo y el texto encima) y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no está instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `~/Documents/mi-contenido/`.
+
+---
+
+# Skill: Historias a Imágenes
 
 Toma un guion de stories generado por `guionizacion-historias-formula100k` y produce imágenes PNG
 listas para subir a Instagram Stories, imitando el estilo nativo de IG y el look del usuario.
@@ -41,8 +58,10 @@ No es opcional.
 
 ## DEPENDENCIAS
 
-- **Skill `banana`** (Nanobanana / Gemini) — para edición de imagen base + overlay del estilo IG
-- **MCP `higgsfield`** (`mcp__higgsfield__*`) — para generación de slides desde cero o con character consistency
+- **Conector de Higgsfield** (`mcp__claude_ai_Higgsfield__…` o `mcp__higgsfield__…`, modelo `nano_banana_2`) — edita sobre la foto base o genera desde cero
+- **Gemini directo** (la skill `banana` o las herramientas de Gemini `gemini_edit_image` / `gemini_generate_image`, si la persona ya las tiene; no vienen en el plugin) — el mismo Nano Banana
+- **Qué motor:** el que pida con `--motor=gemini|higgsfield`; si no pide ninguno, el que esté disponible (si tiene los dos, Higgsfield)
+- **Sin ninguno de los dos:** no te detengas. Guarda el prompt de cada historia en `prompts.md` y arma las historias en HTML (su foto real de fondo y el texto encima, 1080 × 1920) para capturarlas como PNG
 - **Skill `guionizacion-historias-formula100k`** — provee el formato de input (.md con frontmatter + tabla)
 
 ---
@@ -51,21 +70,21 @@ No es opcional.
 
 El usuario te dará alguna combinación de:
 
-1. **Ruta al .md** del guion: `~/Documents/FORMULA100K/HISTORIAS/guiones/[archivo].md`
+1. **Ruta al .md** del guion: `~/Documents/mi-contenido/historias/guiones/[archivo].md`
 2. **Pegado del contenido** del guion directamente
 3. **Carpeta de fotos** (opcional la primera vez, después se guarda como preset): `--fotos=<ruta>` o pregunta interactiva
-4. **Motor preferido** (opcional): `--motor=gemini` | `--motor=higgsfield` (default: gemini)
+4. **Motor preferido** (opcional): `--motor=gemini` | `--motor=higgsfield` (default: el que esté disponible)
 
-Si no hay carpeta de fotos guardada como preset, **pregúntala al usuario antes de proceder**:
+Si no hay carpeta de fotos guardada como preset, usa `~/Documents/mi-contenido/mis-fotos/` si tiene fotos; si no, **pregúntala antes de proceder**:
 
-> "Para diseñar las historias necesito una carpeta con tus fotos de marca personal (Japón, escritorio, playa, etc). Pásame la ruta absoluta. La voy a guardar como preset para futuras generaciones."
+> "Para diseñar las historias necesito una carpeta con tus fotos de marca personal (viajes, escritorio, trabajando, tu producto). Pásame la ruta. La voy a guardar como preset para las próximas veces."
 
-Guarda el preset en: `~/.claude/skills/historias-a-imagenes-nanobanana/preset.json`
+Guarda el preset en: `~/Documents/mi-contenido/historias/preset.json` (nunca dentro de la carpeta de la skill; el `preset.json` de la skill solo trae los valores por defecto).
 
 ```json
 {
-  "fotos_folder": "~/.../fotos-marca",
-  "default_motor": "banana",
+  "fotos_folder": "~/Documents/mi-contenido/mis-fotos",
+  "default_motor": "auto",
   "last_used": "2026-05-06"
 }
 ```
@@ -106,7 +125,7 @@ Lee `references/motor-selection.md`. Lógica simple:
 | Mockup puro (dashboard, GPT, captura sintética) | **Banana** (genera desde cero) |
 | Composición compleja con consistencia de cara | **Higgsfield** (si tiene Soul/character) |
 
-**Default:** si el usuario no especifica `--motor`, usa Banana para todos los slides excepto si la skill detecta que el slide 1 necesita una escena cinematográfica que Higgsfield haría mejor.
+**Default:** si la persona no especifica `--motor`, usa el que esté disponible (si tiene los dos, Higgsfield). Donde la tabla dice «Banana» es el modelo Nano Banana: por Higgsfield (`nano_banana_2`) o por Gemini directo, lo mismo.
 
 ### Paso 4 — Para cada slide: matchear foto
 
@@ -159,10 +178,11 @@ Ver ejemplos completos en `references/prompt-builder.md`.
 
 ### Paso 6 — Generar la imagen
 
-**Si motor = Banana:**
+**Si motor = Gemini (skill `banana` o herramientas de Gemini que la persona ya tenga):**
 ```
-Use the banana skill: /banana edit <foto-base-path> "<prompt-construido>"
+/banana edit <foto-base-path> "<prompt-construido>"
 ```
+Si no tiene ninguna de las dos, usa Higgsfield (abajo).
 
 Captura el output path y muévelo a la carpeta destino.
 
@@ -186,20 +206,15 @@ Captura el output path y muévelo a la carpeta destino.
 
 3. Espera con `mcp__higgsfield__job_status`. Cuando esté lista, descarga vía `mcp__higgsfield__show_medias`.
 
-**Si motor = both:** ejecutar ambos en paralelo y entregar 2 versiones (A/B) por slide.
-
 ### Paso 7 — Guardar y mostrar preview
 
 Carpeta destino:
 ```
-~/Documents/FORMULA100K/HISTORIAS/imagenes/[nombre-del-guion-sin-md]/
+~/Documents/mi-contenido/historias/imagenes/[nombre-del-guion-sin-md]/
 ├── slide_1.png
 ├── slide_2.png
 ├── slide_3.png
 ├── ...
-├── _comparacion_motores/   ← solo si motor=both
-│   ├── slide_1_banana.png
-│   └── slide_1_higgsfield.png
 └── _metadata.json          ← record del run
 ```
 
@@ -208,7 +223,7 @@ Donde `_metadata.json` tiene:
 {
   "guion_origen": "/path/to/guion.md",
   "fecha_generacion": "2026-05-06T14:30:00",
-  "motor_por_slide": {"1": "banana", "2": "banana", "3": "higgsfield", ...},
+  "motor_por_slide": {"1": "higgsfield", "2": "higgsfield", "3": "higgsfield", ...},
   "foto_usada_por_slide": {"1": "playa.jpg", "2": null, "3": "playa.jpg", ...},
   "prompts_usados": {"1": "...", "2": "..."}
 }
@@ -216,9 +231,9 @@ Donde `_metadata.json` tiene:
 
 Después mostrar al usuario:
 1. Lista de imágenes generadas con tamaños
-2. Preview Markdown con cada imagen embebida (o comando para abrir Finder)
+2. Preview Markdown con cada imagen embebida (o el comando para abrir la carpeta)
 3. Costo aproximado (suma de tokens Banana + créditos Higgsfield)
-4. Próximo paso: "¿Querés que regenere algún slide específico?"
+4. Próximo paso: "¿Quieres que regenere algún slide específico?"
 
 ---
 
@@ -244,7 +259,7 @@ Si el guion menciona una captura específica que el usuario ya tiene en su carpe
 - Usarla como capa adicional sobre la foto base
 
 Si NO la tiene:
-- Pedirla explícitamente: "Para el slide 3 necesitas una captura de tu dashboard de Skool. ¿La tienes lista? Pasame la ruta."
+- Pedirla explícitamente: "Para el slide 3 necesitas una captura de tu dashboard de Skool. ¿La tienes lista? Pásame la ruta."
 
 ### Slide de URGENCIA (fondo plano permitido)
 
@@ -258,7 +273,7 @@ Si el guion es categoría `urgencia` y el slide es F9 (fondo de color):
 
 | Flag | Default | Función |
 |---|---|---|
-| `--motor=banana\|higgsfield\|both` | auto | Forzar motor |
+| `--motor=gemini\|higgsfield` | el que esté disponible | Forzar motor |
 | `--fotos=<ruta>` | preset guardado | Carpeta de fotos override |
 | `--solo=1,3,5` | todos | Renderizar solo ciertos slides |
 | `--variantes=N` | 1 | Generar N variantes por slide |

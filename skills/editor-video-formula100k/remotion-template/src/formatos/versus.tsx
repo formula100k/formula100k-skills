@@ -46,7 +46,7 @@ export const Versus: React.FC<FormatoProps> = (props) => {
   // Énfasis y subtítulo comparten banda (la de debajo de la cámara), así que
   // no pueden convivir: se descarta el chunk de subtítulo que pise una
   // ventana de énfasis. Es la misma regla que ya rige entre énfasis y overlay
-  // en `fullscreen` — gana el énfasis —, sólo que acá el que cede es el
+  // en `fullscreen` — gana el énfasis —, sólo que aquí el que cede es el
   // subtítulo.
   const captionsVisibles = useMemo(() => {
     const chunks = marcarDestacados(

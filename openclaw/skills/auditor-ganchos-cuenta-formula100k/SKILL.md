@@ -19,6 +19,27 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
+## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
+
+Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o la ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje.
+- **Tu marca.** Colores, letras, estilo visual y @handle salen, en este orden: de `entregables/`; si no existe, de su manual de identidad visual `mi-marca/marca.md` (en la carpeta del proyecto, en `~/mi-marca/` o en una carpeta `mi-marca` dentro de Documentos; su bloque YAML manda en los valores exactos). Si no hay ninguno, pregúntale lo que haga falta en un solo mensaje. Nunca uses los colores ni el @ de un ejemplo.
+- **Tu voz.** Cómo habla (tono, palabras que usa y las que nunca usa) sale de `entregables/`. Si no existe y lo que entregas lleva texto para decir o publicar, pídele dos o tres textos suyos o que te cuente cómo habla, en un solo mensaje.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe).
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+  - Sin Gmail → entrega el resultado en el chat y guárdalo como archivo.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Las que nombra esta skill vienen en el mismo plugin. Si alguna no está instalada, sigue sin ella y avisa.
+- **Archivos de esta skill.** Las rutas como `references/…` son relativas a la carpeta de esta skill (la que tiene este `SKILL.md`), no a `skills/`.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat ni los escribas en un archivo de `entregables/`.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -64,7 +85,7 @@ Skill que toma una cuenta de Instagram, mira los últimos N reels reales, mide q
 
 ## Output esperado
 
-Carpeta `informes/auditorias-ganchos/<usuario>_<YYYY-MM-DD>/` con:
+Carpeta `entregables/` con:
 
 ```
 00_dataset.json              metadata cruda + stats first-party + carruseles
@@ -141,7 +162,7 @@ Ordenar por `videoPlayCount` desc → TOP N (arriba) + BOTTOM N (abajo).
 
 ## PASO 3 — Guardar dataset y descargar los N videos
 
-Crear carpeta: `informes/auditorias-ganchos/<usuario>_<YYYY-MM-DD>/`
+Crear carpeta: `entregables/`
 
 Guardar `00_dataset.json` con un subset legible:
 ```json
@@ -153,10 +174,10 @@ Guardar `00_dataset.json` con un subset legible:
 En este servidor NO se descargan videos: baja solo la portada de cada reel (`displayUrl`) como `hook_<pos>.jpg`, una tras otra (las URLs de IG expiran rápido, no demorar). El bloque de abajo es de la versión de escritorio: cambia `videoUrl` por `displayUrl` y `reel_${pos}.mp4` por `hook_${pos}.jpg`.
 
 ```bash
-# escribir /tmp/<usuario>_urls.txt con líneas: <pos>|<videoUrl>
+# escribir urls.txt (en la carpeta de la auditoría) con líneas: <pos>|<videoUrl>
 while IFS='|' read -r pos url; do
   curl -sL -A "Mozilla/5.0 ..." -o "reel_${pos}.mp4" "$url" &
-done < /tmp/<usuario>_urls.txt
+done < urls.txt
 wait
 ```
 
@@ -259,7 +280,7 @@ Tabla objetivo→formato→ejemplo→métrica: alcance frío+seguidores (tutoria
 
 ## PASO 6.5 — Tu carrier (lectura ciega)
 
-Mide **quién carga el gancho** (visual / textual / verbal) en los reels de ESTA cuenta y si eso separa a sus ganadores de sus flops. Es el hallazgo que sobrevivió a la auditoría del estudio *1000 Ganchos* ([[feedback_1000_ganchos_data_fabricada]]): a nivel general el visual gana, **pero se INVIERTE por nicho** (en ventas/emprendimiento/mindset suele liderar el texto o lo hablado). Por eso NO se codifica una regla universal: se MIDE la de cada cuenta.
+Mide **quién carga el gancho** (visual / textual / verbal) en los reels de ESTA cuenta y si eso separa a sus ganadores de sus flops. Es el hallazgo que sobrevivió a la auditoría del estudio *1000 Ganchos*: a nivel general el visual gana, **pero se INVIERTE por nicho** (en ventas/emprendimiento/mindset suele liderar el texto o lo hablado). Por eso NO se codifica una regla universal: se MIDE la de cada cuenta.
 
 **Método (anti-circularidad, obligatorio):** codifica el carrier SIN saber qué reel es top o bottom, y recién después cruza con el rendimiento.
 
@@ -271,7 +292,8 @@ os.makedirs('carrier/blind',exist_ok=True); random.seed()
 order=list(reels.values()); random.shuffle(order); mapping={}
 for i,r in enumerate(order,1):
     bid=f"blind_{i:02d}"; mapping[bid]=r['rank']
-    shutil.copy(f"hook_{r['rank']}.jpg", f"carrier/blind/{bid}.jpg")
+    subprocess.run(["ffmpeg","-y","-loglevel","error","-i",f"hook_{r['rank']}.png","-vf","scale=520:520:force_original_aspect_ratio=decrease",f"carrier/blind/{bid}.png"],
+                   stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     tr=' '.join((r.get('transcript') or '').split()[:14])
     open(f"carrier/blind/{bid}.txt","w").write("Primeras ~3s: "+tr)
 json.dump(mapping,open('carrier/mapping_SECRET.json','w'),ensure_ascii=False,indent=2)
@@ -300,11 +322,11 @@ Aplicar la **fórmula ganadora** detectada. Diseñar 6 layouts que sirvan de ref
 
 Para cada layout definir: texto del overlay (amarillo bold), primeras 10 palabras del audio, 3 razones mapeadas a los 12 patrones.
 
-**Si es la cuenta del usuario (auditoría propia):** los layouts pueden mostrar una creadora genérica de marca (pelo lacio castaño, ladrillo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
+**Si es la cuenta del usuario (auditoría propia):** los layouts pueden mostrar una persona genérica parecida a ella (mismo estilo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
 
 **Motor:** Nano Banana. Por defecto **Gemini directo** (`GEMINI_API_KEY`, sección 3.1 de
 `f100k-puente`) con `aspectRatio:"9:16"` e `imageSize:"2K"`, una llamada por layout. Si no hay
-llave pero sí el plugin de Higgsfield, `generate_image` con `model:"nano_banana_pro"`,
+llave pero sí el conector de Higgsfield, `generate_image` con `model:"nano_banana_pro"`,
 `aspect_ratio:"9:16"`, `resolution:"2k"` (revisa saldo antes con `mcp__higgsfield__balance`).
 Sin ningún motor, entrega los 6 prompts en inglés y dilo en la primera línea.
 
@@ -374,7 +396,10 @@ Las imágenes se referencian con paths relativos (`hook_1.png`, `propuestas/p1.p
 
 Al terminar, abrir el archivo:
 ```bash
-# en este agente: comprime la carpeta y manda el .zip por Telegram
+# Mac
+open "entregables/"
+# Windows (Git Bash)
+start "" "entregables/"
 ```
 
 ---
@@ -394,11 +419,11 @@ Ofrecer: "¿Quieres más variantes de un gancho, layouts para editores, o el cal
 
 ## PASO 11 — Encadenamiento opcional (si lo piden)
 
-La auditoría alimenta el resto del ecosistema. Si el usuario lo pide (o proactivamente al final):
+La auditoría alimenta el resto del trabajo. Si el usuario lo pide (o proactivamente al final):
 - **Calendario de guiones** (`CALENDARIO_GUIONES.md`): una semana de guiones que cumplan SOLO el criterio ganador (cada uno con gancho textual/visual/verbal + guion teleprompter con re-hooks por segundo + CTA + nota de producción). Aplicar la jugada combinada carrusel→reel.
-- **Memoria**: guardar el criterio ganador como memoria `feedback` + puntero en `MEMORY.md`.
-- **Segundo Cerebro**: copiar REPORTE.md + index.html + hooks + anatomía + calendario a `cerebro/outputs/<fecha>_auditoria-ganchos-cuenta/`.
-- **Yapper**: subir cada guion con `mcp__yapper__save_yapper_script` (cuenta principal, `scheduled_date`, `entry_type` script/carousel).
+- **Ficha del negocio**: anotar el criterio ganador en `entregables/` para que la calendarizadora lo use.
+- **Segundo Cerebro**: si la persona tiene uno, ofrecer copiar ahí el `REPORTE.md`.
+- **Yapper**: si tiene el conector de Yapper, ofrecer subir cada guion con `save_yapper_script` (con `scheduled_date` y `entry_type` script/carousel).
 
 ---
 
@@ -406,22 +431,23 @@ La auditoría alimenta el resto del ecosistema. Si el usuario lo pide (o proacti
 
 - **NO** confundir `videoViewCount` con `videoPlayCount`. Usar SIEMPRE `playCount` para ordenar (es lo que IG muestra públicamente).
 - **NO** presentes la portada como si fuera el segundo 1: la portada puede ser un thumbnail elegido aparte. Márcala como «portada».
-- **NO** usar nano_banana al 1k para los mockups — texto sale ilegible. SIEMPRE 2k mínimo (4k si el saldo lo permite). Ver [[feedback_avatar_imagen]].
+- **NO** usar nano_banana al 1k para los mockups — texto sale ilegible. SIEMPRE 2k mínimo (4k si el saldo lo permite).
 - **NO** generar mockups con la cara EXACTA de nadie. Si auditas OTRA cuenta, layouts genéricos del estilo de esa cuenta. Si es la propia cuenta del usuario, layouts de una creadora genérica de marca como referencia para editores (no su cara real).
 - **NO** scrapear solo N cuando piden "top N vs bottom N": eso da los N más RECIENTES. Scrapear ~70 y ordenar por playCount.
 - **NO** ignorar las estadísticas nativas si el usuario las pega: guardados/compartidos/seguidores/%no-seguidores NO vienen del scraper y cambian el análisis.
 - **SÍ** marcar el sesgo de recencia (reels <5 días en el bottom).
-- **NO** codificar el carrier (PASO 6.5) mirando primero quién es top/bottom — eso es la circularidad que hundió el estudio *1000 Ganchos*. Codifica a ciegas (frames barajados) y revela después.
+- **NO** codificar el carrier (PASO 6.5) mirando primero quién es top/bottom — eso vuelve circular el análisis. Codifica a ciegas (frames barajados) y revela después.
 - **NO** reportar el carrier como regla universal ("el visual gana"). Se INVIERTE por nicho (ventas/mindset lideran texto/hablado): reporta SIEMPRE el dato de ESA cuenta, y con n chico dilo como "señal, no prueba".
 - **NO** poner emojis en lugares decorativos del HTML excepto en los tabs (donde sí ayudan a navegar) y en los overlays de las propuestas (son parte del lenguaje IG).
-- **SÍ** español neutro en TODO output (ver [[feedback_espanol_neutro]]) — "tu/tú", no "vos/tenés/podés".
+- **SÍ** español neutro en TODO output — "tu/tú", no "vos/tenés/podés".
 - **SÍ** verificar saldo Higgsfield ANTES de generar 6 imágenes.
 - **SÍ** descargar las portadas a disco — las URLs de IG expiran en horas. Los videos no se bajan en este servidor.
 
 ## Dependencias técnicas
 
-- Sin ffmpeg: en este servidor no se procesan videos
-- `curl`
+- `ffmpeg` instalado (Mac: `brew install ffmpeg`; Windows: `winget install ffmpeg`)
+- `curl` (ya viene en Mac y en Windows)
+- Los bloques de Python se corren con `python3` en Mac o `python` en Windows; con uv, `uv run python`
 - MCP Apify autenticado
 - MCP Higgsfield con plan Creator activo
 - Plan F100K Apify con créditos > $0.50 para auditoría estándar de 9 reels

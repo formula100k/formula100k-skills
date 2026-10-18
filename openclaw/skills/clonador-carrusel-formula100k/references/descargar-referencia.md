@@ -1,32 +1,29 @@
-# Descargar la referencia desde un ENLACE (Instagram / TikTok)
+# Bajar la referencia desde un ENLACE (Instagram / TikTok)
 
-> Objetivo: cuando el usuario pasa un **link** de un carrusel (en vez de una captura), la skill baja
-> sola todas las slides como imágenes, las guarda en orden y las lee con visión.
-> Esto resuelve el error clásico: alumna manda un enlace de IG → la skill esperaba una captura → no salía.
+> Objetivo: cuando la persona pasa un **link** de un carrusel (en vez de una captura), bajar todas las slides
+> como imágenes, guardarlas en orden y leerlas con visión.
+> Camino A: el conector de Apify, si la persona lo tiene. Camino B: pedirle capturas. Los dos sirven igual.
 
 ---
 
 ## 0. Detectar el tipo de entrada
 
-- ¿El argumento es un **path/adjunto de imagen** (`.png`, `.jpg`, `.jpeg`, `.webp`)? → NO es link, ir directo a Read (PASO 1 del SKILL).
+- ¿El argumento es una **ruta/adjunto de imagen** (`.png`, `.jpg`, `.jpeg`, `.webp`)? → NO es link, ir directo a Read (PASO 1 del SKILL).
 - ¿Empieza con `http` y contiene `instagram.com` / `tiktok.com`? → es ENLACE, seguir abajo.
 
-Carpeta de trabajo (temporal, del scratchpad de la sesión):
-```
-$SCRATCH/carrusel-ref/
-```
-Crear la carpeta antes de descargar.
+Carpeta de trabajo: una subcarpeta `referencia/` dentro de la carpeta de salida del carrusel
+(`entregables/`). Crearla antes de descargar.
 
 ---
 
-## 1. Instagram (por defecto = Apify directo)
+## 1. ¿Hay conector de Apify?
 
-Patrón F100K `feedback_ig_apify_default`: **para Instagram sin sesión, ir directo a Apify** (no intentar
-agent-browser primero).
+Busca con ToolSearch herramientas cuyo nombre contenga `apify` (por ejemplo `mcp__apify__call-actor` o
+`mcp__claude_ai_Apify__call-actor`). Si no aparece ninguna, ve directo a la **sección 4 (capturas)**.
 
-### 1.1 Obtener las URLs de imagen del carrusel
+## 2. Instagram con Apify
 
-Usar el MCP de Apify. Cargar el tool con ToolSearch (`select:mcp__apify__call-actor,mcp__apify__fetch-actor-details,mcp__apify__get-dataset-items`) y llamar al actor **`apify~instagram-scraper`**:
+Llamar al actor **`apify~instagram-scraper`** (revisa su esquema con la herramienta de detalles del actor si dudas):
 
 Input mínimo:
 ```json
@@ -41,50 +38,53 @@ Input mínimo:
 De la salida (dataset items), extraer las URLs de imagen del carrusel, en orden:
 - Post carrusel → campo **`images`** (array de URLs) **o** **`childPosts[].displayUrl`** (una por slide).
 - Post de imagen única → **`displayUrl`**.
-- Si solo devuelve `videoUrl` (es un reel de video, no carrusel) → avisar al usuario:
+- Si solo devuelve `videoUrl` (es un reel de video, no un carrusel) → avisar:
   "Este post es un video, no un carrusel de imágenes. El clonador trabaja con slides."
 
-> Si el actor pide login/cookies para ese post (privado), avisar y ofrecer el fallback (sección 3).
+Si el actor no devuelve nada (post privado, sin red, sin saldo) → sección 4.
 
-### 1.2 Descargar cada imagen en orden
+### Descargar cada imagen en orden
+
+`curl` viene instalado en Mac y en Windows 10/11:
 
 ```bash
-mkdir -p "$SCRATCH/carrusel-ref"
-# por cada URL i (empezando en 1):
-curl -L -s -o "$SCRATCH/carrusel-ref/slide-$(printf '%02d' $i).jpg" "<URL_i>"
+curl -L -s -o "<carpeta>/referencia/slide-01.jpg" "<URL_1>"
+curl -L -s -o "<carpeta>/referencia/slide-02.jpg" "<URL_2>"
+# … una por slide
 ```
 
-Verificar que se bajaron N archivos y que pesan > 0 bytes.
+Verificar que se bajaron N archivos y que pesan más de 0 bytes.
 
 ---
 
-## 2. TikTok (slideshow / fotos)
+## 3. TikTok con Apify (slideshow / fotos)
 
 TikTok tiene "photo mode" (carrusel de imágenes). Buscar en Apify Store un actor de **TikTok scraper**
-que devuelva las imágenes del slideshow (p. ej. buscar `search-actors` con "tiktok"), y usar `directUrls`/`postURLs`
-según su schema (revisar con `fetch-actor-details` antes de llamar).
-Extraer las URLs de las imágenes del slideshow y descargarlas igual que en 1.2.
+que devuelva las imágenes del slideshow (búsqueda de actores con "tiktok"), y usar `directUrls`/`postURLs`
+según su esquema. Extraer las URLs de las imágenes y descargarlas igual que arriba.
 
 Si el link de TikTok es un video normal (no photo mode) → avisar que el clonador es para carruseles de imágenes.
 
 ---
 
-## 3. Fallback — capturas de la usuaria (nunca navegador logueado)
+## 4. Sin Apify (o si falló): pedir capturas
 
-Solo si Apify falla (post privado, sin red, o el actor no devuelve imágenes):
+No es un error, es el otro camino. (Si la persona tiene instalada la skill `agent-browser` con su sesión
+de Instagram abierta, puedes intentar abrir el post y capturar cada slide con ella antes de pedirle nada.)
+Decirlo en una línea y seguir:
 
-1. Pídele por Telegram una captura de cada slide, en orden.
-2. Abrir el post.
-3. Capturar la portada y avanzar el carrusel capturando cada slide (una captura por slide) a
-   `$SCRATCH/carrusel-ref/slide-XX.png`.
+> "No puedo abrir ese enlace desde aquí. Abre el post en tu teléfono o compu, hazle captura a la portada,
+> a 1 slide del medio y al cierre, y pégamelas aquí en el chat."
 
-Este es el **respaldo**, no el camino principal (Apify primero, por `feedback_ig_apify_default`).
+- En el teléfono: captura normal de pantalla, y luego pásalas a la compu (AirDrop, correo, WhatsApp Web…).
+- En Mac: `Cmd + Shift + 4` y seleccionas la slide.
+- En Windows: `Windows + Shift + S` y seleccionas la slide.
 
 ---
 
-## 4. Entregar al flujo normal
+## 5. Entregar al flujo normal
 
-Cuando ya existan `slide-01.*`, `slide-02.*`, … en `$SCRATCH/carrusel-ref/`:
-- Confirmar al usuario: *"Bajé N slides del post de @referente."*
+Cuando ya existan las imágenes (bajadas o pegadas):
+- Confirmar: *"Tengo N slides de la referencia, ya las estoy leyendo."*
 - Leer cada una con **Read** (visión).
-- Continuar en el **PASO 1** del SKILL (extraer ADN de estilo) con esas imágenes.
+- Continuar en el **PASO 1** del SKILL (extraer ADN de estilo).

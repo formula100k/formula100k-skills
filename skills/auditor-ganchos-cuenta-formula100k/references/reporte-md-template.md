@@ -57,7 +57,7 @@ Versión texto-plano del reporte, complementaria al `index.html` interactivo.
 
 ## Tu carrier (lectura ciega) — quién carga el gancho
 
-> Codificado a ciegas (frames barajados) ANTES de ver el rendimiento, para no caer en la circularidad del estudio *1000 Ganchos*. El carrier general dice "visual > textual > verbal", pero **se invierte por nicho**: acá manda el dato de ESTA cuenta.
+> Codificado a ciegas (frames barajados) ANTES de ver el rendimiento, para no caer en la circularidad del estudio *1000 Ganchos*. El carrier general dice "visual > textual > verbal", pero **se invierte por nicho**: aquí manda el dato de ESTA cuenta.
 
 | Carrier | En TOP | En BOTTOM | Mediana plays |
 |---------|-------:|----------:|--------------:|
@@ -126,7 +126,7 @@ Los reels con MÁS comentarios (<X> cada uno: #N, #N, #N) **no son** los más vi
 
 ## Archivos generados
 
-`~/Documents/FORMULA100K/FORMULA100K AUDITORIAS/<usuario>_<YYYY-MM-DD>/`
+`~/Documents/mi-contenido/auditorias/<usuario>_<YYYY-MM-DD>/`
 - `00_dataset.json` — metadata cruda de los <N> reels
 - `reel_1.mp4` … `reel_<N>.mp4` — videos descargados
 - `hook_1.png` … `hook_<N>.png` — frames @ t=1s

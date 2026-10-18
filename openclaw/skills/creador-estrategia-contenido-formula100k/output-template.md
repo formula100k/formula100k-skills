@@ -1,6 +1,6 @@
 # Template del Output
 
-Formato EXACTO del archivo markdown que se guarda en `entregables/estrategias/{nombre-kebab-case}-estrategia.md`.
+Formato EXACTO del archivo markdown que se guarda en `entregables/`.
 
 Este archivo está diseñado para ser pegado directamente en el TAB 6 del Manual de Negocio 100K.
 

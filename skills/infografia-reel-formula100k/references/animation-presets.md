@@ -125,7 +125,7 @@ Each 3D object in the grid rotates slowly on its vertical axis in a continuous l
    (cada llamada bloquea hasta 25s). Si pasan 5 minutos sin completarse, abortar y reportar.
 
 6. **Descarga**: cuando el job retorna `status: "completed"`, `results.rawUrl` es la URL del .mp4.
-   Descargar con curl a `~/Documents/FORMULA100K/INFOGRAFIAS/<slug>/02_reel.mp4`.
+   Descargar con curl a `~/Documents/mi-contenido/infografias/<slug>/02_reel.mp4`.
 
 7. **Inyectar Text Lock SIEMPRE**: el bloque "CRITICAL TEXT LOCK" del header de este archivo
    debe agregarse al final de TODOS los motion prompts antes de invocar generate_video. Listar

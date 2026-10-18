@@ -56,6 +56,18 @@ import type {
 } from '../src/types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Avance del render: una línea cada 10 %. Reescribir la misma línea llena de
+// ruido la conversación cuando quien lee la salida es un asistente.
+let ultimoDecil = -1;
+function avance(progress: number): void {
+  const decil = Math.floor(progress * 10);
+  if (decil > ultimoDecil) {
+    ultimoDecil = decil;
+    console.log(`[render] ${decil * 10}%`);
+  }
+}
+
 const ROOT = path.resolve(__dirname, '..');
 
 type CuesFile = {
@@ -69,6 +81,12 @@ type CuesFile = {
   subtitulos?: boolean;
   pipEsquina?: 'tl' | 'tr' | 'bl' | 'br';
   versusEtiquetas?: {a: string; b: string};
+  // Sólo los lee el formato `noticiero` (modo news). Ausentes en cualquier
+  // otro MANIFEST — por eso son opcionales y no rompen los demás formatos.
+  newsBrand?: string;
+  newsTicker?: string[];
+  newsChyrons?: unknown[];
+  newsCards?: unknown[];
 };
 
 type ReelArgs = {
@@ -99,7 +117,16 @@ type TutorialArgs = {
   outPath: string;
 };
 
-type Args = ReelArgs | MotionArgs | TutorialArgs;
+type NewsArgs = {
+  mode: 'news';
+  video: string;
+  transcriptPath: string;
+  cuesPath: string;
+  outPath: string;
+  duration?: number;
+};
+
+type Args = ReelArgs | MotionArgs | TutorialArgs | NewsArgs;
 
 const MOTION_COMPOSITIONS = ['motion-badge', 'motion-stat', 'motion-quote', 'motion-list'];
 const MOTION_DURATIONS: Record<string, number> = {
@@ -127,6 +154,20 @@ function parseArgs(argv: string[]): Args {
     else if (a === '--canvas') raw.canvas = next();
     else if (a === '--lienzo') raw.lienzo = next();
     else if (a === '--cutout') raw.cutout = next();
+  }
+
+  if (raw.mode === 'news') {
+    if (!raw.video) throw new Error('Missing --video');
+    if (!raw.transcriptPath) throw new Error('Missing --transcript');
+    if (!raw.cuesPath) throw new Error('Missing --cues');
+    return {
+      mode: 'news',
+      video: raw.video,
+      transcriptPath: path.resolve(raw.transcriptPath),
+      cuesPath: path.resolve(raw.cuesPath),
+      outPath: path.resolve(raw.outPath ?? './news-horizontal.mp4'),
+      duration: raw.duration ? Number(raw.duration) : undefined,
+    };
   }
 
   if (raw.mode === 'tutorial') {
@@ -231,14 +272,10 @@ async function main() {
       inputProps: args.props,
       chromiumOptions: {gl: 'angle'},
       onProgress: ({progress}) => {
-        if (progress === undefined) return;
-        process.stdout.write(
-          `\r[render] ${(progress * 100).toFixed(1)}%`.padEnd(40)
-        );
+        avance(progress);
       },
     });
 
-    process.stdout.write('\n');
     console.log(`[render] done → ${args.outPath}`);
     return;
   }
@@ -287,14 +324,61 @@ async function main() {
       inputProps,
       chromiumOptions: {gl: 'angle'},
       onProgress: ({progress}) => {
-        if (progress === undefined) return;
-        process.stdout.write(
-          `\r[render] ${(progress * 100).toFixed(1)}%`.padEnd(40)
-        );
+        avance(progress);
       },
     });
 
-    process.stdout.write('\n');
+    console.log(`[render] done → ${args.outPath}`);
+    return;
+  }
+
+  if (args.mode === 'news') {
+    const [transcriptRaw, cues] = await Promise.all([
+      readJson<unknown[]>(args.transcriptPath),
+      readJson<CuesFile>(args.cuesPath),
+    ]);
+    const transcript = normalizeTranscript(transcriptRaw);
+
+    const fps = 30;
+    const seconds = args.duration ?? inferDuration(transcript);
+    const durationInFrames = Math.max(1, Math.ceil(seconds * fps));
+
+    const inputProps = {
+      videoSrc: args.video,
+      transcript,
+      brand: cues.newsBrand ?? 'NOTICIAS',
+      ticker: cues.newsTicker ?? [],
+      chyrons: cues.newsChyrons ?? [],
+      cards: cues.newsCards ?? [],
+      width: 1920,
+      height: 1080,
+      fps,
+      durationInFrames,
+    };
+
+    console.log('[render] selecting composition news-horizontal…');
+    const composition = await selectComposition({
+      serveUrl,
+      id: 'news-horizontal',
+      inputProps,
+    });
+
+    console.log(
+      `[render] composition: ${composition.width}x${composition.height} @ ${fps}fps, ${durationInFrames} frames`
+    );
+
+    await renderMedia({
+      serveUrl,
+      composition: {...composition, durationInFrames},
+      codec: 'h264',
+      outputLocation: args.outPath,
+      inputProps,
+      chromiumOptions: {gl: 'angle'},
+      onProgress: ({progress}) => {
+        avance(progress);
+      },
+    });
+
     console.log(`[render] done → ${args.outPath}`);
     return;
   }
@@ -354,14 +438,10 @@ async function main() {
     inputProps,
     chromiumOptions: {gl: 'angle'},
     onProgress: ({progress}) => {
-      if (progress === undefined) return;
-      process.stdout.write(
-        `\r[render] ${(progress * 100).toFixed(1)}%`.padEnd(40)
-      );
+      avance(progress);
     },
   });
 
-  process.stdout.write('\n');
   console.log(`[render] done → ${args.outPath}`);
 }
 

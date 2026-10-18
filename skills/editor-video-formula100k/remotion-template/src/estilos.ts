@@ -4,12 +4,11 @@
 //
 // Un "estilo" es lo que la alumna elige en la vitrina. Un "formato" es lo que
 // el render sabe componer. Hoy son 1:1, pero no siempre lo serán: a futuro un
-// estilo podrá resolverse con otra skill (`collage-cine-f100k`,
-// `motion-reels-f100k`) y la alumna no debería notar la diferencia. Por eso
+// estilo podrá resolverse con otra skill y la alumna no debería notar la diferencia. Por eso
 // `resuelvePor` existe desde ya — es un discriminante de un campo, barato
 // ahora, y evita migrar el JSON del catálogo después.
 //
-// REGLA DURA: un estilo no entra acá hasta que su render salga bien de punta
+// REGLA DURA: un estilo no entra aquí hasta que su render salga bien de punta
 // a punta. Es el bug que ya pasó con `faceless`/`noticiero`: el catálogo
 // prometía formatos que el `/render` no sabía invocar. Vale más un catálogo
 // de cuatro honesto que uno de cinco con una promesa falsa.
@@ -32,12 +31,12 @@ export type EstiloDef = {
 
 // ──────────────────────────────────────────────────────────────────────
 // Las dos primeras partes del prompt son IDÉNTICAS en los cinco estilos, así
-// que viven acá una sola vez. Si mañana cambia el instalador, cambia en un
+// que viven aquí una sola vez. Si mañana cambia el instalador, cambia en un
 // solo lugar y los cinco prompts quedan al día solos.
 // ──────────────────────────────────────────────────────────────────────
 
 /** Parte 1 — instalación. Hace el catálogo servible para alguien sin nada instalado. */
-export const PARTE_INSTALACION = `Si todavía no tengo el editor de video instalado, instálalo primero corriendo \`bootstrap.sh\` (macOS) o \`bootstrap.ps1\` (Windows) de la skill \`editor-video-formula100k\`. Si ya lo tengo, sáltate este paso.`;
+export const PARTE_INSTALACION = `Si todavía no tengo el editor de video instalado, revísalo primero corriendo \`node scripts/editar.mjs --revisar\` dentro de la skill \`editor-video-formula100k\` y sigue lo que indique. Si ya lo tengo, sáltate este paso.`;
 
 /**
  * Parte 2.5 — el MANIFEST. Idéntica en los cinco: sin este paso el prompt
@@ -68,7 +67,7 @@ const PARTES: Record<string, PartesEstilo> = {
       'los tercios — nunca sobre mi cara.',
     nivel: 'conservador',
     extras: [
-      'Este formato usa las cinco secciones del MANIFEST: Header, Gancho visual, Énfasis, Overlays y B-roll. `Header` y `Gancho visual` sólo existen acá — en los demás formatos se ignoran en silencio.',
+      'Este formato usa las cinco secciones del MANIFEST: Header, Gancho visual, Énfasis, Overlays y B-roll. `Header` y `Gancho visual` sólo existen aquí — en los demás formatos se ignoran en silencio.',
       'Propón 3 variantes de header y pregúntame cuál antes de renderizar: es el gancho, carga el 80% de la retención.',
     ],
   },
@@ -112,8 +111,8 @@ const PARTES: Record<string, PartesEstilo> = {
       'detrás de mí al ritmo de lo que digo.',
     nivel: 'conservador',
     extras: [
-      'Genera mi recorte sin fondo (local y gratis, sin pantalla verde): `npx hyperframes remove-background "<carpeta>/_source_cut.mov" -o "<carpeta>/cutout.webm" --quality balanced`.',
-      'El lienzo de trazos lo produce la skill `pizarra-explicativa-f100k` sobre este mismo video. Déjalo en la carpeta con `lienzo` en el nombre. Pídelo en `.webm` si puedes: el alfa de un `.mov` HEVC no lo lee Chrome y hay que convertirlo.',
+      'Genera mi recorte sin fondo (local y gratis, sin pantalla verde): `npx hyperframes remove-background "<carpeta>/_source_cut.mov" -o "<carpeta>/mi_cutout.webm" --quality balanced`.',
+      'El lienzo de trazos es un video con transparencia que este editor no dibuja: tengo que traerlo yo. Déjalo en la carpeta con `lienzo` en el nombre. Pídelo en `.webm` si puedes: el alfa de un `.mov` HEVC no lo lee Chrome y hay que convertirlo.',
       'Los dos se descubren solos por nombre; al MANIFEST le alcanza con `- **Formato:** pizarra`.',
       'Diseña los trazos en los primeros ~700 px de alto: de ahí para abajo los tapo yo.',
       'Este formato no admite B-roll — el lienzo ya es el apoyo visual.',

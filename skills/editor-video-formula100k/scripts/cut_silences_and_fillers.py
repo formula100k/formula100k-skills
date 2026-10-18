@@ -29,7 +29,7 @@ Strategy:
       Skipped gracefully when no key is set. An over-delete guard (40% cap) means
       a bad suggestion can never gut the video.
   3. Drop consecutive repeated words (stutters), keeping the LAST attempt
-  4. Drop phrase restarts (speaker stumbles + retries)
+  4. Drop phrase restarts (the speaker stumbles + retries)
   5. Skip words matching FILLER_REGEX (eh/em/uh/ah/mm)
   6. Compute "keep" ranges; any gap > MIN_SILENCE between kept words is cut
   6b. Snap every cut boundary onto the nearest REAL silence in the audio energy
@@ -49,6 +49,7 @@ import argparse
 import json
 import os
 import re
+import platform
 import subprocess
 import sys
 import tempfile
@@ -242,7 +243,7 @@ def _split_phrases(words: list[dict], min_pause: float) -> list[list[dict]]:
 def _is_restart(a: list[dict], b: list[dict], max_gap: float) -> bool:
     """Returns True if phrase a is a restart of phrase b.
 
-    Differentiates restarts (speaker stumbled) from list items (consecutive sentences
+    Differentiates restarts (the speaker stumbled) from list items (consecutive sentences
     starting the same way intentionally) by requiring either (a) very strong
     first-word match (4+), (b) substantial repeated chunk (LCS ≥ 4 AND ≥ 40%),
     or (c) shorter/unfinished `a` with weaker overlap.
@@ -339,7 +340,9 @@ def remove_phrase_restarts(
 # local engine runs alone. An over-delete guard means a bad model suggestion can
 # never silently gut the video.
 
-DEFAULT_SEMANTIC_MODEL = 'claude-opus-4-8'  # highest quality; override per-render
+# Modelo del corte fino. Se cambia con --semantic-model o con la variable
+# EDITOR_MODELO_CORTE (por ejemplo un modelo más económico).
+DEFAULT_SEMANTIC_MODEL = os.environ.get('EDITOR_MODELO_CORTE') or 'claude-opus-4-8'
 DEFAULT_SEMANTIC_MAX_DROP = 0.40  # never delete more than this fraction of words
 ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
 ANTHROPIC_VERSION = '2023-06-01'
@@ -571,7 +574,18 @@ def call_claude(prompt: str, api_key: str, model: str, timeout: float = 90.0,
     try:
         with urllib.request.urlopen(req, timeout=timeout, context=_ssl_context()) as resp:
             payload = json.loads(resp.read().decode('utf-8'))
-    except (urllib.error.URLError, TimeoutError, ValueError, OSError):
+    except urllib.error.HTTPError as ex:
+        # Decir POR QUÉ falló: llave inválida (401), sin saldo (400/403),
+        # modelo desconocido (404) o demasiadas llamadas (429).
+        try:
+            detalle = json.loads(ex.read().decode('utf-8')).get('error', {}).get('message', '')
+        except Exception:
+            detalle = ''
+        print(f'      ⚠ corte fino: la API respondió {ex.code}. {detalle}'.rstrip(),
+              file=sys.stderr)
+        return None
+    except (urllib.error.URLError, TimeoutError, ValueError, OSError) as ex:
+        print(f'      ⚠ corte fino: no hubo conexión con la API ({ex}).', file=sys.stderr)
         return None
     try:
         blocks = payload.get('content', [])
@@ -629,12 +643,28 @@ def probe_duration(path: Path) -> float:
     return float(out.strip())
 
 
+# Un solo nombre corto para los dos motores (EDITOR_WHISPER_MODELO):
+# small, medium, large-v3 o large-v3-turbo. En mlx también vale un repositorio
+# completo de Hugging Face (con «/»).
+DEFAULT_WHISPER_MODEL = 'large-v3-turbo'
+MLX_MODELOS = {
+    'small': 'mlx-community/whisper-small-mlx',
+    'medium': 'mlx-community/whisper-medium-mlx',
+    'large-v3': 'mlx-community/whisper-large-v3-mlx',
+    'large-v3-turbo': 'mlx-community/whisper-large-v3-turbo',
+}
+
+
 def _transcribe_mlx(audio_path: Path, work_dir: Path) -> list[dict]:
-    """macOS path: mlx-whisper via uvx (rápido, usa MLX/Apple Silicon)."""
+    """Mac con chip Apple: mlx-whisper via uvx (rápido, usa MLX)."""
     out_json = work_dir / (audio_path.stem + '.json')
+    nombre = os.environ.get('EDITOR_WHISPER_MODELO') or DEFAULT_WHISPER_MODEL
+    modelo = nombre if '/' in nombre else MLX_MODELOS.get(nombre, MLX_MODELOS[DEFAULT_WHISPER_MODEL])
+    print(f'      mlx-whisper ({modelo}); la primera vez descarga el modelo, '
+          'puede tardar', file=sys.stderr)
     cmd = [
         'uvx', '--from', 'mlx-whisper', 'mlx_whisper', str(audio_path),
-        '--model', 'mlx-community/whisper-large-v3-mlx',
+        '--model', modelo,
         '--language', 'es',
         '--word-timestamps', 'True',
         '--output-format', 'json',
@@ -649,7 +679,14 @@ def _transcribe_mlx(audio_path: Path, work_dir: Path) -> list[dict]:
         '--no-speech-threshold', '0.5',
         '--hallucination-silence-threshold', '1.0',
     ]
-    subprocess.run(cmd, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    # stderr queda a la vista: ahí sale el avance de la descarga del modelo.
+    r = subprocess.run(cmd, stdout=subprocess.DEVNULL)
+    if r.returncode != 0 or not out_json.is_file():
+        raise RuntimeError(
+            'mlx-whisper no pudo transcribir (el motivo está arriba). Si tu Mac '
+            'no tiene chip Apple o el problema sigue, corre el editor con '
+            'EDITOR_TRANSCRIPCION=faster.'
+        )
     data = json.loads(out_json.read_text(encoding='utf-8'))
     words: list[dict] = []
     for seg in data.get('segments', []):
@@ -661,16 +698,36 @@ def _transcribe_mlx(audio_path: Path, work_dir: Path) -> list[dict]:
 
 
 def _transcribe_faster_whisper(audio_path: Path, work_dir: Path) -> list[dict]:
-    """Windows/Linux path: faster-whisper (CPU, funciona sin GPU)."""
+    """Windows, Mac con procesador Intel y Linux: faster-whisper (CPU, sin GPU).
+
+    El modelo se cambia con la variable EDITOR_WHISPER_MODELO (por ejemplo
+    `small` en una compu lenta, `large-v3` para máxima precisión).
+    """
     try:
         from faster_whisper import WhisperModel  # type: ignore
     except ImportError as e:
         raise RuntimeError(
-            'faster-whisper no está instalado. Corre: pip install faster-whisper'
+            'faster-whisper no está disponible. Corre el editor con '
+            'scripts/editar.mjs, que lo trae solo.'
         ) from e
-    model = WhisperModel('large-v3', device='cpu', compute_type='int8')
+    nombre = os.environ.get('EDITOR_WHISPER_MODELO') or DEFAULT_WHISPER_MODEL
+    print(f'      faster-whisper ({nombre}); la primera vez descarga el modelo',
+          file=sys.stderr)
+    model = WhisperModel(nombre, device='cpu', compute_type='int8')
+    # El audio ya es WAV mono de 16 kHz: se lee aquí y se pasa como arreglo.
+    # Darle la ruta haría que faster-whisper lo decodifique con PyAV, y esa
+    # pareja de versiones no siempre es compatible.
+    import wave
+    import numpy as np
+    with wave.open(str(audio_path), 'rb') as w:
+        muestras = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16)
+    audio = muestras.astype(np.float32) / 32768.0
     segments, _info = model.transcribe(
-        str(audio_path), language='es', word_timestamps=True
+        audio, language='es', word_timestamps=True,
+        # Mismas defensas contra alucinaciones que la ruta de mlx-whisper.
+        condition_on_previous_text=False, temperature=0,
+        compression_ratio_threshold=2.0, log_prob_threshold=-1.0,
+        no_speech_threshold=0.5,
     )
     words: list[dict] = []
     for seg in segments:
@@ -681,10 +738,23 @@ def _transcribe_faster_whisper(audio_path: Path, work_dir: Path) -> list[dict]:
     return words
 
 
+def motor_de_transcripcion() -> str:
+    """`mlx` solo en Mac con chip Apple; `faster` en todo lo demás.
+
+    Se puede forzar con EDITOR_TRANSCRIPCION=mlx|faster (útil para probar en
+    una Mac la ruta que usa Windows).
+    """
+    forzado = (os.environ.get('EDITOR_TRANSCRIPCION') or '').strip().lower()
+    if forzado in ('mlx', 'faster'):
+        return forzado
+    if sys.platform == 'darwin' and platform.machine() == 'arm64':
+        return 'mlx'
+    return 'faster'
+
+
 def transcribe_words(audio_path: Path, work_dir: Path) -> list[dict]:
-    """Devuelve una lista plana de palabras con timestamps.
-    En macOS usa mlx-whisper (rápido). En Windows/Linux usa faster-whisper."""
-    if sys.platform == 'darwin':
+    """Devuelve una lista plana de palabras con timestamps."""
+    if motor_de_transcripcion() == 'mlx':
         return _transcribe_mlx(audio_path, work_dir)
     return _transcribe_faster_whisper(audio_path, work_dir)
 
@@ -877,48 +947,92 @@ def compute_keep_segments(
     return [(s, e) for s, e in merged if (e - s) >= MIN_SEGMENT]
 
 
+def _expresion_select(segments: list[tuple[float, float]]) -> str:
+    """`between(t,a,b)+between(t,c,d)+…` como árbol balanceado de sumas.
+
+    ffmpeg limita a unos 100 niveles la profundidad de una expresión, y una
+    suma plana de N términos tiene profundidad N: con más de ~100 tramos (un
+    video de pocos minutos) fallaba con «Cannot allocate memory». Agrupada de
+    dos en dos con paréntesis, la profundidad es log2(N).
+    """
+    def arbol(ts: list[str]) -> str:
+        if len(ts) == 1:
+            return ts[0]
+        m = len(ts) // 2
+        return f'({arbol(ts[:m])}+{arbol(ts[m:])})'
+    return arbol([f'between(t,{s:.3f},{e:.3f})' for s, e in segments])
+
+
+def _filtros_a_ffmpeg(vf: str | None, af: str, work: Path) -> list[str]:
+    """Pasa los filtros en la línea de comando o, si son largos, por archivo.
+
+    Un video de varios minutos produce cientos de tramos y la expresión
+    `select=` supera el largo máximo de una línea de comando en Windows
+    (unos 32 mil caracteres). Con `-/filter` ffmpeg (7 o más nuevo) la lee
+    de un archivo.
+    """
+    if len(af) < 6000:
+        return (['-vf', vf] if vf else []) + ['-af', af]
+    args: list[str] = []
+    if vf:
+        fv = work / 'filtro_video.txt'
+        fv.write_text(vf, encoding='utf-8')
+        args += ['-/filter:v', str(fv)]
+    fa = work / 'filtro_audio.txt'
+    fa.write_text(af, encoding='utf-8')
+    return args + ['-/filter:a', str(fa)]
+
+
+def _correr_ffmpeg(cmd: list[str]) -> None:
+    r = subprocess.run(cmd, stderr=subprocess.PIPE, text=True, errors='replace')
+    if r.returncode != 0:
+        cola = '\n'.join(l[:300] for l in (r.stderr or '').strip().splitlines()[-8:])
+        raise RuntimeError('ffmpeg no pudo armar el corte:\n' + cola)
+
+
 def cut_video(source: Path, segments: list[tuple[float, float]], out: Path) -> None:
     """Render the cut video using ffmpeg with select+aselect filters."""
     if not segments:
         raise ValueError('No segments to keep')
 
-    # Build select expression: 'between(t,a,b)+between(t,c,d)+...'
-    sel = '+'.join(f'between(t,{s:.3f},{e:.3f})' for s, e in segments)
+    sel = _expresion_select(segments)
     vf = f"select='{sel}',setpts=N/FRAME_RATE/TB"
     af = f"aselect='{sel}',asetpts=N/SR/TB"
 
-    cmd = [
-        'ffmpeg', '-y', '-i', str(source),
-        '-vf', vf, '-af', af,
-        '-c:v', 'libx264', '-preset', 'fast', '-crf', '18',
-        '-c:a', 'aac', '-b:a', '192k',
-        '-movflags', '+faststart',
-        str(out),
-    ]
-    subprocess.run(cmd, check=True, stderr=subprocess.PIPE)
+    with tempfile.TemporaryDirectory() as td:
+        cmd = [
+            'ffmpeg', '-y', '-i', str(source),
+            *_filtros_a_ffmpeg(vf, af, Path(td)),
+            '-c:v', 'libx264', '-preset', 'fast', '-crf', '18',
+            '-pix_fmt', 'yuv420p',
+            '-c:a', 'aac', '-b:a', '192k',
+            '-movflags', '+faststart',
+            str(out),
+        ]
+        _correr_ffmpeg(cmd)
 
 
 def cut_audio(source: Path, segments: list[tuple[float, float]], out: Path) -> None:
     """Render the cut audio using ffmpeg with aselect filter only (no video track).
 
-    Used by --audio-only mode (faceless preset). Output is AAC in an .m4a container.
+    Used by --audio-only mode. Output is AAC in an .m4a container.
     """
     if not segments:
         raise ValueError('No segments to keep')
 
-    # Build aselect expression: 'between(t,a,b)+between(t,c,d)+...'
-    sel = '+'.join(f'between(t,{s:.3f},{e:.3f})' for s, e in segments)
+    sel = _expresion_select(segments)
     af = f"aselect='{sel}',asetpts=N/SR/TB"
 
-    cmd = [
-        'ffmpeg', '-y', '-i', str(source),
-        '-vn',  # no video
-        '-af', af,
-        '-c:a', 'aac', '-b:a', '192k',
-        '-movflags', '+faststart',
-        str(out),
-    ]
-    subprocess.run(cmd, check=True, stderr=subprocess.PIPE)
+    with tempfile.TemporaryDirectory() as td:
+        cmd = [
+            'ffmpeg', '-y', '-i', str(source),
+            '-vn',  # no video
+            *_filtros_a_ffmpeg(None, af, Path(td)),
+            '-c:a', 'aac', '-b:a', '192k',
+            '-movflags', '+faststart',
+            str(out),
+        ]
+        _correr_ffmpeg(cmd)
 
 
 def build_edl(segments: list[tuple[float, float]]) -> list[dict]:
@@ -1032,6 +1146,10 @@ def main() -> int:
         print(f'[2/5] Transcribing source with word timestamps...', file=sys.stderr)
         words = transcribe_words(audio, work)
         print(f'      → {len(words)} words', file=sys.stderr)
+        if not words:
+            print('ERROR: no detecté voz en el video. Revisa que tenga audio y que '
+                  'se escuche a la persona hablar.', file=sys.stderr)
+            return 3
 
         hallucinations = detect_hallucinations(words)
         if hallucinations:
@@ -1053,6 +1171,7 @@ def main() -> int:
 
         # ── Semantic pass (Claude) — runs on the RAW transcript so it has full
         # context; the local layers below then polish whatever it leaves behind.
+        estado_semantico = 'apagado'  # --no-semantic
         if not args.no_semantic:
             api_key = os.environ.get('ANTHROPIC_API_KEY')
             guion_text = None
@@ -1067,6 +1186,7 @@ def main() -> int:
                 guion=guion_text, max_drop_ratio=args.semantic_max_drop,
                 level=args.semantic_level,
             )
+            estado_semantico = status
             if status == 'ok':
                 pct = (n_before - len(words)) / n_before * 100 if n_before else 0
                 print(f'      semantic ({args.semantic_model} · {args.semantic_level}): '
@@ -1078,9 +1198,10 @@ def main() -> int:
                 if len(sem_removed) > 10:
                     print(f'        ... ({len(sem_removed) - 10} más)', file=sys.stderr)
             elif status == 'no_key':
-                print('      ⚠ semantic OFF: falta ANTHROPIC_API_KEY '
-                      '(corre solo el motor local). Exporta la key para activar '
-                      'el corte por comprensión.', file=sys.stderr)
+                print('      ⚠ semantic OFF: no hay llave de Anthropic. Solo se '
+                      'cortan silencios, muletillas y repeticiones literales; '
+                      'el corte fino (reformulaciones y arranques en falso) no '
+                      'corrió.', file=sys.stderr)
             elif status == 'api_fail':
                 print('      ⚠ semantic: la llamada a Claude falló — sigo con el '
                       'motor local.', file=sys.stderr)
@@ -1159,6 +1280,14 @@ def main() -> int:
 
         edl = build_edl(segments)
         (dest / 'edl.json').write_text(json.dumps(edl, indent=2), encoding='utf-8')
+        # Para que quien lance el corte sepa, sin leer el registro, si el corte
+        # fino ocurrió: ok | nothing | no_key | api_fail | aborted_overbudget | apagado
+        (dest / 'corte.json').write_text(json.dumps({
+            'corte_fino': estado_semantico,
+            'duracion_original': round(total, 2),
+            'duracion_cortada': round(cut_total, 2),
+            'tramos': len(segments),
+        }, indent=2), encoding='utf-8')
 
         if args.no_recaption:
             print('[5/5] Skipped captions (--no-recaption)', file=sys.stderr)

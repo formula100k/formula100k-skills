@@ -261,9 +261,5 @@ const proposals = [
 </header>
 ```
 
-## Referencia ejecutada
-
-Para el HTML canónico completo (1177 líneas) que esta plantilla resume, ver:
-(la implementación de referencia de 1177 líneas no viene en este paquete: arma el HTML con esta plantilla)
 
 Esa es la implementación de referencia — clonar su estructura cambiando solo los datos hardcoded en el `<script>` al final.

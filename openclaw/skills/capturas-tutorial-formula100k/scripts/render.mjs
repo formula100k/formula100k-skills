@@ -15,6 +15,7 @@
  *   --scale <n>      (deviceScaleFactor, default 1) — 1 garantiza que el PNG final coincida con (width,height).
  *   --no-trim        Desactiva el auto-trim del bbox de alpha (por default: ON sobre fondo transparente).
  *   --pad <px>       Padding alrededor del bbox tras trim (default 40).
+ *   --marca <ruta.css>  CSS con los colores y letras de la persona (sobrescribe las variables de _tokens.css).
  *
  * Post-procesado automático:
  *   - Si bg=transparent: trim al bbox de alpha + extend(pad).
@@ -23,12 +24,16 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import url from 'node:url';
 import { existsSync } from 'node:fs';
 import sharp from 'sharp';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const TEMPLATES_DIR = path.resolve(__dirname, '..', 'templates');
+
+// CSS opcional con la marca de la persona (--marca). Se aplica después de _tokens.css.
+let MARCA_CSS = '';
 
 const VALID_TYPES = ['step', 'terminal', 'callout', 'screenshot', 'keys', 'link', 'comparison', 'list', 'claude-input'];
 
@@ -93,7 +98,7 @@ function buildItemHtml(type, data, globalBg) {
     ctx.frame = ctx.frame || 'mac';
     // image puede ser ruta absoluta o file:// — convertir a file://
     if (ctx.image && !ctx.image.startsWith('file://') && !ctx.image.startsWith('http')) {
-      ctx.image = 'file://' + path.resolve(ctx.image);
+      ctx.image = url.pathToFileURL(path.resolve(ctx.image.replace(/^~(?=$|[\\/])/, os.homedir()))).href;
     }
     // ocultar el url-bar si frame != browser, ocultar title si frame == browser
     if (ctx.frame === 'browser') {
@@ -166,12 +171,30 @@ function mdLite(s) {
   return out;
 }
 
+// ---------- navegador: el Google Chrome que ya está en la compu (Mac, Windows o Linux) ----------
+function buscarChrome() {
+  if (process.env.CHROME_PATH && existsSync(process.env.CHROME_PATH)) return process.env.CHROME_PATH;
+  const casa = os.homedir();
+  const pf = process.env.PROGRAMFILES || 'C:/Program Files';
+  const pf86 = process.env['PROGRAMFILES(X86)'] || 'C:/Program Files (x86)';
+  const candidatos = process.platform === 'win32'
+    ? [path.join(pf, 'Google/Chrome/Application/chrome.exe'), path.join(pf86, 'Google/Chrome/Application/chrome.exe'),
+      path.join(casa, 'AppData/Local/Google/Chrome/Application/chrome.exe'), path.join(pf86, 'Microsoft/Edge/Application/msedge.exe')]
+    : process.platform === 'darwin'
+      ? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', path.join(casa, 'Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),
+        '/Applications/Chromium.app/Contents/MacOS/Chromium', '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge']
+      : ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'];
+  const hallado = candidatos.find((c) => existsSync(c));
+  if (!hallado) { console.error('\nNo encontré Google Chrome. Instálalo y vuelve a correr esto (o define CHROME_PATH con su ruta).\n'); process.exit(2); }
+  return hallado;
+}
+
 // ---------- render with puppeteer ----------
 async function loadPuppeteer() {
   try {
-    return (await import('puppeteer')).default;
+    return (await import('puppeteer-core')).default;
   } catch (e) {
-    console.error('\nFalta puppeteer. Corre primero: bash ' + path.resolve(__dirname, 'install.sh') + '\n');
+    console.error('\nFalta puppeteer-core. Corre primero: npm install  (dentro de ' + path.resolve(__dirname, '..') + ')\n');
     process.exit(2);
   }
 }
@@ -185,7 +208,7 @@ async function renderOne(browser, { type, data, outPath, width, height, bg, scal
 
   // Inline el CSS de tokens (Puppeteer le da igual el link relativo si baseURI está bien, pero para evitar problemas con file:// y headers, lo inlineamos)
   const tokens = await fs.readFile(path.join(TEMPLATES_DIR, '_tokens.css'), 'utf8');
-  html = html.replace('<link rel="stylesheet" href="_tokens.css">', `<style>${tokens}</style>`);
+  html = html.replace('<link rel="stylesheet" href="_tokens.css">', `<style>${tokens}</style>` + (MARCA_CSS ? `<style>${MARCA_CSS}</style>` : ''));
 
   const page = await browser.newPage();
   await page.setViewport({ width, height, deviceScaleFactor: scale });
@@ -228,7 +251,7 @@ async function loadYaml(filepath) {
   let yaml;
   try { yaml = (await import('js-yaml')).default; }
   catch (e) {
-    console.error('Falta js-yaml. Corre: bash ' + path.resolve(__dirname, 'install.sh'));
+    console.error('Falta js-yaml. Corre: npm install  (dentro de ' + path.resolve(__dirname, '..') + ')');
     process.exit(2);
   }
   const raw = await fs.readFile(filepath, 'utf8');
@@ -244,9 +267,14 @@ async function main() {
   const scale  = parseFloat(args.scale || '1');
   const trim   = !args['no-trim'];
   const pad    = parseInt(args.pad || '40', 10);
+  if (typeof args.marca === 'string') {
+    const rutaMarca = path.resolve(args.marca.replace(/^~(?=$|[\\/])/, os.homedir()));
+    if (!existsSync(rutaMarca)) { console.error('No existe el CSS de marca: ' + rutaMarca); process.exit(1); }
+    MARCA_CSS = await fs.readFile(rutaMarca, 'utf8');
+  }
 
   const puppeteer = await loadPuppeteer();
-  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
+  const browser = await puppeteer.launch({ executablePath: buscarChrome(), headless: 'new', args: ['--no-sandbox'] });
 
   try {
     if (args.manifest) {
@@ -288,6 +316,7 @@ Flags globales:
   --scale <n>     default 1  (mantén 1 — el PNG final coincide con el canvas; 2x rompe Remotion)
   --no-trim       desactiva el auto-trim al bbox (default: ON sobre transparente)
   --pad <px>      padding alrededor del bbox tras trim (default 40)
+  --marca <css>   CSS con las variables de la marca de la persona (--coral, --bg-cream, --ink, --font-display…)
 
 Ejemplos:
   # un comando terminal solo

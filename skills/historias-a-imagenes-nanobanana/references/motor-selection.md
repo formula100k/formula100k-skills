@@ -11,7 +11,7 @@ Cuándo usar cada motor para qué tipo de slide.
 | **Banana (Gemini Nano Banana)** | Edición precisa de imagen base, texto legible, rápido, barato | Generación desde cero menos fotorrealista |
 | **Higgsfield** | Generación cinematográfica, mejor con escenas complejas, character consistency | Más caro, más lento, menos preciso con texto exacto |
 
-**Default:** Banana para todo. Higgsfield solo cuando se necesita "wow" cinematográfico.
+**«Banana» en la tabla de abajo es el modelo Nano Banana, no una herramienta.** Lo puedes correr por Gemini directo (`--motor=gemini`: la skill `banana` o las herramientas de Gemini, si la persona ya las tiene; no vienen en el plugin) o por el conector de Higgsfield (`--motor=higgsfield`, modelo `nano_banana_2`). Sin `--motor`, usa el que esté disponible (si tiene los dos, Higgsfield).
 
 ---
 
@@ -73,7 +73,7 @@ Cuando el usuario quiere ver ambas versiones para elegir:
 
 ### Banana
 
-A través de la skill:
+A través de la skill (opcional, no viene en el plugin):
 ```
 /banana edit <foto-base-path> "<prompt-construido>"
 ```
@@ -136,7 +136,7 @@ Descarga la URL y guarda como `slide_N_higgsfield.png`.
 
 ## ⚠️ COSAS A NO HACER
 
-- **NO usar Higgsfield Soul del usuario** para generar su cara → está deprecado, deriva la cara (ver memoria del usuario: `feedback_avatar_imagen.md`)
+- **NO usar Higgsfield Soul del usuario** para generar su cara → está deprecado, deriva la cara
 - **NO usar Banana solo (`generate_image`) para slides con cara del usuario** → genera caras random, no la de otra persona
 - **NO mezclar motores en una sola secuencia** sin avisar al usuario (genera disparidad visual)
 - **NO usar Higgsfield para texto largo** → su modelo no renderiza texto bien todavía

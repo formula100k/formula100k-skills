@@ -11,7 +11,7 @@ import {Fullscreen} from './fullscreen';
 // Pizarra — formato de MONTAJE, no un motor. No dibuja nada: encadena dos
 // insumos que ya producen otras skills y los apila.
 //
-//   lienzo  ← `pizarra-explicativa-f100k`  (.mov/.webm con alfa: los trazos)
+//   lienzo  ← un video de trazos con transparencia (.mov/.webm con alfa)
 //   cutout  ← `hyperframes remove-background` (.webm VP9 con alfa: el sujeto)
 //
 // Orden de atrás hacia adelante: fondo del tema → lienzo → sujeto → énfasis
@@ -42,8 +42,8 @@ export const Pizarra: React.FC<FormatoProps> = (props) => {
   if (faltan.length > 0) {
     console.warn(
       `[warn] pizarra: falta ${faltan.join(' y ')} — uso fullscreen. ` +
-        'El cutout sale de `hyperframes remove-background`; el lienzo, de ' +
-        'la skill pizarra-explicativa-f100k.'
+        'El cutout sale de `npx hyperframes remove-background`; el lienzo es ' +
+        'un video de trazos con transparencia que traes tú.'
     );
     return <Fullscreen {...props} />;
   }

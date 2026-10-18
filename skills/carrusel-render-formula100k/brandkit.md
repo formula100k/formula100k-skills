@@ -8,11 +8,16 @@
 
 ## 1. Tu marca: de dónde salen los valores (en este orden)
 
-1. **Tu manual de identidad visual** `mi-marca/marca.md`. Cómo buscarlo y leerlo: `references/mi-marca.md`.
+1. **Tu ficha de marca** `~/Documents/mi-contenido/mi-marca.md` (colores, letra, estilo visual y @).
    Si existe, manda sobre todo lo que hay en este archivo.
-2. **Si no hay manual:** la tabla «Mi marca» de abajo, si ya la llenaste (formato de siempre).
-3. **Si tampoco:** ofrece armar el manual en formula100k.app/identidad-visual, o pregunta en un solo mensaje
-   fondo, texto, acento, letra de títulos y @. Lo que no sepa, queda por definir: no lo inventes.
+2. **Si no está:** tu **manual de identidad visual** `mi-marca/marca.md`. Cómo buscarlo y leerlo:
+   `references/mi-marca.md`. También manda sobre este archivo.
+3. **Si no hay ninguno:** la tabla «Mi marca» de abajo, si ya la llenaste (formato de siempre).
+4. **Si tampoco:** pregunta en un solo mensaje fondo, texto, acento, letra de títulos y @ (u ofrece armar el
+   manual en formula100k.app/identidad-visual). Lo que no sepa, queda por definir: no lo inventes.
+
+Los colores y letras de este archivo (paleta neutra de muestra, Caveat, Poppins, Georgia) solo se usan si ella
+no tiene los suyos. Del estilo toma la estructura, la jerarquía y el oficio; el look es el suyo.
 
 ### Cómo pasan los valores del manual a los estilos
 
@@ -90,8 +95,12 @@ La textura va en el papel, la cinta y las piezas; **nunca en las letras** (salen
 - Su `firma.elemento`, si lo tiene, en todas las slides
 
 ## Reglas scrapbook
-1. 1080×1350px · 2. Papel con textura (nunca blanco liso) · 3. Mínimo 1 cinta + 2 stickers + 1 post-it o garabato por slide · 4. Asimetría (ver `references/composiciones.md`) · 5. Slide final con CTA + «guárdalo para después» + handle · 6. Handle abajo a la izquierda · 7. Numeración abajo a la derecha, 28px.
+1. 1080×1350px · 2. Papel con textura (nunca blanco liso) · 3. Mínimo 1 cinta + 2 stickers + 1 post-it o garabato por slide · 4. Asimetría (ver `references/composiciones.md`) · 5. Slide final con CTA «Comenta PALABRA» + handle (nunca «guárdalo» ni «YO» como CTA) · 6. Handle abajo a la izquierda · 7. Numeración abajo a la derecha, 28px.
 
+> **Scrapbook con textura:** si la skill `carrusel-formatos-f100k` trae su carpeta `kit/` (papel con fibras, papel
+> rasgado, cinta washi, polaroids, recortes tipo sticker, post-its), úsalo cuando pidan scrapbook: toma los colores y
+> las letras de la persona desde un `marca.css`, se ve hecho a mano y la textura nunca toca las letras. Ver su `kit/LEEME.md`.
+>
 > El ejemplo canónico del estilo está en `references/ejemplo-completo.html`. Las composiciones asimétricas de
 > `references/composiciones.md` aplican a este estilo.
 
@@ -155,4 +164,6 @@ Mide el contraste del texto contra el velo (mínimo 4,5:1). Si el acento no lleg
 - **Handle:** `firma.usuario` de su manual. Si no hay, pregúntaselo la primera vez (`@tuhandle` es solo un marcador).
 - **CTA:** «Comenta **[PALABRA]** y te envío…», con una palabra ligada al tema y a un regalo o una oferta **de la
   persona**. Si su manual trae `carruseles.cierre`, esa regla manda.
-- **Fotos reales:** la carpeta que te diga la persona (por ejemplo `~/Documents/MIS SELFIES`). Si no existe, pregunta la ruta.
+- **CTA prohibidos:** «guárdalo» como CTA y la palabra «YO».
+- **Fotos reales:** `~/Documents/mi-contenido/mis-fotos/` (o la carpeta que te diga la persona). Si está vacía o no
+  existe, pídele de 10 a 20 fotos. Nunca uses fotos de muestra.

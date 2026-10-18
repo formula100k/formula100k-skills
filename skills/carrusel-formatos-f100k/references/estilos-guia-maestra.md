@@ -1,5 +1,5 @@
 # GUÍA MAESTRA DE CARRUSELES — Generados directamente con Claude
-> FÓRMULA 100K · Versión 2.0 · Mayo 2026 · 25 estilos
+> 25 estilos de carrusel para generar directamente con Claude
 
 ---
 
@@ -82,7 +82,7 @@ ESPECIFICACIONES TÉCNICAS:
 - Sin imágenes, solo tipografía y color
 - Slide 1: hook de apertura impactante
 - Slides 2-N: un punto por slide, mensaje ultra corto y directo
-- Slide final: CTA simple ("Guardalo 💾" o "Seguime @[handle]")
+- Slide final: CTA simple ("Comenta [PALABRA]" o "Sígueme @[handle]")
 - El HTML debe mostrar los slides en secuencia vertical para facilitar la captura de pantalla
 - Cada slide separado visualmente con una línea o espacio
 ```
@@ -676,7 +676,7 @@ ESPECIFICACIONES TÉCNICAS:
 ```
 Generame un carrusel HTML/CSS estilo ANTES/DESPUÉS DRAMÁTICO con estas especificaciones:
 
-TEMA/HISTORIA: [ej: "antes y después de aplicar la estrategia de contenido de FÓRMULA 100K"]
+TEMA/HISTORIA: [ej: "antes y después de [el cambio que logra tu clienta en tu rubro]"]
 ESTRUCTURA: [ej: 2-3 slides de ANTES + 2-3 slides de DESPUÉS + portada y cierre]
 
 ESPECIFICACIONES TÉCNICAS:
@@ -939,7 +939,7 @@ ESPECIFICACIONES TÉCNICAS:
 ```
 Genérame un carrusel HTML/CSS estilo BENTO GRID con estas especificaciones:
 
-TEMA: [escribe tu tema aquí — ej: "todo lo que incluye FÓRMULA 100K"]
+TEMA: [escribe tu tema aquí — ej: "todo lo que incluye [tu oferta]"]
 SLIDES: [número de slides, ej: 7]
 PALETA: [fondo claro #F5F5F7 + acento azul #2563EB / versión dark #0E0E12 + cyan — elige una]
 
@@ -969,7 +969,7 @@ ESPECIFICACIONES TÉCNICAS:
 - Barras (alturas de div), donuts/anillos de progreso (conic-gradient), callouts de stats con flechas arriba/abajo, barras comparativas
 - Un color de acento (#2563EB) + escala de grises
 - Líneas de eje, gridlines, etiquetas de datos
-- Cada slide = un insight visualizado (distinto al "Dato Gigante": acá son varios datos graficados con UI de chart real)
+- Cada slide = un insight visualizado (distinto al "Dato Gigante": aquí son varios datos graficados con UI de chart real)
 
 ### Paletas sugeridas
 - Blanco + grises + acento azul #2563EB
@@ -1028,7 +1028,7 @@ Genérame un carrusel HTML/CSS estilo NEWSPAPER / PRINT con estas especificacion
 
 TEMA: [escribe tu tema aquí]
 SLIDES: [número de slides, ej: 7]
-NOMBRE DEL "PERIÓDICO": [ej: "EL DIARIO 100K" o el nombre de tu marca]
+NOMBRE DEL "PERIÓDICO": [ej: "EL DIARIO DE [TU MARCA]"]
 
 ESPECIFICACIONES TÉCNICAS:
 - Formato: 1080x1350px (portrait 4:5)
@@ -1101,7 +1101,7 @@ ESPECIFICACIONES TÉCNICAS:
 
 ### Paletas sugeridas
 - Fondo #FAFAFA + acento violeta #6D28D9
-- Fondo blanco + acento naranja #FF6B35 (marca F100K)
+- Fondo blanco + acento de tu marca (por defecto naranja #FF6B35)
 - Fondo #0F1020 + acento cyan #22D3EE (dark)
 
 ### PROMPT PARA COPIAR Y PEGAR
@@ -1211,5 +1211,5 @@ Decime qué estilo elegiste y por qué antes de generarlo.
 
 ---
 
-*Guía generada con Claude Code · FÓRMULA 100K · Abril 2026*
+*Guía generada con Claude Code*
 *Actualizar cuando se incorporen nuevos estilos o herramientas*

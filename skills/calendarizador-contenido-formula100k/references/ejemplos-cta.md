@@ -36,7 +36,7 @@ Objetivo: generar señal de utilidad (guardado, comentario, compartido).
 - "Comenta '[PALABRA]' y te paso la plantilla"
 - "Comenta '[PALABRA]' para enviarte la guía"
 - "¿Qué opinas? Cuéntame en comentarios"
-- "Si te identificas, escribe 'YO' en comentarios"
+- "Si te identificas, escribe 'ASÍ ESTOY' en comentarios"
 - "¿Cuál de estos te pasó? Comenta el número"
 
 ### Por compartido
@@ -82,11 +82,11 @@ Objetivo: transacción directa.
 
 ---
 
-## CTAs ESPECIALES PARA F100K (referencia personal del usuario)
+## CTAs PARA TU OFERTA
 
-Cuando se trata de la oferta de FÓRMULA 100K específicamente:
+Cuando se trata de la oferta de la persona (usa su nombre real y sus datos reales, nunca una cifra inventada):
 
-- "Comenta 'FORMULA' y te paso la info de la comunidad"
-- "Si quieres entrar a la comunidad, link en bio"
-- "Mira las clases en mi bio · FÓRMULA 100K"
-- "Únete a las +1.700 alumnas de FÓRMULA 100K"
+- "Comenta '[PALABRA]' y te paso la info de [TU OFERTA]"
+- "Si quieres entrar, el enlace está en mi perfil"
+- "Mira los detalles en mi perfil · [TU OFERTA]"
+

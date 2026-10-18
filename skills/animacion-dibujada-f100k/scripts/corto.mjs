@@ -36,12 +36,13 @@
 // Las transiciones de la skill (tinta, pagina, pixel) se dibujan en canvas: una máscara + adornos (borde de tinta,
 // dorso de la página, bloques de luz), así que salen con bordes suaves y en milisegundos.
 // Subtítulos: se dibujan en canvas (misma letra que las piezas) y se montan con overlay. No necesita libass.
-// Sincronía por palabra: usa mlx-whisper (Apple Silicon, vía uvx) o openai-whisper si están instalados.
+// Sincronía por palabra: transcribe la voz con Whisper local (ver sistema.mjs: mlx-whisper en Mac con chip Apple, faster-whisper en Windows y en Mac Intel).
 import { createRequire } from 'node:module';
-import { spawn, execFileSync, spawnSync } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, statSync } from 'node:fs';
 import { resolve, join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { transcribir as transcribirVoz, paraLista, chrome } from './sistema.mjs';
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -114,7 +115,7 @@ await pool(escenas.map((e, i) => () => new Promise((ok, mal) => {
 // ---------- navegador para dibujar subtítulos, máscaras y medir las franjas ----------
 let chromium; for (const b of [join(aqui, '..') + '/', process.cwd() + '/']) { try { chromium = createRequire(b)('playwright-core').chromium; break; } catch {} }
 const flags = { args: ['--allow-file-access-from-files', ...(process.platform === 'linux' ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])] }   // en un servidor Linux (root) Chrome necesita --no-sandbox;
-let nav; try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch(flags); }
+let nav; try { nav = await chromium.launch({ channel: 'chrome', ...flags }); } catch { nav = await chromium.launch({ ...flags, ...(chrome() ? { executablePath: chrome() } : {}) }); }
 const pag = await nav.newPage();
 await pag.setContent('<canvas id="c" width="1080" height="1920"></canvas><canvas id="m" width="1080" height="1920"></canvas>');
 const png = (b64, ruta) => writeFileSync(ruta, Buffer.from(b64, 'base64'));
@@ -187,22 +188,12 @@ function transcribir(voz) {
   const st = statSync(voz), cache = join(tmp, `palabras-${st.size}-${Math.round(st.mtimeMs)}.json`);
   if (existsSync(cache)) return JSON.parse(readFileSync(cache, 'utf8'));
   const dir = join(tmp, 'whisper'); mkdirSync(dir, { recursive: true });
-  const intentos = [
-    ['uvx', ['--offline', '--from', 'mlx-whisper', 'mlx_whisper', voz, '--model', 'mlx-community/whisper-large-v3-turbo']],
-    ['uvx', ['--from', 'mlx-whisper', 'mlx_whisper', voz, '--model', 'mlx-community/whisper-large-v3-turbo']],
-    ['whisper', [voz, '--model', 'small']],
-  ];
-  const comun = ['--language', 'es', '--word_timestamps', 'True', '--output_format', 'json', '--output_dir', dir, '--condition_on_previous_text', 'False', '--temperature', '0'];
-  for (const [cmd, a] of intentos) {
-    const extra = cmd === 'uvx' ? comun.map(s => s.startsWith('--') ? s.replace(/_/g, '-') : s) : comun;
-    const r = spawnSync(cmd, [...a, ...extra], { encoding: 'utf8', timeout: 600000 });
-    const j = join(dir, basename(voz).replace(/\.[^.]+$/, '') + '.json');
-    if (r.status === 0 && existsSync(j)) {
-      const d = JSON.parse(readFileSync(j, 'utf8'));
-      const pal = d.segments.flatMap(s => s.words || []).map(w => ({ w: w.word.trim(), a: w.start, b: w.end }));
-      if (pal.length) { writeFileSync(cache, JSON.stringify(pal)); console.log(`  voz transcrita con ${cmd === 'uvx' ? 'mlx-whisper' : 'openai-whisper'}: ${pal.length} palabras`); return pal; }
-    }
-  }
+  const r = transcribirVoz(voz, { dir, idioma: 'es', sinInternetPrimero: true, extra: ['--condition-on-previous-text', 'False', '--temperature', '0'] });
+  if (r.ok) {
+    const d = JSON.parse(readFileSync(r.archivo, 'utf8'));
+    const pal = d.segments.flatMap(s => s.words || []).map(w => ({ w: w.word.trim(), a: w.start, b: w.end }));
+    if (pal.length) { writeFileSync(cache, JSON.stringify(pal)); console.log(`  voz transcrita con ${r.motor}: ${pal.length} palabras`); return pal; }
+  } else console.warn('  ' + String(r.error).split('\n').slice(-3).join('\n  '));
   return null;
 }
 // Alinea las palabras del guion (texto correcto) con las de Whisper (tiempos correctos): alineación global con huecos.
@@ -225,7 +216,7 @@ function alinear(guion, voz) {
 const trozos = [];                                   // { texto, activa, desde, hasta, pos }
 let modoPalabra = conSubs && SUB.sincronia === 'palabra' && G.voz;
 let vozPal = null;
-if (modoPalabra) { vozPal = transcribir(rel(G.voz)); if (!vozPal) { console.warn('  ⚠ no encontré Whisper (mlx-whisper o openai-whisper): subtítulos repartidos por largo. Ver cortos/LEEME.md'); modoPalabra = false; } }
+if (modoPalabra) { vozPal = transcribir(rel(G.voz)); if (!vozPal) { console.warn('  ⚠ no pude transcribir la voz: subtítulos repartidos por largo. Ver cortos/LEEME.md'); modoPalabra = false; } }
 if (conSubs) for (const e of escenas) {
   if (!e.subtitulo) continue;
   const ini = e.iniF / FPS + (e.trF ? e.trF / FPS * .5 : 0), fin = (e.iniF + e.durF) / FPS - .05;
@@ -382,7 +373,7 @@ for (const [i, e] of escenas.entries()) {
 await nav.close();
 console.log(`Armando ${segmentos.length} segmentos…`);
 await pool(tareas, 4);
-writeFileSync(join(tmp, 'segmentos.txt'), segmentos.map(s => `file '${s}'`).join('\n'));
+writeFileSync(join(tmp, 'segmentos.txt'), segmentos.map(paraLista).join('\n'));
 
 // ---------- 7. montaje final: segmentos + subtítulos + voz y música ----------
 const entradas = ['-f', 'concat', '-safe', '0', '-i', join(tmp, 'segmentos.txt')], filtro = [];
@@ -408,8 +399,12 @@ if (G.voz || G.musica) {
 const salida = resolve(salidaArg);
 writeFileSync(join(tmp, 'filtro.txt'), filtro.join(';\n'));
 console.log(`Uniendo ${escenas.length} escenas, ${trozos.length} subtítulos${G.voz ? ', la voz' : ''}${G.musica ? ' y la música' : ''}…`);
+// El filtro va en un archivo (con muchos subtítulos no cabe en la línea de comandos). ffmpeg 7 cambió cómo se le pasa
+// y el 8 quitó la forma vieja: se elige según la versión instalada.
+const ffMayor = Number((execFileSync('ffmpeg', ['-version']).toString().match(/ffmpeg version n?(\d+)\./) || [])[1]) || 99;
+const filtroDesdeArchivo = ffMayor >= 7 ? ['-/filter_complex', join(tmp, 'filtro.txt')] : ['-filter_complex_script', join(tmp, 'filtro.txt')];
 try {
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...entradas, '-filter_complex_script', join(tmp, 'filtro.txt'), ...mapa,
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...entradas, ...filtroDesdeArchivo, ...mapa,
     '-t', TOTAL.toFixed(3), '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-color_range', 'tv', '-movflags', '+faststart', salida], { stdio: 'inherit' });
 } catch { console.error(`ffmpeg falló. El filtro quedó en ${join(tmp, 'filtro.txt')}`); process.exit(1); }
 if (op('--limpiar')) rmSync(tmp, { recursive: true, force: true });   // si no, queda de caché para --solo

@@ -17,6 +17,28 @@ metadata: {"openclaw": {"emoji": "🦞"}}
 
 ---
 
+## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
+
+Corre igual en Mac y en Windows.
+
+- **Tu negocio.** Los datos salen de la persona, nunca de un ejemplo: lo que venga en el pedido, su Manual o Segundo Cerebro si lo tiene, o su ficha `entregables/`. Si no hay nada, pregunta rubro, avatar y oferta en un solo mensaje. Si existe `entregables/`, el guion suena a ella.
+- **Tu marca, en este orden:** 1) `entregables/` (colores, letra, estilo visual y @); 2) si no está, su manual de identidad visual `mi-marca/marca.md` (cómo buscarlo y leerlo: `references/mi-marca.md`); 3) si no hay ninguno, el respaldo `references/design_profile.md` si ya está configurado, y si tampoco, pregunta (PASO 0.2). Colores, letra y @handle siempre son los suyos.
+- **Tu marca manda sobre el estilo de esta skill.** Sus colores, letras, estilo visual y lugar del @ reemplazan a los estilos predeterminados de abajo (editorial oscuro, scrapbook, Bebas Neue, Caveat, Poppins), aunque digan «siempre». De esta skill toma la estructura, la jerarquía y el oficio; el look es el suyo.
+- **Dónde guardar.** Todo lo que generes va dentro de `entregables/` (crea la subcarpeta si no existe). Nunca escribas dentro de la carpeta de esta skill: con el plugin esa carpeta no es `skills/…` y se reemplaza en cada actualización.
+- **Si falta una cuenta o un conector, no te detengas:** haz la parte que sí se puede y di en una línea qué faltó.
+  - Sin Apify → usa la búsqueda web de Claude (WebSearch y WebFetch) y los enlaces que la persona te pase. Toda cifra que no leíste de la fuente va marcada «sin verificar». Nunca inventes una métrica ni un enlace.
+  - Sin `agent-browser`, Tavily, Supadata o vidIQ → lo mismo: búsqueda web de Claude.
+  - Sin Higgsfield ni otra herramienta de imagen → entrega la pieza en HTML y tipografía si se puede, y deja el prompt de cada imagen listo para cuando conecte la cuenta.
+- **Nombres de herramientas.** Un conector puede aparecer como `mcp__claude_ai_<Nombre>__…` o `mcp__<nombre>__…`: usa el que esté disponible.
+- **Otras skills.** Si esta skill nombra otra que no está instalada, sigue sin ella y avisa.
+- **Abrir un archivo o una carpeta:** en Mac `open "<ruta>"`; en Windows `start "" "<ruta>"`.
+- **Llaves.** Nunca pidas que peguen una llave o un token en el chat, ni las leas de un archivo de configuración, ni las escribas en un archivo de `entregables/`.
+- **Fotos.** Sus fotos reales viven en `entregables/` (o la carpeta que diga su marca). Si no hay, pídele fotos. Sin fotos, la portada es tipográfica con sus colores: nunca uses fotos de muestra.
+- **Sin pasos de más.** No preguntes por Canva ni entregues calendario, horarios de publicación o estadísticas salvo que te lo pida. Si no encuentras referencias con métricas verificables, dilo en una línea y sigue con el guion.
+- **Tamaño.** 1080 × 1350.
+
+---
+
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)
 
 Esta skill enseña un **método**. El método es agnóstico de industria: sirve igual para
@@ -58,7 +80,7 @@ Mismo molde en todos; ninguno menciona reels ni embudos. Haz exactamente eso.
 
 # Skill: Carrusel Viral — FORMULA 100K
 
-Esta skill transforma una idea o guion en un carrusel de Instagram completamente guionizado, diseñado y construido. El proceso incluye investigación de ganchos virales reales, guion slide por slide con especificaciones de diseño, generación de imagen del gancho con **Nanobanana (skill banana / Gemini API)**, y construcción directa del carrusel en Canva si el usuario proporciona el enlace editable.
+Esta skill transforma una idea o guion en un carrusel de Instagram completamente guionizado, diseñado y construido. El proceso incluye investigación de ganchos virales reales, guion slide por slide con especificaciones de diseño, generación de la imagen del gancho (IA o foto real que diga el tema), y construcción directa del carrusel en Canva solo si el usuario proporciona el enlace editable.
 
 ---
 
@@ -66,11 +88,13 @@ Esta skill transforma una idea o guion en un carrusel de Instagram completamente
 
 Este paso se ejecuta SIEMPRE, al principio de cada sesión. El perfil visual garantiza que todos los carruseles tengan coherencia de marca.
 
-### 0.0 — Primero, su manual de identidad visual
+### 0.0 — Primero, su ficha de marca o su manual de identidad visual
 
-Busca `mi-marca/marca.md` como dice `references/mi-marca.md` (dónde buscarlo, cómo leerlo y qué significa cada campo).
+Busca su marca en este orden:
+1. `entregables/` (su ficha de marca).
+2. Si no está: su manual de identidad visual `mi-marca/marca.md`, como dice `references/mi-marca.md` (dónde buscarlo, cómo leerlo y qué significa cada campo).
 
-**Si existe:** arma el Perfil Visual de Marca (formato del PASO 0.4) a partir del manual, sin preguntar nada de lo que ya trae:
+**Si existe alguno:** arma el Perfil Visual de Marca (formato del PASO 0.4) a partir de él, sin preguntar nada de lo que ya trae. Con el manual, así:
 - Nombre de marca → `firma.usuario` · Estilo y tono visual → `esencia.rasgos` y la prosa del manual
 - Fondo y fondo de slides interiores → `color.lienzo` · Texto → `color.tinta` · Énfasis y CTA → `color.acento` · Secundario → `color.segundo` (si no hay, `color.acento`)
 - Fuentes de títulos y de cuerpo → `letra.titulares` y `letra.apoyo` (en Canva, sus nombres `canva`) · Elemento de énfasis → `letra.resalta_con`
@@ -78,9 +102,11 @@ Busca `mi-marca/marca.md` como dice `references/mi-marca.md` (dónde buscarlo, c
 - Estructura del Slide 1 y CTA visual → `carruseles.portada` y `carruseles.cierre`
 - Nunca usar → `color.prohibidos` e `imagenes.nunca`
 
-Confírmalo en una línea («✓ Tu manual de identidad visual: …») y ve directo al PASO 0.5. En este caso `references/design_profile.md` no se usa.
+Con la ficha `mi-marca.md`, usa lo que traiga (colores, letras, estilo visual, @) y completa solo lo que falte preguntando en un solo mensaje.
 
-**Si no existe:** sigue con el 0.1. `design_profile.md` queda como respaldo para quien todavía no tiene su manual.
+Confírmalo en una línea («✓ Tu marca: …») y ve directo al PASO 0.5. En este caso `references/design_profile.md` no se usa.
+
+**Si no existe ninguno:** sigue con el 0.1. `design_profile.md` queda como respaldo para quien todavía no tiene ficha ni manual.
 
 ### 0.1 — Verificar si existe un perfil configurado (respaldo)
 
@@ -192,7 +218,7 @@ Presenta el perfil al usuario y pregunta:
 Aplica los ajustes que pida.
 
 Luego dile:
-> "Para guardar este perfil para sesiones futuras, cópialo y reemplaza el contenido de `references/design_profile.md` en tu skill. Así no tendrás que configurarlo de nuevo."
+> "¿Quieres que guarde este perfil en `entregables/`? Así no tendrás que configurarlo de nuevo." (Si dice que sí, guárdalo ahí; nunca dentro de la carpeta de la skill.)
 
 ---
 
@@ -203,9 +229,9 @@ Si el usuario ya proporcionó su idea o guion junto con la solicitud inicial, ú
 Si no la proporcionó, pregunta:
 > "¿Cuál es la idea o guion que quieres convertir en carrusel? Puedes pegar el texto de un reel, describir el tema en 1-2 oraciones, o darme el mensaje central que quieres comunicar."
 
-### 0.6 — Preguntar si quiere construcción directa en Canva
+### 0.6 — Construcción directa en Canva (solo si la pide)
 
-**Siempre preguntar esto**, ya sea que la idea haya venido en el mensaje inicial o no:
+**No preguntes por Canva.** Este paso aplica solo si la persona mencionó Canva o pegó un enlace de Canva. En ese caso, si falta el enlace:
 
 > "¿Quieres que construya el carrusel directamente en tu Canva? Si es así, pásame el enlace de edición (el que termina en `/edit`) y lo armo slide por slide con tu perfil de marca. Si prefieres hacerlo tú, te entrego el guion completo con instrucciones detalladas."
 
@@ -214,7 +240,7 @@ Si no la proporcionó, pregunta:
 → Confirmar: *"✓ Link de Canva recibido. Construiré el carrusel ahí directamente después de generar el guion y la imagen del gancho."*
 → Ejecutar PASO 6 (construcción en Canva) después de PASO 5
 
-**Si el usuario prefiere hacerlo él:**
+**Si no mencionó Canva o prefiere hacerlo ella:**
 → Continuar con el flujo normal (guion + instrucciones detalladas)
 → Omitir PASO 6
 
@@ -309,10 +335,10 @@ Compara la idea del usuario con los patrones encontrados:
    | Autoridad / actualidad | G02 noticia · G04 lo que nadie te dice | F14 hot take |
 
    Ninguna encaja de verdad → dilo y usa la arquitectura simple (gancho → 3-5 puntos → cierre con CTA).
-2. **Anatomía** — con la ficha elegida, abre su bloque en `skills/carrusel-formatos-f100k/references/catalogo.md` (`### <ID> · `) y respeta su anatomía slide por slide, su prompt de guion y su **error típico**. El número de slides lo manda la ficha (F17 puede ser 1 sola; F07, 2); si la ficha no lo fija: mínimo 5, máximo 10.
-3. **CTA final** — específico y accionable ("Comenta X", "Guarda esto", "Envía a alguien que...")
+2. **Anatomía** — con la ficha elegida, respeta lo que dice su fila en `references/formatos-carrusel-35.md` (mecánica, soporte y por qué funciona). Para la anatomía lámina a lámina, abre su bloque (`### <ID> · `) en `references/catalogo.md` de la skill `carrusel-formatos-f100k` (viene en el mismo plugin, en su propia carpeta) y respeta su prompt de guion y su **error típico**. Si no está instalada, sigue con el índice. El número de slides lo manda la ficha (F17 puede ser 1 sola; F07, 2); si la ficha no lo fija: mínimo 5, máximo 10.
+3. **CTA final** — específico y accionable: «Comenta PALABRA» con una palabra ligada al tema y a un regalo o una oferta suya, o «Envía a alguien que...». Nunca «guárdalo» como CTA ni «YO».
 
-**Fabricación según el formato:** el guion lo entregas aquí (PASO 4). Para los PNG del formato elegido (plantillas split / papel / datos / garabato, HTML libre de las fichas G, o los prompts listos para Gemini y ChatGPT si la persona no usa Claude Code), invoca `carrusel-formatos-f100k` con la ficha + el guion aprobado: esa skill tiene el visual detallado, las plantillas y su tabla de a qué skill derivar. El PASO 6 (Canva) queda para cuando la persona da un link de Canva.
+**Fabricación según el formato:** el guion lo entregas aquí (PASO 4). Para los PNG del formato elegido (plantillas split / papel / datos / garabato, HTML libre de las fichas G, o los prompts listos para Gemini y ChatGPT si la persona no usa Claude Code), invoca `carrusel-formatos-f100k` con la ficha + el guion aprobado: esa skill tiene el visual detallado, las plantillas y su tabla de a qué skill derivar. Si no está, pasa el guion a `carrusel-render-formula100k` (texto y diseño en HTML). El PASO 6 (Canva) queda para cuando la persona da un link de Canva.
 **Nano Banana:** si el índice marca 2 o más arreglos para esa ficha, o si la slide lleva más de ~25 palabras o una lista, no le pidas el texto al modelo de imagen: texto en HTML (motor A) o fondo IA sin texto + texto encima (motor C).
 
 ---
@@ -345,6 +371,7 @@ Para cada slide, entrega exactamente este formato:
 
 **Reglas de escritura del guion:**
 
+- **Slide 1 (gancho): la imagen ES el tema.** En el guion, describe la imagen de la portada en una línea concreta («la persona en pixel dentro de un nivel de videojuego», «la persona con una cámara VHS apuntando a la lente») siguiendo `references/portada-gancho-visual.md`. Prueba: tapando el titular, ¿la imagen dice de qué trata? Si la persona no tiene una foto así, se crea (IA con sus fotos de referencia) o se arma mix media; nunca se pone una selfie que no tiene que ver.
 - **Slide 1 (gancho) tiene estructura fija e inamovible:**
   - La imagen ocupa el **60% superior o central** del slide
   - El texto ocupa el **40% restante** (franja inferior o superpuesto sobre la imagen)
@@ -386,13 +413,13 @@ Para cada slide, entrega exactamente este formato:
 
 ---
 
-## PASO 5 — Generar imagen gancho con Nanobanana (Gemini)
+## PASO 5 — Generar la imagen del gancho
 
-El slide 1 (gancho) necesita una imagen generada con IA. La herramienta es el **skill banana** (`skills/banana`), que usa la API de Gemini (Nano Banana 2 — `gemini-3.1-flash-image-preview`).
+El slide 1 (gancho) lleva una imagen QUE DIGA EL TEMA: generada con IA si hay una herramienta conectada, o una foto real de la persona haciendo lo que dice el gancho (con el objeto, en la situación, o un mockup). Una foto suya cualquiera no sirve: lee `references/portada-gancho-visual.md`.
 
 ### 5.1 — Construir el prompt con la fórmula de 5 componentes
 
-**NO pasar una descripción genérica.** Construir el prompt siguiendo los 5 componentes del skill banana:
+**NO pasar una descripción genérica.** Construir el prompt con estos 5 componentes:
 
 | Componente | Peso | Qué incluir |
 |------------|------|-------------|
@@ -402,7 +429,7 @@ El slide 1 (gancho) necesita una imagen generada con IA. La herramienta es el **
 | **Composición** | 10% | Ángulo + encuadre: "plano medio bajo", "primer plano extremo", "toma aérea" |
 | **Estilo + Luz** | 25% | Cámara real + focal + diafragma + iluminación + referencia de publicación |
 
-**Reglas obligatorias (del skill banana):**
+**Reglas obligatorias:**
 - NUNCA usar: "fotorrealista", "8K", "ultra detallado", "masterpiece" — degradan la calidad
 - SIEMPRE nombrar cámara real: "Sony A7R IV", "Canon EOS R5", "iPhone 16 Pro Max"
 - SIEMPRE especificar focal: "85mm f/1.4", "24mm gran angular"
@@ -431,78 +458,40 @@ Deep navy and charcoal tones with warm amber accent. Clean vertical composition.
 WIRED magazine editorial aesthetic. NEVER include any text or watermarks.
 ```
 
-### 5.2 — Generar la imagen (cadena de herramientas)
+### 5.2 — Generar la imagen (en este orden)
 
-Intentar en este orden exacto:
+#### Opción A — Conector de Higgsfield (si está conectado)
 
-#### Opción A — MCP nanobanana (si las herramientas están activas en la sesión)
-
-Si los tools `gemini_generate_image`, `set_aspect_ratio` etc. están disponibles:
+Busca entre tus herramientas las de Higgsfield (`mcp__claude_ai_Higgsfield__…` o `mcp__higgsfield__…`). Revisa el saldo con `balance` y genera:
 
 ```
-set_aspect_ratio("4:5")
-gemini_generate_image(prompt="[prompt de 5.1]", imageSize="2K")
+generate_image(params={
+  model: "nano_banana_2",
+  prompt: "[prompt de 5.1]",
+  aspect_ratio: "4:5",
+  resolution: "2k",
+  count: 1
+})
 ```
 
-#### Opción B — Script directo via bash (fallback principal)
+Espera el trabajo, descarga la imagen y guárdala en `entregables/`.
 
-```bash
-API_KEY="$GEMINI_API_KEY"
+#### Opción B — Otra herramienta de imagen que la persona ya tenga
 
-GOOGLE_AI_API_KEY="$API_KEY" python3 skills/banana/scripts/generate.py \
-  --prompt "[prompt de 5.1]" \
-  --aspect-ratio "4:5" \
-  --resolution "2K" \
-  --model "gemini-3.1-flash-image-preview"
-```
+Si en la sesión hay herramientas de imagen de Gemini (`gemini_generate_image`, `set_aspect_ratio`) o la skill `banana` (opcional, no viene en el plugin), úsalas con el mismo prompt en 4:5 y 2K. Nunca pidas que pegue una llave en el chat ni la leas de un archivo.
 
-La imagen se guarda en `entregables/imagenes/`.
+#### Opción C — Foto real de la persona
 
-#### Opción C — curl directo (si hay error SSL de Python)
+Sin herramienta de imagen, la portada va con una foto suya (pídele una con buena luz o usa su carpeta de fotos) y el texto encima. Es una portada válida, no un parche.
 
-```bash
-API_KEY="$GEMINI_API_KEY"
+#### Opción D — Sin imagen por ahora
 
-curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=$API_KEY" \
-  -H "Content-Type: application/json" \
-  -d @- <<\'JSONBODY\' -o /tmp/gemini_hook_response.json
-{
-  "contents": [{"parts": [{"text": "[PROMPT]"}]}],
-  "generationConfig": {
-    "responseModalities": ["TEXT", "IMAGE"],
-    "imageConfig": {"aspectRatio": "4:5", "imageSize": "2K"}
-  }
-}
-JSONBODY
+Entrega el prompt de 5.1 listo para pegar en la herramienta de imagen que prefiera (también sirve «Texto a imagen» dentro de Canva) y sigue con el resto del carrusel.
 
-python3 -c "
-import json, base64
-with open(\'/tmp/gemini_hook_response.json\') as f: data = json.load(f)
-for part in data[\'candidates\'][0][\'content\'][\'parts\']:
-    if \'inlineData\' in part:
-        with open(\'entregables/imagenes/hook_carrusel.png\', \'wb\') as f:
-            f.write(base64.b64decode(part[\'inlineData\'][\'data\']))
-        print(\'Guardada: entregables/imagenes/hook_carrusel.png\')
-"
-```
+### 5.3 — Verificar
 
-#### Opción D — Canva AI integrado (último recurso sin API)
-
-Dentro de Canva → Apps → "Texto a imagen" → usar el prompt de 5.1.
-
-### 5.3 — Verificar y registrar costo
-
-Después de una generación exitosa:
-1. Abrir la imagen para verificar paleta de marca y emoción del gancho
-2. Si tiene texto no deseado o colores incorrectos: ajustar prompt y regenerar (máx. 3 veces)
-3. Registrar costo:
-```bash
-python3 skills/banana/scripts/cost_tracker.py log \
-  --model "gemini-3.1-flash-image-preview" \
-  --resolution "2K" \
-  --prompt "hook_carrusel — [tema breve]"
-```
+1. Abre la imagen y revisa que la paleta y la emoción correspondan al gancho.
+2. Si trae texto no deseado o colores equivocados, ajusta el prompt y regenera (máximo 3 veces).
 
 ### 5.4 — Colocar imagen en Canva
 
@@ -679,10 +668,9 @@ Al final, entrega un resumen de acciones para que el usuario pueda producir de i
 ## ✅ CHECKLIST DE PRODUCCIÓN
 
 **Imagen del gancho:**
-- [ ] Imagen generada con Nanobanana (skill banana) — guardada en `entregables/imagenes/`
-- [ ] Subir a Canva (si no se construyó en PASO 6)
+- [ ] Imagen del gancho lista (generada o foto real) en `entregables/`
 
-**En Canva (1080 × 1350 px):**
+**En tu render o en Canva, si lo usa (1080 × 1350 px):**
 *(Si el carrusel ya fue construido en PASO 6, este paso es de verificación final)*
 - [ ] Slide 1: Colocar imagen de gancho + texto [TÍTULO] en fuente de títulos del perfil
 - [ ] Slide 2: [descripción breve]
@@ -694,14 +682,13 @@ Al final, entrega un resumen de acciones para que el usuario pueda producir de i
 - [ ] Exportar como JPG/PNG individual o PDF con páginas
 - [ ] Caption listo arriba
 - [ ] Agregar música en Instagram (opcional pero aumenta alcance)
-- [ ] Publicar en horario óptimo (Martes/Jueves 9am o 6pm)
 ```
 
 ---
 
 ## PASO 9 — Generar calendario de contenido (30 días)
 
-Después de entregar el carrusel completo, genera automáticamente un calendario de publicación de 30 días que extiende el contenido del carrusel a múltiples formatos y fechas.
+**Solo si la persona lo pide.** No lo entregues por defecto. Cuando lo pida, genera un calendario de publicación de 30 días que extiende el contenido del carrusel a múltiples formatos y fechas.
 
 ### 8.1 — Principio base
 
@@ -777,7 +764,7 @@ Antes de entregar, verifica:
 - [ ] ¿Cada slide tiene UNA sola idea?
 - [ ] ¿El texto de cada slide funciona sin la imagen?
 - [ ] ¿Las instrucciones de Canva son específicas y accionables?
-- [ ] ¿El prompt de imagen usa la fórmula de 5 componentes del skill banana (sujeto, acción, contexto, composición, estilo+luz)?
+- [ ] ¿El prompt de imagen usa la fórmula de 5 componentes (sujeto, acción, contexto, composición, estilo+luz)?
 - [ ] Si el usuario dio link de Canva: ¿se construyó el carrusel completo slide por slide?
 - [ ] ¿El CTA final es específico (pide una acción concreta, no genérica)?
 - [ ] ¿El caption tiene la primera línea como gancho independiente?
@@ -788,19 +775,13 @@ Antes de entregar, verifica:
 
 - **La investigación no es opcional.** Un gancho sin validación viral es una apuesta ciega. Siempre busca referencias antes de proponer el gancho final.
 - **El Slide 1 vale el 80% del carrusel.** Si el gancho no detiene el scroll, nadie ve el resto. Invertir el mayor tiempo de diseño en esta diapositiva.
-- **Imagen del gancho — prioridad de herramientas (ver PASO 5 para comandos exactos):**
-  1. **MCP nanobanana** — si los tools `gemini_generate_image` / `set_aspect_ratio` están activos en la sesión
-  2. **Script banana** — `GOOGLE_AI_API_KEY=... python3 skills/banana/scripts/generate.py` (API key en la variable de entorno `GEMINI_API_KEY`)
-  3. **curl directo** — si hay error SSL de Python (ver Opción C en PASO 5)
-  4. **Canva AI integrado** — Apps → "Texto a imagen" (sin API key, último recurso)
-  - Siempre construir el prompt con la fórmula de 5 componentes del skill banana (NUNCA prompt genérico)
-  - Registrar costo con `cost_tracker.py log` después de cada generación exitosa
-- **Construcción en Canva (PASO 6):** Verificar SIEMPRE si el **Canva MCP Connector** está activo (tools con prefijo Canva disponibles en el entorno). Si sí → usar flujo 6.A (MCP). Si no → usar flujo 6.B (Chrome). El MCP es más rápido, preciso y confiable.
+- **Imagen del gancho — prioridad de herramientas (ver PASO 5):** conector de Higgsfield → otra herramienta de imagen que la persona ya tenga → foto real suya → prompt listo para pegar. Siempre con la fórmula de 5 componentes, nunca un prompt genérico.
+- **Construcción en Canva (PASO 6, solo si dio un enlace de Canva):** Verificar si el **Canva MCP Connector** está activo (tools con prefijo Canva disponibles en el entorno). Si sí → usar flujo 6.A (MCP). Si no → usar flujo 6.B (Chrome). El MCP es más rápido, preciso y confiable.
 - **Operaciones Canva MCP en bulk:** Agrupar TODAS las operaciones del carrusel en UN SOLO llamado a `perform-editing-operations`. No hacer llamadas individuales por slide.
 - **Limitaciones MCP:** No puede agregar páginas, cambiar fondos de página ni cambiar tipografía. Estas acciones se delegan al usuario con instrucciones claras.
 - **Slides interiores = simples.** Tipografía sobre el fondo del perfil de marca. NO sobreproducir — los slides interiores son para comunicar, no para impresionar visualmente.
 - **TikTok MCP:** Si `davibauer/tiktok-mcp` está disponible, úsalo en PASO 2 para obtener datos de engagement reales. Si no, WebSearch es válido como fallback.
 - **Si el input es un guion de reel:** identifica el gancho verbal del reel (los primeros 3 segundos) y conviértelo en gancho visual del Slide 1. El resto del guion se distribuye en slides interiores.
-- **El calendario (PASO 9) es automático** — se entrega siempre después del guion, sin que el usuario lo pida. Es parte del entregable estándar.
-- **El Perfil Visual (PASO 0) se verifica en cada sesión.** Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
-- **Leer siempre** `references/design_profile.md` al inicio de cada sesión (el sistema visual de la marca vive ahí) y `references/formatos-carrusel-35.md` en el PASO 3 (los 37 formatos; se regenera desde el recetario, no se edita a mano).
+- **El calendario (PASO 9) va solo si lo pide.** No es parte del entregable estándar.
+- **El Perfil Visual (PASO 0) se verifica en cada sesión:** primero `entregables/`, después `mi-marca/marca.md`, y solo si no hay ninguno, el respaldo. Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
+- **Leer siempre** su marca al inicio de cada sesión (PASO 0.0; `references/design_profile.md` solo como respaldo) y `references/formatos-carrusel-35.md` en el PASO 3 (los 37 formatos; se regenera desde el recetario, no se edita a mano).

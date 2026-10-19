@@ -58,6 +58,14 @@ Los ejemplos escritos aquí abajo son ilustraciones **del método**, nunca del t
    autoridad de esa creadora; quitarlo borra justo lo que la diferencia.
 5. Si no tienes datos suficientes del negocio, dilo y usa marcadores explícitos
    (`[TU OFERTA]`, `[TU RESULTADO]`). **Nunca asumas que el rubro es marketing.**
+6. **Perfil de compra.** Si vas a proponer ideas, ángulos, ganchos o un calendario, primero encaja al
+   avatar en 1 a 3 perfiles según lo que compra en realidad. Se clasifica por situación, nunca por género:
+   principiante perdida → dirección · saturada → simplicidad · sin tiempo → tiempo · escéptica → certeza
+   (háblale con prueba) · insegura → confianza (identidad + un paso pequeño) · indecisa → que decidan por
+   ella · ambiciosa → acceso y estatus · experta estancada → ventaja · cómoda en su plan B → salir del
+   «sigo como estoy» · responsable de otros → tranquilidad. Etiqueta cada idea con **perfil + nivel de
+   conciencia + palanca** y reparte las piezas entre perfiles. La urgencia sale de lo que le cuesta seguir
+   igual, con datos reales. No nombres el perfil en pantalla: háblale desde su freno.
 
 **El método viaja, el rubro no.** El mismo molde, vestido con rubros distintos:
 

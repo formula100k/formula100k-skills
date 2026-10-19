@@ -310,11 +310,13 @@ Para cada layout definir: texto del overlay (amarillo bold), primeras 10 palabra
 
 **Si es la cuenta del usuario (auditoría propia):** los layouts pueden mostrar una persona genérica parecida a ella (mismo estilo, buena luz) como plantilla para los editores — NO hace falta su cara real. Añadir en el prompt "hook layout reference for video editors".
 
-**Motor:** Nano Banana. Por defecto **Gemini directo** (`GEMINI_API_KEY`, sección 3.1 de
-`f100k-puente`) con `aspectRatio:"9:16"` e `imageSize:"2K"`, una llamada por layout. Si no hay
-llave pero sí el conector de Higgsfield, `generate_image` con `model:"nano_banana_pro"`,
-`aspect_ratio:"9:16"`, `resolution:"2k"` (revisa saldo antes con `mcp__higgsfield__balance`).
-Sin ningún motor, entrega los 6 prompts en inglés y dilo en la primera línea.
+**Motor:** Nano Banana, por el que la persona tenga (la misma regla que `historias-a-imagenes-nanobanana`):
+- **Conector de Higgsfield** (`mcp__claude_ai_Higgsfield__…` o `mcp__higgsfield__…`): `generate_image` con
+  `model:"nano_banana_pro"`, `aspect_ratio:"9:16"`, `resolution:"2k"` (revisa el saldo antes con `balance`).
+- **Gemini directo** (la skill `banana` o las herramientas de Gemini que la persona ya tenga; no vienen en
+  el plugin): relación 9:16 y tamaño 2K, una llamada por layout.
+- Si pide uno, usa ese. Si no pide ninguno, el que esté disponible; si tiene los dos, Higgsfield.
+- Sin ningún motor, entrega los 6 prompts en inglés y dilo en la primera línea.
 
 Prompt de cada layout:
 ```
@@ -322,7 +324,7 @@ Prompt de cada layout:
 ```
 
 Con Gemini son 6 llamadas seguidas, una por layout. Con Higgsfield, espera los jobs con
-`mcp__higgsfield__job_status` sync=true; si `nano_banana_pro` está ocupado hace fallback silencioso
+`jobs_wait` (o `job_status` sync=true, según el conector); si `nano_banana_pro` está ocupado hace fallback silencioso
 a `nano_banana_2`, y la calidad es equivalente: no es un problema.
 
 **Costo estimado:** con Gemini, 6 imágenes 2K (di el costo en dólares y espera ✅). Con Higgsfield, ~12-18 créditos.

@@ -1004,6 +1004,11 @@ def cut_video(source: Path, segments: list[tuple[float, float]], out: Path) -> N
             'ffmpeg', '-y', '-i', str(source),
             *_filtros_a_ffmpeg(vf, af, Path(td)),
             '-c:v', 'libx264', '-preset', 'fast', '-crf', '18',
+            # Un cuadro clave cada 30 cuadros. Con el intervalo por defecto
+            # (250) el corte queda con 2 o 3 cuadros clave y, en Windows, el
+            # compositor de Remotion a veces no encuentra el cuadro que busca
+            # y el render se cae («No frame found at position…»).
+            '-g', '30',
             '-pix_fmt', 'yuv420p',
             '-c:a', 'aac', '-b:a', '192k',
             '-movflags', '+faststart',

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mesa de luz</title>
+<style>
+  html,body{margin:0;background:#1a1b1e;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Mesa de luz» · ingeniería inversa de lemo-opuscar/styles/archive-lighttable (MIT, © 2026 LemoLab) · qué se tomó: la mesa de luz fría con luz desde abajo, la placa de vidrio en negativo (T = 0,035 + 0,9·(1−pos)^1,25, tinte plata), el papel que brilla a contraluz, la lupa que cae seca y adentro cambia el estado del objeto (el frente que revela el positivo, el renglón que se ilumina y su número que salta a una ficha), un solo color de señal y el retroceso a toda la mesa
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Tu primera venta ya está escrita';   // arriba, en serif (máx. ~45 letras)
+const PALABRA_CLAVE = 'escrita';                     // enorme, en su propio renglón
+const FOTO = '';                                     // foto TUYA (tu primer local, tu primer producto). Vacío = foto de muestra (un local genérico)
+const PIE_FOTO = { titulo: 'tu primer local', codigo: 'N.º 001' };   // la etiqueta del negativo
+const CARTA = [                                      // los renglones del mensaje (máx. ~26 letras c/u)
+  'Hola, vi tu video de ayer.',
+  'Me encantó cómo lo explicas.',
+  'Quiero uno, ¿cómo pago?',
+  'Gracias por mostrarlo.',
+];
+const RENGLON_CLAVE = 2;                             // cuál renglón se ilumina (0 = el primero)
+const DATOS = {                                      // SOLO cifras del guion
+  etiqueta: 'el primer pedido',
+  valor: '1 venta',
+  nota: 'mensaje del 14 de mayo',
+};
+const COLORES = {
+  mesa: '#F7F9FB',
+  tinta: '#15171A',
+  senal: '#FF5A1F',     // el único color: marcas, lecturas, anclas
+  escritorio: '#1a1b1e',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+// ---------- los objetos sobre la mesa (mundo = la mesa, 1080 × 1920) ----------
+const NEG = { x: 140, y: 560, w: 800, h: 560, rot: -.03 };
+const DOC = { x: 190, y: 1180, w: 700, h: 640, rot: .025 };
+const MAG = 2.3, RL = 230;                                   // aumento y radio de la lupa (px de pantalla)
+let POS = null, NEGC = null;
+const DOCU = documento(700, 640, CARTA, { titulo: '', semilla: 9 });
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => {
+  const base = fs[0] ? fotoEnLienzo(fs[0], 800, 560) : escenaFoto(800, 560);
+  POS = desaturar(base, 1);
+  // borde de emulsión y una esquina rota: donde no hay vidrio se ve la mesa
+  const m = c => { const p = c.getContext('2d'); p.globalCompositeOperation = 'destination-in'; p.beginPath();
+    p.moveTo(14, 18); p.lineTo(786, 10); p.lineTo(790, 470); p.lineTo(730, 548); p.lineTo(20, 552); p.closePath(); p.fill(); return c; };
+  NEGC = m(negativo(POS)); POS = m(POS);
+});
+const MESA = (() => { const c = lienzo(W + 600, H + 600), p = c.getContext('2d'), r = rng(8), o = 300;
+  p.fillStyle = COLORES.escritorio; p.fillRect(0, 0, c.width, c.height);
+  for (let i = 0; i < 30000; i++) { p.fillStyle = `rgba(255,255,255,${r() * .03})`; p.fillRect(r() * c.width, r() * c.height, 2, 2); }
+  p.fillStyle = '#9fa4ab'; p.fillRect(o - 34, o - 34, W + 68, H + 68); p.fillStyle = '#c9cdd2'; p.fillRect(o - 34, o - 34, W + 68, 8);    // marco de aluminio
+  const g = p.createRadialGradient(o + W / 2, o + H / 2, 200, o + W / 2, o + H / 2, H * .7); g.addColorStop(0, COLORES.mesa); g.addColorStop(1, '#dfe4ea');
+  p.fillStyle = g; p.fillRect(o, o, W, H);
+  for (let i = 0; i < 90000; i++) { p.fillStyle = `rgba(${r() < .5 ? '120,130,140' : '255,255,255'},${r() * .05})`; p.fillRect(o + r() * W, o + r() * H, 1.5, 1.5); }   // ruido del difusor
+  for (let i = 0; i < 40; i++) { p.strokeStyle = 'rgba(90,100,110,.08)'; p.lineWidth = 1; const x = o + r() * W, y = o + r() * H; p.beginPath(); p.moveTo(x, y); p.lineTo(x + (r() - .5) * 160, y + (r() - .5) * 40); p.stroke(); }   // rayitas
+  return { c, o }; })();
+
+function objeto(R, dibujo) { ctx.save(); ctx.translate(R.x + R.w / 2, R.y + R.h / 2); ctx.rotate(R.rot); dibujo(-R.w / 2, -R.h / 2); ctx.restore(); }
+// toda la mesa, en coordenadas de mundo. o.revela = { x, y, r } (mundo): ahí el negativo ya es positivo
+function mesa(o = {}) {
+  ctx.drawImage(MESA.c, -MESA.o, -MESA.o);
+  objeto(DOC, (x, y) => { ctx.save(); ctx.globalAlpha = .9; ctx.drawImage(DOCU.c, x, y); ctx.restore();          // papel a contraluz: brilla en la orilla
+    ctx.strokeStyle = 'rgba(255,240,210,.6)'; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, DOC.w - 3, DOC.h - 3);
+    if (o.renglon) { const l = DOCU.pos[RENGLON_CLAVE]; ctx.save(); ctx.beginPath(); ctx.rect(x, y, DOC.w, DOC.h); ctx.clip();
+      ctx.fillStyle = `rgba(247,249,251,${.55 * o.renglon})`; ctx.fillRect(x, y, DOC.w, l.y - l.size * 1.1); ctx.fillRect(x, y + l.y + l.size * .6, DOC.w, DOC.h);   // el resto se apaga
+      ctx.fillStyle = `rgba(255,248,232,${.5 * o.renglon})`; ctx.fillRect(x, y + l.y - l.size * 1.1, DOC.w, l.size * 1.7); ctx.save(); ctx.beginPath(); ctx.rect(x, y + l.y - l.size * 1.1, DOC.w, l.size * 1.7); ctx.clip(); ctx.drawImage(DOCU.c, x, y); ctx.restore(); ctx.restore(); } });
+  if (NEGC) objeto(NEG, (x, y) => { ctx.drawImage(NEGC, x, y);
+    if (o.revela && o.revela.r > 0) { const c = Math.cos(-NEG.rot), s = Math.sin(-NEG.rot), dx = o.revela.x - (NEG.x + NEG.w / 2), dy = o.revela.y - (NEG.y + NEG.h / 2);
+      const lx = dx * c - dy * s, ly = dx * s + dy * c;
+      ctx.save(); ctx.beginPath(); ctx.arc(lx, ly, o.revela.r, 0, 7); ctx.clip(); ctx.drawImage(POS, x, y); ctx.restore();
+      if (o.revela.r < 520) { ctx.strokeStyle = 'rgba(255,190,120,.8)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(lx, ly, o.revela.r, 0, 7); ctx.stroke(); } }   // el frente de revelado: borde tibio
+    ctx.strokeStyle = 'rgba(40,40,40,.25)'; ctx.lineWidth = 2; ctx.strokeRect(x + 14, y + 12, NEG.w - 26, NEG.h - 24); });
+}
+// ---------- la lupa: cae seca (≈ 0,4 s), adentro todo se ve a ×MAG ----------
+const LUPAS = [
+  { en: [NEG.x + NEG.w * .5, NEG.y + NEG.h * .42], cae: .3, sube: 2.4 },
+  { en: [DOC.x + DOC.w * .42, DOC.y + 0], cae: 3.15, sube: 5.3, renglon: true },
+];
+LUPAS[1].en[1] = DOC.y + DOCU.pos[RENGLON_CLAVE].y - DOCU.pos[RENGLON_CLAVE].size * .35;
+const T = { revela: [.75, 1.9], ilumina: [3.6, 4.0], subraya: [3.9, 4.3], ficha: 4.4, atras: [5.6, 6.8], frase: 1.2 };
+function camara(t) {
+  const keys = [[0, 540, 840, 1.12], [2.5, 540, 860, 1.1], [3.1, 540, 1420, 1.08], [5.6, 540, 1400, 1.06], [6.8, 540, 860, .78]];
+  let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++;
+  const a = keys[i], b = keys[i + 1], k = ease(prog(t, a[0], b[0])); return { cx: lerp(a[1], b[1], k), cy: lerp(a[2], b[2], k), z: zoomLog(a[3], b[3], k) };
+}
+const w2s = (c, [x, y]) => [W / 2 + (x - c.cx) * c.z, H / 2 + (y - c.cy) * c.z];
+function lupa(cam, L, t, o) {
+  const kc = prog(t, L.cae - .4, L.cae), ks = prog(t, L.sube, L.sube + .4); if (kc <= 0 || ks >= 1) return;
+  const vis = aterriza(kc) * (1 - ks), esc = lerp(1.35, 1, aterriza(kc)) * lerp(1, 1.35, ks), al = clamp(kc * 3) * (1 - ks);
+  const s = w2s(cam, L.en), r = RL * esc;
+  ctx.save(); ctx.globalAlpha = al;
+  ctx.filter = `blur(${10 + (esc - 1) * 40}px)`; ctx.fillStyle = 'rgba(20,24,30,.28)'; ctx.beginPath(); ctx.arc(s[0] + 18 * esc, s[1] + 26 * esc, r + 26, 0, 7); ctx.fill(); ctx.filter = 'none';   // sombra suave
+  ctx.fillStyle = 'rgba(230,240,248,.35)'; ctx.beginPath(); ctx.arc(s[0], s[1], r + 34, 0, 7); ctx.fill();                         // falda de acrílico que brilla al pie
+  ctx.save(); ctx.beginPath(); ctx.arc(s[0], s[1], r, 0, 7); ctx.clip();
+  const zi = cam.z * MAG; ctx.translate(s[0], s[1]); ctx.scale(zi, zi); ctx.translate(-L.en[0], -L.en[1]); mesa(o); ctx.restore();
+  // el borde de la lente: un toque de franja de color y viñeta de cojín
+  const g = ctx.createRadialGradient(s[0], s[1], r * .72, s[0], s[1], r); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(40,60,90,.28)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(s[0], s[1], r, 0, 7); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,120,80,.35)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(s[0], s[1], r - 3, 0, 7); ctx.stroke();
+  ctx.strokeStyle = 'rgba(80,140,255,.3)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(s[0], s[1], r + 1, 0, 7); ctx.stroke();
+  ctx.strokeStyle = '#121316'; ctx.lineWidth = 22; ctx.beginPath(); ctx.arc(s[0], s[1], r + 13, 0, 7); ctx.stroke();                 // anillo negro
+  ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(s[0], s[1], r + 20, Math.PI * 1.05, Math.PI * 1.6); ctx.stroke();   // brillo del bisel
+  ctx.restore(); return { s, r, vis };
+}
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 262, fam: F_SERIF, peso: 400, famClave: F_SERIF, pesoClave: 700, chica: 70, grande: 200, col: COLORES.tinta });
+
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = COLORES.escritorio; ctx.fillRect(0, 0, W, H);
+  if (!NEGC) return;
+  const cam = camara(t), kr = ease(prog(t, ...T.revela)), kl = ease(prog(t, ...T.ilumina));
+  const o = { revela: { x: LUPAS[0].en[0], y: LUPAS[0].en[1], r: kr * 600 }, renglon: t > T.ilumina[0] ? kl * (1 - prog(t, LUPAS[1].sube + .2, LUPAS[1].sube + .6)) : 0 };
+  const oMesa = { revela: t > LUPAS[0].sube ? o.revela : null, renglon: o.renglon };      // afuera de la lente el negativo sigue negativo hasta que la lupa se va
+  conCamara(cam.cx, cam.cy, cam.z, 0, () => mesa(oMesa));
+  // marcas sobre la mesa (se recortan bajo la lupa porque la lupa va encima)
+  const a1 = w2s(cam, [NEG.x + 60, NEG.y + 30]);
+  if (t > 2.0) { const k = ease(prog(t, 2.0, 2.35)), ty = a1[1] - 110 * k; punto(a1[0], a1[1], { col: COLORES.senal, r: 5, anillo: 13 });
+    pelo([[a1[0], a1[1] - 14], [a1[0], ty]], { w: 2, col: COLORES.senal, halo: null });
+    if (k >= 1) { escribir(PIE_FOTO.titulo, a1[0] + 18, ty + 8, `600 34px ${F_SANS}`, COLORES.tinta); escribir(PIE_FOTO.codigo, a1[0] + 18, ty + 44, `400 24px ${F_MONO}`, 'rgba(21,23,26,.65)'); } }
+  const L1 = lupa(cam, LUPAS[0], t, o), L2 = lupa(cam, LUPAS[1], t, o);
+  // el renglón: subrayado en señal y el número que salta a una ficha
+  if (L2 && t > T.subraya[0]) { const l = DOCU.pos[RENGLON_CLAVE], z = cam.z * MAG, wl = medir(l.txt, `${l.size}px "American Typewriter"`) * z;
+    const x0 = L2.s[0] - (DOC.w * .42 - l.x) * z, y0 = L2.s[1] + l.size * .5 * z;
+    ctx.save(); ctx.beginPath(); ctx.arc(L2.s[0], L2.s[1], L2.r, 0, 7); ctx.clip();
+    pelo([[x0, y0], [x0 + wl * ease(prog(t, ...T.subraya)), y0]], { w: 5, col: COLORES.senal, halo: null }); ctx.restore(); }
+  if (t > T.ficha) { const x = SEGURA.left, y = lerp(1130, 1290, ease(prog(t, ...T.atras)));
+    const pa = L2 ? [L2.s[0] + L2.r * .3, L2.s[1] - L2.r] : w2s(cam, LUPAS[1].en);
+    lectura(x + 30, y, { etiqueta: DATOS.etiqueta + ' · ' + DATOS.nota, valor: DATOS.valor, nota: '«' + CARTA[RENGLON_CLAVE] + '»', k: ease(prog(t, T.ficha, T.ficha + .5)), tam: 120, col: COLORES.senal, tinta: '#f5f6f7', tenue: 'rgba(245,246,247,.66)', ancho: 640,
+      fondo: (a, b, w, h) => { placa(a, b, w, h, { col: 'rgba(14,15,17,.84)', r: 4, borde: COLORES.senal }); } }); }
+  if (t >= T.frase) placa(SEGURA.left - 20, FR.y0 - 10, SEGURA.right - SEGURA.left + 40, FR.alto + 44, { col: 'rgba(247,249,251,.9)', r: 4 });   // rótulo sobre la mesa
+  pintarFrase(FR, t, T.frase, .17);
+  grano(.05, 6);
+});
+window.SONIDOS = [{ t: .3, tipo: 'golpe' }, { t: .75, tipo: 'desliz' }, { t: 2.0, tipo: 'pop' }, { t: 2.5, tipo: 'papel' }, { t: 3.15, tipo: 'golpe' }, { t: 3.6, tipo: 'papel' }, { t: 4.4, tipo: 'pop' }, { t: 5.6, tipo: 'swish' }];
+</script>
+</body>
+</html>

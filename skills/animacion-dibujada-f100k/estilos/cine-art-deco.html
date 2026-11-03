@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Art déco</title>
+<style>
+  html,body{margin:0;background:#0d0906;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Art déco» · ingeniería inversa de lemo-opuscar/styles/art-deco (MIT, © 2026 LemoLab) · qué se tomó: laca negra cálida, línea de oro grabada (surco + metal en bandas + filete), rayos de sol, arco y zigurat escalonado, eje central sagrado, puertas que se abren por la costura, barra de título que se despliega desde el centro, luz contada (focos que prenden de a uno con sobreimpulso) y el barrido de brillo.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ENCIMA = 'lo que nadie te dice de';           // línea chica dentro de la barra (máx. ~28 letras)
+const CLAVE = 'TU BIO';                             // la palabra enorme de la barra (máx. ~10 letras)
+const PUNTOS = [                                    // 2 o 3 placas que se prenden con su foco (máx. ~22 letras c/u)
+  'a quién ayudas',
+  'qué resultado das',
+  'qué hacer ahora',
+];
+const COLORES = {
+  laca: '#120c07',     // negro laca cálido (nunca gris)
+  marfil: '#f1e6cf',   // texto chico, focos
+  oroPlano: '#d8b45e', // la palabra clave: oro PLANO (sin degradado en el texto)
+  acento: '#7a1f2b',   // el único color saturado: bordó (o coral '#e0705a', jade '#2f8f74')
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-grafica.js"></script>
+<script>
+const CX = W / 2, SOL = { x: CX, y: 880 };                  // el eje central: nada se corre de aquí
+const BARRA = { y: 900, w: 940, h: 300 };
+const T_PUERTA = [.2, .85], T_PUNTO = 1.0, T_HILO = [1.0, 1.3], T_ABRE = [1.3, 1.65];
+const T_PAL0 = 1.75, T_PLACA = i => 3.1 + i * .5, T_BRILLO = [5.3, 6.6];
+const mecanico = t => { t = clamp(t); const e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; return e; };   // firme, como maquinaria
+
+// ---------- fondo (una vez): laca con levantamiento suave al centro ----------
+const FONDO = (() => { const [c, g] = lienzo();
+  g.fillStyle = COLORES.laca; g.fillRect(0, 0, W, H);
+  const r = g.createRadialGradient(SOL.x, SOL.y, 0, SOL.x, SOL.y, 1300); r.addColorStop(0, 'rgba(120,86,36,.38)'); r.addColorStop(.5, 'rgba(60,40,16,.12)'); r.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = r; g.fillRect(0, 0, W, H);
+  const n = rng(5); for (let i = 0; i < 30000; i++) { g.fillStyle = n() < .5 ? 'rgba(255,230,180,.025)' : 'rgba(0,0,0,.05)'; g.fillRect(n() * W, n() * H, 1.5, 1.5); }
+  return c; })();
+
+// ---------- tipografía ----------
+const F_DECO = '"Futura", "Avenir Next", "Gill Sans", sans-serif';
+const LAY_ENC = maquetar([{ t: ENCIMA.toUpperCase(), tam: 36, fam: F_DECO, peso: 500, col: COLORES.marfil, track: .26 }],
+  { x: CX - 370, y: BARRA.y - 110, w: 740, h: 52 }, { alinea: 'centro', espacio: 1.0 });
+const LAY_CLA = maquetar([{ t: CLAVE.toUpperCase(), tam: 170, fam: F_DECO, peso: 700, col: COLORES.oroPlano, track: .1 }],
+  { x: CX - 400, y: BARRA.y - 44, w: 800, h: 170 }, { alinea: 'centro', espacio: .45 });
+const T_ENC = LAY_ENC.palabras.map((_, i) => T_PAL0 + i * .16);
+const T_CLA = LAY_CLA.palabras.map((_, i) => T_ENC[T_ENC.length - 1] + .35 + i * .3);
+const PLACAS = PUNTOS.slice(0, 3).map((p, i) => ({ txt: p, y: 1150 + i * 112, aj: autoajuste(p.toUpperCase(), F_DECO, 500, 400, 1, 36, 20) }));
+
+// ---------- piezas ----------
+function arco(brillo, parte) {
+  for (const [r, w] of [[330, 3.2], [262, 2.2], [196, 1.6]]) lineaOro(arc(CX, BARRA.y - BARRA.h / 2, r, Math.PI, Math.PI * 2), { w, parte, brillo });
+}
+function zigurat(brillo, parte) {      // pilares escalonados que bajan de los extremos de la barra (simétricos)
+  for (const s of [-1, 1]) for (const [d, base] of [[0, 1470], [70, 1430], [140, 1390]]) {
+    const x0 = CX + s * (BARRA.w / 2 - 60 - d), y0 = BARRA.y + BARRA.h / 2;
+    const pts = [[x0, y0], [x0, y0 + 50], [x0 + s * 40, y0 + 50], [x0 + s * 40, y0 + 110], [x0 + s * 80, y0 + 110], [x0 + s * 80, base]];
+    lineaOro(pts, { w: d ? 1.8 : 2.6, parte, brillo });
+  }
+}
+function barraTitulo(t, brillo) {
+  const hilo = mecanico(prog(t, ...T_HILO)), abre = mecanico(prog(t, ...T_ABRE));
+  if (t < T_PUNTO) return;
+  if (abre <= 0) {                                                  // un punto → un hilo de oro que se abre desde el centro
+    const w = Math.max(6, BARRA.w * hilo);
+    lineaOro([[CX - w / 2, BARRA.y], [CX + w / 2, BARRA.y]], { w: 3, brillo }); return;
+  }
+  const h = Math.max(4, BARRA.h * abre), pts = escalonPts(CX, BARRA.y, BARRA.w, h, 3, 22);
+  ctx.save(); ctx.fillStyle = 'rgba(8,5,3,.9)'; ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath(); ctx.fill(); ctx.restore();
+  lineaOro(pts, { w: 3, cerrado: true, brillo });
+  lineaOro(escalonPts(CX, BARRA.y, BARRA.w - 36, Math.max(2, h - 26), 3, 18), { w: 1.4, cerrado: true, brillo });
+  // alas con líneas de velocidad, a los dos lados (simetría)
+  if (abre >= 1) for (const s of [-1, 1]) for (let k = 0; k < 3; k++) {
+    const x0 = CX + s * (BARRA.w / 2 + 14), y = BARRA.y - 40 + k * 40, L = [110, 70, 110][k];
+    lineaOro([[x0, y], [x0 + s * L, y]], { w: 1.6, brillo });
+  }
+  if (abre >= 1) { pintarPalabras(LAY_ENC, t, T_ENC); pintarPalabras(LAY_CLA, t, T_CLA);
+    // la luz contada sobre la barra: una fila de focos que prenden con la palabra clave
+    const n = 15; for (let i = 0; i < n; i++) { const x = CX + (i - (n - 1) / 2) * 52, tf = T_CLA[0] + Math.abs(i - (n - 1) / 2) * .05; foco(x, BARRA.y + BARRA.h / 2 - 26, 7, t, tf); } }
+}
+function foco(x, y, r, t, t0) {
+  if (t < t0) { ctx.fillStyle = '#3a2a16'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); return; }
+  const k = 1 + .6 * Math.exp(-(t - t0) / .06);                    // encendido con sobreimpulso (~1,6× que se asienta en 0,18 s)
+  glow(x, y, r * 4.5 * k, '255,214,140', .32 * Math.min(1, k));
+  ctx.fillStyle = COLORES.marfil; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+}
+function placas(t, brillo) {
+  PLACAS.forEach((p, i) => {
+    const t0 = T_PLACA(i); if (t < t0 - .25) return;
+    const a = mecanico(prog(t, t0 - .25, t0)), w = 560 * a, h = 78;
+    const pts = escalonPts(CX, p.y, Math.max(20, w), h, 2, 14);
+    ctx.save(); ctx.fillStyle = 'rgba(8,5,3,.92)'; ctx.beginPath(); pts.forEach((q, j) => j ? ctx.lineTo(...q) : ctx.moveTo(...q)); ctx.closePath(); ctx.fill(); ctx.restore();
+    lineaOro(pts, { w: 1.8, cerrado: true, brillo });
+    if (i === 0) { ctx.save(); ctx.globalAlpha = a; aerografo(circle(CX - 250, p.y, 17), COLORES.acento, { filo: 1.5 }); ctx.restore(); }   // el único color: la primera placa (la que importa)
+    else foco(CX - 250, p.y, 11, t, t0);
+    if (t >= t0) { ctx.save(); ctx.font = p.aj.font; ctx.letterSpacing = (p.aj.size * .14) + 'px'; ctx.fillStyle = COLORES.marfil; ctx.textAlign = 'center';
+      ctx.fillText(p.txt.toUpperCase(), CX + 30, p.y + p.aj.size * .36); ctx.restore(); }
+  });
+}
+function puertas(t) {                   // umbral: dos hojas de laca con filete de oro que se abren por la costura
+  const k = mecanico(prog(t, ...T_PUERTA)); if (k >= 1) return;
+  const dx = k * (W / 2 + 40);
+  for (const s of [-1, 1]) {
+    ctx.save(); ctx.translate(s * dx, 0);
+    const x0 = s < 0 ? 0 : CX, rect = [[x0, 0], [x0 + CX, 0], [x0 + CX, H], [x0, H]];
+    aerografo(rect, '#1c130a', { filo: 0, dir: s < 0 ? -2.3 : -.8 });
+    const m = 46, xi = s < 0 ? m : CX + m, xf = s < 0 ? CX - 14 : W - m;
+    lineaOro([[xi, 120], [xf, 120], [xf, H - 120], [xi, H - 120]], { w: 2.4, cerrado: true });
+    lineaOro([[xi + 16, 136], [xf - 16, 136], [xf - 16, H - 136], [xi + 16, H - 136]], { w: 1.2, cerrado: true });
+    for (let c = 0; c < 7; c++) { const y = 760 + c * 58, xa = s < 0 ? CX - 30 : CX + 30, xb = s < 0 ? xi + 40 : xf - 40;   // chevrones
+      lineaOro([[xb, y], [lerp(xb, xa, .5), y + 40], [xa, y]], { w: 1.6 }); }
+    lineaOro(arc(CX, 700, 200, s < 0 ? Math.PI : Math.PI * 1.5, s < 0 ? Math.PI * 1.5 : Math.PI * 2), { w: 2 });         // medio abanico en cada hoja
+    ctx.restore();
+  }
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  const brillo = lerp(.12, .9, mecanico(prog(t, ...T_BRILLO)));     // el barrido de luz cruza el oro una vez
+  ctx.drawImage(FONDO, 0, 0);
+  rayos(SOL.x, SOL.y, { n: 56, r0: 120, r1: 2200, parte: 1, rot: -Math.PI / 2, alfa: .55, w: 1.4, brillo });
+  arco(brillo, mecanico(prog(t, .6, 1.4)));
+  zigurat(brillo, prog(t, 1.4, 2.6));                               // el oro se graba a la velocidad de la frase
+  barraTitulo(t, brillo);
+  placas(t, brillo);
+  puertas(t);
+});
+window.SONIDOS = [{ t: .2, tipo: 'golpe' }, { t: .85, tipo: 'desliz' }, { t: 1.3, tipo: 'swish' },
+  ...T_ENC.map(t => ({ t: +t.toFixed(2), tipo: 'pop' })), ...T_CLA.map(t => ({ t: +t.toFixed(2), tipo: 'golpe' })),
+  ...PLACAS.map((_, i) => ({ t: +T_PLACA(i).toFixed(2), tipo: 'pop' })), { t: T_BRILLO[0], tipo: 'swish' }];
+</script>
+</body>
+</html>

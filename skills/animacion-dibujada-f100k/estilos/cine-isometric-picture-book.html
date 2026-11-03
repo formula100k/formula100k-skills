@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Libro isométrico</title>
+<style>
+  html,body{margin:0;background:#1b1a18;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Libro isométrico» · ingeniería inversa de lemo-opuscar/styles/isometric-picture-book (MIT, © 2026 LemoLab) · qué se tomó: un lugar real a sangre en isométrico de tres tonos cálidos, personas de espaldas sin cara que son el diagrama, la tapa que se levanta por la bisagra de atrás con el lado de papel arriba, letra serif pintada en el piso y la flecha de acento que crece delante de quien camina.
+// ANATOMIA: estilizada — siluetas de libro ilustrado vistas de espaldas: cabeza redonda de pelo, torso de dos tonos, piernas en tijera, sin cara ni manos.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+// La frase se pinta en el PISO, en 2 renglones cortos. La palabra clave va enorme y en el color de acento.
+const RENGLON_1 = 'esa fila';                   // máx. ~10 letras
+const RENGLON_2 = 'te engaña';                  // máx. ~10 letras
+const PALABRA_CLAVE = 'engaña';                 // tiene que estar en uno de los dos renglones
+const LETRERO = 'café';                         // lo que dice el letrero de los dos puestos (iguales a propósito)
+const EN_FILA = 6;                              // cuántas personas esperan en la fila larga (3 a 9)
+const COLORES = {
+  papel: '#F1E8D8', tinta: '#2A2E29',
+  acento: '#D0573A',      // caqui: SOLO donde está la regla (la palabra clave, la flecha, el «párate aquí»)
+  lugar: '#3D6B59',       // verde del lugar (los puestos)
+  marca: '#E2AE3A',       // jengibre: líneas pintadas en el piso
+  ropa: ['#C98B3E', '#7F9DB8', '#8E86A3', '#D9C9A8'],   // cuatro colores apagados de ropa
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const SERIF = 'Baskerville, "Hoefler Text", "Big Caslon", Georgia, serif';
+const tri = (hex) => ({ arriba: mezcla(hex, '#FBF3E4', .2), izq: hex, der: mezcla(hex, '#4A3626', .28) });   // sombra hacia sepia cálido
+const TL = tri(COLORES.lugar), PALIDO = tri(mezcla(COLORES.lugar, '#F1E8D8', .62));
+const PELO = '#2B2622', PIERNAS = ['#3B4252', '#4B4540', '#34383A'];
+
+// ---------- el lugar: dos puestos iguales, uno con fila y otro vacío ----------
+const PA = { x: 1.5, y: 0, w: 3.2, d: 2.4, h: 2.7 }, PB = { x: 6.7, y: 0, w: 3.2, d: 2.4, h: 2.7 };
+const FILA_X = PA.x + PA.w / 2, FILA_Y0 = 3.3, SEP = .75;
+const PERSONAS = Array.from({ length: Math.max(3, Math.min(9, EN_FILA)) }, (_, i) => ({ y: FILA_Y0 + i * SEP, ropa: COLORES.ropa[(i * 3 + 1) % 4],
+  piernas: PIERNAS[i % 3], largo: i % 3 === 1, falda: i % 4 === 2, alto: 1.62 + hash2(i, 5) * .18 }));
+const ULTIMA_Y = FILA_Y0 + PERSONAS.length * SEP;
+const NUEVA = { ropa: COLORES.ropa[0], piernas: PIERNAS[1], largo: true, falda: false, alto: 1.68 };
+const T_TAPA = .2, T_R1 = 1.05, T_CAMINA = 1.9, T_LLEGA = 4.9, T_R2 = 3.05, T_AQUI = 5.5;
+const Y_INI = ULTIMA_Y + 5.2;
+function nuevaY(t) { return lerp(Y_INI, ULTIMA_Y, ease(prog(t, T_CAMINA, T_LLEGA))); }
+
+// ---------- cámara: solo traslada y hace zoom; el ángulo nunca cambia ----------
+function cam(t) {
+  const sube = ease(prog(t, T_TAPA, T_TAPA + 1.3)), empuja = ease(prog(t, 5.6, 9));
+  const k = zoomLog(150, 80, sube) * (1 + .07 * empuja);
+  const cx = lerp(3.3, 7.3, sube), cy = lerp(2.4, 5.3, sube);
+  // sigue a la que llega (la cabeza de la acción) y vuelve a encuadrar todo para el final
+  const d = -1.1 * ease(prog(t, 1.5, 2.6)) * (1 - ease(prog(t, 5.0, 6.3)));
+  return { cx: cx + d / 2, cy: cy - d / 2, k };
+}
+
+// ---------- piso a sangre con losas tenues y líneas pintadas ----------
+function piso() {
+  pantalla(); ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(90,70,50,.08)'; ctx.lineWidth = 2;
+  for (let i = -20; i <= 30; i += 1.5) { ctx.beginPath(); ctx.moveTo(...iso(i, -20, 0)); ctx.lineTo(...iso(i, 40, 0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(...iso(-20, i, 0)); ctx.lineTo(...iso(40, i, 0)); ctx.stroke(); }
+  // carriles de espera pintados frente a cada puesto (la fila se ordena entre ellos)
+  for (const P of [PA]) for (const dx of [-.55, .55]) {
+    const x = P.x + P.w / 2 + dx; poli([iso(x - .05, P.d + .5, 0), iso(x + .05, P.d + .5, 0), iso(x + .05, P.d + 9.4, 0), iso(x - .05, P.d + 9.4, 0)], COLORES.marca);
+  }
+}
+// letra pintada en el piso: se lee hacia arriba a la derecha (eje −y); los renglones bajan hacia +x
+function letraPiso(txt, x, y, tamM, col, peso = 700) {
+  const c = Math.cos(ISO.ang), s = Math.sin(ISO.ang), k = ISO.esc / 100, [sx, sy] = iso(x, y, 0);
+  ctx.save(); ctx.setTransform(c * k, -s * k, c * k, s * k, sx, sy); ctx.font = `${peso} ${Math.round(tamM * 100)}px ${SERIF}`;
+  ctx.fillStyle = col; ctx.textBaseline = 'alphabetic'; ctx.fillText(txt, 0, 0); const w = ctx.measureText(txt).width / 100; ctx.restore(); return w;
+}
+const medirPiso = (txt, tamM, peso = 700) => medir(txt, `${peso} ${Math.round(tamM * 100)}px ${SERIF}`) / 100;
+// los renglones: cada letra cae con corte seco, 0,14 s después de la anterior
+function maquetaPiso() {
+  const clave = PALABRA_CLAVE.toLowerCase(), R = [];
+  [RENGLON_1, RENGLON_2].forEach((ren, j) => {
+    const pals = ren.split(/\s+/).map(p => ({ p, clave: p.toLowerCase() === clave }));
+    pals.forEach(o => o.tam = o.clave ? 2.2 : (pals.some(q => q.clave) ? 1.0 : 1.5));
+    R.push(pals);
+  });
+  return R;
+}
+const PISO = maquetaPiso();
+const BASE_X = [8.7, 11.1], BASE_Y = 12.4;
+function fraseEnPiso(t) {
+  [T_R1, T_R2].forEach((t0, j) => {
+    let y = BASE_Y, n = 0;
+    for (const o of PISO[j]) {
+      for (const ch of o.p) { const w = medirPiso(ch, o.tam);
+        if (t >= t0 + n * .14) letraPiso(ch, BASE_X[j], y, o.tam, o.clave ? COLORES.acento : COLORES.tinta, o.clave ? 800 : 600);
+        y -= w; n++; }
+      y -= medirPiso(' ', 1.2);
+    }
+  });
+}
+
+// ---------- puestos: caja con mostrador, letrero en la cara que mira a la cámara y tapa que se levanta ----------
+function letreroPared(P, txt) {                  // texto en la pared que mira +y (plano xz): u = +x, v = −z
+  const c = Math.cos(ISO.ang), s = Math.sin(ISO.ang), k = ISO.esc / 100, [sx, sy] = iso(P.x + .5, P.y + P.d + .01, P.h - .5);
+  ctx.save(); ctx.setTransform(c * k, s * k, 0, k, sx, sy); ctx.font = `700 ${40}px ${SERIF}`; ctx.fillStyle = '#FBF3E4'; ctx.fillText(txt.toUpperCase(), 0, 0); ctx.restore();
+}
+function puesto(P, tapa) {
+  const { x, y, w, d, h } = P, Q = (a, b, z) => iso(x + a, y + b, z), m = .14;
+  // por dentro: piso, pared del fondo con su ventanita, máquina de café sobre la barra trasera
+  poli([Q(0, 0, 0), Q(w, 0, 0), Q(w, d, 0), Q(0, d, 0)], mezcla(COLORES.papel, '#C7B79A', .35));
+  poli([Q(m, 0, 0), Q(m, d, 0), Q(m, d, h), Q(m, 0, h)], TL.der);
+  poli([Q(0, m, 0), Q(w, m, 0), Q(w, m, h), Q(0, m, h)], PALIDO.izq);
+  cajaIso(x + .3, y + .3, 0, w - .6, .55, .95, PALIDO);
+  cajaIso(x + .6, y + .35, .95, .6, .45, .55, tri('#5B5650'));
+  cajaIso(x + 1.6, y + .35, .95, .35, .35, .3, tri('#E9DFCC'));
+  // pared derecha entera y frente cortado bajo (el mostrador), con el letrero arriba sobre una viga
+  cajaIso(x + w - m, y, 0, m, d, h, TL);
+  cajaIso(x, y + d - .5, 0, w, .5, 1.05, TL);
+  cajaIso(x + m, y + d - .5, 1.05, w - 2 * m, .62, .06, tri('#E9DFCC'));
+  cajaIso(x, y + d - .25, h - .6, w, .25, .6, TL);
+  cajaIso(x, y, 0, m, d, h, TL);
+  letreroPared(P, LETRERO);
+  // tapa: gira sobre la bisagra de atrás (y = 0, arriba), muestra su lado de papel y se desliza lejos de la cámara
+  const g = clamp(tapa), rot = ease(prog(g, 0, .7)) * Math.PI, va = ease(prog(g, .7, 1));
+  if (va >= 1) return;
+  const L = (a, b) => { const yy = b * Math.cos(rot), zz = h + .08 + b * Math.sin(rot); return iso(x + a, y + yy - va * 6, zz + va * 1.5); };
+  const esp = .14, arriba = Math.cos(rot) > 0;
+  ctx.save(); ctx.globalAlpha = 1 - va;
+  poli([L(0, 0), L(w, 0), L(w, d + .15), L(0, d + .15)], arriba ? TL.arriba : '#F6EEDD');   // tapa (verde arriba, papel abajo)
+  if (arriba) poli([L(0, d + .15), L(w, d + .15), iso(x + w, y + (d + .15) * Math.cos(rot) - va * 6, h + .08 - esp + (d + .15) * Math.sin(rot) + va * 1.5), iso(x, y + (d + .15) * Math.cos(rot) - va * 6, h + .08 - esp + (d + .15) * Math.sin(rot) + va * 1.5)], TL.izq);
+  ctx.restore();
+}
+
+// ---------- personas: carteles anclados a los pies, vistas de espaldas ----------
+function persona(x, y, p, pose = {}) {
+  const [sx, sy] = iso(x, y, 0), h = p.alto * ISO.esc, sw = pose.camina ? Math.sin(pose.fase) : 0, bob = pose.camina ? Math.abs(Math.cos(pose.fase)) * .012 * h : 0;
+  const B = tri(p.ropa), piernaOsc = mezcla(p.piernas, '#15171A', .25);
+  ctx.save(); ctx.translate(sx, sy - bob);
+  const pierna = (hx, fx, col) => { ctx.beginPath(); ctx.moveTo(hx - .034 * h, -.49 * h); ctx.lineTo(hx + .034 * h, -.49 * h); ctx.lineTo(fx + .028 * h, -.02 * h); ctx.lineTo(fx - .028 * h, -.02 * h); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(fx - .008 * h, -.012 * h, .04 * h, .016 * h, 0, 0, Math.PI * 2); ctx.fillStyle = '#232524'; ctx.fill(); };
+  pierna(.04 * h, .045 * h - sw * .1 * h, piernaOsc); pierna(-.04 * h, -.045 * h + sw * .1 * h, p.piernas);
+  if (p.falda) { ctx.beginPath(); ctx.moveTo(-.1 * h, -.62 * h); ctx.lineTo(.1 * h, -.62 * h); ctx.lineTo(.15 * h, -.38 * h); ctx.lineTo(-.15 * h, -.38 * h); ctx.closePath(); ctx.fillStyle = B.der; ctx.fill(); }
+  const brazo = (bx, giro, col) => { ctx.save(); ctx.translate(bx, -.79 * h); ctx.rotate(giro); ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(-.026 * h, 0, .052 * h, .3 * h, .026 * h); ctx.fill(); ctx.restore(); };
+  brazo(.125 * h, -sw * .22 + .04, B.der);
+  ctx.beginPath(); ctx.moveTo(-.105 * h, -.5 * h); ctx.lineTo(-.12 * h, -.78 * h); ctx.quadraticCurveTo(-.12 * h, -.81 * h, -.09 * h, -.815 * h); ctx.lineTo(.09 * h, -.815 * h); ctx.quadraticCurveTo(.12 * h, -.81 * h, .12 * h, -.78 * h); ctx.lineTo(.105 * h, -.5 * h); ctx.closePath(); ctx.fillStyle = B.izq; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(.03 * h, -.5 * h); ctx.lineTo(.03 * h, -.815 * h); ctx.lineTo(.09 * h, -.815 * h); ctx.quadraticCurveTo(.12 * h, -.81 * h, .12 * h, -.78 * h); ctx.lineTo(.105 * h, -.5 * h); ctx.closePath(); ctx.fillStyle = B.der; ctx.fill();
+  brazo(-.125 * h, sw * .22 - .04, B.izq);
+  ctx.fillStyle = '#B98D6E'; ctx.fillRect(-.022 * h, -.85 * h, .044 * h, .05 * h);                    // cuello
+  if (p.largo) { ctx.beginPath(); ctx.roundRect(-.07 * h, -.9 * h, .14 * h, .17 * h, .05 * h); ctx.fillStyle = PELO; ctx.fill(); }
+  ctx.beginPath(); ctx.arc(0, -.885 * h, .066 * h, 0, Math.PI * 2); ctx.fillStyle = PELO; ctx.fill();
+  ctx.restore();
+}
+
+// ---------- marcas de la regla (solo en acento) ----------
+function flecha(t) {                                // crece delante de la que camina, hasta el final de la fila larga
+  const p = ease(prog(t, T_CAMINA - .3, T_LLEGA - .6)), y0 = Y_INI - .2, y1 = ULTIMA_Y + .35, yp = lerp(y0, y1, p), x = FILA_X;
+  if (p <= 0) return;
+  const desvanece = 1 - prog(t, T_LLEGA, T_LLEGA + .6), a = .42, an = .26;
+  ctx.save(); ctx.globalAlpha = desvanece;
+  poli([iso(x - an, y0, 0), iso(x + an, y0, 0), iso(x + an, yp + .7, 0), iso(x + a * 1.6, yp + .7, 0), iso(x, yp, 0), iso(x - a * 1.6, yp + .7, 0), iso(x - an, yp + .7, 0)], COLORES.acento);
+  ctx.restore();
+}
+function aquiVacio(t) {                             // «párate aquí» frente al puesto vacío: el contorno se traza solo
+  const p = ease(prog(t, T_AQUI, T_AQUI + .8)); if (p <= 0) return;
+  const cx = PB.x + PB.w / 2, cy = PB.d + 1.0, r = .7;
+  const pts = Array.from({ length: 49 }, (_, i) => { const a = -Math.PI / 2 + i / 48 * Math.PI * 2; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0]; });
+  lineaIso(pts, p, { col: COLORES.acento, ancho: 7, guiones: [] });
+  if (p >= 1) { const s = .32; poli([iso(cx - s, cy - s, 0), iso(cx + s, cy - s, 0), iso(cx + s, cy + s, 0), iso(cx - s, cy + s, 0)], mezcla(COLORES.acento, COLORES.papel, .55)); }
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  const c = cam(t); camaraIso(c.cx, c.cy, 0, c.k, W / 2, H * .47);
+  piso(); fraseEnPiso(t); flecha(t); aquiVacio(t);
+  // orden de pintor por la huella en el piso (x + y a nivel del suelo)
+  const cosas = [
+    { z: PA.x + PA.y + PA.d, f: () => puesto(PA, prog(t, T_TAPA, T_TAPA + 1.4)) },
+    { z: PB.x + PB.y + PB.d, f: () => puesto(PB, 0) },
+    ...PERSONAS.map((p, i) => ({ z: FILA_X + p.y, f: () => persona(FILA_X, p.y, p) })),
+  ];
+  const yN = nuevaY(t), camina = t > T_CAMINA && t < T_LLEGA;
+  cosas.push({ z: FILA_X + yN, f: () => persona(FILA_X, yN, NUEVA, { camina, fase: (t - T_CAMINA) * 7.5 }) });
+  cosas.sort((a, b) => a.z - b.z).forEach(o => o.f());
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_TAPA + .3, tipo: 'papel' }, { t: T_TAPA + 1.1, tipo: 'swish' },
+  { t: T_R1, tipo: 'pop' }, { t: T_R2, tipo: 'pop' }, { t: T_CAMINA, tipo: 'desliz' }, { t: T_LLEGA, tipo: 'golpe' }, { t: T_AQUI, tipo: 'pop' },
+];
+</script>
+</body>
+</html>

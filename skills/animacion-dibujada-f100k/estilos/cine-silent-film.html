@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cine mudo de los años 20</title>
+<style>html,body{margin:0;background:#000;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Cine mudo de los años 20» · ingeniería inversa de lemo-opuscar/styles/silent-film (MIT, © 2026 LemoLab) · qué se tomó: dibujo de tinta con lavados grises y rayado a 45° (y cruzado en los oscuros), copia de plata con un toque sepia, parpadeo, rayas y polvo MUY suaves, ventanilla redondeada entre cortinas de terciopelo, movimiento muestreado a 16 cuadros por segundo, cuerpo impasible que actúa con poses y el intertítulo que da el giro.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LETRERO = 'TIENDA';                         // el cartel de la vitrina (≤ 10 letras)
+const CARTEL = 'OFERTAS';                         // lo que levanta la vendedora (≤ 9 letras)
+const TARJETA = 'Publicaba todos los días…';      // primer intertítulo (narración, ≤ 34 letras)
+const FRASE = 'pero nadie entendía su oferta';    // intertítulo del giro, palabra por palabra (≤ 34 letras)
+const PALABRA_CLAVE = 'oferta';                   // sale ENORME
+const SEPIA = .28;                                // 0 = plata fría · .36 = copia cálida
+const COLORES = { cortina: '#5a1018', cortina2: '#24050a' };
+const DUR = 9;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — figura de grabado de cine mudo hecha de formas simples (tubos y mitones redondos, cara de puntos): impasible a propósito, sin intento realista
+const GATE = { x: 96, y: 150, w: W - 192, h: 1580, r: 34 }, ESC = hacerCapa();
+const T_ABRE = .05, T_IRIS = 3.25, T_TARJ1 = 3.7, T_TARJ2 = 5.9;
+const TINTA = '#141210';
+const g16 = t => Math.floor(t * 16) / 16;                         // manivela: personaje y cámara a 16 cuadros por segundo
+const gris = v => { const k = Math.round(v * 255); return `rgb(${k},${k},${k})`; };
+
+// ---------- tinta + lavado + rayado (el dibujo de grabado) ----------
+function lav(pts, v, o = {}) { forma(pts, { relleno: gris(v), tinta: o.tinta === false ? null : TINTA, w: o.w || 4, amp: 1.1, seed: o.seed || 0 });
+  if (v < .62) hatch(pts, { col: TINTA, gap: v < .3 ? 8 : 12, w: 1.6, alpha: .5, angle: -Math.PI / 4, seed: o.seed || 0 });
+  if (v < .35) hatch(pts, { col: TINTA, gap: 10, w: 1.4, alpha: .45, angle: Math.PI / 4, seed: (o.seed || 0) + 5 }); }
+
+// ---------- la calle y la tienda (el lavado se pinta una vez; la tinta hierve encima) ----------
+const SUELO = 1380;
+const FONDO = (() => { const c = hacerCapa(), p = c.getContext('2d'), r = rng(8);
+  const g = p.createLinearGradient(0, 0, 0, SUELO); g.addColorStop(0, gris(.9)); g.addColorStop(1, gris(.78)); p.fillStyle = g; p.fillRect(0, 0, W, SUELO);
+  p.fillStyle = gris(.62); p.fillRect(0, SUELO, W, H - SUELO);
+  for (let y = SUELO + 14; y < H; y += 30) for (let x = (y / 30 % 2) * 30; x < W; x += 60) { p.strokeStyle = 'rgba(20,18,16,.35)'; p.lineWidth = 2; p.beginPath(); p.ellipse(x, y, 26, 11, 0, 0, 7); p.stroke(); }
+  for (let i = 0; i < 4000; i++) { p.fillStyle = `rgba(20,18,16,${r() * .06})`; p.fillRect(r() * W, r() * H, 2, 2); }
+  return c; })();
+function tienda() {
+  lav(rect(120, 300, 840, 1080), .86, { seed: 1 });                      // fachada pálida
+  lav(rect(150, 330, 780, 140), .22, { seed: 2 });                       // tablero oscuro del letrero
+  ctx.save(); ctx.font = `700 104px Didot, "Bodoni 72", serif`; ctx.fillStyle = gris(.92); ctx.textAlign = 'center'; ctx.fillText(LETRERO.split('').join(' '), W / 2, 438); ctx.restore();
+  for (let i = 0; i < 8; i++) lav(resample([[150 + i * 97.5, 490], [150 + (i + 1) * 97.5, 490], [140 + (i + 1) * 97.5 + 10, 560], [140 + i * 97.5 + 10, 560]], 10, true), i % 2 ? .9 : .4, { seed: 10 + i, w: 3 });
+  lav(rect(170, 640, 330, 520), .3, { seed: 3 });                         // vitrina en sombra
+  for (const [x, y] of [[200, 760], [300, 760], [400, 760], [220, 900], [330, 900]]) lav(circle(x + 30, y, 40, 22), .8, { seed: x + y, w: 3 });
+  lav(rect(170, 1000, 330, 18), .75, { seed: 4 });
+  lav(rect(640, 700, 220, 680), .25, { seed: 5 });                        // puerta
+  lav(rect(670, 730, 160, 250), .6, { seed: 6, w: 3 }); forma(circle(835, 1060, 10), { relleno: gris(.85), tinta: TINTA, w: 3 });
+  lav(rect(100, 1360, 880, 26), .5, { seed: 7 });                         // vereda
+}
+// ---------- la vendedora: impasible, levanta el cartel de lado (no cruza la cara) ----------
+function vendedora(t) {
+  const ts = g16(t), sube = ease(prog(ts, 1.3, 2.1));                     // pose con llaves suaves, nada de saltos
+  const X = 560, P = SUELO + 4;
+  // piernas y zapatos
+  lav(rect(X - 46, P - 260, 36, 250), .2, { seed: 20, w: 3 }); lav(rect(X + 10, P - 260, 36, 250), .2, { seed: 21, w: 3 });
+  lav(roundRect(X - 64, P - 22, 62, 24, 10), .1, { seed: 22, w: 3 }); lav(roundRect(X + 4, P - 22, 62, 24, 10), .1, { seed: 23, w: 3 });
+  // cuerpo: chaleco oscuro + delantal blanco
+  lav(resample([[X - 80, P - 560], [X + 80, P - 560], [X + 95, P - 250], [X - 95, P - 250]], 10, true), .22, { seed: 24 });
+  lav(resample([[X - 70, P - 470], [X + 70, P - 470], [X + 100, P - 120], [X - 100, P - 120]], 10, true), .93, { seed: 25 });
+  for (let k = -2; k <= 2; k++) trazo([[X + k * 30, P - 460], [X + k * 40, P - 130]], { col: TINTA, w: 1.5, alpha: .5, seed: 30 + k });
+  // cabeza: cara pálida de maquillaje de época, ojos de punto, cejas, boca recta; sombrero de paja
+  const hy = P - 640;
+  lav(roundRect(X - 22, P - 600, 44, 50, 10), .8, { seed: 41, w: 3 });
+  forma(circle(X, hy, 62, 74), { relleno: gris(.86), tinta: TINTA, w: 4 });
+  for (const s of [-1, 1]) { forma(circle(X + s * 24, hy - 4, 6, 7), { relleno: TINTA, tinta: null }); ceja(X + s * 24, hy - 26, 26, 'plana', s, { col: TINTA, grosor: 4 }); }
+  trazo([[X, hy + 2], [X + 6, hy + 22], [X - 2, hy + 26]], { col: TINTA, w: 3 }); trazo([[X - 16, hy + 44], [X + 16, hy + 44]], { col: TINTA, w: 4 });
+  lav(circle(X, hy - 66, 110, 18), .78, { seed: 42 }); lav(roundRect(X - 64, hy - 128, 128, 64, 12), .72, { seed: 43 }); lav(rect(X - 64, hy - 86, 128, 18), .2, { seed: 44 });
+  // brazos de tubo que suben el cartel por los lados (abducción antes que flexión: nunca cruzan la cara)
+  const ang = lerp(.25, 2.8, sube), L = lerp(230, 285, sube), palmas = [];
+  for (const [hx, hy2, s] of [[X - 78, P - 540, -1], [X + 78, P - 540, 1]]) { const px = hx + s * Math.sin(ang) * L, py = hy2 + Math.cos(ang) * L; palmas.push([px, py]);
+    ink(resample([[hx, hy2], [px, py]], 8), { col: TINTA, w: 40, passes: 1, amp: 1 }); ink(resample([[hx, hy2], [px, py]], 8), { col: gris(.9), w: 30, passes: 1, amp: 1 }); }
+  // el cartel entre las dos palmas: lo sostienen de los bordes
+  const cx = (palmas[0][0] + palmas[1][0]) / 2, cy = palmas[0][1] - (sube > .5 ? 30 : 0), cw = palmas[1][0] - palmas[0][0] + 30;
+  lav(rect(cx - cw / 2, cy - 50, cw, 100), .9, { seed: 40 });
+  ctx.save(); const aj = autoajuste(CARTEL.toUpperCase(), 'Didot, "Bodoni 72", serif', 700, cw - 70, 1, 60, 24); ctx.font = aj.font; ctx.fillStyle = TINTA; ctx.textAlign = 'center'; ctx.fillText(aj.rs[0], cx, cy + aj.size * .35); ctx.restore();
+  for (const [px, py] of palmas) forma(circle(px, py, 20), { relleno: gris(.8), tinta: TINTA, w: 3 });
+}
+// ---------- intertítulo: tarjeta negra con borde art déco (doble raya, esquinas escalonadas, abanicos) ----------
+function tarjeta(dibujarTexto) {
+  ctx.fillStyle = '#0e0d0c'; ctx.fillRect(0, 0, W, H);
+  const x0 = GATE.x + 50, y0 = 380, x1 = GATE.x + GATE.w - 50, y1 = 1440;
+  ctx.save(); ctx.strokeStyle = '#ece6d8'; ctx.lineWidth = 4; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0); ctx.lineWidth = 2; ctx.strokeRect(x0 + 16, y0 + 16, x1 - x0 - 32, y1 - y0 - 32);
+  for (const [x, y, sx, sy] of [[x0, y0, 1, 1], [x1, y0, -1, 1], [x0, y1, 1, -1], [x1, y1, -1, -1]]) {
+    ctx.beginPath(); ctx.moveTo(x + sx * 40, y + sy * 16); ctx.lineTo(x + sx * 40, y + sy * 40); ctx.lineTo(x + sx * 16, y + sy * 40); ctx.stroke();
+    for (let k = 0; k < 5; k++) { const a = Math.atan2(sy, sx) + (k - 2) * .22; ctx.beginPath(); ctx.moveTo(x + sx * 40, y + sy * 40); ctx.lineTo(x + sx * 40 + Math.cos(a) * 46, y + sy * 40 + Math.sin(a) * 46); ctx.stroke(); } }
+  ctx.beginPath(); ctx.moveTo(W / 2 - 120, y1 - 90); ctx.lineTo(W / 2 + 120, y1 - 90); ctx.stroke(); ctx.fillStyle = '#ece6d8'; ctx.beginPath(); ctx.arc(W / 2, y1 - 90, 7, 0, 7); ctx.fill();
+  ctx.restore(); dibujarTexto(x0, y0, x1, y1);
+}
+const AJ_1 = autoajuste(TARJETA, '"Hoefler Text", "Baskerville", serif', 400, GATE.w - 220, 3, 92, 44);
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2, kConector: .6 });
+PARTES.forEach((q, i) => { q.t0 = T_TARJ2 + .25 + i * .3 + (q.clave ? .15 : 0); if (q.clave) { q.familia = 'Didot, "Bodoni 72", serif'; q.peso = 700; q.txt = q.txt.toUpperCase(); } });
+const FR = armarFrase(PARTES, { familia: '"Hoefler Text", "Baskerville", serif', peso: 400, ancho: GATE.w - 220, altoMax: 700, tamMax: 120, tamMin: 40, y0: 600, interlinea: 1.08 });
+FR.tokens.forEach(q => { if (!q.clave) q.font = 'italic ' + q.font; });
+
+arrancar(frame => {
+  const t = frame / FPS;
+  BOIL = Math.floor(t * 12);                                       // el pase de tinta se redibuja cada dos cuadros de película
+  conCtx(ESC.getContext('2d'), () => {
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    if (t < T_TARJ1) {
+      const z = 1 + .04 * ease(prog(g16(t), .9, T_IRIS));              // empuje lento y motivado
+      ctx.save(); ctx.translate(W / 2, 1000); ctx.scale(z, z); ctx.translate(-W / 2, -1000);
+      ctx.drawImage(FONDO, 0, 0); tienda(); vendedora(t);
+      ctx.restore();
+      // iris que se cierra sobre ella (sigue su cara)
+      const ir = prog(t, T_IRIS, T_TARJ1);
+      if (ir > 0) { const R = lerp(1300, 0, ease(ir)); ctx.save(); ctx.fillStyle = '#0e0d0c'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.moveTo(560 + Math.max(1, R), 760); ctx.arc(560, 760, Math.max(1, R), 0, Math.PI * 2, true); ctx.fill('evenodd'); ctx.restore(); }
+    } else if (t < T_TARJ2) {
+      tarjeta((x0, y0, x1, y1) => { ctx.save(); ctx.font = 'italic ' + AJ_1.font; ctx.fillStyle = '#ece6d8'; ctx.textAlign = 'center';
+        const hT = AJ_1.rs.length * AJ_1.size * 1.2; AJ_1.rs.forEach((r, i) => ctx.fillText(r, W / 2, (y0 + y1) / 2 - hT / 2 + AJ_1.size * .9 + i * AJ_1.size * 1.2)); ctx.restore(); });
+    } else {
+      tarjeta(() => pintarFrase(FR, t, q => { ctx.save(); ctx.font = q.font; ctx.fillStyle = '#ece6d8'; ctx.fillText(q.txt, q.x, q.y + 910 - (600 + FR.y1) / 2); ctx.restore(); }));
+    }
+  });
+  pelicula(ESC, t, GATE, { sepia: SEPIA, contraste: 1.15, parpadeo: .018, vineta: .55 });
+  cortinas(prog(t, T_ABRE, T_ABRE + .85), { col: COLORES.cortina, col2: COLORES.cortina2, minimo: 92 });
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_ABRE, tipo: 'desliz' }, { t: 1.3, tipo: 'swish' }, { t: T_IRIS, tipo: 'desliz' },
+  { t: T_TARJ1, tipo: 'papel' }, { t: T_TARJ2, tipo: 'papel' }, ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })),
+];
+</script>
+</body>
+</html>

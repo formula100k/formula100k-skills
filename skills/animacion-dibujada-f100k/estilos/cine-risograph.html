@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Risografía</title>
+<style>
+  html,body{margin:0;background:#d9d2c4;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Risografía» · ingeniería inversa de lemo-opuscar/styles/risograph (MIT, © 2026 LemoLab) · qué se tomó: una plancha por tinta (2–3 tintas translúcidas que se multiplican: dos dan una tercera), registro corrido fijo por plancha con un golpe en el acento, semitono anclado al papel con un ángulo por plancha, grano, poros y vetas de alimentación, reservas en papel con halo, rodillo que trae cada plancha y reflejos con planchas separadas.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = '3 PASOS';                       // enorme, impreso en dos planchas (doble golpe). SOLO cifras del guion
+const SUBTITULO = 'para tu primera venta';      // en la tira de papel sin tinta (máx. ~26 letras)
+const TINTAS = {                                // 3 tintas como máximo; papel cálido, nunca blanco puro
+  uno: '#0078BF',    // plancha 1: carga la silueta sola
+  dos: '#FF48B0',    // plancha 2 (llega con el rodillo)
+  tres: '#FFE800',   // plancha 3 (llega después)
+  papel: '#F4EEE2',
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const I = TINTAS, SOL = { x: 560, y: 930, r: 270 }, HZ = 1180;
+const T = { dos: [.35, .8], tres: [1.05, 1.5], golpe: 1.6 };
+const cerca = X => HZ - 20 - Math.sin(X * .006 + 1) * 60 - Math.sin(X * .017) * 18, lejos = X => HZ - 120 - Math.sin(X * .009 + 3) * 50;
+const FTT = '"Avenir Next Condensed", "Futura", Impact, sans-serif', FTS = '"Futura", "Avenir Next", sans-serif';
+const AJ_T = autoajuste(TITULO, FTT, 800, 940, 1, 300, 120), AJ_S = autoajuste(SUBTITULO, FTS, 700, 760, 1, 62, 34);
+const TY = 290 + AJ_T.size * .82, TIRA = { y: TY + 50, h: AJ_S.size * 1.6 };
+const BOLSA = { x: 790, y: cerca(790) - 10 };
+
+// formas compartidas (las mismas para todas las planchas: así calzan… y se corren)
+const camino = (fn, x0 = 0, x1 = W, base = H) => { const p = new Path2D(); p.moveTo(x0, base); for (let X = x0; X <= x1; X += 8) p.lineTo(X, fn(X)); p.lineTo(x1, base); p.closePath(); return p; };
+const P_CERCA = camino(cerca, 0, W, 1520), P_LEJOS = camino(lejos, 0, W, 1520);
+const P_SOL = new Path2D(); P_SOL.arc(SOL.x, SOL.y, SOL.r, 0, 6.283);
+const bolsa = (s = 1) => { const p = new Path2D(), x = BOLSA.x, y = BOLSA.y, w = 120 * s, h = 130 * s; p.moveTo(x - w / 2, y - h); p.lineTo(x + w / 2, y - h); p.lineTo(x + w / 2 + 8 * s, y); p.lineTo(x - w / 2 - 8 * s, y); p.closePath(); return p; };
+const asa = () => { const p = new Path2D(); p.arc(BOLSA.x, BOLSA.y - 130, 34, Math.PI, 0); return p; };
+const semi = (g, dens, ang, x0 = 0, y0 = 0, x1 = W, y1 = H) => semitono(g, { x0, y0, x1, y1, paso: 9, angulo: ang, k: .72, dens, col: '#000' });
+
+// ---------- las planchas (cada una es la densidad de UNA tinta; se pinta en negro y se tiñe al imprimir) ----------
+function plancha(dibujo) { const c = mk(), g = c.getContext('2d'); g.fillStyle = '#000'; dibujo(g);
+  // reservas en papel (cero tinta en TODAS las planchas): la tira del subtítulo y el halo de la bolsa
+  g.save(); g.globalCompositeOperation = 'destination-out'; g.beginPath(); g.roundRect(W / 2 - medir(AJ_S.rs[0], AJ_S.font) / 2 - 40, TIRA.y, medir(AJ_S.rs[0], AJ_S.font) + 80, TIRA.h, 10); g.fill();
+  g.lineWidth = 14; g.lineJoin = 'round'; g.stroke(bolsa()); g.fill(bolsa()); g.stroke(asa()); g.restore();
+  return c; }
+const PL1 = plancha(g => {                                   // azul: cerro cercano lleno, cerro lejano al 40 %, el título, la bolsa
+  g.fill(P_CERCA); g.save(); g.clip(P_LEJOS); semi(g, () => .4, .26, 0, 900, W, 1300); g.restore();
+  g.save(); g.clip(P_SOL); semi(g, () => .2, .26, SOL.x - SOL.r, SOL.y - SOL.r, SOL.x + SOL.r, SOL.y + SOL.r); g.restore();
+  g.font = AJ_T.font; g.textAlign = 'center'; g.fillText(AJ_T.rs[0], W / 2, TY);
+});
+const PL1b = (() => { const c = mk(), g = c.getContext('2d'); g.fillStyle = '#000'; g.fill(bolsa()); g.lineWidth = 12; g.strokeStyle = '#000'; g.stroke(asa());   // la bolsa: va DESPUÉS de las reservas
+  g.font = AJ_S.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(AJ_S.rs[0], W / 2, TIRA.y + TIRA.h / 2 + 3); return c; })();
+const PL2 = plancha(g => {                                   // rosa: el disco lleno, un tinte del 30 % sobre el cerro (la mezcla más viva) y el doble golpe del título
+  g.fill(P_SOL); g.save(); g.clip(P_CERCA); semi(g, (x, y) => .3 + .25 * clamp((y - 1250) / 250), 1.31, 0, 1000, W, 1520); g.restore();
+  g.font = AJ_T.font; g.textAlign = 'center'; g.fillText(AJ_T.rs[0], W / 2 + 12, TY + 9);
+});
+const PL3 = plancha(g => {                                   // amarillo: cielo en bandas escalonadas (20/40/60 %) y lleno detrás del sol y en la bolsa
+  for (const [a, b, d] of [[0, 520, .2], [520, 820, .4], [820, 1060, .6]]) semi(g, () => d, 0, 0, a, W, b);
+  g.beginPath(); g.moveTo(0, 1060); g.lineTo(W, 1060); for (let X = W; X >= 0; X -= 8) g.lineTo(X, Math.max(1060, lejos(X) + 30)); g.closePath(); g.fill();   // lleno solo en el cielo bajo
+});
+const PL3b = (() => { const c = mk(), g = c.getContext('2d'); g.fillStyle = '#000'; g.fill(bolsa(.86)); return c; })();
+// grano: poros en lo lleno + vetas en el sentido del papel + manchas lentas (fijo por plancha; un tercio «hierve» cada 4 cuadros)
+function grano3(sem) { return [0, 1, 2].map(k => { const c = mk(), g = c.getContext('2d'), R = rng(sem * 10 + k);
+  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(0,0,0,${.4 + R() * .6})`; g.fillRect(R() * W, R() * H, 1 + R() * 2, 1 + R() * 2); }
+  if (!k) { g.globalAlpha = .12; for (let i = 0; i < 40; i++) g.fillRect(R() * W, 0, 1 + R() * 4, H); g.globalAlpha = .09; g.filter = 'blur(30px)';
+    for (let i = 0; i < 25; i++) { g.beginPath(); g.arc(R() * W, R() * H, 40 + R() * 120, 0, 6.283); g.fill(); } g.filter = 'none'; }
+  return c; }); }
+const GR = [grano3(1), grano3(2), grano3(3)];
+const tinta = (c, col, gr, b) => { const o = mk(), g = o.getContext('2d'); g.drawImage(c, 0, 0); g.globalCompositeOperation = 'destination-out'; g.drawImage(gr[0], 0, 0);
+  g.globalCompositeOperation = 'source-in'; g.fillStyle = col; g.fillRect(0, 0, W, H); return o; };
+const TI = [[tinta(PL1, I.uno, GR[0]), tinta(PL1b, I.uno, GR[0])], [tinta(PL2, I.dos, GR[1])], [tinta(PL3, I.tres, GR[2]), tinta(PL3b, I.tres, GR[2])]];
+const PAPEL = papelImpreso(I.papel, { fibras: .5, manchas: 10, viñeta: .05, motitas: 20, semilla: 5 });
+const REG = [[0, 0], [-3, 2], [2.5, -2]];                    // registro fijo de esta tirada (±1–3 px)
+
+// el reflejo en el agua: cada plancha ondula con su propia fase (planchas separadas)
+function reflejo(g, pl, t) { const ts = Math.floor(t * 12) / 12;
+  for (let y = 1530; y < H; y += 14) { const k = (y - 1530) / (H - 1530), fase = [0, 1.9, 3.7][pl], dx = Math.sin(ts * 3 + y * .05 + fase) * (6 + k * 18);
+    g.save(); g.beginPath(); g.rect(0, y, W, 9); g.clip(); g.translate(dx, 0); g.translate(0, 1530 * 2); g.scale(1, -1); g.drawImage(TI[pl][0], 0, 0); g.restore(); } }
+
+const TMP = mk(), tg = TMP.getContext('2d');
+arrancar(frame => {
+  const t = frame / FPS, f4 = Math.floor(frame / 4) % 3;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.drawImage(PAPEL, 0, 0);
+  // golpe de registro en el acento: 8–14 px que vuelven en ~0,25 s (sin rebote)
+  const kick = t >= T.golpe ? Math.max(0, 1 - (t - T.golpe) / .25) : 0;
+  const frentes = [W + 200, lerp(-60, W + 60, prog(t, ...T.dos)), lerp(-60, W + 60, prog(t, ...T.tres))];
+  for (let p = 2; p >= 0; p--) {
+    const fr = frentes[p]; if (fr <= -60) continue;
+    const [rx, ry] = REG[p], kx = kick * [0, 12, -10][p], ky = kick * [0, -7, 9][p];
+    tg.setTransform(1, 0, 0, 1, 0, 0); tg.globalCompositeOperation = 'copy'; tg.drawImage(TI[p][0], rx + kx, ry + ky); tg.globalCompositeOperation = 'source-over';
+    if (TI[p][1]) tg.drawImage(TI[p][1], rx + kx, ry + ky);
+    reflejo(tg, p, t);
+    // el grano hierve en parte: otra capa de poros que se corre cada 4 cuadros
+    tg.globalCompositeOperation = 'destination-out'; tg.globalAlpha = .5; tg.drawImage(GR[p][1 + (f4 % 2)], (f4 * 37) % 11, (f4 * 53) % 13); tg.globalAlpha = 1;
+    if (fr < W + 60) { tg.globalCompositeOperation = 'destination-in'; tg.fillStyle = '#000'; tg.fillRect(0, 0, Math.max(0, fr), H); }   // el rodillo: la plancha llega hasta su frente
+    tg.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(TMP, 0, 0);
+    if (fr > -60 && fr < W + 60) { ctx.save(); ctx.beginPath(); ctx.rect(fr - 40, 0, 40, H); ctx.clip(); ctx.globalAlpha = .45; ctx.drawImage(TMP, 0, 0); ctx.restore(); }   // banda más cargada en el frente
+  }
+  ctx.globalCompositeOperation = 'source-over';
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .35, tipo: 'desliz' }, { t: 1.05, tipo: 'desliz' }, { t: 1.6, tipo: 'golpe' }];
+</script>
+</body>
+</html>

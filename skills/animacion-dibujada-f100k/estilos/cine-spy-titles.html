@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Créditos de espía</title>
+<style>
+  html,body{margin:0;background:#111;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Créditos de espía» · ingeniería inversa de lemo-opuscar/styles/spy-titles (MIT, © 2026 LemoLab) · qué se tomó: papel recortado a tijera con filo cacheado, ranuras y sombra de papel, cuatro tintas planas, la tipografía ES el decorado (letras-vagón), corte duro en el golpe, la escena que se rebana en diagonal y el título que se arma con el objeto buscado (la cerradura).
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = 'tu';                 // crédito chico de la primera escena
+const TREN = 'CONTENIDO';            // la palabra-tren (máx. ~10 letras, MAYÚSCULAS)
+const GOLPE_1 = 'NO';                // escena 2: la palabra enorme (en rojo, el color del peligro)
+const GOLPE_2 = 'VENDE';             // escena 2: debajo, en negro
+const ANTES = 'te falta';            // tira de papel del título final
+const TITULO = 'UN GANCHO';          // el título que se arma letra por letra; la primera «O» se vuelve la cerradura
+const COLORES = {
+  tinta: '#1b1714',   // negro de tinta
+  papel: '#efe4c9',   // crema
+  rojo: '#d23a22',    // el color caliente (peligro y acento)
+  mostaza: '#e2a52a', // el secundario: SOLO el objeto buscado
+  rojoOsc: '#9a2a18', // utilería de fondo (nunca en negro: se leería como letra)
+};
+const LETRA = '"Avenir Next Condensed", Impact, "Arial Narrow", sans-serif';   // condensada de cartel
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-grafica.js"></script>
+<script>
+const T_CORTE1 = 1.0, T_REBANA = 3.0, T_FIN_REBANA = 3.7, BEAT = .25;
+const A2 = t => Math.floor(t * 12) / 12;                              // títeres y letras «en dos» (12 cps); la cámara va en uno
+
+// ---------- textura de papel (una vez): manchas + fibras + motas sin tinta, se MULTIPLICA encima ----------
+const TEXTURA = (() => { const [c, g] = lienzo(), r = rng(19);
+  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+  for (let y = 0; y < H; y += 8) for (let x = 0; x < W; x += 8) { const n = vnoise(x * .01, y * .01) * .6 + vnoise(x * .05, y * .05) * .4;
+    g.fillStyle = `rgba(90,60,30,${(n * .09).toFixed(3)})`; g.fillRect(x, y, 8, 8); }
+  g.strokeStyle = 'rgba(80,50,20,.08)'; for (let i = 0; i < 900; i++) { const x = r() * W, y = r() * H, a = r() * 6.3, l = 5 + r() * 18;
+    g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+  for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(90,60,30,.025)'; g.fillRect(0, r() * H, W, 2 + r() * 10); }   // pasadas de rasqueta
+  return c; })();
+const MOTAS = (() => { const [c, g] = lienzo(), r = rng(23);
+  for (let i = 0; i < 1600; i++) { g.fillStyle = `rgba(239,228,201,${.1 + r() * .25})`; g.beginPath(); g.arc(r() * W, r() * H, .6 + r() * 1.8, 0, 7); g.fill(); } return c; })();
+function papel() { ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(TEXTURA, 0, 0); ctx.restore();
+  ctx.save(); ctx.globalAlpha = .5; ctx.drawImage(MOTAS, 0, 0); ctx.restore(); }
+
+const rectP = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+const circP = (cx, cy, r, n = 60) => Array.from({ length: n }, (_, i) => [cx + Math.cos(i / n * 6.283) * r, cy + Math.sin(i / n * 6.283) * r]);
+const tras = (pts, dx, dy) => pts.map(([x, y]) => [x + dx, y + dy]);
+
+// ---------- escena 1: la palabra-tren cruza y frena seco en el pulso ----------
+const F_TREN = (() => { for (let s = 300; s > 120; s -= 4) { const f = `900 ${s}px ${LETRA}`; if (medirT(TREN, f, s * .06) < W - 120) return f; } return `900 120px ${LETRA}`; })();
+const L_TREN = letrasRecortadas(TREN, F_TREN, COLORES.tinta, { semilla: 4, track: parseFloat(F_TREN.match(/(\d+)px/)[1]) * .06 });
+const L_ARRIBA = letrasRecortadas(ARRIBA, `900 150px ${LETRA}`, COLORES.papel, { semilla: 8 });
+const VIA_Y = 1240;
+function escena1(t) {
+  ctx.fillStyle = COLORES.rojo; ctx.fillRect(0, 0, W, H);
+  const cam = A2(t) < .85 ? 1 - aterriza(prog(t, 0, .85)) : 0;       // el tren entra desde la derecha y para EN el pulso
+  const dx = cam * 640;
+  // utilería de fondo en rojo oscuro: cerros y postes con cable (paralaje: van más lento)
+  pieza(tijera([[0, 1060], [180, 990], [360, 1050], [560, 960], [760, 1040], [980, 980], [1080, 1010], [1080, 1250], [0, 1250]], 3, 2.2), COLORES.rojoOsc, { sombra: 0 });
+  for (let i = -1; i < 5; i++) { const x = ((i * 330 + dx * .45) % 1320 + 1320) % 1320 - 120;
+    pieza(tijera(rectP(x, 640, 16, 600), 30 + i, 1.2), COLORES.rojoOsc, { sombra: 0 });
+    pieza(tijera(rectP(x - 50, 680, 116, 12), 40 + i, 1), COLORES.rojoOsc, { sombra: 0 }); }
+  ctx.strokeStyle = COLORES.papel; ctx.globalAlpha = .55; ctx.lineWidth = 2.5; ctx.beginPath();
+  for (let x = -40; x <= W + 40; x += 20) ctx.lineTo(x, 700 + Math.sin((x + dx * .45) / 330 * Math.PI) * 18); ctx.stroke(); ctx.globalAlpha = 1;
+  // el piso y la vía
+  pieza(tijera(rectP(-20, VIA_Y + 40, W + 40, H - VIA_Y), 5, 2), COLORES.tinta, { sombra: 0 });
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, VIA_Y + 34, W, 7);
+  for (let x = ((dx % 70) + 70) % 70 - 70; x < W; x += 70) { ctx.fillStyle = COLORES.rojo; ctx.fillRect(x, VIA_Y + 58, 40, 9); }
+  // las letras son los vagones: cada letra sobre su plataforma con ruedas
+  const x0 = (W - L_TREN.w) / 2 + dx, top = VIA_Y - L_TREN.base - 6;
+  L_TREN.xs.forEach((lx, i) => { const lw = (L_TREN.xs[i + 1] ?? L_TREN.w - L_TREN.size * .2) - lx - 8, x = x0 + lx;
+    pieza(tijera(rectP(x - 4, VIA_Y - 8, lw + 8, 20), 60 + i, 1.2), COLORES.tinta, { fondo: COLORES.rojo });
+    for (const rx of [x + 14, x + lw - 14]) { pieza(tijera(circP(rx, VIA_Y + 18, 15, 22), 80 + i, .8), COLORES.tinta, { fondo: COLORES.rojo });
+      ctx.strokeStyle = COLORES.rojo; ctx.lineWidth = 3; const a = -dx / 15; ctx.beginPath(); ctx.moveTo(rx - Math.cos(a) * 9, VIA_Y + 18 - Math.sin(a) * 9); ctx.lineTo(rx + Math.cos(a) * 9, VIA_Y + 18 + Math.sin(a) * 9); ctx.stroke(); } });
+  ctx.drawImage(L_TREN.c, x0, top);
+  if (t >= .45) ctx.drawImage(L_ARRIBA.c, 90, 470);                   // el crédito chico, con corte seco
+  papel();
+}
+
+// ---------- escena 2: corte duro en el golpe — fondo crema, «NO» enorme en rojo ----------
+const L_NO = letrasRecortadas(GOLPE_1, `900 ${Math.min(700, Math.floor(700 * 760 / Math.max(1, medirT(GOLPE_1, `900 700px ${LETRA}`))))}px ${LETRA}`, COLORES.rojo, { semilla: 11 });
+const L_VENDE = (() => { for (let s = 380; s > 120; s -= 6) { const f = `900 ${s}px ${LETRA}`; if (medirT(GOLPE_2, f) < W - 160) return letrasRecortadas(GOLPE_2, f, COLORES.tinta, { semilla: 12 }); } })();
+function escena2(t, g) {
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H);
+  // la diagonal de 30°: una franja negra que cruza el cuadro
+  pieza(tijera([[-100, 1700], [W + 100, 1240], [W + 100, 1420], [-100, 1880]], 14, 2.4), COLORES.tinta, { fondo: COLORES.papel });
+  pieza(tijera([[-100, 1600], [W + 100, 1140], [W + 100, 1180], [-100, 1640]], 15, 1.6), COLORES.rojo, { fondo: COLORES.papel });
+  ctx.drawImage(L_NO.c, (W - L_NO.w) / 2 - 20, 300);
+  if (t >= T_CORTE1 + .35) ctx.drawImage(L_VENDE.c, (W - L_VENDE.w) / 2 + 10, 300 + L_NO.base + 30);
+  papel();
+}
+
+// ---------- escena 3: el título se arma; la «O» es la cerradura (el objeto buscado, sobre respaldo negro) ----------
+const F_TIT = (() => { for (let s = 320; s > 100; s -= 4) { const f = `900 ${s}px ${LETRA}`; if (medirT(TITULO.split(' ').pop(), f, s * .04) < W - 150) return f; } return `900 100px ${LETRA}`; })();
+const S_TIT = parseFloat(F_TIT.match(/(\d+)px/)[1]);
+const PAL_T = TITULO.split(' ');
+const PAL_FINAL = PAL_T.pop(), PAL_ANTES = PAL_T.join(' ');
+const I_O = PAL_FINAL.indexOf('O');
+const L_FIN = letrasRecortadas(PAL_FINAL, F_TIT, COLORES.tinta, { semilla: 21, track: S_TIT * .04, saltar: [I_O] });
+const L_UN = PAL_ANTES ? letrasRecortadas(PAL_ANTES, `900 ${Math.round(S_TIT * .62)}px ${LETRA}`, COLORES.papel, { semilla: 22 }) : null;
+const L_ANTES = letrasRecortadas(ANTES, `600 78px ${LETRA}`, COLORES.tinta, { semilla: 23, sombra: 0 });
+const T_LETRA = i => 4.2 + i * BEAT;
+function cerradura(cx, cy, r) {
+  pieza(tijera(circP(cx, cy, r * 1.12, 70), 90, 1.4), COLORES.tinta, { fondo: COLORES.rojo });      // respaldo de tinta
+  const hoyo = [...circP(cx, cy - r * .18, r * .2, 30)].reverse();
+  const pie = [[cx - r * .09, cy - r * .1], [cx + r * .09, cy - r * .1], [cx + r * .17, cy + r * .48], [cx - r * .17, cy + r * .48]].reverse();
+  pieza([tijera(circP(cx, cy, r, 70), 91, 1.4), tijera(hoyo, 92, .8), tijera(pie, 93, .8)], COLORES.mostaza, { sombra: .3 });
+}
+function escena3(t) {
+  ctx.fillStyle = COLORES.rojo; ctx.fillRect(0, 0, W, H);
+  pieza(tijera(circP(W * .64, 600, 300, 90), 32, 2.4), COLORES.rojoOsc, { sombra: 0 });          // el sol enorme de fondo (rojo oscuro)
+  for (let i = 0; i < 4; i++) { const x = 60 + i * 300; pieza(tijera(rectP(x, 380, 14, 1000), 34 + i, 1.2), COLORES.rojoOsc, { sombra: 0 });
+    pieza(tijera(rectP(x - 46, 410, 106, 11), 44 + i, 1), COLORES.rojoOsc, { sombra: 0 }); }
+  pieza(tijera([[0, 1420], [260, 1330], [520, 1400], [800, 1310], [1080, 1380], [1080, H], [0, H]], 31, 2.2), COLORES.rojoOsc, { sombra: 0 });
+  // tira de papel crema, cortada e inclinada
+  if (t >= 3.75) { ctx.save(); ctx.translate(110, 700); ctx.rotate(-.04);
+    pieza(tijera(rectP(0, 0, L_ANTES.w + 50, 112), 33, 1.6), COLORES.papel, { fondo: COLORES.rojo }); ctx.drawImage(L_ANTES.c, 20, 112 / 2 - L_ANTES.base * .7); ctx.restore(); }
+  if (L_UN && t >= 4.0) ctx.drawImage(L_UN.c, 104, 840);
+  const y0 = 840 + (L_UN ? L_UN.base + 30 : 0), x0 = (W - L_FIN.w) / 2;
+  // cada letra aterriza en su pulso con corte seco (golpe de papel); la O-cerradura cae al final
+  const ordenL = [...PAL_FINAL].map((_, i) => i).filter(i => i !== I_O);
+  ctx.save(); ctx.beginPath();
+  ordenL.forEach((i, k) => { if (t >= T_LETRA(k)) { const xa = L_FIN.xs[i] - L_FIN.size * .05, xb = (L_FIN.xs[i + 1] ?? L_FIN.w) - L_FIN.size * .05; ctx.rect(x0 + xa, y0 - 20, xb - xa, L_FIN.h + 40); } });
+  ctx.clip(); ctx.drawImage(L_FIN.c, x0, y0); ctx.restore();
+  if (I_O >= 0 && t >= T_LETRA(ordenL.length) + BEAT) {
+    const xa = L_FIN.xs[I_O], xb = L_FIN.xs[I_O + 1] ?? (xa + medirT('O', F_TIT)), r = Math.min((xb - xa) * .5, S_TIT * .36);
+    cerradura(x0 + (xa + xb) / 2, y0 + L_FIN.base - S_TIT * .37, r);
+  }
+  papel();
+}
+
+// ---------- la escena 2 se rebana en tiras paralelas a la diagonal que salen alternadas ----------
+const [BUF, BG] = lienzo();
+function rebanar(t, k) {
+  const sav = ctx; ctx = BG; escena2(t); ctx = sav;
+  escena3(t);
+  const ang = -Math.atan2(590, W + 200), n = 7, alto = 2600 / n, ux = Math.cos(ang), uy = Math.sin(ang), dist = ease(k) * 2400;
+  for (let i = 0; i < n; i++) { const s = (i % 2 ? 1 : -1) * dist;
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(ang);
+    ctx.beginPath(); ctx.rect(-1600, -1300 + i * alto, 3200, alto + 1); ctx.rotate(-ang); ctx.translate(-W / 2, -H / 2);
+    ctx.clip(); ctx.drawImage(BUF, s * ux, s * uy);
+    ctx.restore(); }
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  if (t < T_CORTE1) escena1(t);
+  else if (t < T_REBANA) escena2(t);
+  else if (t < T_FIN_REBANA) rebanar(t, prog(t, T_REBANA, T_FIN_REBANA));
+  else escena3(t);
+});
+window.SONIDOS = [{ t: 0, tipo: 'desliz' }, { t: .85, tipo: 'golpe' }, { t: T_CORTE1, tipo: 'golpe' }, { t: T_CORTE1 + .35, tipo: 'papel' },
+  { t: T_REBANA, tipo: 'swish' }, { t: 3.75, tipo: 'papel' }, { t: 4.0, tipo: 'papel' },
+  ...[...PAL_FINAL].map((_, k) => ({ t: +T_LETRA(k).toFixed(2), tipo: 'papel' })), { t: +(T_LETRA(PAL_FINAL.length - 1) + BEAT).toFixed(2), tipo: 'golpe' }];
+</script>
+</body>
+</html>

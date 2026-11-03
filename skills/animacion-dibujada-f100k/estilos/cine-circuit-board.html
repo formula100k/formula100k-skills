@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Placa de circuito</title>
+<style>
+  html,body{margin:0;background:#05190F;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Placa de circuito» · ingeniería inversa de lemo-opuscar/styles/circuit-board (MIT, © 2026 LemoLab) · qué se tomó: placa vista desde arriba con laminado de fibra, cobre bajo máscara verde con despejes y canto biselado, pistas a 0/45/90°, pads dorados y vías, serigrafía blanca ruteada como pista que se traza trazo a trazo, y la luz que corre por el cobre: un flujo plateado de vetas paralelas que se vuelve corriente ámbar al cruzar un componente, con destello en cada pad, cámara que va montada en el pulso y el LED de encendido que se queda prendido.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'así se vuelve venta';            // se imprime en la cartela de la placa al final (máx. ~22 letras)
+const PALABRA_CLAVE = 'venta';                    // va enorme
+// Las 5 etapas del recorrido, de abajo hacia arriba (máx. ~10 letras c/u). La luz plateada (atención) se vuelve ámbar (venta) en la 4.ª.
+const ETAPAS = ['idea', 'contenido', 'regalo', 'oferta', 'venta'];
+const REVISION = 'REV 1 · HOJA 1/1';              // micro texto de la cartela
+const COLORES = {
+  laminado: '#05190F', cobre: '#1C6A44', canto: '#4AA977', oro: '#D9B25B', seri: '#F2EEE1',
+  corriente: '255,190,84',   // ámbar: la venta (energía)
+  flujo: '170,214,226',      // plateado: la atención que entra
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+// ---------- la placa en el mundo (px a zoom 1); se pinta UNA vez a 2× ----------
+const B = { x0: -320, y0: -760, x1: 1400, y1: 2240 }, ESC = 2;
+const J1 = [300, 1600], U1 = [300, 1180], C1 = [580, 880], U2 = [720, 560], D1 = [360, 360];
+const RUTA = [J1, [300, 1245], [300, 1115], [300, 1020], [440, 880], C1, [720, 880], [720, 625], [720, 495], [720, 470], [610, 360], [400, 360], D1];
+const R = _remuestreo(RUTA, 3), LARGO = R.total;
+const sDe = p => { let best = 0, d = 1e9; R.pts.forEach((q, i) => { const e = Math.hypot(q[0] - p[0], q[1] - p[1]); if (e < d) { d = e; best = i; } }); return R.len[best]; };
+const S = { j1: 0, u1: sDe(U1), c1: sDe(C1), u2: sDe(U2), d1: LARGO };
+const puntoEn = s => { s = clamp(s, 0, LARGO); let i = 0; while (i < R.len.length - 1 && R.len[i] < s) i++; return R.pts[i]; };
+const tramo = (s0, s1) => R.pts.filter((_, i) => R.len[i] >= s0 && R.len[i] <= s1);
+// otras pistas reales: las patas de los chips salen a una barra de alimentación (no hay pistas decorativas)
+const PATAS = [];
+for (const [cx, cy] of [U1, U2]) for (let k = 0; k < 4; k++) { const y = cy - 45 + k * 30;
+  PATAS.push([[cx - 100, y], [cx - 150, y], [cx - 170, y + 20], [cx - 170, y + 60 + k * 10]]); PATAS.push([[cx + 100, y], [cx + 160, y], [cx + 180, y - 20], [cx + 180, y - 60 - k * 10]]); }
+
+const PLACA = (() => {
+  const c = document.createElement('canvas'); c.width = (B.x1 - B.x0) * ESC; c.height = (B.y1 - B.y0) * ESC; const g = c.getContext('2d'), r = rng(9);
+  g.scale(ESC, ESC); g.translate(-B.x0, -B.y0);
+  // 1. laminado con trama de fibra de vidrio (dos octavas)
+  g.fillStyle = COLORES.laminado; g.fillRect(B.x0, B.y0, B.x1 - B.x0, B.y1 - B.y0);
+  for (const [paso, a] of [[14, .05], [5, .035]]) { g.strokeStyle = `rgba(80,140,100,${a})`; g.lineWidth = paso * .35;
+    for (let y = B.y0; y < B.y1; y += paso) for (let x = B.x0 + ((y / paso) % 2) * paso; x < B.x1; x += paso * 2) { g.beginPath(); g.moveTo(x, y); g.lineTo(x + paso, y); g.stroke(); } }
+  // 2. vertido de cobre bajo máscara: llena todo; luego se le cortan los despejes
+  const cob = document.createElement('canvas'); cob.width = c.width; cob.height = c.height; const k = cob.getContext('2d'); k.scale(ESC, ESC); k.translate(-B.x0, -B.y0);
+  k.fillStyle = COLORES.cobre; k.fillRect(B.x0 + 30, B.y0 + 30, B.x1 - B.x0 - 60, B.y1 - B.y0 - 60);
+  for (let i = 0; i < 1400; i++) { const x = B.x0 + r() * (B.x1 - B.x0), y = B.y0 + r() * (B.y1 - B.y0), rr = 20 + r() * 70;   // moteado de la máscara
+    const gr = k.createRadialGradient(x, y, 0, x, y, rr); gr.addColorStop(0, r() < .5 ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.05)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); k.fillStyle = gr; k.fillRect(x - rr, y - rr, 2 * rr, 2 * rr); }
+  const despeje = (ancho) => { k.globalCompositeOperation = 'destination-out'; k.lineCap = 'round'; k.lineJoin = 'miter'; k.strokeStyle = '#000'; k.lineWidth = ancho;
+    for (const p of [RUTA, ...PATAS]) { k.beginPath(); p.forEach((q, i) => i ? k.lineTo(...q) : k.moveTo(...q)); k.stroke(); }
+    k.fillStyle = '#000'; for (const [cx, cy] of [U1, U2]) k.fillRect(cx - 125, cy - 85, 250, 170); k.fillRect(J1[0] - 85, J1[1] - 70, 170, 140);
+    k.beginPath(); k.arc(...C1, 62, 0, Math.PI * 2); k.fill(); k.beginPath(); k.arc(...D1, 60, 0, Math.PI * 2); k.fill(); k.fillRect(500, 1270, 540, 230); k.globalCompositeOperation = 'source-over'; };
+  despeje(46);
+  g.drawImage(cob, B.x0, B.y0, B.x1 - B.x0, B.y1 - B.y0);
+  // canto biselado: el borde del cobre más claro (despeje un poco más grande encima)
+  g.save(); g.globalAlpha = .55; g.strokeStyle = COLORES.canto; g.lineWidth = 50; g.lineCap = 'round';
+  for (const p of [RUTA, ...PATAS]) { g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.stroke(); } g.restore();
+  g.save(); g.strokeStyle = COLORES.laminado; g.lineWidth = 44; g.lineCap = 'round'; for (const p of [RUTA, ...PATAS]) { g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.stroke(); } g.restore();
+  // 3. pistas: canto + relleno, puntas redondas
+  for (const [p, w] of [[RUTA, 16], ...PATAS.map(p => [p, 8])]) { g.lineCap = 'round'; g.lineJoin = 'miter';
+    g.strokeStyle = COLORES.canto; g.lineWidth = w; g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.stroke();
+    g.strokeStyle = mezcla(COLORES.cobre, COLORES.canto, .35); g.lineWidth = w * .6; g.stroke(); }
+  // vías de costura en el cobre (lejos de despejes) y cerca de vías a lo largo de la pista principal
+  const lejos = (x, y, m) => R.pts.every(q => Math.hypot(q[0] - x, q[1] - y) > m) && ![U1, U2].some(([cx, cy]) => Math.abs(x - cx) < 140 && Math.abs(y - cy) < 100) && !(x > 480 && y > 1250 && y < 1520);
+  const viaG = (x, y, rr) => { g.fillStyle = COLORES.oro; g.beginPath(); g.arc(x, y, rr, 0, Math.PI * 2); g.fill(); g.fillStyle = '#0b1a12'; g.beginPath(); g.arc(x, y, rr * .45, 0, Math.PI * 2); g.fill(); };
+  for (let y = B.y0 + 60; y < B.y1 - 60; y += 70) for (let x = B.x0 + 60 + ((y / 70) % 2) * 35; x < B.x1 - 60; x += 70) if (lejos(x, y, 70) && PATAS.every(p => p.every(q => Math.hypot(q[0] - x, q[1] - y) > 60))) viaG(x, y, 5);
+  for (let i = 0; i < R.pts.length; i += 14) { const a = R.pts[Math.max(0, i - 1)], b = R.pts[Math.min(R.pts.length - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+    for (const s of [-1, 1]) { const x = R.pts[i][0] - dy / l * 40 * s, y = R.pts[i][1] + dx / l * 40 * s; if (lejos(x, y, 36)) viaG(x, y, 4.5); } }
+  // 4. metal expuesto: pads dorados con brillo en el tercio de arriba
+  const pad = (x, y, w, h, redondo, cuadrado1) => { g.fillStyle = COLORES.oro; g.beginPath(); if (redondo) g.arc(x, y, w / 2, 0, Math.PI * 2); else g.rect(x - w / 2, y - h / 2, w, h); g.fill();
+    g.fillStyle = 'rgba(255,245,210,.35)'; if (redondo) { g.beginPath(); g.arc(x, y - w * .15, w * .32, Math.PI, 0); g.fill(); } else g.fillRect(x - w / 2, y - h / 2, w, h / 3);
+    if (cuadrado1 !== undefined) { g.fillStyle = '#0b1a12'; g.beginPath(); g.arc(x, y, Math.min(w, h || w) * .22, 0, Math.PI * 2); g.fill(); } };
+  for (let i = 0; i < 4; i++) pad(J1[0] - 30 + (i % 2) * 60, J1[1] - 25 + Math.floor(i / 2) * 50, 36, 36, i > 0, 1);
+  for (const [cx, cy] of [U1, U2]) { g.fillStyle = '#16191a'; g.fillRect(cx - 80, cy - 60, 160, 120);
+    for (let k2 = 0; k2 < 4; k2++) { pad(cx - 100, cy - 45 + k2 * 30, 26, 16); pad(cx + 100, cy - 45 + k2 * 30, 26, 16); } pad(cx, cy + 65, 22, 14); pad(cx, cy - 65, 22, 14); }
+  pad(C1[0] - 28, C1[1], 28, 28, false, 1); pad(C1[0] + 28, C1[1], 28, 28, true, 1);
+  pad(D1[0] - 22, D1[1], 22, 22, false); pad(D1[0] + 22, D1[1], 22, 22, true);
+  // 5. serigrafía fija: contornos de componentes, marcas de polaridad, fiduciales y agujeros de montaje
+  g.strokeStyle = COLORES.seri; g.lineWidth = 3; g.lineCap = 'round';
+  for (const [cx, cy] of [U1, U2]) { g.strokeRect(cx - 115, cy - 78, 230, 156); g.beginPath(); g.arc(cx - 95, cy - 58, 6, 0, Math.PI * 2); g.stroke(); }
+  g.strokeRect(J1[0] - 75, J1[1] - 60, 150, 120); g.beginPath(); g.arc(...C1, 55, 0, Math.PI * 2); g.stroke(); g.beginPath(); g.moveTo(C1[0] - 70, C1[1] - 40); g.lineTo(C1[0] - 70, C1[1] - 20); g.moveTo(C1[0] - 80, C1[1] - 30); g.lineTo(C1[0] - 60, C1[1] - 30); g.stroke();
+  g.beginPath(); g.arc(...D1, 50, 0, Math.PI * 2); g.stroke();
+  for (const [x, y] of [[B.x0 + 90, B.y0 + 90], [B.x1 - 90, B.y0 + 90], [B.x0 + 90, B.y1 - 90], [B.x1 - 90, B.y1 - 90]]) { g.fillStyle = COLORES.oro; g.beginPath(); g.arc(x, y, 40, 0, Math.PI * 2); g.fill(); g.fillStyle = '#020806'; g.beginPath(); g.arc(x, y, 26, 0, Math.PI * 2); g.fill(); }
+  g.strokeStyle = COLORES.seri; g.lineWidth = 3; g.strokeRect(500, 1270, 540, 230);       // la cartela del título
+  return c;
+})();
+const LUZ = document.createElement('canvas'); LUZ.width = W; LUZ.height = H;
+const MOTAS = Array.from({ length: 16 }, (_, i) => ({ x: hash2(i, 1) * W, y: hash2(i, 2) * H, r: 30 + hash2(i, 3) * 70, v: .3 + hash2(i, 4) }));
+
+// ---------- tiempos: el pulso sube por la pista ----------
+const T_FLASH = .3, T_U2 = 3.6, T_D1 = 4.9, T_SALE = 5.3, T_TIT = 6.5;
+const cabeza = t => t < T_FLASH ? 0 : t < T_U2 ? S.u2 * ease(prog(t, T_FLASH, T_U2)) : S.u2 + (LARGO - S.u2) * aterriza(prog(t, T_U2, T_D1));
+const llegaA = s => { let a = 0, b = DUR; for (let i = 0; i < 30; i++) { const m = (a + b) / 2; if (cabeza(m) < s) a = m; else b = m; } return b; };
+const T_ETAPA = [T_FLASH, llegaA(S.u1), llegaA(S.c1), T_U2, T_D1];
+const ROT = [[J1[0] + 95, J1[1] + 14, 'izq'], [U1[0] + 140, U1[1] + 14, 'izq'], [C1[0], C1[1] - 85, 'centro'], [U2[0] - 140, U2[1] + 14, 'der'], [D1[0], D1[1] - 78, 'centro']];
+
+function cam(t) {
+  const h = puntoEn(cabeza(t));
+  let c = { x: J1[0] + 60, y: J1[1] - 120, z: 2.5 };
+  const monta = ease(prog(t, T_FLASH, T_FLASH + .6));                  // montada en el pulso, la cabeza en un tercio
+  c = { x: lerp(c.x, h[0] + 80, monta), y: lerp(c.y, h[1] - 220, monta), z: lerp(2.5, 1.9, monta) };
+  const sube = ease(prog(t, 1.4, 3.4)); c.z = lerp(c.z, 1.45, sube);
+  const choque = aterriza(prog(t, T_D1 - .25, T_D1 + .05));            // zoom de choque sobre el LED
+  c = { x: lerp(c.x, D1[0] + 120, choque), y: lerp(c.y, D1[1] + 60, choque), z: lerp(c.z, 2.3, choque) };
+  const todo = ease(prog(t, T_SALE, T_SALE + 1.1));                    // se aleja hasta ver la placa entera
+  return { x: lerp(c.x, 560, todo), y: lerp(c.y, 1010, todo), z: lerp(c.z, .85, todo) };
+}
+
+function luces(t, c) {
+  const g = LUZ.getContext('2d'), real = ctx; ctx = g; pantalla(); ctx.clearRect(0, 0, W, H); camara(c);
+  const s = cabeza(t), sPlata = Math.min(s, S.u2);
+  // flujo plateado: varias vetas paralelas de rayitas a distintas velocidades (más rápidas en el centro)
+  if (sPlata > 0 && t < T_SALE + 1.5) for (const [off, vel] of [[-5, 140], [0, 220], [5, 160]]) {
+    const pts = tramo(0, sPlata); ctx.lineCap = 'round';
+    for (let i = 1; i < pts.length; i++) { const L = R.len[R.pts.indexOf(pts[i])]; if (((L - t * vel + off * 30) % 46 + 46) % 46 > 22) continue;
+      const a = pts[i - 1], b = pts[i], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      ctx.strokeStyle = `rgba(${COLORES.flujo},${s >= S.u2 ? .55 : .85})`; ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.moveTo(a[0] - dy / l * off, a[1] + dx / l * off); ctx.lineTo(b[0] - dy / l * off, b[1] + dx / l * off); ctx.stroke(); } }
+  // corriente ámbar (continua): de OFERTA en adelante, con cabeza y una estela que se apaga despacio
+  if (s > S.u2) { const pts = tramo(S.u2, s); ctx.lineCap = 'round';
+    for (let i = 1; i < pts.length; i++) { const L = R.len[R.pts.indexOf(pts[i])], a = clamp(.35 + .65 * (1 - (s - L) / 600)) * (.85 + .15 * Math.sin(L * .05 - t * 9));
+      ctx.strokeStyle = `rgba(${COLORES.corriente},${a})`; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(...pts[i - 1]); ctx.lineTo(...pts[i]); ctx.stroke();
+      ctx.strokeStyle = `rgba(255,245,220,${a * .8})`; ctx.lineWidth = 2; ctx.stroke(); } }
+  // cabeza del pulso
+  if (t > T_FLASH && t < T_D1) { const h = puntoEn(s); ctx.fillStyle = s < S.u2 ? `rgba(${COLORES.flujo},1)` : `rgba(${COLORES.corriente},1)`; ctx.beginPath(); ctx.arc(h[0], h[1], 9, 0, Math.PI * 2); ctx.fill(); }
+  // los componentes «conducen»: sus pads destellan al llegar y se quedan encendidos
+  T_ETAPA.forEach((te, i) => { if (t < te) return; const k = t - te, [x, y] = [J1, U1, C1, U2, D1][i], col = i >= 3 ? COLORES.corriente : COLORES.flujo;
+    const fl = k < .35 ? 1 - k / .35 : 0, rr = Math.min(90, 30 + 120 * (1 - fl) * fl + (i === 4 ? 26 : 0));
+    ctx.fillStyle = `rgba(${col},${.25 + .7 * fl})`; ctx.beginPath(); ctx.arc(x, y, i === 4 ? 30 : 18 + 30 * fl, 0, Math.PI * 2); ctx.fill();
+    if (i === 1 || i === 3) { ctx.strokeStyle = `rgba(${col},${.35 + .5 * fl})`; ctx.lineWidth = 3; ctx.strokeRect(x - 70, y - 50, 140, 100);
+      ctx.beginPath(); ctx.moveTo(x - 50, y + 20); ctx.lineTo(x - 20, y - 20); ctx.lineTo(x + 20, y + 20); ctx.lineTo(x + 50, y - 20); ctx.stroke(); }
+    if (i === 4) { ctx.fillStyle = `rgba(${col},.95)`; ctx.beginPath(); ctx.arc(x, y, 16, 0, Math.PI * 2); ctx.fill(); } });
+  ctx = real;
+  // brillo aditivo: dos desenfoques (ancho y corto) bajo una copia nítida
+  pantalla(); ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  ctx.filter = 'blur(24px)'; ctx.globalAlpha = .9; ctx.drawImage(LUZ, 0, 0); ctx.filter = 'blur(5px)'; ctx.globalAlpha = .8; ctx.drawImage(LUZ, 0, 0);
+  ctx.filter = 'none'; ctx.globalAlpha = 1; ctx.drawImage(LUZ, 0, 0); ctx.restore();
+}
+function rotulos(t) {
+  ETAPAS.slice(0, 5).forEach((e, i) => { const p = prog(t, T_ETAPA[i] - .05, T_ETAPA[i] + .55); if (p <= 0) return; const [x, y, al] = ROT[i];
+    serigrafia(e, x, y, i === 4 ? 46 : 36, { p, alinear: al, grosor: i === 4 ? 5 : 4 }); });
+  // designadores (micro texto real de placa)
+  [['J1', J1[0] - 70, J1[1] + 95], ['U1', U1[0] - 112, U1[1] - 92], ['C1', C1[0] + 50, C1[1] + 75], ['U2', U2[0] + 80, U2[1] - 92], ['D1', D1[0] - 105, D1[1] + 8]].forEach(([d, x, y]) => serigrafia(d, x, y, 18, { grosor: 2.2 }));
+  // la cartela imprime la respuesta: frase en dos tamaños, la clave enorme
+  if (t >= T_TIT) {
+    const pal = TITULO.trim().split(/\s+/), clave = PALABRA_CLAVE.toLowerCase(), chicas = pal.filter(p => p.toLowerCase() !== clave).join(' '), k = clamp((t - T_TIT) / 1.2);
+    const w1 = anchoSerigrafia(chicas, 34), capG = Math.min(110, (500 / (PALABRA_CLAVE.length * 5.6 - 1.6)) * 6);
+    serigrafia(chicas, 530, 1335, 34, { p: clamp(k * 2), grosor: 4 });
+    serigrafia(PALABRA_CLAVE, 530, 1350 + capG, capG, { p: clamp(k * 2 - 1), grosor: Math.max(6, capG * .1), col: COLORES.seri });
+    if (k >= 1) serigrafia(REVISION, 1020, 1488, 16, { alinear: 'der', grosor: 2 });
+  }
+}
+function post(t) {                                                      // luz cálida desde arriba a la izquierda, motas desenfocadas, viñeta
+  pantalla(); let g = ctx.createRadialGradient(150, 200, 0, 150, 200, 1500); g.addColorStop(0, 'rgba(255,230,180,.10)'); g.addColorStop(1, 'rgba(255,230,180,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (const m of MOTAS) { const y = (m.y - t * 20 * m.v + H) % H, x = m.x + Math.sin(t * .4 + m.r) * 20;
+    const r = ctx.createRadialGradient(x, y, 0, x, y, m.r); r.addColorStop(0, 'rgba(200,255,220,.05)'); r.addColorStop(1, 'rgba(200,255,220,0)'); ctx.fillStyle = r; ctx.fillRect(x - m.r, y - m.r, 2 * m.r, 2 * m.r); } ctx.restore();
+  g = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.5)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  const c = cam(t); pantalla(); ctx.fillStyle = COLORES.laminado; ctx.fillRect(0, 0, W, H);
+  camara(c); ctx.imageSmoothingQuality = 'high'; ctx.drawImage(PLACA, B.x0, B.y0, B.x1 - B.x0, B.y1 - B.y0);
+  rotulos(t); luces(t, c); post(t);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_FLASH, tipo: 'golpe' }, ...T_ETAPA.slice(1).map(t => ({ t: +t.toFixed(2), tipo: 'pop' })),
+  { t: T_U2, tipo: 'desliz' }, { t: T_D1, tipo: 'golpe' }, { t: T_SALE, tipo: 'swish' }, { t: T_TIT, tipo: 'papel' },
+];
+</script>
+</body>
+</html>

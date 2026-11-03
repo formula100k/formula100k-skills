@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Óleo con espátula</title>
+<style>
+  html,body{margin:0;background:#1a1612;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Óleo con espátula» · ingeniería inversa de lemo-opuscar/styles/impasto (MIT, © 2026 LemoLab) · qué se tomó:
+// ilustración planeada por valores convertida en trazos de espátula de grueso a fino que nunca cruzan su forma, base fina
+// desenfocada debajo, cada trazo con extremos sesgados, 2.º color arrastrado, cresta, labio y luz rasante; reflejos como
+// pilas de toques horizontales; la jugada «el color lo vuelve a poner la espátula» (el mundo gris se repinta en color
+// trazo por trazo) y la palabra puesta con espátula.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LINEA_CHICA = 'tu marca necesita';           // texto chico, nítido (≤ 22)
+const PALABRA_CLAVE = 'COLOR';                     // se pone con la espátula, enorme (≤ 8)
+const COLORES = {
+  cielo: ['#3d5a9e', '#6f78b0', '#e9a37a', '#f2c46b'],   // cobalto → durazno → oro (después de la lluvia)
+  fachadaIzq: '#c98d4b', fachadaDer: '#a45a3a', fondo: '#6d7591', suelo: '#4a5368',
+  ventana: '#ffd36b',   // luz tibia (el croma más puro va a la ventana y a la palabra)
+  toldo: '#2f6f6a', poste: '#2c2a33',
+  palabra: '#ff6a3d', palabra2: '#ffb347',
+};
+const DUR = 8.5;                                   // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const SERIF = '"Bodoni 72", Didot, Georgia, serif';
+const C = COLORES, VEN = { x0: 740, x1: 1010, y0: 900, y1: 1170 }, FAROL = { x: 300, y: 830 };
+const rect4 = (x0, y0, x1, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
+// ---------- la lámina, planeada por valores (de atrás hacia adelante) ----------
+const FORMAS = [
+  { pts: rect4(-20, -20, 1100, 900), col: C.cielo[1], col2: C.cielo[2], r: 50, dir: -.1,    // un solo grupo: los pasos de color van trazo a trazo, sin costura
+    colY: y => { const k = clamp(y / 900 * 4 + (vnoise(y * .02, 3) - .5) * .9, 0, 3.99) | 0; return [C.cielo[k], C.cielo[Math.min(3, k + 1)]]; } },
+  { pts: [[360, 760], [520, 700], [720, 740], [720, 1320], [360, 1320]], col: C.fondo, col2: '#8a8fa8', r: 30, dir: 1.5, detalle: 12 },
+  { pts: rect4(-20, 1300, 1100, 1940), col: C.suelo, col2: '#5d6680', r: 48, dir: .02 },
+  { pts: [[-20, 480], [380, 540], [380, 1330], [-20, 1330]], col: C.fachadaIzq, col2: '#b07a40', r: 34, dir: 1.55, detalle: 12 },
+  { pts: [[720, 430], [1100, 380], [1100, 1330], [720, 1330]], col: C.fachadaDer, col2: '#8d4b31', r: 34, dir: 1.6, detalle: 12 },
+  { pts: rect4(VEN.x0, VEN.y0, VEN.x1, VEN.y1), col: C.ventana, col2: '#ffe9a8', r: 22, dir: .1, detalle: 9 },
+  { pts: [[715, 850], [1100, 830], [1100, 905], [740, 912]], col: C.toldo, col2: '#3f8a84', r: 16, dir: 0, detalle: 8 },
+  { pts: rect4(VEN.x0 + 128, VEN.y0, VEN.x0 + 142, VEN.y1), col: '#3b2a22', col2: '#3b2a22', r: 8, dir: 1.57 },     // parteluz de la ventana
+  { pts: [[292, 860], [308, 860], [314, 1330], [286, 1330]], col: C.poste, col2: '#3a3844', r: 8, dir: 1.57 },
+  { pts: circle(FAROL.x, FAROL.y, 30), col: C.ventana, col2: '#fff3c4', r: 12, dir: 0, detalle: 6 },
+  { pts: [[60, 700], [300, 690], [300, 1000], [60, 1010]], col: '#e2b267', col2: '#f0c77c', r: 18, dir: 1.55, detalle: 8 },   // ventana tibia lejana a la izquierda
+];
+const TRAZOS = trazosEspatula(FORMAS, { semilla: 4 });
+const colDe = (F, s, gris) => { const [a, b] = F.colY ? F.colY(s.y) : [F.col, F.col2]; return gris ? [grisDe(a), grisDe(b)] : [a, b]; };
+// reflejos en el piso mojado: pilas de toques horizontales cortos bajo cada luz, rotos y cada vez más tenues
+const REFLEJOS = []; for (const [x, w, col, y0] of [[875, 230, C.ventana, 1340], [300, 70, C.ventana, 1340], [180, 200, '#e2b267', 1340]]) {
+  const r = rng(x); for (let i = 0; i < 26; i++) { const y = y0 + i * 22 + r() * 8, f = 1 - i / 26;
+    REFLEJOS.push({ f: -1, x: x + (r() - .5) * w * .8, y, ang: (r() - .5) * .1, len: w * (.3 + r() * .45) * (.6 + .4 * f), wid: 13 + r() * 6, k: .85 + .3 * f, k2: 1, sesgo: (r() - .5), carga: .7 + r() * .3, s: i * 31 + x, col, a: .25 + .7 * f }); } }
+// la ola del color: arranca en la ventana iluminada y se abre hacia afuera
+const ORIGEN = [875, 1040], T = { color: [.15, 1.75], chica: 1.95, palabra: [2.15, 3.2], rasante: [5.4, 6.9] };
+for (const s of [...TRAZOS, ...REFLEJOS]) s.rt = T.color[0] + Math.hypot(s.x - ORIGEN[0], s.y - ORIGEN[1]) / 1500 * (T.color[1] - T.color[0]) + hash2(s.s, 7) * .08;
+
+// ---------- placas horneadas una vez: base desenfocada, gris, color, luz ----------
+function pintar(g, gris, luz) {
+  FORMAS.forEach((F, fi) => { g.save(); g.clip(F.camino);
+    for (const s of TRAZOS) if (s.f === fi) { if (luz) luzEspatula(g, s, 1); else espatula(g, s, ...colDe(F, s, gris)); }
+    g.restore(); });
+  for (const s of REFLEJOS) { g.save(); g.globalAlpha = s.a; if (luz) luzEspatula(g, s, .7); else espatula(g, s, gris ? grisDe(s.col) : s.col, gris ? grisDe('#fff0c0') : '#fff0c0'); g.restore(); }
+}
+const BASE = (() => { const c = capa(), g = c.getContext('2d'); FORMAS.forEach(F => { g.fillStyle = F.col; g.fill(F.camino); }); const d = capa(), h = d.getContext('2d'); h.filter = 'blur(2px)'; h.drawImage(c, 0, 0); return d; })();
+const BASE_G = (() => { const c = capa(), g = c.getContext('2d'); FORMAS.forEach(F => { g.fillStyle = grisDe(F.col); g.fill(F.camino); }); const d = capa(), h = d.getContext('2d'); h.filter = 'blur(2px)'; h.drawImage(c, 0, 0); return d; })();
+const GRIS = (() => { const c = capa(), g = c.getContext('2d'); g.drawImage(BASE_G, 0, 0); pintar(g, true, false); return c; })();
+const COLOR = (() => { const c = capa(), g = c.getContext('2d'); g.drawImage(BASE, 0, 0); pintar(g, false, false); return c; })();
+const LUZ = (() => { const c = capa(), g = c.getContext('2d'); pintar(g, false, true); return c; })();
+
+// ---------- la palabra, puesta con espátula ----------
+const AJ_K = autoajuste(PALABRA_CLAVE, SERIF, 900, 860, 1, 280, 120), AJ_C = autoajuste(LINEA_CHICA, SERIF, 'italic 400', 800, 1, 64, 36);
+const Y_C = 330, Y_K = Y_C + 30 + AJ_K.size * .78;
+const MASCARA = (() => { const c = capa(), g = c.getContext('2d'); g.font = AJ_K.font; g.textAlign = 'center'; g.fillStyle = '#000'; g.fillText(PALABRA_CLAVE, W / 2, Y_K); return c; })();
+const LETRAS_T = (() => { const d = MASCARA.getContext('2d').getImageData(0, 0, W, H).data, r = rng(77), out = [], R = 15;
+  for (let y = Y_K - AJ_K.size; y < Y_K + 40; y += R * .8) for (let x = 60; x < W - 60; x += R * 1.1) { const px = x + (r() - .5) * R * .6 | 0, py = y + (r() - .5) * R * .5 | 0;
+    if (d[4 * (py * W + px) + 3] < 128) continue; out.push({ x: px, y: py, ang: -.25 + (r() - .5) * .45, len: R * (1.7 + r() * 1.3), wid: R * (.95 + r() * .5), k: .92 + r() * .16, k2: .95 + r() * .1, sesgo: (r() - .5) * 1.2, carga: .78 + r() * .5, s: r() * 1000 | 0 }); }
+  const x0 = Math.min(...out.map(s => s.x)), x1 = Math.max(...out.map(s => s.x)); out.forEach(s => s.ta = T.palabra[0] + (s.x - x0) / (x1 - x0 + 1) * (T.palabra[1] - T.palabra[0] - .1) + hash2(s.s, 3) * .08);
+  return out; })();
+const CAPA_P = capa(), gp = CAPA_P.getContext('2d');
+const CAM = camara([[0, 540, 960, 1.0], [DUR, 540, 930, 1.05]]);   // empuje lento, siempre dentro de la lámina
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ponerCam(ctx, c);
+  // el mundo gris; la espátula lo vuelve a pintar en color, trazo por trazo
+  if (t >= T.color[1] + .1) ctx.drawImage(COLOR, 0, 0);
+  else { ctx.drawImage(GRIS, 0, 0);
+    FORMAS.forEach((F, fi) => { ctx.save(); ctx.clip(F.camino); for (const s of TRAZOS) if (s.f === fi && s.rt <= t) espatula(ctx, s, ...colDe(F, s, false)); ctx.restore(); });
+    for (const s of REFLEJOS) if (s.rt <= t) { ctx.save(); ctx.globalAlpha = s.a; espatula(ctx, s, s.col, '#fff0c0'); ctx.restore(); } }
+  // luz rasante: en el pico baja a un ángulo de roce y cada cresta brilla; después se asienta
+  const kr = Math.sin(Math.PI * prog(t, T.rasante[0], T.rasante[1]));
+  ctx.globalAlpha = .8 + .2 * kr; ctx.drawImage(LUZ, 0, 0); if (kr > .5) { ctx.globalAlpha = (kr - .5) * .9; ctx.drawImage(LUZ, 0, 0); } ctx.globalAlpha = 1;
+  // la palabra: los trazos se ponen de izquierda a derecha y la silueta de la letra queda limpia
+  gp.setTransform(1, 0, 0, 1, 0, 0); gp.clearRect(0, 0, W, H);
+  for (const s of LETRAS_T) if (s.ta <= t) { espatula(gp, s, C.palabra, C.palabra2); luzEspatula(gp, s, .8 + kr * .6); }
+  gp.globalCompositeOperation = 'destination-in'; gp.drawImage(MASCARA, 0, 0); gp.globalCompositeOperation = 'source-over';
+  ctx.save(); ctx.filter = 'blur(5px)'; ctx.globalAlpha = .35; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(CAPA_P, 6, 8); ctx.restore();   // la pintura gruesa hace sombra
+  ctx.drawImage(CAPA_P, 0, 0);
+  // texto chico nítido (la espátula no puede con letras chicas): entra con corte seco
+  if (t >= T.chica) { ctx.save(); ctx.font = AJ_C.font; ctx.textAlign = 'center'; ctx.fillStyle = '#fff6e6'; ctx.fillText(LINEA_CHICA, W / 2, Y_C); ctx.restore(); }
+});
+window.SONIDOS = [
+  { t: T.color[0], tipo: 'desliz' },      // raspado de espátula (grave) mientras vuelve el color
+  { t: T.chica, tipo: 'pop' },
+  { t: T.palabra[0], tipo: 'desliz' },
+  { t: T.palabra[1], tipo: 'golpe' },
+  { t: T.rasante[0], tipo: 'ambiente' },  // lluvia que se va
+];
+</script>
+</body>
+</html>

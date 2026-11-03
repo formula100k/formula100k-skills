@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tinta y papel de arroz</title>
+<style>
+  html,body{margin:0;background:#1c1a17;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Tinta y papel de arroz» · ingeniería inversa de lemo-opuscar/styles/ink-wash (MIT, © 2026 LemoLab) · qué se tomó:
+// cinco tonos de tinta multiplicados sobre papel de arroz procedural, masas suaves que sangran con pigmento en la orilla
+// (nunca contornos), pincel seco con «blanco que vuela», 60–80 % de papel vacío, el agua es papel en blanco, figura xieyi
+// en pocos trazos, un solo bermellón (el sello y un farolito), y la jugada «un solo trazo»: una pincelada seca cruza el
+// cuadro y de ahí se pinta todo mientras la cámara sube como en un rollo colgante.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LINEA_CHICA = 'tu contenido necesita';       // inscripción chica (≤ 26)
+const PALABRA_CLAVE = 'una sola idea';             // inscripción enorme (≤ 14)
+const COLORES = {
+  tinta: '#1e1a16',     // negro tibio (los cinco tonos salen de este)
+  sello: '#b02e22',     // el ÚNICO rojo: el sello y el farolito de la barca
+  papel: '#f2ecde',
+};
+const DUR = 9;                                     // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const SERIF = '"Hoefler Text", Baskerville, Georgia, serif';
+const MW = 1080, MH = 2700;
+const PAPEL = papelArroz(COLORES.papel, 3, MW, MH);
+const tinta = a => colorA(COLORES.tinta, a);
+
+// ---------- el mundo (rollo colgante: cielo con inscripción, montes que se disuelven en niebla, agua = papel) ----------
+const cordillera = (y0, amp, semilla, pasos = 12) => { const o = [[-60, y0 + 300]]; for (let i = 0; i <= pasos; i++) { const x = -60 + i * (1200 / pasos);
+  o.push([x, y0 - amp * Math.pow(vnoise(i * .55, semilla), 1.6) - amp * .35 * Math.sin(i * .9 + semilla)]); } o.push([1140, y0 + 300]); return o; };
+const CERCA = (() => { const o = [[-60, 1440]]; for (let i = 0; i <= 14; i++) { const x = -60 + i * 55, k = 1 - i / 14;
+  o.push([x, 1150 - 210 * k * (.6 + .4 * vnoise(i * .6, 9)) + (1 - k) * 120]); } o.push([760, 1440]); return o; })();   // monte cercano: baja hacia el agua
+const MONTES = [
+  { poly: cordillera(880, 190, 2), a0: TONOS.qing, a1: 0, y0: 650, y1: 1150, t: [-1, -.5], semilla: 1, sx: 300, sy: 760 },
+  { poly: cordillera(1010, 230, 5, 9), a0: TONOS.dan, a1: 0, y0: 780, y1: 1280, t: [1.9, 2.8], semilla: 2, sx: 760, sy: 850 },
+  { poly: CERCA, a0: TONOS.zhong, a1: .04, y0: 960, y1: 1330, t: [2.4, 3.3], semilla: 3, sx: 200, sy: 1030 },
+];
+// el contorno cargado de cada monte cercano: el borde oscuro ES el contorno
+const RIDGE = MONTES[2].poly.slice(1, -1);
+const CUN = Array.from({ length: 12 }, (_, i) => { const x = 10 + i * 46 + hash2(i, 3) * 20, y = 1060 + i * 14 + hash2(3, i) * 120; return [[x, y], [x - 14, y + 40 + hash2(i, 8) * 30], [x - 6, y + 90]]; });   // textura «fibra de cáñamo»
+const MUSGO = Array.from({ length: 22 }, (_, i) => [40 + hash2(i, 11) * 560, 1000 + hash2(11, i) * 120 + Math.abs(Math.sin(i)) * 30]);
+const BARCA = { x: 690, y: 1405 };
+const ORILLA = [[-80, 1340], [300, 1300], [700, 1278], [1160, 1232]];       // el trazo seco que cruza el cuadro
+
+// ---------- inscripción y sello ----------
+const AJ_C = autoajuste(LINEA_CHICA, SERIF, 'italic 400', 860, 1, 66, 36);
+const AJ_K = autoajuste(PALABRA_CLAVE, SERIF, 'italic 400', 900, 1, 150, 70);
+const Y_C = 330, Y_K = Y_C + 40 + AJ_K.size * .9;
+const SELLO = { x: W / 2 + medir(PALABRA_CLAVE, AJ_K.font) / 2 - 70, y: Y_K + 50, s: 86 };
+const SELLO_C = (() => { const c = capa(140, 140), g = c.getContext('2d'), r = rng(17), s = SELLO.s, o = (140 - s) / 2;   // sello 白文: líneas caladas en un cuadrado rojo irregular
+  g.fillStyle = COLORES.sello; g.beginPath(); g.moveTo(o + 2, o); g.lineTo(o + s - 1, o + 3); g.lineTo(o + s, o + s - 2); g.lineTo(o + 3, o + s); g.closePath(); g.fill();
+  g.globalCompositeOperation = 'destination-out'; g.lineWidth = 8; g.lineCap = 'square';
+  const L = (a, b, c2, d) => { g.beginPath(); g.moveTo(o + a * s, o + b * s); g.lineTo(o + c2 * s, o + d * s); g.stroke(); };
+  L(.2, .22, .8, .22); L(.5, .22, .5, .8); L(.22, .5, .78, .5); L(.25, .8, .75, .8); L(.22, .22, .22, .62); L(.78, .4, .78, .8);
+  for (let i = 0; i < 260; i++) { g.globalAlpha = .4 + r() * .6; g.fillRect(o + r() * s, o + r() * s, 1 + r() * 2.5, 1 + r() * 2); }   // pasta de tinta que no agarró
+  return c; })();
+const T = { trazo: [.35, .62], sube: [1.0, 3.6], chica: [3.9, 4.3], clave: [4.3, 4.9], sello: 5.4 };
+const CAM = camara([[0, 540, 1700, 1.0], [T.sube[0], 540, 1700, 1.0], [T.sube[1], 540, 960, 1.0], [DUR, 540, 935, 1.04]]);
+
+function floracion(cx, cy, u, semilla) {             // máscara de tinta que florece: radio con ruido y marea oscura en el borde
+  const R = 40 + aterriza(u) * 900; ctx.beginPath();
+  for (let i = 0; i <= 64; i++) { const a = i / 64 * 6.283, r = R * (.82 + .3 * vnoise(Math.cos(a) * 1.6 + semilla, Math.sin(a) * 1.6)); ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); }
+  ctx.closePath();
+}
+function inscripcion(txt, aj, x, y, u) {             // aparece mojada (corrida) y se seca en una fracción de segundo
+  if (u <= 0) return; ctx.save(); ctx.font = aj.font; ctx.textAlign = 'center';
+  const moja = 1 - prog(u, .1, 1); if (moja > 0) { ctx.filter = `blur(${2 + 6 * moja}px)`; ctx.fillStyle = tinta(.5 * moja * clamp(u * 6)); ctx.fillText(txt, x, y); ctx.filter = 'none'; }
+  ctx.fillStyle = tinta(TONOS.jiao * prog(u, .05, .5)); ctx.fillText(txt, x, y); ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t), td = Math.floor(t * 12) / 12;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(PAPEL, 0, 0);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';
+  // montes: cada masa florece desde un punto, de lejos (pálido) a cerca (oscuro)
+  for (const M of MONTES) { const u = prog(td, M.t[0], M.t[1]); if (u <= 0) continue;
+    ctx.save(); floracion(M.sx, M.sy, u, M.semilla); ctx.clip(); masaTinta(ctx, M.poly, M.a0, M.a1, M.y0, M.y1, M.semilla, COLORES.tinta); ctx.restore(); }
+  const un = prog(td, 2.7, 3.3);
+  if (un > 0) pincel(RIDGE, { w: 14, col: tinta(TONOS.nong), seco: .55, presion: .6, semilla: 4, p: un });   // contorno cargado
+  CUN.forEach((p, i) => { const u = prog(td, 3.0 + i * .03, 3.3 + i * .03); if (u > 0) pincel(p, { w: 9, col: tinta(TONOS.zhong), seco: .8, presion: .6, semilla: 20 + i, p: u }); });
+  MUSGO.forEach(([x, y], i) => { if (td > 3.3 + i * .012) { ctx.fillStyle = tinta(TONOS.jiao); ctx.beginPath(); ctx.ellipse(x, y, 5 + hash2(i, 2) * 4, 4 + hash2(2, i) * 3, hash2(i, i), 0, 6.29); ctx.fill(); } });
+  // niebla: bandas de papel que se comen la base de los montes
+  ctx.restore();
+  for (const [y, h] of [[1060, 180], [1230, 140]]) { const g = ctx.createLinearGradient(0, y - h, 0, y + h); g.addColorStop(0, colorA(COLORES.papel, 0)); g.addColorStop(.5, colorA(COLORES.papel, .78)); g.addColorStop(1, colorA(COLORES.papel, 0));
+    ctx.fillStyle = g; ctx.fillRect(-60, y - h, 1200, h * 2); }
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';
+  // el trazo seco que cruza el cuadro (blanco que vuela): sale de la quietud en pocos cuadros
+  const ut = prog(t, T.trazo[0], T.trazo[1]);
+  pincel(ORILLA, { w: 84, col: tinta(TONOS.nong), seco: .7, presion: .55, semilla: 9, p: ut });
+  // agua = papel en blanco: rayitas secas y anillos abiertos alrededor de la barca
+  for (let i = 0; i < 7; i++) pincel([[60 + hash2(i, 1) * 600, 1560 + i * 120], [260 + hash2(i, 1) * 600 + 140, 1556 + i * 120 + 6]], { w: 6, col: tinta(TONOS.qing), seco: .9, semilla: 50 + i });
+  for (let k = 0; k < 3; k++) { const f = ((t * .35 + k / 3) % 1); ctx.strokeStyle = tinta(TONOS.qing * (1 - f) * 1.6); ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.ellipse(BARCA.x, BARCA.y + 22, 120 + f * 260, 16 + f * 34, 0, Math.PI * .08, Math.PI * .92); ctx.stroke(); }
+  // la barca y la figura (xieyi: una masa pálida y dos trazos cargados)
+  masaTinta(ctx, [[BARCA.x - 120, BARCA.y], [BARCA.x + 130, BARCA.y - 6], [BARCA.x + 80, BARCA.y + 26], [BARCA.x - 80, BARCA.y + 28]], TONOS.dan, TONOS.zhong, BARCA.y - 6, BARCA.y + 28, 7, COLORES.tinta);
+  pincel([[BARCA.x - 128, BARCA.y - 2], [BARCA.x - 20, BARCA.y + 24], [BARCA.x + 134, BARCA.y - 8]], { w: 12, col: tinta(TONOS.nong), seco: .3, semilla: 61 });
+  pincel([[BARCA.x + 10, BARCA.y - 8], [BARCA.x + 4, BARCA.y - 56]], { w: 16, col: tinta(TONOS.zhong), seco: .2, semilla: 62 });          // cuerpo
+  ctx.fillStyle = tinta(TONOS.jiao); ctx.beginPath(); ctx.moveTo(BARCA.x - 22, BARCA.y - 56); ctx.lineTo(BARCA.x + 30, BARCA.y - 58); ctx.lineTo(BARCA.x + 6, BARCA.y - 78); ctx.closePath(); ctx.fill();   // sombrero
+  pincel([[BARCA.x + 40, BARCA.y - 110], [BARCA.x - 40, BARCA.y + 40]], { w: 4, col: tinta(TONOS.jiao), seco: .3, semilla: 63 });          // pértiga
+  ctx.restore();
+  ctx.fillStyle = COLORES.sello; ctx.beginPath(); ctx.arc(BARCA.x + 40, BARCA.y - 114, 7, 0, 6.29); ctx.fill();   // el farolito (el único acento)
+  // inscripción y sello
+  inscripcion(LINEA_CHICA, AJ_C, W / 2, Y_C, prog(t, T.chica[0], T.chica[1]));
+  inscripcion(PALABRA_CLAVE, AJ_K, W / 2, Y_K, prog(t, T.clave[0], T.clave[1]));
+  if (t >= T.sello) { ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .92; ctx.drawImage(SELLO_C, SELLO.x - 70, SELLO.y - 70 + 40); ctx.restore(); }
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' },             // papel y agua
+  { t: T.trazo[0], tipo: 'swish' },       // aire del pincel (grave)
+  { t: T.sube[0], tipo: 'desliz' },
+  { t: T.clave[0], tipo: 'papel' },
+  { t: T.sello, tipo: 'golpe' },          // el sello: golpe de madera sordo
+];
+</script>
+</body>
+</html>

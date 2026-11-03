@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Una sola línea</title>
+<style>
+  html,body{margin:0;background:#1d1a17;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Una sola línea» · ingeniería inversa de lemo-opuscar/styles/one-line (MIT, © 2026 LemoLab) · qué se tomó:
+// UNA línea que nunca se levanta (un solo arreglo de puntos), tinta como polígono relleno con presión según la velocidad
+// (rápido = fino), sangrado y charquitos donde frena, gota en forma de lágrima al parar, tiempo por curvatura, la pluma
+// nunca se dibuja (solo su sombra), cámara que sigue la punta con retraso y al final se aleja para mostrar que todo era un
+// solo dibujo; la jugada «la línea es una gráfica» con UN solo acento dorado en el tramo que sube.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LINEA_CHICA = 'cuando tu contenido';         // se escribe al final, en el papel vacío (≤ 24)
+const PALABRA_CLAVE = 'vende';                     // enorme, en letra de una sola línea (≤ 10)
+const COLORES = {
+  tinta: '#1d1a17',     // negro tibio
+  acento: '#c9962e',    // UN acento, una vez: el tramo que sube (dinero)
+  papel: '#f4efe4',
+};
+const DUR = 9;                                     // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const SCRIPT = '"Snell Roundhand", "Bradley Hand", cursive';
+const MX = -400, MY = -500, MW = 2400, MH = 3100;
+const PAPEL = papelArroz(COLORES.papel, 21, MW, MH);
+// ---------- el camino: un solo arreglo de puntos (gráfica plana → sube → bolsa de compra → remate) ----------
+const CAMINO = (() => {
+  const P = [];
+  for (let x = -260; x <= 880; x += 12) P.push([x, 1250 + (30 * Math.sin(x * .02) + 18 * Math.sin(x * .047 + 1)) * (1 - clamp((x - 760) / 120))]);            // ventas planas
+  const sube = [[880, 1250], [950, 1170], [1000, 1205], [1060, 1040], [1105, 1080], [1150, 860], [1170, 790], [1180, 700]];
+  const R = _rem(_chaikin(sube, 3), 8).p; R.forEach(q => P.push(q)); const iA = [P.length - R.length, P.length];              // tramo con acento
+  const bolsa = [[1180, 700], [1420, 700], [1420, 430], [1360, 430]];
+  _rem(bolsa, 8).p.slice(1).forEach(q => P.push(q));
+  for (let i = 1; i <= 30; i++) { const a = Math.PI * i / 30; P.push([1300 - Math.cos(a) * 60, 430 - Math.sin(a) * 95]); }   // asa: arco por arriba
+  _rem([[1240, 430], [1180, 430], [1180, 700], [1410, 700]], 8).p.slice(1).forEach(q => P.push(q));                          // cierra y repasa la base (invisible)
+  _rem(_chaikin([[1410, 700], [1470, 760], [1530, 790], [1590, 772]], 3), 8).p.slice(1).forEach(q => P.push(q));            // remate
+  return { P, iA };
+})();
+const N = CAMINO.P.length;
+// tiempo por punto: más tiempo en las curvas cerradas (suavizado para que la velocidad no salte)
+const TP = (() => { const P = CAMINO.P, w = [0]; let sm = 0;
+  for (let i = 1; i < N; i++) { const a = P[Math.max(0, i - 2)], b = P[i - 1], c = P[i], ds = Math.hypot(c[0] - b[0], c[1] - b[1]);
+    let turn = Math.abs(Math.atan2(c[1] - b[1], c[0] - b[0]) - Math.atan2(b[1] - a[1], b[0] - a[0])); if (turn > Math.PI) turn = 2 * Math.PI - turn;
+    sm = sm * .8 + turn * .2; w.push(w[i - 1] + ds * (1 + 5 * sm)); }
+  const T0 = -3.4, T1 = 5.4; return w.map(v => T0 + v / w[N - 1] * (T1 - T0)); })();   // arranca a mitad de la línea: ya va corriendo
+const T_FIN = TP[N - 1];
+const idxEn = t => { let lo = 0, hi = N - 1; if (t <= TP[0]) return 0; if (t >= T_FIN) return N - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (TP[m] < t) lo = m; else hi = m; } return lo + (t - TP[lo]) / (TP[hi] - TP[lo] || 1); };
+const enT = t => { const f = idxEn(t), i = Math.floor(f), u = f - i, a = CAMINO.P[i], b = CAMINO.P[Math.min(N - 1, i + 1)]; return [lerp(a[0], b[0], u), lerp(a[1], b[1], u)]; };
+// presión por velocidad: rápido = fino, lento = gordo
+const ANCHO = CAMINO.P.map((p, i) => { const j = Math.min(N - 1, i + 1), v = Math.hypot(CAMINO.P[j][0] - p[0], CAMINO.P[j][1] - p[1]) / Math.max(.004, TP[j] - TP[i]);
+  return 7 * (.66 + .8 * Math.exp(-v / 300)) * (1 + (vnoise(i * .08, 3) - .5) * .16); });
+function tinta(g, i0, i1, k = 1) {               // polígono relleno alrededor del camino (no ctx.stroke)
+  const P = CAMINO.P, a = Math.max(0, i0 | 0), b = Math.min(N - 1, Math.ceil(i1)); if (b - a < 1) return;
+  const L = [], R = [];
+  for (let i = a; i <= b; i++) { const p = P[i], q = P[Math.min(N - 1, i + 1)], o = P[Math.max(0, i - 1)], dx = q[0] - o[0], dy = q[1] - o[1], d = Math.hypot(dx, dy) || 1, w = ANCHO[i] * k / 2;
+    L.push([p[0] - dy / d * w, p[1] + dx / d * w]); R.push([p[0] + dy / d * w, p[1] - dx / d * w]); }
+  g.beginPath(); L.forEach(q => g.lineTo(...q)); for (let i = R.length - 1; i >= 0; i--) g.lineTo(...R[i]); g.closePath(); g.fill();
+}
+
+// ---------- texto: escrito de izquierda a derecha sobre un halo de papel ----------
+const AJ_C = autoajuste(LINEA_CHICA, SCRIPT, 600, 820, 1, 110, 50), AJ_K = autoajuste(PALABRA_CLAVE, SCRIPT, 600, 820, 1, 330, 120);
+const TX = 640, Y_C = 140, Y_K = Y_C + 40 + AJ_K.size * .75;
+const T = { aleja: [5.8, 6.9], chica: [6.6, 7.3], clave: [7.2, 8.2] };
+function escrito(txt, aj, x, y, u, a = .86) {
+  if (u <= 0) return; const w = medir(txt, aj.font); ctx.save(); ctx.beginPath(); ctx.rect(x - w / 2 - 20, y - aj.size * 1.3, (w + 40) * u, aj.size * 1.9); ctx.clip();
+  ctx.font = aj.font; ctx.textAlign = 'center'; ctx.lineJoin = 'round'; ctx.strokeStyle = colorA(COLORES.papel, .9); ctx.lineWidth = 16; ctx.strokeText(txt, x, y);
+  ctx.fillStyle = colorA(COLORES.tinta, a); ctx.fillText(txt, x, y); ctx.restore();
+}
+// ---------- cámara: sigue la punta con retraso y anticipación; al final se aleja (todo era un solo dibujo) ----------
+const COMPUESTA = { x: 900, y: 880, z: .74 };
+function camAt(t) {
+  let fx = 0, fy = 0; for (let k = 0; k < 8; k++) { const [x, y] = enT(Math.min(t, T_FIN) - .55 + k / 7 * .95); fx += x / 8; fy += y / 8; }
+  const u = ease(prog(t, T.aleja[0], T.aleja[1])), z = Math.exp(lerp(Math.log(1.3), Math.log(COMPUESTA.z), u));
+  return { x: lerp(fx, COMPUESTA.x, u), y: lerp(fy - 60, COMPUESTA.y, u), z, r: lerp(-.03, 0, u) };
+}
+
+const BLEED = capa(), gb = BLEED.getContext('2d');
+arrancar(frame => {
+  const t = frame / FPS, c = camAt(t), fi = idxEn(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(PAPEL, MX, MY);
+  const kz = Math.max(1, .9 / c.z);               // ancho mínimo en pantalla al alejarse
+  // sangrado: el mismo polígono un poco más ancho, borroso, al 20 %
+  gb.setTransform(1, 0, 0, 1, 0, 0); gb.clearRect(0, 0, W, H); ponerCam(gb, c); gb.fillStyle = COLORES.tinta; tinta(gb, 0, fi, 1.9 * kz);
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'blur(3px)'; ctx.globalAlpha = .2; ctx.drawImage(BLEED, 0, 0); ctx.restore();
+  ctx.fillStyle = COLORES.tinta; tinta(ctx, 0, Math.min(fi, CAMINO.iA[0]), kz);
+  if (fi > CAMINO.iA[0]) { ctx.fillStyle = COLORES.acento; tinta(ctx, CAMINO.iA[0], Math.min(fi, CAMINO.iA[1]), kz * 1.15); }
+  if (fi > CAMINO.iA[1]) { ctx.fillStyle = COLORES.tinta; tinta(ctx, CAMINO.iA[1] - 1, fi, kz); }
+  // charquitos donde la punta frena (las esquinas)
+  for (let i = 2; i < Math.min(fi, N - 2); i++) if (ANCHO[i] > 9.6 && ANCHO[i] >= ANCHO[i - 1] && ANCHO[i] >= ANCHO[i + 1]) { ctx.fillStyle = colorA(COLORES.tinta, .5); ctx.beginPath(); ctx.arc(...CAMINO.P[i], ANCHO[i] * .62 * kz, 0, 6.29); ctx.fill(); }
+  // parar es un evento: la gota en forma de lágrima, la panza cae hacia abajo y deja una marea oscura en el borde
+  if (t > T_FIN) { const [x, y] = CAMINO.P[N - 1], g = aterriza(prog(t, T_FIN, T_FIN + 1.2)), r = 6 + 12 * g;
+    ctx.fillStyle = colorA(COLORES.tinta, .9); ctx.beginPath(); ctx.moveTo(x, y - r * .2); ctx.bezierCurveTo(x + r * 1.1, y + r * .2, x + r * .9, y + r * 1.6, x, y + r * 1.7);
+    ctx.bezierCurveTo(x - r * .9, y + r * 1.6, x - r * 1.1, y + r * .2, x, y - r * .2); ctx.fill(); ctx.strokeStyle = colorA(COLORES.tinta, .5); ctx.lineWidth = 2; ctx.stroke(); }
+  // la pluma no se dibuja: solo su sombra suave y el puntito de contacto
+  if (t < T_FIN + .5) { const [x, y] = aPantalla(c, ...enT(Math.min(t, T_FIN))), lev = prog(t, T_FIN, T_FIN + .5);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'blur(14px)'; ctx.fillStyle = `rgba(40,30,20,${.22 * (1 - lev)})`;
+    ctx.beginPath(); ctx.moveTo(x + 6, y + 6 + lev * 30); ctx.lineTo(x + 260, y - 330 + lev * 30); ctx.lineTo(x + 310, y - 300 + lev * 30); ctx.closePath(); ctx.fill();
+    ctx.filter = 'none'; ctx.fillStyle = `rgba(30,25,20,${.35 * (1 - lev)})`; ctx.beginPath(); ctx.arc(x + 3, y + 4, 4, 0, 6.29); ctx.fill(); ctx.restore(); }
+  // el título, escrito en papel vacío cuando la cámara ya se alejó
+  escrito(LINEA_CHICA, AJ_C, TX, Y_C, easeOut(prog(t, T.chica[0], T.chica[1])), .8);
+  escrito(PALABRA_CLAVE, AJ_K, TX, Y_K, easeOut(prog(t, T.clave[0], T.clave[1])), .9);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'papel' },               // la punta corriendo sobre el papel (roce grave, sigue la velocidad)
+  { t: .9, tipo: 'swish' },              // la línea empieza a subir
+  { t: +T_FIN.toFixed(2), tipo: 'golpe' },   // se detiene: la gota
+  { t: T.aleja[0], tipo: 'desliz' },
+  { t: T.clave[0], tipo: 'papel' },
+];
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pizarra de salón</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Pizarra de salón» · ingeniería inversa de lemo-opuscar/styles/chalkboard (MIT, © 2026 LemoLab) · qué se tomó:
+// escribir lo que la gente cree, borrarlo de una pasada (queda una neblina pareja y una franja húmeda que se seca) y reescribir
+// en el mismo lugar; la pizarra decide qué granos toman la tiza; tiza de acento solo para la palabra que se sigue; salón real
+// (marco de madera, repisa con tizas, reloj, zócalo de color) que se revela al abrir la cámara. Sin mano, sin tiza a la vista.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = 'lo que de verdad vende';             // la frase chica de arriba, se queda todo el video (≤ 26)
+const LO_QUE_CREEN = 'seguidores';                    // lo que la gente cree: ya está escrito y se borra de una pasada (≤ 12)
+const PALABRA_CLAVE = 'confianza';                    // se reescribe en el MISMO lugar con la tiza de acento (≤ 12)
+const ABAJO = 'se gana con historias reales';         // la explicación, en tiza blanca (≤ 40, hasta 2 renglones)
+const COLORES = {
+  pizarra: '#17302a',   // verde tinta profundo
+  tiza: '#efece3',      // tiza blanca: toda la estructura
+  acento: '#ff9a52',    // tiza naranja: SOLO la palabra clave
+  pared: '#c9c2b0',     // pared tibia del salón
+  zocalo: '#56705f',    // zócalo de color
+  madera: '#6a4a2e',    // marco y repisa
+};
+const DUR = 9;                                        // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const LETRA_TIZA = 'Chalkduster, "Chalkboard SE", "Marker Felt", cursive';
+const PZ = { x: 74, y: 364, w: 932, h: 1022 };        // la pizarra (mundo)
+const MA = 36;                                        // ancho del marco
+const MX = -420, MY = -560, MW = 1920, MH = 3000;     // el salón horneado
+
+// ---------- el salón: pared, zócalo, marco, repisa con tizas, reloj (se hornea UNA vez) ----------
+const SALON = (() => {
+  const c = capa(MW, MH), p = c.getContext('2d'), r = rng(31);
+  p.translate(-MX, -MY);
+  p.fillStyle = COLORES.pared; p.fillRect(MX, MY, MW, MH);
+  for (let y = MY; y < MY + MH; y += 10) for (let x = MX; x < MX + MW; x += 10) { const n = vnoise(x * .004, y * .004) * .7 + vnoise(x * .02, y * .02) * .3;
+    p.fillStyle = n > .5 ? `rgba(255,250,235,${(n - .5) * .12})` : `rgba(90,80,60,${(.5 - n) * .1})`; p.fillRect(x, y, 10, 10); }
+  const DY = 1760; p.fillStyle = COLORES.zocalo; p.fillRect(MX, DY, MW, MY + MH - DY);
+  p.fillStyle = 'rgba(30,40,34,.5)'; p.fillRect(MX, DY - 6, MW, 10); p.fillStyle = 'rgba(255,255,240,.18)'; p.fillRect(MX, DY + 4, MW, 3);
+  // sombra del mueble sobre la pared (la luz entra por la izquierda)
+  p.save(); p.filter = 'blur(36px)'; p.fillStyle = 'rgba(30,26,20,.5)'; p.fillRect(PZ.x - MA + 30, PZ.y - MA + 26, PZ.w + 2 * MA + 20, PZ.h + 2 * MA + 110); p.restore();
+  // marco de madera con vetas
+  const madera = (x, y, w, h, horiz) => { p.save(); p.beginPath(); p.rect(x, y, w, h); p.clip(); p.fillStyle = COLORES.madera; p.fillRect(x, y, w, h);
+    for (let i = 0; i < 70; i++) { const t = r(), a = .04 + r() * .1; p.strokeStyle = r() < .5 ? `rgba(40,22,10,${a})` : `rgba(160,118,74,${a})`; p.lineWidth = .6 + r() * 2.2; p.beginPath();
+      if (horiz) { const yy = y + t * h; p.moveTo(x, yy); for (let k = 1; k <= 30; k++) p.lineTo(x + w * k / 30, yy + (vnoise(k * .7 + i, 3) - .5) * 4); }
+      else { const xx = x + t * w; p.moveTo(xx, y); for (let k = 1; k <= 30; k++) p.lineTo(xx + (vnoise(k * .7 + i, 5) - .5) * 4, y + h * k / 30); } p.stroke(); }
+    const g = horiz ? p.createLinearGradient(0, y, 0, y + h) : p.createLinearGradient(x, 0, x + w, 0);
+    g.addColorStop(0, 'rgba(255,225,180,.18)'); g.addColorStop(.45, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.3)'); p.fillStyle = g; p.fillRect(x, y, w, h); p.restore(); };
+  madera(PZ.x - MA, PZ.y - MA, PZ.w + 2 * MA, MA, true); madera(PZ.x - MA, PZ.y + PZ.h, PZ.w + 2 * MA, MA, true);
+  madera(PZ.x - MA, PZ.y, MA, PZ.h, false); madera(PZ.x + PZ.w, PZ.y, MA, PZ.h, false);
+  // pizarra: verde parejo con moteado muy lento y grano fino (limpia, sin clases viejas)
+  p.fillStyle = COLORES.pizarra; p.fillRect(PZ.x, PZ.y, PZ.w, PZ.h);
+  for (let y = PZ.y; y < PZ.y + PZ.h; y += 6) for (let x = PZ.x; x < PZ.x + PZ.w; x += 6) { const n = vnoise(x * .0045, y * .0045) * .75 + vnoise(x * .02 + 9, y * .02) * .25;
+    p.fillStyle = n > .5 ? `rgba(120,170,150,${(n - .5) * .06})` : `rgba(0,0,0,${(.5 - n) * .14})`; p.fillRect(x, y, 6, 6); }
+  for (let i = 0; i < 60000; i++) { p.fillStyle = r() < .5 ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.09)'; p.fillRect(PZ.x + r() * PZ.w, PZ.y + r() * PZ.h, 1.3, 1.3); }
+  p.fillStyle = 'rgba(0,0,0,.35)'; p.fillRect(PZ.x, PZ.y, PZ.w, 5); p.fillRect(PZ.x, PZ.y, 5, PZ.h);
+  // repisa con tizas
+  const RY = PZ.y + PZ.h + MA;
+  p.save(); p.filter = 'blur(6px)'; p.fillStyle = 'rgba(0,0,0,.35)'; p.fillRect(PZ.x - MA - 10, RY + 26, PZ.w + 2 * MA + 20, 28); p.restore();
+  madera(PZ.x - MA - 14, RY - 4, PZ.w + 2 * MA + 28, 34, true);
+  const tiza = (x, len, col) => { p.save(); p.translate(x, RY - 12); p.fillStyle = 'rgba(0,0,0,.3)'; p.beginPath(); p.ellipse(4, 9, len / 2, 5, 0, 0, 6.29); p.fill();
+    const g = p.createLinearGradient(0, -10, 0, 10); g.addColorStop(0, col); g.addColorStop(1, 'rgba(120,110,95,1)'); p.fillStyle = col; p.beginPath(); p.roundRect(-len / 2, -9, len, 18, 6); p.fill();
+    p.fillStyle = 'rgba(0,0,0,.18)'; p.fillRect(-len / 2, 2, len, 7); p.restore(); };
+  tiza(220, 120, COLORES.tiza); tiza(360, 80, COLORES.tiza); tiza(800, 96, COLORES.acento);
+  p.fillStyle = 'rgba(240,236,225,.35)'; for (let i = 0; i < 90; i++) p.fillRect(PZ.x + r() * PZ.w, RY - 4 + r() * 6, 2, 1.5);   // polvo de tiza en la repisa
+  // luz de las ventanas: cae desde la izquierda; un parche tibio muy suave en la pared
+  const lz = p.createLinearGradient(MX, 0, MX + MW, 0); lz.addColorStop(0, 'rgba(0,0,0,0)'); lz.addColorStop(1, 'rgba(20,15,5,.28)');
+  p.fillStyle = lz; p.fillRect(MX, MY, MW, MH);
+  const vp = p.createRadialGradient(-160, 120, 20, -160, 120, 520); vp.addColorStop(0, 'rgba(255,230,180,.16)'); vp.addColorStop(1, 'rgba(255,230,180,0)'); p.fillStyle = vp; p.fillRect(MX, MY, MW, MH);
+  return c;
+})();
+const RELOJ = { x: 540, y: 150, r: 92 };
+function reloj(t) {                                   // reloj de pared: el segundero avanza parejo
+  const { x, y, r } = RELOJ; ctx.save();
+  ctx.save(); ctx.filter = 'blur(8px)'; ctx.fillStyle = 'rgba(30,25,20,.35)'; ctx.beginPath(); ctx.arc(x + 10, y + 12, r + 8, 0, 6.29); ctx.fill(); ctx.restore();
+  ctx.fillStyle = '#2b2b2b'; ctx.beginPath(); ctx.arc(x, y, r + 10, 0, 6.29); ctx.fill();
+  ctx.fillStyle = '#f3efe4'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.29); ctx.fill();
+  ctx.strokeStyle = '#2b2b2b'; ctx.lineCap = 'round';
+  for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283; ctx.lineWidth = i % 3 ? 3 : 6; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r * .78, y + Math.sin(a) * r * .78); ctx.lineTo(x + Math.cos(a) * r * .9, y + Math.sin(a) * r * .9); ctx.stroke(); }
+  const aguja = (a, l, w, col) => { ctx.strokeStyle = col; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a - Math.PI / 2) * l, y + Math.sin(a - Math.PI / 2) * l); ctx.stroke(); };
+  aguja(10.2 / 12 * 6.283, r * .5, 7, '#2b2b2b'); aguja(.62 * 6.283 + t * .0017, r * .72, 5, '#2b2b2b'); aguja((t + 17) / 60 * 6.283, r * .8, 2, '#b8432f');
+  ctx.fillStyle = '#2b2b2b'; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.29); ctx.fill(); ctx.restore();
+}
+
+// ---------- texto en la pizarra ----------
+const ANCHO = PZ.w - 70;
+const AJ_A = autoajuste(ARRIBA, LETRA_TIZA, 400, ANCHO, 1, 84, 40);
+const AJ_K = autoajuste(PALABRA_CLAVE, LETRA_TIZA, 400, ANCHO, 1, 240, 90);
+const AJ_E = autoajuste(LO_QUE_CREEN, LETRA_TIZA, 400, ANCHO, 1, AJ_K.size, 80);
+const AJ_B = autoajuste(ABAJO, LETRA_TIZA, 400, ANCHO, 2, 112, 44);
+const Y_A = 600, Y_K = Y_A + 80 + AJ_K.size * .85, Y_B = Y_K + 170 + AJ_B.size * .8;
+const L_A = letras(ARRIBA, W / 2, Y_A, AJ_A.font, { centro: true, col: COLORES.tiza, semilla: 2, giro: .04, grosor: 2.2 });
+const L_E = letras(LO_QUE_CREEN, W / 2, Y_K, AJ_E.font, { centro: true, col: COLORES.tiza, semilla: 4, giro: .04, grosor: 2.2 });
+const L_K = letras(PALABRA_CLAVE, W / 2, Y_K, AJ_K.font, { centro: true, col: COLORES.acento, semilla: 6, giro: .04, grosor: 2.2 });
+const L_B = AJ_B.rs.map((r, i) => letras(r, W / 2, Y_B + i * AJ_B.size * 1.25, AJ_B.font, { centro: true, col: COLORES.tiza, semilla: 8 + i, giro: .04, grosor: 2.2 }));
+const Y_RAYA = Y_K + AJ_K.size * .22;
+const RAYA = tLinea(L_K.x0 - 10, Y_RAYA + 4, L_K.x0 + L_K.ancho + 10, Y_RAYA - 6, { w: 11, col: COLORES.tiza, temblor: .8 });
+// la pasada del borrador: UNA franja suave a lo largo de la palabra equivocada
+const PASADA = { t0: .25, t1: .9, x0: L_E.x0 - 120, x1: L_E.x0 + L_E.ancho + 120, y: Y_K - AJ_E.size * .22, alto: AJ_E.size * 1.6 };
+const T_ESCRIBE = [1.0, 2.15];
+agendar(L_A, -3, -2); agendar(L_E, -2, -1);
+agendar(L_K, T_ESCRIBE[0], T_ESCRIBE[1], .05);
+const T_B = [3.15, 4.95]; agendar(L_B.flat(), T_B[0], T_B[1], .03);
+const T_RAYA = [6.35, 6.75]; agendar([RAYA], T_RAYA[0], T_RAYA[1]);
+// cámara de frente, sin inclinarse: de cerca en la palabra → plano medio → el salón completo
+const CAM = camara([[0, 540, (Y_A + Y_K) / 2 - 40, 1.12], [2.35, 540, (Y_A + Y_K) / 2 - 40, 1.12], [3.0, 540, 880, 1.06], [5.1, 540, 880, 1.06], [6.2, 540, 900, .92], [DUR, 540, 900, .92]]);
+
+const GRANO = granoTiza(5, 512, .36);
+const CAPA_PRE = capa(), gp = CAPA_PRE.getContext('2d');
+const CAPA_TIZA = capa(), gt = CAPA_TIZA.getContext('2d');
+function granear(g, c) {                              // la pizarra decide qué granos toman la tiza (pegado a la pizarra)
+  g.save(); ponerCam(g, c); g.globalCompositeOperation = 'destination-out'; const pat = g.createPattern(GRANO, 'repeat');
+  g.fillStyle = pat; g.fillRect(PZ.x, PZ.y, PZ.w, PZ.h); g.restore();
+}
+function escribir(g, lista, t) { for (const L of lista) { pintarLetra(g, L, t); const h = hash2(L.x | 0, L.y | 0);   // granitos solo donde la tiza se levanta, no en todas
+  if (t > L.t1 && h < .35) polvoAlSoltar(g, L.x + L.w * (.5 + h), L.y - L.size * .1, (L.x | 0) + 7, 2 + (h * 9 | 0) % 3, L.col); } }
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(SALON, MX, MY); reloj(t);
+  // franja húmeda: la pizarra recién pasada oscurece y se seca desde las orillas
+  const hum = t < PASADA.t0 ? 0 : 1 - prog(t, PASADA.t1 + .3, PASADA.t1 + 3.6);
+  if (hum > 0) { const xe = lerp(PASADA.x0, PASADA.x1, ease(prog(t, PASADA.t0, PASADA.t1))), al = PASADA.alto * (.55 + .45 * hum);
+    ctx.save(); ctx.beginPath(); ctx.rect(PZ.x, PZ.y, PZ.w, PZ.h); ctx.clip(); ctx.filter = `blur(${40 + (1 - hum) * 40}px)`;
+    const gv = ctx.createLinearGradient(0, PASADA.y - al / 2, 0, PASADA.y + al / 2);
+    gv.addColorStop(0, 'rgba(4,14,10,0)'); gv.addColorStop(.5, `rgba(4,14,10,${.36 * hum})`); gv.addColorStop(1, 'rgba(4,14,10,0)');
+    ctx.fillStyle = gv; ctx.fillRect(PASADA.x0, PASADA.y - al / 2, xe - PASADA.x0, al); ctx.restore(); }
+  // capa de lo que se borra: escrito, granulado y pasado por el borrador (deja una neblina pareja)
+  gp.setTransform(1, 0, 0, 1, 0, 0); gp.clearRect(0, 0, W, H); ponerCam(gp, c); escribir(gp, L_E, t); granear(gp, c);
+  if (t > PASADA.t0) { const xe = lerp(PASADA.x0, PASADA.x1, ease(prog(t, PASADA.t0, PASADA.t1)));
+    gp.save(); ponerCam(gp, c); gp.globalCompositeOperation = 'destination-out'; gp.globalAlpha = .975; gp.filter = 'blur(10px)';
+    gp.beginPath(); gp.roundRect(PASADA.x0, PASADA.y - PASADA.alto / 2, Math.max(1, xe - PASADA.x0), PASADA.alto, PASADA.alto / 3); gp.fill(); gp.globalAlpha = .6; gp.fill(); gp.restore(); }
+  // capa de tiza viva
+  gt.setTransform(1, 0, 0, 1, 0, 0); gt.clearRect(0, 0, W, H); ponerCam(gt, c);
+  escribir(gt, L_A, t); escribir(gt, L_K, t); escribir(gt, L_B.flat(), t); pintarTrazo(gt, RAYA, t, { gota: false, alpha: .9 });
+  granear(gt, c);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = .96; ctx.drawImage(CAPA_PRE, 0, 0); ctx.drawImage(CAPA_TIZA, 0, 0); ctx.globalAlpha = 1;
+  // viñeta suave de la cámara
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .75); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.28)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+});
+window.SONIDOS = [
+  { t: .25, tipo: 'desliz' },          // la pasada de fieltro
+  { t: T_ESCRIBE[0], tipo: 'papel' },  // la tiza (grano grave)
+  { t: 2.4, tipo: 'swish' },           // la cámara se abre
+  { t: T_B[0], tipo: 'papel' },
+  { t: 5.1, tipo: 'swish' },
+  { t: T_RAYA[0], tipo: 'golpe' },     // el subrayado aterriza
+  { t: 6.9, tipo: 'ambiente' },        // tono de salón
+];
+</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Anime de los 80</title>
+<style>html,body{margin:0;background:#0a0618;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Anime de los 80» · ingeniería inversa de lemo-opuscar/styles/cel-anime-80s (MIT, © 2026 LemoLab) · qué se tomó: fondo pintado al aerógrafo con su placa emisiva, celda plana con sombra y luz duras y línea de color (nunca negra), luz de contraluz con bloom solo desde la placa emisiva, franjas de luz que barren una celda quieta, personaje sobre dos y reproducción en cinta VHS/CRT suave.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'haz que tu oferta brille';    // el título, palabra por palabra (máx. ~30 letras)
+const PALABRA_CLAVE = 'oferta';              // sale ENORME
+const ETIQUETA = 'EPISODIO 01';              // la placa chica de arriba ('' = sin placa)
+const LETREROS = ['VENTAS', 'ABIERTO', 'RADIO', 'CAFÉ'];   // letreros de neón genéricos de la ciudad (nunca marcas). 3 o 4, ≤ 8 letras
+const COLORES = {                            // modelo de color de NOCHE (cada hora tiene el suyo)
+  cielo: '#120a2e', cielo2: '#3a1a5e', horizonte: '#ff5f8f',
+  edificio: '#1d1440', edificio2: '#2a1d58',
+  ventana: '#ffd27a', neon: ['#ff3fa4', '#3ff0ff', '#ffb43f', '#b06bff'],
+  acento: '#ff4f6d',                         // la chaqueta de la protagonista: el único color que salta en todo
+  piel: '#efc0b4', pielSombra: '#b77a8e', pielLinea: '#5a2f3e',
+  pelo: '#2b1f4a', peloSombra: '#170f30', peloLuz: '#6a58b8', peloLinea: '#0f0820',
+  iris: '#8a5cff', titulo: '#fff4d6', tituloLinea: '#2a0f4a',
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — busto de perfil a la manera del anime de los 80 (ojo almendra en cuña, nariz de un trazo, mechones con puntas): convención del dibujo de celda, sin intento realista
+const C = COLORES, EMI = hacerCapa(), CEL = hacerCapa();
+const LEVANTA = 70;                                             // la grúa baja: el fondo sube LEVANTA px en toda la pieza
+
+// ---------- celda: relleno plano + sombra dura + luz dura + borde de luz de neón + línea de color ----------
+function cel(pts, o) { forma(pts, { relleno: o.f, tinta: o.l, w: o.lw ?? 4, amp: 0, sombra: o.s ? { col: o.s, dx: o.so[0], dy: o.so[1] } : null, luz: o.rim ? { col: o.rim, dx: o.rd[0], dy: o.rd[1] } : null }); }
+
+// ---------- placa pintada (color) y su pareja emisiva: se pintan UNA vez ----------
+const PLACA_H = H + LEVANTA + 40;
+const EDIFICIOS = (() => { const r = rng(5), out = []; let x = -20;
+  while (x < W + 40) { const w = 120 + r() * 170, h = 520 + r() * 640; out.push({ x, w, y: 1500 - h, h, tono: r() < .5 ? C.edificio : C.edificio2, s: r() * 999 }); x += w - 8; } return out; })();
+const SIGNOS = LETREROS.slice(0, 4).map((txt, i) => ({ txt: txt.toUpperCase(), col: C.neon[i % C.neon.length],
+  vertical: i % 2 === 0, x: [60, 610, 870, 640][i], y: [800, 850, 1060, 1560][i], t0: .22 + i * .12 }));
+const PLACA = (() => {
+  const c = hacerCapa(W, PLACA_H), p = c.getContext('2d'), r = rng(9);
+  const g = p.createLinearGradient(0, 0, 0, 1500); g.addColorStop(0, C.cielo); g.addColorStop(.62, C.cielo2); g.addColorStop(1, C.horizonte);
+  p.fillStyle = g; p.fillRect(0, 0, W, PLACA_H);
+  // nubes al aerógrafo con el borde de abajo iluminado
+  p.filter = 'blur(26px)';
+  for (let i = 0; i < 9; i++) { const x = r() * W, y = 300 + r() * 500, w = 260 + r() * 300; p.fillStyle = 'rgba(90,50,140,.45)'; p.beginPath(); p.ellipse(x, y, w, 60, 0, 0, 7); p.fill();
+    p.fillStyle = 'rgba(255,120,170,.22)'; p.beginPath(); p.ellipse(x, y + 34, w * .8, 26, 0, 0, 7); p.fill(); }
+  p.filter = 'none';
+  // estrellas finas
+  for (let i = 0; i < 90; i++) { p.fillStyle = `rgba(255,240,255,${.3 + r() * .5})`; p.fillRect(r() * W, r() * 600, 2, 2); }
+  // edificios con aerógrafo vertical y ventanas
+  for (const e of EDIFICIOS) { const ge = p.createLinearGradient(0, e.y, 0, e.y + e.h); ge.addColorStop(0, e.tono); ge.addColorStop(1, '#0c0722');
+    p.fillStyle = ge; p.fillRect(e.x, e.y, e.w, e.h + 600);
+    p.fillStyle = 'rgba(255,255,255,.05)'; p.fillRect(e.x, e.y, 6, e.h); }
+  // la calle mojada (la refleja más abajo la parte emisiva)
+  p.fillStyle = '#0d0820'; p.fillRect(0, 1500, W, PLACA_H - 1500);
+  return c;
+})();
+const VENTANAS = (() => { const r = rng(13), out = [];
+  for (const e of EDIFICIOS) for (let y = e.y + 30; y < 1480; y += 46) for (let x = e.x + 18; x < e.x + e.w - 24; x += 36) if (r() < .34) out.push([x, y, r()]); return out; })();
+// un letrero: tubo + letras (en vertical, una debajo de otra). on 0..1
+function letrero(p, s, on, emisivo) {
+  const L = [...s.txt], tam = s.vertical ? 62 : 70, pad = 22;
+  const w = s.vertical ? tam + pad * 2 : L.length * tam * .72 + pad * 2, h = s.vertical ? L.length * tam * .98 + pad * 2 : tam + pad * 2;
+  p.save(); p.translate(s.x, s.y);
+  if (!emisivo) { p.fillStyle = '#170c2c'; p.beginPath(); p.roundRect(-4, -4, w + 8, h + 8, 16); p.fill(); }
+  p.lineWidth = 6; p.strokeStyle = emisivo ? s.col : mezcla(s.col, '#1a1030', on ? .25 : .82); p.globalAlpha = emisivo ? on : 1;
+  p.beginPath(); p.roundRect(6, 6, w - 12, h - 12, 12); p.stroke();
+  p.font = `800 ${tam}px "Futura", "Avenir Next", sans-serif`; p.textAlign = 'center'; p.textBaseline = 'middle';
+  p.fillStyle = emisivo ? '#fff' : mezcla(s.col, '#1a1030', on ? .1 : .8);
+  L.forEach((ch, i) => s.vertical ? p.fillText(ch, w / 2, pad + tam * .5 + i * tam * .98) : p.fillText(ch, pad + tam * .36 + i * tam * .72, h / 2));
+  if (emisivo) { p.globalAlpha = on * .9; p.fillStyle = s.col; L.forEach((ch, i) => s.vertical ? p.fillText(ch, w / 2, pad + tam * .5 + i * tam * .98) : p.fillText(ch, pad + tam * .36 + i * tam * .72, h / 2)); }
+  p.restore(); s.w = w; s.h = h;
+}
+function mezcla(a, b, k) { const A = a.match(/\w\w/g).map(x => parseInt(x, 16)), B = b.match(/\w\w/g).map(x => parseInt(x, 16)); return '#' + A.map((v, i) => Math.round(lerp(v, B[i], k)).toString(16).padStart(2, '0')).join(''); }
+// encendido a 12 cuadros por segundo con un tartamudeo corto, luego fijo
+const encendido = (s, t) => { const ts = Math.floor(t * 12) / 12; if (ts < s.t0) return 0; if (ts < s.t0 + .25) return [1, 0, 1, .4, 1][Math.floor((ts - s.t0) * 12) % 5]; return 1; };
+
+// ---------- la protagonista de perfil (mira a la derecha), sobre dos ----------
+const CAB = { x: 470, y: 1230, k: 2.55 };
+function protagonista(t, ts) {
+  const k = CAB.k, P = pts => pts.map(([x, y]) => [CAB.x + x * k, CAB.y + y * k]);
+  const viento = Math.floor(ts * 12 / 2) % 4;                    // ciclo de 4 dibujos para el pelo y el cuello
+  const ond = [0, 1, 0, -1][viento];
+  // pelo de atrás (capa oscura más ancha) + mechón largo al viento
+  cel(P([[30, -128], [-40, -132], [-112, -88], [-138, -10], [-132, 70], [-118, 118], [-92, 132], [-60, 96], [-30, 40], [-6, -20], [40, -60]]), { f: C.peloSombra, l: C.peloLinea, lw: 4 });
+  cel(P([[-100, 60], [-150, 92 + ond * 4], [-215, 118 + ond * 8], [-262, 112 + ond * 12], [-200, 98 + ond * 6], [-150, 70], [-118, 40]]), { f: C.pelo, l: C.peloLinea, lw: 4, s: C.peloSombra, so: [0, -6] });
+  // cuello y chaqueta con cuello alto (el acento)
+  cel(P([[18, 118], [58, 124], [52, 210], [-36, 214], [-30, 120]]), { f: C.piel, l: C.pielLinea, lw: 3.5, s: C.pielSombra, so: [14, 0] });
+  cel(P([[-170, 330], [-150, 210], [-80, 168], [-38, 150], [20, 186], [70, 196], [120, 230], [170, 330]]), { f: C.acento, l: '#5a0f2a', lw: 4, s: '#a8244c', so: [24, -10], rim: '#3ff0ff', rd: [-5, 2] });
+  cel(P([[-62, 150], [-36, 118], [-8, 146], [30, 182], [6, 196], [-30, 170]]), { f: '#ff7b90', l: '#5a0f2a', lw: 3.5 });
+  // cara de perfil: frente, cejas, nariz en punta, labios, mentón de punta suave
+  const cara = [[40, -122], [84, -90], [100, -46], [99, -12], [95, 4], [104, 26], [114, 42], [119, 47], [108, 54], [103, 59], [108, 67], [110, 70], [101, 77], [107, 84], [104, 89], [96, 95], [100, 108], [100, 116], [88, 130], [62, 136], [30, 126], [6, 98], [-6, 40], [-4, -40]];
+  cel(P(cara), { f: C.piel, l: C.pielLinea, lw: 3.5, s: C.pielSombra, so: [12, 4], rim: '#ffd0f0', rd: [-3, 0] });
+  // rubor y nariz: un plano de sombra + un trazo
+  ctx.save(); ctx.globalAlpha = .4; ctx.fillStyle = '#ff7aa0'; ctx.beginPath(); ctx.ellipse(CAB.x + 72 * k, CAB.y + 62 * k, 13 * k, 5 * k, 0, 0, 7); ctx.fill(); ctx.restore();
+  trazo(P([[106, 55], [112, 52]]), { col: C.pielLinea, w: 3, amp: 0 });
+  trazo(P([[92, 78], [102, 77]]), { col: C.pielLinea, w: 3.5, amp: 0 });
+  cel(P([[102, 69], [108, 71], [101, 76], [97, 74]]), { f: '#d98a92', l: null });
+  // ojo almendra en cuña: blanco, iris alto en capas, dos brillos, raya de pestañas gruesa que se abre hacia atrás
+  const parpadeo = (Math.floor(ts * 8) % 30) === 7;
+  const ex = 70, ey = 10, ew = 40, eh = 46;
+  if (!parpadeo) {
+    const blanco = P([[ex - ew * .5, ey - eh * .1], [ex - ew * .05, ey - eh * .46], [ex + ew * .5, ey + eh * .08], [ex + ew * .05, ey + eh * .44]]);
+    ctx.save(); tracePath(blanco, true); ctx.fillStyle = '#f6f0fa'; ctx.fill(); ctx.clip();
+    const ix = CAB.x + (ex + ew * .16) * k, iy = CAB.y + (ey + eh * .06) * k, iw = ew * .24 * k, ih = eh * .44 * k;
+    ctx.fillStyle = C.iris; ctx.beginPath(); ctx.ellipse(ix, iy, iw, ih, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#3a1f7a'; ctx.fillRect(ix - iw, iy - ih, iw * 2, ih * .9);
+    ctx.fillStyle = '#c9b0ff'; ctx.beginPath(); ctx.ellipse(ix, iy + ih * .85, iw * .9, ih * .4, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.ellipse(ix - iw * .2, iy - ih * .35, iw * .42, ih * .2, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(ix + iw * .3, iy + ih * .45, iw * .2, ih * .1, 0, 0, 7); ctx.fill();
+    ctx.restore();
+    cel(P([[ex - ew * .9, ey - eh * .42], [ex - ew * .05, ey - eh * .56], [ex + ew * .54, ey + eh * .06], [ex - ew * .05, ey - eh * .38], [ex - ew * .5, ey - eh * .08]]), { f: C.peloLinea, l: null });
+    trazo(P([[ex - ew * .1, ey + eh * .48], [ex + ew * .38, ey + eh * .26]]), { col: C.pielLinea, w: 2.5, amp: 0 });
+  } else cel(P([[ex - ew * .8, ey], [ex, ey + eh * .22], [ex + ew * .5, ey + eh * .1], [ex, ey + eh * .3], [ex - ew * .5, ey + eh * .05]]), { f: C.peloLinea, l: null });
+  // ceja larga y fina, decidida
+  cel(P([[ex - ew * .55, ey - eh * .95], [ex + ew * .2, ey - eh * 1.12], [ex + ew * .62, ey - eh * .98], [ex + ew * .2, ey - eh * 1.04]]), { f: C.peloLinea, l: null });
+  // oreja con un aro grande
+  cel(P([[-6, 20], [10, 12], [20, 30], [12, 56], [-4, 58]]), { f: C.piel, l: C.pielLinea, lw: 3, s: C.pielSombra, so: [5, 0] });
+  ctx.save(); ctx.strokeStyle = '#ffd36b'; ctx.lineWidth = 3.5 * k; ctx.beginPath(); ctx.arc(CAB.x + 8 * k, CAB.y + 78 * k, 14 * k, 0, 7); ctx.stroke(); ctx.restore();
+  // pelo de arriba: casquete + mechones con puntas desparejas + anillo de luz con borde de zigzag
+  cel(P([[-128, 60], [-136, -40], [-104, -112], [-36, -150], [36, -146], [86, -116], [108, -76], [104, -52], [70, -60], [30, -66], [-2, -50], [-20, 0], [-28, 40], [-70, 96], [-108, 110]]), { f: C.pelo, l: C.peloLinea, lw: 4, s: C.peloSombra, so: [10, 10] });
+  const mechones = [[40, -96, 76, -96, 104, -22 + ond * 2], [62, -94, 98, -82, 114, -30 + ond * 3], [14, -84, 46, -88, 64, -28], [-10, -70, 18, -78, 22, -20]];
+  for (const [a, b, c, d, e, f] of mechones) cel(P([[a, b], [c, d], [e, f]]), { f: C.pelo, l: C.peloLinea, lw: 3.5, s: C.peloSombra, so: [6, 4] });
+  const anillo = []; for (let i = 0; i <= 14; i++) { const a = Math.PI * 1.08 + i / 14 * Math.PI * .62; anillo.push([Math.cos(a) * 112 - 10, Math.sin(a) * 102 - 18]); }
+  const abajo = []; for (let i = 14; i >= 0; i--) { const a = Math.PI * 1.08 + i / 14 * Math.PI * .62; abajo.push([Math.cos(a) * (92 + (i % 2) * 8) - 10, Math.sin(a) * (82 + (i % 2) * 8) - 18]); }
+  cel(P([...anillo, ...abajo]), { f: C.peloLuz, l: null });
+}
+
+// ---------- franjas de luz que barren la celda quieta (se mueve la luz, no el dibujo) ----------
+function franjas(c2, t) {
+  const p = c2.getContext('2d'); p.save(); p.globalCompositeOperation = 'source-atop';
+  for (const [t0, col, w] of [[.55, 'rgba(255,63,164,.38)', 170], [2.6, 'rgba(63,240,255,.32)', 120], [4.6, 'rgba(255,180,63,.32)', 200], [6.3, 'rgba(176,107,255,.3)', 150]]) {
+    const u = (t - t0) / 1.1; if (u < 0 || u > 1) continue;
+    const x = lerp(W + 300, -500, u); p.fillStyle = col; p.beginPath(); p.moveTo(x, 700); p.lineTo(x + w, 700); p.lineTo(x + w - 420, H); p.lineTo(x - 420, H); p.fill(); }
+  p.restore();
+}
+
+// ---------- título: letra itálica pesada, crema con línea violeta y sombra rosa dura (sin degradado ni brillo) ----------
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 1.9, kConector: .58 });
+PARTES.forEach((q, i) => q.t0 = Math.round((1.0 + i * .3 + (q.clave ? .1 : 0)) * 12) / 12);
+const FR = armarFrase(PARTES, { familia: '"Futura", "Avenir Next Condensed", sans-serif', peso: 800, ancho: W - 170, altoMax: 420, tamMax: 150, tamMin: 40, y0: 330, mayus: true, interlinea: .98 });
+FR.tokens.forEach(q => q.font = 'italic ' + q.font);
+
+arrancar(frame => {
+  const t = frame / FPS, ts = Math.floor(t * 12) / 12;
+  BOIL = 0;
+  const cam = LEVANTA * ease(prog(t, 0, DUR - .8));               // la grúa baja sobre la placa (en uno)
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.drawImage(PLACA, 0, -cam);
+  // ventanas y letreros (color) + su pareja emisiva
+  const e = EMI.getContext('2d'); e.setTransform(1, 0, 0, 1, 0, 0); e.clearRect(0, 0, W, H); e.save(); e.translate(0, -cam);
+  ctx.save(); ctx.translate(0, -cam);
+  for (const [x, y, h] of VENTANAS) { const on = h < .8 || ts > 1.2; ctx.fillStyle = on ? C.ventana : '#3a2a50'; ctx.fillRect(x, y, 18, 26);
+    if (on) { e.fillStyle = C.ventana; e.globalAlpha = .55; e.fillRect(x, y, 18, 26); e.globalAlpha = 1; } }
+  for (const s of SIGNOS) { const on = encendido(s, t); letrero(ctx, s, on, false); if (on) letrero(e, s, on, true); }
+  ctx.restore(); e.restore();
+  // calle mojada: los letreros reflejados, aplastados y con bandas de onda
+  ctx.save(); ctx.globalAlpha = .55; ctx.translate(0, (1500 - cam) * 2 + 10); ctx.scale(1, -1); ctx.filter = 'blur(6px)';
+  ctx.beginPath(); ctx.rect(0, 1500 - cam, W, 520); ctx.clip(); ctx.drawImage(EMI, 0, 0); ctx.filter = 'none'; ctx.restore();
+  for (let y = 1500 - cam; y < H; y += 22) { ctx.fillStyle = 'rgba(8,4,20,.35)'; ctx.fillRect(0, y + (hash2(y, 3) * 6), W, 8); }
+  // lluvia en uno, sesgada
+  ctx.save(); ctx.strokeStyle = 'rgba(200,190,255,.32)'; ctx.lineWidth = 2;
+  for (let i = 0; i < 70; i++) { const x0 = hash2(i, 1) * (W + 300), sp = 2200 + hash2(i, 2) * 900, y = ((hash2(i, 3) * H + t * sp) % (H + 200)) - 100, x = x0 - (y * .25);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 14, y + 56); ctx.stroke(); }
+  ctx.restore();
+  // la celda en su propia capa: franjas con source-atop y silueta en negro sobre la emisiva (el neón no la atraviesa)
+  const cg = CEL.getContext('2d'); cg.setTransform(1, 0, 0, 1, 0, 0); cg.clearRect(0, 0, W, H);
+  conCtx(cg, () => protagonista(t, ts)); franjas(CEL, t);
+  e.save(); e.globalCompositeOperation = 'destination-out'; e.drawImage(CEL, 0, 0); e.restore();
+  ctx.drawImage(CEL, 0, 0);
+  bloom(EMI, .95, 26, 4);
+  // placa de episodio y título
+  if (ETIQUETA && t >= .5) { ctx.save(); ctx.font = `700 34px "Futura", sans-serif`; const w = medir(ETIQUETA, ctx.font) + 60;
+    ctx.fillStyle = 'rgba(18,8,40,.8)'; ctx.fillRect(W / 2 - w / 2, 262, w, 52); ctx.strokeStyle = C.neon[1]; ctx.lineWidth = 3; ctx.strokeRect(W / 2 - w / 2, 262, w, 52);
+    ctx.fillStyle = C.titulo; ctx.textAlign = 'center'; ctx.fillText(ETIQUETA.split('').join(' '), W / 2, 300); ctx.restore(); }
+  pintarFrase(FR, t, q => textoTinta(q.txt, q.x, q.y + 30, { font: q.font, relleno: q.clave ? '#ffe37a' : C.titulo, tinta: C.tituloLinea, grosor: Math.max(5, q.size * .07), sombra: [q.size * .05, q.size * .06, '#ff3fa4'] }));
+  pasadaCinta(t, { croma: 4, ruido: .045, esquinas: .55 });
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, ...SIGNOS.map(s => ({ t: +s.t0.toFixed(2), tipo: 'golpe' })), { t: .55, tipo: 'swish' },
+  ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })), { t: 2.6, tipo: 'swish' }, { t: 4.6, tipo: 'swish' },
+];
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Libro pop-up</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Libro pop-up» · ingeniería inversa de lemo-opuscar/styles/paper-popup (MIT, © 2026 LemoLab) · qué se tomó: recortes de papel con tinta café, sombra en medialuna, borde blanco dilatado + canto de cartón + grano, piezas que se levantan de atrás hacia adelante desde su doblez, sombra con la silueta del recorte, libro real sobre un escritorio desenfocado, cámara macro que baja a la escala del libro.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = 'cuando tu historia';           // línea chica de arriba (≤ 26 letras)
+const CLAVE = 'vende';                         // la palabra ENORME (≤ 12 letras)
+const BURBUJA = '¿cuánto cuesta?';             // lo que dice el globo de la tienda (≤ 22 letras)
+const LETRERO = 'tu tienda';                   // lo que dice el letrero de cartón (≤ 12 letras)
+const COLORES = {
+  cielo: '#a9d8e6',     // el fondo del libro (familia dominante de la página)
+  pasto: '#8cc75b',     // colinas y suelo
+  toldo: '#e8483a',     // el toldo de la tienda y la palabra clave
+  tienda: '#f6d77a',    // la pared de la tienda
+  tinta: '#3a2a24',     // tinta café oscura (nunca negra)
+  borde: '#fffaf0',     // el borde blanco de los recortes
+  tapa: '#2f6f73',      // la tapa de tela del libro
+  madera: '#8a5a3a',    // el escritorio real
+};
+const DUR = 8;                                 // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const TINTA = COLORES.tinta, TAU = Math.PI * 2, L = V3.norm([-.45, .9, .75]);
+const LETRA_GORDA = '"Arial Rounded MT Bold", "Avenir Next", sans-serif';
+const LETRA_CUENTO = '"Hoefler Text", "Baskerville", Georgia, serif';
+
+// ---------- papel: grano, recorte con borde blanco y canto de cartón (técnica de paper.js, en 2D) ----------
+const GRANO = (() => { const c = lienzo(256, 256), x = c.getContext('2d'), r = rng(7);
+  for (let i = 0; i < 5000; i++) { x.fillStyle = r() < .5 ? `rgba(90,70,50,${r() * .12})` : `rgba(255,255,255,${r() * .2})`; x.fillRect(r() * 256, r() * 256, 1 + r(), 1 + r()); }
+  x.lineCap = 'round'; for (let i = 0; i < 300; i++) { const px = r() * 256, py = r() * 256, a = r() * TAU, l = 4 + r() * 16;
+    x.strokeStyle = r() < .5 ? 'rgba(90,70,50,.1)' : 'rgba(255,255,255,.22)'; x.lineWidth = .7;
+    x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); x.stroke(); }
+  return c; })();
+function cortar(art, borde = 14) {
+  const w = art.width, h = art.height, out = lienzo(w, h), x = out.getContext('2d');
+  const dil = (r, col) => { const c = lienzo(w, h), y = c.getContext('2d'), n = Math.max(16, Math.round(r * 1.2));
+    for (const rr of [r, r * .66, r * .33]) for (let i = 0; i < n; i++) { const a = i / n * TAU; y.drawImage(art, Math.cos(a) * rr, Math.sin(a) * rr); }
+    y.globalCompositeOperation = 'source-in'; y.fillStyle = col; y.fillRect(0, 0, w, h); return c; };
+  x.drawImage(dil(borde + 3, '#b9ad9c'), 0, 2.5); x.drawImage(dil(borde, COLORES.borde), 0, 0); x.drawImage(art, 0, 0);
+  x.globalCompositeOperation = 'source-atop'; x.globalAlpha = .9; x.fillStyle = x.createPattern(GRANO, 'repeat'); x.fillRect(0, 0, w, h);
+  return out;
+}
+function dorsoDe(img) { // el revés del recorte: papel liso con grano (lo que se ve cuando la pieza está doblada boca abajo)
+  const c = lienzo(img.width, img.height), x = c.getContext('2d'); x.drawImage(img, 0, 0); x.globalCompositeOperation = 'source-in';
+  x.fillStyle = '#efe5cf'; x.fillRect(0, 0, c.width, c.height); x.globalCompositeOperation = 'source-atop'; x.fillStyle = x.createPattern(GRANO, 'repeat'); x.fillRect(0, 0, c.width, c.height);
+  x.strokeStyle = 'rgba(150,130,100,.35)'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, c.height - 6); x.lineTo(c.width, c.height - 6); x.stroke(); return c; }
+function silueta(img) { const c = lienzo(img.width, img.height), x = c.getContext('2d'); x.drawImage(img, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#000'; x.fillRect(0, 0, c.width, c.height); return c; }
+// trazo de tinta: relleno + contorno grueso redondo
+function tinta(x, fillCol, lw = 9) { if (fillCol) { x.fillStyle = fillCol; x.fill(); } x.lineWidth = lw; x.strokeStyle = TINTA; x.lineJoin = x.lineCap = 'round'; x.stroke(); }
+function mancha(x, cx, cy, rx, ry, wob, seed) { const r = rng(seed), ph = [r() * TAU, r() * TAU, r() * TAU], pts = [];
+  for (let i = 0; i < 30; i++) { const a = i / 30 * TAU, k = 1 + wob * (Math.sin(a * 3 + ph[0]) * .5 + Math.sin(a * 5 + ph[1]) * .3 + Math.sin(a * 2 + ph[2]) * .4); pts.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]); }
+  x.beginPath(); const m = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; let q = m(pts[29], pts[0]); x.moveTo(q[0], q[1]);
+  for (let i = 0; i < 30; i++) { const p = pts[i], n = m(p, pts[(i + 1) % 30]); x.quadraticCurveTo(p[0], p[1], n[0], n[1]); } x.closePath(); }
+function medialuna(x, dib, sombra, dx, dy) { // sombra dura en medialuna: se rellena con la sombra y se vuelve a rellenar corrida con el color base
+  x.save(); dib(); x.clip(); dib(); x.fillStyle = sombra; x.fill(); x.translate(-dx, -dy); dib(); x.restore(); }
+const osc = (c, k) => rgbTxt(tonoC(c, k));
+
+// ---------- el arte de cada pieza (se pinta UNA vez) ----------
+function arteCielo() { const c = lienzo(1200, 880), x = c.getContext('2d'), r = rng(3);
+  const g = x.createLinearGradient(0, 0, 0, 880); g.addColorStop(0, osc(COLORES.cielo, .9)); g.addColorStop(1, rgbTxt(mezclaC(COLORES.cielo, '#fff8e8', .55)));
+  x.fillStyle = g; x.fillRect(0, 0, 1200, 880);
+  for (let i = 0; i < 60; i++) { const px = r() * 1200, py = r() * 880, rr = 40 + r() * 200, gg = x.createRadialGradient(px, py, 0, px, py, rr);
+    gg.addColorStop(0, `rgba(255,255,255,${r() * .08})`); gg.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = gg; x.fillRect(px - rr, py - rr, rr * 2, rr * 2); }
+  for (const [cx, cy, s] of [[230, 210, 1], [860, 140, .8], [980, 420, .6]]) { // nubes de papel
+    const nube = lienzo(420, 200), y = nube.getContext('2d');
+    [[120, 120, 70], [200, 95, 85], [290, 120, 66], [210, 140, 70]].forEach(([a, b, rr]) => { y.beginPath(); y.arc(a, b, rr * .8, 0, TAU); y.fillStyle = '#fffdf6'; y.fill(); });
+    x.save(); x.globalAlpha = .92; x.drawImage(cortar(nube, 6), cx - 210 * s, cy - 100 * s, 420 * s, 200 * s); x.restore(); }
+  x.globalCompositeOperation = 'source-atop'; x.fillStyle = x.createPattern(GRANO, 'repeat'); x.fillRect(0, 0, 1200, 880);
+  x.globalCompositeOperation = 'source-over'; x.strokeStyle = osc('#e9dfca', .9); x.lineWidth = 10; x.strokeRect(5, 5, 1190, 870);
+  return c; }
+function artePagina() { const c = lienzo(1200, 800), x = c.getContext('2d'), r = rng(9);
+  x.fillStyle = COLORES.pasto; x.fillRect(0, 0, 1200, 800);
+  for (let i = 0; i < 10; i++) { x.fillStyle = i % 2 ? osc(COLORES.pasto, 1.04) : osc(COLORES.pasto, .97); x.fillRect(0, i * 80, 1200, 80); }   // franjas de pasto
+  x.beginPath(); x.moveTo(520, 0); x.bezierCurveTo(470, 260, 700, 420, 560, 800); x.lineTo(760, 800); x.bezierCurveTo(880, 420, 620, 260, 650, 0); x.closePath(); tinta(x, '#e9cf8f', 0);  // caminito
+  for (let i = 0; i < 160; i++) { x.fillStyle = ['#ffffff', '#ffd1dc', '#ffe58a', '#f7a8c4'][i % 4]; x.globalAlpha = .7; x.beginPath(); x.arc(r() * 1200, r() * 800, 3 + r() * 4, 0, TAU); x.fill(); }
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-atop'; x.fillStyle = x.createPattern(GRANO, 'repeat'); x.fillRect(0, 0, 1200, 800);
+  return c; }
+function arteColinas(seed, col) { const c = lienzo(1300, 420), x = c.getContext('2d');
+  const dib = () => { x.beginPath(); x.moveTo(20, 400); for (let i = 0; i <= 26; i++) { const px = 20 + i * 48; x.lineTo(px, 210 - Math.sin(i * .5 + seed) * 70 - Math.sin(i * .21 + seed * 2) * 60); } x.lineTo(1280, 400); x.closePath(); };
+  medialuna(x, dib, osc(col, .86), 26, -14); dib(); tinta(x, null, 9);
+  x.strokeStyle = osc(col, .75); x.lineWidth = 4; x.lineCap = 'round'; const r = rng(seed * 7);
+  for (let i = 0; i < 24; i++) { const px = 60 + r() * 1180, py = 260 + r() * 110; x.beginPath(); x.moveTo(px, py); x.lineTo(px - 4, py - 16); x.moveTo(px + 6, py); x.lineTo(px + 8, py - 14); x.stroke(); }
+  return cortar(c, 12); }
+function arteArbol(seed, col) { const c = lienzo(320, 460), x = c.getContext('2d');
+  x.beginPath(); x.roundRect(140, 230, 40, 200, 10); tinta(x, '#9a6236', 8);
+  const dib = () => mancha(x, 160, 160, 120, 125, .06, seed); medialuna(x, dib, osc(col, .82), 24, 14); dib(); tinta(x, null, 9);
+  x.strokeStyle = osc(col, .7); x.lineWidth = 5; x.beginPath(); x.arc(110, 150, 26, .4, 1.6); x.stroke(); x.beginPath(); x.arc(190, 200, 22, .2, 1.4); x.stroke();
+  return cortar(c, 13); }
+function artePino(seed) { const c = lienzo(280, 480), x = c.getContext('2d');
+  x.beginPath(); x.roundRect(124, 380, 32, 80, 8); tinta(x, '#9a6236', 8);
+  for (let k = 0; k < 3; k++) { const y0 = 60 + k * 100, ww = 70 + k * 38; x.beginPath(); x.moveTo(140, y0); x.lineTo(140 + ww, y0 + 170); x.lineTo(140 - ww, y0 + 170); x.closePath(); tinta(x, k % 2 ? '#3f9a54' : '#4fae5f', 9); }
+  return cortar(c, 12); }
+function arteTienda() { const c = lienzo(640, 620), x = c.getContext('2d');
+  // pared
+  const pared = () => { x.beginPath(); x.roundRect(80, 230, 480, 360, 14); }; medialuna(x, pared, osc(COLORES.tienda, .86), 30, -10); pared(); tinta(x, null, 10);
+  // toldo a rayas
+  x.save(); x.beginPath(); x.moveTo(50, 250); x.lineTo(110, 120); x.lineTo(530, 120); x.lineTo(590, 250); for (let i = 6; i >= 0; i--) x.arc(70 + i * 83.3, 250, 41.6, 0, Math.PI); x.closePath(); x.clip();
+  for (let i = 0; i < 8; i++) { x.fillStyle = i % 2 ? '#fff6ea' : COLORES.toldo; x.fillRect(30 + i * 83.3, 100, 83.3, 210); } x.restore();
+  x.beginPath(); x.moveTo(50, 250); x.lineTo(110, 120); x.lineTo(530, 120); x.lineTo(590, 250); for (let i = 6; i >= 0; i--) x.arc(70 + i * 83.3, 250, 41.6, 0, Math.PI); x.closePath(); tinta(x, null, 10);
+  // puerta y ventana
+  x.beginPath(); x.roundRect(370, 380, 120, 210, [50, 50, 6, 6]); tinta(x, '#c9814c', 9); x.beginPath(); x.arc(470, 490, 9, 0, TAU); tinta(x, '#f6d77a', 5);
+  x.beginPath(); x.roundRect(140, 360, 170, 130, 12); tinta(x, '#bfe6f0', 9); x.beginPath(); x.moveTo(225, 360); x.lineTo(225, 490); x.moveTo(140, 425); x.lineTo(310, 425); x.lineWidth = 6; x.stroke();
+  x.beginPath(); x.roundRect(130, 495, 190, 40, 10); tinta(x, '#e88fb0', 7);
+  // letrero
+  x.beginPath(); x.roundRect(170, 30, 300, 86, 14); tinta(x, '#fff6ea', 9);
+  const aj = autoajuste(LETRERO, LETRA_GORDA, 700, 260, 1, 56, 26); x.font = aj.font; x.fillStyle = TINTA; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(LETRERO, 320, 76);
+  x.beginPath(); x.moveTo(230, 116); x.lineTo(230, 124); x.moveTo(410, 116); x.lineTo(410, 124); x.lineWidth = 8; x.stroke();
+  return cortar(c, 15); }
+function arteFlores(seed) { const c = lienzo(900, 220), x = c.getContext('2d'), r = rng(seed);
+  for (let i = 0; i < 6; i++) { const cx = 70 + i * 152 + r() * 30, top = 50 + r() * 40, col = ['#f7a8c4', '#ffe58a', '#c8a6f0', '#ff9b7a'][i % 4];
+    x.beginPath(); x.moveTo(cx, 210); x.quadraticCurveTo(cx + 10, 150, cx, top + 30); x.lineWidth = 7; x.strokeStyle = TINTA; x.stroke();
+    x.beginPath(); x.ellipse(cx + 26, 160, 26, 12, -.5, 0, TAU); tinta(x, '#5fb35a', 6);
+    for (let k = 0; k < 5; k++) { const a = k / 5 * TAU; x.beginPath(); x.arc(cx + Math.cos(a) * 20, top + Math.sin(a) * 20, 15, 0, TAU); tinta(x, col, 5); }
+    x.beginPath(); x.arc(cx, top, 11, 0, TAU); tinta(x, '#f6c445', 5); }
+  return cortar(c, 11); }
+
+// ---------- las piezas: x, z del doblez, ancho y alto en el mundo, cuándo se levantan (de atrás hacia adelante) ----------
+const ABRE = .05;                                  // el fondo del libro se para aquí
+const PIEZAS = [
+  { img: arteColinas(1, '#a5d46c'), x: 0, z: .18, w: 3.1, h: 1.0 },
+  { img: arteColinas(4, COLORES.pasto), x: .2, z: .42, w: 3.2, h: .85 },
+  { img: artePino(2), x: -1.05, z: .62, w: .5, h: .86 },
+  { img: arteArbol(5, '#5fb35a'), x: 1.08, z: .66, w: .58, h: .84 },
+  { img: arteTienda(), x: 0, z: .88, w: 1.25, h: 1.21, tienda: true },
+  { img: arteArbol(8, '#6cc06a'), x: -.95, z: 1.25, w: .5, h: .72 },
+  { img: arteFlores(3), x: .35, z: 1.55, w: 1.5, h: .36 },
+];
+PIEZAS.forEach((p, i) => { p.t0 = .25 + i * .14; p.dur = .42; p.sil = silueta(p.img); p.adelante = i >= 2; p.dorso = dorsoDe(p.img); });
+const T_TIENDA = PIEZAS.find(p => p.tienda).t0 + .42;
+const CIELO = cortar(arteCielo(), 0), PAGINA = artePagina();
+
+// ---------- el cuarto real: escritorio de madera y fondo cálido (UNA vez) ----------
+const MADERA = (() => { const c = lienzo(1024, 1024), p = c.getContext('2d'), r = rng(4), base = rgbDe(COLORES.madera);
+  for (let k = 0; k < 5; k++) { p.fillStyle = rgbTxt(tonoC(base, .88 + r() * .2)); p.fillRect(0, k * 205, 1024, 205); p.fillStyle = 'rgba(40,20,10,.4)'; p.fillRect(0, k * 205, 1024, 3); }
+  for (let i = 0; i < 700; i++) { const y = r() * 1024, x0 = r() * 1024, l = 60 + r() * 260; p.strokeStyle = r() < .6 ? 'rgba(50,25,10,.18)' : 'rgba(255,220,170,.1)'; p.lineWidth = 1 + r() * 2;
+    p.beginPath(); p.moveTo(x0, y); p.bezierCurveTo(x0 + l / 3, y + (r() - .5) * 5, x0 + l * 2 / 3, y + (r() - .5) * 5, x0 + l, y); p.stroke(); }
+  return c; })();
+const CUARTO = (() => { const c = lienzo(W, H), p = c.getContext('2d'), g = p.createLinearGradient(0, 0, 0, H * .5);
+  g.addColorStop(0, '#3b2c22'); g.addColorStop(1, '#7a5a40'); p.fillStyle = g; p.fillRect(0, 0, W, H);
+  const lam = p.createRadialGradient(W * .15, H * .12, 20, W * .15, H * .12, 700); lam.addColorStop(0, 'rgba(255,214,150,.75)'); lam.addColorStop(1, 'rgba(255,214,150,0)');
+  p.fillStyle = lam; p.fillRect(0, 0, W, H); return c; })();
+
+// ---------- geometría del libro ----------
+const PW = 3.2, PD = 2.1, BH = 2.35;                // ancho de página, fondo de la página de abajo, alto del fondo
+function cartonLibro() {   // tapas de tela + bloque de hojas (cajas planas)
+  const tapa = caja(0, -.07, PD / 2, PW + .16, .05, PD + .12, COLORES.tapa); tapa.zBias = 1e4;
+  const hojas = caja(0, -.02, PD / 2, PW, .03, PD, '#f3ead6', { porCara: { frente: { dibujo: rayasHojas } } }); hojas.zBias = 1e4 - 1;
+  return [tapa, hojas];
+}
+function rayasHojas(g, f, cam) { g.strokeStyle = 'rgba(120,100,70,.35)'; g.lineWidth = 1;
+  for (let i = 1; i < 4; i++) { const [a, b] = [cam.proy(puntoCara(f, 0, i / 4)), cam.proy(puntoCara(f, 1, i / 4))]; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); } }
+const LIBRO = cartonLibro();
+function esquinasPieza(p, phi) {   // phi: 0 = acostada hacia atrás, π/2 = parada. El doblez es la orilla de abajo.
+  const s = Math.sin(phi), c = Math.cos(phi), x0 = p.x - p.w / 2, x1 = p.x + p.w / 2;
+  return [[x0, p.h * s, p.z - p.h * c], [x1, p.h * s, p.z - p.h * c], [x1, .002, p.z], [x0, .002, p.z]];
+}
+const aSuelo = q => { const k = q[1] / L[1]; return [q[0] - L[0] * k, .003, q[2] - L[2] * k]; };
+
+// ---------- cámara: baja desde la altura de la persona hasta la escala del libro, luego empuja a la tienda ----------
+function camaraEn(t) {
+  const k = ease(prog(t, 0, 2.1)), m = ease(prog(t, 2.1, DUR));
+  return camara({ objetivo: [lerp(0, .05, m), lerp(.5, .78, k), lerp(.9, .75, k)], az: lerp(-.2, .05, k) + m * .1, el: lerp(.8, .3, k) - m * .03,
+    dist: lerp(8.5, 6.6, k) - m * .6, fov: 32, cy: lerp(1000, 1130, k) + m * 40 });
+}
+
+// ---------- texto: tinta café, relleno crema, contorno grueso (como los subtítulos del libro) ----------
+const AJ_A = autoajuste(ARRIBA, LETRA_CUENTO, 'italic 700', 900, 1, 84, 44);
+const AJ_K = autoajuste(CLAVE, LETRA_GORDA, 700, 940, 1, 230, 90);
+const PAL_A = (() => { const ws = ARRIBA.split(' '), esp = medir(' ', AJ_A.font), tot = ws.reduce((a, w) => a + medir(w, AJ_A.font), 0) + esp * (ws.length - 1);
+  let x = W / 2 - tot / 2; return ws.map((w, i) => { const o = { w, x, t: .7 + i * .16 }; x += medir(w, AJ_A.font) + esp; return o; }); })();
+function letrasContorno(txt, x, y, font, fillCol, lw) {
+  ctx.font = font; ctx.lineJoin = 'round'; ctx.lineWidth = lw; ctx.strokeStyle = TINTA; ctx.strokeText(txt, x, y + lw * .25);   // canto de papel
+  ctx.strokeText(txt, x, y); ctx.fillStyle = fillCol; ctx.fillText(txt, x, y);
+}
+function textos(t) {
+  ctx.save(); ctx.textBaseline = 'alphabetic';
+  const yA = 300 + AJ_A.size;
+  for (const p of PAL_A) if (t >= p.t) letrasContorno(p.w, p.x, yA, AJ_A.font, '#fff7e6', 14);
+  if (t >= T_TIENDA) { ctx.textAlign = 'center'; letrasContorno(CLAVE, W / 2, yA + 40 + AJ_K.size * .9, AJ_K.font, COLORES.toldo, 22); }
+  ctx.restore();
+}
+// globo de diálogo: tarjeta de papel con cola hacia la tienda; el texto se escribe letra por letra
+const T_GLOBO = T_TIENDA + .9;
+function globo(t, cam) {
+  if (t < T_GLOBO) return;
+  const n = Math.min(BURBUJA.length, Math.floor((t - T_GLOBO - .15) * 22) + 1), punta = cam.proy([.5, 1.2, .88]);
+  const aj = autoajuste(BURBUJA, LETRA_GORDA, 700, 600, 1, 62, 36), w = medir(BURBUJA, aj.font) + 90, h = aj.size + 76;
+  const x = clamp(punta[0] - w * .3, SEGURA.left, SEGURA.right - w), y = Math.max(punta[1] - h - 70, 300 + AJ_A.size + 70 + AJ_K.size);
+  ctx.save(); ctx.fillStyle = 'rgba(60,40,30,.22)'; ctx.beginPath(); ctx.roundRect(x + 10, y + 14, w, h, 30); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 30); ctx.moveTo(x + w * .3 - 26, y + h - 2); ctx.lineTo(punta[0], punta[1] - 20); ctx.lineTo(x + w * .3 + 26, y + h - 2);
+  ctx.fillStyle = '#fffdf6'; ctx.fill(); ctx.strokeStyle = TINTA; ctx.lineWidth = 8; ctx.lineJoin = 'round'; ctx.stroke();
+  ctx.fillStyle = '#fffdf6'; ctx.fillRect(x + w * .3 - 22, y + h - 10, 44, 12);
+  ctx.font = aj.font; ctx.fillStyle = TINTA; ctx.textBaseline = 'middle'; ctx.fillText(BURBUJA.slice(0, Math.max(0, n)), x + 45, y + h / 2 + 3);
+  ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const cam = camaraEn(t);
+  // el cuarto real, con la lente macro: todo lo que no es el libro queda suave
+  ctx.drawImage(CUARTO, 0, 0);
+  planoImagen(ctx, cam, MADERA, [[-14, -.1, -12], [14, -.1, -12], [14, -.1, 4.2], [-14, -.1, 4.2]], { tiras: 36 });
+  bandaEnfoque(ctx, cam.proy([0, 0, 1])[1], 30, 22, { pasos: 4, rampa: 800 });
+  render3d(ctx, cam, LIBRO, { luz: L, amb: .62, dif: .45, sombras: { alpha: .45, blur: 26, col: '#1c120c', ySuelo: -.1 } });
+  // la página de abajo (el suelo del cuento)
+  planoImagen(ctx, cam, PAGINA, [[-PW / 2, 0, 0], [PW / 2, 0, 0], [PW / 2, 0, PD], [-PW / 2, 0, PD]], { tiras: 30 });
+  // el fondo del libro: se para desde el doblez
+  const th = lerp(.55, Math.PI / 2 + .04, aterriza(prog(t, ABRE, ABRE + .5)));
+  planoImagen(ctx, cam, CIELO, [[-PW / 2, BH * Math.sin(th), -BH * Math.cos(th)], [PW / 2, BH * Math.sin(th), -BH * Math.cos(th)], [PW / 2, 0, 0], [-PW / 2, 0, 0]], { tiras: 30 });
+  // sombras con la silueta de cada recorte, sobre la página
+  const sombras = _capaSombra(); const sx = sombras.getContext('2d'); sx.setTransform(1, 0, 0, 1, 0, 0); sx.clearRect(0, 0, W, H);
+  const fases = PIEZAS.map(p => lerp(p.adelante ? Math.PI - .05 : .06, Math.PI / 2, aterriza(prog(t, p.t0, p.t0 + p.dur))));   // las de atrás se paran desde acostadas; las de adelante, desde boca abajo
+  PIEZAS.forEach((p, i) => planoImagen(sx, cam, p.sil, esquinasPieza(p, fases[i]).map(aSuelo), { tiras: 10 }));
+  ctx.save(); ctx.beginPath(); trazarPoli(ctx, [[-PW / 2, 0, 0], [PW / 2, 0, 0], [PW / 2, 0, PD], [-PW / 2, 0, PD]].map(q => cam.proy(q))); ctx.clip();
+  ctx.globalAlpha = .28; ctx.filter = 'blur(5px)'; ctx.drawImage(sombras, 0, 0); ctx.restore();
+  // las piezas, de atrás hacia adelante
+  PIEZAS.forEach((p, i) => planoImagen(ctx, cam, Math.cos(fases[i]) < -.02 ? p.dorso : p.img, esquinasPieza(p, fases[i]), { tiras: 22 }));
+  // luz de lámpara cálida + viñeta
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; const lg = ctx.createRadialGradient(W * .2, H * .25, 50, W * .5, H * .5, 1300);
+  lg.addColorStop(0, 'rgba(255,220,160,.55)'); lg.addColorStop(1, 'rgba(40,20,10,.55)'); ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H); ctx.restore();
+  textos(t); globo(t, cam);
+});
+let _CS; function _capaSombra() { return _CS || (_CS = lienzo(W, H)); }
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: ABRE, tipo: 'golpe' }, ...PIEZAS.map(p => ({ t: +(p.t0 + p.dur * .6).toFixed(2), tipo: 'papel' })),
+  { t: +T_TIENDA.toFixed(2), tipo: 'pop' }, { t: +T_GLOBO.toFixed(2), tipo: 'pop' }];
+</script>
+</body>
+</html>

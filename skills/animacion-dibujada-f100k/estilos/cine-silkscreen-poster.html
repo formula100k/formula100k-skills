@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Póster serigrafiado</title>
+<style>
+  html,body{margin:0;background:#2a2520;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Póster serigrafiado» · ingeniería inversa de lemo-opuscar/styles/silkscreen-poster (MIT, © 2026 LemoLab) · qué se tomó: cada color es una tinta opaca de su propia pasada de rasero (lineal, con frente áspero, hoja y cordón de tinta), sin degradados (bandas escalonadas que se adelgazan), registro corrido 1–3 px con fantasma de sobreimpresión, filo de grosor de tinta, brillo húmedo que se seca, papel como color y banda de datos impresa al final.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'tu oferta está lista:';   // impreso en el cielo, espaciado (máx. ~24 letras)
+const TITULO_GRANDE = 'LÁNZALA';                // el titular condensado, enorme (máx. ~9 letras)
+const NOMBRE = 'TU LANZAMIENTO';                // la banda de datos de abajo
+const DATOS = [['PASO 1', 'GUION'], ['PASO 2', 'REEL'], ['PASO 3', 'VENTA']];   // 2–4 columnas (etiqueta, valor). SOLO cifras del guion
+const TINTAS = {             // ≤ 6 tintas por papel: cielo claro → cerca oscuro, y UN acento
+  cielo1: '#F6CD98', cielo2: '#EE9A73', lejos: '#9A7FA8', medio: '#3E7079', cerca: '#1E3B3F',
+  acento: '#FBE6B4',         // el sol (lo único brillante)
+  papel: '#f3ead6',
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const I = TINTAS, M = 38, BANDA = { y: 1210, h: 260 };
+// cada pasada: [inicio, fin] del rasero (de arriba hacia abajo, a velocidad pareja)
+const T = { medio: [.1, .7], cerca: [.8, 1.35], sol: 1.45, titulo: [1.9, 2.25], chico: 2.4, banda: [2.75, 3.1], datos: 3.25 };
+const PAPEL = papelImpreso(I.papel, { fibras: .7, manchas: 12, viñeta: .08, semilla: 41 });
+const MOTEADO = (() => { const c = mk(), g = c.getContext('2d'), R = rng(8); for (let i = 0; i < 2400; i++) { g.fillStyle = `rgba(243,234,214,${.25 + R() * .5})`; g.fillRect(R() * W, R() * H, 1 + R() * 2.5, 1 + R() * 2.5); }
+  g.filter = 'blur(18px)'; g.globalAlpha = .1; for (let i = 0; i < 40; i++) { g.beginPath(); g.arc(R() * W, R() * H, 30 + R() * 90, 0, 6.283); g.fill(); } g.filter = 'none'; return c; })();
+
+// ---------- formas (un Path2D por tinta; los calados son huecos del camino) ----------
+const cordillera = (y0, pasos, amp, sem) => { const p = new Path2D(); p.moveTo(M, BANDA.y); let x = M; p.lineTo(M, y0); const R = rng(sem);
+  while (x < W - M) { const w = 70 + R() * 90; p.lineTo(x + w * .5, y0 - amp * (.5 + R() * .6)); x += w; p.lineTo(Math.min(x, W - M), y0 - R() * amp * .2); } p.lineTo(W - M, BANDA.y); p.closePath(); return p; };
+const P_LEJOS = cordillera(980, 0, 240, 3);
+const CARA_LUZ = (() => { const p = new Path2D(), R = rng(3); let x = M;                 // la cara iluminada de cada pico: papel con borde dentado
+  while (x < W - M) { const w = 70 + R() * 90, alto = 240 * (.5 + R() * .6); const px = x + w * .5, py = 980 - alto; x += w; R();
+    p.moveTo(px, py); p.lineTo(px - w * .18, py + alto * .28); p.lineTo(px - w * .06, py + alto * .24); p.lineTo(px - w * .2, py + alto * .5); p.lineTo(px, py + alto * .3); p.closePath(); } return p; })();
+const P_MEDIO = (() => { const p = new Path2D(); p.moveTo(M, BANDA.y); for (let x = M; x <= W - M; x += 10) p.lineTo(x, 1070 - Math.sin(x * .007 + 1) * 55 - Math.sin(x * .021) * 14); p.lineTo(W - M, BANDA.y); p.closePath(); return p; })();
+const pino = (p, x, y, h) => { for (let k = 0; k < 5; k++) { const yy = y - h + k * h * .17, w = h * (.1 + k * .07); p.moveTo(x, yy); p.lineTo(x + w, yy + h * .26); p.lineTo(x + w * .4, yy + h * .23); p.lineTo(x - w * .4, yy + h * .23); p.lineTo(x - w, yy + h * .26); p.closePath(); } p.rect(x - 10, y - 30, 20, 40); };
+const P_CERCA = (() => { const p = new Path2D(); p.moveTo(M, BANDA.y); for (let x = M; x <= W - M; x += 10) p.lineTo(x, 1190 - Math.sin(x * .012) * 18); p.lineTo(W - M, BANDA.y); p.closePath();
+  pino(p, 120, 1200, 430); pino(p, 230, 1210, 300); pino(p, 960, 1195, 470); pino(p, 860, 1215, 280); return p; })();
+const SOL = { x: 690, y: 770, r: 118 };
+const P_SOL = (() => { const p = new Path2D(); p.arc(SOL.x, SOL.y, SOL.r, 0, 6.283); return p; })();
+// el degradado prohibido se reemplaza por bandas: color plano, rayas que se adelgazan, el siguiente color
+const P_CIELO2 = (() => { const p = new Path2D(); p.rect(M, 860, W - 2 * M, 420); for (let k = 0; k < 9; k++) { const y = 860 - 22 - k * 34, h = 16 - k * 1.6; p.rect(M, y, W - 2 * M, Math.max(2, h)); } return p; })();
+const P_BANDA = (() => { const p = new Path2D(); p.rect(M, BANDA.y, W - 2 * M, BANDA.h); return p; })();
+
+// ---------- una tinta: fantasma de sobreimpresión, relleno, filo de grosor (claro arriba-izq, oscuro abajo-der) y brillo húmedo ----------
+function tinta(g, path, col, reg, o = {}) {
+  const [rx, ry] = reg; g.save(); g.translate(rx, ry);
+  g.save(); g.globalCompositeOperation = 'multiply'; g.globalAlpha = .28; g.translate(2, 2); g.fillStyle = col; g.fill(path, 'nonzero'); g.restore();
+  g.fillStyle = col; g.fill(path, 'nonzero');
+  g.save(); g.clip(path, 'nonzero'); g.globalAlpha = .55; g.translate(-rx, -ry); g.drawImage(MOTEADO, 0, 0); g.translate(rx, ry); g.globalAlpha = 1;
+  g.translate(2, 2); g.fillStyle = 'rgba(255,255,255,.12)'; g.fill(path, 'nonzero'); g.translate(-4, -4); g.fillStyle = 'rgba(0,0,0,.08)'; g.fill(path, 'nonzero');
+  if (o.brillo > 0) { g.translate(2, 2); const b = g.createLinearGradient(0, o.y - 200, 0, o.y); b.addColorStop(0, 'rgba(255,255,255,0)'); b.addColorStop(1, `rgba(255,255,255,${.22 * o.brillo})`); g.fillStyle = b; g.fillRect(0, o.y - 200, W, 200); }
+  g.restore(); g.restore();
+}
+// frente áspero del rasero: la tinta llega hasta y (con una cola de arrastre de ~30 px)
+function frente(g, y) { g.beginPath(); g.moveTo(0, 0); g.lineTo(W, 0); for (let x = W; x >= 0; x -= 16) g.lineTo(x, y - 14 + vnoise(x * .03, 5) * 28); g.closePath(); }
+function pasada(g, path, col, reg, t, [a, b]) {
+  if (t < a) return; const k = clamp((t - a) / (b - a)), y = lerp(150, H - 300, k);                 // lineal: un rasero no se suaviza
+  g.save(); if (k < 1) { frente(g, y); g.clip(); } tinta(g, path, col, reg, { brillo: 1 - clamp((t - b) / .9), y: k < 1 ? y : H }); g.restore();
+  if (k > 0 && k < 1) rasero(g, y, col);
+}
+// el rasero: hoja de goma, cordón de tinta redondo con su lado iluminado y una astilla de mango
+function rasero(g, y, col) { g.save(); g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(0, y + 6, W, 24);
+  g.fillStyle = col; g.beginPath(); g.roundRect(-10, y - 6, W + 20, 30, 15); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(0, y - 2, W, 6); g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(0, y + 16, W, 6);
+  g.fillStyle = '#2b2b2e'; g.fillRect(-10, y - 30, W + 20, 22); g.fillStyle = '#8a6a48'; g.fillRect(-10, y - 64, W + 20, 34); g.fillStyle = 'rgba(255,255,255,.18)'; g.fillRect(-10, y - 64, W + 20, 6); g.restore(); }
+
+// ---------- letras (las mismas tintas; el titular se imprime en el cielo, la banda al final) ----------
+const COND = '"Avenir Next Condensed", "Futura", Impact, sans-serif', ROT = '"Futura", "Avenir Next", sans-serif';
+const AJ_G = autoajuste(TITULO_GRANDE, COND, 800, W - 2 * M - 80, 1, 330, 120), AJ_C = autoajuste(TITULO_CHICO.toUpperCase().split('').join(' '), ROT, 600, 820, 1, 48, 28);
+const P_TIT = (() => { const c = mk(), g = c.getContext('2d'); g.font = AJ_G.font; g.textAlign = 'center'; g.fillStyle = '#000'; g.fillText(AJ_G.rs[0], W / 2, 330 + AJ_G.size * .85); return c; })();
+const AJ_N = autoajuste(NOMBRE, COND, 800, W - 2 * M - 80, 1, 92, 50);
+
+const SHEET = mk(), sg = SHEET.getContext('2d');
+function textoTinta(g, mascara, col, reg, t, rango) { if (t < rango[0]) return; const k = clamp((t - rango[0]) / (rango[1] - rango[0])), y = lerp(250, 820, k);
+  const tmp = TEXI.tmp(3), x = tmp.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'copy'; x.drawImage(mascara, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = col; x.fillRect(0, 0, W, H);
+  x.globalCompositeOperation = 'source-atop'; x.globalAlpha = .5; x.drawImage(MOTEADO, 0, 0); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+  g.save(); if (k < 1) { frente(g, y); g.clip(); } g.globalCompositeOperation = 'multiply'; g.globalAlpha = .25; g.drawImage(tmp, reg[0] + 2, reg[1] + 2); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.drawImage(tmp, reg[0], reg[1]); g.restore();
+  if (k > 0 && k < 1) rasero(g, y, col); }
+
+arrancar(frame => {
+  const t = frame / FPS;
+  sg.setTransform(1, 0, 0, 1, 0, 0); sg.globalAlpha = 1; sg.globalCompositeOperation = 'source-over'; sg.drawImage(PAPEL, 0, 0);
+  // ya impresas en el cuadro 0: cielo claro, bandas del cielo y la cordillera lejana con su cara de luz en papel
+  tinta(sg, new Path2D(`M${M} ${M}H${W - M}V${BANDA.y}H${M}Z`), I.cielo1, [1, -1]); tinta(sg, P_CIELO2, I.cielo2, [-2, 1]);
+  // el sol: el acento, medio tiempo después de la tinta de su capa (entra seco con su pasada corta)
+  if (t >= T.sol) { sg.save(); frente(sg, lerp(SOL.y - SOL.r, SOL.y + SOL.r + 20, clamp((t - T.sol) / .18))); sg.clip(); tinta(sg, P_SOL, I.acento, [2, 2], { brillo: 1 - clamp((t - T.sol - .18) / .9), y: SOL.y + SOL.r }); sg.restore(); }
+  tinta(sg, P_LEJOS, I.lejos, [-1, 2]); sg.save(); sg.translate(-1, 2); sg.fillStyle = I.cielo1; sg.fill(CARA_LUZ); sg.restore();
+  // pasadas en vivo: medio y cerca (la tinta de después tapa la de antes del todo)
+  pasada(sg, P_MEDIO, I.medio, [2, -1], t, T.medio);
+  pasada(sg, P_CERCA, I.cerca, [-2, -2], t, T.cerca);
+  // titular impreso en el cielo + línea chica espaciada
+  textoTinta(sg, P_TIT, I.cerca, [1.5, 1], t, T.titulo);
+  if (t >= T.chico) { sg.save(); sg.font = AJ_C.font; sg.fillStyle = I.medio; sg.textAlign = 'center'; sg.fillText(AJ_C.rs[0], W / 2 + 1, 310); sg.restore(); }
+  // banda de datos: la última pasada; los datos entran de izquierda a derecha, uno por golpe
+  pasada(sg, P_BANDA, I.cerca, [1, 2], t, T.banda);
+  if (t >= T.banda[1]) { sg.save(); sg.textAlign = 'left'; sg.fillStyle = I.acento; sg.font = AJ_N.font; sg.fillText(NOMBRE, M + 44, BANDA.y + 22 + AJ_N.size * .8);
+    sg.fillStyle = I.cielo2; sg.fillRect(M + 44, BANDA.y + 40 + AJ_N.size * .9, W - 2 * M - 88, 4);
+    const col = (W - 2 * M - 88) / DATOS.length; DATOS.forEach(([et, val], i) => { if (t < T.datos + i * .2) return; const x = M + 44 + i * col;
+      sg.fillStyle = I.cielo2; sg.font = `600 26px ${ROT}`; sg.fillText(et.split('').join(' '), x, BANDA.y + 80 + AJ_N.size * .9); sg.fillStyle = I.papel; sg.font = `800 60px ${COND}`; sg.fillText(val, x, BANDA.y + 142 + AJ_N.size * .9); });
+    sg.restore(); }
+  // cámara: el pliego completo desde arriba, con un acercamiento lento a la banda al final
+  const z = 1 + .03 * ease(prog(t, 3.6, DUR));
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#2a2520'; ctx.fillRect(0, 0, W, H); ctx.setTransform(z, 0, 0, z, W / 2 * (1 - z), 1300 * (1 - z)); ctx.drawImage(SHEET, 0, 0);
+});
+window.SONIDOS = [{ t: .1, tipo: 'desliz' }, { t: .8, tipo: 'desliz' }, { t: 1.45, tipo: 'pop' }, { t: 1.9, tipo: 'desliz' }, { t: 2.75, tipo: 'desliz' }, { t: 3.25, tipo: 'golpe' }, { t: 3.45, tipo: 'golpe' }, { t: 3.65, tipo: 'golpe' }];
+</script>
+</body>
+</html>

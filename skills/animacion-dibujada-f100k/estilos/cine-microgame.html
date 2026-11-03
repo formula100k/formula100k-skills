@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Microjuegos a toda velocidad</title>
+<style>html,body{margin:0;background:#2a0f5c;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Microjuegos a toda velocidad» · ingeniería inversa de lemo-opuscar/styles/microgame (MIT, © 2026 LemoLab) · qué se tomó: una orden gritada + unos segundos + una acción por juego, cada juego dibujado en un MEDIO distinto (crayón con diente de papel, pixel en búfer chico, tipografía suiza con un rojo señal), un escenario fijo con TV dentro del cuadro, vidas, etapa y mecha del tiempo, el juego que se achica de vuelta a la TV con su sello ✓, y todo que se acelera.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const JUEGOS = [                                  // 3 microjuegos: la ORDEN (≤ 10 letras) + lo que se ve en cada medio
+  { orden: '¡ESCRIBE!', texto: 'tu gancho' },     // crayón: se escribe a mano
+  { orden: '¡PUBLICA!', texto: 'PUBLICAR' },      // pixel: el botón del celular
+  { orden: '¡VENDE!', texto: 'VENDIDO' },         // suizo: el sello rojo
+];
+const FRASE = 'escribe publica y vende';          // el remate en el escenario, palabra por palabra
+const PALABRA_CLAVE = 'vende';                    // sale ENORME
+const ETAPA = '03';                               // el número de la etapa (texto libre)
+const COLORES = {                                 // paleta de fiesta del escenario (los medios traen la suya)
+  fondo: '#2a0f5c', rayos: '#3d1a7a', magenta: '#ff2e88', oro: '#ffc928', cian: '#1fd1d1',
+  exito: '#2fd15a', tinta: '#170a2c', papel: '#fff7e8',
+};
+const DUR = 8.5;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — la heroína es una bolita con boina y un punto de oro: se redibuja en cada medio (crayón, pixel, suizo) conservando esas marcas
+const C = COLORES, INK = C.tinta;
+const TV = { x: 110, y: 560, w: 860, h: 640 };                  // la pantalla dentro de la TV
+const PANT = hacerCapa(TV.w, TV.h);
+// tiempos: cada juego más corto que el anterior (se acelera)
+const LARGO = [2.3, 1.9, 1.5], T_J = [0]; LARGO.forEach((l, i) => T_J.push(T_J[i] + l));
+const T_CASA = T_J[3];
+const juegoEn = t => t < T_CASA ? T_J.findIndex((a, i) => t >= a && t < T_J[i + 1]) : -1;
+const fuente = (px) => `900 ${px}px "Arial Rounded MT Bold", "Avenir Next", sans-serif`;
+
+// ---------- heroína en el escenario (y en el tablero de vidas) ----------
+function heroinaCasa(x, y, r, feliz = true) {
+  forma(circle(x, y, r), { relleno: '#ffd9b8', tinta: INK, w: 6, amp: 0, sombra: { col: '#f0b48a', dx: -r * .2, dy: -r * .2 } });
+  forma(resample([[x - r * 1.05, y - r * .55], [x - r * .4, y - r * 1.25], [x + r * .7, y - r * 1.1], [x + r * 1.1, y - r * .6]], 8, true), { relleno: C.magenta, tinta: INK, w: 6, amp: 0 });
+  forma(circle(x + r * .2, y - r * 1.2, r * .16), { relleno: C.magenta, tinta: INK, w: 4, amp: 0 });
+  for (const s of [-1, 1]) { ctx.fillStyle = INK; ctx.beginPath(); ctx.ellipse(x + s * r * .34, y - r * .02, r * .1, r * .16, 0, 0, 7); ctx.fill();
+    ceja(x + s * r * .34, y - r * .32, r * .3, feliz ? 'arriba' : 'plana', s, { col: INK, grosor: 4 }); }
+  boca(x, y + r * .4, r * .5, 'sonrisa', { tinta: INK, grosor: 4 });
+  forma(circle(x + r * .62, y + r * .55, r * .14), { relleno: C.oro, tinta: INK, w: 3, amp: 0 });   // el punto de oro
+}
+
+// ---------- MEDIO 1: crayón sobre papel con diente ----------
+let ANCHO_CRAYON = 0;
+const CRAYON = (() => { const c = hacerCapa(TV.w, TV.h), p = c.getContext('2d'); let tam = 150; p.font = `700 ${tam}px "Chalkboard SE", "Marker Felt", cursive`;
+  while (p.measureText(JUEGOS[0].texto).width > TV.w - 320 && tam > 60) { tam -= 6; p.font = `700 ${tam}px "Chalkboard SE", "Marker Felt", cursive`; }
+  ANCHO_CRAYON = p.measureText(JUEGOS[0].texto).width;
+  p.fillStyle = '#d6336c'; p.textAlign = 'center'; p.fillText(JUEGOS[0].texto, TV.w / 2 + 110, 380);
+  p.globalCompositeOperation = 'destination-out'; const r = rng(4);                         // la presión contra el diente del papel
+  for (let i = 0; i < 26000; i++) { p.globalAlpha = .25 + r() * .7; p.fillRect(r() * TV.w, r() * TV.h, 1 + r() * 3, 1 + r()); }
+  return c; })();
+function medioCrayon(lt, L) {
+  ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0, 0, TV.w, TV.h);
+  const r = rng(9); for (let i = 0; i < 900; i++) { ctx.fillStyle = 'rgba(120,100,70,.08)'; ctx.fillRect(r() * TV.w, r() * TV.h, 2, 2); }
+  WOBBLE = 2.2; ctx.save();
+  for (let k = 0; k < 9; k++) { const a = k / 9 * Math.PI * .5 + Math.PI * .02; ink([[60, 60], [60 + Math.cos(a) * 130, 60 + Math.sin(a) * 130]], { col: '#f2a12a', w: 9, seed: k, amp: 3 }); }
+  ink(circle(60, 60, 44), { col: '#f2a12a', w: 10, closed: true, amp: 3 });
+  for (let x = 0; x < TV.w; x += 26) ink([[x, TV.h - 70], [x + 40, TV.h - 120]], { col: '#3a9a3a', w: 8, seed: x, amp: 2.5, alpha: .8 });
+  // la heroína en crayón: bolita rayada, boina y punto de oro
+  hatch(circle(160, 440, 62), { col: '#e08a5a', gap: 9, w: 4, alpha: .8, angle: -.7 }); ink(circle(160, 440, 62), { col: '#3a2a1a', w: 6, closed: true, amp: 3 });
+  hatch(resample([[96, 410], [130, 360], [200, 366], [226, 404]], 8, true), { col: '#d6336c', gap: 8, w: 5, alpha: .9 });
+  for (const s of [-1, 1]) ink(circle(160 + s * 20, 438, 5), { col: '#3a2a1a', w: 6, closed: true });
+  ink([[146, 466], [160, 474], [176, 466]], { col: '#3a2a1a', w: 5 }); ink(circle(196, 478, 8), { col: '#e0a020', w: 8, closed: true });
+  WOBBLE = 1; ctx.restore();
+  // se escribe solo, de izquierda a derecha, con el crayón flotando en la punta
+  const k = prog(lt, .55, 1.55), x0 = TV.w / 2 + 110 - ANCHO_CRAYON / 2 - 10, x1 = TV.w / 2 + 110 + ANCHO_CRAYON / 2 + 20, xe = lerp(x0, x1, k);
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, xe, TV.h); ctx.clip(); ctx.drawImage(CRAYON, 0, 0); ctx.restore();
+  if (k > 0 && k < 1) herramientaMagica(xe, 330 + Math.sin(lt * 30) * 18, lt, 1, 0, { tipo: 'plumon', col: '#d6336c', punta: '#d6336c', brillo: '255,210,230' });
+}
+// ---------- MEDIO 2: pixel en búfer chico (100×75, cada pixel = 8.6 px) ----------
+const PXG = hacerCapa(100, 75), pq = PXG.getContext('2d');
+function medioPixel(lt) {
+  const p = (x, y, c, w = 1, h = 1) => { pq.fillStyle = c; pq.fillRect(x, y, w, h); };
+  p(0, 0, '#1b2a4a', 100, 75); for (let y = 0; y < 75; y += 2) for (let x = (y / 2) % 2; x < 100; x += 4) p(x, y, '#23365e');
+  // celular
+  p(34, 6, '#0d0d14', 32, 62); p(36, 9, '#e8f1ff', 28, 50); p(46, 62, '#3a3f4e', 8, 3);
+  const apreta = lt >= .75, b = apreta ? 1 : 0;
+  p(39, 40 + b, '#0d0d14', 22, 11); p(40, 41 + b, apreta ? '#ff2e88' : '#ff6aa8', 20, 9 - b);
+  const T = JUEGOS[1].texto.toUpperCase().slice(0, 8);
+  for (let i = 0; i < T.length; i++) p(42 + i * 2, 45 + b, '#fff', 1, 2);                // «texto» del botón (rayitas)
+  // la heroína pixel: bolita 10×10 con boina y punto de oro
+  const hx = 12, hy = 44; p(hx + 2, hy, '#d6336c', 8, 3); p(hx + 7, hy - 1, '#d6336c', 2, 1);
+  p(hx + 1, hy + 3, '#170a2c', 10, 9); p(hx + 2, hy + 3, '#ffd9b8', 8, 8); p(hx + 4, hy + 6, '#170a2c'); p(hx + 7, hy + 6, '#170a2c'); p(hx + 4, hy + 5, '#170a2c', 1, 1); p(hx + 5, hy + 9, '#170a2c', 2, 1); p(hx + 8, hy + 9, '#ffc928');
+  // corazones que suben a 8 cuadros por segundo
+  if (apreta) { const f = Math.floor((lt - .75) * 8); for (let i = 0; i < Math.min(8, f); i++) { const x = 38 + (i * 7) % 26, y = 34 - (f - i) * 3; if (y < 2) continue;
+    p(x, y, '#ff2e88', 2, 1); p(x + 3, y, '#ff2e88', 2, 1); p(x - 1, y + 1, '#ff2e88', 7, 2); p(x, y + 3, '#ff2e88', 5, 1); p(x + 1, y + 4, '#ff2e88', 3, 1); p(x + 2, y + 5, '#ff2e88'); } }
+  ctx.save(); ctx.imageSmoothingEnabled = false; ctx.drawImage(PXG, 0, 0, TV.w, TV.h); ctx.restore();
+}
+// ---------- MEDIO 3: tipografía suiza, retícula estricta, un rojo señal ----------
+function medioSuizo(lt) {
+  ctx.fillStyle = '#f4f4f0'; ctx.fillRect(0, 0, TV.w, TV.h);
+  ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 1; for (let x = 40; x < TV.w; x += 78) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, TV.h); ctx.stroke(); }
+  ctx.fillStyle = '#111'; ctx.font = `700 92px "Helvetica Neue", Helvetica, sans-serif`; ctx.fillText('Oferta', 40, 150); ctx.font = `300 92px "Helvetica Neue", sans-serif`; ctx.fillText('lista.', 40, 245);
+  ctx.font = `500 30px "Helvetica Neue", sans-serif`; ctx.fillText('N.º 01 — a la venta', 40, 300); ctx.fillRect(40, 320, 400, 4);
+  // heroína suiza: círculo + rectángulo (boina) + punto rojo
+  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(160, 470, 70, 0, 7); ctx.fill(); ctx.fillRect(90, 380, 130, 22); ctx.fillStyle = '#e3001b'; ctx.beginPath(); ctx.arc(205, 515, 13, 0, 7); ctx.fill();
+  ctx.fillStyle = '#f4f4f0'; ctx.fillRect(132, 455, 10, 22); ctx.fillRect(178, 455, 10, 22);
+  // el sello rojo cae seco
+  if (lt >= .55) { const s = lerp(1.5, 1, aterriza(prog(lt, .55, .75))); ctx.save(); ctx.translate(590, 430); ctx.scale(s, s); ctx.rotate(-.18);
+    ctx.fillStyle = '#e3001b'; ctx.beginPath(); ctx.arc(0, 0, 170, 0, 7); ctx.fill(); ctx.fillStyle = '#f4f4f0'; ctx.font = `700 64px "Helvetica Neue", sans-serif`; ctx.textAlign = 'center'; ctx.fillText(JUEGOS[2].texto.toUpperCase(), 0, 22); ctx.restore(); }
+}
+
+// ---------- escenario fijo: rayos que giran, marquesina, vidas, etapa, TV y botón ----------
+function escenario(t) {
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  rayos(W / 2, 880, 0, 1500, 18, t * .25, C.rayos);
+  forma(circle(W / 2, 1520, 600, 90), { relleno: C.magenta, tinta: INK, w: 7, amp: 0 });
+  forma(circle(W / 2, 1505, 560, 70), { relleno: '#ff5aa2', tinta: null, amp: 0 });
+  // etapa y vidas (arriba, dentro de la zona segura)
+  forma(roundRect(70, 270, 230, 130, 26), { relleno: C.oro, tinta: INK, w: 7, amp: 0, sombra: { col: '#e0a400', dx: 8, dy: 8 } });
+  textoTinta('ETAPA', 185, 318, { font: fuente(34), relleno: INK, alinear: 'center' }); textoTinta(ETAPA, 185, 384, { font: fuente(68), relleno: '#fff', tinta: INK, grosor: 6, alinear: 'center' });
+  forma(roundRect(560, 270, 450, 130, 26), { relleno: '#24104a', tinta: INK, w: 7, amp: 0 });
+  for (let i = 0; i < 3; i++) heroinaCasa(640 + i * 145, 345, 38);
+  // la TV
+  forma(roundRect(TV.x - 50, TV.y - 50, TV.w + 100, TV.h + 150, 50), { relleno: C.oro, tinta: INK, w: 9, amp: 0, sombra: { col: '#e0a400', dx: -16, dy: -16 } });
+  forma(rect(W / 2 - 120, TV.y + TV.h + 100, 240, 120), { relleno: '#6a2bd6', tinta: INK, w: 8, amp: 0 });
+  for (let i = 0; i < 9; i++) { ctx.fillStyle = INK; ctx.fillRect(TV.x + 40 + i * 22, TV.y + TV.h + 40, 6, 36); }
+  forma(circle(TV.x + TV.w - 60, TV.y + TV.h + 58, 22), { relleno: '#ff5050', tinta: INK, w: 6, amp: 0 }); forma(circle(TV.x + TV.w - 6, TV.y + TV.h + 58, 22), { relleno: C.cian, tinta: INK, w: 6, amp: 0 });
+}
+function mecha(lt, largo) {                     // la mecha del tiempo: la chispa recorre la mecha a ritmo
+  const y = TV.y + TV.h - 26, x0 = 30, x1 = TV.w - 30, k = clamp(lt / (largo * .85));
+  ctx.save(); ctx.strokeStyle = '#5a3a1a'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x0, y - TV.y); ctx.lineTo(lerp(x1, x0, k), y - TV.y); ctx.stroke(); ctx.restore();
+  const sx = lerp(x1, x0, k); estrellaAtomica(sx, y - TV.y, 28, C.oro, lt * 6); estrellaAtomica(sx, y - TV.y, 14, '#fff', -lt * 6);
+}
+function orden(txt, lt, chica) {                 // la orden: entra con corte seco, sesgada, con estallido; después se va a la esquina
+  const k = aterriza(prog(lt, .4, .55)), x = lerp(W / 2, TV.x + 190, k), y = lerp(TV.y + TV.h / 2, TV.y - 78, k), s = lerp(1, .42, k) * (chica || 1);
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(-.07);
+  if (k < .2) explosion(0, 0, 300, 14, { relleno: C.oro, tinta: INK, w: 10, interior: .74, sombra: [14, 14] });
+  const aj = autoajuste(txt, '"Arial Rounded MT Bold", sans-serif', 900, 760, 1, 190, 60);
+  textoTinta(txt, 0, aj.size * .34, { font: aj.font, relleno: '#fff', tinta: INK, grosor: aj.size * .12, sombra: [12, 14, C.magenta], alinear: 'center' });
+  ctx.restore();
+}
+function sello(x, y, r = 66) { const q = r / 66; ctx.save(); ctx.translate(x, y); ctx.scale(q, q); x = 0; y = 0; forma(circle(x, y, 66), { relleno: C.exito, tinta: INK, w: 8, amp: 0, sombra: { col: '#1a9a3a', dx: 8, dy: 8 } });
+  ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 18; ctx.lineCap = ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(x - 30, y + 2); ctx.lineTo(x - 8, y + 26); ctx.lineTo(x + 32, y - 24); ctx.stroke(); ctx.restore(); ctx.restore(); }
+
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2, kConector: .6 });
+PARTES.forEach((q, i) => q.t0 = T_CASA + .3 + i * .28 + (q.clave ? .1 : 0));
+const FR = armarFrase(PARTES, { familia: '"Arial Rounded MT Bold", "Avenir Next", sans-serif', peso: 900, ancho: TV.w - 80, altoMax: TV.h - 120, tamMax: 170, tamMin: 50, y0: TV.y + 90, interlinea: 1.02 });
+
+arrancar(frame => {
+  const t = frame / FPS, j = juegoEn(t);
+  BOIL = Math.floor(t * (j < 0 ? 8 : 8 + j * 4)) % 3;                // el cuadro del personaje también se acelera
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  escenario(t);
+  // la pantalla: el juego de ahora en su medio, o el remate del escenario
+  const pc = PANT.getContext('2d'); pc.setTransform(1, 0, 0, 1, 0, 0);
+  conCtx(pc, () => {
+    if (j === 0) medioCrayon(t - T_J[0]); else if (j === 1) medioPixel(t - T_J[1]); else if (j === 2) medioSuizo(t - T_J[2]);
+    else { ctx.fillStyle = '#170a2c'; ctx.fillRect(0, 0, TV.w, TV.h); rayos(TV.w / 2, TV.h / 2, 0, 900, 16, t * .4, '#2a1450'); }
+    if (j >= 0) mecha(t - T_J[j], LARGO[j]);
+  });
+  // empieza ADENTRO del juego (la TV llena el cuadro) y se aleja hasta el escenario
+  const z = j === 0 ? lerp(W / TV.w * 1.32, 1, aterriza(prog(t, 1.25, 1.6))) : 1;
+  ctx.save(); ctx.translate(TV.x + TV.w / 2, TV.y + TV.h / 2); ctx.scale(z, z); ctx.translate(-(TV.x + TV.w / 2), -(TV.y + TV.h / 2));
+  ctx.drawImage(PANT, TV.x, TV.y); ctx.strokeStyle = INK; ctx.lineWidth = 10; ctx.strokeRect(TV.x, TV.y, TV.w, TV.h);
+  ctx.restore();
+  if (j >= 0) orden(JUEGOS[j].orden, t - T_J[j], z > 1.01 ? 1.25 : 1);
+  // sellos ✓ de los juegos ya ganados
+  for (let i = 0; i < 3; i++) if (t >= T_J[i + 1] - .25 && (j === i || j < 0)) { if (j < 0) sello(TV.x + 330 + i * 90, TV.y + TV.h + 58, 36); else sello(TV.x + TV.w - 70, TV.y + TV.h - 80); }
+  if (j < 0) pintarFrase(FR, t, q => textoTinta(q.txt, q.x, q.y, { font: q.font, relleno: q.clave ? C.oro : '#fff', tinta: INK, grosor: Math.max(7, q.size * .1), sombra: [10, 12, C.magenta] }));
+  // botón disparador del escenario
+  const apretado = j >= 0 && (t - T_J[j]) < .12;
+  forma(circle(W / 2, TV.y + TV.h + 250, 150, 44), { relleno: '#3a3f4e', tinta: INK, w: 7, amp: 0 });
+  forma(circle(W / 2, TV.y + TV.h + 225 + (apretado ? 14 : 0), 120, 40), { relleno: '#ff4b4b', tinta: INK, w: 7, amp: 0 });
+});
+window.SONIDOS = [
+  ...T_J.slice(0, 3).map(a => ({ t: +a.toFixed(2), tipo: 'golpe' })), { t: 1.25, tipo: 'swish' },
+  { t: .55, tipo: 'desliz' }, { t: +(T_J[1] + .75).toFixed(2), tipo: 'pop' }, { t: +(T_J[2] + .55).toFixed(2), tipo: 'golpe' },
+  ...T_J.slice(1).map(a => ({ t: +(a - .25).toFixed(2), tipo: 'pop' })), ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })),
+];
+</script>
+</body>
+</html>

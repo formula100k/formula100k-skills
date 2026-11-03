@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Toma larga impresa</title>
+<style>
+  html,body{margin:0;background:#16171b;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Toma larga impresa» · ingeniería inversa de lemo-opuscar/styles/printed-long-take (MIT, © 2026 LemoLab) · qué se tomó: solo tinta, papel y UN rojo; el tono se corta (cielo de cortes horizontales que se talla desde el horizonte, montañas facetadas con cortes por la línea de caída, bosque en tinta, nieve en papel con pocas marcas), capas reales en profundidad que se deslizan en una sola toma continua (2.5D), la plancha de tipos colgada en el cielo y el rojo que despierta.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'tu clienta ideal';       // línea chica de la plancha del cielo (máx. ~20 letras)
+const TITULO_GRANDE = 'TE BUSCA';              // la palabra clave, enorme (máx. ~9 letras)
+const COLORES = {
+  tinta: '#16171b', papel: '#ede5cd',
+  rojo: '#c4332b',      // el único rojo: la lámpara de la cabaña (un solo sujeto)
+  amarillo: '#dfa443',  // solo luz: los cortes del amanecer
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const C = COLORES, HZ = 1010, VP = { x: W / 2, y: HZ };
+const T = { cielo: [-.9, 1.2], plancha: 1.5, chico: 1.5, grande: 1.85, rojo: [1.1, 1.6] };
+const nb = () => { const c = mk(), g = c.getContext('2d'); return [c, g]; };
+const corte = (g, pts, w, col, sem) => rellenarTrazo(g, pts, perfilGubia(pts.length, w, sem, .15, .55), col, 1);   // marca de cuchillo: entrada roma, salida en punta
+
+// ---------- cielo (espacio de dirección: no se desliza con la cámara): campo de tinta con cortes de papel en filas ----------
+const FILAS = []; for (let y = HZ - 8, k = 0; y > 0; k++) { const d = (HZ - y) / HZ, gap = 9 + d * 26, w = Math.max(1.2, 7.5 * (1 - d) * (1 - d) + 1); FILAS.push({ y, w, k, amar: d < .12 }); y -= gap; }
+const CIELO = FILAS.map(f => { const segs = [], R = rng(f.k * 7 + 3); let x = -20; while (x < W + 20) { const L = 60 + R() * 260; const pts = []; for (let u = 0; u <= L; u += 10) pts.push([x + u, f.y + Math.sin((x + u) * .004 + f.k) * 1.5]); segs.push(pts); x += L + 6 + R() * 30 * (1 - f.w / 9); } return { ...f, segs }; });
+
+// ---------- capas del mundo (cada marca fija en su capa: las líneas nunca «nadan») ----------
+// montañas facetadas: cara iluminada (luz de la izquierda) = papel con pocos cortes de tinta junto al terminador; cara en sombra = tinta con cortes de papel por la línea de caída
+const [MONTES, mg] = nb();
+const PICOS = [[200, 720, 300], [470, 660, 360], [760, 700, 330], [1000, 750, 280]];
+for (const [px, py, r] of PICOS) { const base = HZ - 30, L = [px - r, base], Rr = [px + r * .95, base], sx = px + r * .08;
+  mg.fillStyle = C.papel; mg.beginPath(); mg.moveTo(px, py); mg.lineTo(L[0], L[1]); mg.lineTo(sx, base); mg.closePath(); mg.fill();
+  mg.fillStyle = C.tinta; mg.beginPath(); mg.moveTo(px, py); mg.lineTo(sx, base); mg.lineTo(Rr[0], Rr[1]); mg.closePath(); mg.fill();
+  for (let i = 1; i < 16; i++) { const u = i / 16, x0 = lerp(px, Rr[0], u * .9), y0 = lerp(py, Rr[1], u * .9); corte(mg, resample([[x0 - 6, y0 + 8], [lerp(x0, sx + (x0 - px) * .2, .7), base - 6]], 10), 4.5 - u * 2, C.papel, i + px); }
+  for (let i = 1; i < 6; i++) { const u = i / 6, x0 = lerp(px, sx, u * .3) - 4, y0 = lerp(py, base, u * .3); corte(mg, resample([[x0, y0 + 20], [x0 - 18, y0 + 150 + i * 20]], 10), 2.6, C.tinta, i * 3 + px); }
+  mg.strokeStyle = C.tinta; mg.lineWidth = 2.4; mg.beginPath(); mg.moveTo(L[0], L[1]); mg.lineTo(px, py); mg.stroke(); }
+// bosque: banda de tinta sólida con puntas de pino
+const [BOSQUE, bg] = nb(); bg.fillStyle = C.tinta; bg.beginPath(); bg.moveTo(0, HZ + 60);
+for (let x = 0; x <= W; x += 18) { const h = 30 + hash2(x, 2) * 50; bg.lineTo(x, HZ - 10 - h); bg.lineTo(x + 9, HZ - 10); } bg.lineTo(W, HZ + 60); bg.fill();
+// campo nevado: papel con marcas sueltas e irregulares + el lago de tinta con ondas cortadas + la cabaña
+const [CAMPO, cg] = nb(); cg.fillStyle = C.papel; cg.fillRect(0, HZ + 40, W, H);
+{ const R = rng(11); for (let i = 0; i < 110; i++) { const y = HZ + 60 + Math.pow(R(), 1.6) * 900, x = R() * W, L = 20 + (y - HZ) * .12 * R(); corte(cg, resample([[x, y], [x + L, y + R() * 3]], 6), 1.5 + (y - HZ) * .006, C.tinta, i); } }
+cg.fillStyle = C.tinta; cg.beginPath(); cg.ellipse(W * .36, HZ + 200, 430, 70, 0, 0, 6.283); cg.fill();
+{ const R = rng(19); for (let i = 0; i < 70; i++) { const a = R() * 6.283, rr = Math.sqrt(R()), x = W * .36 + Math.cos(a) * 400 * rr, y = HZ + 200 + Math.sin(a) * 58 * rr; corte(cg, resample([[x, y], [x + 18 + R() * 30, y]], 6), 2.6, C.papel, i + 40); } }
+const CAB = { x: 760, y: HZ + 150 };
+cg.fillStyle = C.tinta; cg.fillRect(CAB.x - 70, CAB.y - 70, 140, 80); cg.beginPath(); cg.moveTo(CAB.x - 95, CAB.y - 66); cg.lineTo(CAB.x, CAB.y - 150); cg.lineTo(CAB.x + 95, CAB.y - 66); cg.fill();
+cg.fillStyle = C.papel; cg.beginPath(); cg.moveTo(CAB.x - 95, CAB.y - 66); cg.lineTo(CAB.x, CAB.y - 150); cg.lineTo(CAB.x + 95, CAB.y - 66); cg.lineTo(CAB.x + 80, CAB.y - 80); cg.lineTo(CAB.x, CAB.y - 132); cg.lineTo(CAB.x - 80, CAB.y - 80); cg.closePath(); cg.fill();   // nieve en el techo
+for (let i = 0; i < 5; i++) corte(cg, resample([[CAB.x + 10, CAB.y - 55 + i * 12], [CAB.x + 62, CAB.y - 55 + i * 12]], 6), 2.2, C.papel, i + 70);              // cortes de la pared en sombra
+// primer plano: postes de cerca con su gorro de nieve (pasan rápido con la cámara)
+const [CERCA, fg] = nb();
+for (const [x, y, h, w] of [[70, 1600, 520, 34], [260, 1560, 380, 26], [860, 1570, 420, 28], [1020, 1620, 560, 36]]) { fg.fillStyle = C.tinta; fg.fillRect(x - w / 2, y - h, w, h + 400);
+  fg.fillStyle = C.papel; fg.beginPath(); fg.ellipse(x, y - h, w * .75, w * .32, 0, Math.PI, 0); fg.fill(); for (let i = 0; i < 4; i++) corte(fg, resample([[x - w / 2 + 4, y - h + 40 + i * 70], [x - w / 2 + 4, y - h + 90 + i * 70]], 6), 3, C.papel, x + i); }
+fg.strokeStyle = C.tinta; fg.lineWidth = 6; fg.beginPath(); fg.moveTo(70, 1300); fg.lineTo(260, 1290); fg.moveTo(860, 1290); fg.lineTo(1020, 1300); fg.stroke();
+const CAPAS = [[MONTES, 12], [BOSQUE, 8], [CAMPO, 4.2], [CERCA, 1.6]];
+
+// ---------- la plancha de tipos colgada en el cielo: bloque de tinta con letras de papel, cortadas de izquierda a derecha ----------
+const FT = '"Baskerville", "Big Caslon", Georgia, serif';
+const AJ_G = autoajuste(TITULO_GRANDE, FT, 800, 860, 1, 160, 90), AJ_C = autoajuste(TITULO_CHICO, FT, 700, 700, 1, 64, 34);
+const PL = { x: 70, y: 262, w: Math.max(medir(AJ_G.rs[0], AJ_G.font), medir(AJ_C.rs[0], AJ_C.font)) + 90 }; PL.h = AJ_C.size * 1.4 + AJ_G.size * 1.02 + 60;
+function letras(aj, x, y, t0, paso) { const out = []; let px = x; for (const ch of aj.rs[0]) { out.push({ ch, x: px, y, f: aj.font, t: t0 + out.length * paso }); px += medir(ch, aj.font); } return out; }
+const LETRAS = [...letras(AJ_C, PL.x + 44, PL.y + 26 + AJ_C.size, T.chico, .03), ...letras(AJ_G, PL.x + 40, PL.y + PL.h - 34, T.grande, .07)];
+function plancha(g, t) { if (t < T.plancha) return;
+  g.fillStyle = C.tinta; g.fillRect(PL.x, PL.y, PL.w, PL.h); g.strokeStyle = C.papel; g.lineWidth = 3; g.strokeRect(PL.x + 12, PL.y + 12, PL.w - 24, PL.h - 24);
+  g.fillStyle = C.papel; g.textBaseline = 'alphabetic'; for (const l of LETRAS) if (t >= l.t) { g.font = l.f; g.fillText(l.ch, l.x, l.y);
+    if (t < l.t + .1) for (let i = 0; i < 3; i++) g.fillRect(l.x + medir(l.ch, l.f) + 2 + i * 5, l.y - 20 - i * 9, 3, 3); } }   // astillas en el cuchillo
+
+// pase de impresión: fibra del papel, manchitas grises arriba que respiran a 12 Hz (suave), viñeta clara
+const FIBRA = (() => { const c = mk(), g = c.getContext('2d'); fibrasEn(g, 2600, '#f6efdc', .12, .8, 5); fibrasEn(g, 900, '#16171b', .05, .8, 6); return c; })();
+const MANCHAS = [0, 1].map(k => { const c = mk(), g = c.getContext('2d'), R = rng(40 + k); g.filter = 'blur(40px)'; for (let i = 0; i < 12; i++) { g.fillStyle = 'rgba(60,55,50,.05)'; g.beginPath(); g.arc(R() * W, R() * 700, 60 + R() * 140, 0, 6.283); g.fill(); } g.filter = 'none'; return c; });
+
+arrancar(frame => {
+  const t = frame / FPS;
+  // la toma: empuje largo que baja un poco y frena al final (sin rebote)
+  const avance = ease(prog(t, 0, DUR - .3)), camZ = .1 + .95 * avance, baja = 60 * avance;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = C.tinta; ctx.fillRect(0, 0, W, H);
+  // cielo tallado desde el horizonte: cada fila aparece corriendo de izquierda a derecha (la más nueva aún corre)
+  const kc = prog(t, ...T.cielo), nFilas = kc * CIELO.length;
+  CIELO.forEach((f, i) => { if (i > nFilas) return; const p = clamp(nFilas - i); for (const s of f.segs) { const x0 = s[0][0]; if (x0 > p * (W + 40) - 20) continue;
+    const vis = s.filter(q => q[0] < p * (W + 40) - 20); if (vis.length > 1) corte(ctx, vis.map(([x, y]) => [x, y + baja * .1]), f.w, f.amar ? C.amarillo : C.papel, i); } });
+  plancha(ctx, t);
+  // capas en profundidad (proyección propia: escala = z / (z − cámara) alrededor del punto de fuga)
+  for (const [cv, z] of CAPAS) { const s = z / (z - camZ); ctx.setTransform(s, 0, 0, s, VP.x - VP.x * s, VP.y - VP.y * s - baja * (1 - 1 / z)); ctx.drawImage(cv, 0, 0);
+    if (cv === CAMPO) { const kr = prog(t, ...T.rojo); if (kr > 0) {                                           // el rojo despierta: la lámpara, tamaño mínimo garantizado
+        const r = Math.max(9, 13 / s) * (kr < 1 ? aterriza(kr) : 1); ctx.fillStyle = C.papel; ctx.beginPath(); ctx.arc(CAB.x - 30, CAB.y - 28, r + 4, 0, 6.283); ctx.fill();
+        ctx.fillStyle = C.rojo; ctx.fillRect(CAB.x - 30 - r, CAB.y - 28 - r, r * 2, r * 2); } } }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(FIBRA, 0, 0); ctx.globalAlpha = .9; ctx.drawImage(MANCHAS[Math.floor(t * 12) % 2], 0, 0); ctx.globalAlpha = 1;
+  viñetaSuave();
+});
+function viñetaSuave() { const v = ctx.createRadialGradient(W / 2, H / 2, W * .45, W / 2, H / 2, H * .7); v.addColorStop(0, 'rgba(22,23,27,0)'); v.addColorStop(1, 'rgba(22,23,27,.18)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); }
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .2, tipo: 'desliz' }, { t: 1.1, tipo: 'pop' }, { t: 1.5, tipo: 'golpe' }, { t: 1.85, tipo: 'papel' }];
+</script>
+</body>
+</html>

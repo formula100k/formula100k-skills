@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Infografía isométrica</title>
+<style>
+  html,body{margin:0;background:#1b1a18;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Infografía isométrica» · ingeniería inversa de lemo-opuscar/styles/iso-infographic (MIT, © 2026 LemoLab) · qué se tomó: proyección isométrica a 30° con tres tonos por cara, maqueta flotante con estratos, pines de rótulo con cifra y unidad, ruta punteada que va delante, corte que destapa el interior con rayado de sección, número Isotype que se acumula y alejada logarítmica a la infografía completa.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'tu contenido es un sistema';        // arriba, al final (máx. ~32 letras)
+const PALABRA_CLAVE = 'sistema';                     // va enorme
+// Las 3 estaciones del recorrido. SOLO cifras del guion (son ejemplos editables).
+const ESTACIONES = [
+  { nombre: 'contenido', cifra: '3', unidad: 'reels' },
+  { nombre: 'regalo', cifra: '1', unidad: 'guía' },
+  { nombre: 'venta', cifra: '1', unidad: 'oferta' },
+];
+const ICONOS = 12;                                   // número Isotype: cuántos cubitos llegan (SOLO cifras del guion)
+const ICONO_DICE = 'cliente';                        // qué es cada cubito (leyenda: «▣ = 1 cliente»)
+const COLORES = {
+  suelo: '#F3EAD7', tablero: '#DCE6C8', tinta: '#2A2230',
+  contenido: '#2E8B8B',   // azul verdoso: lo que publicas
+  regalo: '#E0A930',      // mostaza: el regalo
+  venta: '#3D5A98',       // azul: la tienda
+  cliente: '#E2604F',     // coral reservado: tu cliente (el que se sigue con el anillo)
+  tierra: '#8A5A3B',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const SANS = 'Futura, "Avenir Next", "Helvetica Neue", sans-serif';
+const T = Object.fromEntries(Object.entries(COLORES).map(([k, v]) => [k, tonosIso(v)]));
+const N_T = 12;                                                   // el tablero mide 12 × 12
+const CONT = { x: 1, y: 7, w: 2.2, d: 2.2, h: 3.4 }, REG = { x: 2.6, y: 1.4, w: 2, d: 2, h: 1.5 }, VEN = { x: 7.8, y: 1.6, w: 2.8, d: 2.6, h: 2.3 };
+const RUTA = [[3.6, 8.1], [3.6, 4.2], [4.9, 4.2], [4.9, 3.0], [7.5, 3.0]];
+const RUTA2 = [[8.8, 4.5], [8.8, 5.6]];
+const GRILLA = Array.from({ length: ICONOS }, (_, i) => { const cols = 4; return [7.7 + (i % cols) * .78, 6.0 + Math.floor(i / cols) * .78]; });
+
+// ---------- tiempos ----------
+const T_CORTE = .18, T_PIEL = .5, T_SALE = 1.7, T_LLEGA_REG = 2.9, T_TAPA = 2.9, T_SIGUE = 3.4, T_LLEGA_VEN = 4.7, T_ICONOS = 4.9;
+const PASO_ICONO = .1, T_ALEJA = T_ICONOS + ICONOS * PASO_ICONO + .1, T_TITULO = T_ALEJA + .55;
+
+// ---------- el cliente que se sigue (cubito coral con anillo «estás aquí») ----------
+function cliente(t) {
+  if (t < T_SALE) return [CONT.x + CONT.w + .5, CONT.y + 1.1, 0];
+  if (t < T_LLEGA_REG) return puntoRuta(RUTA.slice(0, 3), ease(prog(t, T_SALE, T_LLEGA_REG)));
+  if (t < T_SIGUE) return [...RUTA[2], 0];
+  return puntoRuta(RUTA.slice(2), ease(prog(t, T_SIGUE, T_LLEGA_VEN)));
+}
+// ---------- cámara: cerca del contenido, sigue al cliente, se queda quieta mientras llegan los cubitos y se aleja ----------
+function cam(t) {
+  const cerca = [CONT.x + 1.6, CONT.y + .2, 1.6], c = cliente(t);
+  if (t < T_SALE) return { p: cerca, k: 96 };
+  if (t < T_LLEGA_VEN) { const e = ease(prog(t, T_SALE, T_SALE + .6)); return { p: [lerp(cerca[0], c[0], e), lerp(cerca[1], c[1], e), lerp(1.6, .6, e)], k: zoomLog(96, 74, ease(prog(t, T_SALE, T_LLEGA_VEN))) }; }
+  const fija = [9.2, 4.6, .6], e1 = ease(prog(t, T_LLEGA_VEN, T_LLEGA_VEN + .5)), ven = [...RUTA.at(-1), 0];
+  const p1 = [lerp(ven[0], fija[0], e1), lerp(ven[1], fija[1], e1), .6];
+  const e2 = ease(prog(t, T_ALEJA, T_ALEJA + 1.1));
+  return { p: [lerp(p1[0], 6, e2), lerp(p1[1], 6, e2), lerp(.6, 0, e2)], k: zoomLog(74, 45, e2), sy: lerp(H / 2, 1010, e2) };
+}
+
+// ---------- fondo: suelo con retícula isométrica de puntos (en pantalla; el tablero lleva la cámara) ----------
+const SUELO = (() => { const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = COLORES.suelo; g.fillRect(0, 0, W, H); g.fillStyle = 'rgba(42,34,48,.09)';
+  for (let j = 0; j < 80; j++) for (let i = 0; i < 40; i++) g.fillRect(i * 30 + (j % 2) * 15, j * 26, 3, 3);
+  return c; })();
+
+function tablero() {
+  const k = ISO.esc, e = .9;                                      // grosor del tablero con estratos
+  ctx.save(); ctx.filter = 'blur(24px)'; ctx.globalAlpha = .22;  // sombra suave del tablero flotante
+  poli([iso(0, 0, -e - 1.4), iso(N_T, 0, -e - 1.4), iso(N_T, N_T, -e - 1.4), iso(0, N_T, -e - 1.4)].map(([x, y]) => [x + k * .5, y + k * .9]), '#3a2f2a'); ctx.restore();
+  const capas = [[0, .18, mezcla(COLORES.tablero, '#5e8a4a', .5)], [.18, .5, COLORES.tierra], [.5, e, mezcla(COLORES.tierra, '#231A2C', .35)]];
+  for (const [a, b, col] of capas) {
+    const tt = tonosIso(col);
+    poli([iso(0, N_T, -a), iso(N_T, N_T, -a), iso(N_T, N_T, -b), iso(0, N_T, -b)], tt.izq);
+    poli([iso(N_T, 0, -a), iso(N_T, N_T, -a), iso(N_T, N_T, -b), iso(N_T, 0, -b)], tt.der);
+  }
+  poli([iso(0, 0, 0), iso(N_T, 0, 0), iso(N_T, N_T, 0), iso(0, N_T, 0)], COLORES.tablero);
+  ctx.fillStyle = 'rgba(42,34,48,.08)';                           // retícula del tablero
+  for (let i = 1; i < N_T; i++) for (let j = 1; j < N_T; j++) { const [x, y] = iso(i, j, 0); ctx.fillRect(x - 1.5, y - 1.5, 3, 3); }
+}
+// plato pálido con borde punteado bajo cada estación (se encuentran en el plano general)
+function plato(x, y, w, d) { const m = .35, P = [iso(x - m, y - m, 0), iso(x + w + m, y - m, 0), iso(x + w + m, y + d + m, 0), iso(x - m, y + d + m, 0)];
+  poli(P, 'rgba(255,250,240,.8)'); ctx.save(); ctx.setLineDash([8, 7]); poli(P, null, COLORES.tinta, 2); ctx.restore(); }
+
+// caja con corte de casa de muñecas: la tapa y la piel de adelante-izquierda se van; quedan los muros con rayado de sección
+function cajaCortada(b, tt, corte, adentro) {
+  const { x, y, w, d, h } = b, g = .16, P = (a, c, z) => iso(x + a, y + c, z);
+  const s = easeOut(prog(corte, .35, 1));                         // la piel se desliza y se apaga
+  if (s < 1) {                                                    // antes del corte: la caja entera (más la línea de corte)
+    if (s <= 0) cajaIso(x, y, 0, w, d, h, tt);
+  }
+  if (s > 0) {
+    poli([P(0, 0, 0), P(w, 0, 0), P(w, d, 0), P(0, d, 0)], tt.arriba);                      // piso
+    poli([P(g, 0, 0), P(g, d, 0), P(g, d, h), P(g, 0, h)], tt.der);                           // muro del fondo (x = 0), cara de adentro
+    poli([P(0, g, 0), P(w, g, 0), P(w, g, h), P(0, g, h)], tt.izq);                           // muro del fondo (y = 0), cara de adentro
+    adentro();
+    poli([P(w, 0, 0), P(w, d, 0), P(w, d, h), P(w, 0, h)], tt.der);                           // muro derecho, entero
+    const rim1 = [P(0, 0, h), P(g, 0, h), P(g, d, h), P(0, d, h)], rim2 = [P(0, 0, h), P(w, 0, h), P(w, g, h), P(0, g, h)], rim3 = [P(w - g, 0, h), P(w, 0, h), P(w, d, h), P(w - g, d, h)];
+    for (const r of [rim1, rim2, rim3]) { poli(r, tt.arriba); rayadoPoli(r, COLORES.tinta, 7, .5); }
+    poli([P(0, d, 0), P(g, d, 0), P(g, d, h), P(0, d, h)], tt.izq); rayadoPoli([P(0, d, 0), P(g, d, 0), P(g, d, h), P(0, d, h)], COLORES.tinta, 7, .5);
+    poli([P(w - g, d, 0), P(w, d, 0), P(w, d, h), P(w - g, d, h)], tt.izq); rayadoPoli([P(w - g, d, 0), P(w, d, 0), P(w, d, h), P(w - g, d, h)], COLORES.tinta, 7, .5);
+    if (s < 1) {                                                  // la piel sale por su normal (+y) y la tapa sube
+      ctx.save(); ctx.globalAlpha = 1 - s; const o = s * 2.2;
+      poli([P(0, d + o, 0), P(w, d + o, 0), P(w, d + o, h), P(0, d + o, h)], tt.izq);
+      poli([P(0, 0, h + o), P(w, 0, h + o), P(w, d, h + o), P(0, d, h + o)], tt.arriba);
+      ctx.restore();
+    }
+  }
+  // línea de corte punteada que se dibuja antes que nada se mueva
+  const lc = prog(corte, 0, .35); if (lc > 0 && s < 1) lineaIso([[x, y + d, h], [x + w, y + d, h], [x + w, y + d, 0]], lc, { guiones: [10, 8], ancho: 3 });
+}
+function pantallitasReel(b) {                                     // adentro del contenido: 3 reels de pie (losas oscuras con ▶)
+  const n = +ESTACIONES[0].cifra || 3, m = Math.min(n, 4);
+  for (let i = 0; i < m; i++) {
+    const x = b.x + .35 + i * (b.w - .6) / Math.max(1, m - 1) * .92, y = b.y + .5, w = .22, d = 1.2, h = 2.1;
+    cajaIso(x, y, 0, w, d, h, tonosIso('#2b2f3a'));
+    const c = iso(x + w, y + d / 2, h / 2), r = ISO.esc * .22;
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(c[0] - r * .35, c[1] - r * .7); ctx.lineTo(c[0] + r * .55, c[1] - r * .05); ctx.lineTo(c[0] - r * .35, c[1] + r * .45); ctx.closePath(); ctx.fill();
+  }
+}
+function regalo(t) {                                              // caja con cinta; la tapa se levanta cuando llega el cliente
+  const { x, y, w, d, h } = REG, tt = T.regalo, cinta = tonosIso('#F4E9D2');
+  const sube = easeOut(prog(t, T_TAPA, T_TAPA + .35)) * .9 * (1 - ease(prog(t, T_SIGUE + .6, T_SIGUE + 1)));
+  const P = (a, c, z) => iso(x + a, y + c, z), q = .15;
+  cajaIso(x, y, 0, w, d, h, tt);
+  poli([P(w / 2 - q, d, 0), P(w / 2 + q, d, 0), P(w / 2 + q, d, h), P(w / 2 - q, d, h)], cinta.izq);    // cinta en la cara izquierda
+  poli([P(w, d / 2 - q, 0), P(w, d / 2 + q, 0), P(w, d / 2 + q, h), P(w, d / 2 - q, h)], cinta.der);    // cinta en la cara derecha
+  const zt = h + sube, X0 = -.1, X1 = w + .1, Y0 = -.1, Y1 = d + .1, L = .4;
+  cajaIso(x + X0, y + Y0, zt, X1 - X0, Y1 - Y0, L, tt);                                                  // tapa
+  poli([P(w / 2 - q, Y1, zt), P(w / 2 + q, Y1, zt), P(w / 2 + q, Y1, zt + L), P(w / 2 - q, Y1, zt + L)], cinta.izq);
+  poli([P(X1, d / 2 - q, zt), P(X1, d / 2 + q, zt), P(X1, d / 2 + q, zt + L), P(X1, d / 2 - q, zt + L)], cinta.der);
+  poli([P(w / 2 - q, Y0, zt + L), P(w / 2 + q, Y0, zt + L), P(w / 2 + q, Y1, zt + L), P(w / 2 - q, Y1, zt + L)], cinta.arriba);
+  poli([P(X0, d / 2 - q, zt + L), P(X1, d / 2 - q, zt + L), P(X1, d / 2 + q, zt + L), P(X0, d / 2 + q, zt + L)], cinta.arriba);
+}
+function tienda(t) {                                              // tienda: cuerpo, toldo a rayas y vidriera
+  const { x, y, w, d, h } = VEN, tt = T.venta;
+  cajaIso(x, y, 0, w, d, h, tt);
+  const P = (a, c, z) => iso(x + a, y + c, z);
+  poli([P(w, .35, .2), P(w, d - .35, .2), P(w, d - .35, h * .62), P(w, .35, h * .62)], mezcla(COLORES.venta, '#cfe3f0', .55));   // vidriera
+  for (let i = 0; i < 6; i++) {                                    // toldo inclinado sobre la vidriera
+    const a = .25 + i * (d - .5) / 6, b2 = a + (d - .5) / 6;
+    poli([P(w, a, h * .78), P(w, b2, h * .78), P(w + .7, b2, h * .6), P(w + .7, a, h * .6)], i % 2 ? '#FFF7E6' : mezcla(COLORES.venta, '#ffffff', .25));
+  }
+  cajaIso(x - .1, y - .1, h, w + .2, d + .2, .25, tonosIso(mezcla(COLORES.venta, '#231A2C', .2)));   // cornisa
+}
+function cubito(x, y, z, s, col) { const tt = tonosIso(col); cajaIso(x - s / 2, y - s / 2, z, s, s, s, tt); }
+
+function escena(t) {
+  tablero();
+  plato(CONT.x, CONT.y, CONT.w, CONT.d); plato(REG.x, REG.y, REG.w, REG.d); plato(VEN.x, VEN.y, VEN.w, VEN.d);
+  // la ruta se dibuja un poco ADELANTE del cliente (nada se mueve sin una línea que lo guíe)
+  const pr1 = prog(t, T_SALE - .35, T_LLEGA_REG - .25), pr2 = prog(t, T_SIGUE - .35, T_LLEGA_VEN - .25);
+  lineaIso(RUTA.slice(0, 3).map(p => [...p, 0]), pr1, { blanco: 'rgba(255,250,240,.9)' });
+  lineaIso(RUTA.slice(2).map(p => [...p, 0]), pr2, { blanco: 'rgba(255,250,240,.9)' });
+  lineaIso(RUTA2.map(p => [...p, 0]), prog(t, T_LLEGA_VEN - .1, T_ICONOS), { blanco: 'rgba(255,250,240,.9)' });
+  // orden de pintor por profundidad (x + y)
+  const cosas = [
+    { z: REG.x + REG.y + 2, f: () => regalo(t) },
+    { z: VEN.x + VEN.y + 2, f: () => tienda(t) },
+    { z: CONT.x + CONT.y + 2, f: () => cajaCortada(CONT, T.contenido, prog(t, T_CORTE, T_PIEL + .35), () => pantallitasReel(CONT)) },
+    ...GRILLA.map(([gx, gy], i) => ({ z: gx + gy, f: () => {       // cubitos que caen (llegan por movimiento, nunca por transparencia)
+      const t0 = T_ICONOS + i * PASO_ICONO; if (t < t0) return;
+      cubito(gx, gy, 2.6 * (1 - aterriza(prog(t, t0, t0 + .22))), .52, COLORES.cliente); } })),
+  ];
+  const c = cliente(t);
+  if (t < T_LLEGA_VEN + .05) cosas.push({ z: c[0] + c[1] + .5, f: () => cubito(c[0], c[1], 0, .55, COLORES.cliente) });
+  cosas.sort((a, b) => a.z - b.z).forEach(o => o.f());
+  // anillo «estás aquí» alrededor del cliente
+  if (t < T_LLEGA_VEN + .05) { const [sx, sy] = iso(c[0], c[1], .3), r = ISO.esc * .75;
+    ctx.save(); ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(sx, sy, r, r * .58, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([6, 8]); ctx.beginPath(); ctx.ellipse(sx, sy, r * 1.35, r * .58 * 1.35, 0, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
+}
+function rotulos(t) {
+  const lejos = prog(t, T_ALEJA, T_ALEJA + 1.1), k = ISO.esc / 74, tit = Math.round(lerp(34, 30, lejos)), cif = Math.round(lerp(76, 62, lejos));
+  const E = ESTACIONES;
+  pinIso(CONT.x + CONT.w / 2, CONT.y, CONT.h, t - .05, { titulo: E[0].nombre, cifra: E[0].cifra, unidad: E[0].unidad, dir: -1, sube: 150 * Math.max(.8, k), largo: 40, tamTit: tit, tamCifra: cif, tinta: COLORES.tinta, familia: SANS });
+  pinIso(REG.x + REG.w / 2, REG.y, REG.h + .5, t - (T_LLEGA_REG - .2), { titulo: E[1].nombre, cifra: E[1].cifra, unidad: E[1].unidad, dir: -1, sube: 175, largo: 40, tamTit: tit, tamCifra: cif, tinta: COLORES.tinta, familia: SANS });
+  pinIso(VEN.x + VEN.w / 2, VEN.y, VEN.h + .25, t - (T_LLEGA_VEN - .3), { titulo: E[2].nombre, cifra: E[2].cifra, unidad: E[2].unidad, dir: 1, sube: 130, largo: 40, tamTit: tit, tamCifra: cif, tinta: COLORES.tinta, familia: SANS });
+  // la cifra Isotype: cuenta mientras caen los cubitos
+  const llegados = clamp(Math.floor((t - T_ICONOS) / PASO_ICONO) + 1, 0, ICONOS);
+  if (llegados > 0) { const g = GRILLA[ICONOS - 1];
+    pinIso(g[0] + .3, g[1] + .3, .5, t - T_ICONOS, { titulo: ICONO_DICE + (ICONOS > 1 ? 's' : ''), cifra: String(llegados), unidad: '', dir: 1, sube: -150, largo: 30, tamTit: tit, tamCifra: cif, tinta: COLORES.tinta, familia: SANS, punto: COLORES.cliente }); }
+}
+// ---------- título y leyenda (al final, cuando la infografía está completa) ----------
+const TIT = fraseDiseno(TITULO.toUpperCase(), PALABRA_CLAVE.toUpperCase(), { familia: SANS, familiaClave: SANS, peso: 600, pesoClave: 800, tam: 56, factor: 2.1,
+  ancho: SEGURA.right - SEGURA.left - 40, x: SEGURA.left + 20, y: 268, maxAlto: 300, maxRenglones: 3, alinear: 'centro' });
+function leyenda(t) {
+  if (t < T_TITULO + .4) return;
+  const x = 150, y = 1350, w = W - 300, h = 96;
+  ctx.fillStyle = '#FFF8EC'; ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(x, y, w, h, 14); ctx.fill(); ctx.stroke();
+  ISO.esc = 30; ISO.ox = 0; ISO.oy = 0; const [a, b] = iso(0, 0, 0); ISO.ox = x + 60 - a; ISO.oy = y + 40 - b; cubito(0, 0, 0, .9, COLORES.cliente);
+  ctx.fillStyle = COLORES.tinta; ctx.font = `500 40px ${SANS}`; ctx.textBaseline = 'middle'; ctx.fillText(`= 1 ${ICONO_DICE}`, x + 120, y + h / 2 + 2);
+  ctx.textAlign = 'right'; ctx.font = `600 22px ${SANS}`; ctx.letterSpacing = '3px'; ctx.fillText('SIN ESCALA', x + w - 28, y + h / 2 + 2); ctx.letterSpacing = '0px'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  pantalla(); ctx.globalAlpha = 1; ctx.drawImage(SUELO, 0, 0);
+  const c = cam(t); camaraIso(c.p[0], c.p[1], c.p[2], c.k, W / 2, c.sy || H / 2);
+  escena(t); rotulos(t);
+  pintarFrase(TIT, t, T_TITULO, .18, { col: COLORES.tinta, colClave: COLORES.cliente });
+  leyenda(t);
+});
+window.SONIDOS = [
+  { t: T_CORTE, tipo: 'papel' }, { t: T_PIEL, tipo: 'desliz' }, { t: T_SALE, tipo: 'swish' }, { t: T_TAPA, tipo: 'pop' },
+  { t: T_LLEGA_VEN, tipo: 'golpe' }, ...GRILLA.map((_, i) => ({ t: +(T_ICONOS + i * PASO_ICONO + .22).toFixed(2), tipo: 'pop' })),
+  { t: T_ALEJA, tipo: 'swish' }, { t: T_TITULO, tipo: 'golpe' },
+];
+</script>
+</body>
+</html>

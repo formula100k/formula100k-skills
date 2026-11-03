@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Isla low-poly</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Isla low-poly» · ingeniería inversa de lemo-opuscar/styles/lowpoly-island (MIT, © 2026 LemoLab) · qué se tomó: cámara ortográfica isométrica sin horizonte (el mar se disuelve en un degradado de cielo), columnas hexagonales con tapa clara y costado oscuro, sombreado plano por faceta, mar facetado que brilla triángulo por triángulo, piezas que suben del agua con anillo de espuma, la luz como reloj (día → atardecer → noche) y ventanas que se encienden una a una.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = 'tu negocio se construye';      // línea chica de arriba (≤ 28 letras)
+const CLAVE = 'pieza a pieza';                 // la línea ENORME (≤ 16 letras)
+const PASOS = [                                // 2 a 4: cada uno llega con una casita (≤ 26 letras)
+  'una idea clara',
+  'una oferta que se entiende',
+  'tu primera venta',
+];
+const COLORES = {
+  arena: '#efd9a7', pasto: '#8fcf7a', roca: '#b9b2a8',
+  techos: ['#ef7a6b', '#6c9bd8', '#f2c45a', '#c58fd6'],   // un techo por casa (se repiten)
+  muros: '#f6efe3',
+  luz: '#ffd27a',       // ventanas y faro de noche (lo único brillante)
+  mar: '#3f8fb5',       // el agua de día
+};
+const DUR = 9;                                 // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const GEO = '"Futura", "Avenir Next", "Gill Sans", sans-serif';
+// ---------- la hora: colores por fotograma clave (cénit, horizonte, mar hondo, mar claro, tinte del mundo) ----------
+const HORAS = [
+  { t: 0, cenit: '#7ec3e8', horiz: '#d9f0f6', hondo: COLORES.mar, claro: '#6fc3d6', tinte: [1, 1, 1], amb: .6, dif: .5 },
+  { t: DUR * .42, cenit: '#7f8fd0', horiz: '#ffc49a', hondo: '#4a6fa3', claro: '#e7a48a', tinte: [1.02, .9, .86], amb: .52, dif: .5 },
+  { t: DUR * .62, cenit: '#1d1f5c', horiz: '#3b3a7e', hondo: '#162a5a', claro: '#2b4a80', tinte: [.56, .57, .86], amb: .55, dif: .35 },
+  { t: DUR, cenit: '#16184e', horiz: '#2e2f70', hondo: '#12244f', claro: '#24427a', tinte: [.52, .54, .84], amb: .55, dif: .3 },
+];
+function hora(t) { let i = 0; while (i < HORAS.length - 2 && t > HORAS[i + 1].t) i++;
+  const a = HORAS[i], b = HORAS[i + 1], k = ease(prog(t, a.t, b.t)), o = {};
+  for (const key of ['cenit', 'horiz', 'hondo', 'claro']) o[key] = mezclaC(a[key], b[key], k);
+  o.tinte = [0, 1, 2].map(j => lerp(a.tinte[j], b.tinte[j], k)); o.amb = lerp(a.amb, b.amb, k); o.dif = lerp(a.dif, b.dif, k);
+  o.noche = clamp(prog(t, HORAS[1].t, HORAS[2].t)); return o; }
+// ---------- la isla: anillos de hexágonos ----------
+const S3 = Math.sqrt(3), TILES = [];
+for (let q = -3; q <= 3; q++) for (let r = -3; r <= 3; r++) { const s = -q - r; if (Math.abs(s) > 3) continue;
+  const anillo = Math.max(Math.abs(q), Math.abs(r), Math.abs(s)), h = hash2(q * 7 + 50, r * 13 + 50);
+  const tipo = anillo === 3 ? (h < .25 ? 'roca' : 'arena') : anillo === 0 ? 'roca' : 'pasto';
+  const alto = tipo === 'arena' ? .35 + h * .1 : tipo === 'roca' ? (anillo === 0 ? 1.25 : .55) : .75 + h * .25;
+  TILES.push({ q, r, anillo, tipo, alto, x: S3 * (q + r / 2), z: 1.5 * r, h, t0: anillo === 0 ? -.12 : .55 + anillo * .38 + h * .3 }); }
+const colTile = { arena: COLORES.arena, pasto: COLORES.pasto, roca: COLORES.roca };
+function tileObj(tl, sube) {
+  const y = lerp(-tl.alto - .6, 0, sube), top = tonoC(colTile[tl.tipo], .96 + tl.h * .08), lado = tonoC(colTile[tl.tipo], .62);
+  return hexCol(tl.x, y - 1.2, tl.z, .96, tl.alto + 1.2, top, lado);   // la columna baja bajo el agua: nunca se ve flotando
+}
+// casas (una por paso), árboles y el faro
+const SITIO_CASA = [[1, -1], [-1, 0], [0, 1], [1, 1]];
+const CASAS = PASOS.map((p, i) => { const [q, r] = SITIO_CASA[i % 4], tl = TILES.find(x => x.q === q && x.r === r);
+  return { tl, col: COLORES.techos[i % COLORES.techos.length], t0: 1.9 + i * Math.min(1.25, (DUR * .55 - 1.9) / PASOS.length), luzT: DUR * .64 + i * .3, i }; });
+const ARBOLES = TILES.filter(t => t.tipo === 'pasto' && !CASAS.some(c => c.tl === t)).slice(0, 9).map((tl, i) => ({ tl, t0: 1.4 + i * .17, pino: i % 3 !== 0 }));
+function ventanaNoche(i) { return (g, f, cam, col) => { if (f.n[1] > .5) return;
+  const enc = clamp(prog(T_ACTUAL, CASAS[i].luzT, CASAS[i].luzT + .12)), c = enc > 0 ? mezclaC(col, COLORES.luz, enc) : tonoC(col, .55);
+  rellenarPoli(g, cuadCara(f, cam, .3, .3, .7, .72), c); }; }
+let T_ACTUAL = 0;
+function casaObj(c, cae) {
+  const tl = c.tl, y0 = tl.alto + lerp(7, 0, cae);
+  const muro = caja(tl.x, y0, tl.z, 1.05, .8, .9, COLORES.muros, { cara: { dibujo: ventanaNoche(c.i) } }); muro.caras[0].dibujo = null;
+  const tec = techo(tl.x, y0 + .8, tl.z, 1.2, .55, 1.05, c.col);
+  tec.caras.forEach(f => f.orden = 1); muro.caras.push(...tec.caras); return muro;
+}
+function arbolObj(a, crece) {
+  const tl = a.tl, k = crece, ox = (a.tl.h - .5) * .6;
+  if (a.pino) { const ob = cono(tl.x + ox, tl.alto, tl.z - .3, .42 * k, 1.3 * k, '#3f9a5c', { lados: 6, fase: a.tl.h * 3 }); return ob; }
+  const ob = cilindro(tl.x + ox, tl.alto, tl.z - .3, .1 * k, .4 * k, '#8a6a4a', { lados: 5 });
+  const copa = cono(tl.x + ox, tl.alto + .3 * k, tl.z - .3, .45 * k, .9 * k, '#5fb36a', { lados: 5, fase: 1 }); ob.caras.push(...copa.caras.map(f => Object.assign(f, { orden: 1 }))); return ob;
+}
+function faroObj(sube) { const c0 = TILES.find(x => x.anillo === 0), b = lerp(-c0.alto - .6, 0, sube) + c0.alto, ob = { caras: [], centro: [0, b + 1.5, 0], sombra: true };
+  for (let k = 0; k < 4; k++) ob.caras.push(...cilindro(0, b + k * .5, 0, .48 - k * .04, .5, k % 2 ? '#f4f0e8' : '#e0574a', { lados: 8, tapa: k === 3 }).caras);
+  const lin = cilindro(0, b + 2, 0, .36, .42, COLORES.luz, { lados: 8 }); lin.caras.forEach(f => { f.orden = 1; f.emite = T_ACTUAL > DUR * .6; if (!f.emite) f.col = '#cfe3ea'; });
+  const tap = cono(0, b + 2.42, 0, .46, .5, '#3d4c6b', { lados: 8 }); tap.caras.forEach(f => f.orden = 2);
+  ob.caras.push(...lin.caras, ...tap.caras); return ob; }
+// ---------- el mar facetado ----------
+const MAR = { n: 36, paso: 1.5 };
+const ola = (x, z, t) => .09 * Math.sin(.8 * x + 1.2 * t) + .07 * Math.sin(.65 * z - 1.0 * t + .3 * x) + .04 * Math.sin(1.7 * (x + z) + 2.1 * t);
+function mar(cam, t, hr, L) {
+  const n = MAR.n, p = MAR.paso, o = -n * p / 2, V = [];
+  for (let i = 0; i <= n; i++) { V[i] = []; for (let j = 0; j <= n; j++) { const x = o + i * p + (hash2(i, j) - .5) * .5, z = o + j * p + (hash2(j, i) - .5) * .5; V[i][j] = [x, ola(x, z, t), z]; } }
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) for (const tri of [[V[i][j], V[i + 1][j], V[i][j + 1]], [V[i + 1][j], V[i + 1][j + 1], V[i][j + 1]]]) {
+    const exa = tri.map(q => [q[0], q[1] * 4, q[2]]), nn = V3.norm(V3.cross(V3.sub(exa[2], exa[0]), V3.sub(exa[1], exa[0])));
+    const c = tri.reduce((a, q) => V3.add(a, q), [0, 0, 0]).map(v => v / 3), d = Math.hypot(c[0], c[2]);
+    const somero = clamp(1 - (d - 4.5) / 3.5), lam = clamp(V3.dot(nn, L) * .5 + .5);
+    let col = mezclaC(hr.hondo, hr.claro, somero * .85);
+    col = tonoC(col, .84 + lam * .3);
+    rellenarPoli(ctx, tri.map(q => cam.proy(q)), col);
+  }
+}
+function espuma(cam, tl, t) {      // anillo de espuma y gotas cuando la pieza rompe la superficie
+  const k = prog(t, tl.t0 + .3, tl.t0 + 1.1); if (k <= 0 || k >= 1) return;
+  const c = cam.proy([tl.x, 0, tl.z]), r = cam.escala * (1 + k * 1.6);
+  ctx.save(); ctx.globalAlpha = (1 - k) * .85; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 7 * (1 - k) + 1.5;
+  ctx.beginPath(); ctx.ellipse(c[0], c[1], r, r * Math.sin(.62), 0, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = '#ffffff'; for (let i = 0; i < 9; i++) { const a = i / 9 * Math.PI * 2 + tl.h * 5, d = r * (.5 + .5 * k), up = Math.sin(k * Math.PI) * 60;
+    ctx.fillRect(c[0] + Math.cos(a) * d * .7, c[1] + Math.sin(a) * d * .35 - up, 7, 7); }
+  ctx.restore();
+}
+// ---------- cámara ortográfica: el zoom es la escala; giro de tornamesa lento ----------
+function camaraEn(t) { const k = easeOut(prog(t, .1, 1.5)), m = ease(prog(t, 1.5, DUR));
+  return camara({ orto: true, objetivo: [0, .6, 0], az: Math.PI / 4 - .25 + m * .55, el: .62, dist: 60, escala: lerp(160, 100, k) - m * 4, cy: 1060 }); }
+// ---------- texto: geométrica en mayúsculas con mucho aire; palabras con corte seco ----------
+// con el espaciado entre letras incluido: se achica hasta que entra en el ancho
+function ajusteEspaciado(txt, peso, ancho, tamMax, tamMin, track) { for (let z = tamMax; z >= tamMin; z -= 2) { const f = `${peso} ${z}px ${GEO}`;
+  if (medir(txt, f) + track * z * (txt.length - 1) <= ancho) return { font: f, size: z, track: track * z }; }
+  console.error(`[autoajuste] «${txt}» no cabe: acórtalo.`); return { font: `${peso} ${tamMin}px ${GEO}`, size: tamMin, track: track * tamMin }; }
+const AJ_A = ajusteEspaciado(ARRIBA.toUpperCase(), 500, 880, 46, 26, .14), AJ_K = ajusteEspaciado(CLAVE.toUpperCase(), 700, 900, 130, 50, .12);
+function espaciado(txt, font, track, x, y, aline = 'center') { ctx.font = font; const chars = [...txt], ws = chars.map(c => medir(c, font)), tot = ws.reduce((a, b) => a + b, 0) + track * (chars.length - 1);
+  let px = aline === 'center' ? x - tot / 2 : x; chars.forEach((c, i) => { ctx.fillText(c, px, y); px += ws[i] + track; }); return tot; }
+const AJ_P = PASOS.map(p => autoajuste(p, GEO, 500, 820, 1, 56, 32));
+function textos(t, hr) {
+  ctx.save(); ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  const claro = hr.noche > .4, tinta = claro ? '#fff6e8' : '#22304f';   // la tinta cambia con corte seco al caer la noche
+  ctx.fillStyle = rgbTxt(tinta);
+  const ws = ARRIBA.toUpperCase().split(' '); let vis = ws.filter((w, i) => t >= .05 + i * .16).join(' ');
+  if (vis) { const full = espaciado(ARRIBA.toUpperCase(), AJ_A.font, AJ_A.track, -9999, -9999); espaciado(vis, AJ_A.font, AJ_A.track, W / 2 - full / 2, 330, 'left'); }
+  if (t >= 1.05) { ctx.fillStyle = claro ? '#ffffff' : '#1a2542';
+    const tot = espaciado(CLAVE.toUpperCase(), AJ_K.font, AJ_K.track, -9999, -9999); espaciado(CLAVE.toUpperCase(), AJ_K.font, AJ_K.track, W / 2, 360 + AJ_K.size);
+    ctx.fillRect(W / 2 - tot * .3, 400 + AJ_K.size, tot * .6, 3); }
+  // subtítulo del paso: sin caja, con una tapita hexagonal del color del techo
+  let i = -1; for (const c of CASAS) if (t >= c.t0 + .55) i = c.i;
+  if (i >= 0) { const aj = AJ_P[i], tw = medir(PASOS[i], aj.font), x = W / 2 - (tw + 70) / 2, y = 1430;
+    ctx.fillStyle = 'rgba(10,20,50,.55)'; ctx.font = aj.font; ctx.fillText(PASOS[i], x + 70 + 3, y + 4);
+    ctx.fillStyle = '#fff6e8'; ctx.fillText(PASOS[i], x + 70, y);
+    ctx.beginPath(); for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + Math.PI / 6; ctx.lineTo(x + 24 + Math.cos(a) * 24, y - aj.size * .35 + Math.sin(a) * 24 * .62); }
+    ctx.closePath(); ctx.fillStyle = CASAS[i].col; ctx.fill(); }
+  ctx.restore();
+}
+const ESTRELLAS = (() => { const r = rng(12), a = []; for (let i = 0; i < 160; i++) a.push([r() * W, r() * H * .5, 1 + r() * 2.4, r() * 6]); return a; })();
+arrancar(frame => {
+  const t = frame / FPS; T_ACTUAL = t;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const hr = hora(t), cam = camaraEn(t), az = Math.PI / 4 - .25, L = V3.norm([-.7, .75, .25]);
+  // cielo sin horizonte
+  const sk = ctx.createLinearGradient(0, 0, 0, H * .62); sk.addColorStop(0, rgbTxt(hr.cenit)); sk.addColorStop(1, rgbTxt(hr.horiz)); ctx.fillStyle = sk; ctx.fillRect(0, 0, W, H);
+  mar(cam, t, hr, L);
+  // bruma: lo lejano se funde en el degradado del cielo
+  const bz = ctx.createLinearGradient(0, 0, 0, H * .55); bz.addColorStop(0, rgbTxt(hr.cenit)); bz.addColorStop(.55, rgbTxt(hr.horiz, .9)); bz.addColorStop(1, rgbTxt(hr.horiz, 0));
+  ctx.fillStyle = bz; ctx.fillRect(0, 0, W, H * .55);
+  if (hr.noche > 0) { ctx.save(); ctx.fillStyle = '#ffffff'; for (const [x, y, s, ph] of ESTRELLAS) { ctx.globalAlpha = hr.noche * (.45 + .35 * Math.sin(t * 2 + ph)); ctx.fillRect(x, y, s, s); } ctx.restore(); }
+  const objs = [];
+  for (const tl of TILES) { const k = aterriza(prog(t, tl.t0, tl.t0 + .55)); if (k <= 0) continue; objs.push(tileObj(tl, k)); }
+  for (const a of ARBOLES) { const k = aterriza(prog(t, a.t0, a.t0 + .35)); if (k > 0) objs.push(arbolObj(a, k)); }
+  for (const c of CASAS) { const k = prog(t, c.t0, c.t0 + .45); if (k > 0) objs.push(casaObj(c, k * k)); }   // cae con aceleración y se queda
+  { const c0 = TILES.find(x => x.anillo === 0); objs.push(faroObj(aterriza(prog(t, c0.t0, c0.t0 + .55)))); }
+  objs.forEach(o => o.cortarY = 0);
+  render3d(ctx, cam, objs, { luz: L, amb: hr.amb, dif: hr.dif, tinte: hr.tinte, sombras: { alpha: .22 * (1 - hr.noche * .6), blur: 2, col: '#1d2a5a', ySuelo: .36 } });
+  for (const tl of TILES) espuma(cam, tl, t);
+  // de noche: el haz del faro barre como aguja de reloj
+  if (hr.noche > .3) { const c = cam.proy([0, TILES[0].alto + 2.2, 0]), a = t * 1.3, len = 900;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = (hr.noche - .3) * .5;
+    const gx = c[0] + Math.cos(a) * len, gy = c[1] + Math.sin(a) * len * .45, gr = ctx.createLinearGradient(c[0], c[1], gx, gy);
+    gr.addColorStop(0, 'rgba(255,220,150,.9)'); gr.addColorStop(1, 'rgba(255,220,150,0)'); ctx.fillStyle = gr;
+    const nx = -Math.sin(a), ny = Math.cos(a) * .45; ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(gx + nx * 90, gy + ny * 90); ctx.lineTo(gx - nx * 90, gy - ny * 90); ctx.closePath(); ctx.fill();
+    const hg = ctx.createRadialGradient(c[0], c[1], 0, c[0], c[1], 70); hg.addColorStop(0, 'rgba(255,225,160,.9)'); hg.addColorStop(1, 'rgba(255,225,160,0)'); ctx.fillStyle = hg; ctx.fillRect(c[0] - 70, c[1] - 70, 140, 140);
+    ctx.restore(); }
+  textos(t, hr);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .5, tipo: 'golpe' }, ...[1, 2, 3].map(a => ({ t: +(.85 + a * .38).toFixed(2), tipo: 'pop' })),
+  ...CASAS.map(c => ({ t: +(c.t0 + .45).toFixed(2), tipo: 'golpe' })), { t: +(DUR * .64).toFixed(2), tipo: 'desliz' }];
+</script>
+</body>
+</html>

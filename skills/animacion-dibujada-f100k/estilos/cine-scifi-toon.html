@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sitcom de ciencia ficción</title>
+<style>html,body{margin:0;background:#1d1424;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Sitcom de ciencia ficción» · ingeniería inversa de lemo-opuscar/styles/scifi-toon (MIT, © 2026 LemoLab) · qué se tomó: línea gruesa morada-negra que hierve a 12 por segundo y no cambia de grosor en el primer plano, relleno plano con sombra dura, ojos blancos enormes con pupila diminuta y párpado pesado, el portal como lo ÚNICO que brilla, dúo de reacciones que no calzan, corte seco al primer plano de reacción y empuje lentísimo en el silencio.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'ni un portal arregla tu oferta';   // el título, palabra por palabra (máx. ~32 letras)
+const PALABRA_CLAVE = 'oferta';                  // sale ENORME
+const ETIQUETA = '> MUNDO 01: SIN CLIENTES';     // la etiqueta de terminal que se escribe sola ('' = sin etiqueta)
+const OBJETO = 'OFERTA';                         // lo que escupe el portal (una palabra corta en la caja, ≤ 8 letras)
+const COLORES = {                                // UNA paleta por mundo (este: laboratorio salvia)
+  pared: '#a5c6a0', pared2: '#bcd6b5', piso: '#6f8f74', mueble: '#d8c99a',
+  portal: '#d66bff', portal2: '#8a2be2', nucleo: '#fbeaff',    // el brillo es SOLO del portal
+  linea: '#1d1424',                              // no cambia entre mundos
+  ella: '#e0a640', pelo: '#3b2347', pielElla: '#c98a63',       // la impasible
+  bicho: '#ff9cc2',                              // la criatura nerviosa (asquerosa y adorable)
+  titulo: '#fff3d6', sombraTitulo: '#ff5fa2',
+};
+const DUR = 8.5;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — sitcom animada para adultos: cuerpo de frijol, mangas de tubo con mitones redondos, ojos blancos enormes; la criatura es una gelatina con antena
+const C = COLORES, L = C.linea, PISO = 1440;
+const T_PORTAL = .25, T_ESCUPE = 2.3, T_CAE = 2.75, T_CORTE = 5.4;
+
+// ---------- mundo: bandas planas de color (todo hierve, también el fondo) ----------
+function mundo() {
+  ctx.fillStyle = C.pared; ctx.fillRect(0, 0, W, H);
+  for (let x = 0; x < W; x += 270) { forma(rect(x + 20, 140, 230, 1080), { relleno: C.pared2, tinta: L, w: 5, seed: x }); }
+  forma(rect(-20, 1000, W + 40, 60), { relleno: '#8fb08a', tinta: L, w: 5, seed: 3 });
+  forma(rect(-20, PISO - 30, W + 40, 600), { relleno: C.piso, tinta: L, w: 6, seed: 4 });
+  for (let x = -40; x < W; x += 180) trazo([[x, PISO + 60], [x + 90, PISO + 60]], { col: L, w: 4, seed: x, alpha: .5 });
+  // basura de laboratorio: un microondas con antena (hardware como cachivache)
+  forma(roundRect(760, 880, 250, 170, 18), { relleno: '#c9cfd6', tinta: L, w: 6, sombra: { col: '#9aa3ad', dx: -18, dy: -12 }, seed: 5 });
+  forma(roundRect(785, 905, 150, 120, 10), { relleno: '#2e3a3f', tinta: L, w: 5, seed: 6 });
+  forma(circle(970, 940, 14), { relleno: '#ff6b6b', tinta: L, w: 4, seed: 7 }); forma(circle(970, 990, 14), { relleno: '#ffd36b', tinta: L, w: 4, seed: 8 });
+  trazo([[880, 880], [930, 790]], { col: L, w: 5 }); forma(circle(932, 786, 12), { relleno: '#ffd36b', tinta: L, w: 4, seed: 9 });
+  // mesada
+  forma(rect(700, 1050, 400, 40), { relleno: C.mueble, tinta: L, w: 6, seed: 10 });
+  forma(rect(720, 1090, 360, 350), { relleno: '#b9ab7f', tinta: L, w: 6, seed: 11, sombra: { col: '#9c8f66', dx: -20, dy: 0 } });
+}
+
+// ---------- el portal: borde con bultos, brazos en espiral que giran, núcleo pálido, chispas (en uno) ----------
+function portal(t, cx, cy, k) {
+  const ab = aterriza(prog(t, T_PORTAL, T_PORTAL + .45)) * (1 + .1 * Math.sin(Math.PI * prog(t, T_PORTAL + .3, T_PORTAL + .7)));
+  if (ab <= 0) return;
+  const rx = 250 * ab * k, ry = 330 * ab * k;
+  ctx.save(); ctx.globalAlpha = .1 * ab; ctx.fillStyle = C.portal; ctx.fillRect(0, 0, W, H); ctx.restore();   // lavado plano sobre la escena
+  for (const [r, a] of [[1.35, .14], [1.18, .2]]) { ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = C.portal; ctx.beginPath(); ctx.ellipse(cx, cy, rx * r, ry * r, 0, 0, 7); ctx.fill(); ctx.restore(); }
+  const borde = []; for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2, n = 1 + (vnoise(Math.cos(a) * 2 + 9, Math.sin(a) * 2 + t * .8) - .5) * .16; borde.push([cx + Math.cos(a) * rx * n, cy + Math.sin(a) * ry * n]); }
+  forma(borde, { relleno: C.portal2, tinta: L, w: 7, amp: 1.7 });
+  ctx.save(); tracePath(borde, true); ctx.clip();
+  const giro = t * 2.4;
+  for (let b = 0; b < 5; b++) { ctx.fillStyle = b % 2 ? C.portal : '#e9a6ff'; ctx.beginPath();
+    for (let i = 0; i <= 40; i++) { const u = i / 40, a = giro + b * Math.PI * 2 / 5 + u * 3.2, rr = (1 - u) * 1.05; ctx.lineTo(cx + Math.cos(a) * rx * rr, cy + Math.sin(a) * ry * rr); }
+    for (let i = 40; i >= 0; i--) { const u = i / 40, a = giro + b * Math.PI * 2 / 5 + u * 3.2 + .35, rr = (1 - u) * 1.05; ctx.lineTo(cx + Math.cos(a) * rx * rr, cy + Math.sin(a) * ry * rr); }
+    ctx.fill(); }
+  ctx.restore();
+  forma(circle(cx, cy + 10 * k, rx * .3, ry * .26), { relleno: C.nucleo, tinta: null, amp: 1.7 });
+  for (let i = 0; i < 3; i++) { const x = cx + (i - 1) * rx * .45, len = (40 + 30 * vnoise(i, t)) * ab * k; forma(roundRect(x - 9 * k, cy + ry * .92, 18 * k, len, 9 * k), { relleno: C.portal2, tinta: L, w: 5 }); }
+  for (let i = 0; i < 7; i++) { const a = t * 1.6 + i * .9, d = 1.15 + .1 * Math.sin(t * 3 + i); estrellaAtomica(cx + Math.cos(a) * rx * d, cy + Math.sin(a) * ry * d, 16 * k, '#fbeaff', a); }
+}
+
+// ---------- la impasible (mira de frente, párpado pesado, ojeras, cejas planas) ----------
+// M(x,y) mapea a pantalla: la línea NO se escala en el primer plano (se redibuja con el mismo grosor)
+function ella(ts, ox, oy, k, o = {}) {
+  const M = pts => pts.map(([x, y]) => [ox + x * k, oy + y * k]), cara = o.soloCara;
+  const resp = 1 + .01 * Math.sin(ts * 2 * Math.PI / 2.4);
+  if (!cara) {
+    forma(M([[-70, -340], [-20, -340], [-22, 0], [-80, 0]]), { relleno: '#2f3b6b', tinta: L, w: 7 });
+    forma(M([[20, -340], [70, -340], [80, 0], [22, 0]]), { relleno: '#2f3b6b', tinta: L, w: 7 });
+    forma(M(roundRect(-100, -24, 90, 34, 16)), { relleno: '#f2f2f2', tinta: L, w: 6 }); forma(M(roundRect(10, -24, 90, 34, 16)), { relleno: '#f2f2f2', tinta: L, w: 6 });
+    const torso = [[-115, -330], [-125, -560], [-80, -650 * resp], [80, -650 * resp], [125, -560], [115, -330]];
+    forma(M(torso), { relleno: C.ella, tinta: L, w: 7, sombra: { col: '#b98328', dx: 26 * k, dy: 0 } });
+    forma(M(roundRect(-60, -690 * resp, 120, 60, 26)), { relleno: C.ella, tinta: L, w: 7 });     // cuello alto
+    // mangas de tubo y mitones; la derecha sostiene el control del portal
+    forma(M([[-118, -600], [-160, -400], [-150, -330], [-118, -340], [-96, -560]]), { relleno: C.ella, tinta: L, w: 7 });
+    forma(M(circle(-146, -318, 26, 28)), { relleno: C.pielElla, tinta: L, w: 6 });
+    forma(M([[118, -600], [190, -470], [170, -440], [100, -540]]), { relleno: C.ella, tinta: L, w: 7 });
+    forma(M(roundRect(166, -560, 54, 96, 12)), { relleno: '#3a3f47', tinta: L, w: 6 }); forma(M(circle(193, -530, 14)), { relleno: '#ff5050', tinta: L, w: 4 });
+    forma(M(circle(180, -452, 28, 26)), { relleno: C.pielElla, tinta: L, w: 6 });
+  }
+  // cabeza: pelo de bola enorme detrás, cara ovalada, orejas, ojos que se tocan
+  const hy = -800;
+  forma(M(circle(0, hy - 60, 175, 150)), { relleno: C.pelo, tinta: L, w: 7, sombra: { col: '#2a1833', dx: 20 * k, dy: 10 * k } });
+  forma(M(circle(-92, hy + 10, 22, 30)), { relleno: C.pielElla, tinta: L, w: 6 }); forma(M(circle(92, hy + 10, 22, 30)), { relleno: C.pielElla, tinta: L, w: 6 });
+  for (const s of [-1, 1]) { const [ax, ay] = M([[s * 96, hy + 48]])[0]; ctx.save(); ctx.strokeStyle = '#ffd36b'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(ax, ay, 16 * k, 0, 7); ctx.stroke(); ctx.restore(); }
+  forma(M(circle(0, hy + 10, 95, 118)), { relleno: C.pielElla, tinta: L, w: 7, sombra: { col: '#a86f4d', dx: 18 * k, dy: 0 } });
+  forma(M(circle(0, hy - 100, 120, 50)), { relleno: C.pelo, tinta: L, w: 7 });                   // flequillo
+  const lento = o.parpadeo || 0, par = lerp(.42, 1, lento);
+  for (const s of [-1, 1]) { const [ex, ey] = M([[s * 38, hy - 8]])[0];
+    ojoGrande(ex, ey, 40 * k, { mira: o.mira || [0, 0], parpado: par, colParpado: C.pielElla, tinta: L, w: 6, pupila: 5 * k, ojera: true });
+    const [bx, by] = M([[s * 40, hy - 62]])[0]; ceja(bx, by, 52 * k, o.ceja || 'plana', s, { col: L, grosor: 8 }); }
+  trazo(M([[4, hy + 30], [16, hy + 48], [2, hy + 54]]), { col: L, w: 5 });                       // nariz
+  if (o.boca === 'abierta') boca(...M([[0, hy + 82]])[0], 60 * k, 'abierta', { tinta: L, grosor: 6, interior: '#3b1d2a', abre: .5 });
+  else trazo(M([[-24, hy + 84], [22, hy + 82]]), { col: L, w: 6 });
+}
+
+// ---------- la criatura nerviosa: gelatina rosa con antena y babita ----------
+function bicho(ts, ox, oy, k, susto) {
+  const M = pts => pts.map(([x, y]) => [ox + x * k, oy + y * k]), sq = .012 * Math.sin(ts * 2 * Math.PI / 1.2);
+  const cuerpo = []; for (let i = 0; i < 40; i++) { const a = i / 40 * Math.PI * 2, r = 1 + .05 * Math.sin(a * 5); cuerpo.push([Math.cos(a) * 120 * r * (1 + sq), -120 + Math.sin(a) * 118 * r * (1 - sq)]); }
+  forma(M(cuerpo.map(([x, y]) => [x, Math.min(y, 0)])), { relleno: C.bicho, tinta: L, w: 7, sombra: { col: '#e5729f', dx: 20 * k, dy: 8 * k } });
+  trazo(M([[10, -232], [24, -300]]), { col: L, w: 6 }); forma(M(circle(26, -306, 16)), { relleno: '#ffe36b', tinta: L, w: 5 });
+  for (const s of [-1, 1]) { const [ex, ey] = M([[s * 44, -150]])[0]; ojoGrande(ex, ey, (susto ? 44 : 36) * k, { mira: [-.6, 0], tinta: L, w: 6, pupila: 4 * k });
+    const [bx, by] = M([[s * 44, -208 - (susto ? 10 : 0)]])[0]; ceja(bx, by, 40 * k, 'triste', s, { col: L, grosor: 7 }); }
+  boca(...M([[0, -78]])[0], 70 * k, 'ondulada', { tinta: L, grosor: 6 });
+  forma(M(roundRect(-4, -76, 12, 34 + 10 * Math.sin(ts * 3), 6)), { relleno: '#bfe9ff', tinta: L, w: 4 });    // babita
+  if (susto) { const [sx, sy] = M([[118, -230]])[0]; forma(resample([[sx, sy - 30], [sx + 16, sy], [sx, sy + 14], [sx - 16, sy]], 6, true), { relleno: '#bfe9ff', tinta: L, w: 4 }); }
+}
+
+// ---------- la caja que escupe el portal (cae con un aplastón) ----------
+function caja(t, cx, cy) {
+  if (t < T_ESCUPE) return;
+  const u = prog(t, T_ESCUPE, T_CAE), x = lerp(cx, 640, u), y = t < T_CAE ? lerp(cy, PISO - 70, u * u) - Math.sin(u * Math.PI) * 160 : PISO - 70;
+  const d = t - T_CAE, sq = t >= T_CAE ? .22 * Math.exp(-d * 6) * Math.cos(d * 22) : -.1;
+  ctx.save(); ctx.translate(x, y + 70); ctx.scale(1 + sq * .6, 1 - sq);
+  forma(roundRect(-120, -150, 240, 150, 10), { relleno: '#e8c38a', tinta: L, w: 7, sombra: { col: '#c99b5c', dx: -24, dy: -10 } });
+  forma(rect(-120, -150, 240, 34), { relleno: '#f3d9a8', tinta: L, w: 6 });
+  ctx.font = `900 46px "Rockwell", "Avenir Next", sans-serif`; ctx.textAlign = 'center'; ctx.fillStyle = L; ctx.fillText(OBJETO.toUpperCase(), 0, -50);
+  ctx.restore();
+}
+
+// ---------- título y etiqueta de terminal ----------
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2, kConector: .6 });
+PARTES.forEach((q, i) => q.t0 = Math.round((.9 + i * .26 + (q.clave ? .15 : 0)) * 12) / 12);
+const FR = armarFrase(PARTES, { familia: '"Rockwell", "Avenir Next", sans-serif', peso: 800, ancho: W - 160, altoMax: 420, tamMax: 150, tamMin: 40, y0: 270, interlinea: 1 });
+function titulo(t) { pintarFrase(FR, t, q => textoTinta(q.txt, q.x, q.y, { font: q.font, relleno: q.clave ? '#ffe36b' : C.titulo, tinta: L, grosor: Math.max(6, q.size * .08), sombra: [q.size * .045, q.size * .055, C.sombraTitulo] })); }
+function terminal(t) {
+  if (!ETIQUETA || t < 3.1) return; const n = Math.min(ETIQUETA.length, Math.floor((t - 3.1) * 22));
+  ctx.save(); const aj = autoajuste(ETIQUETA, 'Menlo, "Courier New", monospace', 700, 560, 1, 38, 22); ctx.font = aj.font; const w = medir(ETIQUETA, ctx.font) + 50, x = W - 70 - w, y = FR.y1 + 30;
+  ctx.fillStyle = '#14221c'; ctx.fillRect(x, y, w, aj.size + 32); ctx.strokeStyle = L; ctx.lineWidth = 6; ctx.strokeRect(x, y, w, aj.size + 32);
+  ctx.fillStyle = '#9dffb0'; ctx.fillText(ETIQUETA.slice(0, n) + (Math.floor(t * 3) % 2 && n < ETIQUETA.length ? '▌' : ''), x + 25, y + aj.size + 8); ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, ts = Math.floor(t * 12) / 12;           // personajes y hervor sobre dos; cámara y portal en uno
+  BOIL = Math.floor(t * 12) % 3; WOBBLE = 1;                       // 3 dibujos de hervor que se repiten
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  if (t < T_CORTE) {
+    mundo();
+    portal(t, 560, 1060, 1);
+    caja(t, 560, 1060);
+    const susto = ts >= T_CAE;
+    ella(ts, 230, PISO, .82, { mira: ts > T_ESCUPE ? [.5, .4] : [.2, 0] });
+    bicho(ts, 900, PISO, .8, susto);
+    titulo(t); terminal(t);
+  } else {
+    // corte seco al primer plano de reacción + empuje lentísimo (silencio): la línea no engorda
+    const z = 3.1 + .18 * ease(prog(t, T_CORTE, DUR));
+    ctx.fillStyle = C.pared; ctx.fillRect(0, 0, W, H);
+    for (let x = -60; x < W; x += 330) forma(rect(x, 140, 270, 1400), { relleno: C.pared2, tinta: L, w: 5, seed: x });
+    ctx.save(); ctx.globalAlpha = .12; ctx.fillStyle = C.portal; ctx.fillRect(0, 0, W, H); ctx.restore();
+    const parp = prog(t, 6.6, 6.85) - prog(t, 6.95, 7.2);              // un parpadeo LENTO: la cara de «obvio»
+    ella(ts, 540, 1050 + 800 * z * .58, z * .58, { soloCara: true, parpadeo: Math.max(0, parp), mira: [0, 0], ceja: 'duda' });
+    titulo(t);
+  }
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_PORTAL, tipo: 'golpe' }, { t: T_PORTAL + .1, tipo: 'swish' },
+  ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })), { t: T_ESCUPE, tipo: 'swish' }, { t: T_CAE, tipo: 'golpe' },
+  { t: 3.1, tipo: 'papel' }, { t: T_CORTE, tipo: 'desliz' },
+];
+</script>
+</body>
+</html>

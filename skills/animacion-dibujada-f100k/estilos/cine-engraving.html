@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Grabado en cobre</title>
+<style>
+  html,body{margin:0;background:#d8ceb8;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Grabado en cobre» · ingeniería inversa de lemo-opuscar/styles/engraving (MIT, © 2026 LemoLab) · qué se tomó: el tono es solo línea (papel = luz, una familia de paralelas = medio tono, una segunda que cruza = sombra, una tercera en rombo = lo más oscuro), cada línea de buril se hincha y se afina, el orden de corte es la animación (contorno → primera trama → cruce → oscuros), lámina con huella de plancha y filete, rótulos con guía, nota en letra script que se escribe y una aguada transparente que florece al final.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'ANATOMÍA DE';            // versalitas romanas, espaciadas (máx. ~16 letras)
+const TITULO_GRANDE = 'TU OFERTA';             // el título grande (máx. ~11 letras)
+const ROTULOS = ['fig. 1 · la promesa', 'fig. 2 · lo que incluye'];   // 2 rótulos con guía (máx. ~24 letras c/u)
+const NOTA = 'lo que nadie te dice';           // nota en script, abajo (máx. ~28 letras)
+const COLORES = {
+  papel: '#f1e8d2', tinta: '#1c1510',
+  aguada: '#b8505e',    // la aguada transparente (rosa granza): solo en el moño y la cinta
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const C = COLORES, PM = { x0: 58, y0: 196, x1: W - 58, y1: 1500 };
+const T = { contorno: [.3, .9], trama1: [.6, 1.5], cruce: [1.3, 2.0], oscuros: [1.8, 2.4], titulo: -.6, rotulos: 3.0, nota: 3.7, aguada: [4.4, 5.6] };
+const PAPEL = (() => { const c = papelImpreso(C.papel, { verjurado: true, semilla: 31, viñeta: .1 }), g = c.getContext('2d');
+  // huella de plancha: el papel prensado queda un poco más liso y oscuro adentro, con bisel
+  g.fillStyle = 'rgba(120,95,60,.06)'; g.fillRect(PM.x0, PM.y0, PM.x1 - PM.x0, PM.y1 - PM.y0);
+  g.strokeStyle = 'rgba(90,70,40,.35)'; g.lineWidth = 3; g.strokeRect(PM.x0, PM.y0, PM.x1 - PM.x0, PM.y1 - PM.y0);
+  g.strokeStyle = 'rgba(255,255,245,.7)'; g.lineWidth = 2; g.strokeRect(PM.x0 + 4, PM.y0 + 4, PM.x1 - PM.x0 - 8, PM.y1 - PM.y0 - 8);
+  const R = rng(3); for (let i = 0; i < 26; i++) { g.fillStyle = `rgba(150,105,50,${.04 + R() * .06})`; g.beginPath(); g.arc(R() * W, R() * H, 2 + R() * 7, 0, 6.283); g.fill(); }   // manchitas de óxido
+  return c; })();
+
+// ---------- geometría del regalo (luz desde arriba a la izquierda) ----------
+const A = [540, 640], B = [820, 750], Cc = [540, 860], D = [260, 750], B2 = [820, 1110], C2 = [540, 1230], D2 = [260, 1110];
+const TOPE = [A, B, Cc, D], IZQ = [D, Cc, C2, D2], DER = [Cc, B, B2, C2];
+const banda = (p, q, p2, q2, u, w) => { const m = (a, b, k) => [lerp(a[0], b[0], k), lerp(a[1], b[1], k)]; return [m(p, q, u - w), m(p, q, u + w), m(p2, q2, u + w), m(p2, q2, u - w)]; };
+const CINTA_I = banda(D, Cc, D2, C2, .5, .09), CINTA_D = banda(Cc, B, C2, B2, .5, .09);
+const CINTA_T1 = banda(D, A, Cc, B, .5, .09), CINTA_T2 = banda(A, B, D, Cc, .5, .09);
+const dentro = (P, [x, y]) => { let s = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) s = !s; } return s; };
+const MONO_L = { cx: 470, cy: 690, rx: 90, ry: 52, rot: -.35 }, MONO_R = { cx: 610, cy: 690, rx: 90, ry: 52, rot: .35 };
+const lazo = m => circle(m.cx, m.cy, m.rx, m.ry, m.rot), dentroElipse = (m, [x, y]) => { const dx = x - m.cx, dy = y - m.cy, c = Math.cos(-m.rot), s = Math.sin(-m.rot), u = dx * c - dy * s, v = dx * s + dy * c; return (u * u) / (m.rx * m.rx) + (v * v) / (m.ry * m.ry) < 1; };
+
+// ---------- trama: familias de paralelas recortadas por la forma (y por lo que tapa: oclusión geométrica) ----------
+const TR = Trazos();
+function rayar(poly, excl, ang, sep, w, t0, t1, o = {}) {
+  const xs = poly.map(p => p[0]), ys = poly.map(p => p[1]), cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2, R = Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) / 2 + 10;
+  const ca = Math.cos(ang), sa = Math.sin(ang), lineas = []; let n = 0;
+  for (let v = -R; v <= R; v += sep, n++) { let seg = [];
+    const cierra = () => { if (seg.length > 3) lineas.push(seg); seg = []; };
+    for (let u = -R; u <= R; u += 4) { const p = [cx + u * ca - v * sa + (vnoise(u * .01, n) - .5) * (o.onda || 0), cy + u * sa + v * ca]; const ok = dentro(poly, p) && !excl.some(e => e(p)) && (!o.donde || o.donde(p));
+      if (ok) seg.push(p); else cierra(); } cierra(); }
+  lineas.forEach((l, i) => { const t = lerp(t0, t1, i / Math.max(1, lineas.length - 1)); TR.agregar('buril', l, w * (o.wf ? o.wf(l[l.length >> 1]) : 1), t, Math.max(.12, l.length * 4 / 2600), { wMin: .25 }); });
+}
+const fuera = P => p => dentro(P, p), enLazo = m => p => dentroElipse(m, p);
+const tapaCinta = [fuera(CINTA_I), fuera(CINTA_D)], tapaCintaT = [fuera(CINTA_T1), fuera(CINTA_T2), enLazo(MONO_L), enLazo(MONO_R)];
+// tope (lo más claro): una sola familia, fina y espaciada
+rayar(TOPE, tapaCintaT, -.38, 16, 1.4, T.trama1[0], T.trama1[0] + .5);
+// cara izquierda (medio tono): una familia que sigue la arista de arriba
+rayar(IZQ, tapaCinta, Math.atan2(Cc[1] - D[1], Cc[0] - D[0]), 11, 2.0, T.trama1[0] + .2, T.trama1[1]);
+// cara derecha (sombra): primera familia + cruce vertical + rombo abajo
+rayar(DER, tapaCinta, Math.atan2(B[1] - Cc[1], B[0] - Cc[0]), 10, 2.3, T.trama1[0] + .3, T.trama1[1]);
+rayar(DER, tapaCinta, Math.PI / 2 + .05, 12, 1.8, ...T.cruce);
+rayar(DER, tapaCinta, .9, 13, 1.3, ...T.oscuros, { donde: p => p[1] > lerp(B[1], C2[1], .45) + (p[0] - 540) * .1 });
+// cintas: claras, con trama a lo largo (una familia) y una sombra cruzada solo en la cara derecha
+rayar(CINTA_I, [], Math.PI / 2, 9, 1.1, T.cruce[0], T.cruce[1]);
+rayar(CINTA_D, [], Math.PI / 2, 9, 1.5, T.cruce[0], T.cruce[1]); rayar(CINTA_D, [], .3, 12, 1.1, ...T.oscuros);
+rayar(CINTA_T1, [enLazo(MONO_L), enLazo(MONO_R)], Math.atan2(B[1] - A[1], B[0] - A[0]), 14, 1, ...T.cruce);
+// el moño: cada lazo con trama que lo envuelve (más oscura abajo: la forma gira lejos de la luz)
+for (const m of [MONO_L, MONO_R]) rayar(lazo(m), [], m.rot + Math.PI / 2, 9, 1.6, ...T.cruce, { onda: 10, wf: p => .6 + clamp((p[1] - m.cy + 40) / 90) });
+// contornos: varias pasadas que se pinzan al traspasarse; más pesados del lado contrario a la luz
+function contorno(P, w, t0, t1) { const pts = resample(P, 6, true), n = pts.length, runs = 3;
+  for (let r = 0; r < runs; r++) { const a = Math.floor(r * n / runs), b = Math.min(n, Math.floor((r + 1) * n / runs) + 3), seg = pts.slice(a, b); if (b >= n) seg.push(pts[0]);
+    const lado = seg[seg.length >> 1], pesa = lado[0] > 540 || lado[1] > 1000 ? 1.35 : .7; TR.agregar('buril', seg, w * pesa, lerp(t0, t1, r / runs), (t1 - t0) / runs * .9, { wMin: .4 }); } }
+contorno([A, B, B2, C2, D2, D], 4.2, ...T.contorno); TR.agregar('buril', [Cc, C2], 3.4, .5, .4); TR.agregar('buril', [D, Cc, B], 2.4, .6, .4);
+for (const P of [CINTA_I, CINTA_D, CINTA_T1, CINTA_T2]) contorno(P, 2.2, .6, 1.2);
+for (const m of [MONO_L, MONO_R]) contorno(lazo(m), 3, .65, 1.15);
+contorno(circle(540, 700, 22), 2.6, .8, 1.1);
+
+// ---------- letras de la lámina ----------
+const ROMANA = '"Bodoni 72", Didot, "Big Caslon", serif', SCRIPT = '"Snell Roundhand", "Bradley Hand", cursive';
+const AJ_C = autoajuste(TITULO_CHICO.split('').join(' '), ROMANA, 400, 700, 1, 46, 30), AJ_G = autoajuste(TITULO_GRANDE, ROMANA, 700, 880, 1, 128, 70);
+const AJ_N = autoajuste(NOTA, SCRIPT, 600, 820, 1, 92, 50);
+function letrasCortadas(aj, y, t0, paso) { const txt = aj.rs[0], w = medir(txt, aj.font); let x = W / 2 - w / 2; const out = [];
+  for (const ch of txt) { out.push({ ch, x, y, f: aj.font, t: t0 + out.length * paso }); x += medir(ch, aj.font); } return out; }
+const TITULOS = [...letrasCortadas(AJ_C, 300, T.titulo, .025), ...letrasCortadas(AJ_G, 300 + 30 + AJ_G.size * .9, .0, .055)];
+const ROT = [{ txt: ROTULOS[0], x: 118, y: 590, a: [450, 680], t: T.rotulos }, { txt: ROTULOS[1], x: 560, y: 1330, a: [720, 1050], t: T.rotulos + .5 }];
+
+// aguada: rosa transparente que florece desde donde tocó el pincel (multiplica bajo la tinta, se derrama un poco)
+function aguada(g, t) { const k = prog(t, ...T.aguada); if (k <= 0) return; g.save(); g.globalCompositeOperation = 'multiply';
+  const zonas = [lazo(MONO_L), lazo(MONO_R), CINTA_I, CINTA_D, CINTA_T1, CINTA_T2];
+  zonas.forEach((z, i) => { const kz = clamp(k * 1.6 - i * .1); if (kz > 0) acuarelaEn(g, z, kz, i); }); g.restore(); }
+function acuarelaEn(g, pts, kz, i) { const vieja = ctx; ctx = g; acuarela(pts, C.aguada, { crece: kz, alpha: .55, borde: 5, orilla: .5, semilla: 7 + i, capas: 3 }); ctx = vieja; }
+
+const TINTA = mk(), tg = TINTA.getContext('2d');
+arrancar(frame => {
+  const t = frame / FPS, z = 1 + .018 * Math.sin(Math.PI * prog(t, 0, DUR)) + .01 * prog(t, 0, DUR);   // lupa casi quieta: respira menos de 2 %
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = C.papel; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(z, 0, 0, z, W / 2 * (1 - z), 900 * (1 - z));
+  ctx.drawImage(PAPEL, 0, 0); aguada(ctx, t);
+  // tinta (siempre encima de la aguada)
+  tg.setTransform(1, 0, 0, 1, 0, 0); tg.clearRect(0, 0, W, H);
+  tg.strokeStyle = C.tinta; tg.lineWidth = 3; tg.strokeRect(PM.x0 + 26, PM.y0 + 26, PM.x1 - PM.x0 - 52, PM.y1 - PM.y0 - 52); tg.lineWidth = .9; tg.strokeRect(PM.x0 + 36, PM.y0 + 36, PM.x1 - PM.x0 - 72, PM.y1 - PM.y0 - 72);   // filete + línea fina
+  TR.dibujar(tg, t, C.tinta);
+  tg.fillStyle = C.tinta; tg.textBaseline = 'alphabetic'; for (const l of TITULOS) if (t >= l.t) { tg.font = l.f; tg.fillText(l.ch, l.x, l.y); }
+  // rótulos: guía de línea fina desde un punto en la pieza hasta el margen, y el rótulo cursiva cortado de una vez
+  tg.font = `italic 400 40px ${ROMANA}`; for (const r of ROT) { const k = prog(t, r.t, r.t + .35); if (k <= 0) continue; const [ax, ay] = r.a, ex = r.x + 150, ey = r.y > 1000 ? r.y - 46 : r.y + 14;
+    tg.beginPath(); tg.arc(ax, ay, 5, 0, 6.283); tg.fill(); tg.lineWidth = 1.1; tg.beginPath(); tg.moveTo(ax, ay); tg.lineTo(lerp(ax, ex, aterriza(k)), lerp(ay, ey, aterriza(k))); tg.stroke();
+    if (k >= 1) { tg.textAlign = 'left'; tg.fillText(r.txt, r.x, r.y); } }
+  // nota en script: se escribe de izquierda a derecha en un trazo
+  const kn = prog(t, T.nota, T.nota + 1.1); if (kn > 0) { const w = medir(AJ_N.rs[0], AJ_N.font); tg.save(); tg.beginPath(); tg.rect(W / 2 - w / 2 - 10, 1360, (w + 30) * kn, 160); tg.clip();
+    tg.font = AJ_N.font; tg.textAlign = 'center'; tg.fillText(AJ_N.rs[0], W / 2, 1440); tg.restore(); }
+  ctx.drawImage(TINTA, 0, 0);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .35, tipo: 'desliz' }, { t: 1.1, tipo: 'desliz' }, { t: 2.3, tipo: 'golpe' }, { t: 3.0, tipo: 'papel' }, { t: 3.7, tipo: 'desliz' }, { t: 4.4, tipo: 'swish' }];
+</script>
+</body>
+</html>

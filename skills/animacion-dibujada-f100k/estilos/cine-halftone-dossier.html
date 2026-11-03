@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Expediente de semitono</title>
+<style>
+  html,body{margin:0;background:#cfc5b0;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Expediente de semitono» · ingeniería inversa de lemo-opuscar/styles/halftone-dossier (MIT, © 2026 LemoLab) · qué se tomó: todo es papel (manchas, viñeta, doblez), el tono son puntos de semitono por campo de densidad en dos tramas que se sobreimprimen, aparato burocrático (número de expediente, regla de estatura, placa), titular negro con sombra fuera de registro, sello que golpea, barra de leyenda con la palabra clave en otra tinta.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const CASO_CHICO = 'el caso de';                // arriba del titular (máx. ~16 letras)
+const CASO_GRANDE = 'TU BIO';                   // el titular, enorme (máx. ~9 letras)
+const SELLO_TXT = 'NO VENDE';                   // el veredicto que golpea (1–2 palabras)
+const LEYENDA = 'nadie entiende *qué vendes*';  // barra de abajo; la clave entre *asteriscos* va en la tinta de realce
+const EXPEDIENTE = 'EXP. 001';                  // número de expediente (de ejemplo, cámbialo)
+const COLORES = {
+  papel: '#f1e8d4', tinta: '#1d2b5c',  // la tinta oscura: contornos, texto y barra
+  trama: '#2f5fd0',                    // puntos del halo
+  sombra: '#ff4f8b',                   // tinta de sobreimpresión (sombras corridas)
+  realce: '#ffd23f',                   // la palabra clave
+  rojo: '#e0352b',                     // solo para el sello
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const C = COLORES, CEN = { x: 560, y: 960 }, T = { halo: [0, .7], letras: .25, sello: 1.45, placa: 2.2, leyenda: 2.7 };
+const PAPEL = (() => { const c = papelImpreso(C.papel, { manchas: 18, viñeta: .2, semilla: 13, fibras: .6 }), g = c.getContext('2d');
+  const d = g.createLinearGradient(W / 2 - 30, 0, W / 2 + 30, 0); d.addColorStop(0, 'rgba(90,70,40,0)'); d.addColorStop(.5, 'rgba(90,70,40,.12)'); d.addColorStop(1, 'rgba(90,70,40,0)'); g.fillStyle = d; g.fillRect(W / 2 - 30, 0, 60, H);   // el doblez
+  // regla de estatura (fondo de la «foto de ficha»)
+  g.strokeStyle = rgba(C.tinta, .35); g.fillStyle = rgba(C.tinta, .55); g.font = '700 26px Menlo, monospace'; g.lineWidth = 2;
+  for (let k = 0; k <= 4; k++) { const y = 1260 - k * 140; g.beginPath(); g.moveTo(80, y); g.lineTo(W - 80, y); g.stroke(); g.fillText(String(k * 20), 84, y - 10); g.fillText(String(k * 20), W - 130, y - 10); }
+  return c; })();
+const MONO = 'Menlo, "Courier New", monospace', SERIF = 'Rockwell, "American Typewriter", Georgia, serif', SANS = '"Avenir Next", "Helvetica Neue", sans-serif';
+// el halo de semitono: dos tramas a distinto ángulo que se sobreimprimen; la densidad florece desde el centro
+function halo(t) { const k = .3 + .7 * aterriza(prog(t, ...T.halo)), pulso = 1 + .03 * Math.sin(t * 2.4);
+  const dens1 = (x, y) => { const d = Math.hypot(x - CEN.x, (y - CEN.y) * .85) / (560 * k * pulso + 1); return clamp(1.05 - d) * .95; };
+  const dens2 = (x, y) => { const d = Math.hypot(x - CEN.x, (y - CEN.y) * .85) / (560 * k + 1); return clamp(1 - Math.abs(d - .85) * 4) * .55 + clamp((Math.abs(x - W / 2) - 380) / 200) * .35; };
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; semitono(ctx, { paso: 22, angulo: .26, k: .66, dens: dens1, col: C.trama, x0: 0, y0: 300, x1: W, y1: 1620 });
+  semitono(ctx, { paso: 24, angulo: .78, k: .6, dens: dens2, col: C.sombra, x0: 0, y0: 300, x1: W, y1: 1620 }); ctx.restore(); }
+
+// la prueba: la tarjeta de perfil (con línea que hierve a ~10 cps: solo en objetos dibujados, nunca en texto ni puntos)
+function prueba(t) { const x = CEN.x - 300, y = CEN.y - 250, w = 600, h = 470; WOBBLE = .9;
+  fill(roundRect(x + 14, y + 16, w, h, 34), rgba(C.sombra, .9), { seed: 3 });                   // sombra corrida en tinta de sobreimpresión
+  fill(roundRect(x, y, w, h, 34), '#fffaf0', { seed: 4 }); ink(roundRect(x, y, w, h, 34), { w: 7, col: C.tinta, seed: 5, passes: 1, amp: 2.2 });
+  fill(circle(x + 120, y + 130, 74), C.sombra, { seed: 6 }); ink(circle(x + 120, y + 130, 74), { w: 7, col: C.tinta, seed: 7, passes: 1 });
+  fill(circle(x + 120, y + 112, 26), '#fffaf0', { seed: 8 }); fill(resample([[x + 70, y + 190], [x + 85, y + 150], [x + 155, y + 150], [x + 170, y + 190]], 8, true), '#fffaf0', { seed: 9 });
+  for (const [yy, ww, col] of [[y + 92, 300, C.tinta], [y + 150, 220, rgba(C.tinta, .35)]]) fill(roundRect(x + 230, yy, ww, 30, 15), col, { seed: yy });
+  for (let i = 0; i < 3; i++) { const yy = y + 260 + i * 50; fill(roundRect(x + 50, yy, [480, 400, 300][i], 22, 11), rgba(C.tinta, .25), { seed: 20 + i }); ink(line(x + 50, yy + 34, x + 50 + [480, 400, 300][i], yy + 34), { w: 2, col: rgba(C.tinta, .25), seed: 30 + i, passes: 1 }); }
+  fill(roundRect(x + 50, y + 400, 170, 40, 20), C.realce, { seed: 40 }); ink(roundRect(x + 50, y + 400, 170, 40, 20), { w: 4, col: C.tinta, seed: 41, passes: 1 });
+  ctx.fillStyle = C.tinta; ctx.font = `700 24px ${MONO}`; ctx.fillText('link', x + 108, y + 428); WOBBLE = 1; }
+
+// titular: cada letra cae 30–100 px y aterriza seco, una tras otra (sin rebote); sombra corrida +8/+8 en tinta de sobreimpresión
+const AJ_G = autoajuste(CASO_GRANDE, SERIF, 800, 900, 1, 230, 100), AJ_C = autoajuste(CASO_CHICO, SANS, 800, 700, 1, 64, 36);
+const LETRAS = (() => { const out = [], f = AJ_G.font; let x = 90; for (const ch of AJ_G.rs[0]) { out.push({ ch, x }); x += medir(ch, f); } return out; })();
+function titular(t) {
+  ctx.save(); ctx.font = AJ_C.font; ctx.fillStyle = C.tinta; if (t >= T.letras - .15) ctx.fillText(AJ_C.rs[0], 94, 410); ctx.font = AJ_G.font;
+  LETRAS.forEach((l, i) => { const t0 = T.letras + i * .06, k = prog(t, t0, t0 + .22); if (k <= 0 || l.ch === ' ') return; const dy = (1 - aterriza(k)) * -(40 + hash2(i, 3) * 60), y = 410 + AJ_G.size * .95 + dy;
+    ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = C.sombra; ctx.fillText(l.ch, l.x + 8, y + 8); ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = C.tinta; ctx.fillText(l.ch, l.x, y); });
+  ctx.restore(); }
+// HUD: expediente y capítulo arriba a la izquierda, REC arriba a la derecha (el punto late, sin moverse)
+function hud(t) { ctx.save(); ctx.font = `800 30px ${MONO}`;
+  const chip = (x, y, txt, fondo, col) => { const w = medir(txt, ctx.font) + 36; ctx.fillStyle = fondo; ctx.beginPath(); ctx.roundRect(x, y, w, 50, 10); ctx.fill(); ctx.strokeStyle = C.tinta; ctx.lineWidth = 3; ctx.stroke(); ctx.fillStyle = col; ctx.fillText(txt, x + 18, y + 35); return w; };
+  const w1 = chip(80, 262, EXPEDIENTE, C.tinta, C.papel); chip(80 + w1 + 14, 262, 'CASO ABIERTO', C.realce, C.tinta);
+  const wr = chip(W - 210, 262, '  REC', C.papel, C.tinta); if (Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.rojo; ctx.beginPath(); ctx.arc(W - 210 + 30, 287, 11, 0, 6.283); ctx.fill(); }
+  ctx.restore(); }
+// el sello: rectángulo doble redondeado y letra gruesa, tinta moteada y bordes ásperos (se fabrica una vez)
+const SELLO = (() => { const f = `900 120px ${SANS}`, w = medir(SELLO_TXT, f) + 120, h = 210, c = mk(w + 40, h + 40), g = c.getContext('2d'); g.translate(20, 20);
+  g.strokeStyle = g.fillStyle = C.rojo; g.lineWidth = 12; g.beginPath(); g.roundRect(0, 0, w, h, 30); g.stroke(); g.lineWidth = 5; g.beginPath(); g.roundRect(18, 18, w - 36, h - 36, 20); g.stroke();
+  g.font = f; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(SELLO_TXT, w / 2, h / 2 + 6);
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'destination-out'; const R = rng(9);
+  for (let i = 0; i < 2600; i++) { g.globalAlpha = .3 + R() * .7; g.fillRect(R() * c.width, R() * c.height, 1 + R() * 3, 1 + R() * 2.5); }
+  g.globalAlpha = .25; g.filter = 'blur(6px)'; for (let i = 0; i < 18; i++) { g.beginPath(); g.arc(R() * c.width, R() * c.height, 10 + R() * 30, 0, 6.283); g.fill(); } g.filter = 'none';
+  return c; })();
+function sello(t) { if (t < T.sello) return; const k = prog(t, T.sello, T.sello + .09), s = lerp(2.6, 1, k * k);
+  ctx.save(); ctx.translate(CEN.x + 120, CEN.y + 70); ctx.rotate(-.16); ctx.scale(s, s); ctx.globalAlpha = .93 * clamp(.4 + k); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(SELLO, -SELLO.width / 2, -SELLO.height / 2); ctx.restore(); }
+// placa y barra de leyenda: entran secas
+function placa(t) { if (t < T.placa) return; ctx.save(); const txt = CASO_GRANDE.toUpperCase(), f = `800 40px ${MONO}`, w = medir(txt, f) + 80;
+  ctx.fillStyle = C.tinta; ctx.beginPath(); ctx.roundRect(CEN.x - w / 2, 1240, w, 70, 12); ctx.fill(); ctx.fillStyle = C.papel; ctx.font = f; ctx.textAlign = 'center'; ctx.fillText(txt, CEN.x, 1288); ctx.restore(); }
+const PARTES = LEYENDA.split('*'), AJ_L = autoajuste(LEYENDA.replace(/\*/g, ''), SANS, 800, 820, 1, 58, 32);
+function leyenda(t) { if (t < T.leyenda) return; ctx.save(); ctx.font = AJ_L.font; const w = medir(LEYENDA.replace(/\*/g, ''), AJ_L.font) + 80, x = W / 2 - w / 2, y = 1350, h = AJ_L.size * 1.75;
+  ctx.fillStyle = C.sombra; ctx.beginPath(); ctx.roundRect(x + 8, y + 8, w, h, h / 2); ctx.fill(); ctx.fillStyle = C.tinta; ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
+  let px = x + 40; PARTES.forEach((p, i) => { ctx.fillStyle = i % 2 ? C.realce : C.papel; ctx.fillText(p, px, y + h / 2 + AJ_L.size * .36); px += medir(p, AJ_L.font); }); ctx.restore(); }
+// polvo de imprenta: motitas de papel y de tinta, re-sembradas cada 2 cuadros
+function polvo(frame) { const R = rng(Math.floor(frame / 2) + 7); ctx.save();
+  for (let i = 0; i < 260; i++) { ctx.fillStyle = i % 4 ? rgba(C.papel, .8) : rgba(C.tinta, .5); ctx.fillRect(R() * W, R() * H, 1.5 + R() * 2, 1.5 + R() * 2); } ctx.restore(); }
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 3);
+  // cámara: página frontal con un pulso mínimo y un empuje lento hacia la prueba
+  const z = 1 + .04 * ease(prog(t, 2, DUR));
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = C.papel; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(z, 0, 0, z, CEN.x * (1 - z), CEN.y * (1 - z));
+  ctx.drawImage(PAPEL, 0, 0); halo(t); prueba(t); placa(t); sello(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  titular(t); hud(t); leyenda(t);
+  // destello de foto de ficha cuando golpea el sello (tope 0,5)
+  const fl = prog(t, T.sello + .09, T.sello + .4); if (fl > 0 && fl < 1) { ctx.fillStyle = `rgba(255,255,255,${.45 * (1 - fl)})`; ctx.fillRect(0, 0, W, H); }
+  polvo(frame);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .35; ctx.drawImage(PAPEL, 0, 0); ctx.restore();   // el papel encima de todo: también lo oscuro está impreso
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .25, tipo: 'pop' }, { t: .55, tipo: 'pop' }, { t: 1.45, tipo: 'golpe' }, { t: 2.2, tipo: 'papel' }, { t: 2.7, tipo: 'swish' }];
+</script>
+</body>
+</html>

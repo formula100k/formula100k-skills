@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diorama HD-2D</title>
+<style>html,body{margin:0;background:#070912;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Diorama de pixeles con luz (HD-2D)» · ingeniería inversa de lemo-opuscar/styles/hd-2d (MIT, © 2026 LemoLab) · qué se tomó: diorama 2.5D visto desde arriba en 3/4 con texturas de pixel a densidad constante, sprites planos que pasan de dibujo en dibujo mientras la cámara, la luz y las partículas se deslizan; luz por pixel con rampas tramadas (Bayer), farol que se enciende y hace saltar las sombras, bloom desde la placa emisiva, banda de foco tilt-shift, viñeta y caja de diálogo con borde de metal que se escribe sola.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const CAPITULO = 'CAPÍTULO I';                    // la placa de capítulo ('' = sin placa)
+const FRASE = 'tu oferta enciende el mercado';    // el título, palabra por palabra (máx. ~32 letras)
+const PALABRA_CLAVE = 'oferta';                   // sale ENORME
+const NOMBRE = 'Lía';                             // el nombre en la caja de diálogo
+const DIALOGO = 'Primero la oferta. Después, el contenido que la vende.';   // se escribe sola (≤ 70 letras)
+const COLORES = {                                 // dos temperaturas: ambiente frío + farol cálido
+  ambiente: [.32, .40, .62],                      // multiplicador de la luz fría (r, g, b)
+  calida: [1.25, .82, .45],                       // color de la luz del farol
+  niebla: '#1a2a4a', agua: ['#0c1630', '#16264a', '#24407a'],
+  madera: ['#3a2418', '#5a3824', '#7a5034', '#9a6a44'], toldo: ['#e8607a', '#f3e6cf'],
+  capa: '#d8323c',                                // el traje de la protagonista: el ÚNICO color saturado
+  metal: '#d9b45a', papel: '#f4ecd8',
+};
+const DUR = 9;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script src="../nucleo/cine-juegos.js"></script>
+<script>
+// ANATOMIA: estilizada — sprites de pixel art de ~40 pixeles de grilla: cabeza, capa y brazos son bloques planos
+const C = COLORES, G = crearGrilla(4, { lectura: true }), { GW, GH } = G;
+const T_FAROL = .4, T_VENTANAS = 1.2;
+const FAROL = { x: 84, y: 214 }, PISO_Y = 318;
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+
+// ---------- el diorama (albedo, sin luz): se pinta UNA vez en la grilla ----------
+const CASAS = [];
+const ALBEDO = (() => {
+  const G2 = crearGrilla(4, { lectura: true }), q = G2.p, r = rng(21);
+  degradadoPx(G2, 0, 0, GW, 170, ['#0a1024', '#141e3c', C.niebla]);
+  // casas lejanas al fondo (con ventanas que luego se encienden)
+  let x = -6; while (x < GW) { const w = 26 + Math.floor(r() * 22), h = 40 + Math.floor(r() * 50), y = 150 - h;
+    degradadoPx(G2, x, y, w, h + 12, ['#2a2c48', '#1c1e36']); for (let i = 0; i < w; i++) q(x + i, y - Math.max(0, 6 - Math.abs(i - w / 2) / 2), '#24263f');
+    for (let wy = y + 8; wy < y + h - 6; wy += 12) for (let wx = x + 5; wx < x + w - 6; wx += 9) if (r() < .55) CASAS.push({ x: wx, y: wy, t: T_VENTANAS + CASAS.length * .09 + r() * .2 });
+    x += w + 2; }
+  // agua con ondas cuantizadas
+  degradadoPx(G2, 0, 160, GW, GH - 160, [C.agua[1], C.agua[0], C.agua[0]]);
+  for (let y = 166; y < GH; y += 3) for (let x = 0; x < GW; x++) if (vnoise(x * .08, y * .3) > .68) q(x, y, C.agua[2]);
+  // muelle: cara de arriba (tablones en diagonal) + cara del frente + pilotes
+  const top = (x, y) => y >= 200 && y < PISO_Y + 14 && x >= 14 + (PISO_Y + 14 - y) * .35 && x < 262 - (PISO_Y + 14 - y) * .05;
+  for (let y = 196; y < PISO_Y + 14; y++) for (let x = 0; x < GW; x++) if (top(x, y)) {
+    const tabla = Math.floor((x + y * .6) / 9), borde = ((x + y * .6) % 9) < 1;
+    const v = vnoise(x * .3 + tabla * 7, y * .08);
+    q(x, y, borde ? C.madera[0] : v > .62 ? C.madera[3] : v > .4 ? C.madera[2] : C.madera[1]); }
+  for (let y = PISO_Y + 14; y < PISO_Y + 30; y++) for (let x = 14; x < 262; x++) q(x, y, ((x >> 3) + (y > PISO_Y + 22 ? 1 : 0)) % 2 ? C.madera[0] : C.madera[1]);
+  for (const px of [24, 90, 160, 236]) for (let y = PISO_Y + 30; y < PISO_Y + 70; y++) q(px, y, C.madera[0], 6, 1);
+  // puesto con toldo a rayas, mostrador y cajas
+  for (let y = 196; y < 236; y++) q(150, y, C.madera[1], 86, 1);
+  for (let y = 196; y < 200; y++) q(150, y, C.madera[3], 86, 1);
+  for (let y = 168; y < 186; y++) for (let x = 144; x < 242; x++) q(x - (186 - y) * .3, y, Math.floor((x + (186 - y) * .3) / 10) % 2 ? C.toldo[0] : C.toldo[1]);
+  for (let x = 144; x < 242; x += 10) for (let k = 0; k < 4; k++) q(x + k, 186 + (k < 2 ? 1 : 0), C.toldo[0]);
+  for (const px of [150, 232]) for (let y = 168; y < 236; y++) q(px, y, C.madera[0], 3, 1);
+  for (const [bx, by, c] of [[160, 208, '#e8b23a'], [182, 210, '#6fbf5a'], [204, 207, '#e8607a']]) { q(bx, by, '#2a1810', 16, 12); q(bx + 1, by + 1, C.madera[2], 14, 10); for (let i = 0; i < 5; i++) q(bx + 2 + i * 3, by - 2 - (i % 2), c, 3, 3); }
+  // poste del farol
+  for (let y = FAROL.y; y < 268; y++) q(FAROL.x - 1, y, '#20232e', 3, 1);
+  q(FAROL.x - 6, 266, '#20232e', 13, 3);
+  q(FAROL.x - 5, FAROL.y - 12, '#20232e', 11, 2); q(FAROL.x - 4, FAROL.y - 10, '#3a3e4e', 9, 10); q(FAROL.x - 5, FAROL.y, '#20232e', 11, 2);
+  return G2.c;
+})();
+
+// ---------- sprites (pose por tabla de dibujos; quieto alterna 2 dibujos a ~1,5 Hz) ----------
+// la vendedora se arma por tabla de pose en una grilla de 26×40 (un solo tamaño de pixel, contorno de 1 px)
+function armarVendedora(habla, alterna) {
+  const w = 26, h = 40, M = [...Array(h)].map(() => Array(w).fill('.'));
+  const en = (cx, cy, rx, ry, x, y) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (y >= 17 && y < 37) { const hw = 6 + (y - 17) * .3; if (Math.abs(x - 12.5) <= hw) M[y][x] = x > 12.5 + hw * .35 ? 'R' : 'r'; }
+    if (en(12.5, 9, 8.5, 8.5, x, y) && y < 16) M[y][x] = 'h';
+    if (en(12.5, 11.5, 5.5, 5.5, x, y) && y > 7) M[y][x] = 's';
+  }
+  for (const x of [9, 10, 15, 16]) M[8][x] = 'h';                                         // cejas
+  M[11][10] = M[12][10] = M[11][15] = M[12][15] = 'e';                                     // ojos
+  M[13][8] = M[13][17] = 'm';                                                              // rubor
+  if (habla) { M[15][12] = M[15][13] = 'e'; M[16][12] = M[16][13] = 'm'; } else { M[15][11] = M[15][12] = M[15][13] = M[15][14] = 'm'; }
+  for (const x of [11, 12, 13, 14]) M[18][x] = 'g';                                        // broche de oro
+  for (const x of [5, 6, 19, 20]) { M[27 + alterna][x] = 's'; M[28 + alterna][x] = 's'; } // mitones
+  for (let y = 37; y < 40; y++) for (const x of [8, 9, 10, 11, 14, 15, 16, 17]) M[y][x] = 'b';
+  return M.map(f => f.join(''));
+}
+const PAL = { h: '#3b2a3a', s: '#f0c8a0', e: '#120c14', r: C.capa, R: '#8e1c28', g: C.metal, m: '#d87a6a', b: '#2c2f4a' };
+const VEND = [armarVendedora(false, 0), armarVendedora(false, 1), armarVendedora(true, 0)];
+function sprite(G2, filas, x, y) { spritePx(G2, filas, PAL, x, y, { contorno: '#120c14' }); }
+// gato del mercado (segundo sprite)
+const GATO = ['.o...o..', 'oho.oho.', 'ohhhhho.', 'oheheho.', 'ohhhhhooo', '.ohhhhhho', '.ohhhhho.', '.oo..oo..'];
+const VX = 108, VY = PISO_Y - 22 - 40;
+
+// ---------- luz por pixel: ambiente frío + farol cálido, cuantizada con Bayer (rampa, no mezcla) ----------
+const BUF = G.g.createImageData(GW, GH);
+function nivelFarol(t) { if (t < T_FAROL) return 0; const ts = Math.floor(t * 12) / 12;
+  const prende = ts < T_FAROL + .25 ? [1, .2, 1, .5][Math.floor((ts - T_FAROL) * 12) % 4] : 1;
+  return prende * (1 + .12 * Math.sin(t * 7.3) + .08 * Math.sin(t * 13.1 + 1)); }          // la llama respira ±20 %
+function iluminar(t, L) {
+  const d = BUF.data, A = C.ambiente, K = C.calida, ventanaOn = CASAS.filter(c => t >= c.t);
+  for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) {
+    const i = (y * GW + x) * 4;
+    let l = 0; if (L > 0) { const dx = x - FAROL.x, dy = (y - (FAROL.y + 30)) * 1.5, dd = Math.hypot(dx, dy) / 120; if (dd < 1) l = L * Math.pow(1 - dd, 1.6) * 1.3; }
+    const lq = Math.floor(l * 5 + bayer(x, y)) / 5;                                            // escalones tramados
+    for (let c = 0; c < 3; c++) d[i + c] = Math.min(255, ALB[i + c] * (A[c] + lq * K[c]));
+    d[i + 3] = 255;
+  }
+  G.g.putImageData(BUF, 0, 0);
+  for (const c of ventanaOn) G.p(c.x, c.y, '#ffcf7a', 3, 4);
+}
+let ALB = null;
+
+// ---------- capa emisiva (bloom) ----------
+const EMI = hacerCapa(), FULL = hacerCapa(), BORRO = hacerCapa();
+// ---------- texto: placa de capítulo, título y caja de diálogo ----------
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2, kConector: .6 });
+PARTES.forEach((q, i) => q.t0 = 1.2 + i * .3 + (q.clave ? .12 : 0));
+const FR = armarFrase(PARTES, { familia: '"Hoefler Text", "Baskerville", serif', peso: 700, ancho: W - 180, altoMax: 360, tamMax: 130, tamMin: 40, y0: 330, interlinea: 1 });
+FR.tokens.forEach(q => { if (!q.clave) q.font = 'italic ' + q.font; });
+const CAJA = { x: 80, y: 1262, w: W - 160, h: 196 };
+const AJ_D = autoajuste(DIALOGO, '"Hoefler Text", "Baskerville", serif', 400, CAJA.w - 90, 3, 50, 30);
+const T_DIA = 3.3, LPS = 24;
+function adorno(x, y, s) { ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4); ctx.strokeStyle = C.metal; ctx.lineWidth = 3; ctx.strokeRect(-s, -s, 2 * s, 2 * s); ctx.fillStyle = C.metal; ctx.fillRect(-s * .4, -s * .4, s * .8, s * .8); ctx.restore(); }
+function ui(t) {
+  if (CAPITULO && t >= .9) { ctx.save(); ctx.font = `700 38px Copperplate, "Optima", serif`; ctx.fillStyle = C.metal; ctx.textAlign = 'center';
+    ctx.fillText(CAPITULO.split('').join(' '), W / 2, 290); ctx.fillRect(W / 2 - 220, 304, 160, 2); ctx.fillRect(W / 2 + 60, 304, 160, 2); adorno(W / 2, 305, 6); ctx.restore(); }
+  pintarFrase(FR, t, q => textoTinta(q.txt, q.x, q.y + 20, { font: q.font, relleno: q.clave ? C.metal : C.papel, tinta: '#0a0c18', grosor: Math.max(4, q.size * .05), sombra: [0, q.size * .05, 'rgba(5,6,14,.85)'] }));
+  if (t < T_DIA - .35) return;
+  const a = Math.min(1, (t - (T_DIA - .35)) / .3);
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(8,10,22,.84)'; ctx.beginPath(); ctx.roundRect(CAJA.x, CAJA.y, CAJA.w, CAJA.h, 10); ctx.fill();
+  ctx.strokeStyle = C.metal; ctx.lineWidth = 3; ctx.strokeRect(CAJA.x + 10, CAJA.y + 10, CAJA.w - 20, CAJA.h - 20);
+  for (const [x, y] of [[CAJA.x + 10, CAJA.y + 10], [CAJA.x + CAJA.w - 10, CAJA.y + 10], [CAJA.x + 10, CAJA.y + CAJA.h - 10], [CAJA.x + CAJA.w - 10, CAJA.y + CAJA.h - 10]]) adorno(x, y, 9);
+  ctx.font = `700 34px Copperplate, serif`; const wn = medir(NOMBRE.toUpperCase(), ctx.font) + 60;
+  ctx.fillStyle = '#141830'; ctx.fillRect(CAJA.x + 40, CAJA.y - 26, wn, 50); ctx.strokeRect(CAJA.x + 40, CAJA.y - 26, wn, 50);
+  ctx.fillStyle = C.metal; ctx.fillText(NOMBRE.toUpperCase(), CAJA.x + 70, CAJA.y + 10);
+  const n = Math.max(0, Math.floor((t - T_DIA) * LPS)); let resto = n;
+  ctx.font = 'italic ' + AJ_D.font; ctx.fillStyle = C.papel;
+  AJ_D.rs.forEach((r, i) => { const k = Math.min(r.length, resto); resto -= k + 1; if (k > 0) ctx.fillText(r.slice(0, k), CAJA.x + 45, CAJA.y + 60 + AJ_D.size * .9 + i * AJ_D.size * 1.2); });
+  if (n >= DIALOGO.length && Math.floor(t * 2.5) % 2 === 0) { ctx.fillStyle = C.metal; ctx.beginPath(); ctx.moveTo(CAJA.x + CAJA.w - 60, CAJA.y + CAJA.h - 46); ctx.lineTo(CAJA.x + CAJA.w - 40, CAJA.y + CAJA.h - 46); ctx.lineTo(CAJA.x + CAJA.w - 50, CAJA.y + CAJA.h - 32); ctx.fill(); }
+  ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, L = nivelFarol(t), f2 = Math.floor(t * 1.5) % 2, habla = t >= T_DIA && t < T_DIA + DIALOGO.length / LPS && Math.floor(t * 6) % 2;
+  // 1) albedo + sprites + sombras de los sprites en la grilla
+  const g = G.g; g.drawImage(ALBEDO, 0, 0);
+  const sombra = (x, y, w) => { if (L > 0) { const dx = x - FAROL.x, len = 16 * Math.min(1.4, L);   // la sombra salta lejos del farol
+      for (let k = 0; k < len; k++) for (let i = -w; i <= w; i++) { const sx = x + i + Math.sign(dx) * k * 1.1, sy = y + k * .35; if (bayer(sx | 0, sy | 0) < .7 - k / len * .5) G.p(sx, sy, '#120c14'); } }
+    else for (let i = -w; i <= w; i++) G.p(x + i, y, '#120c14'); };
+  sombra(VX + 13, PISO_Y - 22, 9); sprite(G, VEND[habla ? 2 : f2], VX, VY);
+  sombra(66, PISO_Y - 44, 4); spritePx(G, GATO, { o: '#120c14', h: '#e8e2d8', e: '#3fa7a0' }, 62, PISO_Y - 52 + f2);
+  ALB = g.getImageData(0, 0, GW, GH).data;
+  // 2) luz por pixel
+  iluminar(t, L);
+  if (L > 0) { G.p(FAROL.x - 3, FAROL.y - 9, '#fff2c0', 7, 8); G.p(FAROL.x - 2, FAROL.y - 8, '#ffffff', 5, 5); }
+  // 3) a resolución completa con cámara (empuje lento desde arriba)
+  const z = 1.06 + .08 * ease(prog(t, 0, DUR)), cx = 480, cy = 1050;
+  const f = FULL.getContext('2d'); f.setTransform(1, 0, 0, 1, 0, 0); f.imageSmoothingEnabled = false;
+  f.save(); f.translate(cx, cy); f.scale(z, z); f.translate(-cx, -cy); f.drawImage(G.c, 0, 0, W, H); f.restore();
+  // emisiva: farol, ventanas, luciérnagas (se deslizan en cada cuadro)
+  const e = EMI.getContext('2d'); e.setTransform(1, 0, 0, 1, 0, 0); e.clearRect(0, 0, W, H);
+  e.save(); e.translate(cx, cy); e.scale(z, z); e.translate(-cx, -cy);
+  if (L > 0) { e.fillStyle = `rgba(255,200,120,${Math.min(1, L)})`; e.beginPath(); e.arc(FAROL.x * 4, (FAROL.y - 5) * 4, 34, 0, 7); e.fill(); }
+  for (const c of CASAS) if (t >= c.t) { e.fillStyle = 'rgba(255,190,110,.8)'; e.fillRect(c.x * 4, c.y * 4, 12, 16); }
+  for (let i = 0; i < 14; i++) { const a = t * .3 + i * 2.1, x = FAROL.x * 4 + Math.cos(a) * (160 + i * 18) + Math.sin(t * .7 + i) * 30, y = 820 + i * 34 + Math.sin(t * .9 + i * 1.7) * 40;
+    const on = Math.max(0, Math.sin(t * 1.3 + i)) * (t > 1.5 ? 1 : 0); if (on > .05) { e.fillStyle = `rgba(255,230,150,${on})`; e.fillRect(x, y, 6, 6); f.fillStyle = `rgba(255,236,170,${on})`; f.fillRect(x, y, 6, 6); } }
+  e.restore();
+  // 4) tilt-shift: banda nítida en el sujeto; arriba (lejos) y abajo (cerca) desenfocados
+  const b = BORRO.getContext('2d'); b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, W, H);
+  b.filter = 'blur(9px)'; b.drawImage(FULL, 0, 0); b.filter = 'none';
+  b.globalCompositeOperation = 'destination-in'; const gr = b.createLinearGradient(0, 0, 0, H);
+  gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(.36, 'rgba(0,0,0,.55)'); gr.addColorStop(.48, 'rgba(0,0,0,0)'); gr.addColorStop(.66, 'rgba(0,0,0,0)'); gr.addColorStop(.8, 'rgba(0,0,0,1)');
+  b.fillStyle = gr; b.fillRect(0, 0, W, H); b.globalCompositeOperation = 'source-over';
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.drawImage(FULL, 0, 0); ctx.drawImage(BORRO, 0, 0);
+  bloom(EMI, 1.1, 40, 4);
+  vineta(.75, '4,5,14', .3);
+  ui(t);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_FAROL, tipo: 'golpe' }, { t: .9, tipo: 'papel' },
+  ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })), { t: T_VENTANAS, tipo: 'desliz' }, { t: T_DIA - .35, tipo: 'swish' },
+];
+</script>
+</body>
+</html>

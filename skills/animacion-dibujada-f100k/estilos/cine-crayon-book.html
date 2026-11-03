@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Libro de crayones</title>
+<style>
+  html,body{margin:0;background:#2a2118;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Libro de crayones» · ingeniería inversa de lemo-opuscar/styles/crayon-book (MIT, © 2026 LemoLab) · qué se tomó:
+// la cera solo se pega a las crestas del diente del papel (más presión = más sólida), cinta de crayón con pulso, vetas y puntas
+// afinadas, relleno en zigzag que se pasa del borde, hervor a 12 cuadros por segundo, acuarela que la cera repele (el mensaje
+// en crayón blanco aparece cuando pasa el pincel) y la página que al final es un objeto sobre la mesa.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'tu primera venta empieza con';      // se escribe en crayón, letra por letra (≤ 32)
+const MENSAJE_OCULTO = 'una historia';             // escrito en crayón BLANCO: invisible hasta que pasa la acuarela (≤ 14)
+const COLORES = {
+  linea: '#2d3263',     // contorno (índigo; nunca negro)
+  toldo: '#f07a5a',     // coral: el toldo que se pinta (colorear = abrir el puesto)
+  sol: '#f5c842',       // limón
+  pasto: '#5fa35a',     // verde
+  mostrador: '#e8b874', // arena
+  acuarela: '#e0708a',  // UNA sola acuarela (rosa de amanecer)
+  papel: '#f4efe3',
+};
+const DUR = 9;                                     // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const LETRA = '"Chalkboard SE", "Marker Felt", "Comic Sans MS", cursive';
+const DIENTE_F = diente(9, 512, .30), DIENTE_S = diente(9, 512, .5);   // presión fuerte / suave
+// ---------- papel: color tibio, moteado bajo, relieve del diente, viñeta tibia (UNA vez) ----------
+const PAPEL = (() => { const c = capa(), p = c.getContext('2d'), r = rng(4);
+  p.fillStyle = COLORES.papel; p.fillRect(0, 0, W, H);
+  for (let y = 0; y < H; y += 8) for (let x = 0; x < W; x += 8) { const n = vnoise(x * .005, y * .005); p.fillStyle = n > .5 ? `rgba(255,255,255,${(n - .5) * .09})` : `rgba(120,90,50,${(.5 - n) * .06})`; p.fillRect(x, y, 8, 8); }
+  const rel = diente(9, 512, .36); p.save(); p.globalAlpha = .1; p.fillStyle = p.createPattern(rel, 'repeat'); p.translate(1, 1); p.fillRect(-1, -1, W, H); p.restore();   // valles en sombra
+  for (let i = 0; i < 500; i++) { p.strokeStyle = 'rgba(140,110,70,.05)'; p.lineWidth = 1; const x = r() * W, y = r() * H; p.beginPath(); p.moveTo(x, y); p.lineTo(x + 8 + r() * 20, y + (r() - .5) * 3); p.stroke(); }
+  const g = p.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .78); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(110,70,30,.16)'); p.fillStyle = g; p.fillRect(0, 0, W, H);
+  return c; })();
+// la mesa (solo se ve al final, cuando la página es un objeto)
+const MESA = (() => { const c = capa(), p = c.getContext('2d'), r = rng(8); p.fillStyle = '#8a5a34'; p.fillRect(0, 0, W, H);
+  for (let i = 0; i < 160; i++) { const y = r() * H; p.strokeStyle = r() < .5 ? 'rgba(50,25,8,.18)' : 'rgba(230,180,120,.1)'; p.lineWidth = 1 + r() * 4; p.beginPath(); p.moveTo(0, y);
+    for (let x = 0; x <= W; x += 60) p.lineTo(x, y + Math.sin(x * .004 + i) * 8); p.stroke(); }
+  return c; })();
+
+// ---------- el dibujo (coordenadas de página) ----------
+const PUESTO = { x0: 250, x1: 690, yT: 900, yM: 1130, yB: 1380 };
+const SOL = { x: 880, y: 930, r: 78 };
+const P_LINEAS = [                                   // ya dibujado en el cuadro 0
+  [[PUESTO.x0, PUESTO.yM], [PUESTO.x1, PUESTO.yM], [PUESTO.x1, PUESTO.yB], [PUESTO.x0, PUESTO.yB], [PUESTO.x0, PUESTO.yM - 4]],     // mostrador
+  [[PUESTO.x0 + 22, PUESTO.yM], [PUESTO.x0 + 22, PUESTO.yT + 96]], [[PUESTO.x1 - 22, PUESTO.yM], [PUESTO.x1 - 22, PUESTO.yT + 96]],   // postes
+  (() => { const o = [[PUESTO.x0 - 40, PUESTO.yT + 100]]; for (let i = 0; i <= 5; i++) { const xa = lerp(PUESTO.x0 - 40, PUESTO.x1 + 40, i / 5), xb = lerp(PUESTO.x0 - 40, PUESTO.x1 + 40, (i + 1) / 5);
+    if (i < 5) for (let k = 1; k <= 8; k++) { const u = k / 8; o.push([lerp(xa, xb, u), PUESTO.yT + 100 + Math.sin(u * Math.PI) * 34]); } } return o; })(),   // borde ondulado del toldo
+  [[PUESTO.x0 - 40, PUESTO.yT + 100], [PUESTO.x0 + 10, PUESTO.yT], [PUESTO.x1 - 10, PUESTO.yT], [PUESTO.x1 + 40, PUESTO.yT + 100]],                  // techo del toldo
+  ...[1, 2, 3, 4].map(i => [[lerp(PUESTO.x0 + 10, PUESTO.x1 - 10, i / 5), PUESTO.yT], [lerp(PUESTO.x0 - 40, PUESTO.x1 + 40, i / 5), PUESTO.yT + 100]]),  // rayas del toldo
+  [[PUESTO.x0 + 70, PUESTO.yM - 30], [PUESTO.x0 + 150, PUESTO.yM - 30], [PUESTO.x0 + 150, PUESTO.yM], [PUESTO.x0 + 70, PUESTO.yM]],   // cajita en el mostrador
+  circle(PUESTO.x1 - 110, PUESTO.yM - 34, 34).concat([circle(PUESTO.x1 - 110, PUESTO.yM - 34, 34)[0]]),                              // un frasco redondo
+];
+const SOL_LINEAS = [circle(SOL.x, SOL.y, SOL.r).concat([circle(SOL.x, SOL.y, SOL.r)[0], circle(SOL.x, SOL.y, SOL.r)[1]]),
+  ...Array.from({ length: 9 }, (_, i) => { const a = i / 9 * 6.283 + .2; return [[SOL.x + Math.cos(a) * (SOL.r + 18), SOL.y + Math.sin(a) * (SOL.r + 18)], [SOL.x + Math.cos(a) * (SOL.r + 58), SOL.y + Math.sin(a) * (SOL.r + 58)]]; }),
+  arc(SOL.x, SOL.y + 8, 34, .35, Math.PI - .35)];       // sonrisa (lógica de niña: el sol tiene cara)
+const PASTO = rayado([[-20, 1385], [W + 20, 1370], [W + 20, 1640], [-20, 1640]], { angulo: -1.35, paso: 26, sobre: 0 });
+const SUELO = [[-10, 1385], [300, 1378], [700, 1390], [W + 10, 1372]];
+// colorear es una acción: el toldo se pinta (el puesto abre) y el sol se llena
+const FRANJAS = [0, 2, 4].map(i => [[lerp(PUESTO.x0 + 10, PUESTO.x1 - 10, i / 5), PUESTO.yT], [lerp(PUESTO.x0 + 10, PUESTO.x1 - 10, (i + 1) / 5), PUESTO.yT],
+  [lerp(PUESTO.x0 - 40, PUESTO.x1 + 40, (i + 1) / 5), PUESTO.yT + 110], [lerp(PUESTO.x0 - 40, PUESTO.x1 + 40, i / 5), PUESTO.yT + 120]]);
+const R_TOLDO = FRANJAS.map(f => rayado(f, { angulo: -.9, paso: 15, sobre: 7 }));
+const R_SOL = rayado(circle(SOL.x, SOL.y, SOL.r - 4), { angulo: -.6, paso: 16, sobre: 6 });
+const R_MOSTRADOR = rayado([[PUESTO.x0, PUESTO.yM], [PUESTO.x1, PUESTO.yM], [PUESTO.x1, PUESTO.yB], [PUESTO.x0, PUESTO.yB]], { angulo: -.75, paso: 24, sobre: 6 });
+
+// ---------- texto ----------
+const AJ_F = autoajuste(FRASE, LETRA, 700, 900, 2, 74, 40);
+const AJ_M = autoajuste(MENSAJE_OCULTO, LETRA, 700, 920, 2, 190, 80);
+const L_F = AJ_F.rs.map((r, i) => letras(r, W / 2, 370 + i * AJ_F.size * 1.15, AJ_F.font, { centro: true, col: COLORES.linea, semilla: 3 + i, giro: .1, base: .08 })).flat();
+const Y_M = 370 + (AJ_F.rs.length - 1) * AJ_F.size * 1.15 + 80 + AJ_M.size * .8;
+const L_M = AJ_M.rs.map((r, i) => letras(r, W / 2, Y_M + i * AJ_M.size * 1.05, AJ_M.font, { centro: true, col: '#fffdf7', semilla: 11 + i, giro: .08 })).flat();
+agendar(L_M, -2, -1);
+const T = { lava: [.25, 1.6], frase: [1.85, 3.2], toldo: [3.35, 4.6], sol: [4.6, 5.2], raya: [5.3, 5.8], abre: [6.3, 7.4] };
+agendar(L_F, T.frase[0], T.frase[1], .03);
+const SUB = (() => { const y = Y_M + (AJ_M.rs.length - 1) * AJ_M.size * 1.05 + 34, a = W / 2 - AJ_M.size * 2.6, b = W / 2 + AJ_M.size * 2.6;
+  return [[Math.max(110, a), y + 6], [W / 2, y - 6], [Math.min(W - 110, b), y + 4]]; })();
+// la acuarela: 3 bandas anchas que se pisan (nunca dejan rayas blancas), de izquierda a derecha
+const BANDAS = [[260, 520, .25, .8], [600, 400, .6, 1.15], [930, 380, .95, 1.6]].map(([y, h, a, b], i) => ({ y, h, a, b, i }));
+
+const C_F = capa(), gf = C_F.getContext('2d');        // cera con presión fuerte
+const C_S = capa(), gs = C_S.getContext('2d');        // cera suave (relleno)
+const C_B = capa(), gb = C_B.getContext('2d');        // cera blanca (el mensaje)
+const LAV = capa(), gl = LAV.getContext('2d');        // densidad de la acuarela
+const PAG = capa(), gpg = PAG.getContext('2d');       // la página compuesta
+function mascara(g, tile) { g.save(); g.globalCompositeOperation = 'destination-out'; g.fillStyle = g.createPattern(tile, 'repeat'); g.fillRect(0, 0, W, H); g.restore(); }
+const limpiar = g => { g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, H); };
+
+const DEN = capa(), gd = DEN.getContext('2d');        // densidad (0/1): unión de las bandas, sin rayas donde se pisan
+const MANCHAS = (() => { const c = capa(), p = c.getContext('2d');   // florecidas del agua: más y menos pigmento
+  for (let y = 0; y < H; y += 6) for (let x = 0; x < W; x += 6) { const n = vnoise(x * .006, y * .006) * .6 + vnoise(x * .025 + 5, y * .025) * .4; p.fillStyle = `rgba(0,0,0,${clamp((n - .25) * 1.1) * .55})`; p.fillRect(x, y, 6, 6); }
+  return c; })();
+function acuarela(t) {
+  limpiar(gd); limpiar(gl);
+  let frente = null;
+  for (const B of BANDAS) { if (t < B.a) continue; const u = prog(t, B.a, B.b), xe = lerp(-80, W + 120, easeOut(u));
+    const borde = (x, s) => B.y + s * B.h / 2 + (x - W / 2) * .04 + (vnoise(x * .05, B.i * 9 + s) - .5) * 10 + (vnoise(x * .012, B.i * 4 + s) - .5) * 16;
+    gd.beginPath(); gd.moveTo(-80, borde(-80, -1)); for (let x = -80; x <= xe; x += 10) gd.lineTo(x, borde(x, -1));
+    for (let x = xe; x >= -80; x -= 10) gd.lineTo(x, borde(x, 1)); gd.closePath(); gd.fillStyle = '#000'; gd.fill();
+    if (u < 1) frente = { xe, y: B.y, h: B.h }; }
+  // color: lavado translúcido con florecidas
+  gl.drawImage(DEN, 0, 0); gl.save(); gl.globalCompositeOperation = 'source-in'; gl.fillStyle = COLORES.acuarela; gl.fillRect(0, 0, W, H); gl.restore();
+  gl.save(); gl.globalCompositeOperation = 'destination-out'; gl.globalAlpha = .45; gl.drawImage(MANCHAS, 0, 0); gl.restore();
+  // el pigmento se junta en la orilla: densidad menos densidad borrosa
+  const ORI = capa(), go = ORI.getContext('2d'); go.drawImage(DEN, 0, 0); go.globalCompositeOperation = 'destination-out'; go.filter = 'blur(9px)'; go.drawImage(DEN, 0, 0);
+  go.filter = 'none'; go.globalCompositeOperation = 'source-in'; go.fillStyle = COLORES.acuarela; go.fillRect(0, 0, W, H);
+  gl.globalAlpha = .55; gl.drawImage(ORI, 0, 0); gl.globalAlpha = 1;
+  if (frente) { gl.save(); gl.globalCompositeOperation = 'source-atop'; const gr = gl.createLinearGradient(frente.xe - 110, 0, frente.xe, 0); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, COLORES.acuarela);
+    gl.globalAlpha = .5; gl.fillStyle = gr; gl.fillRect(frente.xe - 110, frente.y - frente.h, 110, frente.h * 2); gl.restore(); }   // borde húmedo mientras avanza
+  gl.save(); gl.globalCompositeOperation = 'source-atop'; gl.globalAlpha = .3; gl.fillStyle = gl.createPattern(DIENTE_S, 'repeat'); gl.fillRect(0, 0, W, H); gl.restore();   // granula en los hoyitos
+  // la cera repele el agua: lo que tiene crayón (y el crayón blanco) queda sin pintura
+  gl.save(); gl.globalCompositeOperation = 'destination-out'; gl.globalAlpha = .92; gl.drawImage(C_B, 0, 0); gl.drawImage(C_F, 0, 0); gl.drawImage(C_S, 0, 0); gl.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, td = Math.floor(t * 12) / 12;   // lo dibujado avanza a 12 por segundo
+  PASO_CERA = Math.floor(t * 12);
+  limpiar(gf); limpiar(gs); limpiar(gb);
+  // cera blanca: el mensaje (ya estaba; se ve apenas como un brillo)
+  for (const L of L_M) pintarLetra(gb, L, td); mascara(gb, DIENTE_F);
+  // relleno (suave): pasto, mostrador, toldo, sol
+  ceraLinea(gs, PASTO, { col: COLORES.pasto, w: 18, p: .8, semilla: 5, hierve: .3 });
+  ceraLinea(gs, R_MOSTRADOR, { col: COLORES.mostrador, w: 16, p: .75, semilla: 6, hierve: .3 });
+  R_TOLDO.forEach((r, i) => ceraLinea(gs, r, { col: COLORES.toldo, w: 13, p: .95, semilla: 20 + i, dibuja: prog(td, lerp(T.toldo[0], T.toldo[1], i / 3), lerp(T.toldo[0], T.toldo[1], (i + 1) / 3)) }));
+  ceraLinea(gs, R_SOL, { col: COLORES.sol, w: 14, p: .95, semilla: 30, dibuja: prog(td, T.sol[0], T.sol[1]) });
+  mascara(gs, DIENTE_S);
+  // contornos (fuertes) + texto
+  P_LINEAS.forEach((p, i) => ceraLinea(gf, p, { col: COLORES.linea, w: 10, p: .95, semilla: 40 + i }));
+  SOL_LINEAS.forEach((p, i) => ceraLinea(gf, p, { col: i ? '#e8963a' : '#e08a2e', w: 9, p: .9, semilla: 60 + i }));
+  ceraLinea(gf, SUELO, { col: '#3f7d43', w: 10, p: .9, semilla: 70 });
+  for (const [dx] of [[-22], [22]]) ceraLinea(gf, circle(SOL.x + dx, SOL.y - 14, 5), { col: COLORES.linea, w: 9, p: 1, semilla: 75 + dx });
+  for (const L of L_F) pintarLetra(gf, { ...L, x: L.x + (hash2(PASO_CERA, L.x | 0) - .5) * 1.2 }, td);
+  ceraLinea(gf, SUB, { col: COLORES.toldo, w: 14, p: 1, semilla: 80, dibuja: prog(td, T.raya[0], T.raya[1]) });
+  mascara(gf, DIENTE_F);
+  acuarela(t);
+  // la página
+  limpiar(gpg); gpg.drawImage(PAPEL, 0, 0);
+  gpg.globalAlpha = .16; gpg.drawImage(C_B, 0, 0); gpg.globalAlpha = 1;
+  gpg.save(); gpg.globalCompositeOperation = 'multiply'; gpg.globalAlpha = .62; gpg.drawImage(LAV, 0, 0); gpg.restore();
+  gpg.drawImage(C_S, 0, 0); gpg.drawImage(C_F, 0, 0);
+  // la cámara se aleja más allá del borde: la página es un objeto sobre la mesa
+  const u = ease(prog(t, T.abre[0], T.abre[1])), z = lerp(1, .8, u), rot = lerp(0, -.035, u);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  if (u > 0) { ctx.drawImage(MESA, 0, 0);
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(rot); ctx.scale(z, z);
+    ctx.save(); ctx.filter = 'blur(18px)'; ctx.fillStyle = 'rgba(30,15,5,.45)'; ctx.fillRect(-W / 2 + 16, -H / 2 + 24, W, H); ctx.restore();
+    ctx.drawImage(PAG, -W / 2, -H / 2); ctx.restore();
+    // un crayón coral acostado junto a la página
+    ctx.save(); ctx.translate(W - 120, H - 170); ctx.rotate(-.5 + rot); ctx.globalAlpha = u;
+    ctx.fillStyle = 'rgba(20,10,5,.35)'; ctx.beginPath(); ctx.roundRect(-150, 10, 300, 40, 18); ctx.fill();
+    ctx.fillStyle = COLORES.toldo; ctx.beginPath(); ctx.roundRect(-150, -20, 300, 40, 12); ctx.fill();
+    ctx.fillStyle = '#f7e9d2'; ctx.fillRect(-90, -20, 170, 40); ctx.fillStyle = COLORES.toldo; ctx.fillRect(-60, -6, 110, 12);
+    ctx.beginPath(); ctx.moveTo(150, -20); ctx.lineTo(190, 0); ctx.lineTo(150, 20); ctx.fill(); ctx.restore();
+  } else ctx.drawImage(PAG, 0, 0);
+});
+window.SONIDOS = [
+  { t: .25, tipo: 'desliz' },                // pincel mojado (ruido grave)
+  { t: T.frase[0], tipo: 'papel' },          // crayón
+  { t: T.toldo[0], tipo: 'papel' },
+  { t: T.sol[0], tipo: 'papel' },
+  { t: T.raya[0], tipo: 'swish' },
+  { t: T.abre[0], tipo: 'papel' },           // la página se vuelve objeto
+];
+</script>
+</body>
+</html>

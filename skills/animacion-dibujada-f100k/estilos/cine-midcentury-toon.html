@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Manual de los años 50</title>
+<style>html,body{margin:0;background:#2a2320;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Manual de los años 50» · ingeniería inversa de lemo-opuscar/styles/midcentury-toon (MIT, © 2026 LemoLab) · qué se tomó: color impreso corrido de su línea (y re-registrado sobre dos), tinta que respira y se corta, medallones numerados con rayos de sol, llamadas redondas con el dato, flechas de manual, destellos atómicos, barrido de bloque de color como página que pasa y el cuadro final quieto «para la captura».
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'tu primera venta en 3\u00A0pasos'; // el título, palabra por palabra (máx. ~32 letras; \u00A0 = espacio que no se corta)
+const PALABRA_CLAVE = 'venta';                   // sale ENORME
+const PASOS = [                                  // 2 o 3 pasos: título (≤ 26) + detalle chico (≤ 30) + ícono: 'persona' | 'etiqueta' | 'video' | 'mensaje' | 'estrella'
+  { titulo: 'Elige a quién le vendes', detalle: 'una sola persona', icono: 'persona' },
+  { titulo: 'Arma una oferta clara', detalle: 'qué gana y cuánto cuesta', icono: 'etiqueta' },
+  { titulo: 'Cuéntala en un video', detalle: 'con una historia real', icono: 'video' },
+];
+const COLORES = {                                // papel cálido, tinta casi negra y complementos atómicos (nada puro ni neón)
+  papel: '#f3ead6', tinta: '#2a2320',
+  pasos: ['#e8674a', '#e8b23a', '#3fa7a0'],      // un color por paso (el del producto no se repite)
+  bloque: '#e8674a', rayos: '#e8b23a',            // el bloque que barre al empezar
+};
+const DUR = 9;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+const C = COLORES, INK = C.tinta;
+const PAPEL = hacerPapel(C.papel, { viñeta: .16, semilla: 50 });
+// registro: el color se imprime unos px abajo-derecha de su línea y se corre ±1–2 px sobre dos
+let REG = [6, 5];
+// ---------- tinta rota: cinta de 3–5 px que respira ±40 % y se corta un 12–25 % ----------
+function tintaRota(pts, o = {}) {
+  const { w = 4, col = INK, seed = 0, closed = true, cortes = .16 } = o;
+  const P = J(resample(closed ? [...pts, pts[0]] : pts, 6), seed, .9);
+  ctx.save(); ctx.strokeStyle = col; ctx.lineCap = 'round';
+  for (let i = 0; i < P.length - 1; i++) {
+    const n = vnoise(i * .07 + seed * 3.1, 2.2); if (n < cortes) continue;
+    ctx.lineWidth = w * (.6 + .8 * vnoise(i * .12 + seed, 5.5)); ctx.beginPath(); ctx.moveTo(...P[i]); ctx.lineTo(...P[i + 1]); ctx.stroke();
+  }
+  ctx.restore();
+}
+// forma impresa: relleno corrido + plano de sombra recortado + tinta rota
+function impreso(pts, col, o = {}) {
+  const D = pts.map(([x, y]) => [x + REG[0], y + REG[1]]);
+  ctx.save(); tracePath(D, true); ctx.fillStyle = col; ctx.fill();
+  if (o.plano) { ctx.clip(); tracePath(D.map(([x, y]) => [x - o.plano[0], y - o.plano[1]]), true); ctx.rect(-9e3, -9e3, 2e4, 2e4); ctx.fillStyle = 'rgba(42,35,32,.16)'; ctx.fill('evenodd'); }
+  ctx.restore();
+  if (o.tinta !== false) tintaRota(pts, { w: o.w || 4, seed: o.seed || 0 });
+}
+// texto con su plancha de color corrida y la tinta encima
+function textoImpreso(txt, x, y, font, colPlancha, o = {}) {
+  ctx.save(); ctx.font = font; ctx.textAlign = o.alinear || 'left';
+  if (colPlancha) { ctx.fillStyle = colPlancha; ctx.fillText(txt, x + REG[0] * .9, y + REG[1] * .9); }
+  ctx.fillStyle = o.col || INK; ctx.fillText(txt, x, y); ctx.restore();
+}
+
+// ---------- íconos de manual (formas simples, sin cara) ----------
+function icono(tipo, cx, cy, r, col) {
+  const k = r / 100;
+  if (tipo === 'persona') { impreso(circle(cx, cy - 34 * k, 30 * k), '#f3ead6', { w: 4, seed: 1 }); impreso(resample([[cx - 58 * k, cy + 62 * k], [cx - 44 * k, cy + 6 * k], [cx, cy - 2 * k], [cx + 44 * k, cy + 6 * k], [cx + 58 * k, cy + 62 * k]], 8, true), '#f3ead6', { w: 4, seed: 2 }); }
+  else if (tipo === 'etiqueta') { const P = [[cx - 60 * k, cy - 34 * k], [cx + 30 * k, cy - 34 * k], [cx + 66 * k, cy], [cx + 30 * k, cy + 34 * k], [cx - 60 * k, cy + 34 * k]];
+    impreso(resample(P, 8, true), '#f3ead6', { w: 4, seed: 3 }); tintaRota(circle(cx + 28 * k, cy, 9 * k), { w: 4, seed: 4 });
+    ctx.save(); ctx.font = `900 ${Math.round(52 * k)}px "Rockwell", serif`; ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.fillText('$', cx - 18 * k, cy + 18 * k); ctx.restore(); }
+  else if (tipo === 'video') { impreso(roundRect(cx - 40 * k, cy - 66 * k, 80 * k, 132 * k, 14 * k), '#f3ead6', { w: 4, seed: 5 });
+    impreso(resample([[cx - 12 * k, cy - 22 * k], [cx + 22 * k, cy], [cx - 12 * k, cy + 22 * k]], 6, true), col, { w: 3.5, seed: 6 }); }
+  else if (tipo === 'mensaje') { impreso(roundRect(cx - 62 * k, cy - 42 * k, 124 * k, 76 * k, 22 * k), '#f3ead6', { w: 4, seed: 7 });
+    for (const dx of [-28, 0, 28]) { ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(cx + dx * k, cy - 4 * k, 7 * k, 0, 7); ctx.fill(); } }
+  else { estrellaAtomica(cx + REG[0], cy + REG[1], 70 * k, '#f3ead6'); tintaRota(resample([[cx, cy - 70 * k], [cx + 12 * k, cy - 12 * k], [cx + 70 * k, cy], [cx + 12 * k, cy + 12 * k], [cx, cy + 70 * k], [cx - 12 * k, cy + 12 * k], [cx - 70 * k, cy], [cx - 12 * k, cy - 12 * k]], 6, true), { w: 3.5, seed: 8 }); }
+}
+
+// ---------- título ----------
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2.1, kConector: .6 });
+PARTES.forEach((q, i) => q.t0 = .65 + i * .2 + (q.clave ? .1 : 0));
+const FR = armarFrase(PARTES, { familia: '"Rockwell", "Georgia", serif', peso: 800, ancho: W - 180, altoMax: 400, tamMax: 140, tamMin: 40, y0: 270, interlinea: 1 });
+const Y0_PASOS = FR.y1 + 60, ALTO_PASO = Math.min(260, (1450 - Y0_PASOS) / PASOS.length);
+const T_PASO = i => 1.9 + i * 1.05;
+const MED_R = Math.min(92, ALTO_PASO * .38), XMED = 70 + MED_R + 20, XTXT = XMED + MED_R + 50, ANCHO_TXT = W - 70 - XTXT;
+const FILAS = PASOS.map((p, i) => {
+  const yc = Y0_PASOS + ALTO_PASO * (i + .5);
+  const aT = autoajuste(p.titulo, '"Avenir Next", "Futura", sans-serif', 700, ANCHO_TXT, 2, 64, 34);
+  const aD = autoajuste(p.detalle || '', '"Avenir Next", "Futura", sans-serif', 500, ANCHO_TXT, 1, 40, 24);
+  return { ...p, yc, aT, aD, col: C.pasos[i % C.pasos.length] };
+});
+
+function medallon(f, i, t) {
+  const t0 = T_PASO(i), u = prog(t, t0, t0 + .28); if (u <= 0) return;
+  const s = lerp(1.3, 1, aterriza(u)), r = MED_R * s;                       // estampa seca, sin rebote
+  ctx.save(); ctx.globalAlpha = .45; rayos(XMED, f.yc, r * 1.04, r * 1.3, 28, t * .35 + i, f.col); ctx.restore();   // rayos de sol semitransparentes
+  impreso(circle(XMED, f.yc, r), f.col, { w: 5, seed: 10 + i, plano: [8, 8] });
+  icono(f.icono, XMED, f.yc, r * .72, f.col);
+  // medallón chico con el número, arriba a la izquierda
+  const nx = XMED - r * .78, ny = f.yc - r * .78;
+  ctx.save(); ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(nx, ny, 34, 0, 7); ctx.fill(); ctx.restore();
+  textoImpreso(String(i + 1), nx, ny + 16, `900 46px "Rockwell", serif`, null, { col: C.papel, alinear: 'center' });
+}
+function textoPaso(f, i, t) {
+  if (t < T_PASO(i) + .18) return;
+  const lineasT = f.aT.rs.length, y0 = f.yc - (lineasT * f.aT.size * 1.08 + (f.detalle ? f.aD.size * 1.3 : 0)) / 2 + f.aT.size * .85;
+  ctx.save(); ctx.font = `700 26px "Avenir Next", sans-serif`; ctx.fillStyle = INK; ctx.globalAlpha = .7;
+  ctx.fillText(`P A S O  ${i + 1}  D E  ${PASOS.length}`, XTXT, y0 - f.aT.size * .95); ctx.restore();
+  f.aT.rs.forEach((r, k) => textoImpreso(r, XTXT, y0 + k * f.aT.size * 1.08, f.aT.font, f.col));
+  if (f.detalle && t >= T_PASO(i) + .45) { ctx.save(); ctx.font = f.aD.font; ctx.fillStyle = INK; ctx.globalAlpha = .82; ctx.fillText(f.aD.rs[0], XTXT, y0 + lineasT * f.aT.size * 1.08 + f.aD.size * .25); ctx.restore(); }
+}
+function flecha(i, t) {                     // flecha de manual punteada y curva que baja al siguiente paso
+  const t0 = T_PASO(i) + .55, p = prog(t, t0, t0 + .4); if (p <= 0 || i >= FILAS.length - 1) return;
+  const a = FILAS[i], b = FILAS[i + 1], x = XMED - MED_R - 26, y0 = a.yc + MED_R * .7, y1 = b.yc - MED_R * .7;
+  const pts = []; for (let k = 0; k <= 20; k++) { const u = k / 20 * p; pts.push([x - Math.sin(u * Math.PI) * 34, lerp(y0, y1, u)]); }
+  ctx.save(); ctx.setLineDash([14, 12]); ink(pts, { col: INK, w: 4, passes: 1, amp: .6 }); ctx.restore();
+  if (p >= 1) impreso(resample([[x - 16, y1 - 22], [x + 14, y1 - 18], [x - 2, y1 + 6]], 5, true), a.col, { w: 3.5 });
+}
+
+arrancar(frame => {
+  const t = frame / FPS, dos = Math.floor(frame / 2);
+  BOIL = Math.floor(frame / 3);
+  REG = [6 + (hash2(dos, 1) - .5) * 3, 5 + (hash2(dos, 2) - .5) * 3];       // re-registro sobre dos
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.drawImage(PAPEL, 0, 0);
+  // empuje lento del «soporte» hasta el cuadro final quieto (≥ 3 s)
+  const z = 1 + .035 * ease(prog(t, .5, 5.6));
+  ctx.save(); ctx.translate(W / 2, 860); ctx.scale(z, z); ctx.translate(-W / 2, -860);
+  // adornos de época: destellos atómicos y un búmeran
+  for (const [x, y, r, k] of [[110, 300, 26, 0], [980, 330, 34, 1], [960, 1410, 24, 2], [120, 1430, 18, 0]]) estrellaAtomica(x + REG[0] * .5, y, r, C.pasos[k], .2);
+  impreso(resample([[860, 1560], [1000, 1520], [960, 1600], [900, 1580]], 10, true), C.pasos[1], { w: 3.5, seed: 33 });
+  pintarFrase(FR, t, q => textoImpreso(q.txt, q.x, q.y, q.font, q.clave ? C.pasos[0] : C.pasos[1]));
+  // raya fina bajo el título
+  if (t > 1.4) tintaRota([[160, FR.y1 + 18], [W - 160, FR.y1 + 14]], { closed: false, w: 3.5, seed: 44 });
+  FILAS.forEach((f, i) => { medallon(f, i, t); textoPaso(f, i, t); flecha(i, t); });
+  ctx.restore();
+  grano(.08, 4);
+  // barrido de bloque de color: el cuadro 0 es el bloque lleno con rayos; sube como página que pasa
+  const sube = aterriza(prog(t, .18, .62));
+  if (sube < 1) { const y = -H * sube;
+    ctx.save(); ctx.beginPath(); ctx.rect(0, y, W, H); ctx.clip(); ctx.fillStyle = C.bloque; ctx.fillRect(0, y, W, H);
+    ctx.globalAlpha = .55; rayos(W / 2, y + H * .45, 60, 1400, 30, t * .4, C.rayos); ctx.globalAlpha = 1;
+    explosion(W / 2, y + H * .45, 210, 14, { relleno: C.papel, tinta: INK, w: 6, sombra: [10, 10] });
+    textoImpreso(String(PASOS.length), W / 2, y + H * .45 + 70, `900 210px "Rockwell", serif`, C.pasos[1], { alinear: 'center' });
+    ctx.restore(); }
+});
+window.SONIDOS = [
+  { t: .18, tipo: 'papel' }, ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })),
+  ...PASOS.map((_, i) => ({ t: +T_PASO(i).toFixed(2), tipo: 'golpe' })), ...PASOS.slice(1).map((_, i) => ({ t: +(T_PASO(i) + .55).toFixed(2), tipo: 'desliz' })), { t: 0, tipo: 'ambiente' },
+];
+</script>
+</body>
+</html>

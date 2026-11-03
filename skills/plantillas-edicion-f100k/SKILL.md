@@ -1,6 +1,6 @@
 ---
 name: plantillas-edicion-f100k
-description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (180 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
+description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (246 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
 argument-hint: "[nombre de la plantilla] [ruta del video | tema]"
 ---
 
@@ -17,7 +17,7 @@ reconoce la plantilla → revisa que su motor esté instalado → pide solo el m
 `referencia/plantillas-edicion.md` es la misma lista en tablas, para mostrarla rápido. Si no coinciden, manda el JSON. No edites estos archivos: llegan con cada actualización.
 
 ## 1. ¿Qué pidió?
-- **«Qué plantillas hay» / «/plantillas» / «lista de plantillas»** → muestra los grupos con su cantidad (`porGrupo`) y, de cada grupo, los nombres en una línea separados por « · ». En «¿Qué pasaría si…?» muestra solo las 7 familias con 2 ejemplos cada una (son 56). Cierra con: «Copia el comando de la que quieras, por ejemplo: `edita mi video con la plantilla «Pantalla dividida»`».
+- **«Qué plantillas hay» / «/plantillas» / «lista de plantillas»** → muestra los grupos con su cantidad (`porGrupo`) y, de cada grupo, los nombres en una línea separados por « · ». En «¿Qué pasaría si…?» muestra solo las 7 familias con 2 ejemplos cada una (son 56). En «Estilos de cine» muestra sus 11 familias (`familia`) con 3 nombres cada una (son 66). Cierra con: «Copia el comando de la que quieras, por ejemplo: `edita mi video con la plantilla «Pantalla dividida»`».
   Si pregunta por un grupo («qué efectos hay»), muestra ese grupo completo: nombre — `queSeVe` en una línea.
 - **Nombró una plantilla** → paso 2.
 - **No nombró plantilla** (pasó un guion, un video o un tema) → paso 5.
@@ -53,6 +53,7 @@ Si falta, **no sigas** y dile en 1 paso cómo instalarlo, con el texto de `insta
 | `editor-video-formula100k` | El formato = `receta` (`fullscreen`, `pip`, `versus` o `noticiero`). |
 | `look-viral-en-un-prompt-f100k` | El look = `receta` (`palabra` o `linea`). |
 | `clonador-de-edicion-f100k` | El estilo del catálogo `estilos/catalogo.md` con id = `receta`. |
+| `animacion-dibujada-f100k` con `receta` `cine-<id>` (grupo «Estilos de cine») | `node <skill>/scripts/armar.mjs cine-<id> "<proyecto>/animaciones/<nombre>.html"`, cambia solo el bloque «LO QUE PUEDES CAMBIAR» con su frase (y sus fotos si el estilo las acepta) y renderiza con `renderizar.mjs`, como dice su `SKILL.md` (sección «Estilos de cine (66)»). Es un clip de 8 a 10 s para meter en su reel. |
 | cualquier otra | Su flujo normal; la `receta` es el nombre del estilo o modo dentro de esa skill. |
 
 4. Al entregar, di en una línea qué plantilla usaste y, si tiene `muestra`, que la puede comparar en `formula100k.app` + esa ruta.

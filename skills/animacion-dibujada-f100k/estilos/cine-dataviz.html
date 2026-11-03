@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Gráfica que cuenta</title>
+<style>
+  html,body{margin:0;background:#1b1a18;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Gráfica que cuenta» · ingeniería inversa de lemo-opuscar/styles/dataviz (MIT, © 2026 LemoLab) · qué se tomó: papel crema con retícula de puntos, lápiz rojo–azul que dibuja cada marca, puntos con aro de tinta y pop, notas a mano clavadas al dato, rampa divergente honesta, el marco que se rompe y la escala que reajusta a saltos.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'cuando tu contenido vende';          // el titular de la gráfica (máx. ~40 letras)
+const PALABRA_CLAVE = 'vende';                         // va enorme dentro del titular
+const MEDIDA = 'ventas por semana · ejemplo';          // la unidad, en letra de máquina (chica)
+// EJEMPLO EDITABLE · SOLO cifras del guion: un valor por semana. El último rompe el marco (el récord).
+const DATOS = [1, 2, 1, 3, 2, 4, 3, 6];
+const ETIQUETAS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'];
+const NOTA_INICIO = 'tu primera oferta';               // nota azul (recuerdo) clavada al primer punto
+const NOTA_RECORD = 'aquí cambió todo';                // nota roja (récord) clavada al último punto
+const PIE = 'cada punto es una semana publicando con oferta';   // el pie de la figura (máx. ~60 letras)
+const COLORES = {
+  papel: '#F6F3EC', reticula: '#E4DDCF', tinta: '#2B2723', tintaSuave: '#6E665C', regla: '#DDD6C9',
+  azul: '#2F5D8A',      // mina azul: recuerdos y notas humanas
+  rojo: '#A8283A',      // mina roja: récords y avisos
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.6;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const SERIF = 'Baskerville, "Hoefler Text", Georgia, serif', MONO = 'Menlo, "Courier New", monospace';
+const LETRA_NOTA = '"Bradley Hand", "Noteworthy", cursive';
+const PAPEL = mosaicoPapel(COLORES.papel, 7);
+const CAJA = { x0: 150, x1: 960, y0: 660, y1: 1180 };
+const N = DATOS.length;
+const MAX0 = Math.max(...DATOS.slice(0, -1)) + 1;                 // la escala que pide la historia antes del récord
+const MAX1 = Math.ceil(DATOS[N - 1] + 1);                         // la escala después de reajustar
+// rampa honesta: centrada en el promedio de las primeras semanas (el periodo de referencia), media amplitud simétrica
+const REF = DATOS.slice(0, Math.max(2, Math.floor(N / 2))), CENTRO = REF.reduce((a, b) => a + b, 0) / REF.length;
+const MITAD = Math.max(1, (Math.max(...DATOS) - CENTRO) / 1.15);
+
+// ---------- tiempos ----------
+const T_PUNTO = i => i === 0 ? -1 : i < N - 1 ? 1.45 + (i - 1) * .42 : 1.45 + (N - 3) * .42 + .85;   // el récord se hace esperar
+const T_ROMPE = T_PUNTO(N - 1);
+const PASOS_ESCALA = [0, 1, 2, 3].map(k => T_ROMPE + .7 + k * .2);                                   // trinquete: 4 saltos
+const T_NOTA2 = PASOS_ESCALA[3] + .35, T_ANILLO = T_NOTA2 + 1.05, T_SALE = T_ANILLO + .55;
+
+function escalaMax(t) { let m = MAX0; PASOS_ESCALA.forEach(ts => m += (MAX1 - MAX0) / 4 * ease(prog(t, ts, ts + .09))); return m; }
+const X = i => lerp(CAJA.x0 + 60, CAJA.x1 - 40, i / (N - 1));
+const Y = (v, t) => CAJA.y1 - v / escalaMax(t) * (CAJA.y1 - CAJA.y0);
+// mientras no reajusta, el récord se queda clavado por encima del marco (lo atraviesa)
+const Yp = (i, t) => i === N - 1 ? Math.max(Y(DATOS[i], t), CAJA.y0 - 150) : Y(DATOS[i], t);
+
+// ---------- cámara: de un solo punto a la gráfica entera, empujón en el récord ----------
+function cam(t) {
+  const p1 = [X(0) + 125, Yp(0, 0) - 170];
+  const k = ease(prog(t, .45, 1.35));
+  let c = { x: lerp(p1[0], W / 2, k), y: lerp(p1[1], H / 2, k), z: lerp(2.5, 1, k) };
+  if (t >= T_ROMPE) {                                                // empujón en 2 cuadros hacia el récord y vuelta suave
+    const a = prog(t, T_ROMPE, T_ROMPE + 2 / FPS), b = ease(prog(t, T_ROMPE + .5, T_ROMPE + 1.3)), e = a * (1 - b);
+    c = { x: lerp(c.x, X(N - 1) - 120, e * .35), y: lerp(c.y, CAJA.y0, e * .35), z: c.z * (1 + .14 * e) };
+  }
+  return c;
+}
+const aPantalla = (c, [x, y]) => [W / 2 + (x - c.x) * c.z, H / 2 + (y - c.y) * c.z];
+
+// ---------- maqueta del texto ----------
+const TIT = fraseDiseno(TITULO, PALABRA_CLAVE, { familia: SERIF, familiaClave: SERIF, peso: 400, pesoClave: 700, tam: 78, factor: 2.3,
+  ancho: CAJA.x1 - CAJA.x0, x: CAJA.x0, y: 262, maxAlto: 330, maxRenglones: 3 });
+const PIE_AJ = autoajuste(PIE, SERIF, 400, CAJA.x1 - CAJA.x0, 2, 52, 34);
+const NOTA1 = { x: CAJA.x0 + 14, y: Yp(0, 0) - 300 };
+
+// ---------- el lápiz: dónde está la punta y qué tan alzado ----------
+function lapiz(t, c) {
+  const nota1 = textoLapiz(NOTA_INICIO, NOTA1.x, NOTA1.y, { tam: 46, col: COLORES.azul, p: prog(t, -.6, .55), familia: LETRA_NOTA, dibujar: false });
+  if (t < .55) return { punta: nota1.punta, alza: 0, mina: 'azul' };
+  const salto = (a, b, k, alto = .5) => ({ punta: [lerp(a[0], b[0], ease(k)), lerp(a[1], b[1], ease(k))], alza: Math.sin(clamp(k) * Math.PI) * alto });
+  let prev = nota1.punta;
+  for (let i = 1; i < N; i++) {
+    const tp = T_PUNTO(i), ta = i === 1 ? .55 : T_PUNTO(i - 1), dest = [X(i), Yp(i, Math.min(t, T_ROMPE + .6))];
+    if (i === N - 1 && t >= ta && t < tp) {                          // duda: se queda flotando antes del récord
+      const k = prog(t, ta, ta + .3), h = prog(t, tp - .25, tp); const flota = [lerp(X(i - 1), X(i), .55), CAJA.y0 + 20];
+      if (t < tp - .25) return salto(prev, flota, k, .4);
+      return salto(flota, dest, h, .25);
+    }
+    if (t >= ta && t < tp) return salto(prev, dest, prog(t, ta, tp));
+    prev = [X(i), Yp(i, Math.min(tp + .01, T_ROMPE + .6))];
+  }
+  const rec = [X(N - 1), Yp(N - 1, t)];
+  if (t < T_ROMPE + .3) { const k = prog(t, T_ROMPE, T_ROMPE + .3); return { punta: [rec[0] + 40 * easeOut(k), rec[1] - 90 * easeOut(k)], alza: .7 * easeOut(k), mina: 'azul' }; }   // retrocede
+  const n2 = notaRecord(t);
+  if (t < T_NOTA2) { const k = prog(t, T_ROMPE + .3, T_NOTA2); return { punta: [lerp(rec[0] + 40, n2.izq, ease(k)), lerp(rec[1] - 90, n2.y, ease(k))], alza: .7 * (1 - ease(k)), mina: k > .3 ? 'rojo' : 'azul' }; }
+  if (t < T_ANILLO - .1) return { punta: n2.punta, alza: 0, mina: 'rojo' };
+  if (t < T_SALE) { const an = anilloAbierto(rec[0], rec[1], 34, 3); const k = prog(t, T_ANILLO, T_SALE);
+    return { punta: an[Math.min(an.length - 1, Math.floor(k * (an.length - 1)))], alza: 0, mina: 'rojo' }; }
+  const k = ease(prog(t, T_SALE + .1, T_SALE + .9));
+  return { punta: [rec[0] + 40 + 520 * k, rec[1] + 30 + 900 * k], alza: .3 + k * .7, mina: 'rojo' };
+}
+function notaRecord(t, dibujar = false) {
+  const y = CAJA.y0 - 88, xd = X(N - 1) - 40;
+  const im = textoLapiz(NOTA_RECORD, xd, y, { tam: 46, col: COLORES.rojo, p: 0, familia: LETRA_NOTA, alinear: 'der' });
+  const p = prog(t, T_NOTA2, T_ANILLO - .15);
+  const r = textoLapiz(NOTA_RECORD, xd, y, { tam: 46, col: COLORES.rojo, p, familia: LETRA_NOTA, alinear: 'der', dibujar });
+  return { ...r, izq: im.izq, y: y - 14 };
+}
+
+// ---------- la gráfica ----------
+function grafica(t) {
+  const m = escalaMax(t);
+  ctx.font = `400 26px ${MONO}`; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+  for (let v = 0; v <= MAX1; v++) {                                  // renglones de la escala (cambian con el reajuste)
+    const y = Y(v, t); if (y < CAJA.y0 - 2) continue;
+    ctx.strokeStyle = v === 0 ? '#BDB4A5' : COLORES.regla; ctx.lineWidth = v === 0 ? 2.4 : 1.6;
+    ctx.beginPath(); ctx.moveTo(CAJA.x0, y); ctx.lineTo(CAJA.x1, y); ctx.stroke();
+    ctx.fillStyle = COLORES.tintaSuave; ctx.fillText(String(v), CAJA.x0 - 18, y);
+  }
+  // los ejes crecen desde el primer punto (la unidad llega con la historia)
+  const ke = easeOut(prog(t, .55, 1.4));
+  ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(CAJA.x0, CAJA.y1); ctx.lineTo(lerp(X(0), CAJA.x1, ke), CAJA.y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(CAJA.x0, CAJA.y1); ctx.lineTo(CAJA.x0, lerp(CAJA.y1, CAJA.y0, ke)); ctx.stroke();
+  // borde de arriba: se rompe donde pasa el récord y la rotura queda como cicatriz
+  const xr = X(N - 1), roto = t >= T_ROMPE;
+  ctx.beginPath(); ctx.moveTo(CAJA.x0, CAJA.y0); ctx.lineTo(roto ? xr - 34 : lerp(CAJA.x0, CAJA.x1, ke), CAJA.y0);
+  if (roto) { ctx.moveTo(xr + 34, CAJA.y0); ctx.lineTo(CAJA.x1, CAJA.y0); } ctx.stroke();
+  if (roto) {                                                        // pestañas de papel rasgado
+    ctx.fillStyle = COLORES.papel; ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 2;
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(xr + s * 34, CAJA.y0); ctx.lineTo(xr + s * 20, CAJA.y0 - 22); ctx.lineTo(xr + s * 10, CAJA.y0 - 8); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  }
+  ctx.font = `400 26px ${MONO}`; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ETIQUETAS.forEach((e, i) => { if (t >= T_PUNTO(i)) { ctx.fillStyle = i === 0 || i === N - 1 ? COLORES.tinta : COLORES.tintaSuave; ctx.fillText(e, X(i), CAJA.y1 + 20); } });
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  if (t >= 1.0) { ctx.fillStyle = COLORES.tintaSuave; ctx.font = `400 26px ${MONO}`; ctx.fillText(MEDIDA, CAJA.x0, CAJA.y0 - 22); }
+  // la línea de tinta: cada tramo se dibuja cuando el lápiz viaja al punto siguiente
+  for (let i = 1; i < N; i++) {
+    const p = prog(t, T_PUNTO(i) - .3, T_PUNTO(i)); if (p <= 0) continue;
+    lapizTrazo([[X(i - 1), Yp(i - 1, t)], [X(i), Yp(i, t)]], { col: COLORES.tinta, ancho: 5, p, semilla: i, vaiven: .25, pasadas: 1, grano: .15, alfa: 1 });
+  }
+  DATOS.forEach((v, i) => puntoDato(X(i), Yp(i, t), 15, rampa((v - CENTRO) / MITAD), t - T_PUNTO(i), { anillo: COLORES.tinta, anilloW: 3 }));
+}
+function notas(t) {
+  // nota 1 (azul): guía curva y anillo abierto alrededor del primer punto
+  textoLapiz(NOTA_INICIO, NOTA1.x, NOTA1.y, { tam: 46, col: COLORES.azul, p: prog(t, -.6, .55), familia: LETRA_NOTA });
+  lapizTrazo(anilloAbierto(X(0), Yp(0, t), 30, 1), { col: COLORES.azul, ancho: 2.6, p: 1, semilla: 4, pasadas: 1 });
+  lapizTrazo(curvaQ([NOTA1.x + 20, NOTA1.y + 18], [X(0) - 50, NOTA1.y + 150], [X(0) - 10, Yp(0, t) - 32]), { col: COLORES.azul, ancho: 2.2, p: 1, semilla: 5, pasadas: 1 });
+  // nota 2 (roja): el récord
+  if (t >= T_NOTA2) {
+    const n2 = notaRecord(t, true), rec = [X(N - 1), Yp(N - 1, t)];
+    lapizTrazo(curvaQ([n2.izq + n2.w + 8, CAJA.y0 - 98], [rec[0] + 30, CAJA.y0 - 90], [rec[0] - 26, rec[1] - 26]), { col: COLORES.rojo, ancho: 2.4, p: prog(t, T_ANILLO - .3, T_ANILLO), semilla: 8, pasadas: 1 });
+    lapizTrazo(anilloAbierto(rec[0], rec[1], 34, 3), { col: COLORES.rojo, ancho: 2.8, p: prog(t, T_ANILLO, T_SALE), semilla: 9, pasadas: 1 });
+  }
+}
+function pie(t) {                                                    // el pie de figura: regla fina, rótulo de máquina y serif
+  if (t < 1.6) return;
+  const y0 = 1300; ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(CAJA.x0, y0); ctx.lineTo(CAJA.x1, y0); ctx.stroke();
+  const vistas = DATOS.filter((_, i) => t >= T_PUNTO(i)).length;
+  ctx.fillStyle = COLORES.tintaSuave; ctx.font = `400 24px ${MONO}`; ctx.fillText(`${ETIQUETAS[0]}–${ETIQUETAS[vistas - 1]}`, CAJA.x0, y0 - 14);
+  ctx.fillStyle = COLORES.tinta; ctx.font = PIE_AJ.font;
+  PIE_AJ.rs.forEach((r, i) => ctx.fillText(r, CAJA.x0, y0 + PIE_AJ.size * (1.15 + i * 1.2)));
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  const c = cam(t);
+  papelMundo(PAPEL, c, { colPunto: COLORES.reticula, paso: 26 });
+  camara(c);
+  grafica(t); notas(t);
+  pintarFrase(TIT, t, 1.0, .16, { col: COLORES.tinta, colClave: COLORES.tinta });
+  pie(t);
+  const L = lapiz(t, c);
+  if (t < T_SALE + .9) lapizRojoAzul(aPantalla(c, L.punta), { alza: L.alza, mina: L.mina, ang: lerp(.72, 1.12, clamp((aPantalla(c, L.punta)[1] - 600) / 500)), escala: 1.25 * Math.min(1.6, c.z), azul: COLORES.azul, rojo: COLORES.rojo });
+  pantalla();
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'papel' }, { t: .5, tipo: 'swish' },
+  ...DATOS.map((_, i) => ({ t: +T_PUNTO(i).toFixed(2), tipo: 'pop' })).filter(s => s.t > 0),
+  { t: +T_ROMPE.toFixed(2), tipo: 'golpe' }, ...PASOS_ESCALA.map(t => ({ t: +t.toFixed(2), tipo: 'desliz' })),
+  { t: +T_NOTA2.toFixed(2), tipo: 'papel' },
+];
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Investigación visual</title>
+<style>
+  html,body{margin:0;background:#0B0C0E;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Investigación visual» · ingeniería inversa de lemo-opuscar/styles/visual-investigation (MIT, © 2026 LemoLab) · qué se tomó: mesa fría con evidencias en gris y UN rojo que solo señala, cuadros que entran con destello blanco de 3 cuadros, congelar-encerrar-ampliar (círculo horario + guía + lupa ×2 del mismo recorte), reloj grande que vive en el cuadro, rejilla de 3 columnas que se llena a la hora de cada fuente, línea punteada de sincronía, y enlaces rojos que convergen en una sola zona con palomitas.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const PREGUNTA = '¿Por qué vendió este post?';       // el titular de la primera parte (≤ 30 letras)
+const DETALLE = { x: .5, y: .3, r: .17, txt: 'el producto, de frente' };   // qué se encierra en la foto 1 (0 a 1) y su etiqueta (≤ 24)
+const COLUMNAS = [                                    // las 3 fuentes, en orden de hora. SOLO cifras del guion
+  { hora: '19:02', tag: 'POST · PUBLICADO' },
+  { hora: '19:14', tag: 'DM · PRIMER MENSAJE', cita: '¿cuánto cuesta?' },   // la 2.ª es un mensaje: se escribe como transcripción
+  { hora: '19:31', tag: 'VENTA · PAGO' },
+];
+const VEREDICTO = 'vendió por *el producto*';         // el hallazgo final; la clave entre *asteriscos* va en rojo
+const FOTOS = [];   // 3 capturas (el post, el chat, la venta). Vacío = reemplazos neutros
+const COLORES = {
+  fondo: '#0B0C0E', panel: '#141619', linea: '#2E3238',
+  texto: '#ECEAE4', gris: '#8B9097', duda: '#4A4F57',
+  rojo: '#FF4A2E',                      // el único color: aquí / ahora / coincide
+  papel: '#E4E0D4', tinta: '#1D1D1B',   // tarjeta de transcripción
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30, DUR = 9.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F = '"Helvetica Neue", "Avenir Next", Arial, sans-serif';
+const F_MONO = 'Menlo, "Courier New", monospace';
+const F_CITA = 'Georgia, "Times New Roman", serif';
+const F_NUM = '"DIN Condensed", "Avenir Next Condensed", sans-serif';
+let IMS = [];
+material(FOTOS, ['producto', 'chat', 'perfil']).then(ims => { IMS = ims.map(im => gradear(im, 'bn')); });
+const texto = (s, x, y, font, col, al = 'left') => { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.fillText(s, x, y); ctx.restore(); };
+const T_GRID = 3.0, T_FIN = 6.6, M = SEGURA.left;
+const minutos = h => { const [a, b] = h.split(':').map(Number); return a * 60 + b; };
+
+// ---------- piezas ----------
+function marco(x, y, w, h) { ctx.strokeStyle = C.linea; ctx.lineWidth = 2; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1); }
+function etiqueta(s, x, y) { ctx.fillStyle = C.rojo; ctx.fillRect(x, y - 20, 10, 20); texto(s, x + 20, y, `600 26px ${F_MONO}`, C.gris); }
+function evidencia(im, x, y, w, h, fx = .5, fy = .4, zoom = 1, tEntra = -1, t = 0, frame = 0) {   // cuadro de evidencia: gris, grano propio, destello al entrar
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.fillStyle = C.panel; ctx.fillRect(x, y, w, h);
+  if (im) cubrir(im, x, y, w, h, fx, fy, zoom); granoPeli(.22, frame);
+  if (tEntra >= 0 && t - tEntra < 3 / FPS) { ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(x, y, w, h); }
+  ctx.restore(); marco(x, y, w, h);
+}
+function palomita(x, y, p) {                        // ✓ dibujada en un cuadro rojo, sin palabras
+  if (p <= 0) return; ctx.fillStyle = C.rojo; ctx.fillRect(x, y, 56, 56);
+  ctx.strokeStyle = C.fondo; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.beginPath(); const k = clamp(p * 2);
+  ctx.moveTo(x + 13, y + 30); ctx.lineTo(x + 24, y + 41); if (p > .5) ctx.lineTo(x + 24 + 20 * clamp((p - .5) * 2), y + 41 - 24 * clamp((p - .5) * 2)); ctx.stroke(); void k;
+}
+function guion(x0, y0, x1, y1, p, w = 3) { if (p <= 0) return; ctx.save(); ctx.strokeStyle = C.rojo; ctx.lineWidth = w; ctx.setLineDash([12, 9]); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(lerp(x0, x1, p), lerp(y0, y1, p)); ctx.stroke(); ctx.restore(); }
+
+// ---------- 1 · congelar, encerrar, ampliar ----------
+const P1 = { x: M, y: 420, w: W - 2 * M, h: 820 };
+function parte1(t, frame) {
+  texto(PREGUNTA, M, 360, `700 ${autoajuste(PREGUNTA, F, 700, W - 2 * M, 1, 72, 40).size}px ${F}`, C.texto);
+  etiqueta('CAPTURA · TU POST', M, P1.y - 14);
+  evidencia(IMS[0], P1.x, P1.y, P1.w, P1.h, .5, .4, 1 + .05 * prog(t, 0, T_GRID), -1, t, frame);
+  // dónde cae el detalle en pantalla (mismo cover que la imagen, sin empuje para no despegar el círculo)
+  const im = IMS[0]; if (!im) return; const z = 1 + .05 * prog(t, 0, T_GRID);
+  const e = Math.max(P1.w / im.width, P1.h / im.height) * z, sw = P1.w / e, sh = P1.h / e, sx = (im.width - sw) * .5, sy = clamp((im.height - sh) * .4, 0, im.height - sh);
+  const cx = P1.x + (DETALLE.x * im.width - sx) * e, cy = P1.y + (DETALLE.y * im.height - sy) * e, r = DETALLE.r * im.width * e;
+  const pc = easeOut(prog(t, .25, .75));
+  circuloTrazo(cx, cy, r, r, pc, { col: C.rojo, w: 5 });
+  if (pc > .6) {                                     // guía + etiqueta + lupa ×2 del mismo recorte
+    const lx = P1.x + P1.w - 300, ly = P1.y + P1.h + 40, R = 150, q = easeOut(prog(t, .9, 1.3));
+    guion(cx + r * .7, cy + r * .7, lx + R, ly + R * .3, q);
+    if (q >= 1) {
+      ctx.save(); ctx.beginPath(); ctx.arc(lx + R, ly + R, R, 0, 7); ctx.clip(); ctx.fillStyle = C.panel; ctx.fillRect(lx, ly, 2 * R, 2 * R);
+      const s = r * 1.1 / e;                         // ×2: la mitad de fuente por píxel
+      ctx.drawImage(im, DETALLE.x * im.width - s, DETALLE.y * im.height - s, 2 * s, 2 * s, lx, ly, 2 * R, 2 * R); granoPeli(.2, frame); ctx.restore();
+      ctx.strokeStyle = C.rojo; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(lx + R, ly + R, R, 0, 7); ctx.stroke();
+      texto('×2', lx + 2 * R - 10, ly + 40, `600 28px ${F_MONO}`, C.rojo, 'right');
+    }
+    if (t > 1.35) { const aj = autoajuste(DETALLE.txt, F, 700, 560, 2, 60, 36); aj.rs.forEach((s, i) => texto(s, M, P1.y + P1.h + 90 + i * aj.size * 1.1, aj.font, C.texto)); }
+  }
+}
+
+// ---------- 2 · rejilla de 3 columnas bajo un reloj grande ----------
+const RELOJ_K = COLUMNAS.map((c, i) => ({ t: T_GRID + .25 + i * 1.05, m: minutos(c.hora) }));
+function horaEn(t) {                                // el reloj se mueve entre las horas de cada fuente (suave entre claves)
+  let m = RELOJ_K[0].m; for (let i = 0; i < RELOJ_K.length - 1; i++) { const a = RELOJ_K[i], b = RELOJ_K[i + 1]; if (t >= a.t) m = lerp(a.m, b.m, easeOut(prog(t, a.t + .3, b.t))); }
+  return m;
+}
+function parte2(t, frame) {
+  const m = horaEn(t), hh = Math.floor(m / 60), mm = Math.floor(m % 60);
+  digitosFijos(`${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`, M, 530, `700 230px ${F_NUM}`, C.texto);
+  texto('HORA DEL DÍA', M + 4, 290, `600 26px ${F_MONO}`, C.gris);
+  const gap = 18, cw = (W - 2 * M - 2 * gap) / 3, y = 640, h = 600;
+  COLUMNAS.forEach((c, i) => {
+    const x = M + i * (cw + gap), tE = RELOJ_K[i].t;
+    if (t < tE) { ctx.strokeStyle = C.duda; ctx.setLineDash([10, 8]); ctx.lineWidth = 2; ctx.strokeRect(x, y, cw, h); ctx.setLineDash([]); return; }   // aún no empieza: casilla punteada
+    const aj = autoajuste(c.tag, F_MONO, 600, cw - 20, 2, 24, 16); aj.rs.forEach((s, k) => texto(s, x + 4, y - 22 - (aj.rs.length - 1 - k) * aj.size * 1.15, aj.font, C.gris));
+    if (c.cita) {                                    // transcripción en papel, escrita a máquina
+      ctx.save(); ctx.beginPath(); ctx.rect(x, y, cw, h); ctx.clip(); evidencia(IMS[1], x, y, cw, h, .5, .3, 1.1, tE, t, frame); ctx.restore();
+      ctx.fillStyle = C.papel; ctx.fillRect(x + 14, y + h - 230, cw - 28, 200);
+      texto('TRANSCRIPCIÓN', x + 28, y + h - 196, `600 18px ${F_MONO}`, '#5d5a52');
+      const n = Math.floor(c.cita.length * clamp((t - tE - .2) / .6)), fq = autoajuste(c.cita, F_CITA, 'italic 400', cw - 60, 3, 44, 22);
+      renglones(c.cita.slice(0, n), fq.font, cw - 60).forEach((s, k) => texto(s, x + 28, y + h - 140 + k * fq.size * 1.15, fq.font, C.tinta));
+    } else evidencia(IMS[i === 0 ? 0 : 2], x, y, cw, h, .5, i === 0 ? .35 : .2, 1.15, tE, t, frame);
+    texto(c.hora, x + 4, y + h + 66, `700 64px ${F_NUM}`, C.rojo);
+  });
+  // congelar en el punto de sincronía: línea roja punteada que cruza las tres
+  const ps = easeOut(prog(t, RELOJ_K[2].t + .5, RELOJ_K[2].t + 1.1)); if (ps > 0) guion(M - 20, y + h * .5, W - M + 20, y + h * .5, ps, 4);
+  if (ps >= 1) texto(`${minutos(COLUMNAS[2].hora) - minutos(COLUMNAS[0].hora)} MIN DEL POST AL PAGO`, M, y + h + 150, `700 46px ${F}`, C.texto);
+}
+
+// ---------- 3 · enlaces que convergen en una zona: el hallazgo ----------
+function parte3(t, frame) {
+  const t0 = T_FIN;
+  const m = maqueta(VEREDICTO, { familia: F, peso: 800, pesoChico: 700, grande: 170, chico: 84, x: M, y: 290, ancho: W - 2 * M, alto: 460 });
+  pintarMaqueta(m, t, t0 + .1, .16, { col: C.texto, colClave: C.rojo });
+  const zona = { x: W / 2 - 300, y: 860, w: 600, h: 150 }, nombre = (VEREDICTO.split('*')[1] || 'ZONA').toUpperCase();
+  ctx.fillStyle = 'rgba(255,74,46,.75)'; ctx.fillRect(zona.x, zona.y, zona.w, zona.h * easeOut(prog(t, t0 + .2, t0 + .4)));
+  { const aj = autoajuste(nombre, F_MONO, 700, zona.w - 40, 1, 52, 24); if (t > t0 + .4) texto(aj.rs[0], zona.x + zona.w / 2, zona.y + 92, aj.font, C.fondo, 'center'); }
+  const tw = (W - 2 * M - 40) / 3, ty = 1150, th = 280;
+  [0, 1, 2].forEach(i => { const x = M + i * (tw + 20), ti = t0 + .3 + i * .12;
+    evidencia(IMS[i], x, ty, tw, th, .5, .3, 1.2, ti, t, frame);
+    texto(COLUMNAS[i].hora, x, ty + th + 50, `700 44px ${F_NUM}`, C.gris);
+    guion(x + tw / 2, ty, zona.x + zona.w * (.25 + i * .25), zona.y + zona.h, easeOut(prog(t, ti + .3, ti + .9)));
+    palomita(x + tw - 66, ty + 10, prog(t, t0 + 1.3 + i * .12, t0 + 1.5 + i * .12)); });
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  if (t < T_GRID) parte1(t, frame); else if (t < T_FIN) parte2(t, frame); else parte3(t, frame);
+  for (const c of [T_GRID, T_FIN]) if (t >= c && t < c + 3 / FPS) flash(.5);   // cortes secos con destello de 3 cuadros
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'golpe' }, { t: .25, tipo: 'desliz' }, { t: .9, tipo: 'desliz' }, { t: T_GRID, tipo: 'golpe' },
+  ...RELOJ_K.map(k => ({ t: k.t, tipo: 'papel' })), { t: RELOJ_K[2].t + .5, tipo: 'desliz' }, { t: T_FIN, tipo: 'golpe' },
+  ...[0, 1, 2].map(i => ({ t: T_FIN + 1.3 + i * .12, tipo: 'pop' })),
+];
+</script>
+</body>
+</html>

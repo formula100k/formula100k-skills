@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Producto de vidrio</title>
+<style>
+  html,body{margin:0;background:#000;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Producto de vidrio» · ingeniería inversa de lemo-opuscar/styles/glass-product (MIT, © 2026 LemoLab) · qué se tomó: estudio negro con tiras de luz detrás que vuelven el vidrio una línea blanca, borde con dispersión (rojo/verde/azul corridos), la barrida que dibuja el contorno, piezas internas opacas de metal satinado, luz que viaja dentro como cometa, vista explotada que se cierra de golpe en el tiempo fuerte y anillos cáusticos en el piso brillante.
+// El objeto es inventado: ninguna silueta, marca ni letra de un producto real.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const KICKER = 'lo que nadie ve de tu';        // línea chica en mayúsculas espaciadas (≤ 28 letras)
+const CLAVE = 'oferta';                        // la palabra ENORME, ultrafina (≤ 10 letras)
+const PIEZAS = ['el problema', 'la promesa', 'la prueba'];   // 2 o 3 piezas que se separan, de arriba hacia abajo (≤ 16 c/u)
+const FRASE = 'ábrela y muestra lo que lleva adentro';       // aparece después del cierre (≤ 44 letras)
+const COLORES = {
+  acento: '#8fd3ff',    // la luz (una sola familia: hielo → violeta)
+  acento2: '#b49cff',
+  metal: '#9aa3ad',     // el metal satinado de adentro
+};
+const DUR = 8;                                 // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const FINA = '"Helvetica Neue", "Avenir Next", Arial, sans-serif';
+const N = PIEZAS.length, ALTO_M = 1.05, R_M = 1.25;          // módulos de vidrio grueso apilados
+const T_BARRIDA = [.15, 1.05], T_ABRE = [1.35, 2.7], T_CIERRA = 4.55, T_FIN = T_CIERRA + .18;
+const ac = rgbDe(COLORES.acento), ac2 = rgbDe(COLORES.acento2);
+// separación (vista explotada): sale lento (ease-out), flota, y se cierra muy rápido (ease-in) en el tiempo fuerte
+function separa(t) { if (t < T_ABRE[0]) return 0; if (t < T_ABRE[1]) return easeOut(prog(t, T_ABRE[0], T_ABRE[1]));
+  if (t < T_CIERRA) return 1 + Math.sin((t - T_ABRE[1]) * 1.6) * .02; return 1 - Math.pow(prog(t, T_CIERRA, T_FIN), 2.2); }
+function camaraEn(t) { const m = ease(prog(t, 0, DUR));                       // la cámara siempre deriva: órbita lenta y empuje
+  return camara({ objetivo: [0, 1.75, 0], az: -.32 + m * .6, el: .2 + m * .07, dist: 19.5 - m * 1.6, fov: 34, cy: 1030 }); }
+// ---------- un anillo en el mundo ----------
+function anillo(cam, y, r, n = 48) { const o = []; for (let i = 0; i <= n; i++) { const a = i / n * Math.PI * 2; o.push(cam.proy([Math.cos(a) * r, y, Math.sin(a) * r])); } return o; }
+function trazo(pts, desde = 0, hasta = 1) { const n = pts.length - 1, a = Math.floor(desde * n), b = Math.ceil(hasta * n); ctx.beginPath(); ctx.moveTo(pts[a][0], pts[a][1]); for (let i = a + 1; i <= b; i++) ctx.lineTo(pts[i][0], pts[i][1]); }
+// borde con dispersión: tres pasadas rojo / verde / azul corridas un poco (aditivas)
+function bordeDisperso(dibujar, w, alpha, corre = 2.2) {
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineWidth = w; ctx.lineCap = ctx.lineJoin = 'round';
+  [[255, 60, 60, -corre], [60, 255, 120, 0], [70, 110, 255, corre]].forEach(([r, g, b, dx]) => { ctx.save(); ctx.translate(dx, 0); ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`; dibujar(); ctx.stroke(); ctx.restore(); });
+  ctx.restore();
+}
+// ---------- un módulo de vidrio grueso con su pieza interna ----------
+function modulo(cam, y0, k, t, barre, espejo) {
+  const Y = v => espejo ? -v : v, top = anillo(cam, Y(y0 + ALTO_M), R_M), bot = anillo(cam, Y(y0), R_M);
+  const xs = top.concat(bot).map(p => p[0]), izq = Math.min(...xs), der = Math.max(...xs);
+  const iTI = top.reduce((a, p, i) => p[0] < top[a][0] ? i : a, 0), iTD = top.reduce((a, p, i) => p[0] > top[a][0] ? i : a, 0);
+  const iBI = bot.reduce((a, p, i) => p[0] < bot[a][0] ? i : a, 0), iBD = bot.reduce((a, p, i) => p[0] > bot[a][0] ? i : a, 0);
+  const sil = () => { ctx.beginPath(); ctx.moveTo(top[iTI][0], top[iTI][1]); ctx.lineTo(bot[iBI][0], bot[iBI][1]); bot.forEach(p => ctx.lineTo(p[0], p[1])); ctx.lineTo(bot[iBD][0], bot[iBD][1]); ctx.lineTo(top[iTD][0], top[iTD][1]); top.forEach(p => ctx.lineTo(p[0], p[1])); ctx.closePath(); };
+  // 1) la pieza interna: metal satinado opaco (lo de adentro tiene que ser opaco)
+  const ri = R_M * .62, mt = anillo(cam, Y(y0 + ALTO_M * .62), ri), mb = anillo(cam, Y(y0 + ALTO_M * .38), ri);
+  const mx = mt.concat(mb).map(p => p[0]), ml = Math.min(...mx), mr = Math.max(...mx), my0 = Math.min(...mt.map(p => p[1])), my1 = Math.max(...mb.map(p => p[1]));
+  const met = ctx.createLinearGradient(ml, 0, mr, 0), mc = rgbDe(COLORES.metal);
+  met.addColorStop(0, rgbTxt(tonoC(mc, .35))); met.addColorStop(.32, rgbTxt(tonoC(mc, 1.15))); met.addColorStop(.5, rgbTxt(tonoC(mc, .55))); met.addColorStop(.78, rgbTxt(tonoC(mc, .95))); met.addColorStop(1, rgbTxt(tonoC(mc, .3)));
+  ctx.save(); ctx.fillStyle = met; ctx.beginPath(); mb.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); mt.slice().reverse().forEach(p => ctx.lineTo(p[0], p[1])); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = rgbTxt(tonoC(mc, .7)); ctx.beginPath(); mt.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2; trazo(mt); ctx.stroke(); ctx.restore();
+  // 2) el vidrio: casi invisible, con tiras de luz detrás que se ven a través (y la barrida)
+  ctx.save(); sil(); ctx.clip();
+  ctx.fillStyle = 'rgba(200,220,255,.035)'; ctx.fillRect(izq, 0, der - izq, H);
+  const tira = (xc, ancho, a) => { const g = ctx.createLinearGradient(xc - ancho, 0, xc + ancho, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(255,255,255,${a})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(xc - ancho, 0, ancho * 2, H); };
+  tira(izq + (der - izq) * .09, 26, .55); tira(der - (der - izq) * .08, 18, .42); tira(izq + (der - izq) * .3, 9, .14);
+  if (barre > 0 && barre < 1) tira(lerp(izq - 120, der + 120, barre), 70, .75 * Math.sin(barre * Math.PI));
+  ctx.restore();
+  // 3) el canto: la pared gruesa y los bordes con dispersión
+  const fuerza = .5 + (barre > 0 && barre < 1 ? Math.sin(barre * Math.PI) * .5 : 0);
+  bordeDisperso(() => { ctx.beginPath(); ctx.moveTo(top[iTI][0], top[iTI][1]); ctx.lineTo(bot[iBI][0], bot[iBI][1]); ctx.moveTo(top[iTD][0], top[iTD][1]); ctx.lineTo(bot[iBD][0], bot[iBD][1]); }, 3, .55 * fuerza);
+  ctx.save(); ctx.strokeStyle = `rgba(255,255,255,${.75 * fuerza})`; ctx.lineWidth = 2.2; trazo(top); ctx.stroke();
+  const tin = anillo(cam, Y(y0 + ALTO_M), R_M * .9); ctx.strokeStyle = `rgba(255,255,255,${.22 * fuerza})`; ctx.lineWidth = 1.5; trazo(tin); ctx.stroke();
+  ctx.strokeStyle = `rgba(255,255,255,${.5 * fuerza})`; ctx.lineWidth = 2; trazo(bot, 0, .5); ctx.stroke(); ctx.restore();
+  return { cx: (izq + der) / 2, der, y: (top[iTD][1] + bot[iBD][1]) / 2 };
+}
+// guía de luz: hélice de acrílico oscuro por el eje, con un cometa (cabeza gaussiana, cola exponencial)
+function guia(cam, base, alto, t, cabezas, espejo) {
+  const pts = []; for (let i = 0; i <= 160; i++) { const u = i / 160, a = u * Math.PI * 2 * 5.5; pts.push(cam.proy([Math.cos(a) * .32, (espejo ? -1 : 1) * (base + u * alto), Math.sin(a) * .32])); }
+  ctx.save(); ctx.strokeStyle = 'rgba(40,46,60,.9)'; ctx.lineWidth = 5; ctx.lineCap = 'round'; trazo(pts); ctx.stroke();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const s of cabezas) { if (s < -.1 || s > 1.4) continue;
+    for (let i = 1; i < pts.length; i++) { const u = i / 160, d = s - u; if (d < -.03 || d > .5) continue;
+      const a = d < 0 ? Math.exp(-(d * d) / .00025) : Math.exp(-d * 9), col = mezclaC(ac, ac2, clamp(d * 3));
+      ctx.strokeStyle = rgbTxt(d < .015 && d > -.015 ? [255, 255, 255] : col, a); ctx.lineWidth = 5 + a * 6;
+      ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); } }
+  ctx.restore();
+}
+// piso negro brillante con cáusticas: anillos que se abren desde cada golpe (R, G y B con radios corridos)
+function causticas(cam, t) {
+  for (const [t0, fuerza] of [[.55, .8], [T_FIN, 1]]) { const k = prog(t, t0, t0 + 2.4); if (k <= 0 || k >= 1) continue;
+    const r = .8 + k * 6, a = (1 - k) * fuerza;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    [[ac, 0], [mezclaC(ac, ac2, .5), .08], [ac2, .16]].forEach(([c, dr]) => { ctx.strokeStyle = rgbTxt(c, a * .7); ctx.lineWidth = 3 + (1 - k) * 5; trazo(anillo(cam, 0, r + dr, 80)); ctx.stroke(); });
+    ctx.restore(); }
+  // charco de luz permanente bajo el objeto (lente)
+  const c = cam.proy([0, 0, 0]); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.translate(c[0], c[1]); ctx.scale(1, .2);
+  const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 520); g.addColorStop(0, rgbTxt(ac, .22 + .25 * clamp(1 - prog(t, T_FIN, T_FIN + 1.2)) * (t > T_FIN ? 1 : 0))); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(-520, -520, 1040, 1040); ctx.restore();
+}
+// ---------- el producto entero ----------
+function producto(cam, t, espejo) {
+  const sp = separa(t), barre = prog(t, T_BARRIDA[0], T_BARRIDA[1]), info = [];
+  for (let i = 0; i < N; i++) {                                   // de abajo hacia arriba
+    const j = N - 1 - i, y0 = .15 + i * ALTO_M + i * sp * .62;     // PIEZAS[0] es el de arriba
+    info[j] = modulo(cam, y0, i, t, clamp(barre * 1.25 - i * .12), espejo);
+  }
+  const alto = N * ALTO_M + (N - 1) * sp * .62;
+  const cabezas = [prog(t, .3, 1.5) * 1.3, prog(t, T_FIN, T_FIN + 1.1) * 1.3, prog(t, T_FIN + 1.4, T_FIN + 2.5) * 1.3];
+  guia(cam, .2, alto - .1, t, cabezas, espejo);
+  return info;
+}
+// ---------- texto ultrafino, muy espaciado; palabras con corte seco ----------
+function ajusteEsp(txt, peso, ancho, tamMax, tamMin, track) { for (let z = tamMax; z >= tamMin; z -= 2) { const f = `${peso} ${z}px ${FINA}`;
+  if (medir(txt, f) + track * z * (txt.length - 1) <= ancho) return { font: f, size: z, track: track * z }; }
+  console.error(`[autoajuste] «${txt}» no cabe: acórtalo.`); return { font: `${peso} ${tamMin}px ${FINA}`, size: tamMin, track: track * tamMin }; }
+function esp(txt, aj, x, y) { ctx.font = aj.font; const cs = [...txt], ws = cs.map(c => medir(c, aj.font)), tot = ws.reduce((a, b) => a + b, 0) + aj.track * (cs.length - 1);
+  let px = x - tot / 2; cs.forEach((c, i) => { ctx.fillText(c, px, y); px += ws[i] + aj.track; }); return tot; }
+const AJ_K = ajusteEsp(KICKER.toUpperCase(), 500, 880, 38, 22, .2), AJ_C = ajusteEsp(CLAVE.toUpperCase(), 200, 920, 160, 70, .16);
+const AJ_F = autoajuste(FRASE, FINA, 300, 900, 1, 46, 28), AJ_P = PIEZAS.map(p => ajusteEsp(p.toUpperCase(), 500, 300, 34, 20, .14));
+function textos(t, info) {
+  ctx.save(); ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#eef3f8';
+  const ws = KICKER.toUpperCase().split(' '); const vis = ws.filter((w, i) => t >= .25 + i * .12);
+  if (vis.length) { const full = esp(KICKER.toUpperCase(), AJ_K, -9999, -9999); ctx.save(); ctx.translate(-(full - esp(vis.join(' '), AJ_K, -9999, -9999)) / 2, 0); esp(vis.join(' '), AJ_K, W / 2, 312); ctx.restore(); }
+  if (t >= .75) esp(CLAVE.toUpperCase(), AJ_C, W / 2, 340 + AJ_C.size);
+  // etiquetas de la vista explotada: línea guía fina + punto + nombre (aparecen en cascada, se van al cerrar)
+  if (t > T_ABRE[0] + .6 && t < T_CIERRA) PIEZAS.forEach((p, j) => { if (t < T_ABRE[0] + .6 + j * .38) return; const m = info[j], x0 = m.der + 14, x1 = Math.min(W - 80, m.der + 50);
+    ctx.strokeStyle = 'rgba(238,243,248,.7)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x0, m.y); ctx.lineTo(x1, m.y); ctx.stroke();
+    ctx.fillStyle = rgbTxt(ac); ctx.beginPath(); ctx.arc(x0, m.y, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#eef3f8'; ctx.font = AJ_P[j].font; ctx.textAlign = 'left';
+    let px = x1 - 8 - (medir(p.toUpperCase(), AJ_P[j].font) + AJ_P[j].track * (p.length - 1)); px = Math.max(SEGURA.left, Math.min(px, W - 70 - 300));
+    ctx.save(); ctx.translate(0, 0); const tot = esp(p.toUpperCase(), AJ_P[j], -9999, -9999); esp(p.toUpperCase(), AJ_P[j], Math.min(W - 70 - tot / 2, x1 + 12 + tot / 2), m.y - 16); ctx.restore(); });
+  if (t >= T_FIN + .6) { ctx.font = AJ_F.font; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(238,243,248,.88)'; AJ_F.rs.forEach((r, i) => ctx.fillText(r, W / 2, 1445 + i * AJ_F.size * 1.15)); }
+  ctx.restore();
+}
+const FONDO = (() => { const c = lienzo(W, H), p = c.getContext('2d'); p.fillStyle = '#000'; p.fillRect(0, 0, W, H);
+  const g = p.createRadialGradient(W / 2, 900, 40, W / 2, 900, 900); g.addColorStop(0, '#1d2128'); g.addColorStop(.6, '#0a0c10'); g.addColorStop(1, '#000'); p.fillStyle = g; p.fillRect(0, 0, W, H); return c; })();
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  // un par de cuadros de micro-sacudida en el impacto del cierre (cámara, no texto)
+  const cam = camaraEn(t);
+  ctx.drawImage(FONDO, 0, 0);
+  // reflejo en el piso: el producto espejado, tenue, que se apaga hacia abajo
+  const yPiso = cam.proy([0, 0, 0])[1];
+  ctx.save(); ctx.globalAlpha = .22; ctx.beginPath(); ctx.rect(0, yPiso - 30, W, H); ctx.clip(); producto(cam, t, true); ctx.restore();
+  const fade = ctx.createLinearGradient(0, yPiso - 40, 0, yPiso + 380); fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(1, 'rgba(0,0,0,1)');
+  ctx.fillStyle = fade; ctx.fillRect(0, yPiso - 40, W, H);
+  causticas(cam, t);
+  const info = producto(cam, t, false);
+  textos(t, info);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: T_BARRIDA[0], tipo: 'swish' }, { t: .55, tipo: 'golpe' }, { t: T_ABRE[0], tipo: 'desliz' },
+  { t: +T_FIN.toFixed(2), tipo: 'golpe' }, { t: +(T_FIN + .6).toFixed(2), tipo: 'swish' }];
+</script>
+</body>
+</html>

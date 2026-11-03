@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Microscopio</title>
+<style>
+  html,body{margin:0;background:#0B0D0F;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Microscopio» · ingeniería inversa de lemo-opuscar/styles/microscope (MIT, © 2026 LemoLab) · qué se tomó: el portaobjetos en el banco de grafito y una sola zambullida en escala logarítmica con giro a través de placas anidadas de la MISMA muestra, el respiro de foco en cada cambio de aumento, el barrido del plano focal al aterrizar, el círculo que se dibuja como arco, el frente que cuenta los píxeles del color y los paneles de vidrio esmerilado
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Mira de cerca: tu bio dice más de lo que crees';   // arriba (máx. ~60 letras)
+const PALABRA_CLAVE = 'tu bio';                       // enorme, en su propio renglón
+const MARCA = 'lo que vende';                         // la etiqueta del círculo
+const DATOS = {                                       // SOLO cifras del guion
+  etiqueta: 'visitas que terminan siguiéndote',
+  valor: '30 %',
+  nota: 'medido en tus estadísticas',
+};
+const FOTO = '';                                      // foto macro TUYA (tu producto de cerca, una textura, una captura). Vacío = muestra teñida
+const CREDITO = '';                                   // de dónde sale la imagen. Vacío = «muestra de ejemplo»
+const COLORES = {
+  vidrio: '#F4F1EC',
+  banco: ['#0B0D0F', '#2A3036'],
+  acento: 'rgb(120,240,205)',   // menta: solo la lectura y lo contado
+  tinta: '#F6F4EF',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+const MW = 1100, MH = 1960, OBJ = [560, 1020], R_DET = 130, DET = 4;            // el mundo (= el portaobjetos) y la placa fina
+const PORTA = { x: 40, y: 120, w: 1020, h: 1720 };
+const TEJ = (() => { const o = []; for (let i = 0; i < 90; i++) { const a = i / 90 * Math.PI * 2, r = 1 + (vnoise(Math.cos(a) * 1.6 + 3, Math.sin(a) * 1.6) - .5) * .32;
+  o.push([MW / 2 + Math.cos(a) * 400 * r, MH / 2 + 80 + Math.sin(a) * 640 * r]); } return o; })();
+let PL = null;
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => {
+  const recorta = c => { const p = c.getContext('2d'); p.globalCompositeOperation = 'destination-in'; p.beginPath(); TEJ.forEach((v, i) => i ? p.lineTo(...v) : p.moveTo(...v)); p.closePath(); p.fill(); return c; };
+  let A, B;
+  if (fs[0]) { A = fotoEnLienzo(fs[0], MW, MH); B = null; }
+  else { A = tejido(MW, MH, { semilla: 5 }); B = tejido(R_DET * 2 * DET, R_DET * 2 * DET, { semilla: 5, escala: 1 / DET, x0: OBJ[0] - R_DET, y0: OBJ[1] - R_DET }); }
+  if (!fs[0]) recorta(A);
+  // máscara de lo contado (píxeles azules = colágeno; con foto, los más oscuros): se pinta en menta
+  const src = B || A, sx = B ? OBJ[0] - R_DET : 0, sy = B ? OBJ[1] - R_DET : 0, esc = B ? DET : 1;
+  const m = lienzo(src.width, src.height), mp = m.getContext('2d'), d = src.getContext('2d').getImageData(0, 0, src.width, src.height).data, im = mp.createImageData(src.width, src.height);
+  for (let i = 0; i < d.length; i += 4) { const az = fs[0] ? (d[i] + d[i + 1] + d[i + 2]) / 3 < 90 : d[i + 2] > d[i] + 40 && d[i + 2] > 120;
+    if (az) { im.data[i] = 120; im.data[i + 1] = 240; im.data[i + 2] = 205; im.data[i + 3] = 200; } }
+  mp.putImageData(im, 0, 0);
+  PL = { A, B, mask: m, mx: sx, my: sy, mesc: esc };
+});
+const FONDO = (() => { const c = lienzo(W, H), p = c.getContext('2d'), g = p.createRadialGradient(W * .5, H * .5, 80, W * .5, H * .5, H * .7);
+  g.addColorStop(0, COLORES.banco[1]); g.addColorStop(1, COLORES.banco[0]); p.fillStyle = g; p.fillRect(0, 0, W, H); return c; })();
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 300, x: SEGURA.left + 30, ancho: SEGURA.right - SEGURA.left - 60, fam: F_SANS, peso: 500, famClave: F_LECTURA, pesoClave: 500, chica: 58, grande: 200, col: COLORES.tinta });
+
+// ---------- la cámara: una zambullida logarítmica con giro, de ojo desnudo a la célula ----------
+const T = { buceo: [.15, 2.3], barrido: [2.35, 2.85], circulo: [3.0, 3.5], cuenta: [3.6, 4.9], frase: 2.4 };
+const ZF = FOTO ? 2.4 : 3.3;
+function camara(t) {
+  const k = ease(prog(t, ...T.buceo)), z = zoomLog(.6, ZF, k) * (1 + .03 * prog(t, T.buceo[1], DUR));
+  return { cx: lerp(MW / 2, OBJ[0], k), cy: lerp(MH / 2 + 30, OBJ[1] + 30 / ZF * 0, k), z, rot: lerp(-.35, 0, k) + .012 * prog(t, T.buceo[1], DUR) };
+}
+const AUMENTOS = [[0, '4×'], [1.2, '10×'], [2.4, '40×']];                // cambian donde cambia la placa (zoom real de la cámara)
+const aumento = z => { let a = AUMENTOS[0]; for (const x of AUMENTOS) if (z >= x[0] * (FOTO ? .5 : 1) + (x[0] ? 0 : 0) && z >= x[0]) a = x; return a; };
+const cambios = (() => { const out = []; for (let f = 1; f < FPS * DUR; f++) { const a = aumento(camara((f - 1) / FPS).z)[1], b = aumento(camara(f / FPS).z)[1]; if (a !== b) out.push(f / FPS); } return out; })();
+const respiro = t => cambios.reduce((m, c) => Math.max(m, Math.exp(-Math.pow((t - c) / .12, 2))), 0);   // foco que respira en cada cambio
+const w2s = (cam, [x, y]) => { const dx = (x - cam.cx) * cam.z, dy = (y - cam.cy) * cam.z, c = Math.cos(cam.rot), s = Math.sin(cam.rot); return [W / 2 + dx * c - dy * s, H / 2 + dx * s + dy * c]; };
+
+function muestra(cam, t, borroso) {
+  conCamara(cam.cx, cam.cy, cam.z, cam.rot, () => {
+    ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.filter = 'blur(30px)'; ctx.fillRect(PORTA.x + 20, PORTA.y + 30, PORTA.w, PORTA.h); ctx.filter = 'none';      // sombra del vidrio en el banco
+    ctx.fillStyle = COLORES.vidrio; ctx.beginPath(); ctx.roundRect(PORTA.x, PORTA.y, PORTA.w, PORTA.h, 10); ctx.fill();
+    ctx.fillStyle = '#dcd8d0'; ctx.fillRect(PORTA.x, PORTA.y, PORTA.w, 300);                                       // la punta esmerilada (sin rótulos)
+    if (borroso) ctx.filter = `blur(${borroso / cam.z}px)`;
+    ctx.drawImage(PL.A, 0, 0, MW, MH);
+    if (PL.B) { ctx.globalAlpha = clamp((cam.z - 1.6) / .8); ctx.drawImage(PL.B, OBJ[0] - R_DET, OBJ[1] - R_DET, R_DET * 2, R_DET * 2); ctx.globalAlpha = 1; }
+    ctx.filter = 'none';
+  });
+}
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.drawImage(FONDO, 0, 0);
+  if (!PL) return;
+  const cam = camara(t), br = respiro(t) * 9;
+  // barrido del plano focal: un frente nítido inclinado cruza un cuadro blando
+  const kb = prog(t, ...T.barrido);
+  if (kb > 0 && kb < 1) { muestra(cam, t, 7); ctx.save(); const x = lerp(-300, W + 300, ease(kb)); ctx.beginPath(); ctx.moveTo(-200, 0); ctx.lineTo(x + 200, 0); ctx.lineTo(x - 200, H); ctx.lineTo(-200, H); ctx.closePath(); ctx.clip(); muestra(cam, t, 0); ctx.restore(); }
+  else muestra(cam, t, t < .25 ? lerp(10, 0, prog(t, 0, .25)) : br);
+  // luz de iluminación: viñeta suave
+  vineta(.5, '5,6,8');
+  // el círculo, el frente que cuenta y los píxeles contados
+  const C = w2s(cam, OBJ), RC = 68 * cam.z;
+  anillo(C[0], C[1], RC, ease(prog(t, ...T.circulo)), { col: '#ffffff', w: 2.4, halo: 'rgba(0,0,0,.4)' });
+  const kc = prog(t, ...T.cuenta);
+  if (kc > 0) { const xf = C[0] - RC + 2 * RC * ease(kc);
+    ctx.save(); ctx.beginPath(); ctx.arc(C[0], C[1], RC, 0, 7); ctx.clip(); ctx.beginPath(); ctx.rect(0, 0, xf, H); ctx.clip();
+    conCamara(cam.cx, cam.cy, cam.z, cam.rot, () => { ctx.globalAlpha = kc < 1 ? .9 : .55; ctx.drawImage(PL.mask, PL.mx, PL.my, PL.mask.width / PL.mesc, PL.mask.height / PL.mesc); }); ctx.restore();
+    if (kc < 1) { const hh = Math.sqrt(Math.max(0, RC * RC - (xf - C[0]) ** 2)); pelo([[xf, C[1] - hh], [xf, C[1] + hh]], { w: 2.5, col: COLORES.acento, halo: null }); } }
+  if (t > T.circulo[1]) { const f = `600 32px ${F_SANS}`, w = medir(MARCA, f) + 30, mx = Math.min(SEGURA.right - w, C[0] + RC * .72), my = C[1] - RC * .72 - 26; esmerilado(mx, my, w, 52, { r: 8 }); escribir(MARCA, mx + 15, my + 37, f, COLORES.tinta); }
+  // la lectura en su panel, junto a lo que mide, unida por una guía
+  if (t > T.cuenta[0]) { const x = SEGURA.left, y = Math.min(1180, C[1] + RC + 40);
+    lectura(x + 30, y + 20, { etiqueta: DATOS.etiqueta, valor: DATOS.valor, nota: DATOS.nota, k: ease(kc), tam: 120, col: COLORES.acento, tinta: COLORES.tinta, ancho: 520,
+      fondo: (a, b, w, h) => { esmerilado(a, b, w, h); pelo([[C[0] - RC * .7, C[1] + RC * .7], [C[0] - RC * .7, b]], { w: 1.6, col: '#ffffff', halo: null, alpha: .8 }); } }); }
+  // instrumentos: aumento (cambia donde cambia la placa) y crédito
+  { const [, au] = aumento(cam.z), x = SEGURA.right - 260, y = 1250; esmerilado(x, y, 260, 84, { r: 10 });
+    escribir('OBJETIVO', x + 20, y + 34, `400 20px ${F_MONO}`, 'rgba(246,244,239,.7)'); escribir(au, x + 20, y + 72, `500 38px ${F_LECTURA}`, COLORES.tinta);
+    ctx.save(); ctx.translate(x + 215, y + 42); ctx.rotate(AUMENTOS.findIndex(a => a[1] === au) * Math.PI / 2); ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, 16, 0, 7); ctx.stroke();
+    for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(Math.cos(i * 2.1) * 8, Math.sin(i * 2.1) * 8, 3.4, 0, 7); ctx.fill(); } ctx.restore();
+    const cr = CREDITO || (FOTO ? 'imagen propia' : 'muestra de ejemplo'), fc = `400 20px ${F_MONO}`, wc = medir(cr, fc) + 30; esmerilado(SEGURA.right - wc, y + 104, wc, 54, { r: 10 }); escribir(cr, SEGURA.right - wc + 15, y + 138, fc, 'rgba(246,244,239,.8)'); }
+  // la frase, sobre vidrio esmerilado (se lee sobre vidrio y sobre tinción por igual)
+  if (t >= T.frase) esmerilado(SEGURA.left, FR.y0 - 20, SEGURA.right - SEGURA.left, FR.alto + 50, { r: 14 });
+  pintarFrase(FR, t, T.frase, .16);
+});
+window.SONIDOS = [{ t: .15, tipo: 'swish' }, ...cambios.map(c => ({ t: +c.toFixed(2), tipo: 'golpe' })), { t: 2.35, tipo: 'desliz' }, { t: 3.0, tipo: 'desliz' }, { t: 3.6, tipo: 'desliz' }, { t: 4.9, tipo: 'pop' }];
+</script>
+</body>
+</html>

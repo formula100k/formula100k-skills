@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diorama Memphis</title>
+<style>
+  html,body{margin:0;background:#FFFCF6;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Diorama Memphis» · ingeniería inversa de lemo-opuscar/styles/memphis-diorama (MIT, © 2026 LemoLab) · qué se tomó: maqueta vista desde arriba en tres cuartos, color plano Memphis en tres tonos duros, contorno índigo, sombras moradas duras con tramado de puntos, patrones en las superficies, el marco orgánico granulado que se abre desde el centro, la onda que cambia el estado de todo lo que toca después de que un edificio se aplasta y rebota, globitos de llamada y las tres líneas de texto bajo el marco.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'una venta trae otra';          // línea 1 (≤ 26 letras)
+const PALABRA_CLAVE = 'venta';                 // va ENORME y en coral dentro de la línea 1
+const FRASE = 'cada clienta feliz se lo cuenta a su cuadra';   // línea 2 (≤ 48 letras)
+const DATO = 'EJEMPLO · CAMBIA ESTE DATO';      // línea 3, monoespaciada (SOLO cifras del guion)
+const LLAMADAS = ['le cuenta a su vecina', 'te escribe por DM', 'compra'];   // globitos que salen al pasar la onda (2 a 3, ≤ 22 c/u)
+const COLORES = {
+  papel: '#FFFCF6', tinta: '#25214A',
+  pasto: '#9fd98a', pasto2: '#2FCB7A',          // antes y después de la onda
+  muros: ['#FF7EB3', '#FFD234', '#5CC8FF', '#B9A0FF', '#FF9C6B'],
+  techos: ['#2F5BFF', '#FF5A5F', '#5EDFB0', '#FFD234', '#2F5BFF'],
+  agua: '#5CC8FF', plaza: '#ffd9b8', coral: '#FF5A5F',
+};
+const DUR = 9;                                 // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const SANS = '"Avenir Next", "Helvetica Neue", sans-serif', MONO = 'Menlo, "Courier New", monospace', INK = COLORES.tinta;
+const L = V3.norm([-.55, .85, .35]), SOMBRA_K = [.70, .58, .90];
+const T_SQUASH = 1.25, T_ONDA = 1.65, VEL_ONDA = 4.2;            // el quiosco se aplasta, rebota, y de él sale la onda
+const MARCO = { cx: W / 2, cy: 760, hw: 470, hh: 500, rad: 150 };
+// ---------- el marco orgánico granulado (se precalcula a media resolución) ----------
+const MW = W / 2, MH = H / 2, BASE = new Float32Array(MW * MH), RADIAL = new Float32Array(MW * MH);
+const fbm = (x, y) => vnoise(x, y) * .55 + vnoise(x * 2.1 + 7, y * 2.1) * .3 + vnoise(x * 4.3, y * 4.3 + 3) * .15;
+for (let j = 0; j < MH; j++) for (let i = 0; i < MW; i++) { const px = i * 2, py = j * 2, k = j * MW + i;
+  const qx = Math.abs(px - MARCO.cx) - MARCO.hw + MARCO.rad, qy = Math.abs(py - MARCO.cy) - MARCO.hh + MARCO.rad;
+  let d = Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - MARCO.rad;
+  BASE[k] = d + (fbm(px / 170 + 11, py / 170) - .5) * 70 + (fbm(px / 38 + 2, py / 38) - .5) * 18;
+  RADIAL[k] = Math.hypot(px - MARCO.cx, (py - MARCO.cy) * .9) + (fbm(px / 120 + 7, py / 120) - .5) * 220; }
+const GRANOS = [0, 1, 2, 3].map(s => { const a = new Float32Array(MW * MH); for (let k = 0; k < a.length; k++) { const g = hash2(k, s * 77 + 5) * 2 - 1; a[k] = g * g * g * 46; } return a; });
+const MASC = lienzo(MW, MH), MX = MASC.getContext('2d'), MIMG = MX.createImageData(MW, MH);
+function mascara(grow, frame) { const G = GRANOS[Math.floor(frame / 2.5) % 4], d = MIMG.data;   // el grano hierve a 12 cps
+  for (let k = 0; k < BASE.length; k++) { const g = G[k], ok = BASE[k] + g < 0 && RADIAL[k] + g * 1.6 < grow; d[k * 4 + 3] = ok ? 255 : 0; }
+  MX.putImageData(MIMG, 0, 0); return MASC; }
+// ---------- la maqueta ----------
+const CASAS = COLORES.muros.map((c, i) => ({ x: -6.4 + i * 3.2, z: -3.6, col: c, techo: COLORES.techos[i % COLORES.techos.length], h: 1.6 + (i % 2) * .5 }));
+const QUIOSCO = { x: .3, z: 2.2 };
+const LLAMA_EN = [CASAS[1], CASAS[2], CASAS[3]].slice(0, LLAMADAS.length);
+const distQ = (x, z) => Math.hypot(x - QUIOSCO.x, z - QUIOSCO.z);
+const radioOnda = t => Math.max(0, (t - T_ONDA) * VEL_ONDA);
+function rayas(dir = 'v', n = 6) { return (g, f, cam, col) => { if (f.p.length < 4) return; g.strokeStyle = rgbTxt(tonoC(col, .78)); g.lineWidth = 3;
+  for (let i = 1; i < n; i++) { const u = i / n, a = dir === 'v' ? cam.proy(puntoCara(f, u, 0)) : cam.proy(puntoCara(f, 0, u)), b = dir === 'v' ? cam.proy(puntoCara(f, u, 1)) : cam.proy(puntoCara(f, 1, u));
+    g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); } }; }
+function ventanas(enc) { return (g, f, cam, col) => { if (f.n[1] > .5) return;
+  for (const u of [.18, .58]) { rellenarPoli(g, cuadCara(f, cam, u, .25, u + .24, .62), enc ? '#FFD36E' : '#ffffff'); trazarPoli(g, cuadCara(f, cam, u, .25, u + .24, .62)); g.strokeStyle = INK; g.lineWidth = 2; g.stroke();
+    rellenarPoli(g, cuadCara(f, cam, u - .02, .64, u + .26, .72), '#5EDFB0'); }        // jardinera con flores
+  rellenarPoli(g, cuadCara(f, cam, .0, .9, 1, 1), '#ffffff'); }; }
+function casaObj(c, t) {
+  const toca = radioOnda(t) > distQ(c.x, c.z), k = toca ? clamp(prog(radioOnda(t) - distQ(c.x, c.z), 0, 1.2)) : 0;
+  const sq = k > 0 && k < 1 ? 1 - Math.sin(k * Math.PI) * .12 : 1;          // se agacha y vuelve cuando la toca la onda
+  const col = toca ? c.col : mezclaC(c.col, '#e8e3d8', .55), tcol = toca ? c.techo : mezclaC(c.techo, '#d8d3c8', .55);
+  const plinto = caja(c.x, 0, c.z, 2.5, .25, 2.1, '#ffffff');
+  const muro = caja(c.x, .25, c.z, 2.3, c.h * sq, 1.9, col, { porCara: { frente: { dibujo: ventanas(toca) }, der: { dibujo: ventanas(toca) } } });
+  const tec = techo(c.x, .25 + c.h * sq, c.z, 2.6, .9 * sq, 2.2, tcol, { cara: { dibujo: rayas('h', 5) } });
+  const ch = caja(c.x + .7, .25 + c.h * sq + .3, c.z - .4, .3, .7, .3, '#ffffff');
+  [muro, tec, ch].forEach(o => o.caras.forEach(f => f.orden = 1)); tec.caras.forEach(f => f.orden = 2); ch.caras.forEach(f => f.orden = 3);
+  plinto.caras.push(...muro.caras, ...tec.caras, ...ch.caras); plinto.centro = [c.x, 1, c.z]; return plinto;
+}
+function quioscoObj(t) {   // el hito: anticipa (se aplasta) y rebota; de él nace el cambio
+  const k = prog(t, T_SQUASH, T_SQUASH + .4), sq = k <= 0 ? 1 : k < .35 ? 1 - .28 * ease(k / .35) : 1 + .1 * Math.sin((k - .35) / .65 * Math.PI) * (1 - k);
+  const b = cilindro(QUIOSCO.x, 0, QUIOSCO.z, 1.05, 1.4 * sq, '#FF7EB3', { lados: 16, cara: { dibujo: null } });
+  const tp = cono(QUIOSCO.x, 1.4 * sq, QUIOSCO.z, 1.45, 1.0 * sq, '#FFD234', { lados: 10 });
+  tp.caras.forEach((f, i) => { f.orden = 1; if (i % 2) f.col = '#ffffff'; }); b.caras.push(...tp.caras); b.centro = [QUIOSCO.x, .8, QUIOSCO.z]; return b;
+}
+// árboles: tronco + racimo de lóbulos, con lóbulos más claros del lado del sol; cinco formas distintas
+const ARBOLES = [[-8.6, -.5, 0], [-7.6, 3.6, 1], [7.8, 2.6, 2], [6.4, 5.8, 3], [-3.6, 6.2, 4], [3.4, -.2, 1], [-4.2, .6, 2], [8.6, -.8, 0]];
+function arbol(cam, [x, z, forma], t, toca) {
+  const base = cam.proy([x, 0, z]), top = cam.proy([x, 1.1, z]), s = cam.px(base[2]), sway = Math.sin(t * 1.6 + x) * .03 * s;
+  const col = toca ? ['#FF9C6B', '#2FCB7A', '#FFD234', '#FF5A5F', '#5EDFB0'][forma] : '#b9d9a0';
+  ctx.save(); ctx.lineJoin = 'round';
+  ctx.fillStyle = '#8a5a44'; ctx.strokeStyle = INK; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.rect(base[0] - s * .09, top[1], s * .18, base[1] - top[1]); ctx.fill(); ctx.stroke();
+  const lob = [[[0, 0, .75]], [[-.35, .1, .5], [.35, .1, .5], [0, -.3, .55]], [[0, 0, .5], [0, -.55, .4], [0, .45, .45]], [[-.4, 0, .45], [.4, 0, .45], [0, -.35, .45], [0, .25, .45]], [[0, -.2, .62], [-.42, .25, .4], [.42, .25, .4]]][forma];
+  for (const [dx, dy, r] of lob) { const cx = top[0] + dx * s + sway, cy = top[1] - .55 * s + dy * s;
+    ctx.fillStyle = rgbTxt(col); ctx.beginPath(); ctx.arc(cx, cy, r * s, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = rgbTxt(tonoC(col, 1.12)); ctx.beginPath(); ctx.arc(cx - r * s * .3, cy - r * s * .3, r * s * .45, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = 'rgba(37,33,74,.35)'; for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.arc(top[0] + (hash2(i, forma) - .5) * s * .8, top[1] - .5 * s + (hash2(forma, i) - .5) * s * .7, 2.5, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+// ---------- el suelo: pasto con puntos, río con espuma, plaza ----------
+function suelo(cam, t, col, dotCol) {
+  const P = q => q.map(p => cam.proy(p));
+  rellenarPoli(ctx, P([[-14, 0, -10], [14, 0, -10], [14, 0, 12], [-14, 0, 12]]), col);
+  ctx.fillStyle = dotCol; for (let i = -14; i <= 14; i += 1.2) for (let j = -10; j <= 12; j += 1.2) { const p = cam.proy([i + (Math.round(j / 1.2) % 2) * .6, 0, j]); ctx.beginPath(); ctx.arc(p[0], p[1], 3.2, 0, 7); ctx.fill(); }
+}
+function rio(cam, t) {
+  const borde = s => { const o = []; for (let z = -10; z <= 12; z += .5) o.push([-9.4 + Math.sin(z * .35) * .9 + s, 0, z]); return o; };
+  const a = borde(0), b = borde(3.2);
+  rellenarPoli(ctx, a.concat(b.reverse()).map(p => cam.proy(p)), COLORES.agua);
+  ctx.strokeStyle = INK; ctx.lineWidth = 2.2; for (const s of [0, 3.2]) { const bb = borde(s).map(p => cam.proy(p)); ctx.beginPath(); bb.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke(); }
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.lineCap = 'round';                // ondas blancas que corren con el agua
+  for (let i = 0; i < 14; i++) { const z = -10 + ((i * 1.7 + t * .9) % 22), x = -9.4 + Math.sin(z * .35) * .9 + .8 + (i % 3) * .8;
+    const p = cam.proy([x, 0, z]), q = cam.proy([x + .5, 0, z + .25]); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.quadraticCurveTo((p[0] + q[0]) / 2, p[1] - 6, q[0], q[1]); ctx.stroke(); }
+}
+function plaza(cam) { const o = []; for (let i = 0; i <= 40; i++) { const a = i / 40 * Math.PI * 2; o.push(cam.proy([QUIOSCO.x + Math.cos(a) * 3.2, 0, QUIOSCO.z + Math.sin(a) * 3.2])); }
+  rellenarPoli(ctx, o, COLORES.plaza); ctx.strokeStyle = INK; ctx.lineWidth = 2.2; trazarPoli(ctx, o); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,126,179,.35)'; for (let i = 0; i < 70; i++) { const a = hash2(i, 3) * 6.28, r = Math.sqrt(hash2(3, i)) * 3; const p = cam.proy([QUIOSCO.x + Math.cos(a) * r, 0, QUIOSCO.z + Math.sin(a) * r]); ctx.fillRect(p[0], p[1], 4, 4); } }
+// sombras duras moradas con tramado de puntos claros (como impresión)
+const SOMB = lienzo(W, H), PUNTOS = (() => { const c = lienzo(16, 16), x = c.getContext('2d'); x.fillStyle = 'rgba(255,255,255,.45)'; x.beginPath(); x.arc(4, 4, 2.2, 0, 7); x.arc(12, 12, 2.2, 0, 7); x.fill(); return c; })();
+function sombras(cam, objs, base) {
+  const x = SOMB.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H); x.fillStyle = rgbTxt(tonoC(base, SOMBRA_K));
+  for (const ob of objs) { const cs = sombraDe(ob, L, 0); trazarPoli(x, cs.map(([a, b]) => cam.proy([a, 0, b]))); x.fill(); }
+  x.globalCompositeOperation = 'source-atop'; x.fillStyle = x.createPattern(PUNTOS, 'repeat'); x.fillRect(0, 0, W, H); x.globalCompositeOperation = 'source-over';
+  ctx.save(); ctx.globalAlpha = .8; ctx.drawImage(SOMB, 0, 0); ctx.restore();
+}
+// la onda: un anillo que se abre desde el quiosco; adentro, el suelo ya cambió de estado (por pixel)
+function circuloSuelo(cam, r) { const o = []; for (let i = 0; i <= 64; i++) { const a = i / 64 * Math.PI * 2; o.push(cam.proy([QUIOSCO.x + Math.cos(a) * r, .01, QUIOSCO.z + Math.sin(a) * r])); } return o; }
+// ---------- cámara: deriva alta y lenta (una sola toma) ----------
+function camaraEn(t) { const m = ease(prog(t, 0, DUR)) * .85 + prog(t, 0, DUR) * .15;
+  return camara({ objetivo: [lerp(-.8, .6, m), 0, lerp(-.2, -.6, m)], az: lerp(-.42, -.16, m), el: lerp(.82, .74, m), dist: lerp(36, 33, m), fov: 30, cy: MARCO.cy + 40 }); }
+// ---------- globitos de llamada (pastilla + línea guía + punto) ----------
+const AJ_LL = LLAMADAS.map(s => autoajuste(s, SANS, 600, 380, 1, 34, 22));
+function llamadas(cam, t) {
+  LLAMA_EN.forEach((c, i) => { const tt = T_ONDA + distQ(c.x, c.z) / VEL_ONDA + .35; if (t < tt) return;
+    const a = cam.proy([c.x, .6, c.z + 1.05]), aj = AJ_LL[i], w = medir(LLAMADAS[i], aj.font) + 44, h = aj.size + 26, bx = clamp(a[0] - w / 2, MARCO.cx - MARCO.hw + 30, MARCO.cx + MARCO.hw - 30 - w), by = a[1] + 34 + i * 112;
+    ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(bx + w / 2, by); ctx.stroke();
+    ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(a[0], a[1], 6, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.roundRect(bx, by, w, h, h / 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = INK; ctx.font = aj.font; ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.fillText(LLAMADAS[i], bx + w / 2, by + h / 2 + 2); ctx.restore(); });
+}
+// ---------- las tres líneas bajo el marco, con las tres marcas Memphis ----------
+const Y0 = MARCO.cy + MARCO.hh + 52;
+const AJ_T = autoajuste(TITULO, SANS, 700, 900, 1, 74, 40), AJ_F = autoajuste(FRASE, SANS, 500, 900, 1, 38, 24);
+const TAM_K = Math.round(AJ_T.size * 1.45), FONT_K = `800 ${TAM_K}px ${SANS}`;
+const PAL = (() => { const ws = TITULO.split(' '), fs = ws.map(w => w.toLowerCase() === PALABRA_CLAVE.toLowerCase() ? FONT_K : AJ_T.font), esp = medir(' ', AJ_T.font);
+  let tot = ws.reduce((a, w, i) => a + medir(w, fs[i]), 0) + esp * (ws.length - 1), k = Math.min(1, 920 / tot);
+  let x = W / 2 - tot * k / 2; return ws.map((w, i) => { const o = { w, f: fs[i], x, k, clave: fs[i] === FONT_K, t: .5 + i * .14 }; x += (medir(w, fs[i]) + esp) * k; return o; }); })();
+function textos(t) {
+  ctx.save(); const my = Y0;
+  ctx.fillStyle = '#FFD234'; ctx.beginPath(); ctx.arc(W / 2 - 46, my, 11, 0, 7); ctx.fill();
+  ctx.fillStyle = '#FF7EB3'; ctx.beginPath(); ctx.moveTo(W / 2 - 11, my + 10); ctx.lineTo(W / 2 + 11, my + 10); ctx.lineTo(W / 2, my - 10); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#2F5BFF'; ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.beginPath(); [[30, 6], [38, -6], [46, 6], [54, -6], [62, 6]].forEach(([dx, dy], i) => i ? ctx.lineTo(W / 2 + dx, my + dy) : ctx.moveTo(W / 2 + dx, my + dy)); ctx.stroke();
+  ctx.textBaseline = 'alphabetic'; const yT = my + 40 + TAM_K * .8;
+  for (const p of PAL) { if (t < p.t) continue; ctx.save(); ctx.translate(p.x, yT); ctx.scale(p.k, p.k); ctx.font = p.f; ctx.fillStyle = p.clave ? COLORES.coral : INK; ctx.fillText(p.w, 0, 0); ctx.restore(); }
+  if (t >= T_ONDA) { ctx.font = AJ_F.font; ctx.fillStyle = '#6b6880'; ctx.textAlign = 'center'; ctx.fillText(FRASE, W / 2, yT + 30 + AJ_F.size); }
+  if (t >= T_ONDA + .5) { ctx.font = `500 26px ${MONO}`; ctx.fillStyle = '#a6a3b8'; ctx.textAlign = 'center'; ctx.fillText(DATO, W / 2, yT + 30 + AJ_F.size + 44); }
+  ctx.restore();
+}
+const ESCENA = lienzo(W, H);
+arrancar(frame => {
+  const t = frame / FPS, cam = camaraEn(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  // la maqueta se pinta en su propia capa y después se recorta con el marco
+  const prev = ctx; ctx = ESCENA.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
+  const r = radioOnda(t), anillo = circuloSuelo(cam, Math.max(.01, r));
+  suelo(cam, t, COLORES.pasto, 'rgba(255,255,255,.35)');
+  if (r > 0) { ctx.save(); trazarPoli(ctx, anillo); ctx.clip(); suelo(cam, t, COLORES.pasto2, 'rgba(255,255,255,.4)'); ctx.restore(); }
+  rio(cam, t); plaza(cam);
+  const casas = CASAS.map(c => casaObj(c, t)), q = quioscoObj(t);
+  sombras(cam, [...casas, q], r > 0 ? COLORES.pasto2 : COLORES.pasto);
+  if (r > 0 && r < 30) { ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 8; trazarPoli(ctx, anillo); ctx.stroke(); ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.stroke(); ctx.restore(); }
+  for (const a of ARBOLES.filter(a => a[1] < -2)) arbol(cam, a, t, r > distQ(a[0], a[1]));
+  render3d(ctx, cam, casas, { luz: L, tonos: 'tres', ladoK: SOMBRA_K, borde: { col: INK, w: 2.2 } });
+  for (const a of ARBOLES.filter(a => a[1] >= -2 && a[1] < QUIOSCO.z)) arbol(cam, a, t, r > distQ(a[0], a[1]));
+  render3d(ctx, cam, [q], { luz: L, tonos: 'tres', ladoK: SOMBRA_K, borde: { col: INK, w: 2.2 } });
+  for (const a of ARBOLES.filter(a => a[1] >= QUIOSCO.z)) arbol(cam, a, t, r > distQ(a[0], a[1]));
+  // gente chiquita caminando y pájaros (decoración lejana, sin actuar)
+  for (let i = 0; i < 8; i++) { const u = ((t * .05 + i * .13) % 1), p = cam.proy([lerp(-7, 8, u), .35, -1.3 + (i % 2) * .5]);
+    ctx.fillStyle = ['#2F5BFF', '#FF5A5F', '#FFD234', '#B9A0FF'][i % 4]; ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(p[0] - 5, p[1] - 14, 10, 18, 5); ctx.fill(); ctx.stroke(); }
+  ctx.strokeStyle = INK; ctx.lineWidth = 2.5; for (let i = 0; i < 4; i++) { const bx = MARCO.cx - 300 + ((t * 40 + i * 70) % 620), by = 420 + i * 22 + Math.sin(t * 2 + i) * 6;
+    ctx.beginPath(); ctx.moveTo(bx - 12, by); ctx.quadraticCurveTo(bx - 6, by - 7, bx, by); ctx.quadraticCurveTo(bx + 6, by - 7, bx + 12, by); ctx.stroke(); }
+  ctx.globalCompositeOperation = 'destination-in'; ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(mascara(lerp(620, 1500, aterriza(prog(t, 0, 1.1))), frame), 0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; ctx.imageSmoothingEnabled = true;
+  ctx = prev;
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H); ctx.drawImage(ESCENA, 0, 0);
+  llamadas(cam, t); textos(t);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .05, tipo: 'papel' }, { t: T_SQUASH, tipo: 'golpe' }, { t: T_ONDA, tipo: 'swish' },
+  ...LLAMA_EN.map(c => ({ t: +(T_ONDA + distQ(c.x, c.z) / VEL_ONDA + .35).toFixed(2), tipo: 'pop' }))];
+</script>
+</body>
+</html>

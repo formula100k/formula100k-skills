@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Caricatura de manguera (años 30)</title>
+<style>html,body{margin:0;background:#000;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Caricatura de manguera (años 30)» · ingeniería inversa de lemo-opuscar/styles/rubber-hose (MIT, © 2026 LemoLab) · qué se tomó: tinta de grosor constante con hervor, ojos de pastel, guantes blancos y extremidades de manguera, todo el set respira al compás (sobre dos), cartel de época que baja como persiana, escala de 6 grises con blancos y negros solo para los personajes, y película gastada suave en ventanilla redondeada.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'vende con una historia';      // va en el cartel de época, palabra por palabra (máx. ~30 letras)
+const PALABRA_CLAVE = 'historia';            // sale ENORME (una palabra de la frase)
+const REMATE = 'no con un catálogo';         // renglón chico en versalitas al final ('' = sin remate)
+const COLORES = {                            // escala de grises cálidos (no uses color: la época es blanco y negro)
+  blanco: '#fcfbf7', papel: '#f1eee6', palido: '#e2dfd6', claro: '#c8c5bc', medio: '#9a978f', oscuro: '#6b6963', muyOscuro: '#3b3a37', tinta: '#0e0d0c',
+};
+const SEPIA = .1;          // 0 = plata fría · .3 = copia sepia
+const TEMPO = 120;         // golpes por minuto: todo respira en cada golpe
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — caja de cartón de caricatura de los 30: brazos y piernas de manguera sin codo, guantes de 3 dedos y zapatones; la cara son ojos de pastel sobre la caja
+const C = COLORES, GATE = { x: 34, y: 120, w: W - 68, h: 1640, r: 34 };
+const ESC = hacerCapa(), BEAT = 60 / TEMPO, PARA = DUR - 1.3;   // la banda para: todo se congela al final
+const PISO = 1440;
+let BORDE_CARTEL = 800;                                          // y del borde de abajo del cartel (lo agarran los guantes)
+
+// ---------- fondo: lavado de acuarela gris, se pinta UNA vez ----------
+const FONDO = (() => {
+  const c = hacerCapa(), p = c.getContext('2d'), r = rng(31);
+  const lavado = (x, y, w, h, col, borde = .14) => {
+    p.fillStyle = col; p.fillRect(x, y, w, h);
+    p.save(); p.beginPath(); p.rect(x, y, w, h); p.clip(); p.filter = 'blur(12px)';
+    for (let i = 0; i < Math.min(90, w * h / 9000); i++) { const rr = 20 + r() * 90; p.fillStyle = r() > .5 ? `rgba(30,28,25,${.03 + r() * .05})` : `rgba(255,253,245,${.03 + r() * .05})`;
+      p.beginPath(); p.ellipse(x + r() * w, y + r() * h, rr, rr * (.5 + r() * .6), r() * 3, 0, 7); p.fill(); }
+    p.filter = 'blur(8px)'; p.strokeStyle = `rgba(20,18,16,${borde})`; p.lineWidth = 26; p.strokeRect(x, y, w, h); p.filter = 'none'; p.restore();
+    p.strokeStyle = '#2a2927'; p.lineWidth = 3; p.strokeRect(x, y, w, h);
+  };
+  lavado(0, 0, W, PISO - 40, '#8c8981', 0);
+  for (let x = 0; x < W; x += 64) { p.fillStyle = 'rgba(255,253,245,.07)'; p.fillRect(x, 0, 22, PISO - 40); }
+  for (let x = 32; x < W; x += 128) for (let y = 40; y < PISO - 300; y += 96) { p.fillStyle = 'rgba(30,28,24,.22)'; p.beginPath(); p.moveTo(x, y - 9); p.lineTo(x + 7, y); p.lineTo(x, y + 9); p.lineTo(x - 7, y); p.fill(); }
+  lavado(0, PISO - 300, W, 260, '#6b6963');                       // friso de madera
+  for (let x = 30; x < W; x += 260) lavado(x, PISO - 270, 220, 200, '#7d7a73', .1);
+  lavado(0, PISO - 300, W, 22, '#4a4844');
+  // repisa con frascos (fondo, un paso menos de contraste)
+  lavado(620, 940, 400, 20, '#4a4844');
+  [[650, 830, 64, 110], [730, 800, 76, 140], [820, 845, 60, 95]].forEach(([x, y, w, h], i) => { lavado(x, y, w, h, i % 2 ? '#a8a59d' : '#b5b2aa', .08); lavado(x - 6, y - 18, w + 12, 22, '#5e5c57'); });
+  // ventana con cortinas a la izquierda
+  lavado(250, 850, 260, 240, '#d8d5cc', .06); p.strokeStyle = '#3b3a37'; p.lineWidth = 9; p.strokeRect(250, 850, 260, 240);
+  p.beginPath(); p.moveTo(380, 850); p.lineTo(380, 1090); p.moveTo(250, 970); p.lineTo(510, 970); p.stroke();
+  lavado(230, 826, 300, 24, '#4a4844');
+  // piso de damero en perspectiva (las columnas se juntan hacia el fondo)
+  { const yv = PISO - 900, ys = [PISO - 40]; for (let j = 0; j < 9; j++) ys.push(ys[j] + 46 * Math.pow(1.22, j));
+    const xAt = (i, y) => 540 + (i * 110 - 540) * (y - yv) / (PISO - 40 - yv);
+    for (let j = 0; j < 9; j++) for (let i = -8; i < 18; i++) { const a = ys[j], b = ys[j + 1];
+      p.fillStyle = ((i + j) % 2 + 2) % 2 ? '#5a5853' : '#a29f97'; p.beginPath(); p.moveTo(xAt(i, a), a); p.lineTo(xAt(i + 1, a), a); p.lineTo(xAt(i + 1, b), b); p.lineTo(xAt(i, b), b); p.fill(); } }
+  p.fillStyle = 'rgba(0,0,0,.22)'; p.fillRect(0, PISO - 40, W, 30);
+  for (let i = 0; i < W * H / 900; i++) { p.fillStyle = r() > .5 ? 'rgba(20,18,15,.06)' : 'rgba(255,255,250,.05)'; p.fillRect(r() * W, r() * H, 1 + r() * 2, 1 + r() * 2); }
+  return c;
+})();
+
+// ---------- respiración: todo el set en fase, sobre dos (12 dibujos por segundo a 24) ----------
+const respira = t => { if (t >= PARA) t = PARA; const ts = Math.floor(t * 12) / 12; return Math.cos(2 * Math.PI * ts / BEAT); };
+function respirando(x, y, b, a, fn) { ctx.save(); ctx.translate(x, y); ctx.scale(1 - b * a * .6, 1 + b * a); fn(); ctx.restore(); }
+
+// ---------- utilería viva: lámpara de pie y maceta (cada una con su cara) ----------
+function lampara(t, b) {
+  respirando(150, PISO + 10, b, .06, () => {
+    zapato(-30, 0, -1, .7); zapato(30, 0, 1, .7);
+    forma(roundRect(-14, -420, 28, 400, 12), { relleno: C.muyOscuro, w: 6 });
+    forma(roundRect(-60, -40, 120, 30, 14), { relleno: C.oscuro, w: 6 });
+    const pantalla = [[-110, -420], [-64, -600], [64, -600], [110, -420]];
+    forma(resample(pantalla, 10, true), { relleno: C.palido, w: 6, sombra: { col: C.claro, dx: -26, dy: 0 } });
+    ojoPastel(-32, -515, 20, 28, { mira: [.6, -.2] }); ojoPastel(32, -515, 20, 28, { mira: [.6, -.2] });
+    boca(0, -465, 50, 'sonrisa', { grosor: 5 });
+  });
+}
+function maceta(t, b) {
+  respirando(930, PISO + 10, b, .07, () => {
+    for (const [a, l] of [[-.5, 230], [0, 280], [.45, 220], [-.2, 180]]) {
+      const tip = [Math.sin(a) * l, -190 - Math.cos(a) * l];
+      ink(resample([[0, -190], [tip[0] * .5, (tip[1] - 190) / 2], tip], 10), { col: C.tinta, w: 8, passes: 1 });
+      forma(circle(tip[0], tip[1], 38, 22, a - .3), { relleno: C.oscuro, w: 5 });
+    }
+    forma(resample([[-95, -200], [95, -200], [70, 0], [-70, 0]], 10, true), { relleno: C.medio, w: 6, sombra: { col: C.oscuro, dx: -22, dy: 0 } });
+    forma(roundRect(-108, -228, 216, 40, 12), { relleno: C.claro, w: 6 });
+    ojoPastel(-30, -120, 18, 25, { mira: [-.6, -.3] }); ojoPastel(30, -120, 18, 25, { mira: [-.6, -.3] });
+    boca(0, -70, 46, 'sonrisa', { grosor: 5 });
+  });
+}
+
+// ---------- la protagonista: una caja de envío viva (el objeto ENTERO es el cuerpo) ----------
+const T_AGACHA = .62, T_SALTA = .92, T_CAE = 1.5;
+function caja(t, b) {
+  const ts = Math.floor(Math.min(t, PARA) * 12) / 12;           // personaje sobre dos
+  // salto: agacharse → sostener → disparo → aterrizaje con resorte de vuelta
+  let sq = b * .05, alto = 0;
+  if (ts >= T_AGACHA && ts < T_SALTA) sq = -.17 * easeOut(prog(ts, T_AGACHA, T_AGACHA + .15));
+  if (ts >= T_SALTA && ts < T_CAE) { const u = prog(ts, T_SALTA, T_CAE); alto = 4 * u * (1 - u) * 190; sq = .1 * (1 - u); }
+  if (ts >= T_CAE) { const d = ts - T_CAE; sq += -.16 * Math.exp(-d * 7) * Math.cos(d * 26); }
+  const fiesta = ts >= T_SALTA;                                   // brazos arriba desde el salto
+  ctx.save(); ctx.translate(540, PISO + 4 - alto); ctx.scale(1 - sq * .6, 1 + sq);
+  // sombra en el piso
+  ctx.save(); ctx.translate(0, alto / (1 + sq)); ctx.fillStyle = 'rgba(14,13,12,.28)'; ctx.beginPath(); ctx.ellipse(0, 0, 170 - alto * .25, 22, 0, 0, 7); ctx.fill(); ctx.restore();
+  // piernas de manguera + zapatones
+  const paso = fiesta ? Math.sin(ts / BEAT * Math.PI) * 18 : 0;
+  manguera([-70, -120], [-95 - paso, -18], 14, 20, C.tinta); manguera([70, -120], [95 + paso, -18], -14, 20, C.tinta);
+  zapato(-95 - paso, 0, -1, 1.5); zapato(95 + paso, 0, 1, 1.5);
+  // brazos: bailan al compás; en la fiesta se estiran como manguera hacia arriba
+  const fase = Math.sin(ts / BEAT * Math.PI * 2);
+  const aLocal = (X, Y) => [(X - 540) / (1 - sq * .6), (Y - (PISO + 4 - alto)) / (1 + sq)];
+  const agarra = prog(ts, T_SALTA, T_SALTA + .3);                 // en el salto los brazos se estiran hasta el cartel
+  const iA = [-260, -260 + fase * 40], dA = [300, -300 - fase * 40], iB = aLocal(300, BORDE_CARTEL + 6), dB = aLocal(800, BORDE_CARTEL + 6);
+  const brazoI = fiesta ? [lerp(iA[0], iB[0], easeOut(agarra)), lerp(iA[1], iB[1], easeOut(agarra))] : iA, brazoD = fiesta ? [lerp(dA[0], dB[0], easeOut(agarra)), lerp(dA[1], dB[1], easeOut(agarra))] : dA;
+  manguera([-150, -330], brazoI, fiesta ? -40 : 30, 20, C.tinta); manguera([190, -340], brazoD, fiesta ? 40 : -30, 20, C.tinta);
+  guante(brazoI[0], brazoI[1], fiesta ? -Math.PI / 2 : Math.PI * .95, 1.9, { tipo: fiesta ? 'puno' : 'abierto' });
+  guante(brazoD[0], brazoD[1], fiesta ? -Math.PI / 2 : -.1, 1.9, { tipo: fiesta ? 'puno' : 'abierto', espejo: true });
+  // la caja en 3D proyectada un poco desde arriba: frente, lado y tapa con cinta
+  const fx0 = -170, fx1 = 170, fy0 = -480, fy1 = -110, dx = 60, dy = -50;
+  forma(resample([[fx1, fy0], [fx1 + dx, fy0 + dy], [fx1 + dx, fy1 + dy], [fx1, fy1]], 10, true), { relleno: C.medio, w: 7 });
+  forma(resample([[fx0, fy0], [fx0 + dx, fy0 + dy], [fx1 + dx, fy0 + dy], [fx1, fy0]], 10, true), { relleno: C.papel, w: 7 });
+  forma(rect(fx0, fy0, fx1 - fx0, fy1 - fy0), { relleno: C.palido, w: 7, sombra: { col: C.claro, dx: 0, dy: -40 } });
+  forma(resample([[-26, fy0], [-26 + dx, fy0 + dy], [26 + dx, fy0 + dy], [26, fy0]], 8, true), { relleno: C.claro, w: 5 });   // cinta
+  forma(rect(-26, fy0, 52, 70), { relleno: C.claro, w: 5 });
+  // cara: cejas, ojos de pastel, cachetes, boca
+  const parpadea = (Math.floor(t * 12) % 40) >= 30 && (Math.floor(t * 12) % 40) < 32 && t < PARA - .3 ? .9 : 0;
+  const mira = fiesta ? [0, -.6] : [.3 * Math.sin(ts * 2), -.1];
+  ojoPastel(-62, -340, 44, 58, { mira, parpado: parpadea, colParpado: C.palido, w: 6 });
+  ojoPastel(62, -340, 44, 58, { mira, parpado: parpadea, colParpado: C.palido, w: 6 });
+  ceja(-62, -440 - (fiesta ? 22 : 0), 70, fiesta ? 'arriba' : 'plana', -1, { grosor: 9 });
+  ceja(62, -440 - (fiesta ? 22 : 0), 70, fiesta ? 'arriba' : 'plana', 1, { grosor: 9 });
+  ctx.fillStyle = 'rgba(155,151,143,.55)'; ctx.beginPath(); ctx.ellipse(-120, -250, 26, 16, 0, 0, 7); ctx.ellipse(120, -250, 26, 16, 0, 0, 7); ctx.fill();
+  boca(0, -235, fiesta ? 130 : 95, fiesta ? 'abierta' : 'sonrisa', { interior: C.tinta, lengua: C.oscuro, abre: .55, grosor: 7 });
+  ctx.restore();
+}
+
+// ---------- cartel de época: baja como persiana y la frase entra palabra por palabra ----------
+const CARTEL = { x: 90, y: 270, w: W - 180 };
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 2.1, kConector: .6 });
+const T_PAL = 1.0, PASO_PAL = .32;
+PARTES.forEach((q, i) => { q.t0 = T_PAL + i * PASO_PAL + (q.clave ? .15 : 0); q.familia = q.clave ? '"Bodoni 72"' : '"Bodoni 72"'; q.peso = q.clave ? 700 : 700; });
+const FR = armarFrase(PARTES, { familia: '"Bodoni 72"', peso: 700, ancho: CARTEL.w - 120, altoMax: 440, tamMax: 110, tamMin: 40, x0: W / 2, y0: CARTEL.y + 70, interlinea: 1.0 });
+const T_REMATE = Math.max(...PARTES.map(q => q.t0)) + .5;
+const AJ_R = REMATE ? autoajuste(REMATE.toUpperCase(), 'Copperplate', 700, CARTEL.w - 140, 1, 46, 26) : null;
+const ALTO_CARTEL = FR.y1 - CARTEL.y + (AJ_R ? AJ_R.size + 140 : 110);
+BORDE_CARTEL = CARTEL.y + ALTO_CARTEL;
+function cartel(t) {
+  const baja = aterriza(prog(t, .05, .55)), h = ALTO_CARTEL * baja;
+  if (h < 4) return;
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(CARTEL.x + 12, CARTEL.y + 14, CARTEL.w, h);
+  ctx.fillStyle = '#121110'; ctx.beginPath(); ctx.roundRect(CARTEL.x, CARTEL.y, CARTEL.w, h, 14); ctx.fill();
+  ctx.beginPath(); ctx.rect(CARTEL.x, CARTEL.y, CARTEL.w, h); ctx.clip();
+  ctx.strokeStyle = C.blanco; ctx.lineWidth = 5; ctx.strokeRect(CARTEL.x + 18, CARTEL.y + 18, CARTEL.w - 36, ALTO_CARTEL - 36);
+  ctx.lineWidth = 2; ctx.strokeRect(CARTEL.x + 30, CARTEL.y + 30, CARTEL.w - 60, ALTO_CARTEL - 60);
+  for (const [x, y] of [[CARTEL.x + 30, CARTEL.y + 30], [CARTEL.x + CARTEL.w - 30, CARTEL.y + 30], [CARTEL.x + 30, CARTEL.y + ALTO_CARTEL - 30], [CARTEL.x + CARTEL.w - 30, CARTEL.y + ALTO_CARTEL - 30]]) {
+    ctx.fillStyle = '#121110'; ctx.beginPath(); ctx.arc(x, y, 14, 0, 7); ctx.fill(); ctx.strokeStyle = C.blanco; ctx.lineWidth = 3; ctx.stroke();
+    ctx.fillStyle = C.blanco; ctx.beginPath(); ctx.arc(x, y, 5, 0, 7); ctx.fill(); }
+  pintarFrase(FR, t, q => textoTinta(q.txt, q.x, q.y, { font: q.font, relleno: q.clave ? C.blanco : C.papel, tinta: '#000', grosor: q.clave ? 3 : 0 }));
+  if (AJ_R && t >= T_REMATE) { ctx.font = AJ_R.font; ctx.fillStyle = C.palido; ctx.textAlign = 'center'; ctx.fillText(AJ_R.rs[0], W / 2, FR.y1 + AJ_R.size + 6); }
+  ctx.restore();
+  // el rollo de la persiana en el borde de abajo mientras baja
+  if (baja < 1) { forma(roundRect(CARTEL.x - 14, CARTEL.y + h - 22, CARTEL.w + 28, 40, 18), { relleno: C.muyOscuro, tinta: C.tinta, w: 5 }); }
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  BOIL = Math.floor(Math.min(t, PARA) * 12);                    // hervor de línea a 12 por segundo
+  const b = respira(t);
+  conCtx(ESC.getContext('2d'), () => {
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    // en el pico de alegría el fondo entero se aplasta al compás alrededor del piso
+    const alegria = t >= T_CAE && t < PARA ? b * .012 : 0;
+    ctx.save(); ctx.translate(0, PISO); ctx.scale(1 - alegria * .4, 1 + alegria); ctx.translate(0, -PISO); ctx.drawImage(FONDO, 0, 0); ctx.restore();
+    lampara(t, b); maceta(t, b); cartel(t); caja(t, b);
+  });
+  pelicula(ESC, t, GATE, { sepia: SEPIA, contraste: 1.14, parpadeo: .02 });
+});
+window.SONIDOS = [
+  { t: .05, tipo: 'desliz' }, { t: .55, tipo: 'golpe' },
+  ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })),
+  { t: T_SALTA, tipo: 'swish' }, { t: T_CAE, tipo: 'golpe' }, { t: +T_REMATE.toFixed(2), tipo: 'papel' }, { t: 0, tipo: 'ambiente' },
+];
+</script>
+</body>
+</html>

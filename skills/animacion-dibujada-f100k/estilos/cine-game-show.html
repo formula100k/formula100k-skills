@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Concurso de ritmo</title>
+<style>html,body{margin:0;background:#111;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Concurso de ritmo» · ingeniería inversa de lemo-opuscar/styles/game-show (MIT, © 2026 LemoLab) · qué se tomó: todo sobre una grilla de tempo fija (cada caída, salto y palabra cae en un golpe), vector plano con tinta gruesa y sombra dura corrida (sin degradados ni blur), set de UN color con rayas del mismo tono, mascotas-juguete de una sola construcción que caen del cielo una por medio golpe y saltan en el golpe, telops con tinta DEBAJO del relleno y la palabra de veredicto al último golpe.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const RONDA = 'RONDA 1 · EL GANCHO';            // la plaquita de la ronda (≤ 22 letras)
+const FRASE = 'el gancho es tu primera venta';  // el telop grande, una palabra por golpe (máx. ~32 letras)
+const PALABRA_CLAVE = 'gancho';                 // sale ENORME y amarilla
+const VEREDICTO = '¡Perfecto!';                 // la palabra del final (≤ 12 letras)
+const TEMPO = 120;                              // golpes por minuto: todo cae en la grilla
+const COLORES = {                               // tinta + papel + caramelo. UN set = UN tono
+  set: '#ffb870', rayas: '#ffa85a', piso: '#e8884a',
+  tinta: '#1b1420', papel: '#fff6e6', amarillo: '#ffd23f', rosa: '#ff5f9e',
+  mascotas: ['#3d8bff', '#8a5cff', '#2fbf71', '#ff5f5f', '#22c3d6'],   // cada una es su color (nunca el del set)
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script>
+// ANATOMIA: estilizada — mascotas-juguete de frijol con bracitos cortos y mitones redondos; ojos ovalados con brillo
+const C = COLORES, INK = C.tinta, BEAT = 60 / TEMPO, PISO = 1330;
+const at = (golpe) => golpe * BEAT;                                        // la grilla: (golpe) → segundos
+const N = C.mascotas.length, T_FIN = DUR - 1;                              // al final todo se congela
+const ACCES = ['antena', 'mono', 'gorra', 'brote', 'estrella'];
+const MASC = C.mascotas.map((col, i) => ({ col, acc: ACCES[i % ACCES.length], x: 150 + i * (780 / (N - 1)), t0: .1 + at(i * .5), esc: i % 2 ? .92 : 1 }));
+
+const fuente = (px, peso = 900) => `${peso} ${px}px "Arial Rounded MT Bold", "Avenir Next", sans-serif`;
+// sombra dura corrida: la misma forma en tinta, ~10–14 px abajo-derecha, y encima el color. Sin hervor: vector limpio.
+function plana(pts, col, o = {}) { const d = o.d ?? 10; if (d) forma(pts.map(([x, y]) => [x + d, y + d]), { relleno: INK, tinta: null, amp: 0 }); forma(pts, { relleno: col, tinta: INK, w: o.w || 8, amp: 0 }); }
+
+// ---------- set: un tono con rayas diagonales que corren lento ----------
+function set(t) {
+  ctx.fillStyle = C.set; ctx.fillRect(0, 0, W, H);
+  rayasDiagonales(0, 0, W, PISO, C.rayas, 70, t * 40, -.6);
+  ctx.fillStyle = C.piso; ctx.fillRect(0, PISO, W, H - PISO);
+  ctx.fillStyle = INK; ctx.fillRect(0, PISO - 5, W, 10);
+  lunares(20, PISO + 60, W, 400, 'rgba(255,255,255,.16)', 90, 14);
+}
+
+// ---------- mascota-juguete: cuerpo de frijol, panza, ojos con brillo, mitones, un accesorio ----------
+function mascota(m, t) {
+  if (t < m.t0) return;
+  const tc = Math.min(t, T_FIN), cae = at(.5);                              // cae en medio golpe y aterriza EN su golpe
+  let y = PISO, sq = 0, grito = false;
+  if (tc < m.t0 + cae) { const u = (tc - m.t0) / cae; y = PISO - (1 - u * u) * 1300; sq = -.12; }
+  else { const d = tc - m.t0 - cae, fase = (d / BEAT) % 1;
+    if (d < .35) sq = .25 * Math.exp(-d * 8) * Math.cos(d * 30);         // aplastón al aterrizar
+    else if (tc < T_FIN) { const k = Math.floor(d / BEAT); y = PISO - 4 * fase * (1 - fase) * 26 * (k % 2 === MASC.indexOf(m) % 2 ? 1 : .5); }
+    grito = tc >= T_VER && tc < T_VER + BEAT * .9; }
+  const s = m.esc, ww = 78 * s, hh = 190 * s;
+  ctx.save(); ctx.translate(m.x, y); ctx.scale(1 + sq * .6, 1 - sq);
+  ctx.fillStyle = 'rgba(27,20,32,.25)'; ctx.beginPath(); ctx.ellipse(0, PISO - y + 4, 80 * s, 12, 0, 0, 7); ctx.fill();
+  // bracitos con mitón (arriba cuando grita)
+  for (const l of [-1, 1]) { const ax = l * (ww + 6), ay = grito ? -hh * .95 : -hh * .42;
+    plana(circle(ax, ay, 22 * s), C.papel, { d: 0, w: 6 }); }
+  const cuerpo = []; for (let i = 0; i < 36; i++) { const a = i / 36 * Math.PI * 2, c = Math.cos(a), sn = Math.sin(a); cuerpo.push([c * ww * (sn < 0 ? .86 + .14 * (1 + sn) : 1), -hh * .5 + sn * hh * .5]); }
+  plana(cuerpo, m.col, { d: 10 });
+  forma(circle(0, -hh * .3, ww * .58, hh * .2), { relleno: 'rgba(255,255,255,.42)', tinta: null, amp: 0 });
+  // cara
+  for (const l of [-1, 1]) { const ex = l * ww * .36, ey = -hh * .64;
+    forma(circle(ex, ey, 11 * s, 17 * s), { relleno: INK, tinta: null, amp: 0 });
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex + 3 * s, ey - 6 * s, 4.5 * s, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,95,158,.5)'; ctx.beginPath(); ctx.ellipse(l * ww * .62, -hh * .52, 13 * s, 8 * s, 0, 0, 7); ctx.fill();
+    ceja(ex, ey - 30 * s, 26 * s, grito ? 'arriba' : 'plana', l, { col: INK, grosor: 6 }); }
+  if (grito) boca(0, -hh * .5, 44 * s, 'abierta', { tinta: INK, grosor: 6, interior: '#5a1830', lengua: C.rosa, abre: .7, dientes: false });
+  else boca(0, -hh * .52, 30 * s, 'sonrisa', { tinta: INK, grosor: 6 });
+  // accesorio (lo que la distingue)
+  const top = -hh;
+  if (m.acc === 'antena') { trazo([[0, top], [0, top - 50 * s]], { col: INK, w: 6, amp: 0 }); plana(circle(0, top - 60 * s, 14 * s), C.amarillo, { d: 0, w: 6 }); }
+  else if (m.acc === 'mono') { plana(resample([[0, top + 4], [-44 * s, top - 26 * s], [-44 * s, top + 22 * s]], 6, true), C.rosa, { d: 0, w: 6 }); plana(resample([[0, top + 4], [44 * s, top - 26 * s], [44 * s, top + 22 * s]], 6, true), C.rosa, { d: 0, w: 6 }); plana(circle(0, top + 2, 12 * s), C.rosa, { d: 0, w: 6 }); }
+  else if (m.acc === 'gorra') { plana(resample([[-58 * s, top + 22 * s], [-50 * s, top - 26 * s], [0, top - 40 * s], [50 * s, top - 26 * s], [58 * s, top + 22 * s]], 8, true), '#1e2a6e', { d: 0, w: 6 }); plana(roundRect(20 * s, top + 8 * s, 70 * s, 20 * s, 10 * s), '#1e2a6e', { d: 0, w: 6 }); }
+  else if (m.acc === 'brote') { trazo([[0, top], [0, top - 34 * s]], { col: INK, w: 6, amp: 0 }); plana(circle(-18 * s, top - 40 * s, 18 * s, 10 * s, -.5), '#7ee06a', { d: 0, w: 5 }); plana(circle(18 * s, top - 40 * s, 18 * s, 10 * s, .5), '#7ee06a', { d: 0, w: 5 }); }
+  else { trazo([[0, top], [0, top - 30 * s]], { col: INK, w: 6, amp: 0 }); explosion(0, top - 48 * s, 24 * s, 5, { relleno: C.amarillo, tinta: INK, w: 5, interior: .45, rot: -Math.PI / 2 }); }
+  ctx.restore();
+}
+
+// ---------- telops: una palabra por golpe, tinta DEBAJO del relleno, sombra dura ----------
+const PARTES = partesDe(FRASE, PALABRA_CLAVE, { kClave: 1.9, kConector: .62 });
+const T_TXT = at(Math.ceil((.1 + at(N * .5) + .2) / BEAT));                 // la primera palabra entra en el golpe siguiente a la última caída
+PARTES.forEach((q, i) => q.t0 = T_TXT + at(i * .5));
+const FR = armarFrase(PARTES, { familia: '"Arial Rounded MT Bold", "Avenir Next", sans-serif', peso: 900, ancho: W - 170, altoMax: 420, tamMax: 150, tamMin: 40, y0: 400, interlinea: 1.02 });
+const T_VER = PARTES[PARTES.length - 1].t0 + at(1);
+const AJ_V = autoajuste(VEREDICTO, '"Arial Rounded MT Bold", sans-serif', 900, W - 260, 1, 170, 60);
+function telop(q) { textoTinta(q.txt, q.x, q.y, { font: q.font, relleno: q.clave ? C.amarillo : '#ffffff', tinta: INK, grosor: Math.max(7, q.size * .1), sombra: [8, 10, INK] }); }
+function placaRonda(t) {
+  if (t < at(1)) return;
+  ctx.save(); ctx.font = fuente(46); const w = medir(RONDA, ctx.font) + 70; ctx.translate(80, 262); ctx.rotate(-.04);
+  plana(roundRect(0, 0, w, 84, 22), C.rosa, { d: 10 });
+  textoTinta(RONDA, 35, 58, { font: fuente(46), relleno: '#fff', tinta: INK, grosor: 5 }); ctx.restore();
+}
+function veredicto(t) {
+  if (t < T_VER) return;
+  const cx = W / 2, cy = FR.y1 + 175, d = Math.min(t, T_FIN) - T_VER;
+  // estallido: estrella + aro + líneas de velocidad (el aro se abre solo en el golpe)
+  for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, r0 = 215 + Math.min(1, d * 5) * 30, r1 = r0 + 70; ctx.save(); ctx.strokeStyle = INK; ctx.lineWidth = 9; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0 * .62); ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1 * .62); ctx.stroke(); ctx.restore(); }
+  explosion(cx, cy, 200, 12, { relleno: C.rosa, tinta: INK, w: 8, interior: .78, sombra: [14, 14], rot: .1 });
+  ctx.save(); ctx.translate(cx, cy + AJ_V.size * .33); ctx.rotate(-.08);
+  textoTinta(VEREDICTO, 0, 0, { font: AJ_V.font, relleno: C.amarillo, tinta: INK, grosor: AJ_V.size * .1, sombra: [10, 12, INK], alinear: 'center' }); ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  BOIL = 0;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  set(Math.min(t, T_FIN));
+  placaRonda(t);
+  veredicto(t);
+  pintarFrase(FR, t, telop);
+  MASC.forEach(m => mascota(m, t));
+});
+window.SONIDOS = [
+  ...MASC.map(m => ({ t: +(m.t0 + at(.5)).toFixed(2), tipo: 'pop' })), { t: +at(1).toFixed(2), tipo: 'swish' },
+  ...PARTES.map(q => ({ t: +q.t0.toFixed(2), tipo: 'golpe' })), { t: +T_VER.toFixed(2), tipo: 'golpe' }, { t: +(T_VER + .05).toFixed(2), tipo: 'pop' },
+];
+</script>
+</body>
+</html>

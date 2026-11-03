@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Lámina de acuarela</title>
+<style>
+  html,body{margin:0;background:#2b241c;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Lámina de acuarela» · ingeniería inversa de lemo-opuscar/styles/watercolor (MIT, © 2026 LemoLab) · qué se tomó:
+// pinceladas con perfil de ancho y cerdas que se cortan (el blanco que vuela), lavados en 3 pasadas con orilla más oscura,
+// pigmento transparente en multiply sobre papel de algodón, todo se pinta solo (estructura antes que detalle) y la jugada
+// «espécimen + nota»: notas a mano con línea guía que crece hasta su parte.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'así crece';                    // arriba, chico (≤ 16)
+const PALABRA_CLAVE = 'una venta';                   // arriba, enorme (≤ 12)
+const ETIQUETA = 'LÁMINA 01 · TU NEGOCIO';           // rótulo mono chiquito ('' = sin rótulo)
+const NOTAS = ['la venta', 'tu oferta', 'tu historia'];   // flor · hojas · raíces (≤ 14 c/u)
+const COLORES = {
+  acento: '#c8442a',    // bermellón: SOLO la flor (la venta)
+  hoja: '#8ea860', sombra: '#4e6e3c', centro: '#d9a23e', tierra: '#b98a5e',
+  tinta: '#3b2a20',     // tinta tibia: texto, líneas guía, raíces
+  papel: '#f3ead8',
+};
+const DUR = 9;                                       // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const SERIF = 'Didot, "Bodoni 72", Baskerville, Georgia, serif';
+const LETRA_NOTA = '"Bradley Hand", Noteworthy, "Segoe Print", cursive';
+const MONO = 'Menlo, "Courier New", monospace';
+const PAPEL = papelAcuarela(COLORES.papel, 12);
+const F = { x: 560, y: 760 };                         // la flor
+
+// ---------- la planta (estructura antes que detalle) ----------
+const PETALOS = Array.from({ length: 5 }, (_, i) => { const a = i / 5 * 6.283 - 1.4, cx = F.x + Math.cos(a) * 80, cy = F.y + Math.sin(a) * 80;
+  return circle(cx, cy, 90, 58, a); });
+const BORDES = PETALOS.map((p, i) => pincelada(p.slice(4, 22), 7, COLORES.acento, { perfil: 'punta', semilla: 40 + i, alpha: .7 }));
+const TALLO = pincelada([[F.x, F.y + 110], [548, 980], [566, 1110], [552, 1270]], 20, COLORES.sombra, { perfil: 'tronco', semilla: 3 });
+const HOJAS = [[[552, 1010], [470, 950], [370, 935]], [[560, 1065], [650, 1000], [750, 995]], [[556, 1150], [470, 1125], [395, 1130]], [[560, 1185], [630, 1150], [705, 1150]]]
+  .flatMap((p, i) => [pincelada(p, 54, i % 2 ? COLORES.hoja : '#9cb46a', { perfil: 'hoja', semilla: 10 + i }), pincelada(p, 10, COLORES.sombra, { perfil: 'hoja', semilla: 20 + i, alpha: .55, cerdas: 0 })]);
+const SUELO_C = (() => { const c = capa(), g = c.getContext('2d');     // el suelo: lavado con orilla de arriba más oscura que se funde al papel abajo
+  const top = Array.from({ length: 25 }, (_, i) => [-60 + i * 50, 1262 + Math.sin(i * 1.3) * 7 + (hash2(i, 4) - .5) * 8]);
+  lavadoPoly(g, [...top, [1140, 1620], [-60, 1620]], COLORES.tierra, .62, 5, 7);
+  g.globalAlpha = .35; g.strokeStyle = COLORES.tierra; g.lineWidth = 7; g.beginPath(); top.forEach(q => g.lineTo(...q)); g.stroke(); g.globalAlpha = 1;
+  for (let k = 0; k < 7; k++) { g.fillStyle = colorA(COLORES.tierra, .12); g.beginPath(); g.ellipse(80 + hash2(k, 2) * 920, 1300 + hash2(2, k) * 150, 60 + hash2(k, 9) * 120, 18 + hash2(9, k) * 20, 0, 0, 6.29); g.fill(); }
+  g.globalCompositeOperation = 'destination-in'; const f = g.createLinearGradient(0, 1340, 0, 1560); f.addColorStop(0, '#000'); f.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = f; g.fillRect(0, 1200, W, 500);
+  return c; })();
+const RAICES = [[[552, 1270], [540, 1330], [500, 1390], [430, 1430]], [[552, 1270], [565, 1340], [612, 1400], [660, 1425]], [[548, 1300], [552, 1380], [545, 1445]],
+  [[520, 1360], [470, 1372], [420, 1366]], [[590, 1370], [640, 1365]]].map((p, i) => pincelada(p, 7, COLORES.tinta, { perfil: 'punta', semilla: 60 + i, alpha: .8, cerdas: 2 }));
+
+// ---------- texto ----------
+const AJ_C = autoajuste(TITULO_CHICO, SERIF, 'italic 400', 900, 1, 70, 40);
+const AJ_K = autoajuste(PALABRA_CLAVE, SERIF, 'italic 400', 940, 1, 168, 80);
+const NOTA_POS = [{ x: 790, y: 630, a: [782, 620], b: [690, 690] }, { x: 90, y: 905, a: [300, 915], b: [430, 952] }, { x: 735, y: 1435, a: [730, 1410], b: [628, 1392] }];
+const AJ_N = NOTAS.map(n => autoajuste(n, LETRA_NOTA, 700, 300, 1, 60, 34));
+const GUIAS = NOTA_POS.map((p, i) => pincelada([p.a, [lerp(p.a[0], p.b[0], .5), lerp(p.a[1], p.b[1], .5) - 10], p.b], 3.2, COLORES.tinta, { perfil: 'parejo', cerdas: 0, semilla: 80 + i, alpha: .85 }));
+const T = { flor: [0, 1.3], abre: [1.0, 2.6], centro: [1.3, 1.8], tallo: [1.6, 2.3], hojas: [2.1, 3.0], suelo: [2.6, 3.3], raices: [3.0, 3.7], titulo: [3.4, 4.3], notas: [4.4, 6.9] };
+const CAM = camara([[0, F.x, F.y, 2.0], [T.abre[0], F.x, F.y, 2.0], [T.abre[1], 540, 960, 1.0], [DUR, 540, 960, 1.0]]);
+
+function lista(L, p) { const N = L.length, d = Math.min(.5, Math.max(.12, 4 / N)); L.forEach((s, j) => pintarPincelada(ctx, s, (p - j / N * (1 - d)) / d)); }
+function nota(txt, aj, x, y, p) {                    // nota a mano: dos pasadas sobre un halo de papel, se escribe de izq. a der.
+  if (p <= 0) return; const w = medir(txt, aj.font);
+  ctx.save(); ctx.beginPath(); ctx.rect(x - 12, y - aj.size * 1.2, (w + 24) * easeOut(p), aj.size * 1.7); ctx.clip();
+  ctx.font = aj.font; ctx.lineJoin = 'round'; ctx.strokeStyle = colorA(COLORES.papel, .85); ctx.lineWidth = 12; ctx.strokeText(txt, x, y);
+  ctx.fillStyle = colorA(COLORES.tinta, .8); ctx.fillText(txt, x, y); ctx.globalAlpha = .45; ctx.fillText(txt, x + .8, y + .5); ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(PAPEL, 0, 0);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';          // pigmento transparente: más pasadas = más oscuro
+  // suelo: limpiado con un borde de pincel ondulado que avanza de izquierda a derecha
+  const us = prog(t, T.suelo[0], T.suelo[1]);
+  if (us > 0) { ctx.save(); ctx.beginPath(); ctx.moveTo(-80, 1200); const xe = lerp(-80, 1160, ease(us));
+    for (let y = 1200; y <= 1700; y += 20) ctx.lineTo(xe + Math.sin(y * .05) * 18 + (vnoise(y * .02, 4) - .5) * 30, y); ctx.lineTo(xe, 1700); ctx.lineTo(-80, 1700); ctx.closePath(); ctx.clip();
+    ctx.drawImage(SUELO_C, 0, 0); ctx.restore(); }
+  lista(RAICES, prog(t, T.raices[0], T.raices[1]));
+  pintarPincelada(ctx, TALLO, ease(prog(t, T.tallo[0], T.tallo[1])));
+  lista(HOJAS, prog(t, T.hojas[0], T.hojas[1]));
+  // la flor: el pigmento mojado florece y se abre
+  PETALOS.forEach((p, i) => acuarela(p, COLORES.acento, { crece: .3 + .7 * prog(t, .0 + i * .1, .8 + i * .1), alpha: .85, semilla: 7 + i, borde: 10 }));
+  lista(BORDES, prog(t, T.centro[0], T.centro[1]));
+  acuarela(circle(F.x, F.y, 42), COLORES.centro, { crece: prog(t, T.centro[0], T.centro[1]), alpha: .9, semilla: 3, borde: 6 });
+  ctx.restore();
+  // notas y título en tinta (encima del pigmento)
+  const tk = prog(t, T.titulo[0], T.titulo[1]);
+  nota(TITULO_CHICO, AJ_C, W / 2 - medir(TITULO_CHICO, AJ_C.font) / 2, 330, prog(tk, 0, .35));
+  if (tk > .3) { ctx.save(); ctx.beginPath(); const wk = medir(PALABRA_CLAVE, AJ_K.font); ctx.rect(W / 2 - wk / 2 - 20, 300, (wk + 40) * easeOut(prog(tk, .3, 1)), 260); ctx.clip();
+    ctx.font = AJ_K.font; ctx.fillStyle = colorA(COLORES.tinta, .9); ctx.textAlign = 'center'; ctx.fillText(PALABRA_CLAVE, W / 2, 330 + 30 + AJ_K.size * .85); ctx.restore(); }
+  if (ETIQUETA && tk > .8) { ctx.save(); ctx.font = `500 24px ${MONO}`; ctx.letterSpacing = '6px'; ctx.fillStyle = colorA(COLORES.tinta, .6); ctx.textAlign = 'center';
+    ctx.fillText(ETIQUETA, W / 2, 360 + 30 + AJ_K.size * .85 + 18); ctx.restore(); }
+  NOTAS.forEach((n, i) => { const a = lerp(T.notas[0], T.notas[1], i / 3), b = lerp(T.notas[0], T.notas[1], (i + 1) / 3), u = prog(t, a, b);
+    pintarPincelada(ctx, GUIAS[i], ease(prog(u, 0, .45))); const p = NOTA_POS[i];
+    nota(n, AJ_N[i], i === 1 ? p.x : p.x, p.y, prog(u, .35, 1)); });
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' },             // papel y sala
+  { t: .1, tipo: 'desliz' },              // pigmento mojado que se abre
+  { t: T.abre[0], tipo: 'swish' },        // la cámara se aleja
+  { t: T.tallo[0], tipo: 'papel' },       // roce del pincel
+  { t: T.hojas[0], tipo: 'papel' },
+  { t: T.suelo[0], tipo: 'desliz' },
+  { t: T.notas[0], tipo: 'papel' },
+];
+</script>
+</body>
+</html>

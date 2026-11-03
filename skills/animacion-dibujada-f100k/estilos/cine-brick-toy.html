@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Bloques de juguete</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Bloques de juguete» · ingeniería inversa de lemo-opuscar/styles/brick-toy (MIT, © 2026 LemoLab) · qué se tomó: bloques de plástico brillante con botones, franja especular de softbox, costuras oscuras por contacto, escritorio real desenfocado, piezas que vuelan en arco y encajan a 12 cps con la cámara fluida, foco que salta del objeto real al bloque.
+// Bloques genéricos de juguete: ninguna marca ni figura ajena.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = '3 pasos para';                 // línea chica de arriba (≤ 24 letras)
+const TITULO = 'tu primera venta';             // la línea ENORME (≤ 22 letras)
+const PALABRA_CLAVE = 'venta';                 // va en el color del primer bloque ('' = todo igual)
+const PASOS = [                                // 2 a 4 escalones; cada uno se dice en la cápsula de abajo (≤ 30 letras)
+  'elige a quién le vendes',
+  'cuéntale lo que le duele',
+  'invítala a escribirte',
+];
+const COLORES = {
+  bloques: ['#c91a09', '#f2cd37', '#0055bf', '#237841'], // un color por escalón (rojo, amarillo, azul, verde)
+  base: '#9ba1a6',      // la placa gris sobre la que se construye (mate)
+  tinta: '#1b2a34',     // el texto de arriba
+  pared: '#b9b8b3',     // la pared desenfocada del fondo
+  madera: '#b58a5c',    // el escritorio real
+};
+const DUR = 8;                                  // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const LETRA = '"Arial Rounded MT Bold", "Avenir Next", "Helvetica Neue", sans-serif';
+const N = PASOS.length, ALTO = 1.2, L = [-.55, .8, .42];
+const T_GOLPE = .5;                                        // el primer bloque encaja aquí
+const T_PASO = i => T_GOLPE + .35 + i * Math.min(1.75, (DUR - 3.2) / N);   // cada escalón empieza aquí
+const PIEZAS = [];                                         // { col, w, d, x, y, z, t (encaje), desde }
+{ // escalera: el escalón i tiene i+1 bloques de alto; cada uno 2×2 botones, en fila hacia la derecha
+  const ancho = 2.1, x0 = -(N - 1) * ancho / 2;
+  for (let i = 0; i < N; i++) for (let k = 0; k <= i; k++) {
+    const t = i === 0 ? T_GOLPE : T_PASO(i) + k * .32;
+    PIEZAS.push({ col: COLORES.bloques[i % COLORES.bloques.length], w: 2, d: 2, x: x0 + i * ancho, y: .4 + k * ALTO, z: 0, t, paso: i,
+      desde: i === 0 ? [x0, 3.4, .6] : [x0 + i * ancho + (i % 2 ? 7 : -7), 14 + k * 2, 6] });
+  }
+  // remate: una pieza redonda en lo alto del último escalón (la venta)
+  const ult = PIEZAS[PIEZAS.length - 1];
+  PIEZAS.push({ redonda: true, col: '#f2f2ee', x: ult.x, y: ult.y + ALTO, z: 0, t: ult.t + .45, paso: N - 1, desde: [ult.x + 3, 18, 3] });
+}
+const T_FIN = PIEZAS[PIEZAS.length - 1].t + .2;
+
+// ---------- el escritorio de madera (textura pintada UNA vez) ----------
+const MADERA = (() => {
+  const c = lienzo(1024, 1024), p = c.getContext('2d'), r = rng(5), base = rgbDe(COLORES.madera);
+  for (let k = 0; k < 6; k++) { const y = k * 1024 / 6; p.fillStyle = rgbTxt(tonoC(base, .9 + r() * .18)); p.fillRect(0, y, 1024, 1024 / 6);
+    p.fillStyle = 'rgba(60,35,15,.35)'; p.fillRect(0, y, 1024, 3); }
+  for (let i = 0; i < 900; i++) { const y = r() * 1024, x = r() * 1024, l = 80 + r() * 300;
+    p.strokeStyle = r() < .6 ? 'rgba(80,50,25,.16)' : 'rgba(255,230,190,.12)'; p.lineWidth = .8 + r() * 2.2;
+    p.beginPath(); p.moveTo(x, y); p.bezierCurveTo(x + l / 3, y + (r() - .5) * 6, x + l * 2 / 3, y + (r() - .5) * 6, x + l, y + (r() - .5) * 4); p.stroke(); }
+  return c;
+})();
+// ---------- la pared con luz de ventana (UNA vez) ----------
+const PARED = (() => {
+  const c = lienzo(W, H), p = c.getContext('2d'), gr = p.createLinearGradient(0, 0, W, H * .6);
+  gr.addColorStop(0, rgbTxt(tonoC(COLORES.pared, .72))); gr.addColorStop(.6, rgbTxt(COLORES.pared)); gr.addColorStop(1, rgbTxt(tonoC(COLORES.pared, 1.08)));
+  p.fillStyle = gr; p.fillRect(0, 0, W, H);
+  const v = p.createRadialGradient(W * .75, H * .25, 50, W * .75, H * .25, 900); v.addColorStop(0, 'rgba(255,255,250,.35)'); v.addColorStop(1, 'rgba(255,255,250,0)');
+  p.fillStyle = v; p.fillRect(0, 0, W, H); return c;
+})();
+
+// ---------- piezas de plástico ----------
+const cara0 = { brillo: .38, brilloExp: 2, brilloBanda: [.06, .08, .94, .3] };
+function bloque(x, y, z, w, d, col, o = {}) {
+  const ob = caja(x, y, z, w - .04, ALTO - .02, d - .04, col, { porCara: { frente: cara0, der: cara0, izq: cara0, arriba: { brillo: .5, brilloBanda: [.1, .06, .9, .2] } } });
+  ob.caras.forEach(f => f.borde = { col: rgbTxt(tonoC(col, .62)), w: 1.6 });   // costura oscura (contacto) en el canto
+  for (let i = 0; i < w; i++) for (let j = 0; j < d; j++) {
+    const s = cilindro(x - w / 2 + .5 + i, y + ALTO - .02, z - d / 2 + .5 + j, .3, .2, col, { lados: 14 });
+    s.caras.forEach(f => { f.orden = 1; if (f.tipo === 'arriba') f.dibujo = brilloBoton; });
+    ob.caras.push(...s.caras);
+  }
+  return ob;
+}
+function brilloBoton(g, f, cam, col, p2) {           // reflejo de la caja de luz en la tapa del botón
+  const xs = p2.map(p => p[0]), ys = p2.map(p => p[1]);
+  const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2, rx = (Math.max(...xs) - Math.min(...xs)) / 2, ry = (Math.max(...ys) - Math.min(...ys)) / 2;
+  g.fillStyle = 'rgba(255,255,255,.55)'; g.beginPath(); g.ellipse(cx - rx * .25, cy - ry * .1, rx * .42, ry * .3, -.3, 0, Math.PI * 2); g.fill();
+}
+function redonda(x, y, z, col) {                     // pieza redonda 2×2 con cúpula (remate)
+  const a = cilindro(x, y, z, 1, ALTO * .9, col, { lados: 22, caraTapa: { brillo: .4 } });
+  a.caras.forEach(f => { if (f.tipo === 'lado') { f.borde = { col: rgbTxt(tonoC(col, .8)), w: 1 }; } });
+  const b = cono(x, y + ALTO * .9, z, .95, 1.1, '#f2cd37', { lados: 16 }); b.caras.forEach(f => f.orden = 1);
+  a.caras.push(...b.caras); return a;
+}
+function basePlaca() {
+  const ob = caja(0, 0, 0, 14, .4, 9, COLORES.base); ob.zBias = 1e4; ob.sombra = true;
+  ob.caras.forEach(f => f.borde = { col: rgbTxt(tonoC(COLORES.base, .7)), w: 1.4 });
+  for (let i = 0; i < 14; i++) for (let j = 0; j < 9; j++) {
+    const s = cilindro(-6.5 + i, .4, -4 + j, .3, .17, COLORES.base, { lados: 10 });
+    s.caras.forEach(f => f.orden = 1); ob.caras.push(...s.caras);
+  }
+  return ob;
+}
+// objetos reales del escritorio (desenfocados por la lente): una taza y una pila de libros
+function utileria() {
+  const taza = cilindro(-16, 0, -30, 4.2, 9.5, '#e9e4da', { lados: 26 }); taza.caras.forEach(f => f.brillo = f.tipo === 'lado' ? .25 : 0);
+  const asa = caja(-20.6, 2.5, -30, 1.2, 4.5, 1, '#e2dcd0');
+  const libros = [caja(19, 0, -38, 16, 3, 11, '#6d7a86'), caja(19.5, 3, -38.3, 15, 2.6, 10.4, '#8b9a8c'), caja(18.6, 5.6, -37.8, 15.4, 2.2, 10.8, '#d9cfb8')];
+  return [taza, asa, ...libros];
+}
+
+// ---------- tiempo de juguete: las piezas van a 12 cps, la cámara va fluida ----------
+const paso12 = t => Math.floor(t * 12) / 12;
+function poseDe(pz, t) {          // dónde está la pieza: vuela en arco y encaja con un pasito de más (fracción de botón)
+  const tv = pz.paso === 0 ? .62 : .55, k = prog(t, pz.t - tv, pz.t);
+  if (k <= 0) return null;
+  if (k < 1) { const e = ease(k); const p = V3.lerp(pz.desde, [pz.x, pz.y, pz.z], e); p[1] += Math.sin(e * Math.PI) * 3; return { p, giro: (1 - e) * .9 }; }
+  const s = prog(t, pz.t, pz.t + 4 / 30); return { p: [pz.x, pz.y + (1 - s) * .12 * (s < 1 ? 1 : 0), pz.z], giro: 0 };
+}
+
+// ---------- texto ----------
+const AJ_A = autoajuste(ARRIBA, LETRA, 700, 760, 1, 72, 40);
+// la palabra clave sale del título y va sola, ENORME; el resto va mediano y lo de arriba, chico
+const _i = PALABRA_CLAVE ? TITULO.toLowerCase().lastIndexOf(PALABRA_CLAVE.toLowerCase()) : -1;
+const RESTO = _i >= 0 ? (TITULO.slice(0, _i) + TITULO.slice(_i + PALABRA_CLAVE.length)).replace(/\s+/g, ' ').trim() : TITULO;
+const CLAVE_TXT = _i >= 0 ? TITULO.slice(_i, _i + PALABRA_CLAVE.length) : '';
+const AJ_T = autoajuste(RESTO, LETRA, 700, 940, 1, 104, 56);
+const AJ_K = CLAVE_TXT ? autoajuste(CLAVE_TXT, LETRA, 700, 940, 1, 200, 80) : null;
+const LINEAS_T = [{ txt: ARRIBA, aj: AJ_A, col: COLORES.tinta }, { txt: RESTO, aj: AJ_T, col: COLORES.tinta }];
+if (AJ_K) LINEAS_T.push({ txt: CLAVE_TXT, aj: AJ_K, col: COLORES.bloques[0] });
+const PALABRAS = [];
+{ let y = 288; LINEAS_T.forEach((l, ln) => { y += l.aj.size * (ln ? .98 : 1) + (ln ? 6 : 0);
+    const ws = l.txt.split(' ').filter(Boolean), esp = medir(' ', l.aj.font), tot = ws.reduce((a, w) => a + medir(w, l.aj.font), 0) + esp * (ws.length - 1);
+    let x = W / 2 - tot / 2; ws.forEach(w => { PALABRAS.push({ w, font: l.aj.font, col: l.col, x, y }); x += medir(w, l.aj.font) + esp; }); }); }
+// cada palabra aparece con corte seco, en cascada; la clave cae cuando encaja el primer bloque
+PALABRAS.forEach((p, i) => p.t = i === PALABRAS.length - 1 && AJ_K ? T_GOLPE : .06 + i * .09);
+function titulo(t) {
+  ctx.save(); ctx.textBaseline = 'alphabetic';
+  for (const p of PALABRAS) { if (t < p.t) continue; ctx.font = p.font; ctx.fillStyle = p.col; ctx.fillText(p.w, p.x, p.y); }
+  ctx.restore();
+}
+const CAP = { y: 1342, h: 112 };
+const AJ_P = PASOS.map(s => autoajuste(s, LETRA, 700, 760, 1, 56, 34));
+function capsula(t) {             // subtítulo de juguete: cápsula oscura con un bloquecito del color del escalón
+  let i = -1; for (let k = 0; k < N; k++) if (t >= (k === 0 ? T_GOLPE + .1 : T_PASO(k))) i = k;
+  if (i < 0) return;
+  const aj = AJ_P[i], tw = medir(PASOS[i], aj.font), w = tw + 150, x = W / 2 - w / 2;
+  ctx.save(); ctx.fillStyle = 'rgba(27,42,52,.9)'; ctx.beginPath(); ctx.roundRect(x, CAP.y, w, CAP.h, CAP.h / 2); ctx.fill();
+  const col = COLORES.bloques[i % COLORES.bloques.length], bx = x + 34, by = CAP.y + 40;   // ícono: bloque de 2 botones
+  ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(bx, by + 12, 64, 34, 5); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(bx + 8, by, 18, 14, 3); ctx.roundRect(bx + 38, by, 18, 14, 3); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(bx + 4, by + 16, 56, 5);
+  ctx.font = aj.font; ctx.fillStyle = '#ffffff'; ctx.textBaseline = 'middle'; ctx.fillText(PASOS[i], x + 118, CAP.y + CAP.h / 2 + 3);
+  ctx.restore();
+}
+
+// ---------- la cámara: baja a la altura del juguete, empuja y gira despacio (en unos, sin pasos) ----------
+function camaraEn(t) {
+  // 0–1,3 s: macro sobre el primer bloque (el cuarto real borroso detrás) y sale a la altura del juguete; luego órbita lenta
+  const k = ease(prog(t, .35, 1.5)), m = ease(prog(t, 1.5, DUR)), x0 = PIEZAS[0].x;
+  return camara({ objetivo: [lerp(x0, 0, k), lerp(1.2, 3.4, k), 0], az: lerp(-.75, -.4, k) + m * .4, el: lerp(.36, .3, k) + m * .05,
+    dist: lerp(11, 31, k) - m * 1.5, fov: 36, cy: lerp(1050, 1010, k) });
+}
+
+const BASE = basePlaca(), UTIL = utileria();
+arrancar(frame => {
+  const t = frame / FPS, tp = paso12(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const cam = camaraEn(t);
+  // fondo: pared + escritorio en perspectiva, con desenfoque de lente que crece lejos del plano de foco
+  ctx.drawImage(PARED, 0, 0); ctx.fillStyle = rgbTxt(tonoC(COLORES.madera, .92)); ctx.fillRect(0, H * .55, W, H * .45);
+  planoImagen(ctx, cam, MADERA, [[-90, 0, -80], [90, 0, -80], [90, 0, 20], [-90, 0, 20]], { tiras: 40 });
+  const yFoco = cam.proy([0, 0, 0])[1];
+  bandaEnfoque(ctx, yFoco, 40, 16, { pasos: 4, rampa: 700 });
+  // el foco salta: primero en la taza (lo real), luego en el bloque que encaja (lo chico)
+  const rack = 1, focoTaza = cam.proy([-16, 5, -30])[2], focoBloque = cam.proy([0, 1.5, 0])[2];
+  const objs = [];
+  for (const pz of PIEZAS) { const ps = poseDe(pz, tp); if (!ps) continue;
+    const ob = pz.redonda ? redonda(pz.x, ps.p[1], pz.z, pz.col) : bloque(0, 0, 0, pz.w, pz.d, pz.col);
+    if (!pz.redonda) { moverObj(ob, ps.p); if (ps.giro) rotarObjY(ob, ps.giro); }
+    else { moverObj(ob, [ps.p[0] - pz.x, 0, ps.p[2] - pz.z]); }
+    objs.push(ob); }
+  const opc = { luz: L, amb: .56, dif: .52, cielo: [235, 240, 255], cieloK: .1, dof: { foco: lerp(focoTaza, focoBloque, rack), apertura: 26, max: 18 } };
+  render3d(ctx, cam, [BASE, ...UTIL], Object.assign({}, opc, { sombras: { alpha: .3, blur: 18, col: '#2b2a35', contacto: .4, blurContacto: 6, ySuelo: 0 } }));
+  render3d(ctx, cam, objs, { luz: L, amb: .56, dif: .52, cielo: [235, 240, 255], cieloK: .1,
+    sombras: { alpha: .32, blur: 14, col: '#2b2a35', contacto: .5, blurContacto: 4, ySuelo: .4, alturaContacto: .2 },
+    dof: { foco: lerp(focoTaza, focoBloque, rack), apertura: 26, max: 18 } });
+  // gradación apenas fría para que el blanco se lea blanco
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = 'rgba(150,180,220,.18)'; ctx.fillRect(0, 0, W, H); ctx.restore();
+  titulo(t); capsula(t);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: T_GOLPE, tipo: 'golpe' },
+  ...PIEZAS.slice(1).map(p => ({ t: +p.t.toFixed(2), tipo: 'pop' })), { t: +(T_FIN + .1).toFixed(2), tipo: 'desliz' }];
+</script>
+</body>
+</html>

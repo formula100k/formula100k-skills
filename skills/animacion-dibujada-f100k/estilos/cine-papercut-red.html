@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Papel rojo recortado</title>
+<style>
+  html,body{margin:0;background:#0e1124;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Papel rojo recortado» · ingeniería inversa de lemo-opuscar/styles/papercut-red (MIT, © 2026 LemoLab) · qué se tomó: todo es papel cortado con tijera (grano soft-light, filo claro/oscuro, sombra corta), rosetón de una cuña de 45° reflejada 8 veces que se despliega en tres dobleces, agujeros que se vuelven luz y recortes que caen; personajes en pasos de 12 cps.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'UNA IDEA';                    // letras recortadas, enormes (máx. ~10 letras)
+const FRASE = 'se vuelve muchas piezas';      // la banda roja de abajo (máx. ~28 letras)
+const COLORES = {
+  rojo: '#d2201f',      // el papel protagonista (rojo China)
+  rojoBanda: '#9c1416', // la banda: un paso más oscuro que los rojos del cuadro
+  noche: '#141a33',     // fondo: una sola familia de papel teñido (índigo)
+  lejos: '#2e3c70',     // cerros lejanos: un paso más claros
+  cerca: '#1e2a55',     // cerros cercanos
+  crema: '#f1e6cf',     // tira del título y letra de la banda
+  luz: '255,190,110',   // la luz que pasa por los agujeros (r,g,b)
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script src="../nucleo/cine-asia.js"></script>
+<script>
+const C = COLORES, R0 = 330, CX = W / 2, CY = 760;
+const paso12 = t => Math.floor(t * 12) / 12;            // lo que actúa va a 12 cps
+
+// ---------- fondo: papeles teñidos en capas (se pinta una vez) ----------
+const ondulado = (y0, amp, f, sem) => X => y0 + Math.sin(X * f + sem) * amp + (vnoise(X * .01, sem) - .5) * amp * .8;
+function capaCerro(col, fy, sierra, sem) {
+  return piezaPapel(W, H, g => { g.fillStyle = col; g.beginPath(); g.moveTo(0, H); for (let X = 0; X <= W; X += 14) g.lineTo(X, fy(X) + (hash2(X, sem) - .5) * 3); g.lineTo(W, H); g.fill();
+    if (sierra) for (let X = 0; X < W; X += 140) dienteSierra(g, X + 20, X + 110, fy(X + 60) + 40, 18, 15); }, { semilla: sem, sombra: 10 });
+}
+const FONDO = (() => {
+  const c = mk(), g = c.getContext('2d');
+  g.drawImage(piezaPapel(W, H, x => { x.fillStyle = C.noche; x.fillRect(0, 0, W, H); }, { filo: 0, sombra: 0, semilla: 2, grano: .7 }).c, 0, 0);
+  // estrellas: agujeritos en el papel del cielo (dejan ver un papel claro de atrás)
+  const R = rng(4); g.fillStyle = '#c9cfe6'; for (let i = 0; i < 70; i++) { const x = R() * W, y = 120 + R() * 900, r = 1.5 + R() * 2.5; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill(); }
+  const L = capaCerro(C.lejos, ondulado(1180, 40, .006, 1), true, 5), N = capaCerro(C.cerca, ondulado(1360, 30, .009, 3), true, 7);
+  ponerPapel(g, L, 0, 0, 0, 8); ponerPapel(g, N, 0, 0, 0, 10);
+  // la nieve del suelo: papel claro
+  ponerPapel(g, piezaPapel(W, H, x => { x.fillStyle = '#ddd6c8'; x.beginPath(); x.moveTo(0, H); for (let X = 0; X <= W; X += 14) x.lineTo(X, 1560 + Math.sin(X * .007) * 16); x.lineTo(W, H); x.fill(); }, { semilla: 9 }), 0, 0, 0, -6);
+  return c;
+})();
+
+// ---------- el rosetón: UNA cuña de 45° (anillos yin y yang) reflejada 8 veces ----------
+const RF = rosetaD4(R0, C.rojo, (g, R) => {
+  const P = (r, a) => [Math.cos(a) * r, Math.sin(a) * r], A = Math.PI / 8;
+  // centro: pétalos (agujeros) y un aro de cuentas
+  recorte(g, q => { const [x, y] = P(R * .1, A); q.ellipse(x, y, R * .055, R * .028, A, 0, 6.283); });
+  cuentas(g, [P(R * .19, A * .5), P(R * .19, A * 1.5)], R * .018);
+  // anillo yin: lágrimas inclinadas (la cuña es asimétrica: el espejo arma el par)
+  recorte(g, q => { const [x, y] = P(R * .31, A * .9); q.ellipse(x, y, R * .085, R * .03, A + .7, 0, 6.283); });
+  nubeEspiral(g, ...P(R * .3, A * 1.65), R * .035, 0, R * .012);
+  // anillo yang: se quita la banda y quedan líneas rojas (radios + zigzag que los une: nada queda suelto)
+  recorte(g, q => { for (let i = 0; i < 3; i++) { const a0 = i * Math.PI / 12 + .025, a1 = (i + 1) * Math.PI / 12 - .025, r0 = R * .44, r1 = R * .6;
+    q.moveTo(...P(r0, a0)); q.arc(0, 0, r0, a0, a1); q.lineTo(...P(r1, a1)); q.arc(0, 0, r1, a1, a0, true); q.closePath(); } }, 'nonzero');
+  g.save(); g.strokeStyle = C.rojo; g.lineWidth = R * .018; g.beginPath();
+  for (let i = 0; i <= 12; i++) { const a = i * Math.PI / 48, r = i % 2 ? R * .47 : R * .57; i ? g.lineTo(...P(r, a)) : g.moveTo(...P(r, a)); } g.stroke(); g.restore();
+  // medias lunas y monedas
+  for (let i = 0; i < 3; i++) { const a = (i + .5) * Math.PI / 12; recorteLinea(g, R * .016, q => q.arc(...P(R * .7, a), R * .045, a + .5, a + Math.PI - .5)); moneda(g, ...P(R * .8, a), R * .028); }
+  // borde aserrado: dientes de sierra en la orilla
+  recorte(g, q => { for (let i = 0; i < 10; i++) { const a0 = i * Math.PI / 40, a1 = (i + 1) * Math.PI / 40; q.moveTo(...P(R * 1.02, a0)); q.lineTo(...P(R * .9, (a0 + a1) / 2)); q.lineTo(...P(R * 1.02, a1)); q.closePath(); } }, 'nonzero');
+  recorteLinea(g, R * .01, q => q.arc(0, 0, R * .865, 0, Math.PI / 4));
+}, { semilla: 3 });
+// la máscara de agujeros del rosetón (para la luz que pasa)
+const HUECOS = (() => { const c = mk(RF.c.width, RF.c.height), g = c.getContext('2d'); g.fillStyle = '#000'; g.beginPath(); g.arc(c.width / 2, c.height / 2, R0 * .99, 0, 6.283); g.fill();
+  g.globalCompositeOperation = 'destination-out'; g.drawImage(RF.c, 0, 0); return c; })();
+
+// ---------- recortes que caen (sobras del corte) ----------
+const SOBRAS = Array.from({ length: 16 }, (_, i) => ({ x: CX - 260 + hash2(i, 1) * 520, y0: CY - 200 + hash2(i, 2) * 200, piso: 1575 + hash2(i, 3) * 120, tam: 14 + hash2(i, 4) * 22, gira: hash2(i, 5) * 6, t0: .05 + hash2(i, 6) * .35 }));
+const SOBRA = piezaPapel(60, 60, g => { g.fillStyle = C.rojo; g.beginPath(); g.moveTo(8, 10); g.lineTo(52, 18); g.lineTo(22, 50); g.closePath(); g.fill(); }, { sombra: 3, semilla: 11 });
+function sobras(g, t) {
+  for (const s of SOBRAS) { const u = paso12(Math.max(0, t - s.t0)), y = Math.min(s.piso, s.y0 + 900 * u * u), a = y >= s.piso ? s.gira : s.gira + u * 9;
+    const x = s.x + Math.sin(u * 4 + s.gira) * 30 * Math.min(1, u);
+    g.save(); g.translate(x, y); g.rotate(a); g.scale(s.tam / 40, s.tam / 40); if (y >= s.piso) g.drawImage(SOBRA.sombra, -30 + 3, -30 + 5); g.drawImage(SOBRA.c, -30, -30); g.restore(); }
+}
+
+// ---------- texto: tira crema con letras rojas recortadas + banda roja con colas de golondrina ----------
+const FT = '"Hoefler Text", "Big Caslon", Georgia, serif';
+const AJ_T = autoajuste(TITULO, FT, 900, 860, 1, 210, 90), AJ_F = autoajuste(FRASE, FT, 700, 720, 1, 66, 38);
+const LETRAS = (() => { const out = [], f = AJ_T.font, txt = AJ_T.rs[0], w = medir(txt, f); let x = CX - w / 2;
+  for (const ch of txt) { const cw = medir(ch, f); if (ch !== ' ') out.push({ ch, x, cw }); x += cw; } return out; })();
+const TIRA_Y = 1120, TIRA_H = AJ_T.size * 1.12;
+const TIRA = piezaPapel(W - 80, TIRA_H + 40, g => { g.fillStyle = C.crema; g.fillRect(0, 20, W - 80, TIRA_H); dienteSierra(g, 0, W - 80, 20 + 14, 14, 18);
+  recorte(g, q => { for (let x = 0; x < W - 80; x += 18) { q.moveTo(x, TIRA_H + 20 - 14); q.lineTo(x + 9, TIRA_H + 20); q.lineTo(x + 18, TIRA_H + 20 - 14); q.closePath(); } }, 'nonzero'); }, { semilla: 21 });
+const LETRA_P = LETRAS.map((l, i) => piezaPapel(Math.ceil(l.cw) + 20, AJ_T.size * 1.3, g => { g.font = AJ_T.font; g.fillStyle = C.rojo; g.textBaseline = 'alphabetic'; g.fillText(l.ch, 10, AJ_T.size * 1.02); }, { semilla: 30 + i, sombra: 4, filo: 1.2 }));
+const BANDA_Y = 1330, BANDA_H = 96, BANDA_W = Math.min(W - 60, medir(FRASE, AJ_F.font) + 220);
+const BANDA = piezaPapel(BANDA_W, BANDA_H, g => { g.fillStyle = C.rojoBanda; g.beginPath(); g.moveTo(0, 0); g.lineTo(BANDA_W, 0); g.lineTo(BANDA_W - 46, BANDA_H / 2); g.lineTo(BANDA_W, BANDA_H); g.lineTo(0, BANDA_H); g.lineTo(46, BANDA_H / 2); g.closePath(); g.fill();
+  dienteSierra(g, 60, BANDA_W - 60, 12, 10, 14); g.font = AJ_F.font; g.fillStyle = C.crema; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(FRASE, BANDA_W / 2, BANDA_H / 2 + 6); }, { semilla: 41, sombra: 8 });
+
+const T = { despliega: [.3, 1.25], flash: 1.25, luz: 1.6, tira: 2.0, letras: 2.15, banda: 3.2 };
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  // cámara: el plano frontal, quieto; una paralaje mínima al final (las capas siguen paralelas a la pantalla)
+  const pan = 14 * ease(prog(t, 1.4, DUR));
+  ctx.drawImage(FONDO, -pan * .4, 0, W + pan * .8, H + pan * 1.4);
+  // luz detrás del rosetón: los agujeros se vuelven luz (la jugada «los huecos son luz»)
+  const kl = aterriza(prog(t, T.luz, T.luz + .6));
+  if (kl > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(CX, CY, 0, CX, CY, R0 * 1.05);
+    g.addColorStop(0, `rgba(${C.luz},${.95 * kl})`); g.addColorStop(.7, `rgba(${C.luz},${.55 * kl})`); g.addColorStop(1, `rgba(${C.luz},0)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(CX, CY, R0 * .98, 0, 6.283); ctx.fill(); ctx.restore(); }
+  // el rosetón: cuña doblada → tres dobleces que se abren (cada uno en su golpe), luego un salto de escala en 1 paso
+  const pd = prog(t, ...T.despliega), salto = t >= T.flash && t < T.flash + 1 / 12 ? 1.06 : 1;
+  ctx.save(); ctx.translate(CX, CY); ctx.scale(salto, salto); ctx.translate(-CX, -CY);
+  const pq = Math.floor(pd * 3) / 3 + aterriza(clamp(pd * 3 - Math.floor(pd * 3))) / 3;   // cada doblez: «¡pa!» con salida rápida
+  desplegar(ctx, RF, CX, CY, pd >= 1 ? 1 : pq);
+  ctx.restore();
+  if (kl > 0) { ctx.save(); ctx.globalAlpha = kl * .35; ctx.globalCompositeOperation = 'lighter'; ctx.filter = 'blur(10px)';
+    ctx.drawImage(HUECOS, CX - HUECOS.width / 2, CY - HUECOS.height / 2); ctx.filter = 'none'; ctx.restore(); }   // brillo suave de los huecos
+  // destello cálido al abrirse del todo (corto, nunca blanco total)
+  const fl = prog(t, T.flash, T.flash + .35); if (fl > 0 && fl < 1) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(CX, CY, R0 * .5, CX, CY, R0 * 1.8);
+    g.addColorStop(0, `rgba(${C.luz},${.35 * (1 - fl)})`); g.addColorStop(1, `rgba(${C.luz},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  sobras(ctx, t);
+  // la tira del título entra en dos pasos de 12 cps (como un papel que se pega) y las letras saltan de a una
+  if (t >= T.tira) { const st = t < T.tira + 1 / 12 ? -18 : 0; ponerPapel(ctx, TIRA, 40, TIRA_Y - 20 + st, 4, 8); }
+  LETRAS.forEach((l, i) => { if (paso12(t) < T.letras + i / 12 * 1.5) return; const p = LETRA_P[i]; ponerPapel(ctx, p, l.x - 10, TIRA_Y + TIRA_H / 2 - AJ_T.size * .62, 3, 4); });
+  if (t >= T.banda) { const st = t < T.banda + 1 / 12 ? -22 : 0; ponerPapel(ctx, BANDA, CX - BANDA_W / 2, BANDA_Y + st, 5, 9); }
+});
+window.SONIDOS = [{ t: .05, tipo: 'papel' }, { t: .3, tipo: 'papel' }, { t: .62, tipo: 'papel' }, { t: .93, tipo: 'golpe' }, { t: 1.25, tipo: 'golpe' }, { t: 2.0, tipo: 'papel' }, { t: 2.15, tipo: 'pop' }, { t: 3.2, tipo: 'papel' }];
+</script>
+</body>
+</html>

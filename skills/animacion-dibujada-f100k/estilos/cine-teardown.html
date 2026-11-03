@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Despiece</title>
+<style>
+  html,body{margin:0;background:#0d0e10;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Despiece» · ingeniería inversa de lemo-opuscar/styles/teardown (MIT, © 2026 LemoLab) · qué se tomó: el objeto que se abre en capas sobre un solo eje (salida suave, centro rápido, asentado largo, de arriba hacia abajo con 0,15 s entre capas), fondo de grafito sin costura, llave cálida y contorno frío, la placa pintada con pistas y componentes, las luces de adentro que se encienden con el objeto abierto y la columna de etiquetas fija (índice en el acento, nombre, una línea de dato) con guías que aterrizan en la pieza
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Así se arma un reel que vende';     // arriba (máx. ~50 letras)
+const PALABRA_CLAVE = 'vende';                      // enorme, en su propio renglón
+const CAPAS = [                                     // de arriba hacia abajo, de 3 a 5 (nombre ≤ 14, dato ≤ 26)
+  { nombre: 'Gancho', dato: 'lo primero que se ve' },
+  { nombre: 'Problema', dato: 'lo que le duele' },
+  { nombre: 'Prueba', dato: 'tu caso real' },
+  { nombre: 'Oferta', dato: 'lo que vendes' },
+  { nombre: 'Llamado', dato: 'la palabra para pedirlo' },
+];
+const FOTO = '';                                    // captura TUYA para la pantalla (tu reel, tu perfil). Vacío = pantalla de muestra
+const COLORES = {
+  tinta: '#f1efe9',
+  acento: '#ff6b3d',    // solo lo medido: índices, la guía de la pieza que importa
+  grafito: ['#34363a', '#0d0e10'],
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+const CW = 36, CD = 74, K = Math.min(5, CAPAS.length), TEXP = 512, TEXH = Math.round(TEXP * CD / CW);
+// ---------- las caras de cada capa (se pintan UNA vez) ----------
+function tex(fn) { const c = lienzo(TEXP, TEXH), p = c.getContext('2d'); fn(p, c.width, c.height); return c; }
+const rr = (p, x, y, w, h, r) => { p.beginPath(); p.roundRect(x, y, w, h, r); };
+let PANT = null;
+function pantallaMuestra(p, w, h) {                       // sin captura: una cuadrícula de publicaciones genérica
+  p.fillStyle = '#101317'; p.fillRect(0, 0, w, h);
+  p.fillStyle = '#1d2229'; rr(p, 30, 60, w - 60, 120, 14); p.fill();
+  p.fillStyle = '#e9e6df'; p.beginPath(); p.arc(100, 120, 38, 0, 7); p.fill();
+  p.fillStyle = '#6b727c'; p.fillRect(160, 96, 200, 18); p.fillRect(160, 128, 140, 14);
+  const g = (w - 60 - 16) / 3, cols = ['#3c4652', '#5a4a40', '#445248', '#4b4256', '#5b5446', '#3e4a5a'];
+  for (let j = 0; j < 4; j++) for (let i = 0; i < 3; i++) { p.fillStyle = cols[(i + j * 2) % 6]; p.fillRect(30 + i * (g + 8), 210 + j * (g + 8), g, g); }
+  p.fillStyle = COLORES.acento; p.fillRect(30, 210, g, g);
+}
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => { PANT = tex((p, w, h) => {
+  if (fs[0]) { p.fillStyle = '#000'; p.fillRect(0, 0, w, h); p.drawImage(fotoEnLienzo(fs[0], w - 24, h - 24, .5, .3), 12, 12); } else pantallaMuestra(p, w, h);
+  const g = p.createLinearGradient(0, 0, w, h); g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(.4, 'rgba(255,255,255,0)'); p.fillStyle = g; p.fillRect(0, 0, w, h); }); });
+const MARCO = tex((p, w, h) => { p.fillStyle = '#b9bcc2'; rr(p, 0, 0, w, h, 40); p.fill(); p.clearRect(28, 28, w - 56, h - 56);
+  p.strokeStyle = 'rgba(255,255,255,.5)'; p.lineWidth = 3; rr(p, 3, 3, w - 6, h - 6, 38); p.stroke(); });
+const LEDS = [];
+const PLACA = tex((p, w, h) => { const r = rng(14);
+  p.fillStyle = '#1f5a45'; rr(p, 8, 8, w - 16, h - 16, 30); p.fill();
+  p.strokeStyle = '#3f8a6a'; p.lineCap = 'round';
+  for (let i = 0; i < 90; i++) { let x = 30 + r() * (w - 60), y = 30 + r() * (h - 60); p.lineWidth = 2 + r() * 3; p.beginPath(); p.moveTo(x, y);
+    for (let k = 0; k < 4; k++) { if (k % 2) y = clamp(y + (r() - .5) * 260, 30, h - 30); else x = clamp(x + (r() - .5) * 220, 30, w - 30); p.lineTo(x, y); } p.stroke();
+    p.fillStyle = '#c9a85a'; p.beginPath(); p.arc(x, y, 4, 0, 7); p.fill(); }
+  const chip = (x, y, s) => { p.fillStyle = '#16181b'; p.fillRect(x, y, s, s); p.fillStyle = '#c9a85a'; for (let k = 0; k < 8; k++) { p.fillRect(x - 8, y + 6 + k * (s - 12) / 7, 8, 3); p.fillRect(x + s, y + 6 + k * (s - 12) / 7, 8, 3); } };
+  chip(150, 300, 150); chip(310, 520, 90); chip(110, 640, 70);
+  for (let i = 0; i < 24; i++) { p.fillStyle = '#d8d4c8'; p.fillRect(40 + r() * (w - 80), 40 + r() * (h - 80), 10, 5); }
+  for (let i = 0; i < 6; i++) { const x = 60 + (i % 3) * 170, y = 130 + Math.floor(i / 3) * (h - 300); LEDS.push([x / w, y / h]); p.fillStyle = '#f5f1e6'; p.fillRect(x - 8, y - 5, 16, 10); } });
+const BATERIA = tex((p, w, h) => { p.fillStyle = '#2b2d31'; rr(p, 40, 120, w - 80, h - 360, 18); p.fill();
+  p.fillStyle = '#3a3d42'; rr(p, 70, 200, w - 140, 200, 10); p.fill(); p.fillStyle = '#5a5e66'; for (let i = 0; i < 4; i++) p.fillRect(90, 230 + i * 40, w - 180 - i * 60, 12);
+  p.fillStyle = '#c9a85a'; p.fillRect(w / 2 - 50, 100, 100, 26); });
+const CARCASA = tex((p, w, h) => { p.fillStyle = '#3a3c41'; rr(p, 0, 0, w, h, 44); p.fill(); p.fillStyle = '#2c2e32'; rr(p, 20, 20, w - 40, h - 40, 34); p.fill();
+  p.fillStyle = '#4a4d53'; for (const [x, y] of [[60, 60], [w - 60, 60], [60, h - 60], [w - 60, h - 60]]) { p.beginPath(); p.arc(x, y, 12, 0, 7); p.fill(); } });
+// capa: alto, color de los cantos, cara superior
+const PIEZAS = [
+  { e: 1.1, col: [24, 26, 30], cara: () => PANT },
+  { e: 2.0, col: [150, 154, 160], cara: () => MARCO, marco: true },
+  { e: .9, col: [28, 70, 54], cara: () => PLACA, leds: true },
+  { e: 2.2, col: [44, 46, 50], cara: () => BATERIA },
+  { e: 3.0, col: [56, 58, 63], cara: () => CARCASA },
+].slice(0, K);
+const SEP = 18;                                              // separación entre capas abiertas
+const zCerrado = i => PIEZAS.slice(i + 1).reduce((a, q) => a + q.e, 0);
+const T = { abre: .3, entre: .16, dur: 1.15, leds: 1.6, etiq: 1.9, frase: 2.0 };
+const zDe = (i, t) => { const orden = i, k = ease(prog(t, T.abre + orden * T.entre, T.abre + orden * T.entre + T.dur)); return zCerrado(i) + k * (K - 1 - i) * SEP + Math.sin(t * 1.3 + i) * .25 * k; };
+
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 262, fam: F_SANS, peso: 500, famClave: F_SANS, pesoClave: 600, chica: 66, grande: 210, col: COLORES.tinta });
+const FONDO = (() => { const c = lienzo(W, H), p = c.getContext('2d'), g = p.createRadialGradient(W * .42, H * .58, 60, W * .5, H * .6, H * .75);
+  g.addColorStop(0, COLORES.grafito[0]); g.addColorStop(1, COLORES.grafito[1]); p.fillStyle = g; p.fillRect(0, 0, W, H); return c; })();
+
+function camara(t) {
+  const k = ease(prog(t, 0, 2.2)), kz = ease(prog(t, 0, DUR));
+  const obj = [CW / 2, CD / 2, lerp(6, (K - 1) * SEP * .5, k)];
+  return vistaA(obj, [lerp(540, 390, k), lerp(1060, 1010, k)], { esc: lerp(15, 6.6, k) * (1 + .03 * kz), yaw: lerp(.25, .62, kz) + .0, pitch: lerp(.95, .72, k) });
+}
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.drawImage(FONDO, 0, 0);
+  if (!PANT) return;
+  const p = camara(t), luz = [-.4, .55, .75];
+  sombraSuelo(p, [[-2, -2, -1], [CW + 4, -2, -1], [CW + 4, CD + 4, -1], [-2, CD + 4, -1]], { alpha: .5, borroso: 26 });   // sombra de contacto en un piso invisible
+  const anclas = [];
+  for (let i = K - 1; i >= 0; i--) {                         // de abajo hacia arriba (orden de pintor)
+    const q = PIEZAS[i], z = zDe(i, t);
+    caja(p, 0, 0, z, CW, CD, q.e, q.col, { luz, ambiente: .55, tapaCol: q.col });
+    tapa(p, 0, 0, z + q.e, CW, CD, q.cara());
+    pelo([p(0, 0, z + q.e), p(CW, 0, z + q.e)], { w: 1.6, col: '#cfe3ff', halo: null, alpha: .35 });          // contorno frío del canto de atrás
+    if (q.leds) { const on = prog(t, T.leds, T.leds + .25);
+      if (on > 0) { ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        for (const [u, v] of LEDS) { const s = p(u * CW, v * CD, z + q.e); const g = ctx.createRadialGradient(s[0], s[1], 0, s[0], s[1], 40); g.addColorStop(0, `rgba(255,236,200,${.85 * on})`); g.addColorStop(1, 'rgba(255,236,200,0)');
+          ctx.fillStyle = g; ctx.fillRect(s[0] - 40, s[1] - 40, 80, 80); } ctx.restore(); } }
+    anclas[i] = p(CW, CD * .5, z + q.e * .5);
+  }
+  // la columna de etiquetas: x fija, cada guía aterriza en su pieza
+  const XC = 670;
+  for (let i = 0; i < K; i++) { const a = anclas[i], kk = prog(t, T.etiq + i * .22, T.etiq + i * .22 + .35); if (kk <= 0) continue;
+    const y = a[1], fin = [XC - 20, y];
+    punto(a[0], a[1], { col: COLORES.tinta, r: 4, anillo: 10 });
+    pelo([a, [lerp(a[0], fin[0], ease(kk)), y]], { w: 1.6, col: i === 0 ? COLORES.acento : 'rgba(241,239,233,.7)', halo: null });
+    if (kk >= 1) { const c = CAPAS[i], fn = autoajuste(c.nombre, F_SANS, 600, 300, 1, 50, 30), fd = autoajuste(c.dato, F_MONO, 400, SEGURA.right - XC - 46, 1, 24, 16);
+      escribir(String(i + 1).padStart(2, '0'), XC, y - 4, `500 24px ${F_MONO}`, COLORES.acento);
+      escribir(c.nombre, XC + 46, y + 8, fn.font, COLORES.tinta);
+      escribir(c.dato, XC + 46, y + 8 + fd.size * 1.7, fd.font, 'rgba(241,239,233,.6)'); } }
+  vineta(.45);
+  pintarFrase(FR, t, T.frase, .17);
+});
+window.SONIDOS = [{ t: .3, tipo: 'swish' }, { t: 1.6, tipo: 'pop' }, ...CAPAS.slice(0, 5).map((_, i) => ({ t: +(1.9 + i * .22).toFixed(2), tipo: 'pop' })), { t: 2.0, tipo: 'ambiente' }];
+</script>
+</body>
+</html>

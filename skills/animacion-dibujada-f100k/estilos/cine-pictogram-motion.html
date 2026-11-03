@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pictogramas en movimiento</title>
+<style>
+  html,body{margin:0;background:#111;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Pictogramas en movimiento» · ingeniería inversa de lemo-opuscar/styles/pictogram-motion (MIT, © 2026 LemoLab) · qué se tomó: patrón de retícula cuadrada (discos, medios discos y motivos en 5 tonos de un color) con filas enteras que se corren, pictogramas de barras redondeadas y discos sobre un disco-escenario, una tarjeta = un ítem, capítulo = color, título 900 enorme + línea pesada + metadatos mono tipo HUD con barra de avance, transición de filas que entran alternadas y muro de íconos al cierre.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const PORTADA = { grande: '4 piezas', chica: 'de un reel que vende' };   // tarjeta de apertura y de cierre
+const ITEMS = [                                       // 2 a 4 tarjetas. picto: 'iman' | 'burbuja' | 'medalla' | 'carrito'
+  { titulo: 'GANCHO', linea: 'que frena el dedo', picto: 'iman' },
+  { titulo: 'HISTORIA', linea: 'que se siente tuya', picto: 'burbuja' },
+  { titulo: 'PRUEBA', linea: 'que da confianza', picto: 'medalla' },
+  { titulo: 'CTA', linea: 'que pide la venta', picto: 'carrito' },
+];
+const CAPITULO = 'CAP. 01 · PIEZAS';                  // texto mono de la esquina
+const COLORES = {                                     // 5 tonos por color (oscuro → claro); un capítulo = un color
+  tonos: [
+    ['#00544c', '#00685d', '#0b7f70', '#2e9686', '#5fae9f'],   // verde azulado
+    ['#a93726', '#c04731', '#d75d43', '#e2785c', '#ea957a'],   // coral
+    ['#13254a', '#1a3263', '#24457d', '#3b5e95', '#5d7cad'],   // azul noche
+    ['#d39400', '#e4a608', '#f2ba1d', '#f6c94a', '#f9d87e'],   // amarillo señal (claro: lleva letra oscura)
+  ],
+  crema: '#fbf6ec', tinta: '#111521',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-grafica.js"></script>
+<script>
+const CELDA = 270, N = Math.min(4, ITEMS.length), BEAT = 1.3, T0 = 1.2;           // una tarjeta por compás, cada corte en el pulso
+const T_CARD = i => T0 + i * BEAT, T_MURO = T_CARD(N);
+const claro = k => k === 3;                                                           // en colores claros: letra y pictograma oscuros
+const F_TIT = '"Avenir Next", "Helvetica Neue", Arial, sans-serif', F_MONO = 'Menlo, "Courier New", monospace';
+const PAT_BAJO = COLORES.tonos.map((t, k) => patronReticula(t, CELDA, 11 + k, { densidad: .5, contraste: .35 }));
+const PAT_ALTO = patronReticula(COLORES.tonos[0], CELDA, 7, { densidad: .55, contraste: 1 });
+
+// ---------- pictogramas: barras de punta redonda, discos y cápsulas; máximo dos tonos ----------
+function picto(tipo, cx, cy, s, a, b) {
+  const g = ctx; g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+  if (tipo === 'iman') { g.strokeStyle = a; g.lineWidth = s * .26; g.beginPath(); g.arc(cx, cy - s * .05, s * .42, Math.PI, 0); g.lineTo(cx + s * .42, cy + s * .38); g.moveTo(cx - s * .42, cy - s * .05); g.lineTo(cx - s * .42, cy + s * .38); g.stroke();
+    g.strokeStyle = b; g.lineCap = 'butt'; for (const x of [-.42, .42]) { g.beginPath(); g.moveTo(cx + x * s, cy + s * .36); g.lineTo(cx + x * s, cy + s * .58); g.stroke(); } }
+  if (tipo === 'burbuja') { g.fillStyle = a; g.beginPath(); g.roundRect(cx - s * .62, cy - s * .45, s * 1.24, s * .8, s * .32); g.fill();
+    g.beginPath(); g.moveTo(cx - s * .3, cy + s * .25); g.lineTo(cx - s * .48, cy + s * .62); g.lineTo(cx - s * .02, cy + s * .3); g.fill();
+    for (const x of [-.3, 0, .3]) disco(g, cx + x * s, cy - s * .05, s * .1, b); }
+  if (tipo === 'medalla') { g.strokeStyle = b; g.lineWidth = s * .16; for (const x of [-.18, .18]) { g.beginPath(); g.moveTo(cx + x * s, cy - s * .65); g.lineTo(cx + x * s * .4, cy - s * .2); g.stroke(); }
+    disco(g, cx, cy + s * .12, s * .48, a); g.strokeStyle = b; g.lineWidth = s * .13; g.beginPath(); g.moveTo(cx - s * .2, cy + s * .14); g.lineTo(cx - s * .04, cy + s * .3); g.lineTo(cx + s * .24, cy - s * .04); g.stroke(); }
+  if (tipo === 'carrito') { g.strokeStyle = a; g.lineWidth = s * .14; g.beginPath(); g.moveTo(cx - s * .7, cy - s * .5); g.lineTo(cx - s * .48, cy - s * .5); g.lineTo(cx - s * .3, cy + s * .25); g.lineTo(cx + s * .5, cy + s * .25); g.stroke();
+    g.fillStyle = a; g.beginPath(); g.moveTo(cx - s * .42, cy - s * .32); g.lineTo(cx + s * .66, cy - s * .32); g.lineTo(cx + s * .5, cy + s * .1); g.lineTo(cx - s * .32, cy + s * .1); g.closePath(); g.fill();
+    disco(g, cx - s * .2, cy + s * .5, s * .13, b); disco(g, cx + s * .42, cy + s * .5, s * .13, b); }
+  g.restore();
+}
+// ---------- tarjeta ----------
+const AJ = ITEMS.map(it => ({ t: autoajuste(it.titulo, F_TIT, 900, 940, 1, 300, 120), l: autoajuste(it.linea, F_TIT, 800, 940, 2, 76, 40) }));
+const AJ_P = { t: autoajuste(PORTADA.grande.toUpperCase(), F_TIT, 900, 940, 1, 240, 110), l: autoajuste(PORTADA.chica, F_TIT, 800, 940, 2, 78, 40) };
+function hud(t, i, fg, sinBarra = false) {
+  ctx.save(); ctx.font = `500 30px ${F_MONO}`; ctx.letterSpacing = '4px'; ctx.fillStyle = fg;
+  ctx.fillText(CAPITULO, 70, 290); ctx.textAlign = 'right'; ctx.fillText(i >= 0 ? `0${i + 1} / 0${N}` : `00 / 0${N}`, W - 70, 290); ctx.textAlign = 'left';
+  if (sinBarra) { ctx.restore(); return; }
+  const y = SEGURA.bottom - 20, paso = (W - 140) / Math.max(1, N - 1);                       // barra de avance: actual alta, hechas tenues
+  for (let k = 0; k < N; k++) { ctx.globalAlpha = k === i ? 1 : k < i ? .55 : .25; ctx.fillRect(70 + k * paso - 3, y - (k === i ? 44 : 22), 6, k === i ? 44 : 22); }
+  ctx.restore();
+}
+function tarjeta(i, t) {                     // i = 0..N-1 · t = segundos desde que empezó la tarjeta
+  const k = i % COLORES.tonos.length, T = COLORES.tonos[k], fg = claro(k) ? COLORES.tinta : COLORES.crema;
+  const der = (j) => (j % 2 ? 1 : -1) * (t * 22);                                         // las filas respiran en sentidos alternos
+  pintarFilas(PAT_BAJO[k], CELDA, der);
+  const D = { x: W / 2, y: 720, r: 330 };
+  disco(ctx, D.x, D.y, D.r, claro(k) ? T[4] : T[3]);
+  ctx.save(); ctx.beginPath(); ctx.arc(D.x, D.y, D.r, 0, 7); ctx.clip();                  // el único degradado: un barrido de luz suave
+  const sw = lerp(-D.r * 1.4, D.r * 1.4, clamp(t / BEAT)), gr = ctx.createLinearGradient(D.x + sw - 120, 0, D.x + sw + 120, 0);
+  gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(.5, 'rgba(255,255,255,.12)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = gr; ctx.fillRect(D.x - D.r, D.y - D.r, 2 * D.r, 2 * D.r); ctx.restore();
+  // el pictograma se arma en bandas horizontales que entran desde lados alternos y encajan
+  const [B, bg] = BANDA; bg.setTransform(1, 0, 0, 1, 0, 0); bg.clearRect(0, 0, W, H);
+  const sav = ctx; ctx = bg; picto(ITEMS[i].picto, D.x, D.y, 220, fg, claro(k) ? T[1] : T[0]); ctx = sav;
+  for (let b = 0; b < 6; b++) { const y0 = D.y - 300 + b * 100, a = aterriza(prog(t, .04 * b, .04 * b + .3)), dx = (1 - a) * (b % 2 ? 1 : -1) * 500;
+    ctx.save(); ctx.beginPath(); ctx.rect(0, y0, W, 101); ctx.clip(); ctx.drawImage(B, dx, 0); ctx.restore(); }
+  // tipografía: título → línea → etiqueta, cada una con corte seco
+  const aj = AJ[i];
+  ctx.fillStyle = fg; ctx.font = aj.t.font; ctx.letterSpacing = (-aj.t.size * .02) + 'px';
+  if (t >= .12) ctx.fillText(ITEMS[i].titulo, 70, 1110 + aj.t.size * .76);
+  ctx.letterSpacing = '0px'; ctx.font = aj.l.font;
+  if (t >= .22) aj.l.rs.forEach((r, j) => ctx.fillText(r, 72, 1110 + aj.t.size * .86 + (j + 1) * aj.l.size * 1.08));
+  if (t >= .32) { ctx.font = `600 24px ${F_MONO}`; ctx.letterSpacing = '3px'; const tag = `PIEZA 0${i + 1}`, w = medirT(tag, ctx.font, 3) + 28;
+    ctx.fillStyle = fg; ctx.fillRect(70, 1034, w, 44); ctx.fillStyle = T[0]; ctx.fillText(tag, 84, 1066); ctx.letterSpacing = '0px'; }
+  hud(t, i, fg);
+}
+const BANDA = lienzo();
+function portada(t, final) {
+  const T = COLORES.tonos[final ? 2 : 0];
+  const salto = final ? 0 : Math.floor(clamp((t - .3) / .35) * 4) / 4;                    // golpe: las filas saltan un cuarto de celda por pulso, alternadas
+  pintarFilas(final ? PAT_BAJO[2] : PAT_ALTO, CELDA, j => (j % 2 ? 1 : -1) * (salto * CELDA + (final ? t * 18 : 0)));
+  if (final) { ITEMS.slice(0, N).forEach((it, i) => { const x = W / 2 + (i % 2 ? 1 : -1) * 220, y = 540 + Math.floor(i / 2) * 330;   // muro de íconos, todos de un color
+    if (t < i * .12) return; disco(ctx, x, y, 150, T[3]); picto(it.picto, x, y, 105, COLORES.crema, T[0]); }); }
+  const y0 = final ? 1060 : 980, bloqueH = AJ_P.t.rs.length * AJ_P.t.size * .95 + AJ_P.l.rs.length * AJ_P.l.size * 1.1 + 90;
+  ctx.fillStyle = T[0]; ctx.fillRect(40, y0 - 50, W - 80, bloqueH);
+  ctx.fillStyle = COLORES.crema; ctx.font = AJ_P.t.font; ctx.letterSpacing = (-AJ_P.t.size * .02) + 'px';
+  const tt = final ? .5 : 0;
+  if (t >= tt) AJ_P.t.rs.forEach((r, j) => ctx.fillText(r, 70, y0 + AJ_P.t.size * .76 + j * AJ_P.t.size * .95));
+  ctx.letterSpacing = '0px'; ctx.font = AJ_P.l.font;
+  if (t >= tt + (final ? .2 : .5)) AJ_P.l.rs.forEach((r, j) => ctx.fillText(r, 72, y0 + AJ_P.t.rs.length * AJ_P.t.size * .95 + (j + .55) * AJ_P.l.size * 1.1));
+  hud(t, final ? N - 1 : -1, COLORES.crema, final);
+}
+// ---------- transición: las filas de la tarjeta nueva entran alternadas desde los lados ----------
+const [NUEVA, ng] = lienzo();
+function escena(tt) { if (tt < T0) portada(tt, false); else if (tt < T_MURO) { const i = Math.floor((tt - T0) / BEAT); tarjeta(i, tt - T_CARD(i)); } else portada(tt - T_MURO, true); }
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.letterSpacing = '0px';
+  const cortes = [T0, ...Array.from({ length: N }, (_, i) => T_CARD(i + 1))], c = cortes.find(tc => t >= tc - .2 && t < tc);
+  if (c === undefined) { escena(t); return; }
+  escena(t);                                                       // lo viejo sigue debajo
+  const sav = ctx; ctx = ng; ctx.setTransform(1, 0, 0, 1, 0, 0); escena(c + .001); ctx = sav;
+  const k = prog(t, c - .2, c), filas = Math.ceil(H / CELDA);
+  for (let j = 0; j < filas; j++) { const a = clamp(k * 1.6 - j * .08), dx = (1 - (a <= 0 ? 0 : a >= 1 ? 1 : 1 - Math.pow(2, -10 * a))) * (j % 2 ? 1 : -1) * W;
+    if (a <= 0) continue; ctx.save(); ctx.beginPath(); ctx.rect(0, j * CELDA, W, CELDA + 1); ctx.clip(); ctx.drawImage(NUEVA, dx, 0); ctx.restore(); }
+});
+window.SONIDOS = [{ t: .3, tipo: 'golpe' }, { t: .5, tipo: 'pop' }, ...Array.from({ length: N }, (_, i) => ({ t: +T_CARD(i).toFixed(2), tipo: 'golpe' })),
+  ...Array.from({ length: N }, (_, i) => ({ t: +(T_CARD(i) + .12).toFixed(2), tipo: 'pop' })), { t: +T_MURO.toFixed(2), tipo: 'swish' }, { t: +(T_MURO + .5).toFixed(2), tipo: 'golpe' }];
+</script>
+</body>
+</html>

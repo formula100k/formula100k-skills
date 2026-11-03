@@ -25,17 +25,19 @@ Si en el clip salen caras de otras personas, logos o marcas, avísale: el filtro
 de otra persona no se publica sin su permiso.
 
 ## Paso 1 — La hoja de personaje
+> Se hace con la skill **`hoja-de-personaje-f100k`** (camino A · persona real). Resumen:
 - Crea la carpeta `~/Documents/mi-contenido/cine/<fecha>_<tema>/` y guarda ahí todo.
 - Modelo `gpt_image_2`, `resolution: 2k`, `quality: high`, `aspect_ratio: 16:9`. Las fotos entran con
   rol **`image`**: imagen 1 = su cara de frente (selfie), imagen 2 = la foto con la ropa del clip.
 - Prompt en positivo: 4 fotos lado a lado separadas por una línea blanca fina → 1 FACE de frente del
   pecho arriba · 2 PROFILE perfil exacto a 90° · 3 BACK cuerpo entero de espalda · 4 BODY cuerpo entero
   de frente. Un bloque IDENTITY que copia la imagen 1 (ojos, cejas, lunares, pelo) y un bloque OUTFIT que
-  copia la imagen 2 prenda por prenda. Luz: *soft frontal north-window light, even and low-contrast,
+  copia la imagen 2 prenda por prenda, idéntico en las 4 vistas y solo lo listado, y un bloque BODY con
+  altura y complexión (cara y cuerpo 1:1). Luz: *soft frontal north-window light, even and low-contrast,
   seamless light-grey studio backdrop #F7F7F7, full-frame camera at 85 mm equivalent, f/8, ISO 100,
   photorealistic, natural skin texture, every view sharp and fully inside the frame with clean margins.*
-- **Parte la hoja en 4 imágenes** buscando las columnas blancas (con Python: columnas donde casi todos
-  los píxeles son blancos). Al cuerpo **recórtale la cabeza**: la única cara que manda es la del FACE.
+- **Parte la hoja en 4 imágenes** con `scripts/partir_hoja.py` de `hoja-de-personaje-f100k` (busca la
+  línea blanca de cada división). Al cuerpo **le quita la cabeza**: la única cara que manda es la del FACE.
 - Muéstrale la hoja y **espera su OK** antes de seguir.
 
 ## Paso 2 — La lista de tomas (sin costo)

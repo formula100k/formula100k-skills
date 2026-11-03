@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Noticiero de 1920</title>
+<style>
+  html,body{margin:0;background:#000;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Noticiero de 1920» · ingeniería inversa de lemo-opuscar/styles/newsreel (MIT, © 2026 LemoLab) · qué se tomó: ventanilla de proyección 1,37 con esquinas redondas y negro afuera, grade plata cálido (multiply + screen) con parpadeo suave, rayas de 9 cuadros y polvo de 1, el rito de apertura (reflectores, rayos y globo de alambre), el diario que gira hacia la lente (crece u^2,3, el giro se apaga en 2,5 vueltas, 3 copias fantasma), tarjeta LUGAR · FECHA, franja de subtítulos y el congelado con lápiz graso.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const CANAL = 'NOTICIAS DE TU NEGOCIO';      // el nombre del noticiero en la apertura (inventado, ≤ 24 letras)
+const CABECERA = 'EL DIARIO DE LA SEMANA';   // el nombre del periódico (≤ 24 letras)
+const TITULAR = '¡Vendió sin pagar anuncios!';   // el titular del diario (≤ 30 letras)
+const LUGAR = 'TU CIUDAD · HOY';             // la tarjeta de lugar y fecha (≤ 20 letras)
+const SUBTITULOS = [                         // lo que dice el locutor (≤ 34 letras c/u), en orden
+  { t: 3.3, txt: '¡Extra! ¡Extra! ¡Lo cuenta en su perfil!' },
+  { t: 5.4, txt: 'Publicó tres días seguidos…' },
+  { t: 7.0, txt: '¡y el pedido llegó solo!' },
+];
+const CIRCULO = { x: .5, y: .3, r: .18 };    // congelado: qué se encierra con lápiz en la foto 2 (0 a 1)
+const FOTOS = [];   // 2 fotos tuyas: la del diario y la «película» del final. Vacío = reemplazos neutros
+const COLORES = {
+  crema: '#f3eee4', crema2: '#d6cfc0', caja: 'rgba(12,11,10,.8)', lapiz: '#f6f1e6',
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F_DECO = 'Copperplate, "Didot", serif';
+const F_DIARIO = '"Bodoni 72", Didot, serif';
+const F_SUB = '"Gill Sans", "Futura", sans-serif';
+const G = { x: 60, y: 236, w: 960, h: 1316, r: 26 };            // la ventanilla 1 : 1,37 (vertical)
+let IMS = [];
+material(FOTOS, ['producto', 'escritorio']).then(ims => { IMS = ims.map(im => gradear(im, 'plata')); });
+const texto = (s, x, y, font, col, al = 'left', ls = 0) => { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.letterSpacing = ls + 'px'; ctx.fillText(s, x, y); ctx.restore(); };
+const contorno = (s, x, y, font, col, w, al = 'center', ls = 0) => { ctx.save(); ctx.font = font; ctx.textAlign = al; ctx.letterSpacing = ls + 'px'; ctx.lineJoin = 'round'; ctx.lineWidth = w; ctx.strokeStyle = '#000'; ctx.strokeText(s, x, y); ctx.fillStyle = col; ctx.fillText(s, x, y); ctx.restore(); };
+const T_IRIS = 1.95, T_DIARIO = 2.2, T_SLAM = 3.1, T_PELI = 5.0, T_CONG = 6.6;
+const BPM = 200, PULSO = 60 / BPM;
+
+// ---------- el diario (se arma una vez) ----------
+let DIARIO = null;
+function armarDiario() {
+  const [c, p] = lienzo(900, 1240); p.fillStyle = '#e6dfcf'; p.fillRect(0, 0, 900, 1240);
+  const r = rng(77); for (let i = 0; i < 4000; i++) { p.fillStyle = `rgba(80,70,55,${r() * .08})`; p.fillRect(r() * 900, r() * 1240, 2, 2); }
+  p.fillStyle = '#1c1a17'; p.textAlign = 'center';
+  p.font = `700 ${autoajuste(CABECERA, F_DIARIO, 700, 820, 1, 92, 50).size}px ${F_DIARIO}`; p.fillText(CABECERA, 450, 110);
+  p.fillRect(40, 136, 820, 6); p.fillRect(40, 150, 820, 2);
+  p.font = `500 22px ${F_DECO}`; p.fillText('EDICIÓN ESPECIAL  ·  UN CENTAVO', 450, 182);
+  const aj = autoajuste(TITULAR.toUpperCase(), F_DIARIO, 900, 820, 2, 120, 60);
+  p.font = aj.font; aj.rs.forEach((s, i) => p.fillText(s, 450, 300 + i * aj.size * 1.02));
+  const fy = 300 + aj.rs.length * aj.size * 1.02 - 30;
+  p.fillRect(40, fy, 820, 3);
+  if (IMS[0]) { const im = IMS[0], e = Math.max(520 / im.width, 520 / im.height); p.drawImage(im, (im.width - 520 / e) / 2, (im.height - 520 / e) * .4, 520 / e, 520 / e, 40, fy + 24, 520, 520); }
+  p.strokeStyle = '#1c1a17'; p.lineWidth = 3; p.strokeRect(40, fy + 24, 520, 520);
+  for (let col = 0; col < 2; col++) for (let k = 0; k < 40; k++) { const y = fy + 34 + k * 26; if (y > 1200) break; const x = col ? 40 : 590, w = col ? 820 : 270; if (col && y < fy + 560) continue;
+    p.fillStyle = 'rgba(40,36,30,.55)'; p.fillRect(x, y, w * (k % 7 === 6 ? .6 : .97 - r() * .06), 9); }
+  return c;
+}
+
+// ---------- piezas ----------
+function ventanilla() { ctx.beginPath(); ctx.roundRect(G.x, G.y, G.w, G.h, G.r); }
+function lookPelicula(frame, t) {                     // parpadeo suave + viñeta + rayas + polvo + grano (solo en la imagen)
+  const fl = (hash2(frame, 9) - .5) * .05 + Math.sin(t * 2 * Math.PI * 3) * .012;
+  ctx.fillStyle = fl > 0 ? `rgba(255,250,235,${fl})` : `rgba(0,0,0,${-fl})`; ctx.fillRect(G.x, G.y, G.w, G.h);
+  const v = ctx.createRadialGradient(W / 2, G.y + G.h / 2, G.h * .3, W / 2, G.y + G.h / 2, G.h * .75); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.55)');
+  ctx.fillStyle = v; ctx.fillRect(G.x, G.y, G.w, G.h);
+  rayasPeli(frame, G.x, G.y, G.w, G.h); granoPeli(.16, frame);
+}
+function rayos(t) {                                   // rayos de sol de la apertura, giro lento
+  const cx = W / 2, cy = G.y + G.h * .45;
+  ctx.fillStyle = '#16140f'; ctx.fillRect(G.x, G.y, G.w, G.h);
+  for (let i = 0; i < 28; i++) { const a = i / 28 * Math.PI * 2 + t * .15; ctx.fillStyle = i % 2 ? '#2a2620' : '#1e1b16';
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * 1800, cy + Math.sin(a) * 1800); ctx.lineTo(cx + Math.cos(a + .11) * 1800, cy + Math.sin(a + .11) * 1800); ctx.fill(); }
+}
+function reflectores(t) {                             // dos haces que se cruzan; se encienden con destello en 0,2 s
+  const on = prog(t, 0, .2), base = G.y + G.h;
+  for (const [x0, s] of [[G.x + 140, 1], [G.x + G.w - 140, -1]]) { const a = -Math.PI / 2 + s * (.42 - .18 * Math.sin(t * 1.3 + s));
+    const g = ctx.createLinearGradient(x0, base, x0 + Math.cos(a) * 1500, base + Math.sin(a) * 1500); g.addColorStop(0, `rgba(255,248,230,${.5 * on})`); g.addColorStop(1, 'rgba(255,248,230,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0 - 30, base); ctx.lineTo(x0 + Math.cos(a - .07) * 1600, base + Math.sin(a - .07) * 1600); ctx.lineTo(x0 + Math.cos(a + .07) * 1600, base + Math.sin(a + .07) * 1600); ctx.lineTo(x0 + 30, base); ctx.fill(); }
+}
+function globo(t) {                                   // globo de alambre que crece y gira
+  const cx = W / 2, cy = G.y + G.h * .45, R = 300 * easeOut(prog(t, 0, .9)) + 40; if (R <= 0) return;
+  ctx.save(); ctx.strokeStyle = C.crema2; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.stroke();
+  for (let i = 0; i < 6; i++) { const ph = (i / 6) * Math.PI + t * .9, rx = Math.abs(Math.cos(ph)) * R; ctx.beginPath(); ctx.ellipse(cx, cy, rx, R, 0, 0, 7); ctx.stroke(); }
+  for (let k = -2; k <= 2; k++) { const yy = cy + k * R * .38, rr = Math.sqrt(Math.max(0, R * R - (yy - cy) ** 2)); ctx.beginPath(); ctx.ellipse(cx, yy, rr, rr * .16, 0, 0, 7); ctx.stroke(); }
+  ctx.restore();
+}
+function apertura(t, frame) {
+  ctx.save(); ventanilla(); ctx.clip();
+  rayos(t); reflectores(t); globo(t);
+  // el nombre aterriza (sin rebote) sobre el globo
+  if (t > .55) { const k = aterriza(prog(t, .55, .8)), aj = autoajuste(CANAL, F_DECO, 700, 860, 2, 96, 50);
+    ctx.save(); ctx.translate(W / 2, G.y + G.h * .45); ctx.scale(lerp(1.4, 1, k), lerp(1.4, 1, k));
+    aj.rs.forEach((s, i) => contorno(s, 0, (i - (aj.rs.length - 1) / 2) * aj.size * 1.1 + aj.size * .35, aj.font, C.crema, aj.size * .24, 'center', 6)); ctx.restore(); }
+  lookPelicula(frame, t);
+  if (t < .2) { ctx.fillStyle = `rgba(255,250,235,${.6 * (1 - t / .2)})`; ctx.fillRect(G.x, G.y, G.w, G.h); }   // chispazo del arco de carbón
+  ctx.restore();
+}
+function diario(t, frame) {
+  if (!DIARIO) DIARIO = armarDiario();
+  ctx.save(); ventanilla(); ctx.clip(); ctx.fillStyle = '#14120e'; ctx.fillRect(G.x, G.y, G.w, G.h);
+  const pinta = (tt, alfa) => { const u = clamp((tt - T_DIARIO) / (T_SLAM - T_DIARIO)), esc = .04 + .96 * Math.pow(u, 2.3), giro = Math.pow(1 - u, 1.25) * Math.PI * 2 * 2.5;
+    // tras el golpe: empuje lento y un salto (punch-in) al titular en el siguiente pulso
+    const empuje = tt < T_SLAM ? 1 : 1 + .05 * prog(tt, T_SLAM, T_SLAM + 2) + (tt > T_SLAM + 2 * PULSO * 2 ? .25 : 0), fyAlto = tt > T_SLAM + 4 * PULSO ? 230 : 0;
+    ctx.save(); ctx.globalAlpha = alfa; ctx.translate(W / 2, G.y + G.h / 2 + fyAlto * empuje * .9); ctx.rotate(giro); ctx.scale(esc * empuje * .95, esc * empuje * .95);
+    ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fillRect(-440, -610, 900, 1240); ctx.drawImage(DIARIO, -450, -620); ctx.restore(); };
+  if (t < T_SLAM) for (let g = 3; g >= 1; g--) pinta(t - g * .018, .22);   // 3 copias fantasma = barrido de movimiento
+  pinta(t, 1);
+  lookPelicula(frame, t); ctx.restore();
+}
+function pelicula(t, frame) {                         // la «película» del final: foto 2 con empuje ≤ 6 % y congelado con lápiz graso
+  const im = IMS[1 % IMS.length]; ctx.save(); ventanilla(); ctx.clip();
+  const z = t < T_CONG ? 1 + .06 * prog(t, T_PELI, T_CONG) : 1.06 * (1 + .1 * aterriza(prog(t, T_CONG, T_CONG + .2)));
+  if (im) cubrir(im, G.x, G.y, G.w, G.h, .5, .35, z);
+  lookPelicula(frame, t);
+  if (t >= T_CONG) {                                  // lápiz graso: un lazo a mano y una flecha
+    if (t < T_CONG + .1) { ctx.fillStyle = 'rgba(255,250,235,.7)'; ctx.fillRect(G.x, G.y, G.w, G.h); }
+    const e = Math.max(G.w / im.width, G.h / im.height) * z, sw = G.w / e, sh = G.h / e, sx = (im.width - sw) * .5, sy = clamp((im.height - sh) * .35, 0, im.height - sh);
+    const cx = G.x + (CIRCULO.x * im.width - sx) * e, cy = G.y + (CIRCULO.y * im.height - sy) * e, r = CIRCULO.r * im.width * e;
+    const pts = []; for (let i = 0; i <= 70; i++) { const a = -2.4 + i / 70 * Math.PI * 2.25, k = 1 + .08 * Math.sin(i * .3); pts.push([cx + Math.cos(a) * r * k, cy + Math.sin(a) * r * .8 * k]); }
+    WOBBLE = 1.4; drawOn(pts, easeOut(prog(t, T_CONG + .1, T_CONG + .6)), { col: C.lapiz, w: 10, amp: 3, seed: 5 });
+    drawOn([[cx + r * 1.6, cy + r * 1.9], [cx + r * 1.2, cy + r * 1.3], [cx + r * .95, cy + r * .95]], easeOut(prog(t, T_CONG + .6, T_CONG + .9)), { col: C.lapiz, w: 9, amp: 2, seed: 8 });
+    if (t > T_CONG + .9) drawOn([[cx + r * .95 + 46, cy + r * .95 + 6], [cx + r * .95, cy + r * .95], [cx + r * .95 + 6, cy + r * .95 + 46]], 1, { col: C.lapiz, w: 9, amp: 1.5, seed: 9 });
+    WOBBLE = 1;
+  }
+  ctx.restore();
+  // tarjeta de lugar y fecha (capa nítida: no lleva el look de película)
+  const k = easeOut(prog(t, T_PELI + .15, T_PELI + .37)), f = `700 46px ${F_DECO}`, w = medir(LUGAR, f) + 5 * [...LUGAR].length + 80;
+  if (k > 0 && t < T_CONG - .15) { ctx.save(); ctx.beginPath(); ctx.rect(G.x + 48, G.y + 56, w * k, 110); ctx.clip();
+    ctx.fillStyle = C.caja; ctx.fillRect(G.x + 48, G.y + 56, w, 110); ctx.strokeStyle = C.crema; ctx.lineWidth = 2; ctx.strokeRect(G.x + 58, G.y + 66, w - 20, 90);
+    texto(LUGAR, G.x + 88, G.y + 128, f, C.crema, 'left', 5); ctx.restore(); }
+}
+function iris(p, cx, cy) {                            // se cierra (p 0→1) sobre el globo; negro detrás
+  if (p <= 0) return; const R = lerp(1300, 0, easeIO(p));
+  ctx.save(); ventanilla(); ctx.clip(); ctx.fillStyle = '#000'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(cx, cy, Math.max(0, R), 0, 7); ctx.fill('evenodd'); ctx.restore();
+}
+const easeIO = t => { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+function subtitulos(t) {                              // franja oscura al pie de la ventanilla; una línea, nunca partida
+  const act = SUBTITULOS.filter(s => t >= s.t).pop(); if (!act) return;
+  const a = prog(t, SUBTITULOS[0].t - .25, SUBTITULOS[0].t);
+  const g = ctx.createLinearGradient(0, G.y + G.h - 260, 0, G.y + G.h - 120); g.addColorStop(0, 'rgba(10,9,8,0)'); g.addColorStop(1, `rgba(10,9,8,${.94 * a})`);
+  ctx.save(); ventanilla(); ctx.clip(); ctx.fillStyle = g; ctx.fillRect(G.x, G.y + G.h - 260, G.w, 260); ctx.restore();
+  const aj = autoajuste(act.txt, F_SUB, 600, G.w - 100, 1, 66, 34); contorno(aj.rs[0], W / 2, 1440, aj.font, C.crema, 8);
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  if (t < T_DIARIO) { apertura(t, frame); iris(prog(t, T_IRIS - .3, T_IRIS), W / 2, G.y + G.h * .45); }
+  else if (t < T_PELI) { diario(t, frame); iris(1 - prog(t, T_DIARIO, T_DIARIO + .25), W / 2, G.y + G.h / 2); }
+  else pelicula(t, frame);
+  subtitulos(t);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'golpe' }, { t: .55, tipo: 'golpe' }, { t: T_IRIS - .3, tipo: 'swish' }, { t: T_DIARIO, tipo: 'swish' },
+  { t: T_SLAM, tipo: 'golpe' }, { t: T_SLAM + .02, tipo: 'papel' }, { t: T_PELI, tipo: 'desliz' }, { t: T_CONG, tipo: 'golpe' }, { t: T_CONG + .1, tipo: 'desliz' },
+  { t: 0, tipo: 'ambiente' },
+];
+</script>
+</body>
+</html>

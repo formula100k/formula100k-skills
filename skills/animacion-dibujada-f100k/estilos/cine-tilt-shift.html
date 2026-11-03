@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Miniatura tilt-shift</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Miniatura tilt-shift» · ingeniería inversa de lemo-opuscar/styles/tilt-shift (MIT, © 2026 LemoLab) · qué se tomó: ciudad vista desde muy alto con lente basculante (franja nítida que sigue al protagonista y desenfoque arriba y abajo), color saturado de maqueta, sol duro con sombras azules, fachadas con ventanas y techos con trastos, cámara rápida que avanza a saltos y la caída a tiempo real en un solo detalle.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const ARRIBA = 'mientras todos corren';        // primera línea del letrero (chica, ≤ 26 letras)
+const CLAVE = 'tú vendes';                     // aparece ENORME cuando el tiempo cae a velocidad real (≤ 14 letras)
+const ROTULO_RAPIDO = '×24 CÁMARA RÁPIDA';     // el reloj de cámara rápida (monoespaciada)
+const ROTULO_REAL = '×1 TIEMPO REAL';
+const COLORES = {
+  letrero: '#1f6b45',   // verde de letrero de carretera
+  clave: '#ffd23f',     // la palabra clave y la camioneta protagonista
+  toldo: '#ff5d8f',     // el toldo de la tiendita a la que llega
+  asfalto: '#3a3e47',
+  sombra: '#3a4fa0',    // las sombras se quedan azules, nunca grises
+};
+const DUR = 8;                                 // segundos (6 a 10)
+const T_CAIDA = 4.4;                           // cuándo cae el tiempo a velocidad real
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const SEÑAL = '"DIN Alternate", "DIN Condensed", "Avenir Next Condensed", "Helvetica Neue", sans-serif';
+const MONO = 'Menlo, "Courier New", monospace';
+const L = V3.norm([.55, .8, .62]);                       // sol duro puesto de frente a las fachadas que se ven
+const R = rng(21);
+// ---------- la ciudad (se arma UNA vez) ----------
+const BLOQUE = 11, CALLE = 3.4, NX = 6, NZ = 9, PASO = BLOQUE + CALLE;
+const X0 = -NX * PASO / 2, Z0 = -NZ * PASO / 2;
+const PALETA = ['#f1e6d2', '#efd9b8', '#e9c9a4', '#f4efe6', '#d9e4ea', '#f0c8b4', '#e7dcc4'];
+const ACENTOS = ['#ff7a59', '#4fb0c6', '#f2b134', '#7bc96f', '#e65f7c'];
+const EDIF = [], SUELO = [], ARBOLES = [];
+const TIENDA = { bx: 3, bz: 6 };                         // la manzana donde está la tiendita
+function ventanas(g, f, cam, col) {                      // fachada: ventanas por piso y por vano, algunas con reflejo de cielo
+  if (f.n[1] > .5) return; const pisos = Math.max(1, Math.round(f.alto / 1.05)), vanos = Math.max(1, Math.round(f.ancho / 1.3));
+  for (let i = 0; i < vanos; i++) for (let j = 0; j < pisos; j++) {
+    const u0 = (i + .25) / vanos, u1 = (i + .75) / vanos, v0 = (j + .25) / pisos, v1 = (j + .7) / pisos;
+    const h = hash2(i * 31 + f.semilla, j * 17), c = h < .18 ? [150, 190, 220] : h < .24 ? [255, 236, 190] : tonoC(col, .45);
+    rellenarPoli(g, cuadCara(f, cam, u0, v0, u1, v1), c);
+  }
+  rellenarPoli(g, cuadCara(f, cam, 0, .92, 1, 1), tonoC(col, .7));   // la base se oscurece hacia el suelo
+}
+for (let bx = 0; bx < NX; bx++) for (let bz = 0; bz < NZ; bz++) {
+  const cx = X0 + bx * PASO + PASO / 2, cz = Z0 + bz * PASO + PASO / 2;
+  const acera = caja(cx, 0, cz, BLOQUE + 1, .12, BLOQUE + 1, '#c9c6bf'); acera.zBias = 1e5; acera.sombra = false; SUELO.push(acera);
+  if ((bx + bz * 3) % 7 === 2) {                          // un parque: pasto muy verde y árboles
+    const p = caja(cx, .12, cz, BLOQUE - .4, .06, BLOQUE - .4, '#4cc35a'); p.zBias = 1e5 - 1; p.sombra = false; SUELO.push(p);
+    for (let k = 0; k < 7; k++) ARBOLES.push([cx + (R() - .5) * 8, cz + (R() - .5) * 8, .9 + R() * .6]);
+    continue; }
+  const tienda = bx === TIENDA.bx && bz === TIENDA.bz;
+  const lotes = tienda ? [[-2.6, 2.4, 4.6, 4.6, 1.6], [2.8, 0, 4.6, 10, 4], [-2.6, -2.6, 4.6, 4.6, 3.2]]
+    : [[-2.7, -2.7, 4.8, 4.8], [2.7, -2.7, 4.8, 4.8], [-2.7, 2.7, 4.8, 4.8], [2.7, 2.7, 4.8, 4.8]];
+  for (const [dx, dz, w, d, hh] of lotes) {
+    if (!tienda && R() < .18) { ARBOLES.push([cx + dx, cz + dz, 1.2]); continue; }
+    const h = hh || 1.6 + Math.floor(R() * 4) * 1.05, col = R() < .2 ? ACENTOS[Math.floor(R() * ACENTOS.length)] : PALETA[Math.floor(R() * PALETA.length)];
+    const ed = caja(cx + dx, .12, cz + dz, w, h, d, col, { cara: { dibujo: ventanas } });
+    ed.caras.forEach((f, k) => { f.alto = h; f.ancho = f.tipo === 'der' || f.tipo === 'izq' ? d : w; f.semilla = EDIF.length * 7 + k; });
+    ed.caras[0].col = tonoC(col, .82);                      // azotea más oscura
+    ed.caras[0].dibujo = null; EDIF.push(ed);
+    for (let k = 0; k < 2; k++) { const tr = caja(cx + dx + (R() - .5) * w * .5, .12 + h, cz + dz + (R() - .5) * d * .5, .6 + R() * .8, .35 + R() * .4, .6 + R() * .8, '#a9adb3'); EDIF.push(tr); }
+    if (tienda && hh === 1.6) { // la tiendita: un toldo de color que se ve desde arriba
+      EDIF.push(caja(cx + dx, .12 + 1.1, cz + dz + d / 2 + .45, w * .9, .12, .9, COLORES.toldo));
+      TIENDA.puerta = [cx + dx, cz + dz + d / 2 + 1.9]; }
+  }
+}
+function arbol([x, z, s]) { const ob = cilindro(x, .12, z, .7 * s, 1.1 * s, '#2fae4a', { lados: 7, caraTapa: { col: '#3cc456' } }); return ob; }
+ARBOLES.forEach(a => EDIF.push(arbol(a)));
+// ---------- el asfalto con sus marcas (se pinta encima del suelo, por cuadro) ----------
+function asfalto(cam) {
+  const ext = [[X0 - 30, 0, Z0 - 30], [X0 + NX * PASO + 30, 0, Z0 - 30], [X0 + NX * PASO + 30, 0, Z0 + NZ * PASO + 30], [X0 - 30, 0, Z0 + NZ * PASO + 30]];
+  rellenarPoli(ctx, ext.map(p => cam.proy(p)), COLORES.asfalto);
+  ctx.save(); ctx.globalAlpha = .85;
+  for (let bz = 0; bz <= NZ; bz++) { const z = Z0 + bz * PASO; for (let x = X0; x < X0 + NX * PASO; x += 2.2)        // líneas punteadas
+    rellenarPoli(ctx, [[x, .01, z - .08], [x + 1.1, .01, z - .08], [x + 1.1, .01, z + .08], [x, .01, z + .08]].map(p => cam.proy(p)), '#f2f2ea'); }
+  for (let bx = 0; bx <= NX; bx++) { const x = X0 + bx * PASO; for (let bz = 0; bz <= NZ; bz++) { const z = Z0 + bz * PASO;   // pasos de cebra
+    for (let k = -2; k <= 2; k++) rellenarPoli(ctx, [[x - 1.4, .01, z + PASO / 2 - 6.4 + k * .5], [x + 1.4, .01, z + PASO / 2 - 6.4 + k * .5], [x + 1.4, .01, z + PASO / 2 - 6.2 + k * .5], [x - 1.4, .01, z + PASO / 2 - 6.2 + k * .5]].map(p => cam.proy(p)), '#e9e9e0'); } }
+  ctx.restore();
+}
+// ---------- el tiempo: cámara rápida a saltos (10 por segundo), luego cae a tiempo real ----------
+const vel = t => t < T_CAIDA ? 24 : t < T_CAIDA + .5 ? lerp(24, 1, ease(prog(t, T_CAIDA, T_CAIDA + .5))) : 1;
+function tiempoSim(t) { // integral de la velocidad (cerrada por tramos)
+  const a = Math.min(t, T_CAIDA) * 24; if (t <= T_CAIDA) return a;
+  const d = Math.min(t, T_CAIDA + .5) - T_CAIDA, b = 24 * d - 23 * (d * d / .5 - d * d * d / (3 * .25)) ; // aproximación suave del tramo de frenada
+  return a + Math.max(0, b) + Math.max(0, t - T_CAIDA - .5) * 1;
+}
+const tSalto = t => vel(t) > 2 ? Math.floor(t * 10) / 10 : t;     // el mundo se queda quieto 3 cuadros y salta (la cámara no)
+// ---------- tráfico ----------
+const COCHES = []; { const r = rng(4);
+  for (let bz = 0; bz <= NZ; bz++) for (let k = 0; k < 4; k++) COCHES.push({ z: Z0 + bz * PASO + (k % 2 ? .8 : -.8), dir: k % 2 ? 1 : -1, x0: r() * NX * PASO, v: .35 + r() * .25, col: ['#ff7a59', '#4fb0c6', '#7bc96f', '#e65f7c', '#ffffff', '#2c3e66', '#d8d8d8', '#9fb4c7'][Math.floor(r() * 8)] });
+  for (let bx = 0; bx <= NX; bx++) for (let k = 0; k < 3; k++) COCHES.push({ x: X0 + bx * PASO + (k % 2 ? .8 : -.8), dir: k % 2 ? 1 : -1, z0: r() * NZ * PASO, v: .3 + r() * .25, col: ['#ffffff', '#e8483a', '#2c3e66', '#9fb4c7'][Math.floor(r() * 4)] }); }
+function coche(x, z, rot, col, larga = 1) {
+  const ob = caja(x, 0, z, 1.7 * larga, .55, .85, col, { rot }); const cab = caja(x - .1, .55, z, 1.0 * larga, .38, .75, '#2a3442', { rot });
+  ob.caras.push(...cab.caras.map(f => Object.assign(f, { orden: 1 }))); return ob;
+}
+const RUTA = { x0: X0 + 0 * PASO + 1, z: Z0 + (TIENDA.bz + 1) * PASO - .8 };   // la camioneta va por la calle frente a la tiendita
+function camioneta(t) {    // dirigida a mano: llega a la puerta justo cuando cae el tiempo
+  const xf = TIENDA.puerta[0] + .6, k = tSalto(t) / T_CAIDA;
+  const x = t < T_CAIDA ? lerp(RUTA.x0, xf - 1.6, Math.pow(k, .9)) : lerp(xf - 1.6, xf, easeOut(prog(t, T_CAIDA, T_CAIDA + 1.2)));
+  return [x, RUTA.z];
+}
+// ---------- gente: cápsulas de colores sobre las aceras ----------
+const GENTE = []; { const r = rng(9); for (let i = 0; i < 90; i++) GENTE.push({ bx: Math.floor(r() * NX), bz: Math.floor(r() * NZ), u: r(), lado: Math.floor(r() * 4), v: .03 + r() * .05, col: ACENTOS[i % 5] }); }
+function gente(cam, ts) {
+  for (const p of GENTE) { const cx = X0 + p.bx * PASO + PASO / 2, cz = Z0 + p.bz * PASO + PASO / 2, s = BLOQUE / 2 + .25, u = ((p.u + ts * p.v) % 1) * 2 - 1;
+    const q = [[cx + u * s, cz + s], [cx + s, cz + u * s], [cx - u * s, cz - s], [cx - s, cz - u * s]][p.lado];
+    const a = cam.proy([q[0], .5, q[1]]), b = cam.proy([q[0], .12, q[1]]), r = Math.max(1.5, cam.px(a[2]) * .16);
+    ctx.strokeStyle = p.col; ctx.lineWidth = r * 2; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(b[0], b[1]); ctx.lineTo(a[0], a[1]); ctx.stroke(); }
+}
+// ---------- cámara: zambullida desde muy alto, luego deslizamiento lento que sigue a la camioneta ----------
+function camaraEn(t, van) {
+  const k = ease(prog(t, 0, 1.6)), m = ease(prog(t, 1.6, DUR));
+  return camara({ objetivo: [lerp(RUTA.x0 + 14, van[0] + 2, k * .6 + m * .4), 0, RUTA.z - 1 - m * 1.5], az: .38 - m * .12, el: lerp(1.2, .9, k) + m * .02,
+    dist: lerp(190, 98, k) - m * 14, fov: 24, cy: 1080 });
+}
+// ---------- letrero de carretera (el texto vive en la señalización del lugar) ----------
+const AJ_A = autoajuste(ARRIBA, SEÑAL, 700, 820, 1, 74, 40), AJ_K = autoajuste(CLAVE, SEÑAL, 700, 820, 1, 190, 70);
+const PAL_A = ARRIBA.split(' ');
+function letrero(t) {
+  const x = 90, y = 262, w = W - 180, h = 112 + AJ_A.size + (t >= T_CAIDA ? AJ_K.size * .95 + 20 : 0);
+  ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.roundRect(x + 8, y + 12, w, h, 26); ctx.fill();
+  ctx.fillStyle = COLORES.letrero; ctx.beginPath(); ctx.roundRect(x, y, w, h, 26); ctx.fill();
+  ctx.strokeStyle = '#f4f4ee'; ctx.lineWidth = 7; ctx.beginPath(); ctx.roundRect(x + 14, y + 14, w - 28, h - 28, 16); ctx.stroke();
+  ctx.fillStyle = '#f4f4ee'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  let px = W / 2 - medir(ARRIBA, AJ_A.font) / 2; ctx.font = AJ_A.font;
+  PAL_A.forEach((p, i) => { if (t >= i * .22) ctx.fillText(p, px, y + 46 + AJ_A.size); px += medir(p + ' ', AJ_A.font); });
+  if (t >= T_CAIDA) { ctx.font = AJ_K.font; ctx.fillStyle = COLORES.clave; ctx.textAlign = 'center'; ctx.fillText(CLAVE, W / 2, y + 46 + AJ_A.size + 14 + AJ_K.size * .82); }
+  // reloj de cámara rápida
+  const rot = vel(t) > 2 ? ROTULO_RAPIDO : ROTULO_REAL;
+  ctx.font = `700 34px ${MONO}`; ctx.textAlign = 'center'; const tw = medir(rot, ctx.font) + 44, ry = y + h + 22;
+  ctx.fillStyle = 'rgba(20,24,30,.78)'; ctx.beginPath(); ctx.roundRect(W / 2 - tw / 2, ry, tw, 56, 12); ctx.fill();
+  ctx.fillStyle = vel(t) > 2 ? '#ffffff' : COLORES.clave; ctx.fillText(rot, W / 2, ry + 40);
+  ctx.restore();
+}
+const GRADO = lienzo(W, H);
+arrancar(frame => {
+  const t = frame / FPS, ts = tiempoSim(tSalto(t));
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const van = camioneta(t), cam = camaraEn(t, van);
+  ctx.fillStyle = COLORES.asfalto; ctx.fillRect(0, 0, W, H);
+  asfalto(cam);
+  const moviles = [];
+  for (const c of COCHES) { if (c.z != null) { const x = X0 + ((c.x0 + c.dir * c.v * ts) % (NX * PASO) + NX * PASO) % (NX * PASO); if (Math.abs(x - van[0]) < 3 && Math.abs(c.z - RUTA.z) < .2) continue; moviles.push(coche(x, c.z, c.dir > 0 ? 0 : Math.PI, c.col)); }
+    else { const z = Z0 + ((c.z0 + c.dir * c.v * ts) % (NZ * PASO) + NZ * PASO) % (NZ * PASO); moviles.push(coche(c.x, z, Math.PI / 2, c.col)); } }
+  const heroe = coche(van[0], van[1], 0, COLORES.clave, 1.25); moviles.push(heroe);
+  render3d(ctx, cam, SUELO, { luz: L, amb: .7, dif: .35 });
+  render3d(ctx, cam, [...EDIF, ...moviles], { luz: L, amb: .55, dif: .6, cielo: [190, 215, 255], cieloK: .12, sombraTinte: [.75, .82, 1.15], sombraK: .25,
+    sombras: { alpha: .42, blur: 1.2, col: COLORES.sombra, ySuelo: .12 } });
+  gente(cam, ts);
+  // sombras de nubes que barren la maqueta (en cámara rápida cruzan veloces)
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';
+  for (let i = 0; i < 3; i++) { const cxw = X0 - 40 + ((ts * .9 + i * 45) % (NX * PASO + 80)), czw = Z0 + 18 + i * 34, c = cam.proy([cxw, 0, czw]), r = cam.px(c[2]) * 16;
+    const g = ctx.createRadialGradient(c[0], c[1], 0, c[0], c[1], r); g.addColorStop(0, 'rgba(90,110,170,.34)'); g.addColorStop(1, 'rgba(90,110,170,0)');
+    ctx.fillStyle = g; ctx.fillRect(c[0] - r, c[1] - r, 2 * r, 2 * r); }
+  ctx.restore();
+  // la franja nítida sigue a la camioneta; en la caída se angosta (intimidad)
+  const yv = cam.proy([van[0], 0, van[1]])[1], angosta = ease(prog(t, T_CAIDA, T_CAIDA + .8));
+  bandaEnfoque(ctx, yv, lerp(150, 95, angosta), 26, { pasos: 5, rampa: 560 });
+  // gradación de maqueta recién pintada: saturación alta, contraste suave, viñeta
+  const gx = GRADO.getContext('2d'); gx.filter = 'saturate(1.35) contrast(1.06)'; gx.drawImage(cv, 0, 0); gx.filter = 'none'; ctx.drawImage(GRADO, 0, 0);
+  const vg = ctx.createRadialGradient(W / 2, H / 2, 500, W / 2, H / 2, 1250); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(10,20,50,.35)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  letrero(t);
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .1, tipo: 'swish' }, { t: 1.6, tipo: 'desliz' }, { t: T_CAIDA, tipo: 'golpe' }, { t: T_CAIDA + 1.2, tipo: 'pop' }];
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pantalla viva</title>
+<style>
+  html,body{margin:0;background:#1b1a18;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Pantalla viva» · ingeniería inversa de lemo-opuscar/styles/living-screencast (MIT, © 2026 LemoLab) · qué se tomó: una app redibujada en alta resolución flotando sobre un fondo de escritorio, cámara de grabadora de pantalla (empuje al cursor, latigazo con desenfoque de movimiento, seguir a la mascota, foco con viñeta), y una mascota de pixeles grandes que se para solo en los bordes de arriba de la interfaz y actúa lo que hace la app. El cursor es la usuaria; la mascota, la app.
+// ANATOMIA: estilizada — mascota propia de pixeles grandes (un bichito cuadrado con antenas, ojos de 2×2 y patitas), sin ninguna anatomía realista.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'tu semana de contenido';          // el título vive en la app (encabezado). Máx. ~30 letras
+const PALABRA_CLAVE = 'contenido';                 // va enorme dentro del encabezado
+const PEDIDO = 'arma mi semana para vender';       // lo que la usuaria teclea en la caja (máx. ~32 letras)
+const PASOS = ['idea con oferta', 'guion de 30 s', 'grabar en 1 toma', 'publicar con CTA'];   // 3 o 4 filas (máx. ~20 letras c/u)
+const GUARDADO = 'listo para publicar';            // la insignia que se ilumina al final
+const APP = 'Mi plan';                             // nombre en la barra de la ventana
+const FOTO = '';                                   // captura real de tu app: se ve en el panel de vista previa. Vacío = vista previa genérica
+const COLORES = {
+  fondo1: '#EBD9C9', fondo2: '#D9C6E6',            // el fondo de escritorio
+  app: '#FAF8F4', barra: '#F1EDE6', linea: '#E3DDD3', texto: '#26231F', texto2: '#8A8378',
+  acento: '#2F8F83',     // el acento de la app (casillas, insignia)
+  mascota: '#7A5CFF',    // un color que nada de la interfaz usa: así el ojo la encuentra
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const SANS = '"Avenir Next", "Helvetica Neue", sans-serif', SERIF = 'Baskerville, "Hoefler Text", Georgia, serif', MONO = 'Menlo, monospace';
+let IMG = null; if (FOTO) cargarFotos([FOTO]).then(a => IMG = a[0]);
+const MUNDO = document.createElement('canvas'); MUNDO.width = W; MUNDO.height = H;
+
+// ---------- la app: medidas de cada elemento (la mascota solo se para en sus bordes de arriba) ----------
+const VEN = { x: 80, y: 250, w: 920, h: 1200 };
+const ENC = fraseDiseno(TITULO, PALABRA_CLAVE, { familia: SERIF, familiaClave: SERIF, peso: 400, pesoClave: 700, tam: 50, factor: 1.9, ancho: VEN.w - 120, x: VEN.x + 60, y: VEN.y + 100, maxAlto: 220, maxRenglones: 2 });
+const PREV = { x: VEN.x + 60, y: VEN.y + 120 + ENC.alto, w: VEN.w - 120, h: 330 };
+const FILA_H = 88, FILAS = PASOS.slice(0, 4).map((p, i) => ({ txt: p, x: VEN.x + 60, y: PREV.y + PREV.h + 40 + i * FILA_H, w: VEN.w - 120, h: FILA_H - 14 }));
+const CAJA = { x: VEN.x + 40, y: VEN.y + VEN.h - 170, w: VEN.w - 80, h: 130 };
+const INS = { x: VEN.x + VEN.w - 60, y: PREV.y - 30 };
+
+// ---------- tiempos ----------
+const T_ENVIA = .95, T_CAE = 1.25, PASO = .72, T_FILA = i => 1.55 + i * PASO, T_FIN = T_FILA(FILAS.length - 1) + .45;
+const T_FOCO = T_FIN + .1, T_ATRAS = T_FOCO + 1.0, T_TITULO = T_ATRAS + .7;
+
+// ---------- la mascota: sprite de pixeles, saltos con anticipación, estirón, aplastón y polvo ----------
+const SPR = ['....b..b....', '....b..b....', '..bbbbbbbb..', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '.bbbbbbbbbb.', '..bbbbbbbb..', '..bb....bb..'];
+const PX = 10;                                                              // un solo tamaño de pixel para la mascota y sus cosas
+function mascota(x, y, o = {}) {                                            // (x, y) = centro de los pies sobre un borde
+  const { sx = 1, sy = 1, mira = 0, ojos = 'abiertos', brazos = false } = o;
+  const g = ctx, cols = SPR[0].length, rows = SPR.length, px = PX;
+  x = Math.round(x / (px / 2)) * (px / 2); y = Math.round(y / (px / 2)) * (px / 2);   // posición escalonada a la grilla
+  g.save(); g.translate(x, y); g.scale(sx, sy); g.imageSmoothingEnabled = false;
+  g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(-cols * px * .45, -2, cols * px * .9, 4);
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (SPR[r][c] === 'b') { g.fillStyle = r < 2 ? mezcla(COLORES.mascota, '#000', .2) : COLORES.mascota; g.fillRect((c - cols / 2) * px, (r - rows) * px, px, px); }
+  g.fillStyle = mezcla(COLORES.mascota, '#fff', .35); g.fillRect((2 - cols / 2) * px, (3 - rows) * px, px * 2, px);
+  if (brazos) { g.fillStyle = COLORES.mascota; g.fillRect((-1 - cols / 2) * px, (1 - rows) * px + px * 2, px, px * 2); g.fillRect((cols / 2) * px, (1 - rows) * px + px * 2, px, px * 2); }
+  g.fillStyle = '#1E1A2E';
+  for (const ex of [3, 7]) {
+    const cx = (ex + mira - cols / 2) * px, cy = (4 - rows) * px;
+    if (ojos === 'cerrados') g.fillRect(cx, cy + px, px * 2, px / 2 + 1);
+    else if (ojos === 'felices') { g.fillRect(cx, cy + px, px / 2 + 1, px / 2 + 1); g.fillRect(cx + px / 2, cy + px / 2, px, px / 2 + 1); g.fillRect(cx + px * 1.5, cy + px, px / 2 + 1, px / 2 + 1); }
+    else g.fillRect(cx, cy, px * 2, px * 2);
+  }
+  g.restore();
+}
+function polvo(x, y, edad) {                                                // polvito de pixeles al aterrizar
+  if (edad < 0 || edad > .35) return; const k = edad / .35;
+  ctx.fillStyle = `rgba(140,130,120,${.8 * (1 - k)})`;
+  for (const s of [-1, 1]) for (let i = 0; i < 3; i++) ctx.fillRect(Math.round((x + s * (40 + i * 18 + k * 50)) / 5) * 5, Math.round((y - 6 - i * 7 - k * 14) / 5) * 5, PX * .6, PX * .6);
+}
+// salto entre dos bordes: agacharse (anticipación), estirarse al despegar, encoger en el aire, aplastarse al caer
+function salto(a, b, t0, dur) {
+  const t = prog(lastT, t0, t0 + dur), ag = .16;
+  if (t <= 0) return { x: a[0], y: a[1], sx: 1, sy: 1 };
+  if (t < ag) { const k = Math.sin(t / ag * Math.PI / 2); return { x: a[0], y: a[1], sx: 1 + .18 * k, sy: 1 - .2 * k }; }
+  if (t < .88) { const k = (t - ag) / (.88 - ag), h = Math.max(110, Math.abs(b[1] - a[1]) * .4 + 110);
+    return { x: lerp(a[0], b[0], k), y: lerp(a[1], b[1], k) - Math.sin(k * Math.PI) * h, sx: k < .3 ? .88 : 1, sy: k < .3 ? 1.16 : 1 }; }
+  const k = (t - .88) / .12, s = Math.sin(k * Math.PI) * .22; return { x: b[0], y: b[1], sx: 1 + s, sy: 1 - s };
+}
+let lastT = 0;
+function poseMascota(t) {
+  const sobreFila = i => [FILAS[i].x + FILAS[i].w - 120, FILAS[i].y];
+  if (t < T_CAE) return null;
+  if (t < T_FILA(0)) { const k = aterriza(prog(t, T_CAE, T_FILA(0) - .05)); return { x: sobreFila(0)[0], y: lerp(VEN.y + 70, FILAS[0].y, k), sx: k < 1 ? .9 : 1, sy: k < 1 ? 1.12 : 1, ojos: 'abiertos', mira: 0 }; }
+  for (let i = 1; i < FILAS.length; i++) if (t < T_FILA(i)) { const p = salto(sobreFila(i - 1), sobreFila(i), T_FILA(i) - .42, .42); return { ...p, ojos: 'abiertos', mira: 1 }; }
+  if (t < T_TITULO - .45) return { x: sobreFila(FILAS.length - 1)[0], y: sobreFila(FILAS.length - 1)[1], sx: 1, sy: 1 + .02 * Math.sin(t * 6), ojos: Math.floor(t * 3) % 7 === 0 ? 'cerrados' : 'abiertos', mira: t > T_FOCO ? 1 : 0 };
+  ctx.font = `600 26px ${SANS}`; const wIns = medir(GUARDADO, ctx.font) + 70, dest = [INS.x - wIns / 2, INS.y - 26];
+  const p = salto(sobreFila(FILAS.length - 1), dest, T_TITULO - .45, .5);
+  return { ...p, ojos: t > T_TITULO + .1 ? 'felices' : 'abiertos', brazos: t > T_TITULO + .1, mira: 0 };
+}
+
+// ---------- la interfaz ----------
+function app(t) {
+  const g = ctx;
+  g.save(); g.shadowColor = 'rgba(60,40,70,.28)'; g.shadowBlur = 60; g.shadowOffsetY = 24; g.fillStyle = COLORES.app; g.beginPath(); g.roundRect(VEN.x, VEN.y, VEN.w, VEN.h, 26); g.fill(); g.restore();
+  g.save(); g.beginPath(); g.roundRect(VEN.x, VEN.y, VEN.w, VEN.h, 26); g.clip();
+  g.fillStyle = COLORES.barra; g.fillRect(VEN.x, VEN.y, VEN.w, 70); g.fillStyle = COLORES.linea; g.fillRect(VEN.x, VEN.y + 70, VEN.w, 2);
+  g.fillStyle = COLORES.texto; g.font = `600 28px ${SANS}`; g.fillText(APP, VEN.x + 34, VEN.y + 45);
+  ['Plan', 'Ideas', 'Métricas'].forEach((tab, i) => { const x = VEN.x + 360 + i * 160; if (i === 0) { g.fillStyle = '#fff'; g.beginPath(); g.roundRect(x - 18, VEN.y + 14, 140, 42, 10); g.fill(); }
+    g.fillStyle = i === 0 ? COLORES.texto : COLORES.texto2; g.font = `500 24px ${SANS}`; g.fillText(tab, x, VEN.y + 43); });
+  g.restore();
+  // encabezado (el título vive en la app): aparece palabra por palabra cuando llega la respuesta
+  pintarFrase(ENC, t, T_CAE - .1, .12, { col: COLORES.texto, colClave: COLORES.texto });
+  // panel de vista previa: tu captura real o una vista previa genérica
+  g.save(); g.beginPath(); g.roundRect(PREV.x, PREV.y, PREV.w, PREV.h, 20); g.clip();
+  if (IMG) fotoCover(IMG, PREV.x, PREV.y, PREV.w, PREV.h, .5, .2);
+  else { g.fillStyle = '#F1ECE4'; g.fillRect(PREV.x, PREV.y, PREV.w, PREV.h);
+    const gr = g.createLinearGradient(PREV.x, PREV.y, PREV.x + 260, PREV.y + PREV.h); gr.addColorStop(0, '#F3C9A8'); gr.addColorStop(1, '#C9B6EC');
+    g.fillStyle = gr; g.beginPath(); g.roundRect(PREV.x + 24, PREV.y + 24, 250, PREV.h - 48, 16); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.moveTo(PREV.x + 130, PREV.y + 130); g.lineTo(PREV.x + 185, PREV.y + 165); g.lineTo(PREV.x + 130, PREV.y + 200); g.closePath(); g.fill();
+    [0, 1, 2, 3].forEach(k => { g.fillStyle = k ? '#E2DBD0' : '#CFC6B8'; g.beginPath(); g.roundRect(PREV.x + 310, PREV.y + 50 + k * 56, k ? 420 - k * 70 : 300, k ? 22 : 30, 11); g.fill(); }); }
+  g.restore(); g.strokeStyle = COLORES.linea; g.lineWidth = 2; g.beginPath(); g.roundRect(PREV.x, PREV.y, PREV.w, PREV.h, 20); g.stroke();
+  // filas: esqueleto gris hasta que la mascota cae; entonces aparece el texto y se marca la casilla
+  FILAS.forEach((f, i) => {
+    const hecho = t >= T_FILA(i), visible = t >= T_ENVIA + .2 + i * .06;
+    if (!visible) return;
+    g.fillStyle = '#fff'; g.beginPath(); g.roundRect(f.x, f.y, f.w, f.h, 14); g.fill(); g.strokeStyle = COLORES.linea; g.lineWidth = 2; g.stroke();
+    const cb = { x: f.x + 26, y: f.y + f.h / 2 - 17 };
+    g.strokeStyle = hecho ? COLORES.acento : '#CFC8BC'; g.lineWidth = 3; g.beginPath(); g.roundRect(cb.x, cb.y, 34, 34, 8); g.stroke();
+    if (hecho) { g.fillStyle = COLORES.acento; g.beginPath(); g.roundRect(cb.x, cb.y, 34, 34, 8); g.fill(); g.strokeStyle = '#fff'; g.lineWidth = 4; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(cb.x + 8, cb.y + 18); g.lineTo(cb.x + 15, cb.y + 25); g.lineTo(cb.x + 27, cb.y + 10); g.stroke(); }
+    if (hecho) { g.fillStyle = COLORES.texto; g.font = `500 36px ${SANS}`; g.fillText(f.txt, f.x + 84, f.y + f.h / 2 + 13); }
+    else { g.fillStyle = '#ECE7DF'; g.beginPath(); g.roundRect(f.x + 84, f.y + f.h / 2 - 10, 260 - i * 30, 20, 10); g.fill(); }
+  });
+  // insignia que guarda la promesa
+  if (t >= T_FIN) { g.font = `600 26px ${SANS}`; const w = medir(GUARDADO, g.font) + 70;
+    g.fillStyle = mezcla(COLORES.acento, '#ffffff', .85); g.beginPath(); g.roundRect(INS.x - w, INS.y - 26, w, 52, 26); g.fill();
+    g.fillStyle = COLORES.acento; g.beginPath(); g.arc(INS.x - w + 28, INS.y, 9, 0, Math.PI * 2); g.fill(); g.fillText(GUARDADO, INS.x - w + 48, INS.y + 9); }
+  // caja de pedido con el texto tecleado y el cursor de texto
+  g.fillStyle = '#fff'; g.beginPath(); g.roundRect(CAJA.x, CAJA.y, CAJA.w, CAJA.h, 22); g.fill(); g.strokeStyle = COLORES.linea; g.lineWidth = 2; g.stroke();
+  const escrito = t < T_ENVIA ? tecleo(PEDIDO, t, -.9, 30) : '';
+  g.font = `500 34px ${SANS}`; g.fillStyle = escrito ? COLORES.texto : COLORES.texto2;
+  g.fillText(escrito || (t < T_ENVIA ? '' : 'Pídele algo a tu plan…'), CAJA.x + 30, CAJA.y + 56);
+  if (t < T_ENVIA && Math.floor(t * 2.5) % 2 === 0) { g.fillStyle = COLORES.texto; g.fillRect(CAJA.x + 32 + medir(escrito, g.font), CAJA.y + 26, 3, 40); }
+  const env = { x: CAJA.x + CAJA.w - 82, y: CAJA.y + CAJA.h - 74 };
+  g.fillStyle = escrito ? COLORES.acento : '#D9D3C9'; g.beginPath(); g.roundRect(env.x, env.y, 56, 56, 16); g.fill();
+  g.strokeStyle = '#fff'; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(env.x + 28, env.y + 42); g.lineTo(env.x + 28, env.y + 15); g.moveTo(env.x + 17, env.y + 26); g.lineTo(env.x + 28, env.y + 15); g.lineTo(env.x + 39, env.y + 26); g.stroke();
+  return env;
+}
+
+// ---------- cámara de grabadora de pantalla ----------
+function cam(t, m) {
+  const ini = { x: CAJA.x + 330, y: CAJA.y + 40, z: 1.6 };
+  const lista = { x: W / 2, y: (FILAS[0].y + FILAS.at(-1).y) / 2 - 40, z: 1.32 };
+  const foco = { x: INS.x - 180, y: INS.y + 40, z: 1.9 }, todo = { x: W / 2, y: VEN.y + VEN.h / 2, z: 1 };
+  const mix = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), z: lerp(a.z, b.z, k) });
+  let c = mix(ini, lista, ease(prog(t, T_ENVIA + .05, T_ENVIA + .45)));                 // latigazo hacia la lista
+  if (t > T_FILA(0) && m) c.y = lerp(c.y, m.y - 60, .25 * clamp((t - T_FILA(0)) * 3));   // sigue a la mascota por la lista
+  if (t > T_FOCO - .2) c = mix(c, foco, ease(prog(t, T_FOCO - .2, T_FOCO + .25)));        // empuje + viñeta sobre la promesa
+  if (t > T_ATRAS) c = mix(c, todo, ease(prog(t, T_ATRAS, T_ATRAS + .6)));               // vuelve a la ventana entera
+  c.z = Math.max(1, c.z);
+  // el borde de la ventana nunca deja ver más allá del escritorio
+  const vw = W / c.z / 2, vh = H / c.z / 2; c.x = clamp(c.x, vw, W - vw); c.y = clamp(c.y, vh, H - vh);
+  return c;
+}
+const FONDO = (() => { const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  const gr = g.createLinearGradient(0, 0, W, H); gr.addColorStop(0, COLORES.fondo1); gr.addColorStop(1, COLORES.fondo2); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  const r = g.createRadialGradient(W * .2, H * .15, 0, W * .2, H * .15, 900); r.addColorStop(0, 'rgba(255,255,255,.35)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, W, H);
+  g.fillStyle = 'rgba(255,255,255,.55)'; g.fillRect(0, 0, W, 54); g.fillStyle = '#3a3440'; g.font = `600 24px ${SANS}`; g.fillText(APP, 30, 36);
+  g.textAlign = 'right'; g.fillText('9:41', W - 30, 36); return c; })();
+
+let camPrev = null;
+arrancar(frame => {
+  const t = frame / FPS; lastT = t; BOIL = Math.floor(frame / 4);
+  const m = poseMascota(t), c = cam(t, m), cAnt = cam(Math.max(0, t - 1 / FPS), poseMascota(Math.max(0, t - 1 / FPS)));
+  // el mundo se dibuja en un lienzo aparte (sin transformar) para poder desenfocarlo en los latigazos
+  const real = ctx; ctx = MUNDO.getContext('2d'); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(FONDO, 0, 0); const env = app(t);
+  if (m) { mascota(m.x, m.y, m); polvo(m.x, m.y, t - (t >= T_FILA(0) ? T_FILA(FILAS.findIndex((_, i) => t < T_FILA(i + 1)) === -1 ? FILAS.length - 1 : FILAS.findIndex((_, i) => t < T_FILA(i + 1))) : T_FILA(0))); }
+  // el cursor (la usuaria): suave hasta el botón de enviar, empujoncito al hacer clic, y se va
+  if (t < T_ENVIA + .6) { const k = ease(prog(t, 0, T_ENVIA - .1)), cx = lerp(CAJA.x + CAJA.w * .7, env.x + 30, k), cy = lerp(CAJA.y - 60, env.y + 30, k);
+    const clic = t > T_ENVIA - .06 && t < T_ENVIA + .08 ? .86 : 1; cursorFlecha(cx, cy, 1.7 * clic); }
+  ctx = real; pantalla(); ctx.globalAlpha = 1;
+  // cámara + desenfoque de movimiento solo en el latigazo (copias corridas en la dirección del movimiento)
+  const vel = Math.hypot(c.x - cAnt.x, c.y - cAnt.y) * c.z;
+  const pinta = (dx, dy, a) => { ctx.globalAlpha = a; ctx.setTransform(c.z, 0, 0, c.z, W / 2 - c.x * c.z + dx, H / 2 - c.y * c.z + dy); ctx.drawImage(MUNDO, 0, 0); };
+  if (vel > 25 && t < T_ENVIA + .6) { const n = 7, ux = (c.x - cAnt.x) * c.z, uy = (c.y - cAnt.y) * c.z; for (let i = 0; i < n; i++) pinta(-ux * i / n * .8, -uy * i / n * .8, i ? .22 : 1); }
+  else pinta(0, 0, 1);
+  pantalla(); ctx.globalAlpha = 1;
+  // viñeta de foco sobre la promesa
+  const vi = prog(t, T_FOCO, T_FOCO + .25) * (1 - prog(t, T_ATRAS, T_ATRAS + .4));
+  if (vi > 0) { const r = ctx.createRadialGradient(W / 2, H / 2, 160, W / 2, H / 2, 900); r.addColorStop(0, 'rgba(20,15,30,0)'); r.addColorStop(1, `rgba(20,15,30,${.55 * vi})`); ctx.fillStyle = r; ctx.fillRect(0, 0, W, H); }
+});
+window.SONIDOS = [
+  { t: .2, tipo: 'pop' }, { t: T_ENVIA, tipo: 'pop' }, { t: T_ENVIA + .1, tipo: 'swish' }, { t: T_FILA(0), tipo: 'golpe' },
+  ...FILAS.slice(1).map((_, i) => ({ t: +T_FILA(i + 1).toFixed(2), tipo: 'pop' })), { t: T_FOCO, tipo: 'ambiente' }, { t: T_ATRAS, tipo: 'desliz' }, { t: T_TITULO + .05, tipo: 'golpe' },
+];
+</script>
+</body>
+</html>

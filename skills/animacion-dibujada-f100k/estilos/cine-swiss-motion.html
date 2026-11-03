@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Retícula suiza</title>
+<style>
+  html,body{margin:0;background:#111;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Retícula suiza» · ingeniería inversa de lemo-opuscar/styles/swiss-motion (MIT, © 2026 LemoLab) · qué se tomó: retícula modular, una sola familia, un solo color de señal, barras que encajan en el pulso, cifra gigante junto a notas chicas, corte de cuchillo y «la excepción» que se mueve lineal y fuera de la retícula.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const NUMERO = '3';                                  // la cifra gigante del cartel (SOLO cifras del guion; 1 o 2 caracteres)
+const ENTRADA = 'pasos para';                        // la frase chica que abre (gris)
+const FRASE = 'tu primera venta';                    // la frase grande (máx. ~24 letras)
+const PALABRA_CLAVE = 'venta';                       // la palabra de FRASE sobre la que aterriza el círculo de señal
+const NOTAS = ['una oferta clara', 'un guion simple', 'un CTA directo'];   // 2 a 3 notas técnicas abajo (máx. ~20 letras c/u)
+const SE_CORTA = 'teoría';                           // el bloque que el cuchillo corta ('' = sin corte)
+const COLORES = {
+  pagina: '#EAE9E5',     // la página
+  papel: '#FFFFFF',      // el cartel
+  tinta: '#111111',      // letras y barras
+  gris: '#CFCEC8',       // la segunda voz (barras grises)
+  reticula: '#E4E3DE',   // líneas de la retícula
+  senal: '#E30613',      // EL color de señal: solo el círculo lo lleva (rojo, naranja #FF5A00, ultramar #1F3FFF o verde)
+};
+const LETRA = '"Avenir Next", "Helvetica Neue", Arial, sans-serif';   // una sola familia, varios pesos
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-grafica.js"></script>
+<script>
+// ---------- retícula: 6 columnas, márgenes de 72, medianil de 24 ----------
+const M = 72, MED = 24, COLW = (W - 2 * M - 5 * MED) / 6, colX = i => M + i * (COLW + MED);
+const MOD = 92;
+const PANEL = { x: M, y: 330, w: W - 2 * M, h: MOD * 7 };
+const ease7 = t => { t = clamp(t); // cubic-bezier(.7,0,.2,1): la única curva para encajar
+  let lo = 0, hi = 1; for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2, x = 3 * .7 * m * (1 - m) ** 2 + 3 * .2 * m * m * (1 - m) + m ** 3; if (x < t) lo = m; else hi = m; }
+  const u = (lo + hi) / 2; return 3 * u * u * (1 - u) + u ** 3; };
+const BEAT = .5;                                     // 120 ppm: todo aterriza en el pulso
+
+// barras del programa (columnas 3–5, en escalera): cada una entra con un barrido a lo largo
+const BARRAS = [
+  { x: colX(3), y: PANEL.y, w: COLW, h: MOD * 2.2, t: 0, negra: true },
+  { x: colX(3) + COLW + MED, y: PANEL.y + MOD * 2.2, w: COLW, h: MOD * .55, t: .6, negra: true },
+  { x: colX(5), y: PANEL.y + MOD * 2.75, w: COLW, h: MOD * 1.9, t: 1.0, negra: true },
+  { x: colX(5), y: PANEL.y + MOD * 4.65, w: COLW, h: MOD * .55, t: 1.5, negra: true },
+  { x: colX(3), y: PANEL.y + MOD * 2.2, w: COLW, h: MOD * 1.6, t: 0, negra: false },
+  { x: colX(4), y: PANEL.y + MOD * 2.75, w: COLW, h: MOD * 2.6, t: 0, negra: false },
+];
+const CORTE = SE_CORTA ? { x: colX(3) + 20, y: PANEL.y + MOD * 5.5, w: COLW * 2 + MED, h: MOD * 1.1, t: 4.3 } : null;
+
+// ---------- texto ----------
+const CAJA = { x: M, y: PANEL.y + PANEL.h + 40, w: W - 2 * M, h: SEGURA.bottom - 140 - (PANEL.y + PANEL.h + 40) };
+const LAY = maquetar([
+  { t: ENTRADA, tam: 50, fam: LETRA, peso: 500, col: '#8a8a86' },
+  { t: FRASE, tam: 150, fam: LETRA, peso: 800, col: COLORES.tinta, nueva: true, track: -.02 },
+], CAJA, { interlinea: 1.0, espacio: .24 });
+const T_PAL = LAY.palabras.map((p, i) => 1.0 + i * BEAT / 2);       // una palabra por medio pulso, con corte seco
+const CLAVE = LAY.palabras.find(p => p.txt.toLowerCase().replace(/[^\wáéíóúñü]/g, '') === PALABRA_CLAVE.toLowerCase()) || LAY.palabras[LAY.palabras.length - 1];
+const NOTAS_Y = Math.max(CAJA.y + LAY.alto + 40, SEGURA.bottom - 120);
+
+// la señal: empieza en el cartel y al final «se sale de la retícula» (lineal, sin encajar) para posarse detrás de la palabra clave
+const SEN0 = { x: colX(1) + 40, y: PANEL.y + 270, r: 230 };
+const SEN1 = { x: CLAVE.x + CLAVE.ancho / 2, y: CLAVE.y - CLAVE.size * .34, r: CLAVE.ancho * .3 };
+const T_SALE = 5.2, T_LLEGA = 6.5;
+
+function fondo() {
+  ctx.fillStyle = COLORES.pagina; ctx.fillRect(0, 0, W, H);
+  // cabecera técnica: regla de 1 px y notas chicas
+  ctx.fillStyle = COLORES.tinta; ctx.fillRect(M, 262, W - 2 * M, 2);
+  ctx.font = `500 26px ${LETRA}`; ctx.fillText('programa 01', M, 300); ctx.fillText('retícula 6 × 16', colX(2), 300); ctx.fillText('120 ppm', colX(4), 300);
+  ctx.fillStyle = COLORES.papel; ctx.fillRect(PANEL.x, PANEL.y, PANEL.w, PANEL.h);
+  ctx.fillStyle = COLORES.reticula;
+  for (let i = 0; i < 6; i++) { ctx.fillRect(colX(i), PANEL.y, 1.5, PANEL.h); ctx.fillRect(colX(i) + COLW, PANEL.y, 1.5, PANEL.h); }
+  for (let y = PANEL.y + MOD; y < PANEL.y + PANEL.h; y += MOD) ctx.fillRect(PANEL.x, y, PANEL.w, 1.5);
+}
+function barra(b, t) {
+  const k = b.t === 0 ? 1 : ease7(prog(t, b.t - BEAT / 2, b.t));     // barrido que aterriza EN el pulso
+  if (k <= 0) return;
+  ctx.fillStyle = b.negra ? COLORES.tinta : COLORES.gris;
+  ctx.fillRect(Math.round(b.x) - .5, Math.round(b.y), Math.round(b.w) + 1, Math.round(b.h * k) + 1);   // 1 px de más: sin costuras
+}
+function corte(t) {
+  if (!CORTE || t < 2.0) return;
+  const b = CORTE, a = ease7(prog(t, 2.0, 2.25));
+  const cuchillo = prog(t, b.t, b.t + .3), colapso = ease7(prog(t, b.t + .35, b.t + .7));
+  if (t >= b.t + .7) { ctx.fillStyle = COLORES.tinta; ctx.fillRect(b.x, b.y + b.h / 2 - 1, b.w * (1 - ease7(prog(t, b.t + .7, b.t + 1))), 2); return; }
+  const h = b.h * (1 - colapso), y = b.y + (b.h - h) / 2;
+  ctx.save(); ctx.beginPath(); ctx.rect(b.x, y, b.w * a, h); ctx.clip();
+  ctx.fillStyle = COLORES.gris; ctx.fillRect(b.x, y, b.w, h);
+  ctx.fillStyle = COLORES.tinta; ctx.font = `600 ${Math.round(MOD * .42)}px ${LETRA}`; ctx.fillText(SE_CORTA, b.x + 16, b.y + b.h * .62);
+  ctx.restore();
+  if (cuchillo > 0) { ctx.fillStyle = COLORES.tinta; ctx.fillRect(b.x - 30, b.y + b.h / 2 - 1, (b.w + 60) * cuchillo, 2); }   // el cuchillo: lineal
+}
+function senal(t) {
+  const k = prog(t, T_SALE, T_LLEGA);                                 // la excepción: LINEAL, sin la curva de encaje
+  const x = lerp(SEN0.x, SEN1.x, k), y = lerp(SEN0.y, SEN1.y, k), r = lerp(SEN0.r, SEN1.r, k);
+  const entra = ease7(prog(t, .2, .55));                              // el golpe: el círculo rojo entra barriendo de izquierda a derecha
+  ctx.save(); if (entra < 1) { ctx.beginPath(); ctx.rect(0, 0, PANEL.x + (x + r - PANEL.x) * entra, H); ctx.clip(); }
+  ctx.fillStyle = COLORES.senal; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  if (k > 0 && k < 1) { ctx.fillStyle = COLORES.tinta; ctx.font = `500 24px ${LETRA}`;
+    ctx.fillText(`x ${Math.round(x)} · y ${Math.round(y)}  fuera de retícula`, Math.min(x + r + 18, W - 380), y + 8); }
+}
+function numeral() {
+  const size = 640, font = `800 ${size}px ${LETRA}`;
+  ctx.save(); ctx.font = font;
+  const izq = ctx.measureText(NUMERO).actualBoundingBoxLeft || 0;     // al ras óptico: se resta el margen izquierdo del glifo
+  ctx.beginPath(); ctx.rect(PANEL.x, PANEL.y, PANEL.w, PANEL.h); ctx.clip();
+  ctx.fillStyle = COLORES.tinta; ctx.fillText(NUMERO, colX(0) + izq, PANEL.y + PANEL.h + size * .03); ctx.restore();
+}
+function notas(t) {
+  NOTAS.forEach((n, i) => {
+    const tn = 3.0 + i * BEAT, x = colX(i * 2), w = COLW * 2 + MED - 12;
+    const k = ease7(prog(t, tn - BEAT / 2, tn)); if (k <= 0) return;
+    ctx.fillStyle = COLORES.tinta; ctx.fillRect(x, NOTAS_Y, w * k, 2);                      // la regla crece a lo largo
+    if (t >= tn) { const aj = autoajuste(n, LETRA, 600, w, 2, 34, 22);
+      ctx.font = `500 22px ${LETRA}`; ctx.fillStyle = '#8a8a86'; ctx.fillText('0' + (i + 1), x, NOTAS_Y + 34);
+      ctx.font = aj.font; ctx.fillStyle = COLORES.tinta; aj.rs.forEach((r, j) => ctx.fillText(r, x, NOTAS_Y + 72 + j * aj.size * 1.1)); }
+  });
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  fondo();
+  BARRAS.filter(b => !b.negra).forEach(b => barra(b, t));
+  corte(t);
+  if (t < T_SALE) senal(t);
+  BARRAS.filter(b => b.negra).forEach(b => barra(b, t));
+  numeral();
+  if (t >= T_SALE) senal(t);                                          // fuera del cartel va encima del papel y debajo del texto (sobreimpresión)
+  pintarPalabras(LAY, t, T_PAL);
+  notas(t);
+});
+window.SONIDOS = [{ t: .2, tipo: 'golpe' }, { t: .6, tipo: 'papel' }, { t: 1.0, tipo: 'papel' }, { t: 1.5, tipo: 'papel' },
+  ...LAY.palabras.map((p, i) => ({ t: +T_PAL[i].toFixed(2), tipo: 'pop' })),
+  { t: 2.5, tipo: 'desliz' }, { t: 3.0, tipo: 'pop' }, { t: 3.5, tipo: 'pop' }, { t: 4.0, tipo: 'pop' },
+  { t: 4.3, tipo: 'swish' }, { t: 4.65, tipo: 'golpe' }, { t: 5.2, tipo: 'desliz' }, { t: 6.5, tipo: 'golpe' }];
+</script>
+</body>
+</html>

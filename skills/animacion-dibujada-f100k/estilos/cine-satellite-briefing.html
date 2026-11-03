@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Informe satelital</title>
+<style>
+  html,body{margin:0;background:#070B0E;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Informe satelital» · ingeniería inversa de lemo-opuscar/styles/satellite-briefing (MIT, © 2026 LemoLab) · qué se tomó: placas anidadas con zoom logarítmico, el gris del analista (luminancia + claridad, azul-negro → plata), líneas finas blancas con halo oscuro, retícula que engancha, línea de rango con marcas y el color que vuelve donde gira la historia
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Tu primera venta está más cerca de lo que crees';   // arriba (máx. ~60 letras)
+const PALABRA_CLAVE = 'más cerca';                     // va enorme, en su propio renglón (tiene que estar dentro de FRASE)
+const PUNTO_A = 'TÚ';                                  // etiqueta pegada al suelo, donde empieza la línea
+const PUNTO_B = 'TU PRIMERA VENTA';                    // etiqueta del lugar marcado (el que recupera el color)
+const DATOS = {                                        // SOLO cifras del guion: la lectura que cae al final de la línea
+  etiqueta: 'lo que te separa de tu venta',
+  valor: '3 pasos',
+  nota: 'contados en tu propio embudo',
+};
+const FOTO = '';                                       // foto aérea o de satélite TUYA (ruta relativa a este archivo). Vacío = terreno de muestra
+const CREDITO = '';                                    // de dónde sale la imagen (ej. 'foto de dron · tu campo'). Vacío = «terreno de muestra»
+const COLORES = {
+  marcas: '#F2F5F6',    // blanco = lo medido
+  lectura: '#FFBE55',   // el único acento: la cifra
+  suelo: '#070B0E',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+// ---------- el suelo: placas anidadas (mundo + detalle), cada una en color y en gris de analista ----------
+const MW = 1000, MH = 1800;                                 // el mundo, en unidades de suelo
+const C = [560, 620];                                       // dónde aterriza la cámara
+const A = [C[0] - 74, C[1] + 16], B = [C[0] + 70, C[1] - 34];
+const Z = FOTO ? 2.6 : 3.4;
+const PUEBLO = { x: C[0] + 70, y: C[1] - 34, r: 34 };                                 // con foto, no se agranda más de lo que aguanta
+let PL = null;                                              // placas
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => {
+  const mundo = fs[0] ? fotoEnLienzo(fs[0], MW, MH) : terreno(1000, 1800, { semilla: 3, mundo: [0, 0, MW, MH], pueblo: PUEBLO });
+  const placas = [{ x: 0, y: 0, w: MW, h: MH, col: mundo, gris: gradoAnalista(mundo, { claridad: .45, contraste: 1.3 }) }];
+  if (!fs[0]) {                                            // la placa fina: el mismo terreno, más resolución, bordes difuminados
+    const r = 150, d = terreno(1100, 1100, { semilla: 3, mundo: [C[0] - r, C[1] - r, C[0] + r, C[1] + r], pueblo: PUEBLO });
+    const pluma = c => { const p = c.getContext('2d'); p.globalCompositeOperation = 'destination-in';
+      const g = p.createRadialGradient(550, 550, 380, 550, 550, 550); g.addColorStop(0, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)'); p.fillStyle = g; p.fillRect(0, 0, 1100, 1100); return c; };
+    placas.push({ x: C[0] - r, y: C[1] - r, w: 2 * r, h: 2 * r, col: pluma(d), gris: pluma(gradoAnalista(d, { claridad: .45, contraste: 1.3 })), fina: true });
+  }
+  PL = placas;
+});
+// el contorno del lugar marcado: un borde irregular (se imprime detrás del barrido)
+const CONTORNO = (() => { const o = []; for (let i = 0; i < 80; i++) { const a = i / 80 * Math.PI * 2, r = 30 + (vnoise(Math.cos(a) * 2 + 5, Math.sin(a) * 2) - .5) * 16;
+  o.push([B[0] + Math.cos(a) * r * 1.25, B[1] + Math.sin(a) * r]); } return o; })();
+
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 268, fam: F_LECTURA, peso: 500, famClave: F_LECTURA, pesoClave: 600, chica: 72, grande: 220, col: COLORES.marcas });
+const T = { buceo: [.15, 1.55], gris: [.45, 1.5], engancha: 1.5, contorno: 1.75, rango: [2.5, 4.1], color: 4.35, frase: 1.9 };
+
+function camara(t) {
+  const k = ease(prog(t, ...T.buceo)), creep = 1 + .045 * prog(t, T.buceo[1], DUR);
+  const z = zoomLog(1.14, Z, k) * creep, cx = lerp(MW / 2, C[0], k), cy = lerp(MH * .5, C[1] + 6, k);
+  return { cx, cy, s: z * W / MW, rot: lerp(.07, 0, k) + .015 * prog(t, T.buceo[1], DUR), z };
+}
+const w2s = (cam, [x, y]) => { const dx = (x - cam.cx) * cam.s, dy = (y - cam.cy) * cam.s, c = Math.cos(cam.rot), s = Math.sin(cam.rot);
+  return [W / 2 + dx * c - dy * s, H / 2 + dx * s + dy * c]; };
+
+function etiqueta(txt, x, y, lado = 1) {                   // etiqueta pegada al suelo: punto, guía y texto sobre placa oscura
+  const f = `600 34px ${F_SANS}`, w = medir(txt, f) + 32, tx = lado > 0 ? x + 30 : x - 30 - w, ty = y - 118;
+  punto(x, y, { col: COLORES.marcas, r: 5, anillo: 12 });
+  pelo([[x, y - 12], [x, ty + 26], [lado > 0 ? tx : tx + w, ty + 26]], { w: 1.6, col: COLORES.marcas });
+  placa(tx, ty, w, 52, { col: 'rgba(5,8,10,.72)', r: 4 }); escribir(txt, tx + 16, ty + 38, f, COLORES.marcas);
+}
+
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.fillStyle = COLORES.suelo; ctx.fillRect(0, 0, W, H);
+  if (!PL) return;
+  const cam = camara(t), g = ease(prog(t, ...T.gris));
+  // el suelo: color verdadero desde órbita, gris de analista para medir
+  conCamara(cam.cx, cam.cy, cam.s, cam.rot, () => {
+    for (const p of PL) { const a = p.fina ? clamp((cam.z - 1.6) / .9) : 1; if (a <= 0) continue;
+      ctx.globalAlpha = a; ctx.drawImage(p.col, p.x, p.y, p.w, p.h); ctx.globalAlpha = a * g; ctx.drawImage(p.gris, p.x, p.y, p.w, p.h); }
+    ctx.globalAlpha = 1;
+  });
+  // el color vuelve donde gira la historia: solo adentro del lugar marcado
+  const kc = ease(prog(t, T.color, T.color + .9));
+  const cont = CONTORNO.map(v => w2s(cam, v));
+  if (kc > 0) { ctx.save(); ctx.beginPath(); cont.forEach((v, i) => i ? ctx.lineTo(...v) : ctx.moveTo(...v)); ctx.closePath(); ctx.clip();
+    conCamara(cam.cx, cam.cy, cam.s, cam.rot, () => { ctx.globalAlpha = kc; for (const p of PL) ctx.drawImage(p.col, p.x, p.y, p.w, p.h); }); ctx.restore(); }
+  // franja oscura arriba para que la frase se lea (el suelo se apaga, la letra no lleva sombra)
+  { const gr = ctx.createLinearGradient(0, 180, 0, FR.y1 + 160); gr.addColorStop(0, 'rgba(4,7,9,.72)'); gr.addColorStop(1, 'rgba(4,7,9,0)');
+    ctx.fillStyle = gr; ctx.fillRect(0, 180, W, FR.y1 - 20); ctx.fillStyle = 'rgba(4,7,9,.72)'; ctx.fillRect(0, 0, W, 180); }
+  vineta(.45);
+  // retícula: busca desde órbita y engancha el lugar
+  { const kr = prog(t, 0, T.engancha), ub = ease(prog(t, .2, T.engancha)), r = lerp(200, 70, ub);
+    const wob = [Math.sin(t * 2.1) * 90 * (1 - ub), Math.cos(t * 1.7) * 70 * (1 - ub)];
+    const pos = w2s(cam, [lerp(MW * .5, B[0], ub), lerp(MH * .5, B[1], ub)]);
+    if (t < T.engancha + 1.2) reticula(pos[0] + wob[0], pos[1] + wob[1], r, t < T.engancha ? 1 : 1 - prog(t, T.engancha + .8, T.engancha + 1.2) + .001, { col: COLORES.marcas });
+    if (t >= T.engancha && t < T.engancha + .25) anillo(pos[0], pos[1], r * (1 + prog(t, T.engancha, T.engancha + .25) * .8), 1, { col: COLORES.marcas, marcas: false, w: 2 }); }
+  // el contorno se imprime, después las etiquetas, después la línea de rango
+  pelo(cont, { k: ease(prog(t, T.contorno, T.contorno + .7)), cerrado: true, w: 2.4, col: COLORES.marcas });
+  if (t > T.contorno + .35) pelo(CONTORNO.map(v => w2s(cam, [B[0] + (v[0] - B[0]) * 1.35, B[1] + (v[1] - B[1]) * 1.35])), { k: ease(prog(t, T.contorno + .35, T.contorno + 1)), cerrado: true, w: 1.4, dash: [8, 7], col: COLORES.marcas, alpha: .7 });
+  const pa = w2s(cam, A), pb = w2s(cam, B);
+  if (t > T.contorno + .6) etiqueta(PUNTO_A, pa[0], pa[1], -1);
+  if (t > T.contorno + .9) etiqueta(PUNTO_B, pb[0], pb[1], pb[0] > W * .55 ? -1 : 1);
+  const kr = ease(prog(t, ...T.rango));
+  if (kr > 0) lineaRango(pa, pb, kr, { col: COLORES.marcas, marcas: 12 });
+  // la lectura: rueda con la línea y aterriza
+  if (t > T.rango[0]) lectura(SEGURA.left + 10, 1150, { etiqueta: DATOS.etiqueta, valor: DATOS.valor, nota: DATOS.nota, k: kr, tam: 160, col: COLORES.lectura, tinta: COLORES.marcas, ancho: 520,
+    fondo: (x, y, w, h) => placa(x, y, w, h, { col: 'rgba(5,8,10,.66)', r: 6 }) });
+  // instrumentos (pantalla): acercamiento real de la cámara, barra de escala y crédito
+  { const x1 = SEGURA.right, y = 1440, f = `400 26px ${F_MONO}`;
+    escribir('ACERCAMIENTO ×' + cam.z.toFixed(1), x1, 1366, f, COLORES.marcas, { align: 'right' });
+    const lb = 160; pelo([[x1 - lb, y - 26], [x1 - lb, y - 14], [x1, y - 14], [x1, y - 26]], { w: 2, col: COLORES.marcas });
+    escribir(CREDITO ? 'IMAGEN · ' + CREDITO : FOTO ? 'IMAGEN PROPIA' : 'TERRENO DE MUESTRA', x1, y + 22, `400 22px ${F_MONO}`, 'rgba(242,245,246,.7)', { align: 'right' }); }
+  pintarFrase(FR, t, T.frase, .17);
+});
+window.SONIDOS = [{ t: .15, tipo: 'swish' }, { t: 1.5, tipo: 'golpe' }, { t: 1.75, tipo: 'desliz' }, { t: 2.5, tipo: 'desliz' }, { t: 4.1, tipo: 'golpe' }, { t: 4.35, tipo: 'ambiente' }];
+</script>
+</body>
+</html>

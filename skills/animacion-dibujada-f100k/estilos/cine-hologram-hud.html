@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Holograma HUD</title>
+<style>
+  html,body{margin:0;background:#020507;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Holograma HUD» · ingeniería inversa de lemo-opuscar/styles/hologram-hud (MIT, © 2026 LemoLab) · qué se tomó: alambre de luz en perspectiva con niebla de profundidad y brillo aditivo, plano de escaneo que hace crecer el objeto, plataforma proyectora en perspectiva, recuadro que se fija con destello, carcasa que se desliza por su eje (despiece local), guía de tres tramos a una placa oscura, cifras que ruedan de basura de glifos al valor real (solo el valor fijado usa el acento) y la ignición en holograma sólido una sola vez.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'tu celular ya es tu estudio';       // aparece al final (máx. ~30 letras)
+const PALABRA_CLAVE = 'estudio';                     // va enorme
+const CODIGO = 'KIT-01 // ESCANEO';                  // rótulo chico de arriba a la izquierda
+// Las 3 piezas que se fijan, en orden. EJEMPLO EDITABLE · SOLO cifras del guion.
+const PIEZAS = [
+  { nombre: 'cámara', valor: '1', unidad: 'toma', detalle: 'graba de corrido' },
+  { nombre: 'batería', valor: '3', unidad: 'reels', detalle: 'en una sola carga' },
+  { nombre: 'micrófono', valor: '30', unidad: 'cm', detalle: 'de distancia, no más' },
+];
+const COLORES = {
+  tono: '#5FE3FF',       // el tono frío: líneas, interfaz y rellenos
+  acento: '#FFB547',     // el acento cálido: SOLO los valores ya fijados
+  fondo: '#03080B',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const FINA = '"Helvetica Neue", "Avenir Next", sans-serif', MONO = 'Menlo, "Courier New", monospace';
+const [TR, TG, TB] = rgbDe(COLORES.tono), TONO = a => `rgba(${TR},${TG},${TB},${a})`;
+const CALIENTE = a => `rgba(${Math.round(lerp(TR, 255, .75))},${Math.round(lerp(TG, 255, .75))},${Math.round(lerp(TB, 255, .75))},${a})`;
+
+// ---------- el modelo: un celular en alambre (topología real: contorno redondeado, nervios, módulo de cámara, batería, micrófono) ----------
+const AN = .74, AL = 1.56, GR = .09, RAD = .13;
+function contorno(z, ins = 0, n = 10) {                 // rectángulo redondeado en el plano z
+  const w = AN / 2 - ins, h = AL / 2 - ins, r = RAD, pts = [];
+  for (const [cx, cy, a0] of [[w - r, h - r, 0], [-(w - r), h - r, Math.PI / 2], [-(w - r), -(h - r), Math.PI], [w - r, -(h - r), Math.PI * 1.5]])
+    for (let i = 0; i <= n; i++) { const a = a0 + i / n * Math.PI / 2; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r, z]); }
+  pts.push(pts[0]); return pts;
+}
+const anillo = (cx, cy, z, r, n = 20) => Array.from({ length: n + 1 }, (_, i) => [cx + Math.cos(i / n * Math.PI * 2) * r, cy + Math.sin(i / n * Math.PI * 2) * r, z]);
+const tramos = pts => pts.slice(1).map((p, i) => [pts[i], p]);
+const MOD = { x: -.14, y: .5, l: .3 };                  // módulo de cámara (en la espalda, z = −GR/2)
+function modelo() {
+  const carcasa = [], cuerpo = [], camara = [], bateria = [], micro = [];
+  // frente: contorno + pantalla; espalda: contorno (es la carcasa que se desliza); costados: nervios longitudinales
+  cuerpo.push(...tramos(contorno(GR / 2)), ...tramos(contorno(GR / 2 + .001, .05)));
+  carcasa.push(...tramos(contorno(-GR / 2)));
+  const f = contorno(GR / 2), b = contorno(-GR / 2); for (let i = 0; i < f.length - 1; i += 3) carcasa.push([f[i], b[i]]);
+  for (let k = 1; k <= 7; k++) { const y = -AL / 2 + AL * k / 8; carcasa.push([[-AN / 2, y, GR / 2], [-AN / 2, y, -GR / 2]], [[AN / 2, y, GR / 2], [AN / 2, y, -GR / 2]]); }
+  carcasa.push([[AN / 2, .34, .03], [AN / 2 + .015, .34, .03]], [[AN / 2 + .015, .34, .03], [AN / 2 + .015, .14, .03]], [[AN / 2 + .015, .14, .03], [AN / 2, .14, .03]]);   // botón
+  // módulo de cámara: base redondeada y tres lentes (cada lente: dos aros y un tubo corto)
+  const zb = -GR / 2, m = MOD;
+  const base = []; for (const [cx, cy, a0] of [[m.x + m.l / 2 - .05, m.y + m.l / 2 - .05, 0], [m.x - m.l / 2 + .05, m.y + m.l / 2 - .05, Math.PI / 2], [m.x - m.l / 2 + .05, m.y - m.l / 2 + .05, Math.PI], [m.x + m.l / 2 - .05, m.y - m.l / 2 + .05, Math.PI * 1.5]])
+    for (let i = 0; i <= 6; i++) { const a = a0 + i / 6 * Math.PI / 2; base.push([cx + Math.cos(a) * .05, cy + Math.sin(a) * .05, zb - .02]); }
+  base.push(base[0]); camara.push(...tramos(base));
+  for (const [lx, ly] of [[m.x - .065, m.y + .065], [m.x - .065, m.y - .065], [m.x + .07, m.y]]) {
+    const a1 = anillo(lx, ly, zb - .02, .048), a2 = anillo(lx, ly, zb - .045, .048), a3 = anillo(lx, ly, zb - .045, .024);
+    camara.push(...tramos(a1), ...tramos(a2), ...tramos(a3)); for (let i = 0; i < 20; i += 5) camara.push([a1[i], a2[i]]);
+  }
+  // batería (adentro: solo se ve cuando la carcasa se abre)
+  const bw = .27, bh = .42, bz = [-.012, -.035];
+  for (const z of bz) bateria.push(...tramos([[-bw, -bh - .1, z], [bw, -bh - .1, z], [bw, bh - .1, z], [-bw, bh - .1, z], [-bw, -bh - .1, z]]));
+  for (const [x, y] of [[-bw, -bh - .1], [bw, -bh - .1], [bw, bh - .1], [-bw, bh - .1]]) bateria.push([[x, y, bz[0]], [x, y, bz[1]]]);
+  for (let k = 1; k < 4; k++) bateria.push([[-bw, -bh - .1 + 2 * bh * k / 4, bz[1]], [bw, -bh - .1 + 2 * bh * k / 4, bz[1]]]);
+  // micrófono: rejilla de agujeros en el borde de abajo
+  for (let k = 0; k < 6; k++) { const x = -.16 + k * .025; micro.push([[x, -AL / 2, .012], [x, -AL / 2, -.012]]); }
+  for (let k = 0; k < 6; k++) { const x = .06 + k * .025; micro.push([[x, -AL / 2, .012], [x, -AL / 2, -.012]]); }
+  return { carcasa, cuerpo, camara, bateria, micro };
+}
+const M = modelo();
+const CENTRO_PIEZA = [[MOD.x, MOD.y, -GR / 2 - .03], [0, -.1, -.02], [-.05, -AL / 2, 0]];
+const GRUPO_PIEZA = ['camara', 'bateria', 'micro'];
+
+// ---------- cámara en órbita (guiñada, inclinación, distancia, campo angosto) ----------
+const T_LOCK = [1.25, 3.35, 5.45], DUR_PIEZA = 2.1, T_SOLIDO = 7.3, T_TIT = 7.55;
+function orbita(t) {
+  const yaw = Math.PI + .75 - t * .09, pitch = .3 - .06 * ease(prog(t, 0, 3)), dist = 4.6 - .5 * ease(prog(t, 0, 1.2));
+  // se acerca un poco a cada pieza (empuje y deriva 3/4) y vuelve al general al final
+  let foco = [0, 0, 0], d = dist;
+  T_LOCK.forEach((tl, i) => { const k = ease(prog(t, tl - .35, tl + .25)) * (1 - ease(prog(t, tl + DUR_PIEZA - .5, tl + DUR_PIEZA - .1)));
+    foco = foco.map((v, j) => lerp(v, CENTRO_PIEZA[i][j] * .55, k)); d -= .55 * k; });
+  return { yaw, pitch, d, foco, cx: 730, cy: 900, f: 1750 };
+}
+function P3(c, p) {
+  let [x, y, z] = [p[0] - c.foco[0], p[1] - c.foco[1], p[2] - c.foco[2]];
+  const cy = Math.cos(c.yaw), sy = Math.sin(c.yaw), cp = Math.cos(c.pitch), sp = Math.sin(c.pitch);
+  [x, z] = [x * cy + z * sy, -x * sy + z * cy]; [y, z] = [y * cp - z * sp, y * sp + z * cp];
+  const zc = z + c.d; return [c.cx + c.f * x / zc, c.cy - c.f * y / zc, zc];
+}
+
+// ---------- escenario, plataforma y muebles del HUD (se pinta una vez lo fijo) ----------
+const ESC = (() => { const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = COLORES.fondo; g.fillRect(0, 0, W, H);
+  let r = g.createRadialGradient(700, 900, 0, 700, 900, 900); r.addColorStop(0, TONO(.10)); r.addColorStop(1, TONO(0)); g.fillStyle = r; g.fillRect(0, 0, W, H);
+  r = g.createRadialGradient(W / 2, H / 2, H * .25, W / 2, H / 2, H * .72); r.addColorStop(0, 'rgba(0,0,0,0)'); r.addColorStop(1, 'rgba(0,0,0,.75)'); g.fillStyle = r; g.fillRect(0, 0, W, H);
+  return c; })();
+function retícula(t) {                                     // fondo de puntos con paralaje lento
+  ctx.fillStyle = TONO(.10); const off = (t * 6) % 60;
+  for (let y = -60; y < H + 60; y += 60) for (let x = -60; x < W + 60; x += 60) ctx.fillRect(x + off, y, 2, 2);
+}
+function plataforma(c, t) {
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  const y = -AL / 2 - .2, gira = t * .25;
+  [[.95, .35, []], [.78, .55, [10, 10]], [.6, .2, []], [1.15, .12, []]].forEach(([r, a, dash]) => {
+    ctx.setLineDash(dash); ctx.strokeStyle = TONO(a); ctx.lineWidth = 2; ctx.beginPath();
+    for (let i = 0; i <= 72; i++) { const ang = i / 72 * Math.PI * 2 + gira; const q = P3(c, [Math.cos(ang) * r, y, Math.sin(ang) * r]); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); } ctx.stroke(); });
+  ctx.setLineDash([]); ctx.strokeStyle = TONO(.3);
+  for (let i = 0; i < 48; i++) { const ang = i / 48 * Math.PI * 2 + gira, a = P3(c, [Math.cos(ang) * .95, y, Math.sin(ang) * .95]), b = P3(c, [Math.cos(ang) * 1.02, y, Math.sin(ang) * 1.02]);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
+  ctx.restore();
+}
+// ---------- alambre: niebla de profundidad, escaneo desde abajo, brillo aditivo ----------
+function alambre(c, segs, o = {}) {
+  const { scanY = 9, caliente = false, corre = [0, 0, 0], alfa = 1 } = o;
+  const lineas = [];
+  for (const [a0, b0] of segs) {
+    const a = a0.map((v, i) => v + corre[i]), b = b0.map((v, i) => v + corre[i]);
+    const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) / .06));
+    for (let k = 0; k < n; k++) {
+      const p = a.map((v, i) => lerp(v, b[i], k / n)), q = a.map((v, i) => lerp(v, b[i], (k + 1) / n));
+      if (Math.min(p[1], q[1]) > scanY) continue;
+      const A = P3(c, p), B = P3(c, q), fog = clamp(1.25 - (A[2] - (c.d - .5)) / 1.4, .25, 1);
+      const frente = clamp(1 - Math.abs(scanY - p[1]) / .08);
+      lineas.push([A, B, fog, frente]);
+    }
+  }
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+  for (const [ancho, a, col] of [[9, .05, TONO], [4, .12, TONO], [1.6, .85, null]])
+    for (const [A, B, fog, fr] of lineas) {
+      ctx.strokeStyle = col ? col(a * fog * alfa) : (caliente || fr > 0 ? CALIENTE(lerp(fog, 1, fr) * alfa) : TONO(a * fog * alfa)); ctx.lineWidth = ancho;
+      ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke(); }
+  ctx.restore();
+}
+function planoEscaneo(c, y, a) {                           // el plano de escaneo se ve como una elipse caliente
+  if (a <= 0) return; ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = CALIENTE(.7 * a); ctx.lineWidth = 3; ctx.beginPath();
+  for (let i = 0; i <= 60; i++) { const ang = i / 60 * Math.PI * 2, q = P3(c, [Math.cos(ang) * .62, y, Math.sin(ang) * .62]); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }
+  ctx.stroke(); ctx.fillStyle = TONO(.06 * a); ctx.fill(); ctx.restore();
+}
+// ---------- HUD: placa oscura, recuadro que se fija, guía, cifra que rueda ----------
+function placa(x, y, w, h) {
+  ctx.save(); ctx.fillStyle = 'rgba(2,10,14,.78)'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = TONO(.35); ctx.lineWidth = 1.5; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+  ctx.strokeStyle = TONO(.9); ctx.lineWidth = 3; const k = 16;
+  for (const [cx, cy, sx, sy] of [[x, y, 1, 1], [x + w, y, -1, 1], [x, y + h, 1, -1], [x + w, y + h, -1, -1]]) { ctx.beginPath(); ctx.moveTo(cx + sx * k, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy * k); ctx.stroke(); }
+  ctx.restore();
+}
+function recuadro(c, i, t) {
+  const tl = T_LOCK[i], a = t - (tl - .25); if (a < 0 || t > tl + DUR_PIEZA - .15) return null;
+  const pts = M[GRUPO_PIEZA[i]].flat().map(p => P3(c, i === 1 ? [p[0], p[1], p[2]] : p));
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const w = Math.max(70, Math.max(...xs) - Math.min(...xs)) + 34, h = Math.max(70, Math.max(...ys) - Math.min(...ys)) + 34;
+  const k = easeOut(prog(a, 0, .22)), esc = lerp(2.2, 1, k), rot = lerp(Math.PI / 4, 0, k), destello = a > .22 && a < .22 + 3 / FPS;
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot); ctx.strokeStyle = destello ? '#ffffff' : TONO(lerp(.3, .95, k)); ctx.lineWidth = destello ? 4 : 2.5;
+  const ww = w * esc / 2, hh = h * esc / 2, q = Math.min(ww, hh) * .4;
+  for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { ctx.beginPath(); ctx.moveTo(sx * ww, sy * (hh - q)); ctx.lineTo(sx * ww, sy * hh); ctx.lineTo(sx * (ww - q), sy * hh); ctx.stroke(); }
+  ctx.restore();
+  if (k >= 1) { ctx.save(); ctx.fillStyle = 'rgba(2,10,14,.85)'; ctx.fillRect(cx + w / 2 - 6, cy - h / 2 - 46, 60, 40); ctx.fillStyle = TONO(1); ctx.font = `500 26px ${MONO}`; ctx.fillText('0' + (i + 1), cx + w / 2 + 6, cy - h / 2 - 17); ctx.restore(); }
+  return { cx, cy, w, h };
+}
+const RIEL = i => ({ x: 60, y: 1040 + i * 138, w: 470, h: 120 });
+function rueda(txt, t0, t) {                                // los caracteres se fijan de derecha a izquierda
+  const n = txt.length, f = Math.floor(t * FPS);
+  return [...txt].map((ch, i) => (t - t0) > (n - 1 - i) * .1 + .25 ? ch : (/\s/.test(ch) ? ch : '0123456789#%/<>'[Math.floor(hash2(i * 13 + f, 9) * 15)])).join('');
+}
+function tarjetaPieza(i, t, box) {
+  const tl = T_LOCK[i], a = t - tl; if (a < 0) return;
+  const r = RIEL(i), p = PIEZAS[i];
+  if (box && a < DUR_PIEZA - .2) {                          // guía: aro en la pieza → diagonal → horizontal hasta la placa
+    const k = easeOut(prog(a, 0, .5)), ax = box.cx - box.w / 2 + 8, ay = box.cy, mx = r.x + r.w + 70, my = r.y + r.h / 2;
+    ctx.save(); ctx.strokeStyle = TONO(.9); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ax, ay, 9, 0, Math.PI * 2); ctx.stroke();
+    const p1 = [lerp(ax, mx, clamp(k * 2)), lerp(ay, my, clamp(k * 2))]; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(...p1);
+    if (k > .5) ctx.lineTo(lerp(mx, r.x + r.w, (k - .5) * 2), my); ctx.stroke(); ctx.restore();
+  }
+  if (a < .45) return;
+  placa(r.x, r.y, r.w, r.h);
+  ctx.save(); ctx.fillStyle = TONO(.8); ctx.font = `500 22px ${MONO}`; ctx.fillText('0' + (i + 1), r.x + 22, r.y + 42);
+  ctx.fillStyle = TONO(1); ctx.font = `600 26px ${FINA}`; ctx.letterSpacing = '3px'; ctx.fillText(p.nombre.toUpperCase(), r.x + 70, r.y + 42); ctx.letterSpacing = '0px';
+  ctx.fillStyle = TONO(.75); ctx.font = `400 24px ${FINA}`; ctx.fillText(p.detalle, r.x + 70, r.y + 88);
+  const fijo = a > .45 + p.valor.length * .1 + .3, txt = rueda(p.valor, tl + .45, t);
+  ctx.font = `200 64px ${FINA}`; ctx.textAlign = 'right'; const uw = medir(p.unidad, `400 24px ${FINA}`) + 10;
+  ctx.fillStyle = fijo ? COLORES.acento : TONO(.9); ctx.fillText(txt, r.x + r.w - 20 - uw, r.y + 86);
+  ctx.font = `400 24px ${FINA}`; ctx.fillStyle = fijo ? COLORES.acento : TONO(.7); ctx.fillText(p.unidad, r.x + r.w - 20, r.y + 86); ctx.restore();
+}
+function muebles(t) {                                       // corchetes, reglas que se corren más rápido, rótulos
+  ctx.save(); ctx.strokeStyle = TONO(.5); ctx.lineWidth = 2;
+  for (const [x, y, sx, sy] of [[40, 120, 1, 1], [W - 40, 120, -1, 1], [40, 1500, 1, -1], [W - 40, 1500, -1, -1]]) { ctx.beginPath(); ctx.moveTo(x + sx * 60, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * 60); ctx.stroke(); }
+  ctx.fillStyle = TONO(.85); ctx.font = `500 24px ${MONO}`; ctx.letterSpacing = '3px'; ctx.fillText(CODIGO, 70, 170);
+  ctx.textAlign = 'right'; const estado = t < T_LOCK[0] ? 'ESCANEANDO' : t < T_SOLIDO ? `PIEZA 0${Math.min(3, 1 + T_LOCK.filter(x => t >= x - .25).length - 1 + 1)}/03` : 'LISTO'; ctx.fillText(estado, W - 70, 170);
+  ctx.fillStyle = TONO(.45); ctx.fillText(`ROT ${(((Math.PI + .75 - t * .09) * 57.3) % 360).toFixed(1)}°`, W - 70, 1450); ctx.textAlign = 'left'; ctx.fillText(`HOLO.${String(1000 + Math.floor(t * 30)).slice(-4)}`, 70, 1450);
+  ctx.letterSpacing = '0px';
+  const off = (t * 40) % 40; ctx.strokeStyle = TONO(.25); ctx.lineWidth = 1.5;
+  for (let y = 300 + off; y < 1400; y += 40) { ctx.beginPath(); ctx.moveTo(W - 50, y); ctx.lineTo(W - 50 - ((Math.round((y - off) / 40)) % 5 ? 12 : 26), y); ctx.stroke(); }
+  ctx.restore();
+}
+function solido(c, a) {                                     // una sola vez: caras translúcidas con entrelazado que corre (las líneas quedan arriba)
+  if (a <= 0) return;
+  const cara = contorno(GR / 2).map(p => P3(c, p)), esp = contorno(-GR / 2).map(p => P3(c, p));
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (const q of [esp, cara]) { ctx.beginPath(); q.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath();
+    const xs = q.map(p => p[0]), g = ctx.createLinearGradient(Math.min(...xs), 0, Math.max(...xs), 0);
+    g.addColorStop(0, TONO(.22 * a)); g.addColorStop(.5, TONO(.05 * a)); g.addColorStop(1, TONO(.22 * a)); ctx.fillStyle = g; ctx.fill();
+    ctx.save(); ctx.clip(); ctx.fillStyle = TONO(.06 * a); const off = (lastT * 60) % 8; for (let y = 0; y < H; y += 8) ctx.fillRect(0, y + off, W, 3); ctx.restore(); }
+  ctx.restore();
+}
+const TIT = fraseDiseno(TITULO.toUpperCase(), PALABRA_CLAVE.toUpperCase(), { familia: FINA, familiaClave: FINA, peso: 400, pesoClave: 200, tam: 46, factor: 2.6,
+  ancho: W - 180, x: 90, y: 262, maxAlto: 300, maxRenglones: 3, alinear: 'izq', inter: 1 });
+let lastT = 0;
+
+arrancar(frame => {
+  const t = frame / FPS; lastT = t; BOIL = Math.floor(frame / 4);
+  pantalla(); ctx.globalAlpha = 1; ctx.drawImage(ESC, 0, 0); retícula(t);
+  const c = orbita(t);
+  plataforma(c, t);
+  const scanY = lerp(-AL / 2 - .05, AL / 2 + .1, easeOut(prog(t, -.35, 1.15)));
+  const abre = ease(prog(t, T_LOCK[1] + .2, T_LOCK[1] + .9)) * (1 - aterriza(prog(t, T_LOCK[1] + DUR_PIEZA - .45, T_LOCK[1] + DUR_PIEZA - .2)));
+  const corre = [0, 0, -.32 * abre];                          // la carcasa de atrás (y la cámara) se desliza por su eje
+  solido(c, ease(prog(t, T_SOLIDO, T_SOLIDO + .6)));
+  alambre(c, M.cuerpo, { scanY });
+  alambre(c, M.carcasa, { scanY, corre, alfa: 1 - .35 * abre });
+  alambre(c, M.camara, { scanY, corre, caliente: t > T_LOCK[0] && t < T_LOCK[0] + DUR_PIEZA - .2 && Math.floor(t * FPS) % 30 < 2 });
+  if (abre > .02 || t > T_SOLIDO) alambre(c, M.bateria, { scanY, caliente: abre > .5, alfa: Math.max(abre, t > T_SOLIDO ? .6 : 0) });
+  alambre(c, M.micro, { scanY, caliente: t > T_LOCK[2] && t < T_LOCK[2] + DUR_PIEZA - .2 });
+  if (t > T_SOLIDO && t < T_SOLIDO + .6) { const yo = lerp(-AL / 2, AL / 2, prog(t, T_SOLIDO, T_SOLIDO + .6)); planoEscaneo(c, yo, 1); }   // onda de luz que sube
+  planoEscaneo(c, scanY, 1 - prog(t, 1.05, 1.25));
+  muebles(t);
+  for (let i = 0; i < 3; i++) { const b = recuadro(c, i, t); tarjetaPieza(i, t, b); }
+  if (t >= T_TIT) { placa(70, 230, W - 140, TIT.alto + 70); pintarFrase(TIT, t, T_TIT, .14, { col: TONO(1), colClave: '#E9FBFF' }); }
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: .1, tipo: 'desliz' }, ...T_LOCK.map(t => ({ t, tipo: 'golpe' })),
+  { t: T_LOCK[1] + .2, tipo: 'swish' }, ...PIEZAS.map((p, i) => ({ t: +(T_LOCK[i] + .45 + p.valor.length * .1 + .3).toFixed(2), tipo: 'pop' })),
+  { t: T_SOLIDO, tipo: 'swish' }, { t: T_TIT, tipo: 'golpe' },
+];
+</script>
+</body>
+</html>

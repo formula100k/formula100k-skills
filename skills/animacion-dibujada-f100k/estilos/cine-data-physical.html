@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Datos en piezas</title>
+<style>
+  html,body{margin:0;background:#C4BEB4;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Datos en piezas» · ingeniería inversa de lemo-opuscar/styles/data-physical (MIT, © 2026 LemoLab) · qué se tomó: una unidad = una pieza de material (placas de aluminio, cada décima de latón como regla), pilas a escala exacta sobre una base de nogal con marcas incrustadas, luz de estudio cálida y baja con sombras largas, la cascada y el «feed» pieza por pieza con el contador atado a las piezas que aterrizan, y el último objeto de latón con el total grabado
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Cada pieza es una venta tuya';     // arriba (máx. ~50 letras)
+const PALABRA_CLAVE = 'una venta';                 // enorme, en su propio renglón
+const UNIDAD = '1 pieza = 1 venta';                // la regla, dicha una vez
+const SERIE = [                                    // SOLO cifras del guion: de 3 a 6 columnas (valores enteros, hasta 40)
+  { etiqueta: 'sem 1', valor: 4 },
+  { etiqueta: 'sem 2', valor: 7 },
+  { etiqueta: 'sem 3', valor: 11 },
+  { etiqueta: 'sem 4', valor: 16 },
+];
+const FUENTE = 'datos: tu registro de ventas';     // la línea de fuente (siempre en cuadro)
+const TOTAL_TXT = 'ventas del mes';                // lo que dice el último objeto debajo del total (el total se suma solo)
+const COLORES = {
+  barrido: '#C4BEB4',   // el fondo de estudio
+  nogal: [92, 62, 42],
+  aluminio: [200, 204, 209],
+  laton: [210, 176, 122],
+  tinta: '#1C1D20',
+  acento: '#D4521C',    // solo el veredicto
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+const S = SERIE.slice(0, 6), N = S.length, PASO = 15, LADO = 9, GROSOR = 1.7, BASE = { x: -6, y: -6, w: N * PASO + 12, d: 32, h: 4 };
+const TOTAL = S.reduce((a, s) => a + s.valor, 0);
+const VEREDICTO = (() => { const a = S[0].valor, b = S[N - 1].valor; if (!a) return ''; const r = b / a;
+  return `${S[N - 1].etiqueta}: ×${(Math.round(r * 10) / 10).toString().replace('.', ',')} de ${S[0].etiqueta}`; })();   // calculado de la serie, no inventado
+// ---------- cuándo aterriza cada pieza (el contador se ata a esto) ----------
+const T_PILA = i => i === 0 ? .05 : 1.5 + (i - 1) * .72, PPS = i => i === 0 ? 9 : Math.max(12, S[i].valor / .6);
+const llegada = (i, k) => T_PILA(i) + k / PPS(i);                       // la pieza k de la pila i
+const posadas = (i, t) => { if (t < T_PILA(i)) return 0; return Math.min(S[i].valor, Math.floor((t - T_PILA(i)) * PPS(i) + 1e-6)); };
+const T_FIN_PILAS = llegada(N - 1, S[N - 1].valor), T_OBJ = T_FIN_PILAS + .4, T_VER = T_OBJ + .9;
+// variación por pieza: unos milímetros de corrimiento y ±7 % de valor (así se lee apilado, no una barra)
+const PZ = S.map((s, i) => Array.from({ length: s.valor }, (_, k) => ({ dx: (hash2(i, k) - .5) * .7, dy: (hash2(k, i + 9) - .5) * .7, v: .93 + hash2(i * 7, k) * .14, laton: (k + 1) % 10 === 0 })));
+
+// ---------- la base de nogal con su incrustación (se pinta UNA vez) ----------
+const TAPA_BASE = (() => { const esc = 12, c = lienzo(BASE.w * esc, BASE.d * esc), p = c.getContext('2d'), r = rng(31);
+  p.fillStyle = rgb(COLORES.nogal); p.fillRect(0, 0, c.width, c.height);
+  for (let i = 0; i < 260; i++) { const y = r() * c.height; p.strokeStyle = `rgba(${r() < .5 ? '30,18,10' : '150,110,80'},${.08 + r() * .12})`; p.lineWidth = 1 + r() * 3;
+    p.beginPath(); p.moveTo(0, y); for (let x = 0; x <= c.width; x += 40) p.lineTo(x, y + Math.sin(x * .01 + i) * 4 + (vnoise(x * .01, i) - .5) * 10); p.stroke(); }
+  p.strokeStyle = 'rgba(235,220,190,.55)'; p.lineWidth = 3;                          // la regla incrustada al frente
+  const yR = c.height - 40; p.beginPath(); p.moveTo(30, yR); p.lineTo(c.width - 30, yR); p.stroke();
+  for (let x = 30, k = 0; x <= c.width - 30; x += 12, k++) { p.lineWidth = k % 10 ? 1.5 : 3; p.beginPath(); p.moveTo(x, yR); p.lineTo(x, yR - (k % 10 ? 10 : 20)); p.stroke(); }
+  p.fillStyle = 'rgba(240,226,198,.85)'; p.font = `600 ${Math.round(esc * 2.6)}px ${F_MONO}`; p.textAlign = 'center';
+  S.forEach((s, i) => p.fillText(s.etiqueta, (-BASE.x + i * PASO + LADO / 2) * esc, (8 - BASE.y + LADO + 4.6) * esc));
+  return c; })();
+const TAPA_OBJ = (() => { const c = lienzo(400, 400), p = c.getContext('2d');           // el total grabado en el latón
+  p.fillStyle = rgb(COLORES.laton, 1.05); p.beginPath(); p.arc(200, 200, 198, 0, 7); p.fill();
+  p.strokeStyle = 'rgba(90,60,20,.5)'; p.lineWidth = 4; p.beginPath(); p.arc(200, 200, 170, 0, 7); p.stroke();
+  for (let i = 0; i < 60; i++) { const a = i / 60 * Math.PI * 2; p.lineWidth = 2; p.beginPath(); p.moveTo(200 + Math.cos(a) * 172, 200 + Math.sin(a) * 172); p.lineTo(200 + Math.cos(a) * (i % 5 ? 182 : 190), 200 + Math.sin(a) * (i % 5 ? 182 : 190)); p.stroke(); }
+  p.fillStyle = 'rgba(60,38,10,.85)'; p.textAlign = 'center'; p.font = `200 150px ${F_SANS}`; p.fillText(String(TOTAL), 200, 245);
+  p.font = `600 30px ${F_SANS}`; p.fillText(TOTAL_TXT, 200, 300); return c; })();
+const FONDO = (() => { const c = lienzo(W, H), p = c.getContext('2d'), g = p.createRadialGradient(W * .45, H * .5, 100, W * .5, H * .55, H * .8);
+  g.addColorStop(0, '#d6d0c6'); g.addColorStop(1, '#a9a298'); p.fillStyle = g; p.fillRect(0, 0, W, H); const r = rng(4);
+  for (let i = 0; i < 60000; i++) { p.fillStyle = `rgba(${r() < .5 ? '0,0,0' : '255,255,255'},.03)`; p.fillRect(r() * W, r() * H, 2, 2); } return c; })();
+
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 262, fam: F_SANS, peso: 300, famClave: F_SANS, pesoClave: 600, chica: 66, grande: 190, col: COLORES.tinta });
+const LUZ = [-.75, .35, .55];                               // llave cálida baja desde la izquierda
+
+function camara(t) {                                       // macro en la primera pila → recorrido lateral → retroceso a la instalación
+  const fin = [BASE.x + BASE.w / 2, BASE.y + BASE.d / 2 + 2, 6], k1 = ease(prog(t, 1.1, 2.6)), k2 = ease(prog(t, 2.6, T_OBJ + .6));
+  const a = [LADO / 2, 8 + LADO / 2, 3], b = [lerp(a[0], fin[0], .55), fin[1], 8];
+  const obj = k2 > 0 ? b.map((v, j) => lerp(v, fin[j], k2)) : a.map((v, j) => lerp(v, b[j], k1));
+  const esc = k2 > 0 ? lerp(14, 12.4, k2) : zoomLog(28, 14, k1);
+  return vistaA(obj, [W / 2, k2 > 0 ? lerp(1060, 1080, k2) : lerp(1000, 1060, k1)], { esc: esc * (1 + .02 * prog(t, T_OBJ + .6, DUR)), yaw: lerp(.42, .62, ease(prog(t, 0, DUR))), pitch: lerp(.42, .62, ease(prog(t, 0, T_OBJ))) });
+}
+function pieza(p, x, y, z, info, k) {                       // una placa que baja unos centímetros, frena seco y desenrosca su giro
+  const caida = (1 - aterriza(k)) * 7, col = (info.laton ? COLORES.laton : COLORES.aluminio).map(v => v * info.v);
+  caja(p, x + info.dx + (1 - aterriza(k)) * 1.2, y + info.dy, z + caida, LADO, LADO, GROSOR - .12, col, { luz: LUZ, ambiente: .55, borde: 'rgba(40,40,44,.18)', tapaCol: col.map(v => Math.min(255, v * 1.04)) });
+}
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.drawImage(FONDO, 0, 0);
+  const p = camara(t);
+  // sombra larga de la base sobre el barrido
+  sombraSuelo(p, [[BASE.x + 3, BASE.y - 2, -BASE.h], [BASE.x + BASE.w + 14, BASE.y - 6, -BASE.h], [BASE.x + BASE.w + 18, BASE.y + BASE.d + 4, -BASE.h], [BASE.x + 6, BASE.y + BASE.d + 6, -BASE.h]], { alpha: .3, borroso: 28 });
+  caja(p, BASE.x, BASE.y, -BASE.h, BASE.w, BASE.d, BASE.h, COLORES.nogal, { luz: LUZ, ambiente: .5 });
+  tapa(p, BASE.x, BASE.y, 0, BASE.w, BASE.d, TAPA_BASE);
+  // sombras de las pilas sobre la base (luz baja: largas, hacia la derecha)
+  for (let i = 0; i < N; i++) { const h = posadas(i, t) * GROSOR; if (!h) continue; const x = i * PASO, y = 8, l = h * .9;
+    sombraSuelo(p, [[x, y, .02], [x + LADO, y, .02], [x + LADO + l, y + LADO - l * .2, .02], [x + l, y + LADO + 2 - l * .2, .02]], { alpha: .32, borroso: 10 }); }
+  // las pilas, de lejos a cerca (por profundidad de su centro), cada una de abajo hacia arriba
+  const orden = S.map((_, i) => i).sort((a, b) => p(a * PASO + LADO / 2, 8 + LADO / 2, 0)[2] - p(b * PASO + LADO / 2, 8 + LADO / 2, 0)[2]);
+  for (const i of orden) { const n = posadas(i, t);
+    for (let k = 0; k < Math.min(S[i].valor, n + 1); k++) { const kk = prog(t, llegada(i, k) - .12, llegada(i, k) + .1); if (kk <= 0) continue; pieza(p, i * PASO, 8, k * GROSOR, PZ[i][k], kk); } }
+  // el último objeto: un disco de latón con el total grabado
+  if (t > T_OBJ - .3) { const cx = BASE.x + BASE.w - 8.5, cy = 8 + LADO / 2, R = 5.2, z = caer(t - (T_OBJ - .3), { desde: -40, piso: 0, gravedad: 900, rebotes: 1, elastico: .18 });
+    const elev = Math.max(0, -z);
+    const top = [], bot = []; for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2; top.push(p(cx + Math.cos(a) * R, cy + Math.sin(a) * R, 1.6 + elev)); bot.push(p(cx + Math.cos(a) * R, cy + Math.sin(a) * R, elev)); }
+    sombraSuelo(p, Array.from({ length: 24 }, (_, i) => { const a = i / 24 * Math.PI * 2; return [cx + 2 + Math.cos(a) * R * (1 + elev * .02), cy + Math.sin(a) * R, .02]; }), { alpha: .35 * (1 - clamp(elev / 40)), borroso: 8 + elev * .4 });
+    ctx.fillStyle = rgb(COLORES.laton, .72); ctx.beginPath(); bot.forEach((v, i) => i ? ctx.lineTo(v[0], v[1]) : ctx.moveTo(v[0], v[1])); top.slice().reverse().forEach(v => ctx.lineTo(v[0], v[1])); ctx.closePath(); ctx.fill();
+    ctx.save(); ctx.beginPath(); top.forEach((v, i) => i ? ctx.lineTo(v[0], v[1]) : ctx.moveTo(v[0], v[1])); ctx.closePath(); ctx.clip(); tapa(p, cx - R, cy - R, 1.6 + elev, 2 * R, 2 * R, TAPA_OBJ); ctx.restore(); }
+  // lecturas sobre cada pila (el contador rueda con las piezas posadas, no con el reloj)
+  for (let i = 0; i < N; i++) { const n = posadas(i, t); if (!n || t < 1.2 && i === 0 && t < .5) continue;
+    const a = p(i * PASO + LADO / 2, 8 + LADO / 2, n * GROSOR + 1.4); const f = `300 ${Math.round(clamp(p.esc * 4.4, 44, 120))}px ${F_SANS}`;
+    escribir(String(n), a[0], a[1] - 8, f, COLORES.tinta, { align: 'center' }); }
+  // la regla de la unidad (cerca de la primera pila, en el primer plano)
+  if (t > .5 && t < 2.9) { const a = p(LADO, 8 + LADO, GROSOR * 2.5), al = clamp(prog(t, .5, .7)) * (1 - prog(t, 2.6, 2.9));
+    ctx.save(); ctx.globalAlpha = al; punto(a[0], a[1], { col: COLORES.tinta, r: 6 }); const lw = medir(UNIDAD, `500 40px ${F_SANS}`) + 36, lx = clamp(a[0] - lw / 2, SEGURA.left, SEGURA.right - lw), ly = a[1] + 150;
+    pelo([a, [a[0], ly]], { w: 2, col: COLORES.tinta, halo: null });
+    placa(lx, ly, lw, 66, { col: 'rgba(244,240,232,.86)', r: 6 }); escribir(UNIDAD, lx + 18, ly + 46, `500 40px ${F_SANS}`, COLORES.tinta); ctx.restore(); }
+  // el veredicto (acento), recién cuando las pilas llevan quietas un rato
+  if (t > T_VER && VEREDICTO) { const y = FR.y1 + 70, f = `600 46px ${F_SANS}`, w = medir(VEREDICTO, f);
+    escribir(VEREDICTO, SEGURA.left, y, f, COLORES.acento); pelo([[SEGURA.left, y + 18], [SEGURA.left + w * ease(prog(t, T_VER, T_VER + .5)), y + 18]], { w: 3, col: COLORES.acento, halo: null }); }
+  // la línea de fuente, siempre en cuadro
+  escribir(FUENTE + ' · ' + UNIDAD, SEGURA.left, 1452, `400 24px ${F_MONO}`, 'rgba(28,29,32,.62)');
+  vineta(.18, '60,45,30');
+  pintarFrase(FR, t, 1.2, .18);
+});
+window.SONIDOS = [{ t: .05, tipo: 'desliz' }, ...S.slice(1).map((_, i) => ({ t: T_PILA(i + 1), tipo: 'desliz' })), { t: T_OBJ, tipo: 'golpe' }, { t: T_VER, tipo: 'papel' }];
+window.QUIETO = DUR - T_VER - .5;
+</script>
+</body>
+</html>

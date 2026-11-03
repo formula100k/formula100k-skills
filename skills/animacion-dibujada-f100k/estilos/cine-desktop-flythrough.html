@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Escritorio en vuelo</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Escritorio en vuelo» · ingeniería inversa de lemo-opuscar/styles/desktop-flythrough (MIT, © 2026 LemoLab) · qué se tomó: escritorio de madera con un tapete de papel punteado, pantallas impresas como tarjetas de papel con grosor y sombra larga de sol bajo, un personaje pixel hecho de cubitos que pasa de calcomanía a juguete y salta de tarjeta en tarjeta dejando una ruta punteada, una sola toma de cámara que baja, barre entre paradas y al final se aleja sobre todo el escritorio mientras cae la tarjeta del título.
+// Personaje propio; tarjetas genéricas sin marcas.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const PASOS = [                                // las 3 paradas: { etiqueta del paso, lo que dice la tarjeta }
+  { palabra: 'GUION', titulo: 'Tu guion', linea: 'gancho · historia · invitación' },
+  { palabra: 'REEL', titulo: 'Tu reel', linea: 'lo grabas en 1 toma' },
+  { palabra: 'VENTA', titulo: 'Tu venta', linea: '¡lo quiero!' },
+];
+const KICKER = '3 PASOS PARA';                 // tarjeta final, línea chica (monoespaciada)
+const TITULO = 'tu primera venta';             // tarjeta final, línea grande (≤ 20 letras)
+const FOTOS = [];                              // opcional: ['fotos/mi-reel.jpg', 'fotos/mi-chat.jpg'] capturas REALES; vacío = pantallas genéricas
+const COLORES = {
+  tapete: '#e5e9ed', punto: '#c8cfd7', tarjeta: '#fdfdfc', tinta: '#20252b', mudo: '#7f8790',
+  acento: '#e8890c',    // lo que importa ahora: la ruta, el paso actual, el botón de enviar
+  personaje: '#2f8fb0', personaje2: '#f4e3b5', verde: '#3c9c6e', madera: '#c99a6b',
+};
+const DUR = 8.5;                               // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-3d.js"></script>
+<script>
+const MONO = 'Menlo, "Courier New", monospace', SANS = '"Avenir Next", "Helvetica Neue", sans-serif', C = COLORES;
+const L = V3.norm([-.62, .42, -.66]);          // sol bajo desde atrás a la izquierda: sombras largas
+const GROSOR = .025;
+if (FOTOS.length) cargarFotos(FOTOS);
+let IMGS = null; if (window.LISTO) window.LISTO.then(v => IMGS = v);
+// ---------- tarjetas (posición en el tapete, tamaño, textura impresa) ----------
+const TARJ = [
+  { x: -.62, z: -1.95, w: 1.25, d: .92, tipo: 'doc' },
+  { x: .68, z: -.45, w: .74, d: 1.42, tipo: 'reel' },
+  { x: -.58, z: .95, w: .74, d: 1.42, tipo: 'chat' },
+];
+const FINAL = { x: .5, z: 2.1, w: 1.75, d: .82 };
+const PXU = 800;
+function papel(w, h) { const c = lienzo(Math.round(w * PXU), Math.round(h * PXU)), x = c.getContext('2d'); return [c, x]; }
+function rr(x, a, b, w, h, r) { x.beginPath(); x.roundRect(a, b, w, h, r); }
+function cabeza(x, en, es, w) { x.fillStyle = C.acento; x.fillRect(40, 44, 22, 22); x.font = `700 28px ${MONO}`; x.fillStyle = C.mudo; x.fillText(en.split('').join(' '), 76, 66);
+  x.font = `800 46px ${SANS}`; x.fillStyle = C.tinta; x.fillText(es, 40, 124); x.fillStyle = '#e0e4e8'; x.fillRect(40, 146, w - 80, 3); }
+function texDoc(p, i) { const [c, x] = papel(TARJ[i].w, TARJ[i].d); x.fillStyle = C.tarjeta; rr(x, 0, 0, c.width, c.height, 40); x.fill();
+  cabeza(x, 'PASO ' + (i + 1), p.titulo, c.width); x.font = `600 32px ${SANS}`; x.fillStyle = C.mudo; x.fillText(p.linea, 40, 200);
+  for (let k = 0; k < 6; k++) { x.fillStyle = k === 1 ? C.acento : '#d5dae0'; rr(x, 40, 240 + k * 64, (k === 1 ? .7 : .45 + hash2(k, 3) * .45) * (c.width - 80), 22, 11); x.fill(); }
+  return c; }
+function telefono(i, pantalla) { const t = TARJ[i], [c, x] = papel(t.w, t.d); x.fillStyle = '#1c2027'; rr(x, 0, 0, c.width, c.height, 70); x.fill();
+  x.fillStyle = C.tarjeta; rr(x, 22, 22, c.width - 44, c.height - 44, 54); x.fill(); x.save(); rr(x, 22, 22, c.width - 44, c.height - 44, 54); x.clip(); pantalla(x, c.width, c.height); x.restore();
+  x.fillStyle = '#1c2027'; rr(x, c.width / 2 - 70, 34, 140, 26, 13); x.fill(); return c; }
+function texReel(p, i) { return telefono(i, (x, w, h) => {
+  x.font = `700 24px ${MONO}`; x.fillStyle = C.tinta; x.fillText('9:41', 50, 100); x.font = `800 40px ${SANS}`; x.fillText(p.titulo, 50, 160);
+  const fx = 50, fy = 190, fw = w - 100, fh = h - 420;
+  if (IMGS && IMGS[0]) { x.save(); rr(x, fx, fy, fw, fh, 26); x.clip(); const im = IMGS[0], e = Math.max(fw / im.width, fh / im.height); x.drawImage(im, fx + (fw - im.width * e) / 2, fy + (fh - im.height * e) / 2, im.width * e, im.height * e); x.restore(); }
+  else { const g = x.createLinearGradient(0, fy, 0, fy + fh); g.addColorStop(0, '#f4e3b5'); g.addColorStop(1, '#e8890c'); x.fillStyle = g; rr(x, fx, fy, fw, fh, 26); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.9)'; x.beginPath(); x.moveTo(w / 2 - 40, fy + fh / 2 - 50); x.lineTo(w / 2 + 55, fy + fh / 2); x.lineTo(w / 2 - 40, fy + fh / 2 + 50); x.closePath(); x.fill(); }
+  x.font = `600 30px ${SANS}`; x.fillStyle = C.mudo; x.fillText(p.linea, 50, fy + fh + 60);
+  for (let k = 0; k < 3; k++) { x.fillStyle = '#d5dae0'; rr(x, 50 + k * 150, fy + fh + 100, 120, 70, 14); x.fill(); } }); }
+function texChat(p, i, mostrar) { return telefono(i, (x, w, h) => {
+  x.font = `700 24px ${MONO}`; x.fillStyle = C.tinta; x.fillText('9:41', 50, 100);
+  x.fillStyle = C.personaje; x.beginPath(); x.arc(80, 160, 26, 0, 7); x.fill(); x.font = `800 36px ${SANS}`; x.fillStyle = C.tinta; x.fillText('tu clienta', 120, 172);
+  x.fillStyle = '#e0e4e8'; x.fillRect(40, 205, w - 80, 3);
+  const burb = (y, txt, mia, col) => { x.font = `700 34px ${SANS}`; const tw = x.measureText(txt).width + 50, bx = mia ? w - 50 - tw : 50; x.fillStyle = col; rr(x, bx, y, tw, 66, 33); x.fill(); x.fillStyle = mia ? '#fff' : C.tinta; x.fillText(txt, bx + 25, y + 45); };
+  burb(250, 'vi tu reel', false, '#eceff2'); burb(340, '¿cómo funciona?', false, '#eceff2'); burb(450, 'te explico 👇'.replace(' 👇', ''), true, C.personaje);
+  if (IMGS && IMGS[1]) { x.save(); rr(x, w - 330, 540, 280, 200, 20); x.clip(); x.drawImage(IMGS[1], w - 330, 540, 280, 200); x.restore(); }
+  if (mostrar) burb(IMGS && IMGS[1] ? 770 : 560, p.linea, false, '#d9f0e4');
+  x.fillStyle = '#eceff2'; rr(x, 50, h - 160, w - 210, 74, 37); x.fill(); x.fillStyle = C.acento; x.beginPath(); x.arc(w - 105, h - 123, 37, 0, 7); x.fill(); }); }
+function texFinal() { const [c, x] = papel(FINAL.w, FINAL.d); x.fillStyle = C.tarjeta; rr(x, 0, 0, c.width, c.height, 30); x.fill();
+  x.fillStyle = C.acento; x.fillRect(0, 0, 26, c.height);
+  x.font = `700 46px ${MONO}`; x.fillStyle = C.acento; x.fillText(KICKER.split('').join(' '), 90, 150);
+  const aj = autoajuste(TITULO, SANS, 800, c.width - 160, 2, 170, 70); x.font = aj.font; x.fillStyle = C.tinta; aj.rs.forEach((r, i) => x.fillText(r, 90, 170 + aj.size * (i + 1) * .98));
+  return c; }
+function grano(c) { const x = c.getContext('2d'), r = rng(c.width); x.globalCompositeOperation = 'source-atop'; for (let i = 0; i < c.width * c.height / 60; i++) { x.fillStyle = r() < .5 ? 'rgba(0,0,0,.035)' : 'rgba(255,255,255,.05)'; x.fillRect(r() * c.width, r() * c.height, 2, 2); } return c; }
+let TEX = null;
+function texturas() { TEX = [grano(texDoc(PASOS[0], 0)), grano(texReel(PASOS[1], 1)), grano(texChat(PASOS[2], 2, false))]; TEX.chatSi = grano(texChat(PASOS[2], 2, true)); TEX.final = grano(texFinal()); }
+// ---------- el escritorio y el tapete punteado (UNA vez) ----------
+const MADERA = (() => { const c = lienzo(1024, 1024), p = c.getContext('2d'), r = rng(8), b = rgbDe(C.madera);
+  for (let k = 0; k < 8; k++) { p.fillStyle = rgbTxt(tonoC(b, .94 + r() * .1)); p.fillRect(0, k * 128, 1024, 128); p.fillStyle = 'rgba(90,60,30,.18)'; p.fillRect(0, k * 128, 1024, 2); }
+  for (let i = 0; i < 500; i++) { const y = r() * 1024, x0 = r() * 1024; p.strokeStyle = 'rgba(110,70,35,.12)'; p.lineWidth = 1 + r() * 2; p.beginPath(); p.moveTo(x0, y); p.bezierCurveTo(x0 + 80, y + 2, x0 + 160, y - 2, x0 + 300, y); p.stroke(); }
+  return c; })();
+const MAT = { w: 3.12, d: 6.36 };
+const TAPETE = (() => { const c = lienzo(1248, 2544), p = c.getContext('2d'); p.fillStyle = C.tapete; p.fillRect(0, 0, c.width, c.height);
+  p.fillStyle = C.punto; for (let y = 12; y < c.height; y += 24) for (let x = 12; x < c.width; x += 24) { p.beginPath(); p.arc(x, y, 2.4, 0, 7); p.fill(); } return grano(c); })();
+// ---------- el personaje: un dibujo pixel hecho de cubitos ----------
+// ANATOMIA: estilizada — criatura pixel de bloques (sin extremidades), solo ojos de pixel negro
+const SPRITE = ['..OOOOO..', '.OOOOOOO.', 'OOOOOOOOO', 'OOKOOOKOO', 'OOKOOOKOO', 'OOOOOOOOO', 'OOOYYYOOO', '.OOOOOOO.', '.OO...OO.'];
+const CEL = .034;
+function personaje(root, e, sq, parpadea) {   // e: 0 = calcomanía acostada sobre la tarjeta, 1 = juguete parado
+  const objs = [], n = SPRITE.length, th = e * Math.PI / 2;
+  SPRITE.forEach((fila, j) => [...fila].forEach((ch, i) => { if (ch === '.') return;
+    let col = ch === 'K' ? (parpadea ? C.personaje : '#111') : ch === 'Y' ? C.personaje2 : C.personaje;
+    const borde = (i === 0 || i === fila.length - 1 || SPRITE[j][i - 1] === '.' || SPRITE[j][i + 1] === '.') ? 0 : 1;
+    const alto = (n - j - .5) * CEL * sq, dx = (i - (fila.length - 1) / 2) * CEL;
+    const p = [root[0] + dx, root[1] + alto * Math.sin(th), root[2] - alto * Math.cos(th)];
+    const prof = CEL * lerp(.35, .7 + .6 * borde + (ch === 'K' ? .5 : 0), e);
+    const cu = caja(p[0], p[1] - CEL * .48 * Math.sin(th), p[2] + (ch === 'K' ? prof * .2 : 0), CEL * .96, lerp(prof, CEL * .96 * sq, e), lerp(CEL * .96, prof, e), col,
+      { porCara: { arriba: { brillo: .2 } } });
+    cu.caras.forEach(f => f.borde = { col: rgbTxt(tonoC(col, .8)), w: 1 }); objs.push(cu); }));
+  return objs;
+}
+// ---------- la coreografía: aparece, salta de tarjeta en tarjeta, festeja ----------
+const T_POP = .95, SALTOS = [[2.15, 2.6], [3.95, 4.4]], T_LLEGA = 4.45, T_TITULO = 6.35, T_CURTAIN = 7.1;
+const posTarj = i => [TARJ[i].x + TARJ[i].w * (i === 0 ? .22 : .12), GROSOR, TARJ[i].z + TARJ[i].d * (i === 0 ? .4 : .38)];
+function estadoPersonaje(t) {
+  let k = 0, pos = posTarj(0), sq = 1;
+  for (let s = 0; s < SALTOS.length; s++) { const [a, b] = SALTOS[s];
+    if (t >= b) pos = posTarj(s + 1);
+    else if (t > a) { const u = prog(t, a, b), A = posTarj(s), B = posTarj(s + 1); pos = V3.lerp(A, B, ease(u)); pos[1] += Math.sin(u * Math.PI) * .55; sq = 1.12; } }
+  // estiramiento en el aire, aplastado al despegar y al caer (es el gesto del personaje)
+  for (const [a, b] of SALTOS) { const d1 = a - t, d2 = t - b; if (d1 > 0 && d1 < .12) sq = 1 - .18 * (1 - d1 / .12); if (d2 >= 0 && d2 < .22) sq = 1 - .3 * (1 - d2 / .22); }
+  const e = resorte(prog(t, T_POP, T_POP + .45), { rebote: 1.2, amortigua: 6 });
+  if (t > T_CURTAIN && t < T_CURTAIN + .5) { pos = pos.slice(); pos[1] += Math.sin(prog(t, T_CURTAIN, T_CURTAIN + .5) * Math.PI) * .3; }
+  const parp = (Math.floor(t * 30) % 70) < 3;
+  return { pos, e: clamp(e, 0, 1.08), sq, parp };
+}
+// ---------- cámara: una sola toma ----------
+const KEYS = [   // [t, objetivo, dist, az, el]
+  [0, [-.62, 0, -1.6], 9.5, .5, 1.2], [.95, [-.62, .1, -1.75], 3.3, .3, .82], [2.1, [-.55, .1, -1.7], 3.1, .12, .78],
+  [2.6, [.62, .1, -.3], 3.4, .02, .95], [3.9, [.62, .1, -.25], 3.2, -.12, .98],
+  [4.4, [-.55, .1, 1.1], 3.4, -.05, 1.0], [5.6, [-.5, .1, 1.1], 3.1, .1, 1.02],
+  [7.0, [.1, 0, .75], 10.8, 0, 1.2], [DUR, [.1, 0, .75], 10.5, .02, 1.22]];
+function camaraEn(t) { let i = 0; while (i < KEYS.length - 2 && t > KEYS[i + 1][0]) i++;
+  const a = KEYS[i], b = KEYS[i + 1], u = prog(t, a[0], b[0]), k = (b[0] - a[0]) < .6 ? ease(u) : (i === 0 ? aterriza(u) : ease(u));
+  return camara({ objetivo: V3.lerp(a[1], b[1], k), dist: lerp(a[2], b[2], k), az: lerp(a[3], b[3], k), el: lerp(a[4], b[4], k), fov: 32, cy: 1000 }); }
+// ---------- dibujo ----------
+function losa(x, z, w, d, y0 = 0, col = '#dfe3e8') { const ob = caja(x, y0, z, w, GROSOR, d, col); ob.caras[0].oculta = true; ob.caras.splice(0, 1); return ob; }
+function esquinas(x, z, w, d, y) { return [[x - w / 2, y, z - d / 2], [x + w / 2, y, z - d / 2], [x + w / 2, y, z + d / 2], [x - w / 2, y, z + d / 2]]; }
+function anilloImpacto(cam, p, t0, t) { const k = prog(t, t0, t0 + 1); if (k <= 0 || k >= 1) return; const o = [];
+  for (let i = 0; i <= 48; i++) { const a = i / 48 * Math.PI * 2; o.push(cam.proy([p[0] + Math.cos(a) * (.1 + k * .6), GROSOR + .002, p[2] + Math.sin(a) * (.1 + k * .6)])); }
+  ctx.save(); ctx.strokeStyle = rgbTxt(C.acento, 1 - k); ctx.lineWidth = 5 * (1 - k) + 1.5; trazarPoli(ctx, o); ctx.stroke(); ctx.restore(); }
+function ruta(cam, t) {     // la ruta punteada se dibuja detrás del personaje
+  ctx.save(); ctx.fillStyle = C.acento;
+  SALTOS.forEach(([a, b], s) => { const A = posTarj(s), B = posTarj(s + 1), u = prog(t, a, b + .1); if (u <= 0) return;
+    for (let k = 0; k <= 26 * u; k++) { const v = k / 26, p = V3.lerp(A, B, v); p[1] = GROSOR + .004 + (Math.sin(v * Math.PI) * 0); const q = cam.proy(p); ctx.beginPath(); ctx.arc(q[0], q[1], Math.max(2.5, cam.px(q[2]) * .012), 0, 7); ctx.fill(); } });
+  ctx.restore(); }
+const PILL_F = `800 54px ${SANS}`;
+function pastilla(cam, i, t) {   // insignia del paso: mira a cámara, sin sombra, se va antes de que la cámara siga
+  const t0 = [T_POP + .1, SALTOS[0][1], SALTOS[1][1]][i], t1 = i < 2 ? SALTOS[i][0] : 5.75; if (t < t0 || t > t1) return;
+  const tj = TARJ[i], p = cam.proy([tj.x + tj.w / 2 - .05, GROSOR + .32, tj.z - tj.d / 2]);
+  const txt = PASOS[i].palabra, w = medir(txt, PILL_F) + 150, h = 96, x = clamp(p[0] - w / 2, SEGURA.left, SEGURA.right - w), y = clamp(p[1] - h - 40, SEGURA.top, SEGURA.bottom - h);
+  ctx.save(); ctx.fillStyle = C.acento; ctx.beginPath(); ctx.roundRect(x, y, w, h, h / 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x + 50, y + h / 2, 32, 0, 7); ctx.fill(); ctx.fillStyle = C.acento; ctx.font = `800 42px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i + 1), x + 50, y + h / 2 + 2);
+  ctx.fillStyle = '#fff'; ctx.font = PILL_F; ctx.textAlign = 'left'; ctx.fillText(txt, x + 100, y + h / 2 + 3); ctx.restore();
+}
+arrancar(frame => {
+  const t = frame / FPS; if (!TEX) texturas();
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const cam = camaraEn(t);
+  ctx.fillStyle = rgbTxt(tonoC(C.madera, .9)); ctx.fillRect(0, 0, W, H);
+  planoImagen(ctx, cam, MADERA, esquinas(0, .3, 9, 12, -.012), { tiras: 30 });
+  // tapete (losa delgada) con su sombra
+  const tap = losa(0, 0, MAT.w, MAT.d, -.012, '#cfd5db');
+  render3d(ctx, cam, [tap], { luz: L, amb: .7, dif: .3, sombras: { alpha: .25, blur: 10, col: '#5a4a3a', ySuelo: -.012 } });
+  planoImagen(ctx, cam, TAPETE, esquinas(0, 0, MAT.w, MAT.d, .001), { tiras: 90 });
+  // luz de ventana: cuatro paneles cálidos y suaves sobre el tapete
+  ctx.save(); ctx.globalCompositeOperation = 'soft-light'; ctx.filter = 'blur(26px)'; ctx.fillStyle = 'rgba(255,236,200,.75)';
+  for (const [a, b] of [[0, 0], [1, 0], [0, 1], [1, 1]]) { const x0 = .25 + a * .55, z0 = -1.2 + b * .8; trazarPoli(ctx, esquinas(x0, z0, .48, .7, .002).map(p => cam.proy(p))); ctx.fill(); }
+  ctx.restore();
+  // tarjetas: losa con grosor + impreso arriba; sombras largas
+  const caidaF = t < T_TITULO ? null : (() => { const u = prog(t, T_TITULO, T_TITULO + .35); return lerp(1.6, 0, u * u); })();
+  const losas = TARJ.map(tj => losa(tj.x, tj.z, tj.w, tj.d));
+  if (caidaF != null) losas.push(losa(FINAL.x, FINAL.z, FINAL.w, FINAL.d, caidaF));
+  const st = estadoPersonaje(t), cubos = personaje(st.pos, st.e, st.sq, st.parp);
+  render3d(ctx, cam, losas, { luz: L, amb: .8, dif: .2, sombras: { alpha: .28, blur: 6, col: '#41506a', ySuelo: 0 } });
+  TARJ.forEach((tj, i) => planoImagen(ctx, cam, i === 2 && t >= T_LLEGA ? TEX.chatSi : TEX[i], esquinas(tj.x, tj.z, tj.w, tj.d, GROSOR + .001), { tiras: 26 }));
+  if (caidaF != null) planoImagen(ctx, cam, TEX.final, esquinas(FINAL.x, FINAL.z, FINAL.w, FINAL.d, caidaF + GROSOR + .001), { tiras: 26 });
+  ruta(cam, t);
+  render3d(ctx, cam, cubos, { luz: L, amb: .62, dif: .5, cielo: [200, 220, 255], cieloK: .1, sombras: { alpha: .3, blur: 3, col: '#41506a', ySuelo: GROSOR } });
+  anilloImpacto(cam, posTarj(0), T_POP, t); anilloImpacto(cam, posTarj(1), SALTOS[0][1], t); anilloImpacto(cam, posTarj(2), SALTOS[1][1], t);
+  if (caidaF != null) anilloImpacto(cam, [FINAL.x, 0, FINAL.z], T_TITULO + .35, t);
+  for (let i = 0; i < 3; i++) pastilla(cam, i, t);
+  // gradación: viñeta ligera y un poco de calidez
+  const vg = ctx.createRadialGradient(W / 2, H / 2, 600, W / 2, H / 2, 1250); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(60,40,20,.22)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+});
+window.SONIDOS = [{ t: 0, tipo: 'swish' }, { t: T_POP, tipo: 'pop' }, ...SALTOS.flatMap(([a, b]) => [{ t: a, tipo: 'swish' }, { t: b, tipo: 'golpe' }]),
+  { t: T_LLEGA, tipo: 'pop' }, { t: 5.6, tipo: 'desliz' }, { t: +(T_TITULO + .35).toFixed(2), tipo: 'golpe' }, { t: T_CURTAIN, tipo: 'pop' }];
+</script>
+</body>
+</html>

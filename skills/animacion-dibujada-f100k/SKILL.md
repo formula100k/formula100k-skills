@@ -1,6 +1,6 @@
 ---
 name: animacion-dibujada-f100k
-description: "Fabrica clips y cortos animados 9:16 donde CADA CUADRO SE DIBUJA CON CÓDIGO (canvas + JavaScript): sin IA de video y sin créditos. 13 estilos de clip para meter como inserto en un reel (libreta a mano, pizarra, post-its, chat, notificaciones, ticket, gráfica, mapa, pixel art, tinta, scrapbook y polaroid con tus fotos), mascotas pixel chiquitas que caminan sobre tu mesa ENCIMA del video (tu sello de marca) y un sistema de cortos de 30-90 s: tu mascota dibujada a partir de tu foto (vector, pixel o papel), tu propio personaje animado como títere, escenarios y objetos de 12 rubros, transiciones, subtítulos y tu voz. Render local en segundos. Activar con: 'animación dibujada', 'como las de Opus 5.5', 'animación en JavaScript', 'pixel art', 'mi mascota', 'mascotas pixel en mi mesa', 'pixel mascots en mi video', 'hazme un personaje', 'anima mi personaje', 'corto animado', 'video explicativo animado', 'B-roll dibujado', 'anima esta frase del guion'. NO hace video realista ni con personas reales en movimiento (eso es Higgsfield)."
+description: "Fabrica clips y cortos animados 9:16 donde CADA CUADRO SE DIBUJA CON CÓDIGO (canvas + JavaScript): sin IA de video y sin créditos. 13 estilos de clip propios + 66 estilos de cine (pizarra blanca, acuarela, ukiyo-e, vitral, anime de los 80, RPG pixel, noticiero, cuenta regresiva, isla low-poly, despiece…) para meter como inserto en un reel (libreta a mano, pizarra, post-its, chat, notificaciones, ticket, gráfica, mapa, pixel art, tinta, scrapbook y polaroid con tus fotos), mascotas pixel chiquitas que caminan sobre tu mesa ENCIMA del video (tu sello de marca) y un sistema de cortos de 30-90 s: tu mascota dibujada a partir de tu foto (vector, pixel o papel), tu propio personaje animado como títere, escenarios y objetos de 12 rubros, transiciones, subtítulos y tu voz. Render local en segundos. Activar con: 'animación dibujada', 'como las de Opus 5.5', 'animación en JavaScript', 'pixel art', 'mi mascota', 'mascotas pixel en mi mesa', 'pixel mascots en mi video', 'hazme un personaje', 'anima mi personaje', 'corto animado', 'video explicativo animado', 'B-roll dibujado', 'anima esta frase del guion'. NO hace video realista ni con personas reales en movimiento (eso es Higgsfield)."
 ---
 
 # Animación dibujada (cada cuadro en código)
@@ -77,6 +77,136 @@ Si una foto no carga, el render se detiene y te dice cuál: nunca sale un cuadro
 
 La frase del clip sale **del guion literal**: la línea que dice la persona en ese momento, recortada.
 Nunca inventes cifras ni promesas que el guion no dice.
+
+## Estilos de cine (66, ingeniería inversa)
+
+Clips de 8 a 10 s en 9:16, rearmados desde cero con este núcleo a partir de la biblioteca lemo-opuscar (MIT, © 2026 LemoLab) y las reglas de la casa (golpe antes de 2 s, sin tembladera, letra de diseño con corte seco, sin anatomía deforme, sin marcas ajenas). Se arman igual que los demás: `node scripts/armar.mjs cine-<id> "$DEST/animaciones/<nombre>.html"`, se cambia SOLO el bloque «LO QUE PUEDES CAMBIAR» y se renderizan con `renderizar.mjs`.
+- Los motores de cada familia viven en `nucleo/cine-*.js` (dibujo, asia, impresion, grafica, info, caricatura, juegos, 3d, evidencia, montaje); `armar.mjs` los mete adentro solos.
+- Cada pieza deja `window.SONIDOS = [{t, tipo}]` con golpes sugeridos (solo graves: pop, swish, golpe, papel, desliz, ambiente) para la mezcla del editor.
+- 📷 = acepta `FOTO`/`FOTOS` con capturas o fotos REALES de la persona; vacío, dibuja un reemplazo neutro. En `telestrator`, `visual-investigation` y `newsreel` las coordenadas de los círculos se ajustan a mano a cada foto.
+- Cifras: los ejemplos con números van marcados «SOLO cifras del guion» en el código; nunca dejes una cifra de ejemplo en una pieza entregada.
+
+**Con material real**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-archive-lighttable` 📷 Mesa de luz | mostrar una prueba real (el primer pedido, un mensaje de clienta) como documento de archivo | FRASE (≤ 45), PALABRA_CLAVE, FOTO, PIE_FOTO, CARTA (renglones ≤ 26), RENGLON_CLAVE, DATOS (SOLO cifras del guion), COLORES |
+| `cine-briefing-board` 📷 Pizarra de obra | una lista de 2–3 pasos con veredicto, con la opción descartada tachada | FRASE (≤ 45), PALABRA_CLAVE, PASOS (2–3, ≤ 26), DESCARTADA, SELLO, FOTO, PIE_FOTO, COLORES |
+| `cine-data-physical`  Datos en piezas | mostrar crecimiento con números reales como objetos contables («cada pieza es una venta») | FRASE (≤ 50), PALABRA_CLAVE, UNIDAD, SERIE (3–6, enteros ≤ 40, SOLO cifras del guion), FUENTE, TOTAL_TXT, COLORES |
+| `cine-lidar-survey` 📷 Nube de puntos | revelar lo que está escondido debajo («debajo de tus seguidores hay compradores») | FRASE (≤ 60), PALABRA_CLAVE, HALLAZGO, CAPA, DATOS (SOLO cifras del guion), FOTO, COLORES |
+| `cine-microscope` 📷 Microscopio | mirar de cerca algo y medir una proporción («mira de cerca: tu bio dice más de lo que crees») | FRASE (≤ 60), PALABRA_CLAVE, MARCA, DATOS (SOLO cifras del guion), FOTO (macro), CREDITO, COLORES |
+| `cine-satellite-briefing` 📷 Informe satelital | mostrar que algo está más cerca o más lejos de lo que parece, ubicar y medir | FRASE (≤ 60), PALABRA_CLAVE, PUNTO_A / PUNTO_B, DATOS (SOLO cifras del guion), FOTO (aérea/dron), CREDITO, COLORES |
+| `cine-teardown` 📷 Despiece | desarmar algo en sus partes («así se arma un reel que vende», las piezas de tu oferta) | FRASE (≤ 50), PALABRA_CLAVE, CAPAS (3–5: nombre ≤ 14, dato ≤ 26), FOTO (captura), COLORES |
+| `cine-white-model`  Maqueta blanca | hacer que UNA cosa destaque entre muchas («que tu oferta destaque entre todas») | FRASE (≤ 60), PALABRA_CLAVE, CAPA_1, CAPA_2, PIN.titulo/sub, DATOS (SOLO cifras del guion), COLORES |
+
+**Gráfica y tipografía**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-art-deco`  Art déco | revelación con lista de 2–3 puntos («lo que nadie te dice de TU BIO»), lanzamientos | ENCIMA (≤ 28), CLAVE (≤ 10), PUNTOS (2–3, ≤ 22 c/u), COLORES.laca/marfil/oroPlano/acento |
+| `cine-ascii-crt`  Terminal CRT | diagnóstico tipo «error del sistema» con su arreglo («tu bio no dice qué vendes → di qué vendes») | REGISTRO (líneas cortas, sin cifras), ERROR (≤ 34), TITULO (≤ 10), SUBTITULO (≤ 30), PALABRA_IMAGEN, ARREGLO, CLAVE (≤ 16), COLORES |
+| `cine-blueprint`  Plano técnico | desarmar la estructura de algo en partes numeradas («plano de un reel que vende»: gancho, historia, CTA) | TITULO_CHICO, TITULO_GRANDE, PARTES (3, ≤ 10 c/u), COTA, NOTAS (1–2, ≤ 24), SELLO, COLORES.azul1/azul2/linea/sello |
+| `cine-pictogram-motion`  Pictogramas en movimiento | catálogo de 2–4 ítems, una tarjeta por ítem («4 piezas de un reel que vende») | PORTADA.grande/chica, ITEMS (2–4: titulo ≤ 10, linea ≤ 24, picto 'iman'|'burbuja'|'medalla'|'carrito'), CAPITULO, COLORES |
+| `cine-spy-titles`  Créditos de espía | diagnóstico con giro y remate («tu contenido NO VENDE → te falta UN GANCHO») | ARRIBA, TREN (≤ 10, MAYÚS.), GOLPE_1, GOLPE_2, ANTES, TITULO (la primera O se vuelve cerradura), COLORES.rojo/mostaza/papel/tinta |
+| `cine-stained-glass`  Vitral | tres etapas que se encienden en orden («tu contenido atrae, nutre y VENDE») | ENTRADA, PALABRAS (3, de abajo arriba; la última es la clave), SIMBOLOS ('iman'|'brote'|'llave'|'sol'), COLORES |
+| `cine-swiss-motion`  Retícula suiza | una cifra con pasos o reglas («3 pasos para tu primera venta»), listas cortas y precisas | NUMERO (1–2 car., SOLO cifras del guion), ENTRADA (≤ 14), FRASE (≤ 24), PALABRA_CLAVE, NOTAS (2–3, ≤ 20 c/u), SE_CORTA, COLORES.senal/pagina/tinta |
+
+**Cine y épocas**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-backrooms`  Cinta perdida del pasillo | suelta reglas incómodas con suspenso («tu contenido no vende» + reglas del piso) | TITULO, PALABRA_CLAVE, AVISO (≤ 22), REGLAS (3–4, ≤ 46), FIRMA, HORA y FECHA (inventadas), COLORES |
+| `cine-silent-film`  Cine mudo de los años 20 | cuenta un error con giro en un intertítulo («publicaba todos los días… pero nadie entendía su oferta») | LETRERO (≤ 10), CARTEL (≤ 9), TARJETA (≤ 34), FRASE (≤ 34), PALABRA_CLAVE, SEPIA, COLORES |
+
+**Materiales y 3D**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-brick-toy`  Bloques de juguete | un proceso que se construye paso a paso («3 pasos para tu primera venta») | ARRIBA (≤ 24), TITULO (≤ 22), PALABRA_CLAVE, PASOS (2–4, ≤ 30), COLORES, DUR |
+| `cine-desktop-flythrough` 📷 Escritorio en vuelo | un recorrido de herramienta en herramienta («guion → reel → venta») que termina en el título | PASOS (3: palabra, titulo, linea), KICKER, TITULO (≤ 20), FOTOS (opcional: capturas reales), COLORES, DUR |
+| `cine-glass-product`  Producto de vidrio | desarmar una oferta o un producto en sus partes («lo que nadie ve de tu oferta») | KICKER (≤ 28), CLAVE (≤ 10), PIEZAS (2–3, ≤ 16), FRASE (≤ 44), COLORES, DUR |
+| `cine-lowpoly-island`  Isla low-poly | algo que crece pieza a pieza («tu negocio se construye pieza a pieza») y termina encendido | ARRIBA (≤ 28), CLAVE (≤ 16), PASOS (2–4, ≤ 26), COLORES, DUR |
+| `cine-memphis-diorama`  Diorama Memphis | efecto contagio o causa → efecto en un lugar («una venta trae otra») | TITULO (≤ 26), PALABRA_CLAVE, FRASE (≤ 48), DATO (SOLO cifras del guion), LLAMADAS (2–3), COLORES, DUR |
+| `cine-paper-popup`  Libro pop-up | abre una historia o un lugar («cuando tu historia vende»), con un globo de lo que pregunta la clienta | ARRIBA (≤ 26), CLAVE (≤ 12), BURBUJA (≤ 22), LETRERO (≤ 12), COLORES, DUR |
+| `cine-tilt-shift`  Miniatura tilt-shift | contraste ruido vs. una sola acción que importa («mientras todos corren, tú vendes») | ARRIBA (≤ 26), CLAVE (≤ 14), ROTULO_RAPIDO, ROTULO_REAL, COLORES, T_CAIDA, DUR |
+
+**Montaje documental**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-caption-news` 📷 Noticia con subtítulos gigantes | una cifra que duele y su giro, para entender sin sonido («el 90 % no te compra») | CANAL, TEMA, GANCHO {numero, unidad, antes, despues} (SOLO cifras del guion), FUENTE, CREDITO, SUBTITULOS (3, clave entre *asteriscos*), FOTOS (3), COLORES |
+| `cine-city-symphony` 📷 Sinfonía en time-lapse | el ritmo de un trabajo que no para, una frase reflexiva con un solo número («tu contenido trabaja mientras duermes») | NUMERO (SOLO cifras del guion), NUMERO_QUE, NUMERO_FUENTE, CITA (≤ 44), CITA_FUENTE, CIUDAD_DIBUJADA, FOTOS (2–4), COLORES.sodio |
+| `cine-countdown` 📷 Cuenta regresiva en pantalla dividida | cierre de carrito, Black Friday, fin de una oferta o de un reto («el carrito se cerró») | EVENTO, SEGUNDOS (3–6, SOLO cifras del guion), ETAPAS (3), CAMARAS, HITOS [{t, txt}], BANDERA, FRASE_FINAL (*clave*), FOTOS (1–4), COLORES.acento |
+| `cine-kino-montage` 📷 Montaje constructivista | un método en pasos o un mensaje que se construye a golpes («3 pasos para tu primera venta») | NUMERO, UNIDAD, BANDA, VERTICAL, CHOQUE [A, B], FINAL (*clave*), ETIQUETAS (3), FOTOS (3), COLORES |
+| `cine-news-package` 📷 Noticiero de novedades | novedades de IA o del negocio en formato noticiero (sumario de 3 + una noticia con antes/después) | CANAL (inventado), CANAL_SUB, FECHA, SUMARIO (3), CATEGORIA, TITULARES (2), TABLERO {antes, ahora} (SOLO cifras del guion), SELLO, FUENTE, FOTOS (opcional), COLORES |
+| `cine-newsreel` 📷 Noticiero de 1920 | anunciar un logro o un caso como noticia de época («¡vendió sin pagar anuncios!») | CANAL, CABECERA, TITULAR (≤ 30), LUGAR, SUBTITULOS [{t, txt}], CIRCULO {x,y,r}, FOTOS (2), COLORES |
+| `cine-telestrator` 📷 Pizarra de análisis | revisar una captura (bio, perfil, reel) y señalar qué falla («lo que nadie te dice de tu bio») | PROGRAMA, FOTO (captura vertical), OBJETIVO/HUECO {x,y,rx,ry}, RECORRIDO, ETIQUETAS (2), TARJETA [{etq, num}], CLAVE_TARJETA, COLORES |
+| `cine-visual-investigation` 📷 Investigación visual | desarmar por qué algo vendió o falló, con pruebas y horas («¿por qué vendió este post?») | PREGUNTA (≤ 30), DETALLE {x,y,r,txt}, COLUMNAS [{hora, tag, cita?}], VEREDICTO (*clave*), FOTOS (3), COLORES.rojo |
+
+**Caricatura y anime**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-cel-anime-80s`  Anime de los 80 | promesa con épica nocturna («haz que tu oferta brille») | FRASE (≤ 30), PALABRA_CLAVE, ETIQUETA, LETREROS (3–4, ≤ 8), COLORES |
+| `cine-midcentury-toon`  Manual de los años 50 | enseña de 2 a 3 pasos como manual de uso («tu primera venta en 3 pasos») | FRASE, PALABRA_CLAVE, PASOS (2–3: titulo, detalle, icono), COLORES |
+| `cine-rubber-hose`  Caricatura de manguera (años 30) | abre con energía o celebra una idea simple («vende con una historia») | FRASE (≤ 30), PALABRA_CLAVE, REMATE (≤ 26), COLORES, SEPIA, TEMPO |
+| `cine-scifi-toon`  Sitcom de ciencia ficción | remata con humor seco un error de base («ni un portal arregla tu oferta») | FRASE (≤ 32), PALABRA_CLAVE, ETIQUETA, OBJETO (≤ 8), COLORES |
+
+**Dibujo y pintura**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-chalkboard`  Pizarra de salón | corrige una creencia: lo que creen se borra y la verdad queda en el mismo lugar | ARRIBA (≤ 26), LO_QUE_CREEN (≤ 12), PALABRA_CLAVE (≤ 12), ABAJO (≤ 40), COLORES, DUR |
+| `cine-crayon-book`  Libro de crayones | cuento tierno de una idea con mensaje escondido que se revela | FRASE (≤ 32), MENSAJE_OCULTO (≤ 14), COLORES, DUR |
+| `cine-impasto`  Óleo con espátula | un antes y después de color («tu marca necesita COLOR»): el mundo gris se repinta | LINEA_CHICA (≤ 22), PALABRA_CLAVE (≤ 8), COLORES, DUR |
+| `cine-ink-wash`  Tinta y papel de arroz | una idea sola y calma, con mucho vacío («tu contenido necesita una sola idea») | LINEA_CHICA (≤ 26), PALABRA_CLAVE (≤ 14), COLORES, DUR |
+| `cine-one-line`  Una sola línea | una transformación o una gráfica que sube («cuando tu contenido vende») | LINEA_CHICA (≤ 24), PALABRA_CLAVE (≤ 10), COLORES, DUR |
+| `cine-urban-sketch`  Croquis con acuarela | retrato de un lugar o un negocio como página de cuaderno («deja de vender, empieza a contar») | LINEA_CHICA (≤ 30), PALABRA_CLAVE (≤ 10), NOTA_ESQUINA (≤ 28), COLORES, DUR |
+| `cine-watercolor`  Lámina de acuarela | explica las partes de algo como una lámina con notas («así crece una venta») | TITULO_CHICO (≤ 16), PALABRA_CLAVE (≤ 12), ETIQUETA, NOTAS (3, ≤ 14), COLORES, DUR |
+| `cine-whiteboard`  Pizarra blanca | enseña un mecanismo paso a paso («así funciona un reel que vende») | LO_QUE_CREES (≤ 18), LINEA_CHICA (≤ 30), PALABRA_CLAVE (≤ 10), PASOS (2–3, ≤ 36), COLORES, DUR |
+
+**Información y keynote**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-circuit-board`  Placa de circuito | un proceso de punta a punta como pulso de luz por etapas («así se vuelve venta») | TITULO (≤ 22), PALABRA_CLAVE, ETAPAS[5] (≤ 10), REVISION, COLORES |
+| `cine-dark-keynote` 📷 Keynote oscuro | pasar del caos al orden en una herramienta o sistema, cerrando con una sola cifra gigante | TITULO (≤ 30), PALABRA_CLAVE, VENTANA, CIFRA (SOLO cifras del guion) + CIFRA_DICE, PENDIENTES, FOTO (captura real opcional), COLORES |
+| `cine-dataviz`  Gráfica que cuenta | una cifra que cambia en el tiempo contada como historia («así subieron tus ventas cuando…») | TITULO (≤ 40), PALABRA_CLAVE, MEDIDA, DATOS + ETIQUETAS (SOLO cifras del guion), NOTA_INICIO, NOTA_RECORD, PIE (≤ 60), COLORES |
+| `cine-hologram-hud`  Holograma HUD | ficha técnica de un objeto o kit por piezas («tu celular ya es tu estudio») | TITULO (≤ 30), PALABRA_CLAVE, CODIGO, PIEZAS[3] {nombre, valor, unidad, detalle} (SOLO cifras del guion), COLORES |
+| `cine-iso-infographic`  Infografía isométrica | explica un sistema por estaciones (contenido → regalo → venta) y lo cierra con la infografía completa | TITULO (≤ 32), PALABRA_CLAVE, ESTACIONES[3] {nombre, cifra, unidad} (SOLO cifras del guion), ICONOS, ICONO_DICE, COLORES |
+| `cine-isometric-picture-book`  Libro isométrico | curiosidades de psicología y marketing con personas que hacen la regla («esa fila te engaña», prueba social) | RENGLON_1 (≤ 10), RENGLON_2 (≤ 10), PALABRA_CLAVE, LETRERO, EN_FILA (3–9), COLORES |
+| `cine-living-screencast` 📷 Pantalla viva | demo de cómo se usa una app paso a paso (pides algo y la app lo resuelve) | TITULO (≤ 30), PALABRA_CLAVE, PEDIDO (≤ 32), PASOS (3–4, ≤ 20), GUARDADO, APP, FOTO (captura real), COLORES |
+| `cine-transit-map`  Mapa de metro | una ruta o un embudo contado como red de metro (etapas = estaciones) | TITULO (≤ 24), PALABRA_CLAVE, RIO, LINEAS_NOMBRE[4], ESTACIONES (12, ≤ 11), COLORES |
+
+**Impresión y grabado**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-engraving`  Grabado en cobre | desarmar algo en partes («anatomía de tu oferta») | TITULO_CHICO (≤16), TITULO_GRANDE (≤11), ROTULOS (2, ≤24), NOTA (≤28), COLORES |
+| `cine-halftone-dossier`  Expediente de semitono | «el caso de…»: acusar un error y dar el veredicto (bio, oferta, CTA) | CASO_CHICO (≤16), CASO_GRANDE (≤9), SELLO_TXT, LEYENDA (*clave*), EXPEDIENTE, COLORES |
+| `cine-printed-long-take`  Toma larga impresa | cierre o llamada emocional («tu clienta ideal te busca»), viaje hacia algo | TITULO_CHICO (≤20), TITULO_GRANDE (≤9), COLORES |
+| `cine-risograph`  Risografía | lista corta o promesa con energía («3 pasos para tu primera venta») | TITULO (SOLO cifras del guion), SUBTITULO (≤26), TINTAS |
+| `cine-silkscreen-poster`  Póster serigrafiado | anuncio de lanzamiento o evento con datos al pie | TITULO_CHICO (≤24), TITULO_GRANDE (≤9), NOMBRE, DATOS (2–4, SOLO cifras del guion), TINTAS |
+| `cine-woodcut`  Grabado en madera | historia, origen o una verdad de fondo («lo que vende es tu historia») | TITULO_CHICO (≤22), TITULO_GRANDE (≤10), LEYENDA (≤60), COLORES |
+
+**Videojuegos**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-game-show`  Concurso de ritmo | celebra una regla o un logro con veredicto («el gancho es tu primera venta» → ¡Perfecto!) | RONDA (≤ 22), FRASE (≤ 32), PALABRA_CLAVE, VEREDICTO (≤ 12), TEMPO, COLORES |
+| `cine-hd-2d`  Diorama de pixeles con luz (HD-2D) | abre un capítulo con algo que se enciende («tu oferta enciende el mercado») | CAPITULO, FRASE (≤ 32), PALABRA_CLAVE, NOMBRE, DIALOGO (≤ 70), COLORES |
+| `cine-microgame`  Microjuegos a toda velocidad | resume un proceso de 3 acciones con ritmo («escribe, publica y vende») | JUEGOS (3: orden ≤ 10 + texto), FRASE, PALABRA_CLAVE, ETAPA, COLORES |
+| `cine-pixel-rpg`  RPG de 16 bits | presenta lo que falta como un tesoro o una mejora («tu oferta es el tesoro») | FRASE, PALABRA_CLAVE (≤ 7), OBJETO (≤ 8), NOMBRE, DIALOGO (≤ 70), COLORES |
+
+**Tradiciones de Asia**
+
+| Estilo | Úsalo cuando el guion… | Qué cambias |
+|---|---|---|
+| `cine-paper-lantern`  Caja de luz de papel | efecto en cadena o algo que se enciende de a poco («una venta enciende la siguiente») | TITULO_GRANDE (≤12), TITULO_CHICO (≤26), VENTANAS (4–12), COLORES |
+| `cine-papercut-red`  Papel rojo recortado | una cosa que se multiplica («una idea, muchas piezas») | TITULO (≤10), FRASE (≤28), COLORES |
+| `cine-shadow-puppet`  Teatro de sombras | diagnóstico que duele o «nadie te ve»: la luz que se enciende = visibilidad | TITULO_CHICO (≤16), TITULO_GRANDE (≤10), PLACA (≤28), COLORES |
+| `cine-ukiyoe`  Grabado japonés en bloques | revela «lo que nadie te dice» de algo, en tono sereno | TITULO_CHICO (≤26), TITULO_GRANDE (≤12), SELLO (1–4 letras), COLORES |
+
 
 ## Mascotas sobre tu video (`mascota-en-tu-espacio`)
 

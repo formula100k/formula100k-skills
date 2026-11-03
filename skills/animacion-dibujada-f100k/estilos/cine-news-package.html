@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Noticiero de novedades</title>
+<style>
+  html,body{margin:0;background:#121417;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Noticiero de novedades» · ingeniería inversa de lemo-opuscar/styles/news-package (MIT, © 2026 LemoLab) · qué se tomó: el sistema de paquete (placa paralelogramo que entra de golpe y vuela a la esquina como mosca del canal, sumario con filas que giran, cintillo de papel con pestaña de categoría que gira sus palabras, tablero de fichas que voltean de antes a después, sello, barrido de banda vertical limón-tinta-oro, línea de fuente en mono).
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const CANAL = 'AL DÍA';                              // nombre del canal en la placa (≤ 8 letras; inventado, nunca uno real)
+const CANAL_SUB = 'NOTICIAS IA';                     // la línea chica de la mosca
+const FECHA = { dia: '03', mes: 'NOV', semana: 'LUNES' };   // la fecha del bloque del sumario
+const SUMARIO = [                                    // 3 noticias de hoy (≤ 30 letras c/u)
+  'Tu guion se escribe solo',
+  'Edita tu reel sin editor',
+  'Tu bio, revisada en 1 clic',
+];
+const CATEGORIA = 'IA · HERRAMIENTAS';               // la pestaña del cintillo
+const TITULARES = [                                  // el cintillo cambia de palabras (2): ≤ 34 letras c/u
+  'Tu guion ya sale en 20 minutos',
+  'Y suena a ti, no a un robot',
+];
+const TABLERO = { antes: '3 HORAS', ahora: '20 MIN' };   // fichas que voltean de antes a después (≤ 7 letras). SOLO cifras del guion
+const SELLO = 'NOVEDAD';                             // el sello que cae al final (≤ 10 letras)
+const FUENTE = 'FUENTE · TU PRUEBA · 03 NOV';        // línea de fuente en mono (≤ 32 letras)
+const FOTOS = [];   // opcional: 1 foto o captura detrás del tablero (se tiñe en dos tonos). Vacío = fondo de rayos de luz dibujado
+const COLORES = {
+  tinta: '#121417', tinta2: '#1B1E23', tinta3: '#22262C',
+  acento: '#F2CF1D', acentoOsc: '#D8B30C',   // limón: placa, pestañas, barras, sello
+  oro: '#D4B064',                             // fechas, fuentes, umbrales
+  papel: '#F4F1E8', oliva: '#6E5A1E',         // el cintillo y su segunda línea
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F_TIT = '"Avenir Next Condensed", "Helvetica Neue", Arial, sans-serif';
+const F_NUM = '"DIN Condensed", "Avenir Next Condensed", Impact, sans-serif';
+const F_MONO = 'Menlo, "Courier New", monospace';
+let PLACA_IM = null;
+if (FOTOS.length) material(FOTOS, ['escritorio']).then(ims => { PLACA_IM = gradear(ims[0], 'duotono', { oscuro: '#0E1013', claro: '#ECE7D8' }); });
+const T_STING = 1.45, T_ITEM = 4.1, T_FLIP = 6.9, T_SELLO = 6.3;
+const texto = (s, x, y, font, col, al = 'left', ls = 0) => { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.letterSpacing = ls + 'px'; ctx.fillText(s, x, y); ctx.restore(); };
+
+// ---------- fondo de tinta con aletas de luz (se pinta una vez) ----------
+const FONDO = (() => { const [c, p] = lienzo(W, H); p.fillStyle = C.tinta; p.fillRect(0, 0, W, H);
+  for (let i = 0; i < 7; i++) { const x = -300 + i * 260; const g = p.createLinearGradient(x, 0, x + 220, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, `rgba(212,176,100,${.05 + (i % 3) * .015})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+    p.save(); p.translate(x, 0); p.transform(1, 0, -.35, 1, 0, 0); p.fillStyle = g; p.fillRect(0, 0, 220, H); p.restore(); }
+  const v = p.createRadialGradient(W / 2, H * .45, 200, W / 2, H * .45, H * .8); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.5)'); p.fillStyle = v; p.fillRect(0, 0, W, H);
+  return c; })();
+
+// ---------- la placa (es el sting, la mosca y el cierre) ----------
+function placa(cx, cy, esc, t, letras = 1) {
+  const w = 640, h = 200, k = 60; ctx.save(); ctx.translate(cx, cy); ctx.scale(esc, esc);
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.moveTo(-w / 2 + k + 12, -h / 2 + 14); ctx.lineTo(w / 2 + 12, -h / 2 + 14); ctx.lineTo(w / 2 - k + 12, h / 2 + 14); ctx.lineTo(-w / 2 + 12, h / 2 + 14); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-w / 2 + k, -h / 2); ctx.lineTo(w / 2, -h / 2); ctx.lineTo(w / 2 - k, h / 2); ctx.lineTo(-w / 2, h / 2); ctx.closePath();
+  ctx.fillStyle = C.acento; ctx.fill(); ctx.save(); ctx.clip();
+  ctx.fillStyle = C.acentoOsc; ctx.fillRect(-w / 2, h * .18, w, h * .32);
+  ctx.fillStyle = C.tinta; ctx.fillRect(-w / 2 + 6, -h / 2, 26, h); ctx.fillStyle = C.oro; ctx.fillRect(-w / 2 + 40, -h / 2, 12, h);
+  ctx.restore();
+  // letras que caen de a una (corte seco: cada letra aparece entera en su casilla)
+  const f = `800 150px ${F_TIT}`, n = [...CANAL].length, visibles = Math.floor(n * clamp(letras) + .0001);
+  ctx.font = f; const tw = medir(CANAL, f), x0 = -tw / 2 + 20; let xx = x0;
+  [...CANAL].forEach((ch, i) => { const cw = medir(ch, f); if (i < visibles) texto(ch, xx, 56, f, C.tinta); xx += cw; });
+  ctx.restore();
+}
+function sting(t) {
+  ctx.drawImage(FONDO, 0, 0);
+  // dos barras limón que cruzan (0,04 y 0,10 s) — ya en pantalla en el cuadro 0
+  for (const [d, y, ww] of [[0, 700, 160], [.06, 1060, 110]]) { const q = easeOut(prog(t, d - .12, d + .45)); ctx.save(); ctx.translate(lerp(-600, W + 600, q), y); ctx.transform(1, 0, -.55, 1, 0, 0);
+    ctx.fillStyle = C.acento; ctx.fillRect(-ww / 2, -260, ww, 520); ctx.restore(); }
+  const k = aterriza(prog(t, 0, .26)), esc = lerp(2.2, 1, k);
+  {
+    // anillo de impacto al asentarse
+    if (t > .24 && t < .8) { const q = prog(t, .24, .8); ctx.save(); ctx.globalAlpha = (1 - q) * .7; ctx.strokeStyle = C.acento; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(W / 2, 880, 340 + q * 360, 120 + q * 140, 0, 0, 7); ctx.stroke(); ctx.restore(); }
+    // vuelo a la esquina: la placa se vuelve la mosca
+    const v = easeIO(prog(t, 1.08, T_STING + .1)), cx = lerp(W / 2, BUG.x, v), cy = lerp(880, BUG.y, v), e = lerp(esc, BUG.e, v);
+    placa(cx, cy, e, t, prog(t, .26, .62));
+    // línea de fecha que se abre desde el centro
+    const a = easeOut(prog(t, .7, .95)) * (1 - v); if (a > 0) { ctx.save(); ctx.beginPath(); ctx.rect(W / 2 - 360 * a, 1000, 720 * a, 80); ctx.clip();
+      texto(`${CANAL_SUB} · ${FECHA.dia} ${FECHA.mes}`, W / 2, 1050, `500 34px ${F_MONO}`, C.oro, 'center', 4); ctx.restore(); }
+  }
+}
+const easeIO = t => { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+const BUG = { x: W - 70 - 640 * .36 / 2, y: 300, e: .36 };
+function mosca(t) { placa(BUG.x, BUG.y, BUG.e, t, 1); texto(CANAL_SUB, BUG.x - 640 * .36 / 2 - 18, BUG.y + 12, `800 32px ${F_TIT}`, C.papel, 'right', 2); }
+
+// ---------- sumario: bloque de fecha + 3 filas que giran en el pulso ----------
+function sumario(t, recap = false) {
+  ctx.drawImage(FONDO, 0, 0);
+  const x = 70, y = 400;
+  texto(FECHA.dia, x, y + 190, `700 230px ${F_NUM}`, C.papel);
+  texto(FECHA.mes, x + 250, y + 100, `800 80px ${F_TIT}`, C.acento); texto(FECHA.semana, x + 250, y + 176, `600 46px ${F_TIT}`, C.oro, 'left', 3);
+  texto('HOY EN EL NOTICIERO', x, y + 270, `500 28px ${F_MONO}`, C.oro, 'left', 4);
+  SUMARIO.forEach((s, i) => {
+    const t0 = T_STING + .25 + i * .5, k = aterriza(prog(t, t0, t0 + .28)); if (k <= 0) return;   // gira vertical (sin rebote)
+    const ry = y + 340 + i * 190, rw = W - 140, rh = 160;
+    ctx.save(); ctx.translate(x, ry + rh / 2); ctx.scale(1, k); ctx.translate(-x, -(ry + rh / 2));
+    ctx.fillStyle = C.tinta2; ctx.fillRect(x, ry, rw, rh); ctx.fillStyle = C.acento; ctx.fillRect(x, ry, 140, rh);
+    texto(String(i + 1), x + 70, ry + 122, `700 120px ${F_NUM}`, C.tinta, 'center');
+    const aj = autoajuste(s, F_TIT, 800, rw - 200, 1, 64, 34); texto(aj.rs[0], x + 172, ry + 102, aj.font, C.papel);
+    ctx.restore();
+    if (t - t0 < .2 && t > t0) { ctx.save(); ctx.globalAlpha = .5 * (1 - (t - t0) / .2); ctx.fillStyle = '#fff'; ctx.fillRect(x, ry, rw, rh); ctx.restore(); }   // destello al llegar
+  });
+}
+
+// ---------- tablero de fichas: el valor viejo y el nuevo en el mismo tablero ----------
+function ficha(x, y, w, h, viejo, nuevo, p) {        // p 0→1: la mitad de arriba cae, la de abajo se abre
+  const mitad = (ch, arriba, esc = 1) => { ctx.save(); ctx.beginPath(); arriba ? ctx.rect(x, y, w, h / 2) : ctx.rect(x, y + h / 2, w, h / 2); ctx.clip();
+    ctx.translate(0, y + h / 2); ctx.scale(1, esc); ctx.translate(0, -(y + h / 2));
+    ctx.fillStyle = C.tinta3; ctx.fillRect(x, y, w, h); texto(ch, x + w / 2, y + h * .78, `700 ${h * .86}px ${F_NUM}`, C.papel, 'center'); ctx.restore(); };
+  if (p <= 0) { mitad(viejo, true); mitad(viejo, false); }
+  else if (p >= 1) { mitad(nuevo, true); mitad(nuevo, false); }
+  else if (p < .5) { mitad(nuevo, true); mitad(viejo, false); mitad(viejo, true, 1 - p * 2); }
+  else { mitad(nuevo, true); mitad(viejo, false); mitad(nuevo, false, (p - .5) * 2); }
+  ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(x, y + h / 2 - 2, w, 4);
+}
+function filaFichas(etq, viejoTxt, valor, y, t0, t, colEtq) {
+  const n = Math.min(7, Math.max(TABLERO.antes.length, TABLERO.ahora.length)), gap = 10, tw = Math.min(136, (W - 140 - (n - 1) * gap) / n), th = tw * 1.37, x0 = (W - (n * tw + (n - 1) * gap)) / 2, s = valor.padEnd(n, ' ').slice(0, n), v = viejoTxt.padEnd(n, ' ').slice(0, n);
+  texto(etq, x0, y - 22, `800 50px ${F_TIT}`, colEtq, 'left', 2);
+  for (let i = 0; i < n; i++) { const a = t0 + i * .09, viejo = v[i], p = prog(t, a, a + .18); ficha(x0 + i * (tw + gap), y, tw, th, viejo, s[i], p); }
+}
+function item(t) {
+  ctx.drawImage(FONDO, 0, 0);
+  if (PLACA_IM) { ctx.save(); ctx.globalAlpha = .55; cubrir(PLACA_IM, 0, 340, W, 860, .5, .4, 1.02 + .03 * prog(t, T_ITEM, DUR)); ctx.restore();
+    const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(18,20,23,.85)'); g.addColorStop(1, 'rgba(18,20,23,.3)'); ctx.fillStyle = g; ctx.fillRect(0, 340, W, 860); }
+  texto(FUENTE.toUpperCase(), 70, 420, `500 28px ${F_MONO}`, C.oro, 'left', 3);   // fecha en la ceja
+  filaFichas('ANTES', '      ', TABLERO.antes, 530, T_ITEM + .3, t, '#9aa0a8');
+  filaFichas('AHORA', TABLERO.antes, TABLERO.ahora, 830, T_ITEM + 1.2, t, C.acento);
+  ctx.fillStyle = C.acento; ctx.fillRect(70, 1060, 940 * easeOut(prog(t, T_ITEM + 2, T_ITEM + 2.3)), 8);
+  sello(SELLO, W - 330, 1130, prog(t, T_SELLO, T_SELLO + 1), { font: `800 82px ${F_TIT}`, fondo: C.acento, tinta: C.tinta, rot: -.12 });
+}
+
+// ---------- cintillo: pestaña de categoría + titular en papel; las palabras giran de abajo hacia arriba ----------
+function cintillo(t) {
+  const k = easeOut(prog(t, T_ITEM + .1, T_ITEM + .45)); if (k <= 0) return;
+  const x = 70, ty = 1226, sy = 1274, sw = W - 140, sh = 150;
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 1200, x + (sw + 40) * k, 300); ctx.clip();
+  const ft = `800 34px ${F_TIT}`, tw = medir(CATEGORIA, ft) + 44;
+  ctx.fillStyle = C.acento; ctx.fillRect(x, ty, tw, 48); texto(CATEGORIA, x + 22, ty + 37, ft, C.tinta, 'left', 1);
+  ctx.fillStyle = C.papel; ctx.fillRect(x, sy, sw - 110, sh); ctx.fillStyle = C.acento; ctx.fillRect(x, sy, 14, sh);
+  ctx.fillStyle = C.tinta; ctx.fillRect(x + sw - 110, sy, 110, sh); ctx.fillStyle = C.acento; ctx.fillRect(x + sw - 110, sy, 110, 8);
+  { const aj = autoajuste(CANAL, F_TIT, 800, 90, 2, 40, 20); aj.rs.forEach((r, i) => texto(r, x + sw - 55, sy + 80 + (i - (aj.rs.length - 1) / 2) * aj.size, aj.font, C.acento, 'center')); }
+  // titular: gira (sube el nuevo desde abajo, el viejo sale por arriba, 0,32 s)
+  ctx.beginPath(); ctx.rect(x + 14, sy, sw - 124, sh); ctx.clip();
+  const q = easeIO(prog(t, T_FLIP, T_FLIP + .32));
+  TITULARES.slice(0, 2).forEach((s, i) => { const dy = i === 0 ? -q * sh : (1 - q) * sh; if (i === 1 && q <= 0) return;
+    const aj = autoajuste(s, F_TIT, 800, sw - 170, 1, 76, 40); texto(aj.rs[0], x + 40, sy + 98 + dy, aj.font, C.tinta); });
+  ctx.restore();
+  if (t > T_FLIP && t < T_FLIP + .25) { ctx.save(); ctx.globalAlpha = .7 * (1 - (t - T_FLIP) / .25); ctx.fillStyle = '#fff'; ctx.fillRect(x, ty, tw, 48); ctx.restore(); }   // la pestaña destella
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  const ANG = 0;                                     // banda vertical
+  if (t < T_STING) sting(t);
+  else if (t < T_ITEM) { sumario(t); mosca(t); }
+  else { item(t); cintillo(t); mosca(t); }
+  // barridos de banda: sting → sumario (la escena nueva ya entra con contenido) y sumario → noticia
+  for (const [a, de, a2] of [[T_STING - .3, 'sting', 'sumario'], [T_ITEM - .3, 'sumario', 'item']]) {
+    const p = prog(t, a, a + .34); if (p <= 0 || p >= 1) continue;
+    const L = W + 220, xb = lerp(-110, W + 110, p);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, xb, H); ctx.clip();
+    if (a2 === 'sumario') { sumario(t); } else { item(t); cintillo(t); }
+    mosca(t); ctx.restore();
+    ctx.fillStyle = C.oro; ctx.fillRect(xb - 14, 0, 14, H); ctx.fillStyle = C.tinta; ctx.fillRect(xb, 0, 5, H); ctx.fillStyle = C.acento; ctx.fillRect(xb + 5, 0, 84, H);
+    void L; void de; void ANG;
+  }
+});
+window.SONIDOS = [
+  { t: .04, tipo: 'swish' }, { t: .24, tipo: 'golpe' }, { t: .5, tipo: 'pop' }, { t: 1.1, tipo: 'swish' },
+  ...SUMARIO.map((_, i) => ({ t: T_STING + .25 + i * .5, tipo: 'pop' })), { t: T_ITEM - .3, tipo: 'swish' },
+  { t: T_ITEM + .3, tipo: 'papel' }, { t: T_ITEM + 1.2, tipo: 'papel' }, { t: T_SELLO, tipo: 'golpe' }, { t: T_FLIP, tipo: 'desliz' },
+];
+</script>
+</body>
+</html>

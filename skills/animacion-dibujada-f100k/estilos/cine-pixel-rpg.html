@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RPG de 16 bits</title>
+<style>html,body{margin:0;background:#181425;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw;image-rendering:pixelated}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «RPG de 16 bits» · ingeniería inversa de lemo-opuscar/styles/pixel-rpg (MIT, © 2026 LemoLab) · qué se tomó: grilla de 180×320 pixeles agrandada ×6 sin suavizar, paleta limitada con tramado de Bayer (nunca mezclas), sprites que pasan a 8 cuadros por segundo con contorno de 1 px, el retrato que actúa la cara, la caja de diálogo que se escribe sola con ▼, y la jugada nativa «objeto conseguido».
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'tu oferta es el tesoro';          // el título de arriba, palabra por palabra (sale en MAYÚSCULAS de pixel)
+const PALABRA_CLAVE = 'tesoro';                  // sale ENORME (≤ 7 letras para que quepa grande)
+const OBJETO = 'OFERTA';                         // lo que sale del cofre (≤ 8 letras, va en el pergamino)
+const NOMBRE = 'TÚ';                             // la plaquita de la caja de diálogo
+const DIALOGO = '¡CONSEGUISTE TU OFERTA! AHORA TU CONTENIDO SÍ VENDE.';   // se escribe sola (≤ 70 letras)
+const COLORES = {                                // paleta indexada propia (~16 colores)
+  tinta: '#181425', azulOsc: '#262b44', azul: '#3a4466', pizarra: '#5a6988', claro: '#8b9bb4', blanco: '#ffffff',
+  madera: '#733e39', maderaClara: '#b86f50', oro: '#feae34', amarillo: '#fee761', rojo: '#e43b44', rojoOsc: '#a22633',
+  pelo: '#5d3a2a', peloOsc: '#3b2420', tez: '#f2c9a0', tezSombra: '#d49a78', tunica: '#2f5fc4', tunicaOsc: '#1d3b8a',
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-juegos.js"></script>
+<script>
+// ANATOMIA: estilizada — sprite y retrato en pixel art de una grilla chica: los brazos y la cara son bloques de 1–3 pixeles
+const C = COLORES, G = crearGrilla(6), { GW, GH } = G, p = G.p;
+const PISO = 190, COFRE = { x: 104, y: PISO - 16 }, HEROE = { x: 58, y: PISO - 23 };
+const T_ABRE = .35, T_SUBE = .7, T_FIESTA = 1.1, T_DIALOGO = 2.4, LPS = 26;
+
+// ---------- el sprite de la heroína (la bufanda roja es su marca de silueta) ----------
+const PAL_H = { h: C.pelo, H: C.peloOsc, s: C.tez, S: C.tezSombra, e: C.tinta, m: C.rojoOsc, r: C.rojo, R: C.rojoOsc, b: C.tunica, B: C.tunicaOsc, w: C.blanco, l: C.madera, g: C.oro, p: C.azulOsc, k: C.peloOsc };
+const QUIETA = [
+  '....hhhhhh....', '..hhhhhhhhhh..', '.hhhhhhhhhhhh.', '.hhhhHhhhHhhh.', '.hhsssssssshh.', '.hsHHssssHHsh.', '.hssessssessh.', '.hsSssssssSsh.',
+  '..sssmmmmsss..', '...ssssssss...', '..rrrrrrrrrr..', '.rrRrrrrrrRrr.', 'bbrrrrrrrrrrbb', 'bbbbbbwwbbbbbb', 'sbbbbbwwbbbbbs', 'sbbbbbwwbbbbbs',
+  '.lllllgglllll.', '..bbbbbbbbbb..', '..ppp....ppp..', '..ppp....ppp..', '..ppp....ppp..', '.kkkk....kkkk.', '.kkkk....kkkk.'];
+const FIESTA = QUIETA.map((f, j) => {           // brazos arriba: la pose de «objeto conseguido»
+  let r = '.' + f + '.';
+  if (j >= 2 && j <= 11) r = 'b' + r.slice(1, -1) + 'b';
+  if (j === 1) r = 's' + r.slice(1, -1) + 's';
+  if (j === 0) r = 's' + r.slice(1, -1) + 's';
+  if (j === 8) r = r.replace('mmmm', 'mRRm');
+  if (j >= 12 && j <= 15) r = '.' + f.replace(/^s|s$/g, 'b') + '.';
+  return r; });
+
+// ---------- fondo: muro de ladrillo tramado, piso de piedra, estandartes (se pinta UNA vez) ----------
+const FONDO = (() => {
+  const G2 = crearGrilla(6), q = G2.p;
+  degradadoPx(G2, 0, 0, GW, PISO, [C.azulOsc, C.azul, C.azul, C.azulOsc]);
+  for (let y = 0; y < PISO; y += 8) { const off = (y / 8) % 2 ? 8 : 0; q(0, y, C.tinta, GW, 1);
+    for (let x = -off; x < GW; x += 16) { q(x, y, C.tinta, 1, 8); if (hash2(x, y) > .7) q(x + 2, y + 2, C.pizarra, 10, 1); } }
+  // arco del fondo con luz cálida tramada
+  for (let y = 110; y < PISO; y++) for (let x = 60; x < 120; x++) { const dx = (x - 90) / 30, dy = (y - 140) / 30;
+    if (y < 140 && dx * dx + dy * dy > 1) continue; const v = 1 - Math.abs(dx) * .9; q(x, y, v > bayer(x, y) * 1.2 ? C.oro : C.madera); }
+  for (let y = 140; y < PISO; y++) { q(58, y, C.claro, 2, 1); q(120, y, C.claro, 2, 1); }
+  // estandartes verdes con borde de oro
+  for (const x of [16, 150]) { for (let y = 112; y < 150; y++) q(x, y, '#2e7d4f', 14, 1); for (let i = 0; i < 7; i++) { q(x + i, 150 + i, '#2e7d4f', 14 - i * 2, 1); }
+    q(x, 112, C.oro, 14, 2); q(x + 6, 120, C.amarillo, 2, 18); }
+  // piso de piedra en perspectiva con tramado
+  degradadoPx(G2, 0, PISO, GW, GH - PISO, [C.pizarra, C.azul, C.azulOsc]);
+  for (let y = PISO + 6, k = 6; y < GH; y += k, k += 2) q(0, y, C.tinta, GW, 1);
+  for (let i = -10; i < 20; i++) { const x0 = 90 + i * 14; for (let y = PISO; y < GH; y += 2) q(Math.round(90 + (x0 - 90) * (1 + (y - PISO) / 40)), y, C.tinta); }
+  q(0, PISO, C.claro, GW, 1);
+  return G2.c;
+})();
+
+// ---------- antorchas: llama a 12 cuadros por segundo + aro de luz tramado ----------
+function antorcha(x, y, f12) {
+  p(x - 1, y, C.madera, 3, 9); p(x - 2, y - 1, C.oro, 5, 2);
+  const fl = [[0, -2, 3], [-1, -4, 5], [0, -6, 3], [0, -7, 1]], k = f12 % 3;
+  fl.forEach(([dx, dy, w], i) => p(x + dx - (w >> 1) + (i === 1 && k === 1 ? 1 : 0), y + dy - (k === 2 ? 1 : 0), i < 2 ? C.oro : C.amarillo, w, 2));
+  for (let j = -16; j <= 16; j++) for (let i = -16; i <= 16; i++) { const d = Math.hypot(i, j) / 16; if (d > 1 || d < .3) continue;
+    if ((1 - d) * .55 > bayer(x + i, y + j)) { const X = x + i, Y = y - 4 + j; if (Y < PISO) p(X, Y, d < .6 ? C.maderaClara : C.madera); } }
+}
+// ---------- cofre: se abre, sale la luz en rayos tramados y sube el pergamino ----------
+function cofre(t) {
+  const { x, y } = COFRE, abierto = t >= T_ABRE;
+  p(x, y + 6, C.tinta, 26, 11); p(x + 1, y + 7, C.madera, 24, 9); p(x + 1, y + 7, C.maderaClara, 24, 2);
+  p(x + 1, y + 11, C.oro, 24, 1); p(x + 11, y + 8, C.oro, 4, 5); p(x + 12, y + 9, C.tinta, 2, 2);
+  if (!abierto) { p(x, y, C.tinta, 26, 7); p(x + 1, y + 1, C.madera, 24, 5); p(x + 1, y + 1, C.maderaClara, 24, 1); p(x + 1, y + 4, C.oro, 24, 1); return; }
+  p(x, y - 6, C.tinta, 26, 7); p(x + 1, y - 5, C.madera, 24, 5); p(x + 1, y - 1, C.oro, 24, 1);   // tapa echada atrás
+  p(x + 1, y + 5, C.amarillo, 24, 2);
+  const fuerza = Math.min(1, (t - T_ABRE) / .25) * (1 - .35 * prog(t, 2, 3));
+  for (let j = 1; j < 70; j++) for (let i = -40; i < 40; i++) { const X = x + 13 + i, Y = y + 4 - j, cono = Math.abs(i) / (6 + j * .5); if (cono > 1) continue;
+    const v = (1 - cono) * (1 - j / 70) * fuerza; if (v > bayer(X, Y)) p(X, Y, v > .55 ? C.blanco : C.amarillo); }
+}
+function pergamino(t) {
+  if (t < T_SUBE) return;
+  const u = Math.min(1, (t - T_SUBE) / .45), y = Math.round(COFRE.y - 4 - u * 46), x = COFRE.x + 13 - 20;
+  const w = Math.max(40, anchoPx(OBJETO, 1) + 10);
+  p(x - 1, y - 1, C.tinta, w + 2, 13); p(x, y, '#f4e4c1', w, 11); p(x - 2, y, C.madera, 3, 11); p(x + w - 1, y, C.madera, 3, 11);
+  textoPx(G, OBJETO, x + Math.round((w - anchoPx(OBJETO, 1)) / 2), y + 2, { col: C.rojoOsc });
+  const f = Math.floor(t * 8);
+  for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + f * .4, r = 24 + (f + i) % 3 * 2; const sx = Math.round(x + w / 2 + Math.cos(a) * r), sy = Math.round(y + 5 + Math.sin(a) * r * .6);
+    p(sx, sy, C.amarillo); if ((f + i) % 2) { p(sx - 1, sy, C.oro); p(sx + 1, sy, C.oro); p(sx, sy - 1, C.oro); p(sx, sy + 1, C.oro); } }
+}
+
+// ---------- retrato 32×32 que actúa la cara (cejas, ojos y boca) ----------
+function retrato(x, y, alegre, habla) {
+  p(x, y, C.tinta, 32, 32); degradadoPx(G, x + 1, y + 1, 30, 30, [C.azul, C.pizarra]);
+  const dentro = (cx, cy, rx, ry, i, j) => ((i - cx) / rx) ** 2 + ((j - cy) / ry) ** 2 <= 1;
+  for (let j = 0; j < 30; j++) for (let i = 0; i < 30; i++) { const X = x + 1 + i, Y = y + 1 + j;
+    if (dentro(15, 13, 12, 12, i, j)) p(X, Y, C.pelo);
+    if (j > 22 && dentro(15, 32, 12, 10, i, j)) p(X, Y, C.tunica);
+    if (j > 21 && j < 26 && i > 8 && i < 22) p(X, Y, C.rojo);
+    if (dentro(15, 16, 8.5, 9.5, i, j) && j > 9) p(X, Y, C.tez); }
+  for (let i = 7; i < 24; i++) p(x + 1 + i, y + 9 + (i % 3 === 0 ? 1 : 0), C.peloOsc);      // flequillo
+  const yb = alegre ? y + 12 : y + 13;                                                   // cejas: arriba cuando festeja
+  p(x + 9, yb, C.peloOsc, 5, 1); p(x + 18, yb, C.peloOsc, 5, 1);
+  if (alegre) { p(x + 9, y + 16, C.tinta, 4, 1); p(x + 10, y + 15, C.tinta, 2, 1); p(x + 19, y + 16, C.tinta, 4, 1); p(x + 20, y + 15, C.tinta, 2, 1); }
+  else { p(x + 10, y + 15, C.tinta, 3, 3); p(x + 19, y + 15, C.tinta, 3, 3); p(x + 10, y + 15, C.blanco); p(x + 19, y + 15, C.blanco); }
+  p(x + 8, y + 19, C.tezSombra, 2, 1); p(x + 22, y + 19, C.tezSombra, 2, 1);
+  if (habla) { p(x + 13, y + 21, C.rojoOsc, 6, 2); p(x + 14, y + 23, C.rojoOsc, 4, 1); } else { p(x + 13, y + 21, C.rojoOsc, 6, 1); p(x + 12, y + 20, C.rojoOsc); p(x + 19, y + 20, C.rojoOsc); }
+}
+
+// ---------- título en una ventana de arriba: palabra por palabra, la clave enorme ----------
+const PAL = FRASE.toUpperCase().split(/[ \t\n]+/).map((txt, i) => { const limpia = txt.replace(/[¡!¿?.,]/g, ''), clave = limpia === PALABRA_CLAVE.toUpperCase();
+  const corta = ['TU', 'ES', 'EL', 'LA', 'DE', 'Y', 'EN', 'UN', 'UNA', 'NO', 'SIN', 'CON', 'LO', 'TUS'].includes(limpia);
+  return { txt, esc: clave ? 4 : corta ? 1 : 2, t0: 1.0 + i * .28 + (clave ? .12 : 0), clave }; });
+const TIT = (() => { const maxW = GW - 20, filas = []; let fila = [], w = 0;
+  for (const q of PAL) { while (q.esc > 1 && anchoPx(q.txt, q.esc) > maxW) q.esc--; const ww = anchoPx(q.txt, q.esc), sp = 5;
+    if (fila.length && w + sp + ww > maxW) { filas.push(fila); fila = []; w = 0; } w += (fila.length ? sp : 0) + ww; fila.push(q); }
+  if (fila.length) filas.push(fila);
+  let y = 50; for (const f of filas) { const alto = Math.max(...f.map(q => q.esc * 7)), wf = f.reduce((a, q) => a + anchoPx(q.txt, q.esc), 0) + 5 * (f.length - 1);
+    let x = Math.round((GW - wf) / 2); for (const q of f) { q.x = x; q.y = y + alto - q.esc * 7; x += anchoPx(q.txt, q.esc) + 5; } y += alto + 6; }
+  return { y0: 44, y1: y + 2 }; })();
+
+// ---------- caja de diálogo con retrato (es el subtítulo) ----------
+const CAJA = { x: 4, y: 198, w: GW - 8, h: 46 }, TX = CAJA.x + 42, ANCHO_TX = CAJA.w - 50;
+const RENG = partirPx(DIALOGO.toUpperCase(), ANCHO_TX, 1);
+if (RENG.length > 3) console.error(`[pixel-rpg] el diálogo ocupa ${RENG.length} renglones: el máximo es 3. Acórtalo.`);
+function dialogo(t) {
+  if (t < T_DIALOGO - .3) return;
+  const entra = Math.min(1, (t - (T_DIALOGO - .3)) / .3), y = Math.round(CAJA.y + (1 - easeOut(entra)) * 50);   // la ventana sube en px enteros
+  ventanaPx(G, CAJA.x, y, CAJA.w, CAJA.h);
+  ventanaPx(G, CAJA.x + 6, y - 12, anchoPx(NOMBRE, 1) + 12, 16, { fondo: [C.rojoOsc, C.rojo] }); textoPx(G, NOMBRE, CAJA.x + 12, y - 6, { col: C.blanco, sombra: C.tinta });
+  const n = Math.max(0, Math.floor((t - T_DIALOGO) * LPS)); let resto = n;
+  const habla = n < DIALOGO.length && Math.floor(t * 8) % 2 === 0;
+  retrato(CAJA.x + 6, y + 7, true, habla);
+  RENG.forEach((r, i) => { const k = Math.min([...r].length, resto); resto -= k + 1; if (k > 0) textoPx(G, r, TX, y + 9 + i * 11, { col: C.blanco, sombra: C.tinta, max: k }); });
+  if (n >= DIALOGO.length + 4 && Math.floor(t * 3) % 2 === 0) textoPx(G, '▼', CAJA.x + CAJA.w - 12, y + CAJA.h - 10, { col: C.amarillo });
+}
+
+arrancar(frame => {
+  const t = frame / FPS, f8 = Math.floor(t * 8), f12 = Math.floor(t * 12);
+  G.g.drawImage(FONDO, 0, 0);
+  antorcha(44, 160, f12); antorcha(136, 160, f12 + 1);
+  cofre(t);
+  // heroína: respira 1 px a 2 Hz; brinco de «actuar» y pose de fiesta
+  const brinco = t >= T_FIESTA && t < T_FIESTA + .375 ? [0, 2, 3, 2, 0][Math.min(4, Math.floor((t - T_FIESTA) * 12))] : 0;
+  const resp = t < T_FIESTA && f8 % 8 < 4 ? 1 : 0;
+  ctx.save();
+  if (t >= T_FIESTA) spritePx(G, FIESTA, PAL_H, HEROE.x - 1, HEROE.y - brinco, { contorno: C.tinta });
+  else spritePx(G, QUIETA, PAL_H, HEROE.x, HEROE.y + resp, { contorno: C.tinta });
+  p(HEROE.x + 1, PISO, C.tinta, 12, 1);
+  pergamino(t);
+  // ventana de título
+  if (t >= .9) { ventanaPx(G, 6, TIT.y0, GW - 12, TIT.y1 - TIT.y0 + 4);
+    for (const q of PAL) if (t >= q.t0) textoPx(G, q.txt, q.x, q.y, { esc: q.esc, col: q.clave ? C.amarillo : C.blanco, sombra: C.tinta }); }
+  dialogo(t);
+  ctx.restore();
+  ctx.setTransform(1, 0, 0, 1, 0, 0); G.presentar(ctx);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: T_ABRE, tipo: 'golpe' }, { t: T_SUBE, tipo: 'swish' }, { t: T_FIESTA, tipo: 'pop' }, { t: .9, tipo: 'desliz' },
+  ...PAL.map(q => ({ t: +q.t0.toFixed(2), tipo: 'pop' })), { t: T_DIALOGO - .3, tipo: 'desliz' },
+];
+</script>
+</body>
+</html>

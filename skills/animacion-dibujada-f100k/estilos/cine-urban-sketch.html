@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Croquis con acuarela</title>
+<style>
+  html,body{margin:0;background:#2a241d;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Croquis con acuarela» · ingeniería inversa de lemo-opuscar/styles/urban-sketch (MIT, © 2026 LemoLab) · qué se tomó:
+// dos capas que no se mezclan: línea fina sepia de estilógrafo (tiembla, se pasa en las esquinas, se corta a veces) y aguada
+// transparente encima, corrida 1–3 px de la línea, con orilla seca más oscura y granulado; la página es parte de la imagen
+// (papel crema, márgenes con letra a mano, borde que se deshace en toques) y la jugada «el color llega»: la aguada se abre
+// desde la vitrina con un frente mojado más oscuro.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LINEA_CHICA = 'deja de vender, empieza a';     // en el margen de arriba, a mano (≤ 30)
+const PALABRA_CLAVE = 'contar';                      // enorme, a mano (≤ 10)
+const NOTA_ESQUINA = 'hoy · tu tienda · sol';        // la nota de la esquina, como en un cuaderno de viaje (≤ 28)
+const COLORES = {
+  tinta: '#4a3426',     // sepia oscuro (nunca cambia)
+  fachada: '#d8c6a0', toldo: '#b8483e', vitrina: '#e2b04a', hojas: '#7fa04a', cielo: '#9fbcd6',
+  puerta: '#5f7486', vereda: '#c8b89a', sombra: '#8a7fa8', bruma: '#c9cfd8',
+  papel: '#f3ead6',
+};
+const DUR = 9;                                       // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const LETRA = '"Bradley Hand", Noteworthy, "Segoe Print", cursive';
+const C = COLORES;
+const PAPEL = papelAcuarela(C.papel, 31);
+// ---------- la línea (estilógrafo): sugiere, no describe ----------
+const L = (pts, w = 3) => tCurva(pts, { w, col: C.tinta, temblor: .45, onda: 160, sobre: 5 + hash2(pts.length, pts[0][0] | 0) * 4 });
+const RECTA = (x0, y0, x1, y1, w = 3) => tLinea(x0, y0, x1, y1, { w, col: C.tinta, temblor: .45, sobre: 6, comba: .006 });
+const TRAZOS = [];
+const add = s => { (Array.isArray(s) ? s : [s]).forEach(x => TRAZOS.push(x)); };
+// fachada principal
+add(RECTA(282, 640, 822, 628)); add(RECTA(280, 636, 284, 1334)); add(RECTA(820, 626, 824, 1334)); add(RECTA(250, 610, 850, 598, 3.4));   // cornisa
+for (const [x, y] of [[340, 700], [560, 694]]) { add(RECTA(x, y, x + 150, y - 2)); add(RECTA(x, y, x + 2, y + 170)); add(RECTA(x + 150, y - 2, x + 152, y + 120)); add(RECTA(x, y + 170, x + 110, y + 168)); add(RECTA(x + 75, y, x + 76, y + 160, 2.4)); }
+// toldo festoneado y letrero
+add(RECTA(300, 962, 800, 954)); { const p = []; for (let i = 0; i <= 10; i++) { const x = 300 + i * 50; p.push([x, 1030]); if (i < 10) p.push([x + 25, 1052]); } add(L(p)); }
+add(RECTA(300, 962, 318, 1030)); add(RECTA(800, 954, 790, 1030)); for (let i = 1; i < 5; i++) add(RECTA(300 + i * 100, 960, 300 + i * 100 - 4, 1030, 2.2));
+add(RECTA(380, 870, 720, 866)); add(RECTA(380, 870, 382, 930)); add(RECTA(720, 866, 722, 926)); add(RECTA(382, 930, 700, 928));
+// vitrina con repisas y cosas sugeridas, y la puerta
+add(RECTA(322, 1062, 602, 1058)); add(RECTA(322, 1062, 324, 1262)); add(RECTA(602, 1058, 604, 1262)); add(RECTA(318, 1262, 610, 1260, 3.4));
+add(RECTA(332, 1160, 594, 1158, 2.2)); for (const x of [350, 400, 470, 520]) add(L([[x, 1156], [x + 6, 1120], [x + 28, 1118], [x + 32, 1156]], 2.2));
+add(L([[360, 1258], [370, 1210], [410, 1206], [416, 1258]], 2.2)); add(L([[470, 1258], [500, 1196], [540, 1256]], 2.2));
+add(RECTA(650, 1040, 760, 1036)); add(RECTA(650, 1040, 652, 1334)); add(RECTA(760, 1036, 762, 1334)); add(L([[738, 1190], [742, 1192]], 4));
+// árbol: copa con trazos festoneados solo en el contorno, tronco
+for (let k = 0; k < 7; k++) { const a0 = -2.9 + k * .55, cx = 170, cy = 900, p = []; for (let i = 0; i <= 6; i++) { const a = a0 + i * .08, r = 150 + 22 * Math.sin(i * 1.7 + k); p.push([cx + Math.cos(a) * r * .95, cy + Math.sin(a) * r * 1.2]); } add(L(p, 2.6)); }
+add(L([[160, 1080], [168, 1200], [158, 1334]], 3.4)); add(L([[186, 1080], [182, 1210], [190, 1334]], 3.4));
+// farol, edificio lejano y vereda
+add(RECTA(912, 830, 914, 1334, 3)); add(L([[890, 830], [912, 800], [936, 830], [890, 830]], 2.8));
+add(RECTA(830, 760, 1010, 770, 2.2)); add(RECTA(1008, 770, 1010, 1330, 2.2)); for (const y of [820, 920, 1020]) add(RECTA(860, y, 900, y + 1, 2));
+add(RECTA(60, 1336, 1020, 1330, 3.4)); add(RECTA(80, 1395, 1000, 1388, 2.6));
+// algunos trazos largos con un huequito (se corta a media línea)
+TRAZOS.forEach((s, i) => { if (s.len > 300 && hash2(i, 5) < .45) s.hueco = .3 + hash2(5, i) * .4; });
+// ---------- la aguada (encima, corrida de la línea, con orilla seca y granulado) ----------
+const BORDE_PAG = (() => { const o = []; for (let i = 0; i < 80; i++) { const a = i / 80 * 6.283, rx = 520, ry = 470;
+  const k = .9 + .14 * vnoise(Math.cos(a) * 2 + 9, Math.sin(a) * 2); o.push([540 + Math.cos(a) * rx * k * 1.02, 985 + Math.sin(a) * ry * k]); } return o; })();
+const AGUADA = (() => { const c = capa(), g = c.getContext('2d'), r = rng(8);
+  const capaAg = (pts, col, a = .5, sem = 1) => { const P = pts.map(([x, y], i) => [x + 3 + (vnoise(i * .9, sem) - .5) * 14, y + 2 + (vnoise(sem, i * .9) - .5) * 14]);
+    g.save(); g.beginPath(); P.forEach(q => g.lineTo(...q)); g.closePath(); g.fillStyle = colorA(col, a); g.fill(); g.lineWidth = 3; g.strokeStyle = colorA(col, a * .7); g.stroke(); g.restore(); };   // orilla seca
+  const R4 = (x0, y0, x1, y1) => resample([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], 30, true);
+  g.save(); g.beginPath(); BORDE_PAG.forEach(q => g.lineTo(...q)); g.closePath(); g.clip();
+  const cg = g.createLinearGradient(0, 520, 0, 900); cg.addColorStop(0, colorA(C.cielo, 0)); cg.addColorStop(1, colorA(C.cielo, .45)); g.fillStyle = cg; g.fillRect(0, 500, W, 480);   // cielo: se apaga hacia arriba
+  capaAg(R4(830, 760, 1010, 1330), C.bruma, .45, 2);
+  capaAg(R4(282, 640, 822, 1334), C.fachada, .55, 3); capaAg(R4(700, 630, 822, 1334), C.sombra, .3, 4);     // lado en sombra hacia el violeta
+  capaAg(R4(304, 962, 798, 1046), C.toldo, .62, 5); capaAg(R4(322, 1062, 602, 1262), C.vitrina, .6, 6); capaAg(R4(650, 1040, 760, 1334), C.puerta, .5, 7);
+  capaAg(R4(60, 1334, 1020, 1400), C.vereda, .45, 8); capaAg(R4(900, 830, 926, 1334), C.sombra, .4, 9);
+  for (let i = 0; i < 70; i++) { const a = r() * 6.28, d = r() * 150; g.fillStyle = colorA(r() < .6 ? C.hojas : '#5d7f38', .35 + r() * .3);   // copa: toques de hoja, con huecos en la orilla
+    g.beginPath(); g.ellipse(170 + Math.cos(a) * d, 900 + Math.sin(a) * d * 1.2, 14 + r() * 18, 10 + r() * 12, r() * 3, 0, 6.29); g.fill(); }
+  g.globalCompositeOperation = 'source-atop'; g.globalAlpha = .35; g.fillStyle = g.createPattern(diente(4, 512, .45), 'repeat'); g.fillRect(0, 0, W, H);   // granula en el diente
+  g.restore();
+  g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
+  for (let i = 0; i < 46; i++) { const a = r() * 6.28, k = .97 + r() * .07, j = Math.floor(a / 6.283 * 80) % 80, q = BORDE_PAG[j]; g.fillStyle = colorA([C.hojas, C.fachada, C.cielo, C.vereda][i % 4], .14 + r() * .18);   // el borde se deshace en toques
+    g.beginPath(); g.ellipse(540 + (q[0] - 540) * k, 985 + (q[1] - 985) * k, 10 + r() * 16, 7 + r() * 10, r() * 3, 0, 6.29); g.fill(); }
+  return c; })();
+const TINTA = (() => { const c = capa(), g = c.getContext('2d'); for (const s of TRAZOS) {
+  if (s.hueco) { const L1 = s.len * s.hueco; g.save(); g.fillStyle = s.col; g.globalAlpha = .96; g.beginPath(); cinta(g, s, L1 - 6); g.fill(); g.restore();
+    const resto = { ...s, pts: s.pts.filter((_, i) => s.cum[i] > L1 + 8), cum: null }; if (resto.pts.length > 2) pintarTrazo(g, new Trazo(resto.pts, { w: s.w, col: s.col, temblor: 0 }), 0, { p: 1, alpha: .96, gota: false }); }
+  else pintarTrazo(g, s, 0, { p: 1, alpha: .96, gota: false }); } return c; })();
+
+// ---------- el color llega desde la vitrina: frente mojado con borde ruidoso ----------
+const FUENTE = [462, 1160], T = { llega: [.2, 2.0], chica: [3.3, 4.1], clave: [4.1, 5.1], nota: [5.3, 6.0] };
+function frente(R, sem = 3) { ctx.beginPath(); for (let i = 0; i <= 90; i++) { const a = i / 90 * 6.283, r = R * (.85 + .3 * vnoise(Math.cos(a) * 2.2 + sem, Math.sin(a) * 2.2 + R * .002)); ctx.lineTo(FUENTE[0] + Math.cos(a) * r, FUENTE[1] + Math.sin(a) * r); } ctx.closePath(); }
+const AJ_C = autoajuste(LINEA_CHICA, LETRA, 700, 900, 1, 64, 36), AJ_K = autoajuste(PALABRA_CLAVE, LETRA, 700, 900, 1, 200, 90), AJ_N = autoajuste(NOTA_ESQUINA, LETRA, 400, 560, 1, 42, 26);
+const Y_C = 300, Y_K = Y_C + 30 + AJ_K.size * .85;
+function aMano(txt, aj, x, y, u, a = .92) {          // se escribe de izquierda a derecha con el estilógrafo
+  if (u <= 0) return; const w = medir(txt, aj.font); ctx.save(); ctx.beginPath(); ctx.rect(x - 10, y - aj.size * 1.2, (w + 20) * u, aj.size * 1.8); ctx.clip();
+  ctx.font = aj.font; ctx.fillStyle = colorA(C.tinta, a); ctx.fillText(txt, x, y); ctx.restore(); }
+const CAM = camara([[0, 500, 1080, 1.22], [1.6, 500, 1080, 1.22], [3.2, 540, 960, 1.0], [DUR, 540, 950, 1.02]]);
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = C.papel; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(PAPEL, 0, 0); ctx.drawImage(TINTA, 0, 0);
+  const u = prog(t, T.llega[0], T.llega[1]), R = 30 + easeOut(u) * 1250;
+  if (u > 0) { ctx.save(); ctx.globalCompositeOperation = 'multiply';
+    ctx.save(); frente(R); ctx.clip(); ctx.drawImage(AGUADA, 0, 0); ctx.restore();
+    if (u < 1) { ctx.save(); ctx.beginPath(); BORDE_PAG.forEach(q => ctx.lineTo(...q)); ctx.closePath(); ctx.clip(); frente(R); ctx.lineWidth = 70; ctx.filter = 'blur(10px)'; ctx.strokeStyle = 'rgba(120,110,150,.16)'; ctx.stroke(); ctx.restore();   // banda mojada detrás del frente
+      ctx.save(); frente(R); frente(R * .9, 3); ctx.clip('evenodd'); ctx.globalAlpha = .5; ctx.drawImage(AGUADA, 0, 0); ctx.restore(); }
+    ctx.restore(); }
+  aMano(LINEA_CHICA, AJ_C, 90, Y_C, easeOut(prog(t, T.chica[0], T.chica[1])), .85);
+  aMano(PALABRA_CLAVE, AJ_K, 90, Y_K, easeOut(prog(t, T.clave[0], T.clave[1])));
+  aMano(NOTA_ESQUINA, AJ_N, 90, 1455, easeOut(prog(t, T.nota[0], T.nota[1])), .75);
+  if (t > T.clave[1]) { const s = prog(t, T.clave[1], T.clave[1] + .35); ctx.save(); ctx.globalCompositeOperation = 'multiply';   // un toque de aguada bajo la palabra (misregistrado)
+    ctx.fillStyle = colorA(C.toldo, .3 * s); ctx.beginPath(); ctx.ellipse(90 + medir(PALABRA_CLAVE, AJ_K.font) * .5 + 6, Y_K - AJ_K.size * .05, medir(PALABRA_CLAVE, AJ_K.font) * .55 * s, AJ_K.size * .14, -.03, 0, 6.29); ctx.fill(); ctx.restore(); }
+});
+window.SONIDOS = [
+  { t: .2, tipo: 'desliz' },            // pincel mojado («shhh» grave)
+  { t: 1.6, tipo: 'swish' },            // la cámara se aleja
+  { t: T.chica[0], tipo: 'papel' },     // estilógrafo sobre papel
+  { t: T.clave[0], tipo: 'papel' },
+  { t: T.clave[1], tipo: 'pop' },
+  { t: T.nota[0], tipo: 'papel' },
+];
+</script>
+</body>
+</html>

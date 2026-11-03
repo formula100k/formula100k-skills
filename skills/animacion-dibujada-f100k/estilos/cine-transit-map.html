@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mapa de metro</title>
+<style>
+  html,body{margin:0;background:#1B1918;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Mapa de metro» · ingeniería inversa de lemo-opuscar/styles/transit-map (MIT, © 2026 LemoLab) · qué se tomó: esquema de metro en ocho direcciones con esquinas de un solo radio, impreso en una hoja de papel con diente sobre una mesa oscura y vista con cámara en perspectiva real (proyección por franjas) y profundidad de campo; puntas de pluma que dibujan las líneas, paradas que se encienden al pasar, la combinación que cae con su sombra y anillos, el túnel punteado bajo el río, el contador mecánico y el título impreso en la cartela.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'tu ruta a la venta';             // impreso en la cartela del mapa (máx. ~24 letras)
+const PALABRA_CLAVE = 'venta';                    // va enorme
+const RIO = 'la duda';                            // el nombre del río que cruzan los túneles
+// Las 4 líneas (lo que representa cada una) y los nombres de sus estaciones (cortos, máx. ~11 letras).
+const LINEAS_NOMBRE = ['contenido', 'comunidad', 'oferta', 'anuncio'];
+const ESTACIONES = {
+  idea: 'idea', guion: 'guion', grabar: 'grabar', publicar: 'publicar', venta: 'venta',
+  seguidora: 'seguidora', comentario: 'comentario', regalo: 'regalo', mensaje: 'mensaje',
+  llamada: 'llamada', oferta: 'oferta', anuncio: 'anuncio',
+};
+const COLORES = {
+  papel: '#F2EEE5', tinta: '#1B1C1E', tinta2: '#4A4740', rio: '#BCD6EA', rioBorde: '#8FB5D6', rioTexto: '#5F88AD', mesa: '#1B1918',
+  lineas: ['#E3002B', '#1E6FD9', '#1FA05A', '#F28C1B'],   // el rojo (línea 1) es el acento de la historia
+};
+// El contador solo cuenta lo que ya está dibujado (estaciones y líneas): nunca muestra una cifra inventada.
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-info.js"></script>
+<script>
+const SANS = '"Helvetica Neue", "Avenir Next", sans-serif';
+const G = 80, MG = 4, SW = 15, SH = 24;                                       // px por paso de retícula en la hoja · margen de mesa · hoja en G
+const TW = (SW + 2 * MG) * G, TH = (SH + 2 * MG) * G;                         // textura: hoja + mesa alrededor
+const X = g => (g + MG) * G;                                                  // G de la hoja → px de la textura
+
+// ---------- la red: estaciones en G, líneas en 0/45/90° ----------
+const ST = {
+  idea: [2.5, 19, 'e'], guion: [2.5, 16.5, 'e'], grabar: [2.5, 14, 'e'], publicar: [5, 10, 'w'], venta: [7, 6.6, 'n'],
+  seguidora: [11.5, 19.5, 'w'], comentario: [11.5, 15.5, 'w'], regalo: [11.5, 12, 'e'], mensaje: [9, 12, 's'],
+  llamada: [11.5, 9.7, 'e'], oferta: [8.6, 8.2, 'e'], anuncio: [12.9, 20.3, 'e'],
+};
+const LINEAS = [
+  { ruta: [ST.idea, ST.guion, ST.grabar, [2.5, 12.5], ST.publicar, [5, 8.6], ST.venta], paradas: ['idea', 'guion', 'grabar', 'publicar', 'venta'], t0: -.25, t1: 2.9 },
+  { ruta: [ST.seguidora, ST.comentario, ST.regalo, ST.mensaje, [7, 12], ST.publicar], paradas: ['seguidora', 'comentario', 'regalo', 'mensaje', 'publicar'], t0: 2.5, t1: 4.5 },
+  { ruta: [ST.regalo, ST.llamada, [10.1, 9.7], ST.oferta, ST.venta], paradas: ['regalo', 'llamada', 'oferta', 'venta'], t0: 4.6, t1: 6.1 },
+  { ruta: [ST.anuncio, [12.9, 16.9], ST.comentario], paradas: ['anuncio', 'comentario'], t0: 3.0, t1: 4.1 },
+];
+const RIO_Y = [7.45, 8.2];                                                    // la banda del río (G)
+// largo acumulado de cada estación a lo largo de su línea (para encenderla cuando pasa la punta)
+LINEAS.forEach(L => {
+  const P = L.ruta.map(p => [p[0], p[1]]), acc = [0]; for (let i = 1; i < P.length; i++) acc.push(acc[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+  L.largo = acc.at(-1); L.pos = L.paradas.map(id => { const i = P.findIndex(p => p[0] === ST[id][0] && p[1] === ST[id][1]); return acc[i] / L.largo; });
+  L.punto = u => { const d = clamp(u) * L.largo; let i = 1; while (i < acc.length - 1 && acc[i] < d) i++; const k = (d - acc[i - 1]) / Math.max(1e-6, acc[i] - acc[i - 1]); return [lerp(P[i - 1][0], P[i][0], k), lerp(P[i - 1][1], P[i][1], k)]; };
+});
+const avance = (L, t) => ease(prog(t, L.t0, L.t1));
+// cuándo llega la punta a cada estación; una combinación existe cuando llega la SEGUNDA línea
+const LLEGA = {}; LINEAS.forEach((L, li) => L.paradas.forEach((id, k) => {
+  // tiempo inverso de ease por bisección (la punta solo avanza)
+  let a = L.t0, b = L.t1; for (let i = 0; i < 30; i++) { const m = (a + b) / 2; if (avance(L, m) < L.pos[k]) a = m; else b = m; }
+  (LLEGA[id] = LLEGA[id] || []).push({ li, t: b }); }));
+const COMB = Object.fromEntries(Object.entries(LLEGA).filter(([, v]) => v.length > 1).map(([id, v]) => [id, v.map(x => x.t).sort((a, b) => a - b)[1]]));
+const T_TIT = 6.75;
+
+// ---------- papel (una vez): diente, fibras, nubes ±3 %, luz rasante desde el noroeste, borde y sombra sobre la mesa ----------
+const PAPEL = (() => { const c = document.createElement('canvas'); c.width = TW; c.height = TH; const g = c.getContext('2d'), r = rng(5);
+  g.fillStyle = COLORES.mesa; g.fillRect(0, 0, TW, TH);
+  g.save(); g.filter = 'blur(10px)'; g.fillStyle = 'rgba(0,0,0,.6)'; g.fillRect(X(0) + 6, X(0) + 10, SW * G, SH * G); g.restore();
+  g.fillStyle = COLORES.papel; g.fillRect(X(0), X(0), SW * G, SH * G);
+  g.save(); g.beginPath(); g.rect(X(0), X(0), SW * G, SH * G); g.clip();
+  for (let y = 0; y < SH * G; y += 6) for (let x = 0; x < SW * G; x += 6) { const n = vnoise(x / (9 * G) * 4, y / (9 * G) * 4) - .5;
+    g.fillStyle = n > 0 ? `rgba(255,255,255,${n * .12})` : `rgba(90,70,50,${-n * .1})`; g.fillRect(X(0) + x, X(0) + y, 6, 6); }
+  for (let i = 0; i < 60000; i++) { g.fillStyle = r() < .5 ? 'rgba(80,60,40,.05)' : 'rgba(255,255,255,.08)'; g.fillRect(X(0) + r() * SW * G, X(0) + r() * SH * G, 1.5, 1.5); }
+  g.strokeStyle = 'rgba(110,90,70,.07)'; g.lineWidth = 1; for (let i = 0; i < 2500; i++) { const x = X(0) + r() * SW * G, y = X(0) + r() * SH * G, a = r() * 6.28, l = 2 + r() * 7; g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+  const luz = g.createLinearGradient(X(0), X(0), X(SW), X(SH)); luz.addColorStop(0, 'rgba(255,255,255,.07)'); luz.addColorStop(1, 'rgba(60,40,20,.05)'); g.fillStyle = luz; g.fillRect(X(0), X(0), SW * G, SH * G);
+  g.restore(); return c; })();
+const TINTA = document.createElement('canvas'); TINTA.width = TW; TINTA.height = TH;
+const BORROSA = document.createElement('canvas'); BORROSA.width = TW / 6; BORROSA.height = TH / 6;
+
+// ---------- dibujo de la hoja (cada cuadro: las líneas crecen) ----------
+function letra(txt, x, y, tam, peso, col, alinear = 'left', halo = true) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${SANS}`; ctx.textAlign = alinear; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  if (halo) { ctx.strokeStyle = 'rgba(242,238,229,.92)'; ctx.lineWidth = .05 * G * 2; ctx.strokeText(txt, x, y); }
+  ctx.fillStyle = col; ctx.fillText(txt, x, y); ctx.restore();
+}
+function hoja(t) {
+  const g = TINTA.getContext('2d'), real = ctx; ctx = g; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.drawImage(PAPEL, 0, 0);
+  ctx.save(); ctx.beginPath(); ctx.rect(X(0), X(0), SW * G, SH * G); ctx.clip();
+  ctx.globalCompositeOperation = 'multiply';
+  // agua: banda plana con borde más oscuro
+  ctx.fillStyle = COLORES.rioBorde; ctx.fillRect(X(0), X(RIO_Y[0]) - 2, SW * G, (RIO_Y[1] - RIO_Y[0]) * G + 4);
+  ctx.fillStyle = COLORES.rio; ctx.fillRect(X(0), X(RIO_Y[0]), SW * G, (RIO_Y[1] - RIO_Y[0]) * G);
+  // líneas que crecen hasta su punta (esquinas con un solo radio)
+  const puntas = [];
+  LINEAS.forEach((L, li) => { const p = avance(L, t); if (p <= 0) return;
+    const tip = lineaMetro(L.ruta.map(q => [X(q[0]), X(q[1])]), COLORES.lineas[li], .17 * G, p, { radio: .34 * G * 1.6 }); if (p < 1) puntas.push([tip, li]); });
+  // túnel bajo el río: dentro de la banda la línea va punteada con dos líneas de forro
+  ctx.save(); ctx.beginPath(); ctx.rect(X(0), X(RIO_Y[0]), SW * G, (RIO_Y[1] - RIO_Y[0]) * G); ctx.clip();
+  ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = COLORES.rio; ctx.fillRect(X(0), X(RIO_Y[0]), SW * G, (RIO_Y[1] - RIO_Y[0]) * G);
+  LINEAS.forEach((L, li) => { const p = avance(L, t); if (p <= 0) return; const pts = L.ruta.map(q => [X(q[0]), X(q[1])]);
+    ctx.save(); ctx.globalAlpha = .55; lineaMetro(pts, COLORES.tinta, .17 * G + .1 * G + 3, p, { radio: .34 * G * 1.6 }); ctx.restore();
+    lineaMetro(pts, COLORES.rio, .17 * G + .1 * G - 1, p, { radio: .34 * G * 1.6 });
+    ctx.save(); ctx.setLineDash([.16 * G, .11 * G]); ctx.lineCap = 'butt';
+    const Q = _remuestreo(lineaMetroPts(pts), 4), fin = Q.total * p; ctx.strokeStyle = COLORES.lineas[li]; ctx.lineWidth = .17 * G; ctx.beginPath();
+    let first = true; for (let i = 0; i < Q.pts.length && Q.len[i] <= fin; i++) { first ? ctx.moveTo(...Q.pts[i]) : ctx.lineTo(...Q.pts[i]); first = false; } ctx.stroke(); ctx.restore(); });
+  ctx.restore();
+  letra(RIO.toUpperCase(), X(13.6), X((RIO_Y[0] + RIO_Y[1]) / 2), .26 * G, 600, COLORES.rioTexto, 'right', false);
+  ctx.globalCompositeOperation = 'source-over';
+  // paradas: se encienden cuando pasa la punta (pop corto y aro que se abre)
+  for (const [id, v] of Object.entries(LLEGA)) {
+    const [gx, gy, lado] = ST[id], x = X(gx), y = X(gy), t1 = Math.min(...v.map(o => o.t)); if (t < t1) continue;
+    const comb = COMB[id] !== undefined && t >= COMB[id], li = v[0].li;
+    if (!comb) { const k = t - t1, s = k < .28 ? lerp(.6, 1, aterriza(k / .28)) : 1;
+      if (k < .6) { ctx.strokeStyle = COLORES.lineas[li]; ctx.globalAlpha = 1 - k / .6; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y, lerp(.1, .42, k / .6) * G, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1; }
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = COLORES.lineas[li]; ctx.lineWidth = .05 * G; ctx.beginPath(); ctx.arc(x, y, .12 * G * s, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+    else { const k = t - COMB[id], mayor = id === 'venta', cae = mayor ? .4 : .22, f = clamp(k / cae), esc = lerp(mayor ? 3.4 : 2, 1, aterriza(f)), r = (mayor ? .3 : .21) * G;
+      if (f < 1) { ctx.save(); ctx.globalAlpha = .35 * (1 - f); ctx.filter = `blur(${(8 * (1 - f)).toFixed(1)}px)`; ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(x + 18 * (1 - f), y + 26 * (1 - f), r * esc, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      if (k > cae && k < cae + .9) { const q = (k - cae) / .9; v.forEach((o, j) => { ctx.strokeStyle = COLORES.lineas[o.li]; ctx.globalAlpha = (1 - q) * .8; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(x, y, lerp(.3, mayor ? 2.4 : 1.4, q) * G + j * 10, 0, Math.PI * 2); ctx.stroke(); }); ctx.globalAlpha = 1; }
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = (mayor ? .09 : .07) * G; ctx.beginPath(); ctx.arc(x, y, r * esc, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+    // nombre impreso (posición fija desde el principio: nunca salta)
+    const nom = ESTACIONES[id] || id, hub = id === 'venta', tam = (hub ? .6 : COMB[id] !== undefined ? .46 : .42) * G;
+    const d = (hub ? .55 : .32) * G, [ax, ay, al] = lado === 'e' ? [x + d, y, 'left'] : lado === 'w' ? [x - d, y, 'right'] : lado === 'n' ? [x, y - d - tam * .3, 'center'] : [x, y + d + tam * .3, 'center'];
+    letra(hub ? nom.toUpperCase() : nom, ax, ay, tam, hub ? 800 : 600, COLORES.tinta, al);
+  }
+  // viñetas de línea (bala con número) al inicio de cada una
+  LINEAS.forEach((L, li) => { if (t < L.t0 + .15) return; const [gx, gy] = L.ruta[0], x = X(gx), y = X(gy) + .75 * G;
+    ctx.fillStyle = COLORES.lineas[li]; ctx.beginPath(); ctx.arc(x, y, .3 * G, 0, Math.PI * 2); ctx.fill(); letra(String(li + 1), x, y + 1, .32 * G, 800, li === 3 ? COLORES.tinta : '#fff', 'center', false);
+    letra(LINEAS_NOMBRE[li], x, y + .62 * G, .26 * G, 600, COLORES.tinta2, 'center'); });
+  // trenes: cápsulas blancas solo sobre vía terminada
+  LINEAS.forEach((L, li) => { if (t < L.t1) return; for (let k = 0; k < 2; k++) { const u = ((t - L.t1) * 2 / L.largo + k / 2) % 1, [gx, gy] = L.punto(u), [hx, hy] = L.punto(Math.min(1, u + .01));
+    const a = Math.atan2(hy - gy, hx - gx); ctx.save(); ctx.translate(X(gx), X(gy)); ctx.rotate(a); ctx.fillStyle = '#fff'; ctx.strokeStyle = COLORES.tinta; ctx.lineWidth = .026 * G;
+    ctx.beginPath(); ctx.roundRect(-.2 * G, -.07 * G, .4 * G, .14 * G, .07 * G); ctx.fill(); ctx.stroke(); ctx.fillStyle = COLORES.lineas[li]; for (let w = -1; w <= 1; w++) ctx.fillRect(w * .11 * G - .032 * G, -.028 * G, .064 * G, .056 * G); ctx.restore(); } });
+  // cartela: el título del video impreso en el mapa (barra de tinta + palabras que se imprimen de a una)
+  if (t >= T_TIT - .3) { ctx.fillStyle = COLORES.tinta; ctx.fillRect(X(7.4), X(1.1), .12 * G, 3.1 * G);
+    ctx.save(); const m = fraseDiseno(TITULO, PALABRA_CLAVE, { familia: SANS, familiaClave: SANS, peso: 600, pesoClave: 800, tam: .62 * G, factor: 2.3, ancho: 7.2 * G, x: X(7.8), y: X(1.0), maxAlto: 3.4 * G, maxRenglones: 3 });
+    pintarFrase(m, t, T_TIT, .16, { col: COLORES.tinta, colClave: COLORES.lineas[0] }); ctx.restore();
+    if (t >= T_TIT + .8) letra('esquema sin escala · ' + LINEAS.length + ' líneas', X(7.8), X(4.75), .26 * G, 500, COLORES.tinta2, 'left', false); }
+  ctx.restore();
+  ctx = real; return puntas;
+}
+
+// ---------- cámara en perspectiva real sobre la hoja (proyección por franjas) ----------
+const F = (H / 2) / Math.tan(16 * Math.PI / 180);                            // campo vertical de 32°
+function camara(t) {
+  const L1 = LINEAS[0], tip1 = L1.punto(avance(L1, Math.min(t, L1.t1)));
+  const montar = { a: [tip1[0], tip1[1] - 1.2], z: 125, tilt: 28, ap: 14 };
+  const rio = Math.sin(Math.PI * prog(t, 1.85, 2.75)), cruza = { tilt: 28 + 30 * rio, z: 125 + 50 * rio };
+  const red = { a: [8, 13], z: 72, tilt: 16, ap: 6 }, nudo = { a: [8.4, 8.6], z: 92, tilt: 42, ap: 18 }, todo = { a: [7.5, 12.6], z: 55, tilt: 6, ap: 0 };
+  const mix = (A, B, k) => ({ a: [lerp(A.a[0], B.a[0], k), lerp(A.a[1], B.a[1], k)], z: Math.exp(lerp(Math.log(A.z), Math.log(B.z), k)), tilt: lerp(A.tilt, B.tilt, k), ap: lerp(A.ap, B.ap, k) });
+  let c = { ...montar, z: cruza.z, tilt: cruza.tilt };
+  c = mix(c, red, ease(prog(t, 2.8, 4.2)));
+  c = mix(c, nudo, ease(prog(t, 4.5, 5.4)));
+  c = mix(c, todo, ease(prog(t, 6.0, 7.0)));
+  return c;
+}
+function proyectar(c) {
+  const fi = c.tilt * Math.PI / 180, d = F / c.z * G, ax = X(c.a[0]), ay = X(c.a[1]);   // distancia para tener c.z px por G en el punto de mira
+  const Cy = ay + d * Math.sin(fi), Cz = d * Math.cos(fi);
+  const bctx = BORROSA.getContext('2d'); bctx.drawImage(TINTA, 0, 0, BORROSA.width, BORROSA.height);
+  ctx.fillStyle = COLORES.mesa; ctx.fillRect(0, 0, W, H);
+  const PASO = 3;
+  for (let sy = 0; sy < H; sy += PASO) {
+    const v = (sy + PASO / 2 - H / 2) / F, Rz = -Math.cos(fi) - v * Math.sin(fi); if (Rz >= -1e-3) continue;
+    const tt = -Cz / Rz, Y = Cy + tt * (-Math.sin(fi) + v * Math.cos(fi)), esc = F / tt;            // px de pantalla por px de textura en esta franja
+    const v2 = (sy + PASO + PASO / 2 - H / 2) / F, Rz2 = -Math.cos(fi) - v2 * Math.sin(fi), tt2 = -Cz / Rz2, Y2 = Cy + tt2 * (-Math.sin(fi) + v2 * Math.cos(fi));
+    const x0 = ax - (W / 2) / esc, w = W / esc, h = Math.max(.5, Math.abs(Y2 - Y));
+    ctx.globalAlpha = 1; ctx.drawImage(TINTA, x0, Y, w, h, 0, sy, W, PASO + .5);
+    const borr = clamp(c.ap * Math.abs(tt - d) / tt / 10);                // profundidad de campo analítica
+    if (borr > .03) { ctx.globalAlpha = borr; ctx.drawImage(BORROSA, x0 / 6, Y / 6, w / 6, h / 6, 0, sy, W, PASO + .5); }
+    if (tt > d * 2.2) { ctx.globalAlpha = clamp((tt - d * 2.2) / (d * 2)); ctx.fillStyle = COLORES.mesa; ctx.fillRect(0, sy, W, PASO + .5); }
+  }
+  ctx.globalAlpha = 1;
+  return (gx, gy) => { const px = X(gx), py = X(gy), dy = py - Cy, dz = -Cz;                        // hoja → pantalla (para las puntas)
+    const zc = dy * -Math.sin(fi) + dz * -Math.cos(fi), yc = dy * Math.cos(fi) + dz * -Math.sin(fi);
+    return [W / 2 + (px - ax) / zc * F, H / 2 + yc / zc * F, F / zc]; };
+}
+// puntos de una ruta con esquinas redondeadas (lo mismo que dibuja lineaMetro, para el túnel)
+function lineaMetroPts(pts) { const radio = .34 * G * 1.6, R = [];
+  for (let i = 0; i < pts.length; i++) { if (i === 0 || i === pts.length - 1) { R.push(pts[i]); continue; }
+    const [ax, ay] = pts[i - 1], [bx, by] = pts[i], [cx, cy] = pts[i + 1], l1 = Math.hypot(bx - ax, by - ay), l2 = Math.hypot(cx - bx, cy - by), r = Math.min(radio, l1 / 2, l2 / 2);
+    R.push(...curvaQ([bx - (bx - ax) / l1 * r, by - (by - ay) / l1 * r], [bx, by], [bx + (cx - bx) / l2 * r, by + (cy - by) / l2 * r], 10)); }
+  return R; }
+// ---------- contador mecánico (pantalla, arriba a la izquierda): solo cuenta lo que ya está dibujado ----------
+function contador(t) {
+  const est = Object.values(LLEGA).filter(v => t >= Math.min(...v.map(o => o.t))).length, lin = LINEAS.filter(L => t >= L.t0 + .15).length;
+  const x = 60, y = 262, w = 440, h = 200; ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8; ctx.fillStyle = '#1E2023'; ctx.beginPath(); ctx.roundRect(x, y, w, h, 18); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.fillStyle = '#3a3d42'; for (const [sx, sy] of [[x + 14, y + 14], [x + w - 14, y + 14], [x + 14, y + h - 14], [x + w - 14, y + h - 14]]) { ctx.beginPath(); ctx.arc(sx, sy, 5, 0, Math.PI * 2); ctx.fill(); }
+  [['estaciones', est, 2], ['líneas', lin, 1]].forEach(([nom, val, dig], i) => { const ry = y + 34 + i * 86;
+    ctx.fillStyle = '#E9E6DF'; ctx.font = `600 30px ${SANS}`; ctx.textBaseline = 'middle'; ctx.fillText(nom, x + 30, ry + 32);
+    const s = String(val).padStart(dig, '0'); [...s].forEach((ch, k) => { const dx = x + w - 30 - (dig - k) * 52;
+      ctx.fillStyle = '#F4EFE2'; ctx.beginPath(); ctx.roundRect(dx, ry, 46, 66, 8); ctx.fill();
+      ctx.fillStyle = COLORES.tinta; ctx.font = `800 46px ${SANS}`; ctx.textAlign = 'center'; ctx.fillText(ch, dx + 23, ry + 35); ctx.textAlign = 'left'; }); });
+  ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  const puntas = hoja(t); pantalla(); const c = camara(t), aPant = proyectar(c);
+  // puntas de pluma: núcleo blanco, aro del color de la línea y halo suave
+  for (const [tip, li] of puntas) { const gx = tip[0] / G - MG, gy = tip[1] / G - MG, [sx, sy, k] = aPant(gx, gy), r = .11 * G * k;
+    const halo = ctx.createRadialGradient(sx, sy, 0, sx, sy, .8 * G * k); const [cr, cg, cb] = rgbDe(COLORES.lineas[li]);
+    halo.addColorStop(0, `rgba(${cr},${cg},${cb},.45)`); halo.addColorStop(1, `rgba(${cr},${cg},${cb},0)`); ctx.fillStyle = halo; ctx.fillRect(sx - G * k, sy - G * k, 2 * G * k, 2 * G * k);
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = COLORES.lineas[li]; ctx.lineWidth = .05 * G * k; ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+  // viñeta ligera
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.24)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  contador(t);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'desliz' }, ...Object.values(LLEGA).map(v => ({ t: +Math.min(...v.map(o => o.t)).toFixed(2), tipo: 'pop' })).filter(s => s.t > 0),
+  ...Object.entries(COMB).map(([id, t]) => ({ t: +(t + (id === 'venta' ? .4 : .22)).toFixed(2), tipo: 'golpe' })), { t: 2.1, tipo: 'ambiente' }, { t: T_TIT, tipo: 'papel' },
+];
+</script>
+</body>
+</html>

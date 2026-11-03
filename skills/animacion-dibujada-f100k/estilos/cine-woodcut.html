@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Grabado en madera</title>
+<style>
+  html,body{margin:0;background:#2b2722;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Grabado en madera» · ingeniería inversa de lemo-opuscar/styles/woodcut (MIT, © 2026 LemoLab) · qué se tomó: lo negro es la madera y lo blanco es lo que quitó la gubia; la luz se talla con cortes radiales (anchos = claro), cada corte con entrada roma y salida en punta, la imagen aparece al tallarse (gruesos primero), una sola plancha de color que brilla solo dentro de los cortes, leyenda en tipografía de imprenta en el margen del papel.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'lo que vende es tu';      // tallado arriba, chico (máx. ~22 letras)
+const TITULO_GRANDE = 'HISTORIA';               // tallado enorme (máx. ~10 letras)
+const LEYENDA = 'nadie compra un producto: compra una historia';   // en el margen, como pie de grabado (máx. ~60 letras)
+const COLORES = {
+  tinta: '#121110',     // la madera entintada
+  papel: '#efe8d8',     // papel verjurado
+  plancha: '#c8502a',   // LA única tinta de color: cobre, solo donde se talló cerca de la luz
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const C = COLORES, BL = { x0: 64, y0: 232, x1: W - 64, y1: 1300 }, LIB = { x: 540, y: 1075 };
+const T = { rayos: [.12, 1.25], paginas: [.9, 1.9], chico: 1.7, grande: 2.0, leyenda: 2.9, chispas: [.7, 1.6] };
+const PAPEL = papelImpreso(C.papel, { verjurado: true, semilla: 21, viñeta: .1 });
+// el taco: negro con borde mordido (nunca un rectángulo limpio) + vetas y motas donde la tinta no agarró
+const TACO = (() => { const c = mk(), g = c.getContext('2d'), R = rng(5); g.fillStyle = C.tinta; g.beginPath();
+  const lado = (x0, y0, x1, y1) => { for (let i = 0; i <= 40; i++) { const u = i / 40; g.lineTo(lerp(x0, x1, u) + (R() - .5) * 5, lerp(y0, y1, u) + (R() - .5) * 5); } };
+  lado(BL.x0, BL.y0, BL.x1, BL.y0); lado(BL.x1, BL.y0, BL.x1, BL.y1); lado(BL.x1, BL.y1, BL.x0, BL.y1); lado(BL.x0, BL.y1, BL.x0, BL.y0); g.fill();
+  return entintar(c, { veta: .1, motas: .22, baren: .12 }); })();
+
+// ---------- los cortes (cada uno con su hora y su velocidad) ----------
+const CORTES = Trazos(), R = rng(17);
+// rayos de luz tallados desde el libro abierto: anchos cerca, finos lejos (gubia en U)
+for (let i = 0; i < 44; i++) { const a = -Math.PI + (i + .5 + (R() - .5) * .5) / 44 * Math.PI, r0 = 105 + R() * 30, r1 = 380 + R() * 260, pts = [];
+  for (let k = 0; k <= 30; k++) { const u = k / 30, r = r0 + (r1 - r0) * u; pts.push([LIB.x + Math.cos(a) * r, LIB.y - 95 + Math.sin(a) * r * .95]); }
+  const t0 = T.rayos[0] + R() * .35, dur = .25 + R() * .3; CORTES.agregar('gubia', pts.filter(([x, y]) => y > 650 && x > BL.x0 + 10 && x < BL.x1 - 10), 16 + R() * 12, t0, dur, { entrada: .05, salida: .7 }); }
+// el núcleo de la luz: arcos concéntricos sobre el libro (anchos adentro = lo más claro), tallados primero
+for (let k = 0; k < 6; k++) { const r = 18 + k * 17, pts = []; for (let i = 0; i <= 28; i++) { const a = -Math.PI + .12 + i / 28 * (Math.PI - .24); pts.push([LIB.x + Math.cos(a) * r, LIB.y - 95 + Math.sin(a) * r * .95]); }
+  CORTES.agregar('gubia', pts, 15 - k * 1.6, T.rayos[0] - .1 + k * .03, .18, { entrada: .1, salida: .2 }); }
+// la mesa: cortes largos en U a lo largo de la veta, más anchos cerca del libro (luz) — ya talladas en el cuadro 0
+for (let k = 0; k < 9; k++) { const y = 1165 + k * 14, pts = []; for (let x = BL.x0 + 30 + (k % 3) * 40; x < BL.x1 - 40; x += 12) pts.push([x, y + Math.sin(x * .01 + k) * 2]);
+  const largo = pts.length; for (let s = 0; s < largo; s += 18 + (k * 5) % 9) { const seg = pts.slice(s, s + 14); if (seg.length < 4) continue;
+    const cerca = 1 - Math.min(1, Math.abs(seg[7 % seg.length][0] - LIB.x) / 480); CORTES.agregar('gubia', seg, 3 + cerca * 9, -1, .1); } }
+// el libro: silueta negra con halo de cuchillo y líneas de página que siguen la curva (anchas junto al lomo: ahí sale la luz)
+const pagina = s => { const pts = []; for (let i = 0; i <= 24; i++) { const u = i / 24, x = LIB.x + s * u * 300, y = LIB.y - 80 + u * 40 - Math.sin(u * Math.PI) * 26; pts.push([x, y]); } return pts; };
+const bordeLibro = (() => { const izq = pagina(-1), der = pagina(1), pts = [...izq.slice().reverse(), ...der];
+  pts.push([LIB.x + 300, LIB.y + 50], [LIB.x, LIB.y + 80], [LIB.x - 300, LIB.y + 50]); return resample(pts, 6, true); })();
+CORTES.agregar('linea', bordeLibro, 3, -1, .1);
+for (const s of [-1, 1]) for (let k = 1; k < 9; k++) { const pts = pagina(s).map(([x, y], i) => [x, y + k * 13 + i * 0]).slice(1, 23); const w = 9 - k * .8;
+  CORTES.agregar('gubia', pts.map(([x, y], i) => [x, y + (i / 22) * k * 1.5]), w, T.paginas[0] + k * .1 + (s > 0 ? .05 : 0), .35, { entrada: .1, salida: .5 }); }
+// chispas: cortes de punta (estocadas) alrededor de la luz
+const CHISPAS = Array.from({ length: 60 }, (_, i) => { const a = -Math.PI * hash2(i, 1), r = 200 + hash2(i, 2) * 420; return { x: LIB.x + Math.cos(a) * r, y: LIB.y - 40 + Math.sin(a) * r, r: 3 + hash2(i, 3) * 5, t: lerp(T.chispas[0], T.chispas[1], hash2(i, 4)) }; }).filter(c => c.y > 660 && c.y < 1140 && c.x > BL.x0 + 20 && c.x < BL.x1 - 20);
+
+// títulos tallados en el negro: cada letra entra entera, una tras otra (corte seco), con astillas en el borde
+const FT = '"Hoefler Text", "Big Caslon", Georgia, serif';
+const AJ_G = autoajuste(TITULO_GRANDE, FT, 900, 900, 1, 190, 90), AJ_C = autoajuste(TITULO_CHICO, FT, 600, 760, 1, 66, 36), AJ_L = autoajuste(LEYENDA, FT, 400, 900, 2, 46, 32);
+function letrasDe(aj, y, t0, paso) { const f = aj.font, txt = aj.rs[0]; let x = W / 2 - medir(txt, f) / 2; const out = [];
+  for (const ch of txt) { out.push({ ch, x, y, f, t: t0 + out.length * paso }); x += medir(ch, f); } return out; }
+const LETRAS = [...letrasDe(AJ_C, 380, T.chico, .03), ...letrasDe(AJ_G, 380 + 40 + AJ_G.size * .9, T.grande, .07)];
+
+const CUT = mk(), cg = CUT.getContext('2d'), INK = mk(), ig = INK.getContext('2d'), COL = mk(), og = COL.getContext('2d');
+arrancar(frame => {
+  const t = frame / FPS;
+  // 1) máscara de cortes (blanco = madera quitada)
+  cg.setTransform(1, 0, 0, 1, 0, 0); cg.clearRect(0, 0, W, H); CORTES.dibujar(cg, t, '#fff');
+  cg.fillStyle = '#fff'; for (const c of CHISPAS) if (t >= c.t) { cg.beginPath(); cg.ellipse(c.x, c.y, c.r * 1.5, c.r * .7, -.6, 0, 6.283); cg.fill(); }
+  cg.textBaseline = 'alphabetic'; for (const l of LETRAS) if (t >= l.t) { cg.font = l.f; cg.fillText(l.ch, l.x, l.y); }
+  // 2) la tinta: el taco menos los cortes
+  ig.setTransform(1, 0, 0, 1, 0, 0); ig.globalCompositeOperation = 'copy'; ig.drawImage(TACO, 0, 0); ig.globalCompositeOperation = 'destination-out'; ig.drawImage(CUT, 0, 0); ig.globalCompositeOperation = 'source-over';
+  // 3) la plancha de color: cobre moteado, solo dentro de los cortes y cerca de la luz (crece con la talla)
+  const kc = aterriza(prog(t, .5, 1.6)), rr = 90 + 300 * kc;
+  og.setTransform(1, 0, 0, 1, 0, 0); og.globalCompositeOperation = 'copy'; const gr = og.createRadialGradient(LIB.x, LIB.y - 60, 0, LIB.x, LIB.y - 60, rr);
+  gr.addColorStop(0, rgba(C.plancha, .95)); gr.addColorStop(.45, rgba(C.plancha, .7)); gr.addColorStop(1, rgba(C.plancha, 0)); og.fillStyle = gr; og.fillRect(0, 0, W, H);
+  og.globalCompositeOperation = 'destination-out'; og.globalAlpha = .35; og.drawImage(TEXI.motas(), 0, 0); og.globalAlpha = 1;
+  og.globalCompositeOperation = 'destination-in'; og.drawImage(CUT, 3, -2);                     // registro corrido fijo de la plancha
+  og.globalCompositeOperation = 'destination-out'; og.fillRect(0, 0, W, 640);                     // nunca en el título
+  // 4) impresión: papel → color → tinta
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.drawImage(PAPEL, 0, 0);
+  ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(COL, 0, 0); ctx.drawImage(INK, 0, 0); ctx.globalCompositeOperation = 'source-over';
+  // 5) leyenda de imprenta en el margen: la tinta sube en 0,1 s, sin deslizarse
+  if (t >= T.leyenda) { ctx.save(); ctx.globalAlpha = clamp((t - T.leyenda) / .1); ctx.fillStyle = C.tinta; ctx.font = AJ_L.font; ctx.textAlign = 'center';
+    AJ_L.rs.forEach((r, i) => ctx.fillText(r, W / 2, 1375 + i * AJ_L.size * 1.25)); ctx.restore(); }
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .12, tipo: 'desliz' }, { t: .5, tipo: 'desliz' }, { t: .9, tipo: 'papel' }, { t: 2.0, tipo: 'golpe' }, { t: 2.9, tipo: 'papel' }];
+</script>
+</body>
+</html>

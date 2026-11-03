@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Montaje constructivista</title>
+<style>
+  html,body{margin:0;background:#EDE4D0;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Montaje constructivista» · ingeniería inversa de lemo-opuscar/styles/kino-montage (MIT, © 2026 LemoLab) · qué se tomó: un solo pliego tinta-papel-rojo, fotos en impresión a dos tonos dentro de ventanas recortadas al eje de −18°, banda roja que entra de golpe por el eje, dígitos que se estampan uno por corchea, título vertical letra a letra, barrido rojo a 72°, choque A + B que se acelera (fondos rojo/tinta alternados) y la torre de fotomontaje piso por piso con la cámara que sube.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const NUMERO = '3';                         // la cifra del título (≤ 3 dígitos). SOLO cifras del guion
+const UNIDAD = 'PASOS';                     // la unidad, en bloque rojo (≤ 7 letras)
+const BANDA = 'para tu primera venta';      // lo que va escrito sobre la banda roja (≤ 26 letras)
+const VERTICAL = 'VENDE';                   // la palabra apilada letra a letra (≤ 6 letras)
+const CHOQUE = ['PUBLICAS', 'TE COMPRAN'];  // A + B: las dos ideas que chocan cada vez más rápido (≤ 11 letras c/u)
+const FINAL = 'tu contenido *vende*';       // arriba de la torre; la clave entre *asteriscos* va en rojo y enorme
+const ETIQUETAS = ['FOTO · TU NEGOCIO', 'FOTO · TU PRODUCTO', 'FOTO · TU PERFIL'];   // la etiqueta de cada foto
+const FOTOS = [];   // 3 fotos o capturas tuyas. Vacío = reemplazos neutros (escritorio, producto, perfil)
+const COLORES = {
+  rojo: '#D52B1E',     // bandas, cuñas, la cifra clave, el ganador
+  tinta: '#141210',    // letras, vigas, bordes
+  papel: '#EDE4D0',    // fondo, letras al revés, borde de los recortes
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F_NUM = 'Impact, "Avenir Next Condensed", sans-serif';
+const F_BLOQ = '"Futura", "Avenir Next", sans-serif';
+const F_COND = '"Avenir Next Condensed", Impact, sans-serif';
+const F_TAG = '"Courier New", Menlo, monospace';
+const EJE = -18 * Math.PI / 180;
+let IMS = [];
+material(FOTOS, ['escritorio', 'producto', 'perfil']).then(ims => { IMS = ims.map(im => gradear(im, 'tinta', { tinta: C.tinta, papel: C.papel })); });
+const PAPEL = hacerPapel(C.papel, { viñeta: .08, semilla: 21 });
+const FIBRA = (() => { const [c, p] = lienzo(W, H), r = rng(31); for (let i = 0; i < 9000; i++) { p.fillStyle = r() < .5 ? 'rgba(90,70,40,.10)' : 'rgba(255,255,255,.10)'; p.fillRect(r() * W, r() * H, 1 + r() * 2, 1 + r() * 2); } return c; })();
+const texto = (s, x, y, font, col, al = 'left', ls = 0) => { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.letterSpacing = ls + 'px'; ctx.fillText(s, x, y); ctx.restore(); };
+const BEAT = .5;
+const T_WIPE = 2.0, T_CHOQUE = 4.0, T_TORRE = 6.0;
+
+// ---------- piezas del pliego ----------
+function eje(cx, cy, f) { ctx.save(); ctx.translate(cx, cy); ctx.rotate(EJE); f(); ctx.restore(); }
+function banda(cx, cy, largo, grueso, col) { eje(cx, cy, () => { ctx.fillStyle = col; ctx.fillRect(-largo / 2, -grueso / 2, largo, grueso); }); }
+function ventana(im, pts, fx = .5, fy = .4, zoom = 1, borde = 10) {   // ventana (paralelogramo) con la foto impresa a dos tonos
+  ctx.save(); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath();
+  ctx.lineWidth = borde * 2; ctx.strokeStyle = C.tinta; ctx.stroke(); ctx.clip();
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs), y0 = Math.min(...ys);
+  if (im) cubrir(im, x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0, fx, fy, zoom);
+  ctx.restore();
+}
+function tag(s, x, y, rot = 0, fondo = C.tinta, col = C.papel) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const f = `700 26px ${F_TAG}`, w = medir(s, f) + 24;
+  ctx.fillStyle = fondo; ctx.fillRect(0, 0, w, 40); texto(s, 12, 28, f, col); ctx.restore();
+}
+const deslizar = (t, t0, d = .14) => aterriza(prog(t, t0, t0 + d));   // golpe por el eje: entra rápido y frena seco (sin temblor)
+
+// ---------- 1 · paquete de título: banda roja por el eje, ventana recortada a su borde, dígitos estampados ----------
+function titulo(t) {
+  ctx.drawImage(PAPEL, 0, 0);
+  const k = deslizar(t, 0, .25), cx = lerp(-700, W / 2, k) + (1 - k) * 0, cy = 1180;
+  // ventana con foto, recortada al borde de arriba de la banda (la banda la corta en diagonal)
+  const yTope = x => cy - 130 + (x - W / 2) * Math.tan(EJE);
+  ctx.save(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); ctx.lineTo(W, yTope(W)); ctx.lineTo(0, yTope(0)); ctx.closePath(); ctx.clip();
+  ventana(IMS[0], [[470, 260], [1080, 260], [1080, 1300], [470, 1300]], .5, .4, 1 + .04 * prog(t, 0, T_WIPE), 0);
+  ctx.restore();
+  ctx.fillStyle = C.tinta; ctx.fillRect(452, 260, 18, yTope(461) - 260);
+  banda(cx, cy, 2400, 260, C.rojo);
+  if (k >= 1) eje(W / 2, cy, () => { const aj = autoajuste(BANDA, F_COND, 800, 900, 1, 96, 48); texto(aj.rs[0], -440, aj.size * .35, aj.font, C.papel, 'left', 2); });
+  // dígitos que se estampan uno por corchea
+  const fN = `400 520px ${F_NUM}`, ds = [...NUMERO]; let x = SEGURA.left;
+  ds.forEach((d, i) => { if (t >= .25 + i * BEAT / 2) texto(d, x, 760, fN, C.tinta); x += medir(d, fN); });
+  if (t >= .25 + ds.length * BEAT / 2) { const f = `800 92px ${F_COND}`, w = medir(UNIDAD, f) + 40; ctx.fillStyle = C.rojo; ctx.fillRect(SEGURA.left, 800, w, 120); texto(UNIDAD, SEGURA.left + 20, 892, f, C.papel, 'left', 2); }
+  tag(ETIQUETAS[0], 490, 280, 0);
+}
+// ---------- 2 · título vertical letra a letra junto a una ventana alta ----------
+function vertical(t) {
+  ctx.drawImage(PAPEL, 0, 0);
+  ventana(IMS[1], [[520, 300], [1000, 250], [1000, 1460], [520, 1460]], .5, .35, 1.02 + .04 * prog(t, T_WIPE, T_CHOQUE), 10);
+  tag(ETIQUETAS[1], 540, 1400, 0);
+  const letras = [...VERTICAL.toUpperCase()], alto = Math.min(230, 1180 / letras.length), f = `400 ${alto * 1.05}px ${F_NUM}`;
+  letras.forEach((ch, i) => { if (t < T_WIPE + .25 + i * BEAT / 4) return; texto(ch, SEGURA.left + 180, 300 + (i + 1) * alto, f, i === letras.length - 1 ? C.rojo : C.tinta, 'center'); });
+  // cuña roja que apunta a la ventana
+  ctx.fillStyle = C.rojo; ctx.beginPath(); ctx.moveTo(SEGURA.left + 330, 820); ctx.lineTo(520, 760); ctx.lineTo(520, 900); ctx.closePath(); ctx.fill();
+}
+// ---------- 3 · choque A + B: cada corte más corto, el fondo alterna rojo / tinta ----------
+const CORTES = (() => { const d = [.5, .5, .25, .25, .125, .125, .125, .125], out = []; let t = T_CHOQUE; d.forEach((x, i) => { out.push({ t, i }); t += x; }); out.push({ t, i: d.length }); return out; })();
+function choque(t) {
+  let c = CORTES[0]; for (const k of CORTES) if (t >= k.t) c = k;
+  const i = c.i, A = i % 2 === 0, fondo = A ? C.rojo : C.tinta, ang = (A ? -5 : 5) * Math.PI / 180;
+  ctx.fillStyle = fondo; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(W / 2, 860); ctx.rotate(ang);
+  ventana(IMS[A ? 0 : 2], [[-420, -480], [420, -480], [420, 480], [-420, 480]], .5, A ? .4 : .25, 1.1, 12); ctx.restore();
+  const palabra = CHOQUE[A ? 0 : 1], aj = autoajuste(palabra, F_NUM, 400, 940, 1, 200, 80);
+  ctx.save(); ctx.translate(W / 2, 1420); ctx.rotate(EJE * .6);
+  const w = medir(aj.rs[0], aj.font) + 60; ctx.fillStyle = A ? C.tinta : C.papel; ctx.fillRect(-w / 2, -aj.size * .82, w, aj.size * 1.05);
+  texto(aj.rs[0], 0, aj.size * .1, aj.font, A ? C.papel : C.tinta, 'center'); ctx.restore();
+}
+// ---------- 4 · torre de fotomontaje: pisos de tiras de foto, una viga de tinta bajo cada uno, la cámara sube ----------
+const PISOS = 6, PISO_H = 210, T_PISO = .25;
+function torre(t) {
+  ctx.drawImage(PAPEL, 0, 0);
+  const hechos = clamp((t - T_TORRE) / T_PISO, 0, PISOS), subida = easeOut(clamp(hechos / PISOS)) * (PISOS * PISO_H - 820);
+  ctx.save(); ctx.translate(0, subida);
+  const base = 1480;
+  // cuña roja de fondo
+  ctx.fillStyle = C.rojo; ctx.beginPath(); ctx.moveTo(0, base - 200); ctx.lineTo(W, base - 520); ctx.lineTo(W, base + 300); ctx.lineTo(0, base + 300); ctx.fill();
+  for (let i = 0; i < PISOS; i++) {
+    const ti = T_TORRE + i * T_PISO, k = deslizar(t, ti, .12); if (k <= 0) continue;
+    const izq = i % 2 === 0, y = base - (i + 1) * PISO_H, w = 760 - i * 60, x = W / 2 - w / 2 + (izq ? -1 : 1) * (1 - k) * 1100;
+    ventana(IMS[i % IMS.length], [[x, y], [x + w, y], [x + w, y + PISO_H - 30], [x, y + PISO_H - 30]], .5, (i * .17) % 1, 1.3, 6);
+    ctx.fillStyle = C.tinta; ctx.fillRect(x - 30, y + PISO_H - 30, w + 60, 26);       // la viga
+  }
+  ctx.restore();
+  // arriba: el resultado (entra cuando la torre llega)
+  if (t >= T_TORRE + PISOS * T_PISO + .1) {
+    const m = maqueta(FINAL, { familia: F_NUM, peso: 400, pesoChico: 400, familiaChica: F_COND, grande: 300, chico: 110, x: SEGURA.left, y: SEGURA.top + 10, ancho: SEGURA.right - SEGURA.left, alto: 560, mayus: true });
+    pintarMaqueta(m, t, T_TORRE + PISOS * T_PISO + .1, BEAT / 2, { col: C.tinta, colClave: C.rojo });
+  }
+  if (t >= T_TORRE + PISOS * T_PISO + .1) tag(ETIQUETAS[2], 40, 680, 0, C.rojo, C.papel);
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  if (t < T_WIPE) titulo(t);
+  else if (t < T_CHOQUE) {
+    const p = prog(t, T_WIPE, T_WIPE + .25);           // barrido rojo de 260 px a 72° (perpendicular al eje)
+    if (p < 1) { titulo(t); ctx.save(); clipBanda(p, EJE, [[260, C.rojo]]); vertical(t); ctx.restore(); bandaWipe(p, EJE, [[260, C.rojo]]); }
+    else vertical(t);
+  }
+  else if (t < T_TORRE) choque(t);
+  else torre(t);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = .5; ctx.drawImage(FIBRA, 0, 0); ctx.restore();   // fibra de papel sobre todo
+  if (t >= T_CHOQUE && t < T_CHOQUE + 1 / FPS) flash(.6, '237,228,208');                                                   // corte con destello
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'golpe' }, ...[...NUMERO].map((_, i) => ({ t: .25 + i * .25, tipo: 'golpe' })), { t: T_WIPE, tipo: 'swish' },
+  ...[...VERTICAL].map((_, i) => ({ t: T_WIPE + .25 + i * .125, tipo: 'pop' })), ...CORTES.slice(0, -1).map(c => ({ t: c.t, tipo: 'golpe' })),
+  ...Array.from({ length: PISOS }, (_, i) => ({ t: T_TORRE + i * T_PISO, tipo: 'golpe' })),
+];
+</script>
+</body>
+</html>

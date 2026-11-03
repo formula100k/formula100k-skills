@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Noticia con subtítulos gigantes</title>
+<style>
+  html,body{margin:0;background:#0E0E0C;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Noticia con subtítulos gigantes» · ingeniería inversa de lemo-opuscar/styles/caption-news (MIT, © 2026 LemoLab) · qué se tomó: gancho del cuadro 4 (la cifra más grande en bloque miel que rueda a su valor), subtítulo-gráfico en trozos con UNA clave sobre bloque miel, etiqueta de fuente que entra con cada cifra, «proporción por oscuridad» (una línea barre la foto hasta el porcentaje y lo pasado se apaga), cortes secos en rejilla de 0,5 s y destello de 2 cuadros en el giro.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const CANAL = 'AL GRANO';                     // la mosca amarilla arriba a la izquierda (nombre inventado, ≤ 12 letras)
+const TEMA = 'TU CONTENIDO';                  // la palabra chica al lado de la mosca
+const GANCHO = { numero: 90, unidad: '%', antes: 'el', despues: 'no te compra' };   // la cifra del gancho. SOLO cifras del guion
+const FUENTE = 'TUS MÉTRICAS · 03.11';        // la etiqueta de fuente que entra con la cifra (≤ 24 letras)
+const CREDITO = 'FOTO · TU CARRETE';          // crédito de la foto arriba a la derecha
+const SUBTITULOS = [                          // 3 subtítulos; la clave entre *asteriscos* va sobre el bloque miel (una por subtítulo)
+  'tu contenido *no vende*',
+  'nadie sabe qué *ofreces*',
+  'dilo claro en tu *bio*',
+];
+const FOTOS = [];   // 3 fotos o capturas tuyas (una por toma), p. ej. ['fotos/perfil.jpg', ...]. Vacío = reemplazos neutros
+const COLORES = {
+  miel: '#FFC21A',     // la clave, el bloque de la cifra, la línea
+  rojo: '#FF4A3D',     // lo malo: la parte que se apaga
+  marfil: '#F7F5EF', tinta: '#0E0E0C', gris: '#8D8B83',
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30, DUR = 8;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F = '"Avenir Next", "Helvetica Neue", Arial, sans-serif';
+const F_NUM = '"Avenir Next", "Helvetica Neue", Arial, sans-serif';
+let IMS = [];
+material(FOTOS, ['perfil', 'post', 'chat']).then(ims => { IMS = ims.map(im => gradear(im, 'noticia')); });
+const CORTES = [0, 2.5, 5.0];                 // cortes secos en la rejilla de medio pulso (120 BPM)
+const T_SUB = [.75, 2.75, 5.25];              // cada subtítulo entra en trozos
+const texto = (s, x, y, font, col, al = 'left') => { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.fillText(s, x, y); ctx.restore(); };
+const BANDA = 1560;                           // la foto ocupa 1080×1560; el subtítulo vive en su parte baja oscurecida
+const SUBS = SUBTITULOS.map(s => maqueta(s, { familia: F, peso: 800, pesoChico: 700, grande: 168, chico: 96, x: SEGURA.left, y: 1085, ancho: SEGURA.right - SEGURA.left, alto: 380 }));
+
+function toma(i, t) {
+  const im = IMS[i % IMS.length]; if (!im) return;
+  const t0 = CORTES[i], z = 1 + .03 * prog(t, t0, t0 + 2.5);       // empuje lento (≤ 1,5× del original)
+  cubrir(im, 0, 0, W, BANDA, .5, [.25, .2, .3][i], z);
+  ctx.fillStyle = C.tinta; ctx.fillRect(0, BANDA, W, H - BANDA);
+  ctx.fillStyle = 'rgba(14,14,12,.32)'; ctx.fillRect(0, 0, W, BANDA);                      // la foto baja un punto para que el marfil se lea
+  const g = ctx.createLinearGradient(0, 640, 0, BANDA); g.addColorStop(0, 'rgba(14,14,12,0)'); g.addColorStop(.45, 'rgba(14,14,12,.72)'); g.addColorStop(1, 'rgba(14,14,12,.94)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, BANDA);
+  const r = ctx.createRadialGradient(0, BANDA, 100, 0, BANDA, 1100); r.addColorStop(0, 'rgba(14,14,12,.5)'); r.addColorStop(1, 'rgba(14,14,12,0)'); ctx.fillStyle = r; ctx.fillRect(0, 0, W, BANDA);
+  if (i === 0) { const g3 = ctx.createLinearGradient(0, 380, 0, 1100); g3.addColorStop(0, 'rgba(14,14,12,.55)'); g3.addColorStop(1, 'rgba(14,14,12,0)'); ctx.fillStyle = g3; ctx.fillRect(0, 380, W, 720); }
+  const g2 = ctx.createLinearGradient(0, 0, 0, 470); g2.addColorStop(0, 'rgba(14,14,12,.6)'); g2.addColorStop(1, 'rgba(14,14,12,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, W, 470);
+}
+function mosca() {
+  const f = `800 44px ${F}`, w = medir(CANAL, f) + 36;
+  ctx.fillStyle = C.miel; ctx.fillRect(SEGURA.left, 262, w, 66); texto(CANAL, SEGURA.left + 18, 311, f, C.tinta);
+  ctx.fillStyle = 'rgba(14,14,12,.72)'; const f2 = `700 30px ${F}`, w2 = medir(TEMA, f2) + 36; ctx.fillRect(SEGURA.left + w, 262, w2, 66); texto(TEMA, SEGURA.left + w + 18, 306, f2, C.marfil);
+  const fc = `500 26px ${F}`, wc = medir(CREDITO, fc) + 28; ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(SEGURA.right - wc, 270, wc, 46); texto(CREDITO, SEGURA.right - 14, 302, fc, C.marfil, 'right');
+}
+function etiquetaFuente(t, t0) {                // «FUENTE» blanco + etiqueta oscura; entra deslizando 0,2 s
+  const k = easeOut(prog(t, t0, t0 + .2)); if (k <= 0) return;
+  const f = `800 28px ${F}`, f2 = `500 28px ${F}`, a = medir('FUENTE', f) + 28, b = medir(FUENTE, f2) + 30, x = SEGURA.left, y = 344;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, (a + b) * k, 52); ctx.clip();
+  ctx.fillStyle = C.marfil; ctx.fillRect(x, y, a, 52); texto('FUENTE', x + 14, y + 37, f, C.tinta);
+  ctx.fillStyle = 'rgba(14,14,12,.85)'; ctx.fillRect(x + a, y, b, 52); texto(FUENTE, x + a + 15, y + 37, f2, C.marfil); ctx.restore();
+}
+// gancho del cuadro 4: la cifra en bloque miel rueda a su valor en 0,45 s, después la unidad y el sujeto
+function gancho(t) {
+  const t0 = .13, x = SEGURA.left, y = 470;
+  if (t < t0) return;
+  texto(GANCHO.antes, x, y + 70, `700 76px ${F}`, C.marfil);
+  const v = Math.round(GANCHO.numero * easeOut(prog(t, t0, t0 + .45))), fN = `800 330px ${F_NUM}`;
+  const wMax = medir(String(GANCHO.numero), fN), q = easeOut(prog(t, t0, t0 + .12));
+  ctx.fillStyle = C.miel; ctx.fillRect(x - 10, y + 110, (wMax + 40 + medir(GANCHO.unidad, `800 200px ${F}`)) * q, 330);
+  ctx.save(); ctx.beginPath(); ctx.rect(x - 10, y + 110, W, 330); ctx.clip();
+  digitosFijos(String(v), x + 10, y + 390, fN, C.tinta);
+  if (t > t0 + .45) texto(GANCHO.unidad, x + 24 + wMax, y + 360, `800 200px ${F}`, C.tinta);
+  ctx.restore();
+  if (t > t0 + .6) texto(GANCHO.despues, x, y + 540, `800 96px ${F}`, C.marfil);
+}
+// proporción por oscuridad: una línea miel barre la foto hasta el porcentaje; lo que pasó queda gris y oscuro
+function proporcion(t) {
+  const t0 = CORTES[1] + .1, p = easeIO(prog(t, t0, t0 + .9)) * GANCHO.numero / 100, xL = W * p;
+  if (p <= 0) return;
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, xL, BANDA); ctx.clip();
+  ctx.globalCompositeOperation = 'saturation'; ctx.fillStyle = '#808080'; ctx.fillRect(0, 0, xL, BANDA);
+  ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = 'rgba(70,40,38,1)'; ctx.fillRect(0, 0, xL, BANDA);
+  ctx.restore();
+  ctx.fillStyle = C.miel; ctx.fillRect(xL - 3, 0, 6, BANDA);
+  if (t > t0 + .9) {                                // la cifra aparece del lado oscuro
+    const f = `800 200px ${F_NUM}`; digitosFijos(String(GANCHO.numero) + GANCHO.unidad, SEGURA.left, 650, f, C.rojo);
+    texto(GANCHO.despues, SEGURA.left, 740, `700 64px ${F}`, C.marfil);
+  }
+}
+const easeIO = t => { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  let i = 0; CORTES.forEach((c, k) => { if (t >= c) i = k; });
+  toma(i, t);
+  granoPeli(.06, frame);
+  if (i === 0) { gancho(t); etiquetaFuente(t, .3); }
+  if (i === 1) { proporcion(t); etiquetaFuente(t, CORTES[1] + 1.0); }
+  mosca();
+  pintarMaqueta(SUBS[i], t, T_SUB[i], .14, { col: C.marfil, bloque: C.miel, colSobreBloque: C.tinta });
+  if (i === 2) flash(t - CORTES[2] < 2 / FPS ? .85 : 0);   // destello de 2 cuadros en el giro
+});
+window.SONIDOS = [
+  { t: .13, tipo: 'golpe' }, { t: .3, tipo: 'desliz' }, ...T_SUB.map(t => ({ t, tipo: 'pop' })),
+  { t: 2.5, tipo: 'golpe' }, { t: 2.6, tipo: 'swish' }, { t: 5.0, tipo: 'golpe' },
+];
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nube de puntos</title>
+<style>
+  html,body{margin:0;background:#05080A;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Nube de puntos» · ingeniería inversa de lemo-opuscar/styles/lidar-survey (MIT, © 2026 LemoLab) · qué se tomó: la foto que una línea de barrido convierte en puntos, la nube coloreada por altura con rampa desaturada y niebla, el plano de corte que levanta la copa capa por capa con su regla, el frente que condensa los puntos en superficie con luz rasante, y el hallazgo trazado en ámbar
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Debajo de tus seguidores hay compradores';   // arriba (máx. ~60 letras)
+const PALABRA_CLAVE = 'compradores';                  // enorme, en su propio renglón
+const HALLAZGO = 'tus compradores';                   // la etiqueta del trazo ámbar que aparece al quitar la copa
+const CAPA = 'seguidores';                            // el nombre de la capa que se levanta (la copa de los árboles)
+const DATOS = {                                       // SOLO cifras del guion
+  etiqueta: 'te escriben por privado',
+  valor: '1 de cada 10',
+  nota: 'trazado en tus mensajes',
+};
+const FOTO = '';                                      // foto aérea / de dron TUYA (ruta relativa). Vacío = vista aérea de muestra
+const COLORES = {
+  fondo: '#05080A',
+  copa: ['#1F3F35', '#5C9A7A', '#E2F3DC'],   // la rampa por altura (de abajo a arriba)
+  suelo: '#C8B38C',
+  superficie: '#BDB5A6',
+  frente: '#D4FFF0',
+  acento: '#FFB347',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 9;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+// ---------- el levantamiento: una grilla de retornos (suelo + copa) sobre un modelo de terreno ----------
+const NX = 150, NY = 230, X0 = -75, Y0 = -115;
+const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const RAMPA = COLORES.copa.map(hex), SUELO = hex(COLORES.suelo), SUP = hex(COLORES.superficie), FRENTE = hex(COLORES.frente), ACENTO = hex(COLORES.acento);
+// el hallazgo: un recinto rectangular con un camino que sale (lo que la copa escondía)
+const RECINTO = [[-26, -6], [22, -14], [28, 30], [-20, 36], [-26, -6]], CAMINO = [[-23, 15], [-48, 22], [-70, 40]];
+const _dSeg = (x, y, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], u = clamp(((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy)); return Math.hypot(x - a[0] - u * dx, y - a[1] - u * dy); };
+const dLinea = (x, y, L) => { let d = 1e9; for (let i = 0; i < L.length - 1; i++) d = Math.min(d, _dSeg(x, y, L[i], L[i + 1])); return d; };
+const suelo = (x, y) => 6 * _fbm(x * .012 + 3, y * .012) + 2.2 * _fbm(x * .05, y * .05 + 9, 3) + Math.max(0, 1.1 - dLinea(x, y, RECINTO) * .55) * .9 - Math.max(0, 1 - dLinea(x, y, CAMINO) * .4) * .5;
+const PTS = [];                                        // { x, y, z, tipo: 0 suelo / 1 copa, c: color, sh: sombreado }
+const CMAX = 16;
+{ const r = rng(5);
+  for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
+    const x = X0 + i + (r() - .5) * .6, y = Y0 + j + (r() - .5) * .6, z = suelo(x, y);
+    const e = 1.2, nx = suelo(x - e, y) - suelo(x + e, y), ny = suelo(x, y - e) - suelo(x, y + e);
+    const sh = clamp(.35 + (nx * .9 + ny * .35) * .9 + .3, .12, 1.05);               // sol rasante desde el oeste
+    PTS.push({ x, y, z, tipo: 0, sh, fe: Math.max(0, 1 - dLinea(x, y, RECINTO) * .7) + Math.max(0, 1 - dLinea(x, y, CAMINO) * .9) * .8, i: r() });
+    const dens = vnoise(x * .06 + 11, y * .06);                                          // la copa: casi todo tapado
+    if (dens > .3) { const copa = (4 + 12 * Math.pow(vnoise(x * .22, y * .22 + 4), 1.6)) * clamp((dens - .3) * 4);
+      PTS.push({ x, y, z: z + copa, tipo: 1, h: copa / CMAX, i: r() });
+      if (r() < .45) PTS.push({ x: x + .4, y: y + .3, z: z + copa * (.4 + r() * .4), tipo: 1, h: copa * .6 / CMAX, i: r() }); } } }
+const N_PUNTOS = PTS.length.toLocaleString('es');
+const rampa = h => { h = clamp(h); return h < .5 ? mezclar(RAMPA[0], RAMPA[1], h * 2) : mezclar(RAMPA[1], RAMPA[2], (h - .5) * 2); };
+
+// ---------- la foto de arriba (o la vista aérea de muestra) ----------
+let FOTOC = null;
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => { FOTOC = fs[0] ? fotoEnLienzo(fs[0], NX * 6, NY * 6) : terreno(NX * 6, NY * 6, { semilla: 8, mundo: [0, 0, 600, 920] }); });
+function fotoSuelo(p, yDesde) {                         // la foto pegada al plano del suelo, solo donde el barrido todavía no pasó
+  if (!FOTOC || yDesde >= Y0 + NY) return; const y0 = Math.max(Y0, yDesde), sy = (y0 - Y0) / NY * FOTOC.height;
+  const o = p(X0, y0, 0), ex = p(X0 + NX, y0, 0), ey = p(X0, Y0 + NY, 0), hh = FOTOC.height - sy;
+  ctx.save(); ctx.transform((ex[0] - o[0]) / FOTOC.width, (ex[1] - o[1]) / FOTOC.width, (ey[0] - o[0]) / hh, (ey[1] - o[1]) / hh, o[0], o[1]);
+  ctx.drawImage(FOTOC, 0, sy, FOTOC.width, hh, 0, 0, FOTOC.width, hh); ctx.restore();
+}
+
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { y: 262, fam: F_SANS, peso: 500, famClave: F_LECTURA, pesoClave: 500, chica: 66, grande: 200, col: '#E8EEEC', colClave: '#E8EEEC' });
+const T = { barre: [.12, 1.45], inclina: [.3, 2.3], frase: 1.7, corte: [3.4, 4.9], condensa: [4.9, 6.1], traza: [5.7, 6.7], lectura: 6.5 };
+
+function camara(t) {
+  const k = ease(prog(t, ...T.inclina));
+  return vista({ cx: W / 2, cy: lerp(960, 1130, k), esc: lerp(8.6, 9.6, ease(prog(t, .3, DUR))), yaw: lerp(0, -.22, k) + .1 * ease(prog(t, 2.3, DUR)), pitch: lerp(Math.PI / 2, .62, k) });
+}
+arrancar(frame => {
+  const t = frame / FPS; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = COLORES.fondo; ctx.fillRect(0, 0, W, H);
+  const p = camara(t);
+  const ysc = lerp(Y0 - 8, Y0 + NY + 8, ease(prog(t, ...T.barre)));          // la línea de barrido (norte → sur)
+  const zc = lerp(CMAX + 14, 1.2, ease(prog(t, ...T.corte)));                 // el plano de corte, por altura sobre el suelo
+  const yco = lerp(Y0 - 10, Y0 + NY + 10, ease(prog(t, ...T.condensa)));      // el frente que condensa la superficie
+  fotoSuelo(p, ysc);
+  // puntos, de lejos a cerca (la cámara mira hacia +y): orden de pintor por fila
+  const tam = Math.max(2, p.esc * .42), sup = p.esc * 1.25;
+  for (const q of PTS) {
+    if (q.y > ysc) continue;
+    const s = p(q.x, q.y, q.z);
+    if (s[1] < -20 || s[1] > H + 20 || s[0] < -20 || s[0] > W + 20) continue;
+    const niebla = clamp(1 - (p(q.x, q.y, 0)[1] < 700 ? (700 - p(q.x, q.y, 0)[1]) / 900 : 0));   // lo lejano se apaga
+    const cerca = ysc - q.y, brillo = cerca < 6 ? (1 - cerca / 6) : 0;           // los puntos recién barridos brillan
+    let col, a = niebla, sz = tam, sy = s[1];
+    if (q.tipo === 1) {
+      const sobre = q.z - suelo(q.x, q.y);
+      if (sobre > zc) { const lev = clamp((sobre - zc) / 6); a *= 1 - lev; if (a <= .02) continue; sy -= lev * 40 * p.esc / 9; }   // la copa se levanta y se va
+      col = rampa(q.h).map(v => v * (.75 + q.i * .35));
+    } else if (q.y < yco) {                                                       // suelo condensado: superficie sólida con luz rasante
+      const fe = clamp(q.fe) * clamp((t - T.traza[0] - (q.x - X0) / NX * .6) / .35);
+      col = mezclar(SUP.map(v => v * q.sh), ACENTO, fe * .85); sz = sup;
+      const borde = yco - q.y; if (borde < 4) col = mezclar(col, FRENTE, (1 - borde / 4) * .8);
+    } else col = SUELO.map(v => v * (.55 + q.sh * .45 + q.i * .1));
+    if (brillo > 0) col = mezclar(col, FRENTE, brillo * .9);
+    ctx.globalAlpha = a; ctx.fillStyle = rgb(col); ctx.fillRect(s[0] - sz / 2, sy - sz / 2, sz, sz);
+  }
+  ctx.globalAlpha = 1;
+  // la costura del barrido: una línea de luz fría (la única que brilla)
+  if (ysc > Y0 && ysc < Y0 + NY) { const a = p(X0, ysc, 0), b = p(X0 + NX, ysc, 0);
+    ctx.save(); ctx.filter = 'blur(6px)'; pelo([a, b], { w: 10, col: COLORES.frente, halo: null, alpha: .7 }); ctx.restore(); pelo([a, b], { w: 2.5, col: '#ffffff', halo: null }); }
+  if (yco > Y0 && yco < Y0 + NY) { const a = p(X0, yco, suelo(0, yco)), b = p(X0 + NX, yco, suelo(0, yco)); ctx.save(); ctx.filter = 'blur(5px)'; pelo([a, b], { w: 8, col: COLORES.frente, halo: null, alpha: .55 }); ctx.restore(); }
+  // el hallazgo trazado: línea fina ámbar sobre la superficie, después su guía y su etiqueta
+  const kt = prog(t, ...T.traza);
+  if (kt > 0) { const lin = resample(RECINTO, 1).map(([x, y]) => p(x, y, suelo(x, y) + .3));
+    pelo(lin, { w: 2.6, col: COLORES.acento, halo: 'rgba(0,0,0,.4)', k: ease(kt) });
+    pelo(resample(CAMINO, 1).map(([x, y]) => p(x, y, suelo(x, y) + .3)), { w: 2.2, col: COLORES.acento, halo: 'rgba(0,0,0,.4)', k: ease(prog(t, T.traza[0] + .4, T.traza[1] + .2)), dash: [10, 8] }); }
+  if (t > T.traza[1]) { const a = p(RECINTO[1][0], RECINTO[1][1], suelo(...RECINTO[1]) + 1), y = Math.max(FR.y1 + 110, a[1] - 170), f = `600 36px ${F_SANS}`;
+    const lw = medir(HALLAZGO, f), ex = Math.min(SEGURA.right - lw - 16, a[0] + 120);
+    guia(a, [ex, y], ease(prog(t, T.traza[1], T.traza[1] + .3)), { col: COLORES.acento });
+    if (t > T.traza[1] + .3) { placa(ex + 4, y - 24, lw + 24, 50, { col: 'rgba(5,8,10,.7)', r: 4 }); escribir(HALLAZGO, ex + 16, y + 12, f, COLORES.acento); } }
+  // la regla del plano de corte, en el borde
+  if (t > T.corte[0] - .2 && t < T.condensa[1] + .6) { const x = W - 52, ytop = 760, ybot = 1330, k = (zc - 1.2) / (CMAX + 12.8);
+    const al = clamp(prog(t, T.corte[0] - .2, T.corte[0])) * (1 - prog(t, T.condensa[1], T.condensa[1] + .6));
+    ctx.save(); ctx.globalAlpha = al; pelo([[x, ytop], [x, ybot]], { w: 2, col: '#cfd8d5', halo: null });
+    for (let i = 0; i <= 12; i++) pelo([[x - (i % 4 ? 8 : 16), lerp(ybot, ytop, i / 12)], [x, lerp(ybot, ytop, i / 12)]], { w: 1.6, col: '#cfd8d5', halo: null });
+    const yy = lerp(ybot, ytop, k); pelo([[x - 40, yy], [x + 8, yy]], { w: 3, col: COLORES.frente, halo: null });
+    placa(x - 340, yy - 44, 286, 84, { col: 'rgba(5,8,10,.72)', r: 4 });
+    escribir('PLANO DE CORTE', x - 48, yy - 14, `400 22px ${F_MONO}`, '#cfd8d5', { align: 'right' });
+    escribir('se levanta: ' + CAPA, x - 48, yy + 26, `400 22px ${F_MONO}`, 'rgba(207,216,213,.7)', { align: 'right' }); ctx.restore(); }
+  // instrumentos en una esquina (cambian solo cuando cambia el medio)
+  { const x = SEGURA.left, f = `400 23px ${F_MONO}`, c = 'rgba(214,226,222,.78)';
+    placa(x - 14, 1366, 420, 86, { col: 'rgba(5,8,10,.72)', r: 4 });
+    escribir(FOTO ? 'LEVANTAMIENTO · TU FOTO' : 'LEVANTAMIENTO DE MUESTRA', x, 1400, f, c);
+    escribir((t < T.barre[1] ? Math.round(PTS.length * prog(t, ...T.barre)).toLocaleString('es') : N_PUNTOS) + ' retornos · relieve ×2', x, 1436, f, c); }
+  // la lectura, en el tercio derecho, al lado de lo que mide
+  if (t > T.lectura) lectura(W * .46, 1245, { etiqueta: DATOS.etiqueta, valor: DATOS.valor, nota: DATOS.nota, k: prog(t, T.lectura, T.lectura + .6), tam: 108, col: COLORES.acento, tinta: '#E8EEEC', ancho: 470,
+    fondo: (x, y, w, h) => placa(x, y, w, h, { col: 'rgba(5,8,10,.72)', r: 6 }) });
+  { const g = ctx.createLinearGradient(0, 0, 0, FR.y1 + 120); g.addColorStop(0, 'rgba(5,8,10,.92)'); g.addColorStop(.75, 'rgba(5,8,10,.6)'); g.addColorStop(1, 'rgba(5,8,10,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, FR.y1 + 120); }
+  vineta(.4);
+  pintarFrase(FR, t, T.frase, .17);
+});
+window.SONIDOS = [{ t: .12, tipo: 'desliz' }, { t: 1.45, tipo: 'golpe' }, { t: 3.3, tipo: 'ambiente' }, { t: 3.4, tipo: 'swish' }, { t: 4.9, tipo: 'golpe' }, { t: 5.7, tipo: 'desliz' }, { t: 6.5, tipo: 'pop' }];
+</script>
+</body>
+</html>

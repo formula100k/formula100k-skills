@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cinta perdida del pasillo</title>
+<style>html,body{margin:0;background:#000;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Cinta perdida del pasillo» · ingeniería inversa de lemo-opuscar/styles/backrooms (MIT, © 2026 LemoLab) · qué se tomó: grabación de videocámara en primera persona por un interior vacío y repetido (empapelado mostaza, alfombra, cielorraso de placas con paneles de luz a intervalos), luz plana de muchos paneles sin sombras y niebla que sigue a la luz local, un panel muerto, el cartel de reglas como imagen (cámara paralela a la hoja), el generador de títulos y el OSD (REC, batería, hora) como trama, y una pasada VHS suave (croma corrido, banda de cabezal, ruido bajo, sin líneas de barrido).
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO = 'tu contenido no vende';          // el generador de títulos de la cámara (se escribe letra por letra)
+const PALABRA_CLAVE = 'vende';                   // sale ENORME
+const AVISO = 'REGLAS DE ESTE PISO';             // el encabezado del cartel (≤ 22 letras)
+const REGLAS = [                                 // 3 o 4 reglas (≤ 46 letras c/u). Empiezan normales y se ponen raras
+  'Si publicas sin oferta, nadie te encuentra.',
+  'No contestes «¿precio?» con silencio.',
+  'Si ves la misma idea tres veces, grábala.',
+  'Esta pared no vende. Tu oferta sí.',
+];
+const FIRMA = 'Gracias por su cooperación. — La Gerencia';
+const HORA = [23, 58];                           // la hora del OSD (inventada, editable)
+const FECHA = 'NOV. 03 1996';
+const COLORES = {                                // UN tono enfermizo del material + UN color señal (el REC)
+  papel: [213, 189, 102], moldura: [77, 61, 38], alfombra: [140, 118, 60], techo: [226, 220, 196],
+  senal: '#e3241b',
+};
+const DUR = 9;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-caricatura.js"></script>
+<script src="../nucleo/cine-juegos.js"></script>
+<script>
+const C = COLORES, LW = 270, LH = 480, Z_FIN = 13, F = LW / 2 / .55;           // pasillo y cámara (tan(fov/2) = .55)
+const T_PARPADEO = 1.15, T_TITULO = .35;
+const BAJA = hacerCapa(LW, LH), bg = BAJA.getContext('2d', { willReadFrequently: true }), IMG = bg.createImageData(LW, LH);
+const PANELES = [2, 5, 8, 11].map((z, i) => ({ z, muerto: i === 2 }));
+const camZ = t => lerp(.4, Z_FIN - 1.45, ease(prog(t, 0, DUR - 1.4)));
+// nivel de cada panel: parpadeo corto y SUAVE (baja al 55 %, nunca negro), el panel muerto apagado
+function nivel(p, t) { if (p.muerto) return .04; const dip = t > T_PARPADEO && t < T_PARPADEO + .12 ? .55 : t > T_PARPADEO + .2 && t < T_PARPADEO + .27 ? .7 : 1; return dip * (1 + .015 * Math.sin(t * 50 + p.z)); }
+
+// ---------- trazado por pixel del pasillo (resolución baja: la cinta la agranda) ----------
+function pasillo(t) {
+  const cz = camZ(t), cy = .02 * Math.sin(t * 3.6) , cx = .015 * Math.sin(t * 1.8), d = IMG.data;
+  const niv = PANELES.map(p => nivel(p, t));
+  const exp = 1 / (.75 + .25 * lerp(1, .6, prog(t, T_PARPADEO, T_PARPADEO + .12) - prog(t, T_PARPADEO + .3, T_PARPADEO + .75)));   // la exposición automática llega tarde
+  for (let j = 0; j < LH; j++) for (let i = 0; i < LW; i++) {
+    const dx = (i - LW / 2) / F, dy = -(j - LH / 2) / F;
+    let tt = Z_FIN - cz, sup = 'fondo', hx = cx + dx * tt, hy = cy + dy * tt;
+    const tPared = dx > 0 ? (1 - cx) / dx : dx < 0 ? (-1 - cx) / dx : 1e9;
+    const tSuelo = dy < 0 ? (-1 - cy) / dy : 1e9, tTecho = dy > 0 ? (1.1 - cy) / dy : 1e9;
+    if (tPared < tt) { tt = tPared; sup = 'pared'; }
+    if (tSuelo < tt) { tt = tSuelo; sup = 'suelo'; } if (tTecho < tt) { tt = tTecho; sup = 'techo'; }
+    const z = cz + tt, x = cx + dx * tt, y = cy + dy * tt;
+    if (sup === 'pared' && dx < 0 && z > 6.1 && z < 7.6 && y < .9) sup = 'hueco';                  // una puerta abierta: más vacío
+    let col;
+    if (sup === 'pared' || sup === 'fondo') { const u = sup === 'pared' ? z : x;
+      col = y < -.82 ? C.moldura : C.papel; const raya = (u * 7) % 1 < .32 ? .93 : 1, punto = ((u * 14) % 1 < .12 && (y * 14) % 1 < .12) ? .85 : 1;
+      const mancha = y > .78 ? .88 : 1, marea = y < -.7 && y > -.82 ? .92 - .06 * vnoise(u * 3, 1) : 1;
+      col = col.map(c => c * raya * punto * mancha * marea); }
+    else if (sup === 'suelo') { const n = .82 + .3 * vnoise(x * 9, z * 9) + .08 * vnoise(x * 40, z * 40); col = C.alfombra.map(c => c * n); }
+    else if (sup === 'hueco') col = [10, 9, 6];
+    else { const bx = ((x + 1) * 2.5) % 1, bz = (z * 2.5) % 1; col = (bx < .04 || bz < .04) ? [150, 145, 125] : C.techo;
+      for (let k = 0; k < PANELES.length; k++) { const p = PANELES[k]; if (Math.abs(z - p.z) < .42 && Math.abs(x) < .38) { const v = niv[k]; col = [255 * v + 30, 248 * v + 28, 225 * v + 25]; } } }
+    // luz: suma de paneles cercanos (sin oclusión) + rebote; el panel muerto deja una zona oscura
+    let L = .1; for (let k = 0; k < PANELES.length; k++) { const p = PANELES[k], ddz = z - p.z, ddy = 1.1 - y, dd = ddz * ddz + x * x * .5 + ddy * ddy; L += niv[k] * 1.25 / (1 + dd * .55); }
+    if (sup === 'hueco') L *= .15;
+    const niebla = Math.exp(-tt * .1), nieblaCol = C.papel.map(c => c * .32 * Math.min(1, L));
+    for (let c = 0; c < 3; c++) { const v = sup === 'techo' && col[0] > 260 ? col[c] : col[c] * Math.min(1.25, L); d[(j * LW + i) * 4 + c] = Math.min(255, lerp(nieblaCol[c], v, niebla) * exp); }
+    d[(j * LW + i) * 4 + 3] = 255;
+  }
+  bg.putImageData(IMG, 0, 0);
+  return { cz, cx, cy, luzFondo: Math.min(1.2, .1 + PANELES.reduce((a, p, k) => a + niv[k] * 1.25 / (1 + (Z_FIN - p.z) ** 2 * .55 + 1), 0)) * exp };
+}
+
+// ---------- el cartel: corcho + hoja impresa en láser (se pinta UNA vez, nítido) ----------
+const CW = 900, CH = 1170;
+const CARTEL = (() => { const c = hacerCapa(CW, CH), p = c.getContext('2d'), r = rng(3);
+  p.fillStyle = '#4d3d26'; p.fillRect(0, 0, CW, CH); p.fillStyle = '#9a7445'; p.fillRect(26, 26, CW - 52, CH - 52);
+  for (let i = 0; i < 9000; i++) { p.fillStyle = r() < .5 ? 'rgba(60,40,20,.35)' : 'rgba(200,160,110,.3)'; p.fillRect(26 + r() * (CW - 52), 26 + r() * (CH - 52), 2, 2); }
+  const hx = 90, hy = 80, hw = CW - 180, hh = CH - 150;
+  p.fillStyle = 'rgba(0,0,0,.25)'; p.fillRect(hx + 10, hy + 12, hw, hh);
+  p.fillStyle = '#efe6c8'; p.fillRect(hx, hy, hw, hh);
+  const gy = p.createLinearGradient(0, hy, 0, hy + hh); gy.addColorStop(0, 'rgba(160,130,60,0)'); gy.addColorStop(1, 'rgba(160,130,60,.18)'); p.fillStyle = gy; p.fillRect(hx, hy, hw, hh);
+  p.fillStyle = '#c23'; p.beginPath(); p.arc(hx + hw / 2, hy + 24, 12, 0, 7); p.fill();
+  p.fillStyle = '#1c1a16'; p.font = `500 22px "Helvetica Neue", Arial, sans-serif`; p.fillText('FORMULARIO 7-B · REV. 3', hx + 40, hy + 70);
+  const aj = autoajuste(AVISO.toUpperCase(), '"Helvetica Neue", "Avenir Next Condensed", Arial, sans-serif', 800, hw - 80, 2, 66, 34);
+  p.font = aj.font; aj.rs.forEach((l, i) => p.fillText(l, hx + 40, hy + 130 + aj.size * (i + .8)));
+  let y = hy + 150 + aj.size * (aj.rs.length + .2); p.fillRect(hx + 40, y - 20, hw - 80, 4);
+  REGLAS.slice(0, 4).forEach((rg, i) => { const a = autoajuste(rg, '"Helvetica Neue", Arial, sans-serif', 500, hw - 140, 3, 40, 26); p.font = `800 ${a.size}px "Helvetica Neue", sans-serif`;
+    p.fillText((i + 1) + '.', hx + 40, y + a.size); p.font = a.font; a.rs.forEach((l, k) => p.fillText(l, hx + 92, y + a.size * (k + 1) * 1.18)); y += a.size * 1.18 * a.rs.length + 34; });
+  p.font = `italic 400 24px "Helvetica Neue", sans-serif`; p.fillStyle = '#3a372f'; const af = autoajuste(FIRMA, '"Helvetica Neue", sans-serif', 400, hw - 80, 2, 26, 18);
+  af.rs.forEach((l, k) => p.fillText(l, hx + 40, hy + hh - 60 + k * 30));
+  return c; })();
+
+// ---------- OSD y generador de títulos (fuente de mapa de bits con contorno negro, fuera de la distorsión) ----------
+const OSD = crearGrilla(4);
+const PAL = TITULO.toUpperCase().split(/[ \t\n]+/);
+const TIT = (() => { const filas = []; let fila = [], w = 0;
+  for (const p of PAL) { const clave = p.replace(/[¡!¿?.,]/g, '') === PALABRA_CLAVE.toUpperCase(); let esc = clave ? 6 : 3; while (anchoPx(p, esc) > LW - 30 && esc > 1) esc--;
+    if (fila.length && w + 12 + anchoPx(p, esc) > LW - 30) { filas.push(fila); fila = []; w = 0; } w += (fila.length ? 12 : 0) + anchoPx(p, esc); fila.push({ p, esc, clave }); }
+  filas.push(fila); let y = 100, n = 0; const out = [];
+  for (const f of filas) { const alto = Math.max(...f.map(q => q.esc * 7)), wf = f.reduce((a, q) => a + anchoPx(q.p, q.esc), 0) + 12 * (f.length - 1); let x = Math.round((LW - wf) / 2);
+    for (const q of f) { out.push({ ...q, x, y: y + alto - q.esc * 7, i0: n }); n += [...q.p].length; x += anchoPx(q.p, q.esc) + 12; } y += alto + 10; }
+  return { items: out, total: n }; })();
+function osd(t) {
+  OSD.limpiar();
+  if (Math.floor(t * 1.2) % 2 === 0) { for (let j = -5; j <= 5; j++) for (let i = -5; i <= 5; i++) if (i * i + j * j <= 25) OSD.p(26 + i, 68 + j, C.senal); }
+  textoPx(OSD, 'REC', 36, 65, { esc: 2, col: '#fff', contorno: '#000' });
+  OSD.p(206, 60, '#000', 40, 18); OSD.p(207, 61, '#fff', 38, 16); OSD.p(208, 62, '#000', 36, 14); OSD.p(246, 65, '#fff', 3, 8);
+  for (let k = 0; k < 3; k++) OSD.p(210 + k * 11, 64, '#fff', 9, 10);
+  const s = Math.floor(t), mm = HORA[1] + Math.floor(s / 60), hh = HORA[0] % 12 || 12;
+  textoPx(OSD, `${HORA[0] >= 12 ? 'PM' : 'AM'} ${hh}:${String(mm).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`, 120, 330, { esc: 2, col: '#fff', contorno: '#000' });
+  textoPx(OSD, FECHA, 120, 350, { esc: 2, col: '#fff', contorno: '#000' });
+  // generador de títulos: letra por letra, sale cuando se acerca el cartel
+  if (t >= T_TITULO && t < 4.2) { const n = Math.floor((t - T_TITULO) * 16);
+    for (const q of TIT.items) { const k = n - q.i0; if (k > 0) textoPx(OSD, q.p, q.x, q.y, { esc: q.esc, col: '#fff', contorno: '#000', max: k }); } }
+  OSD.presentar(ctx);
+}
+
+arrancar(frame => {
+  const t = frame / FPS;
+  const cam = pasillo(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.imageSmoothingEnabled = true;
+  ctx.filter = 'blur(1.2px)'; ctx.drawImage(BAJA, 0, 0, W, H); ctx.filter = 'none';                  // la cinta agranda y ablanda
+  // el cartel en la pared del fondo: plano frontal, sin cizalla (la cámara queda paralela a la hoja)
+  const dz = Z_FIN - cam.cz, k = (W / LW) * F / dz, cwM = 1.0, chM = cwM * CH / CW;
+  const sx = W / 2 + (-cwM / 2 - cam.cx) * k, sy = H / 2 - (.88 - cam.cy) * k;
+  ctx.save(); ctx.filter = `brightness(${Math.min(1.15, cam.luzFondo * .95).toFixed(3)}) blur(${Math.max(0, .9 - 4 / dz).toFixed(2)}px)`;
+  ctx.drawImage(CARTEL, sx, sy, cwM * k, chM * k); ctx.restore();
+  // pasada VHS: croma corrido, ruido de ganancia, banda del cabezal abajo; al arrancar, la cinta entra rodando
+  const rueda = t < .45 ? { y: lerp(-80, H, t / .45), h: 120, a: .6 } : { y: H - 70 + Math.round(vnoise(t * 3, 2) * 10), h: 40, a: .35 };
+  pasadaCinta(t, { lineas: false, croma: 5, ruido: .05 + .03 * prog(t, T_PARPADEO, T_PARPADEO + .2) * (1 - prog(t, T_PARPADEO + .3, T_PARPADEO + .8)), esquinas: .5, banda: rueda });
+  osd(t);
+});
+window.SONIDOS = [
+  { t: 0, tipo: 'ambiente' }, { t: 0, tipo: 'desliz' }, { t: T_TITULO, tipo: 'papel' }, { t: T_PARPADEO, tipo: 'golpe' },
+  { t: 3, tipo: 'desliz' }, { t: DUR - 1.4, tipo: 'golpe' },
+];
+</script>
+</body>
+</html>

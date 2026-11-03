@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pizarra de obra</title>
+<style>
+  html,body{margin:0;background:#8f8a82;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Pizarra de obra» · ingeniería inversa de lemo-opuscar/styles/briefing-board (MIT, © 2026 LemoLab) · qué se tomó: pizarra blanca filmada (esmalte, luz de ventana, reflejo que se desliza, fantasmas de lo borrado, marco y bandeja), fotos impresas que caen con peso y quedan con imán, tinta de plumón en multiplicar con tres colores con significado, borrar a fantasma, el sello del veredicto y el retroceso final a toda la pared
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const FRASE = 'Tres pasos para tu primera venta';   // arriba, en plumón grafito (máx. ~45 letras)
+const PALABRA_CLAVE = 'primera venta';               // va enorme y en ROJO (el rojo es la decisión)
+const PASOS = [                                       // 2 o 3 tarjetas con imán (máx. ~26 letras c/u)
+  'Una oferta clara',
+  'Un video que la muestre',
+  'Una palabra para pedirla',
+];
+const DESCARTADA = 'publicar por publicar';           // la idea que se borra y queda como fantasma
+const SELLO = 'VENDE';                                // el sello rojo del final (1 o 2 palabras cortas)
+const FOTO = '';                                      // foto TUYA (tu producto, tu perfil, tu local). Vacío = boceto en plumón
+const PIE_FOTO = 'tu producto';                       // la etiqueta de la foto
+const COLORES = {
+  grafito: '#26282c',   // nombres y reglas
+  azul: '#2456c4',      // medidas y marcas de visto
+  rojo: '#d1352a',      // SOLO la decisión
+  esmalte: '#eef0ed',
+  pared: '#8f8a82',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30, DUR = 8.5;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-evidencia.js"></script>
+<script>
+const BX = 0, BY = 0, BW = W, BH = H;                     // la pizarra, en unidades de mundo (= px a zoom 1)
+const LUZ = [.55, .4];                                    // la ventana está a la izquierda: las sombras caen a la derecha y abajo
+let IM = null;
+cargarMaterial(FOTO ? [FOTO] : []).then(fs => { IM = fs[0] ? desaturar(fotoEnLienzo(fs[0], 440, 330, .5, .45), .25, .6) : null; });
+
+// ---------- la pared, el marco, el esmalte con fantasmas y la bandeja (se pinta UNA vez) ----------
+const MARGEN = 46;
+const FONDO = (() => {
+  const c = lienzo(W + 400, H + 400), p = c.getContext('2d'), r = rng(21), o = 200;
+  p.fillStyle = COLORES.pared; p.fillRect(0, 0, c.width, c.height);
+  for (let i = 0; i < 40000; i++) { p.fillStyle = r() < .5 ? 'rgba(0,0,0,.05)' : 'rgba(255,255,255,.05)'; p.fillRect(r() * c.width, r() * c.height, 2, 2); }
+  p.save(); p.filter = 'blur(26px)'; p.fillStyle = 'rgba(0,0,0,.4)'; p.fillRect(o + 30, o + 40, BW, BH); p.restore();      // el marco da sombra a la pared
+  const g = p.createLinearGradient(o, 0, o + BW, 0); g.addColorStop(0, '#c9ccd0'); g.addColorStop(.5, '#eceef0'); g.addColorStop(1, '#b8bbc0');
+  p.fillStyle = g; p.fillRect(o, o, BW, BH);                                                                    // marco de aluminio
+  const ix = o + MARGEN, iy = o + MARGEN, iw = BW - 2 * MARGEN, ih = BH - 2 * MARGEN - 40;
+  p.fillStyle = COLORES.esmalte; p.fillRect(ix, iy, iw, ih);
+  const v = p.createLinearGradient(ix, 0, ix + iw, 0); v.addColorStop(0, 'rgba(255,255,250,.55)'); v.addColorStop(.55, 'rgba(255,255,255,0)'); v.addColorStop(1, 'rgba(60,64,70,.16)');
+  p.fillStyle = v; p.fillRect(ix, iy, iw, ih);                                                                    // caída de la luz de ventana
+  p.save(); p.beginPath(); p.rect(ix, iy, iw, ih); p.clip();
+  p.lineCap = 'round';
+  for (let i = 0; i < 26; i++) {                                                                                   // fantasmas de plumón borrado
+    p.strokeStyle = ['rgba(38,40,44,.05)', 'rgba(36,86,196,.045)', 'rgba(209,53,42,.035)'][i % 3]; p.lineWidth = 5 + r() * 5;
+    const x = ix + r() * iw, y = iy + r() * ih; p.beginPath(); p.moveTo(x, y);
+    for (let k = 0; k < 4; k++) p.quadraticCurveTo(x + (r() - .5) * 300, y + (r() - .5) * 120, x + (r() - .3) * 260, y + (r() - .5) * 90); p.stroke(); }
+  p.font = `64px ${F_PLUMON}`; p.fillStyle = 'rgba(38,40,44,.045)';
+  for (let i = 0; i < 6; i++) { p.save(); p.translate(ix + r() * iw * .8, iy + 200 + r() * ih * .8); p.rotate((r() - .5) * .1); p.fillText(['plan', '→', 'sem 2', '¿?', 'ok', '1 ·'][i], 0, 0); p.restore(); }
+  p.filter = 'blur(10px)'; p.fillStyle = 'rgba(255,255,255,.35)';                                                // manchas de borrador
+  for (let i = 0; i < 7; i++) { p.beginPath(); p.ellipse(ix + r() * iw, iy + r() * ih, 140 + r() * 120, 40 + r() * 30, r() * .4, 0, Math.PI * 2); p.fill(); }
+  p.filter = 'none';
+  for (let i = 0; i < 30000; i++) { p.fillStyle = `rgba(0,0,0,${r() * .03})`; p.fillRect(ix + r() * iw, iy + r() * ih, 1.5, 1.5); }
+  p.restore();
+  p.strokeStyle = 'rgba(0,0,0,.25)'; p.lineWidth = 3; p.strokeRect(ix, iy, iw, ih);
+  // bandeja con plumones
+  const ty = iy + ih + 6; p.fillStyle = '#a9adb2'; p.fillRect(o + 20, ty, BW - 40, 34); p.fillStyle = 'rgba(255,255,255,.5)'; p.fillRect(o + 20, ty, BW - 40, 5);
+  const plumon = (x, col) => { p.fillStyle = '#f4f4f2'; p.beginPath(); p.roundRect(x, ty - 22, 150, 24, 8); p.fill(); p.fillStyle = col; p.beginPath(); p.roundRect(x + 110, ty - 24, 46, 28, 8); p.fill(); };
+  plumon(o + 120, COLORES.grafito); plumon(o + 300, COLORES.azul); plumon(o + 480, COLORES.rojo);
+  p.fillStyle = '#3a3c40'; p.beginPath(); p.roundRect(o + 760, ty - 40, 190, 42, 8); p.fill(); p.fillStyle = '#c8c0b0'; p.fillRect(o + 768, ty - 12, 174, 12);
+  return { c, o, ix, iy, iw, ih };
+})();
+
+// ---------- piezas de la pared ----------
+const FR = armarFrase(FRASE, PALABRA_CLAVE, { x: 96, y: 290, ancho: 880, fam: F_PLUMON, peso: 400, famClave: F_PLUMON, pesoClave: 700, chica: 78, grande: 180, col: COLORES.grafito, colClave: COLORES.rojo });
+const Y0 = Math.min(900, FR.y1 + 70);                     // debajo de la frase arranca la pared de trabajo
+const FOTO_R = { x: 690, y: Y0, w: 320, h: 270, rot: .03 };
+const TARJ = PASOS.slice(0, 3).map((s, i) => ({ s, x: 110, y: Y0 + 10 + i * 112, rot: [.012, -.016, .01][i], t: 3.5 + i * .45 }));
+const FUENTE_TARJ = (() => { let z = 46; for (; z > 26; z -= 2) if (TARJ.every(c => medir(c.s, `600 ${z}px ${F_SANS}`) <= 380)) break; return `600 ${z}px ${F_SANS}`; })();
+const SELLO_P = [340, TARJ[TARJ.length - 1].y + 250];
+const T = { foto: .2, iman: .55, frase: 1.6, borra: 3.0, sello: 5.35, atras: [5.9, 7.0] };
+
+function camara(t) {                                       // primer plano de la foto → frase → tarjetas → toda la pared
+  const fx = FOTO_R.x + FOTO_R.w / 2, fy = FOTO_R.y + FOTO_R.h / 2;
+  const keys = [[0, fx - 60, fy + 20, 1.7], [1.15, fx - 70, fy + 10, 1.66], [2.2, 540, (FR.y0 + FR.y1) / 2 + 120, 1.1], [3.3, 540, (FR.y0 + FR.y1) / 2 + 200, 1.08],
+    [4.6, 420, TARJ[1].y + 60, 1.28], [5.6, 470, SELLO_P[1] - 140, 1.22], [7.0, 540, 960, .92]];
+  let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++;
+  const a = keys[i], b = keys[i + 1], k = ease(prog(t, a[0], b[0]));
+  return { cx: lerp(a[1], b[1], k), cy: lerp(a[2], b[2], k), z: zoomLog(a[3], b[3], k) };
+}
+function iman(x, y, s = 1) {
+  ctx.save(); ctx.filter = 'blur(4px)'; ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.arc(x + 6 * s, y + 7 * s, 17 * s, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  ctx.fillStyle = '#2a2b2e'; ctx.beginPath(); ctx.arc(x, y, 17 * s, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(x - 5 * s, y - 6 * s, 6 * s, 0, Math.PI * 2); ctx.fill();
+}
+function impreso(r, k, dibujo) {                            // una impresión que baja desde la cámara, aterriza y su sombra se aprieta
+  if (k <= 0) return; const a = aterriza(k), alto = (1 - a) * 1;          // alto 1 → 0 (en el aire → pegada)
+  const s = 1 + alto * .35, cx = r.x + r.w / 2, cy = r.y + r.h / 2, d = 10 + alto * 60;
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(r.rot); ctx.scale(s, s);
+  ctx.save(); ctx.filter = `blur(${6 + alto * 22}px)`; ctx.fillStyle = `rgba(30,28,24,${.32 - alto * .12})`; ctx.fillRect(-r.w / 2 + d * LUZ[0], -r.h / 2 + d * LUZ[1], r.w, r.h); ctx.restore();
+  ctx.fillStyle = '#fbfbf8'; ctx.fillRect(-r.w / 2, -r.h / 2, r.w, r.h);
+  dibujo(-r.w / 2, -r.h / 2, r.w, r.h);
+  ctx.restore();
+}
+function bocetoTelefono(x, y, w, h) {                       // sin foto: boceto en plumón de un celular con un post
+  const cx = x + w / 2, ph = h * .86, pw = ph * .52, px = cx - pw / 2, py = y + h * .07;
+  WOBBLE = .6; ink(roundRect(px, py, pw, ph, 22), { w: 5, col: COLORES.grafito, closed: true, seed: 3 });
+  ink(roundRect(px + 14, py + 36, pw - 28, pw - 28, 6), { w: 3, col: COLORES.azul, closed: true, seed: 4 });
+  hatch(roundRect(px + 14, py + 36, pw - 28, pw - 28, 6), { col: COLORES.azul, alpha: .25, gap: 14 });
+  for (let i = 0; i < 3; i++) ink(line(px + 18, py + pw + 30 + i * 24, px + pw - 18 - i * 30, py + pw + 30 + i * 24), { w: 3, col: COLORES.grafito, seed: 7 + i });
+  ink(line(cx - 20, py + ph - 18, cx + 20, py + ph - 18), { w: 4, col: COLORES.grafito, seed: 9 }); WOBBLE = 1;
+}
+function tinta(txt, x, y, font, col, alpha = .92) {        // tinta de plumón: multiplica sobre el esmalte
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha *= alpha; escribir(txt, x, y, font, col); ctx.restore();
+}
+function sello(x, y, k, txt) {                              // cae con un golpe seco; la tinta queda picada
+  if (k <= 0) return; const a = aterriza(prog(k, 0, .35)), s = lerp(1.6, 1, a);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(-.14); ctx.scale(s, s); ctx.globalAlpha = clamp(k * 4);
+  const f = `800 110px ${F_SANS}`, w = medir(txt, f) + 70;
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.strokeStyle = COLORES.rojo; ctx.lineWidth = 10; ctx.beginPath(); ctx.roundRect(-w / 2, -82, w, 150, 14); ctx.stroke();
+  ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-w / 2 + 14, -68, w - 28, 122, 8); ctx.stroke();
+  escribir(txt, 0, 34, f, COLORES.rojo, { align: 'center', track: 4 });
+  ctx.globalCompositeOperation = 'destination-out'; const r = rng(77);        // picado del sello
+  for (let i = 0; i < 260; i++) { ctx.globalAlpha = .5 + r() * .5; ctx.fillRect(-w / 2 + r() * w, -82 + r() * 150, 2 + r() * 5, 2 + r() * 3); }
+  ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  const cam = camara(t);
+  conCamara(cam.cx, cam.cy, cam.z, 0, () => {
+    ctx.drawImage(FONDO.c, -FONDO.o, -FONDO.o);
+    // reflejo diagonal que se desliza con la cámara (más lento que la pared)
+    ctx.save(); ctx.beginPath(); ctx.rect(FONDO.ix - FONDO.o, FONDO.iy - FONDO.o, FONDO.iw, FONDO.ih); ctx.clip();
+    const rx = 200 + cam.cx * .35 + t * 30; ctx.translate(rx, 0); ctx.rotate(.5);
+    const g = ctx.createLinearGradient(-160, 0, 160, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.22)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(-160, -900, 320, 4000); ctx.restore();
+    // la frase en plumón (grafito, la clave en rojo)
+    let tt = T.frase, pluma = null;
+    for (const it of FR.items) { if (it.clave) tt += .1; if (t >= tt) { tinta(it.txt, it.x, it.y, it.font, it.col); pluma = [it.x + medir(it.txt, it.font), it.y - 20]; } tt += .17; if (it.clave) tt += .07; }
+    const T_FIN_FRASE = tt;
+    if (t >= T_FIN_FRASE) pelo(resample([[96, FR.y1 + 6], [96 + Math.min(880, medir(FR.items.filter(i => i.clave).map(i => i.txt).join(' '), FR.items.find(i => i.clave).font) + 10), FR.y1 + 2]], 10), { w: 5, col: COLORES.grafito, halo: null, k: ease(prog(t, T_FIN_FRASE, T_FIN_FRASE + .3)) });
+    // la foto impresa (o el boceto) y sus imanes
+    impreso(FOTO_R, prog(t, T.foto - .4, T.foto + .3), (x, y, w, h) => {
+      if (IM) ctx.drawImage(IM, x + 14, y + 14, w - 28, h - 64); else bocetoTelefono(x + 14, y + 10, w - 28, h - 60);
+      escribir(PIE_FOTO, x + w / 2, y + h - 18, `500 28px ${F_MONO}`, '#55585e', { align: 'center' });
+    });
+    if (t > T.iman) iman(FOTO_R.x + 40, FOTO_R.y + 30); if (t > T.iman + .14) iman(FOTO_R.x + FOTO_R.w - 40, FOTO_R.y + 22);
+    // la idea descartada: escrita en grafito y borrada a fantasma, con la raya roja
+    { const x = FOTO_R.x + 10, y = FOTO_R.y + FOTO_R.h + 120, f = `400 50px ${F_PLUMON}`, rs = renglones(DESCARTADA, f, 340);
+      const kb = prog(t, T.borra, T.borra + .5), al = lerp(.92, .17, kb);
+      ctx.save(); if (kb > 0) ctx.filter = `blur(${kb * 2.5}px)`;
+      rs.forEach((r, i) => { if (t > .9 + i * .25) tinta(r, x, y + i * 62, f, COLORES.grafito, al); }); ctx.restore();
+      if (t > T.borra + .45) rs.forEach((r, i) => pelo(resample([[x - 8, y + i * 62 - 14], [x + medir(r, f) + 8, y + i * 62 - 20]], 10), { w: 6, col: COLORES.rojo, halo: null, k: ease(prog(t, T.borra + .45 + i * .15, T.borra + .7 + i * .15)) }));
+      escribir('antes', x, y - 70, `500 26px ${F_MONO}`, '#7d8086'); }
+    // la cota azul: mide la columna de pasos (de la primera tarjeta a la última)
+    cota([TARJ[0].x - 30 + 0, TARJ[0].y - 4], [TARJ[0].x - 30, TARJ[TARJ.length - 1].y + 86], prog(t, 3.3, 3.8), { col: COLORES.azul, w: 4, flecha: 14 });
+    // las tarjetas con imán (una por paso) y su visto azul
+    for (const [i, c] of TARJ.entries()) { const k = prog(t, c.t, c.t + .3); if (k <= 0) continue;
+      const a = aterriza(k), alto = 1 - a;
+      ctx.save(); ctx.translate(c.x + 240, c.y + 40); ctx.rotate(c.rot + alto * .06); ctx.scale(1 + alto * .2, 1 + alto * .2);
+      ctx.save(); ctx.filter = `blur(${5 + alto * 14}px)`; ctx.fillStyle = 'rgba(30,28,24,.28)'; ctx.fillRect(-240 + 8, -40 + 8, 480, 84); ctx.restore();
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(-240, -40, 480, 84); ctx.fillStyle = '#e8e9ea'; ctx.fillRect(-240, 34, 480, 10);
+      escribir(c.s, -175, 15, FUENTE_TARJ, COLORES.grafito); ctx.restore();
+      if (t > c.t + .22) iman(c.x + 26, c.y + 40, .8);
+      const kv = prog(t, c.t + .6, c.t + .85);
+      if (kv > 0) pelo(_parcial(resample([[c.x + 498, c.y + 40], [c.x + 518, c.y + 62], [c.x + 558, c.y + 8]], 6), kv), { w: 8, col: COLORES.azul, halo: null }); }
+    // el sello del veredicto
+    sello(SELLO_P[0], SELLO_P[1], prog(t, T.sello, T.sello + .5), SELLO);
+    // el plumón escribe solo, flota (sin mano)
+    if (pluma && t < T_FIN_FRASE + .9) herramientaMagica(pluma[0], pluma[1], t, prog(t, T.frase - .2, T.frase + .1), prog(t, T_FIN_FRASE + .35, T_FIN_FRASE + .85), { tipo: 'plumon', col: COLORES.rojo, punta: COLORES.rojo, brillo: '255,240,225' });
+  });
+  grano(.06, 4);
+});
+window.SONIDOS = [{ t: .2, tipo: 'papel' }, { t: .55, tipo: 'golpe' }, { t: .69, tipo: 'golpe' }, { t: 1.6, tipo: 'desliz' }, { t: 3.0, tipo: 'papel' }, { t: 3.3, tipo: 'desliz' }, { t: 3.5, tipo: 'pop' }, { t: 3.95, tipo: 'pop' }, { t: 4.4, tipo: 'pop' }, { t: 5.35, tipo: 'golpe' }, { t: 5.9, tipo: 'swish' }];
+window.QUIETO = 1.5;
+</script>
+</body>
+</html>

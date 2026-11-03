@@ -7,7 +7,7 @@
   "módulo Animación": "Instala el módulo Animación desde la Fábrica de contenido (formula100k.app, Instala tus módulos → Animación).",
   "plugin formula100k": "En Claude Code: /plugin marketplace add formula100k/formula100k-skills y luego /plugin install formula100k@formula100k."
  },
- "total": 180,
+ "total": 246,
  "porGrupo": {
   "Con tu video": 44,
   "YouTube 16:9": 11,
@@ -15,6 +15,7 @@
   "Animado sin cara": 13,
   "¿Qué pasaría si…?": 56,
   "Motion graphics": 4,
+  "Estilos de cine": 66,
   "Efectos": 40,
   "Looks": 7
  },
@@ -2478,6 +2479,1431 @@
     "receta": "clon"
    },
    "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Archive Light Table",
+    "Mesa de archivo"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/archive-lighttable.mp4",
+   "id": "cine-archive-lighttable",
+   "nombre": "Mesa de luz",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Una mesa de luz de archivo: la lupa cae sobre un negativo que se revela y un renglón se ilumina.",
+   "para": "mostrar una prueba real (el primer pedido, un mensaje de clienta) como documento de archivo",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Mesa de luz» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-archive-lighttable"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Art Deco"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/art-deco.mp4",
+   "id": "cine-art-deco",
+   "nombre": "Art déco",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Art déco: puertas de laca con filete de oro que se abren, rayos de sol y tu título en oro plano.",
+   "para": "revelación con lista de 2–3 puntos («lo que nadie te dice de TU BIO»), lanzamientos",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Art déco» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-art-deco"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "ASCII / CRT Terminal",
+    "Terminal ASCII"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/ascii-crt.mp4",
+   "id": "cine-ascii-crt",
+   "nombre": "Terminal CRT",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Una terminal ámbar de pantalla vieja: el registro corre, frena en el error y lo arregla, todo hecho de letras.",
+   "para": "diagnóstico tipo «error del sistema» con su arreglo («tu bio no dice qué vendes → di qué vendes»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Terminal CRT» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-ascii-crt"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Liminal Found Footage",
+    "Pasillos liminales"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/backrooms.mp4",
+   "id": "cine-backrooms",
+   "nombre": "Cinta perdida del pasillo",
+   "grupo": "Estilos de cine",
+   "familia": "Cine y épocas",
+   "queSeVe": "Una cinta perdida en un pasillo amarillo sin fin, con las reglas del piso en un cartel.",
+   "para": "suelta reglas incómodas con suspenso («tu contenido no vende» + reglas del piso)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Cinta perdida del pasillo» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-backrooms"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Blueprint"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/blueprint.mp4",
+   "id": "cine-blueprint",
+   "nombre": "Plano técnico",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Un plano técnico en cianotipo: la figura se dibuja con ejes, cotas y globos numerados, y cae el sello rojo.",
+   "para": "desarmar la estructura de algo en partes numeradas («plano de un reel que vende»: gancho, historia, CTA)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Plano técnico» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-blueprint"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Brick Toy"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/brick-toy.mp4",
+   "id": "cine-brick-toy",
+   "nombre": "Bloques de juguete",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Bloques de juguete que caen y encajan en la placa, paso por paso, con desenfoque de lente.",
+   "para": "un proceso que se construye paso a paso («3 pasos para tu primera venta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Bloques de juguete» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-brick-toy"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Engineering Briefing Board",
+    "Pizarra de ingeniería"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/briefing-board.mp4",
+   "id": "cine-briefing-board",
+   "nombre": "Pizarra de obra",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Una pizarra de obra con tu foto, imanes, cotas, la opción descartada tachada y el sello del veredicto.",
+   "para": "una lista de 2–3 pasos con veredicto, con la opción descartada tachada",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Pizarra de obra» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-briefing-board"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Caption News",
+    "Noticia con subtítulos"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/caption-news.mp4",
+   "id": "cine-caption-news",
+   "nombre": "Noticia con subtítulos gigantes",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Noticia con subtítulos gigantes que se entiende sin sonido: una cifra en bloque y su fuente.",
+   "para": "una cifra que duele y su giro, para entender sin sonido («el 90 % no te compra»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Noticia con subtítulos gigantes» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-caption-news"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "80s Cel Anime"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/cel-anime-80s.mp4",
+   "id": "cine-cel-anime-80s",
+   "nombre": "Anime de los 80",
+   "grupo": "Estilos de cine",
+   "familia": "Caricatura y anime",
+   "queSeVe": "Anime de los 80: ciudad de noche con neones que se prenden y una protagonista bajo la lluvia.",
+   "para": "promesa con épica nocturna («haz que tu oferta brille»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Anime de los 80» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-cel-anime-80s"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Chalkboard",
+    "Pizarrón con tiza"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/chalkboard.mp4",
+   "id": "cine-chalkboard",
+   "nombre": "Pizarra de salón",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Un pizarrón de salón: la tiza escribe lo que todos creen, una pasada lo borra y la verdad aparece en el mismo lugar.",
+   "para": "corrige una creencia: lo que creen se borra y la verdad queda en el mismo lugar",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Pizarra de salón» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-chalkboard"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Circuit Board",
+    "Circuito"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/circuit-board.mp4",
+   "id": "cine-circuit-board",
+   "nombre": "Placa de circuito",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Una placa de circuito: un pulso de luz recorre las pistas etapa por etapa hasta encender el LED.",
+   "para": "un proceso de punta a punta como pulso de luz por etapas («así se vuelve venta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Placa de circuito» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-circuit-board"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Time-lapse Symphony"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/city-symphony.mp4",
+   "id": "cine-city-symphony",
+   "nombre": "Sinfonía en time-lapse",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Sinfonía en time-lapse: ríos de luz, una rejilla que se enciende al compás y un número que se traba.",
+   "para": "el ritmo de un trabajo que no para, una frase reflexiva con un solo número («tu contenido trabaja mientras duermes»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Sinfonía en time-lapse» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-city-symphony"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Live Countdown Split-screen"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/countdown.mp4",
+   "id": "cine-countdown",
+   "nombre": "Cuenta regresiva en pantalla dividida",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Cuenta regresiva en pantalla dividida: el reloj baja, las celdas se multiplican y al cero todas se vuelven una.",
+   "para": "cierre de carrito, Black Friday, fin de una oferta o de un reto («el carrito se cerró»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Cuenta regresiva en pantalla dividida» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-countdown"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Crayon Picture Book",
+    "Cuento en crayón"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/crayon-book.mp4",
+   "id": "cine-crayon-book",
+   "nombre": "Libro de crayones",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Una página de cuento en crayón: la acuarela barre el cielo y aparece el mensaje escondido en cera blanca.",
+   "para": "cuento tierno de una idea con mensaje escondido que se revela",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Libro de crayones» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-crayon-book"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Dark Tech Keynote"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/dark-keynote.mp4",
+   "id": "cine-dark-keynote",
+   "nombre": "Keynote oscuro",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Keynote oscuro: una tormenta de ventanas que de un golpe se ordena y cierra en una sola cifra gigante.",
+   "para": "pasar del caos al orden en una herramienta o sistema, cerrando con una sola cifra gigante",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Keynote oscuro» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-dark-keynote"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Data Physicalization",
+    "Datos en objetos"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/data-physical.mp4",
+   "id": "cine-data-physical",
+   "nombre": "Datos en piezas",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Tus números como piezas de metal que se apilan sobre una base de nogal, una pieza por unidad.",
+   "para": "mostrar crecimiento con números reales como objetos contables («cada pieza es una venta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Datos en piezas» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-data-physical"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Data Storytelling",
+    "Historia con datos"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/dataviz.mp4",
+   "id": "cine-dataviz",
+   "nombre": "Gráfica que cuenta",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Una gráfica a lápiz sobre papel: cada punto lleva su nota a mano y el récord rompe el marco.",
+   "para": "una cifra que cambia en el tiempo contada como historia («así subieron tus ventas cuando…»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Gráfica que cuenta» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-dataviz"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Desktop Flythrough",
+    "Vuelo por el escritorio"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/desktop-flythrough.mp4",
+   "id": "cine-desktop-flythrough",
+   "nombre": "Escritorio en vuelo",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Un vuelo por el escritorio: tarjetas de papel con tus capturas y un personaje de cubitos que salta de una a otra.",
+   "para": "un recorrido de herramienta en herramienta («guion → reel → venta») que termina en el título",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Escritorio en vuelo» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-desktop-flythrough"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Copperplate Engraving"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/engraving.mp4",
+   "id": "cine-engraving",
+   "nombre": "Grabado en cobre",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Grabado en cobre: el buril corta el título y las tramas de líneas modelan el objeto, con rótulos de lámina.",
+   "para": "desarmar algo en partes («anatomía de tu oferta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Grabado en cobre» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-engraving"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Game Show Flat",
+    "Concurso plano"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/game-show.mp4",
+   "id": "cine-game-show",
+   "nombre": "Concurso de ritmo",
+   "grupo": "Estilos de cine",
+   "familia": "Videojuegos",
+   "queSeVe": "Un concurso de ritmo: mascotas que caen al compás, rótulos de programa y un veredicto con estallido.",
+   "para": "celebra una regla o un logro con veredicto («el gancho es tu primera venta» → ¡Perfecto!)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Concurso de ritmo» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-game-show"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Glass Product Render"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/glass-product.mp4",
+   "id": "cine-glass-product",
+   "nombre": "Producto de vidrio",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Un producto de vidrio en estudio negro: la luz lo dibuja, se despieza en partes y vuelve a cerrarse.",
+   "para": "desarmar una oferta o un producto en sus partes («lo que nadie ve de tu oferta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Producto de vidrio» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-glass-product"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Halftone Dossier",
+    "Expediente en semitono"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/halftone-dossier.mp4",
+   "id": "cine-halftone-dossier",
+   "nombre": "Expediente de semitono",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Un expediente en semitono: titular de caso, trama de puntos y un sello que cae con el veredicto.",
+   "para": "«el caso de…»: acusar un error y dar el veredicto (bio, oferta, CTA)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Expediente de semitono» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-halftone-dossier"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "HD-2D",
+    "HD-2D"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/hd-2d.mp4",
+   "id": "cine-hd-2d",
+   "nombre": "Diorama de pixeles con luz (HD-2D)",
+   "grupo": "Estilos de cine",
+   "familia": "Videojuegos",
+   "queSeVe": "Un diorama de pixeles con luz real: el farol se prende y las ventanas del muelle se encienden en cascada.",
+   "para": "abre un capítulo con algo que se enciende («tu oferta enciende el mercado»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Diorama de pixeles con luz (HD-2D)» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-hd-2d"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Sci-fi Hologram HUD",
+    "Holograma sci-fi"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/hologram-hud.mp4",
+   "id": "cine-hologram-hud",
+   "nombre": "Holograma HUD",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Un holograma de alambre que se escanea pieza por pieza, con recuadros y fichas técnicas.",
+   "para": "ficha técnica de un objeto o kit por piezas («tu celular ya es tu estudio»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Holograma HUD» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-hologram-hud"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Impasto Oil Painting",
+    "Óleo empastado"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/impasto.mp4",
+   "id": "cine-impasto",
+   "nombre": "Óleo con espátula",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Una calle gris que la espátula repinta trazo a trazo en óleo grueso, hasta que tu palabra aparece en color.",
+   "para": "un antes y después de color («tu marca necesita COLOR»): el mundo gris se repinta",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Óleo con espátula» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-impasto"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Chinese Ink Wash",
+    "Tinta china"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/ink-wash.mp4",
+   "id": "cine-ink-wash",
+   "nombre": "Tinta y papel de arroz",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Tinta china sobre papel de arroz, mucho vacío y una sola pincelada que cruza, con el sello rojo al final.",
+   "para": "una idea sola y calma, con mucho vacío («tu contenido necesita una sola idea»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Tinta y papel de arroz» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-ink-wash"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Isometric Infographic"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/iso-infographic.mp4",
+   "id": "cine-iso-infographic",
+   "nombre": "Infografía isométrica",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Una infografía isométrica que se corta como casa de muñecas para mostrar cada estación del sistema.",
+   "para": "explica un sistema por estaciones (contenido → regalo → venta) y lo cierra con la infografía completa",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Infografía isométrica» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-iso-infographic"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Isometric Picture Book"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/isometric-picture-book.mp4",
+   "id": "cine-isometric-picture-book",
+   "nombre": "Libro isométrico",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Un libro isométrico con personas en fila: la regla de psicología se ve, no se explica.",
+   "para": "curiosidades de psicología y marketing con personas que hacen la regla («esa fila te engaña», prueba social)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Libro isométrico» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-isometric-picture-book"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Constructivist Montage"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/kino-montage.mp4",
+   "id": "cine-kino-montage",
+   "nombre": "Montaje constructivista",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Montaje constructivista: bandas rojas en diagonal, fotos impresas a dos tonos y palabras que chocan.",
+   "para": "un método en pasos o un mensaje que se construye a golpes («3 pasos para tu primera venta»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Montaje constructivista» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-kino-montage"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "LiDAR Survey",
+    "Escaneo LiDAR"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/lidar-survey.mp4",
+   "id": "cine-lidar-survey",
+   "nombre": "Nube de puntos",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Un barrido láser convierte la foto en nube de puntos y revela lo que estaba escondido debajo.",
+   "para": "revelar lo que está escondido debajo («debajo de tus seguidores hay compradores»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Nube de puntos» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-lidar-survey"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Living Screencast"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/living-screencast.mp4",
+   "id": "cine-living-screencast",
+   "nombre": "Pantalla viva",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Una app que se usa sola: el cursor pide algo, la lista se marca y una mascota pixel salta por la pantalla.",
+   "para": "demo de cómo se usa una app paso a paso (pides algo y la app lo resuelve)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Pantalla viva» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-living-screencast"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Low-poly Isometric Island"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/lowpoly-island.mp4",
+   "id": "cine-lowpoly-island",
+   "nombre": "Isla low-poly",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Una isla low-poly que crece pieza por pieza desde el mar y termina de noche con el faro encendido.",
+   "para": "algo que crece pieza a pieza («tu negocio se construye pieza a pieza») y termina encendido",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Isla low-poly» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-lowpoly-island"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Memphis Diorama"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/memphis-diorama.mp4",
+   "id": "cine-memphis-diorama",
+   "nombre": "Diorama Memphis",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Un diorama Memphis de colores duros: una onda sale de un punto y cambia todo el pueblo.",
+   "para": "efecto contagio o causa → efecto en un lugar («una venta trae otra»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Diorama Memphis» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-memphis-diorama"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Microgame Frenzy",
+    "Minijuegos a toda velocidad"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/microgame.mp4",
+   "id": "cine-microgame",
+   "nombre": "Microjuegos a toda velocidad",
+   "grupo": "Estilos de cine",
+   "familia": "Videojuegos",
+   "queSeVe": "Microjuegos a toda velocidad: tres órdenes de un segundo, cada una en un estilo distinto, sobre un escenario con tele.",
+   "para": "resume un proceso de 3 acciones con ritmo («escribe, publica y vende»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Microjuegos a toda velocidad» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-microgame"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Microscope Story",
+    "Historia al microscopio"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/microscope.mp4",
+   "id": "cine-microscope",
+   "nombre": "Microscopio",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Un microscopio: zambullida de 4× a 40× sobre la muestra, círculo que mide y una proporción que se cuenta.",
+   "para": "mirar de cerca algo y medir una proporción («mira de cerca: tu bio dice más de lo que crees»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Microscopio» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-microscope"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Mid-century Cartoon",
+    "Caricatura de los 50"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/midcentury-toon.mp4",
+   "id": "cine-midcentury-toon",
+   "nombre": "Manual de los años 50",
+   "grupo": "Estilos de cine",
+   "familia": "Caricatura y anime",
+   "queSeVe": "Manual ilustrado de los años 50: pasos numerados con medallones, flechas punteadas y color corrido.",
+   "para": "enseña de 2 a 3 pasos como manual de uso («tu primera venta en 3 pasos»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Manual de los años 50» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-midcentury-toon"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Broadcast News Package",
+    "Paquete de noticiero"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/news-package.mp4",
+   "id": "cine-news-package",
+   "nombre": "Noticiero de novedades",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Noticiero de novedades: sumario de 3 titulares, cintillo y un tablero que voltea de antes a ahora.",
+   "para": "novedades de IA o del negocio en formato noticiero (sumario de 3 + una noticia con antes/después)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Noticiero de novedades» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-news-package"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "1920s Newsreel",
+    "Noticiero de los 20"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/newsreel.mp4",
+   "id": "cine-newsreel",
+   "nombre": "Noticiero de 1920",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Noticiero de 1920: el diario gira hacia la cámara, cartela de lugar y fecha, y subtítulos de época.",
+   "para": "anunciar un logro o un caso como noticia de época («¡vendió sin pagar anuncios!»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Noticiero de 1920» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-newsreel"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "One-line Drawing"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/one-line.mp4",
+   "id": "cine-one-line",
+   "nombre": "Una sola línea",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Una sola línea de tinta que nunca se levanta: dibuja la escena y se dispara hacia arriba en dorado.",
+   "para": "una transformación o una gráfica que sube («cuando tu contenido vende»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Una sola línea» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-one-line"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Paper-cut Lightbox"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/paper-lantern.mp4",
+   "id": "cine-paper-lantern",
+   "nombre": "Caja de luz de papel",
+   "grupo": "Estilos de cine",
+   "familia": "Tradiciones de Asia",
+   "queSeVe": "Capas de papel recortado iluminadas por detrás, como caja de luz, con ventanas que se encienden de a una.",
+   "para": "efecto en cadena o algo que se enciende de a poco («una venta enciende la siguiente»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Caja de luz de papel» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-paper-lantern"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Paper Pop-up Book",
+    "Libro desplegable"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/paper-popup.mp4",
+   "id": "cine-paper-popup",
+   "nombre": "Libro pop-up",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Un libro pop-up que se para al abrirse, con piezas de papel que se voltean y un globo de diálogo.",
+   "para": "abre una historia o un lugar («cuando tu historia vende»), con un globo de lo que pregunta la clienta",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Libro pop-up» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-paper-popup"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Red Paper-cut",
+    "Papel picado rojo"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/papercut-red.mp4",
+   "id": "cine-papercut-red",
+   "nombre": "Papel rojo recortado",
+   "grupo": "Estilos de cine",
+   "familia": "Tradiciones de Asia",
+   "queSeVe": "Papel rojo doblado que se despliega en un rosetón calado, con recortes que caen.",
+   "para": "una cosa que se multiplica («una idea, muchas piezas»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Papel rojo recortado» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-papercut-red"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Pictogram Motion",
+    "Pictogramas"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/pictogram-motion.mp4",
+   "id": "cine-pictogram-motion",
+   "nombre": "Pictogramas en movimiento",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Pictogramas geométricos en una retícula de colores que salta, una tarjeta por ítem.",
+   "para": "catálogo de 2–4 ítems, una tarjeta por ítem («4 piezas de un reel que vende»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Pictogramas en movimiento» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-pictogram-motion"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "16-bit Pixel RPG",
+    "RPG pixel de 16 bits"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/pixel-rpg.mp4",
+   "id": "cine-pixel-rpg",
+   "nombre": "RPG de 16 bits",
+   "grupo": "Estilos de cine",
+   "familia": "Videojuegos",
+   "queSeVe": "Un RPG de 16 bits: el cofre se abre, sube el pergamino y la caja de diálogo se escribe sola.",
+   "para": "presenta lo que falta como un tesoro o una mejora («tu oferta es el tesoro»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «RPG de 16 bits» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-pixel-rpg"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Printed Long Take",
+    "Plano largo impreso"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/printed-long-take.mp4",
+   "id": "cine-printed-long-take",
+   "nombre": "Toma larga impresa",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Un plano largo hacia el horizonte tallado como grabado, con un solo punto rojo que se enciende.",
+   "para": "cierre o llamada emocional («tu clienta ideal te busca»), viaje hacia algo",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Toma larga impresa» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-printed-long-take"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Risograph Print"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/risograph.mp4",
+   "id": "cine-risograph",
+   "nombre": "Risografía",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Impresión risográfica: las tintas entran por planchas, se pasan de registro y se sobreimprimen.",
+   "para": "lista corta o promesa con energía («3 pasos para tu primera venta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Risografía» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-risograph"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "1930s Rubber Hose Cartoon",
+    "Caricatura de los años 30"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/rubber-hose.mp4",
+   "id": "cine-rubber-hose",
+   "nombre": "Caricatura de manguera (años 30)",
+   "grupo": "Estilos de cine",
+   "familia": "Caricatura y anime",
+   "queSeVe": "Caricatura de los años 30 en blanco y negro: un personaje de manguera celebra con su cartel.",
+   "para": "abre con energía o celebra una idea simple («vende con una historia»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Caricatura de manguera (años 30)» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-rubber-hose"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Satellite Briefing"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/satellite-briefing.mp4",
+   "id": "cine-satellite-briefing",
+   "nombre": "Informe satelital",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Informe satelital: zambullida desde órbita, gris de analista y una línea que mide la distancia.",
+   "para": "mostrar que algo está más cerca o más lejos de lo que parece, ubicar y medir",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Informe satelital» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-satellite-briefing"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Sci-Fi Sitcom Toon",
+    "Caricatura sci-fi"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/scifi-toon.mp4",
+   "id": "cine-scifi-toon",
+   "nombre": "Sitcom de ciencia ficción",
+   "grupo": "Estilos de cine",
+   "familia": "Caricatura y anime",
+   "queSeVe": "Sitcom de ciencia ficción: un portal violeta se abre y escupe el objeto, con humor seco.",
+   "para": "remata con humor seco un error de base («ni un portal arregla tu oferta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Sitcom de ciencia ficción» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-scifi-toon"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Shadow Puppetry"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/shadow-puppet.mp4",
+   "id": "cine-shadow-puppet",
+   "nombre": "Teatro de sombras",
+   "grupo": "Estilos de cine",
+   "familia": "Tradiciones de Asia",
+   "queSeVe": "Teatro de sombras: figuras de cuero calado contra la tela iluminada por lámparas.",
+   "para": "diagnóstico que duele o «nadie te ve»: la luz que se enciende = visibilidad",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Teatro de sombras» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-shadow-puppet"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "1920s Silent Film",
+    "Cine mudo de los 20"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/silent-film.mp4",
+   "id": "cine-silent-film",
+   "nombre": "Cine mudo de los años 20",
+   "grupo": "Estilos de cine",
+   "familia": "Cine y épocas",
+   "queSeVe": "Cine mudo de los 20: cortinas que se abren, iris y un intertítulo con el giro.",
+   "para": "cuenta un error con giro en un intertítulo («publicaba todos los días… pero nadie entendía su oferta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Cine mudo de los años 20» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-silent-film"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Silkscreen Travel Poster",
+    "Póster serigrafiado de viaje"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/silkscreen-poster.mp4",
+   "id": "cine-silkscreen-poster",
+   "nombre": "Póster serigrafiado",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Póster serigrafiado: el rasero pasa tinta por tinta y deja el cartel con los datos al pie.",
+   "para": "anuncio de lanzamiento o evento con datos al pie",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Póster serigrafiado» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-silkscreen-poster"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "60s Spy Title Sequence",
+    "Títulos de espía de los 60"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/spy-titles.mp4",
+   "id": "cine-spy-titles",
+   "nombre": "Créditos de espía",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Créditos de espía de los 60: papel recortado, la palabra que cruza y frena seca, y el título que se arma letra por letra.",
+   "para": "diagnóstico con giro y remate («tu contenido NO VENDE → te falta UN GANCHO»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Créditos de espía» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-spy-titles"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Stained Glass"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/stained-glass.mp4",
+   "id": "cine-stained-glass",
+   "nombre": "Vitral",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Un vitral que la luz enciende de abajo hacia arriba, medallón por medallón, con su mancha de color en el piso.",
+   "para": "tres etapas que se encienden en orden («tu contenido atrae, nutre y VENDE»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Vitral» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-stained-glass"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Swiss Motion Graphics",
+    "Motion suizo"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/swiss-motion.mp4",
+   "id": "cine-swiss-motion",
+   "nombre": "Retícula suiza",
+   "grupo": "Estilos de cine",
+   "familia": "Gráfica y tipografía",
+   "queSeVe": "Retícula suiza: una cifra gigante, barras que encajan en el pulso y un círculo rojo que rompe la regla.",
+   "para": "una cifra con pasos o reglas («3 pasos para tu primera venta»), listas cortas y precisas",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Retícula suiza» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-swiss-motion"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Exploded Teardown"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/teardown.mp4",
+   "id": "cine-teardown",
+   "nombre": "Despiece",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Un despiece: el aparato se abre en capas, cada una con su etiqueta, y se encienden las luces de la placa.",
+   "para": "desarmar algo en sus partes («así se arma un reel que vende», las piezas de tu oferta)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Despiece» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-teardown"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Sports Telestrator",
+    "Pizarra deportiva"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/telestrator.mp4",
+   "id": "cine-telestrator",
+   "nombre": "Pizarra de análisis",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Pizarra de análisis sobre tu captura: rebobina, congela y dibuja lo que falla con anillos y flechas.",
+   "para": "revisar una captura (bio, perfil, reel) y señalar qué falla («lo que nadie te dice de tu bio»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Pizarra de análisis» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-telestrator"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Tilt-Shift Miniature"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/tilt-shift.mp4",
+   "id": "cine-tilt-shift",
+   "nombre": "Miniatura tilt-shift",
+   "grupo": "Estilos de cine",
+   "familia": "Materiales y 3D",
+   "queSeVe": "Una ciudad en miniatura tilt-shift en cámara rápida, con una franja nítida que sigue lo que importa.",
+   "para": "contraste ruido vs. una sola acción que importa («mientras todos corren, tú vendes»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Miniatura tilt-shift» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-tilt-shift"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Transit Map"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/transit-map.mp4",
+   "id": "cine-transit-map",
+   "nombre": "Mapa de metro",
+   "grupo": "Estilos de cine",
+   "familia": "Información y keynote",
+   "queSeVe": "Un mapa de metro que se dibuja estación por estación sobre papel, con tu ruta como línea.",
+   "para": "una ruta o un embudo contado como red de metro (etapas = estaciones)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Mapa de metro» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-transit-map"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Ukiyo-e",
+    "Ukiyo-e"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/ukiyoe.mp4",
+   "id": "cine-ukiyoe",
+   "nombre": "Grabado japonés en bloques",
+   "grupo": "Estilos de cine",
+   "familia": "Tradiciones de Asia",
+   "queSeVe": "Grabado japonés que se imprime bloque por bloque: cerro, pino y sol rojo, con cartela y sello.",
+   "para": "revela «lo que nadie te dice» de algo, en tono sereno",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Grabado japonés en bloques» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-ukiyoe"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Urban Sketch · Pen & Wash",
+    "Boceto urbano con acuarela"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/urban-sketch.mp4",
+   "id": "cine-urban-sketch",
+   "nombre": "Croquis con acuarela",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Un croquis de cuaderno con línea fina y aguada que llega desde la vitrina, con notas a mano en el margen.",
+   "para": "retrato de un lugar o un negocio como página de cuaderno («deja de vender, empieza a contar»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Croquis con acuarela» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-urban-sketch"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Visual Investigation"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/visual-investigation.mp4",
+   "id": "cine-visual-investigation",
+   "nombre": "Investigación visual",
+   "grupo": "Estilos de cine",
+   "familia": "Montaje documental",
+   "queSeVe": "Investigación visual: un círculo rojo marca la prueba, la lupa la amplía y un reloj ordena las horas.",
+   "para": "desarmar por qué algo vendió o falló, con pruebas y horas («¿por qué vendió este post?»)",
+   "necesita": "La frase de tu reel y tus fotos o capturas reales (si no, dibuja un reemplazo).",
+   "comando": "hazme un clip en el estilo «Investigación visual» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-visual-investigation"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Watercolor Brush",
+    "Acuarela"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/watercolor.mp4",
+   "id": "cine-watercolor",
+   "nombre": "Lámina de acuarela",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Una lámina de acuarela que florece en el papel, con notas a mano que señalan cada parte.",
+   "para": "explica las partes de algo como una lámina con notas («así crece una venta»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Lámina de acuarela» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-watercolor"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Projection on White Model",
+    "Proyección sobre maqueta"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/white-model.mp4",
+   "id": "cine-white-model",
+   "nombre": "Maqueta blanca",
+   "grupo": "Estilos de cine",
+   "familia": "Con material real",
+   "queSeVe": "Una maqueta blanca en sala oscura: el proyector pinta capas de color y una sola pieza queda destacada.",
+   "para": "hacer que UNA cosa destaque entre muchas («que tu oferta destaque entre todas»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Maqueta blanca» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-white-model"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Whiteboard Explainer"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/whiteboard.mp4",
+   "id": "cine-whiteboard",
+   "nombre": "Pizarra blanca",
+   "grupo": "Estilos de cine",
+   "familia": "Dibujo y pintura",
+   "queSeVe": "Una pizarra blanca de verdad: el plumón flota y escribe solo, el borrador deja el fantasma de lo que creías y la palabra clave queda encerrada en un círculo.",
+   "para": "enseña un mecanismo paso a paso («así funciona un reel que vende»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Pizarra blanca» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-whiteboard"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Woodcut Print"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos-de-cine/woodcut.mp4",
+   "id": "cine-woodcut",
+   "nombre": "Grabado en madera",
+   "grupo": "Estilos de cine",
+   "familia": "Impresión y grabado",
+   "queSeVe": "Grabado en madera: la gubia talla rayos de luz y los títulos letra por letra sobre el taco negro.",
+   "para": "historia, origen o una verdad de fondo («lo que vende es tu historia»)",
+   "necesita": "La frase de tu reel.",
+   "comando": "hazme un clip en el estilo «Grabado en madera» con la frase [TU FRASE]",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "cine-woodcut"
+   },
+   "seInstalaCon": "plugin formula100k"
   },
   {
    "alias": [],

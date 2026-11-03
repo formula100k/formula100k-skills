@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Caja de luz de papel</title>
+<style>
+  html,body{margin:0;background:#05080f;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Caja de luz de papel» · ingeniería inversa de lemo-opuscar/styles/paper-lantern (MIT, © 2026 LemoLab) · qué se tomó: hojas de papel cortado paralelas en una caja poco profunda (atrás claras y translúcidas, adelante casi negras), borde de luz arriba y banda oscura abajo, sombras suaves de cada hoja sobre la de atrás, luz que se enciende capa por capa y ventanas que se prenden de a una; el texto es una tira de papel que se escribe sola.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_GRANDE = 'UNA VENTA';             // tira de papel grande (máx. ~12 letras)
+const TITULO_CHICO = 'enciende la siguiente';  // tira chica (máx. ~26 letras)
+const COLORES = {                              // la escalera de valores: atrás claro → adelante oscuro (una sola temperatura)
+  cielo: '#0a1330', lejos: '#6a86c2', medio: '#3f5a92', frente: '#0e1532',
+  luz: '#ffb862',       // ventanas y fuente de luz (cálida)
+  acento: '#c0392b',    // UN acento: el sello de la tira
+  tira: '#efe4cc',      // papel de las tiras de texto
+  tinta: '#1b1a2a',
+};
+const VENTANAS = 9;      // cuántas ventanas se encienden (de 4 a 12)
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script src="../nucleo/cine-asia.js"></script>
+<script>
+const C = COLORES, LUNA = { x: 850, y: 720, r: 58 };
+const T = { fuente: .12, capas: [.3, .55, .8], ventanas: [.95, 1.9], tira1: [1.85, 2.35], tira2: [2.6, 3.0], sello: 3.15 };
+
+// ---------- las hojas (una vez): siluetas con fibra, borde de luz arriba y banda oscura abajo ----------
+const perfil = (y0, amp, f, sem, picos = 0) => X => y0 - Math.abs(Math.sin(X * f + sem)) * amp * picos - Math.sin(X * f * .7 + sem) * amp * (1 - picos) - (vnoise(X * .02, sem) - .5) * 18;
+const fLejos = perfil(1000, 260, .006, 1, 1), fMedio = perfil(1180, 60, .008, 4);
+const CASAS = [[120, 1120, 150], [300, 1150, 130], [470, 1110, 170], [660, 1160, 140], [830, 1130, 160], [990, 1170, 120]];
+const VENT = []; CASAS.forEach(([x, y, w], i) => { const n = i % 3 === 1 ? 1 : 2; for (let k = 0; k < n; k++) VENT.push({ x: x - w / 2 + w * (k + 1) / (n + 1) - 16, y: y + 30, w: 32, h: 40 }); });
+const VENT_ON = VENT.slice(0, Math.max(4, Math.min(12, VENTANAS))).map((v, i) => ({ ...v, t: lerp(T.ventanas[0], T.ventanas[1], hash2(i, 7) * .85 + i / VENT.length * .15) }));
+const L_LEJOS = capaLinterna(g => { g.beginPath(); g.moveTo(0, H); for (let X = 0; X <= W; X += 10) g.lineTo(X, fLejos(X)); g.lineTo(W, H); g.fill(); }, C.lejos, { semilla: 1 });
+const L_MEDIO = capaLinterna(g => { g.beginPath(); g.moveTo(0, H); for (let X = 0; X <= W; X += 10) g.lineTo(X, fMedio(X)); g.lineTo(W, H); g.fill();
+  for (const [x, y, w] of CASAS) { g.fillRect(x - w / 2, y, w, 160); g.beginPath(); g.moveTo(x - w / 2 - 14, y + 2); g.lineTo(x, y - w * .45); g.lineTo(x + w / 2 + 14, y + 2); g.fill(); }
+  recorte(g, q => { for (const v of VENT) q.rect(v.x, v.y, v.w, v.h); }); }, C.medio, { semilla: 2 });
+const L_FRENTE = capaLinterna(g => { g.beginPath(); g.moveTo(0, H); for (let X = 0; X <= W; X += 10) g.lineTo(X, 1440 + Math.sin(X * .01) * 20); g.lineTo(W, H); g.fill();
+  const abeto = (x, y, h) => { g.beginPath(); for (let k = 0; k < 4; k++) { const yy = y - h + k * h * .22, ww = h * (.18 + k * .1); g.moveTo(x, yy); g.lineTo(x + ww, yy + h * .3); g.lineTo(x - ww, yy + h * .3); g.closePath(); } g.fill(); g.fillRect(x - 8, y - 20, 16, 40); };
+  abeto(60, 1480, 520); abeto(170, 1500, 360); abeto(1010, 1470, 560); abeto(900, 1510, 330); }, C.frente, { semilla: 3, rim: 'rgba(255,214,150,.35)' });
+const CIELO = capaLinterna(g => g.fillRect(0, 0, W, H), C.cielo, { semilla: 4, rim: 'rgba(0,0,0,0)', borde: 'rgba(0,0,0,0)' });
+const S_LEJOS = sombraDe(L_LEJOS, 16, .5), S_MEDIO = sombraDe(L_MEDIO, 14, .55), S_FRENTE = sombraDe(L_FRENTE, 12, .6);
+// la luz que atraviesa cada hoja: albedo × luz × translucidez × caída gaussiana × pulpa (pintada una vez; luego solo cambia su intensidad)
+const PULPA = (() => { const w = 135, h = 240, m = campoRuido(w, h, [30, 10, 4], 71), c = mk(w, h), x = c.getContext('2d'), id = x.createImageData(w, h);
+  for (let i = 0; i < w * h; i++) { id.data[i * 4] = id.data[i * 4 + 1] = id.data[i * 4 + 2] = 255; id.data[i * 4 + 3] = (.55 + .45 * m[i]) * 255; } x.putImageData(id, 0, 0); return c; })();
+function luzDe(capa, trans, radio) { const c = mk(), g = c.getContext('2d');
+  const gr = g.createRadialGradient(LUNA.x, LUNA.y, 0, LUNA.x, LUNA.y, radio); gr.addColorStop(0, rgba(C.luz, trans)); gr.addColorStop(.45, rgba(C.luz, trans * .45)); gr.addColorStop(1, rgba(C.luz, 0));
+  g.fillStyle = gr; g.fillRect(0, 0, W, H); g.globalCompositeOperation = 'destination-in'; g.drawImage(PULPA, 0, 0, W, H); g.drawImage(capa, 0, 0); return c; }
+const LZ = { cielo: luzDe(CIELO, .5, 900), lejos: luzDe(L_LEJOS, .55, 1000), medio: luzDe(L_MEDIO, .14, 900), frente: luzDe(L_FRENTE, .06, 800) };
+
+// ---------- tiras de papel con texto (crecen desde su borde izquierdo: se recortan, no se aplastan) ----------
+const FT = '"Baskerville", "Big Caslon", Georgia, serif';
+const AJ_G = autoajuste(TITULO_GRANDE, FT, 700, 880, 1, 160, 70), AJ_C = autoajuste(TITULO_CHICO, FT, 600, 760, 1, 64, 34);
+function hacerTira(aj, alto) { const w = medir(aj.rs[0], aj.font) + 110, c = mk(w + 40, alto + 40), g = c.getContext('2d');
+  g.fillStyle = C.tira; g.beginPath(); g.moveTo(20, 24); for (let x = 20; x <= w + 20; x += 24) g.lineTo(x, 20 + (hash2(x, 3) - .5) * 4); g.lineTo(w + 20, alto + 20); for (let x = w + 20; x >= 20; x -= 24) g.lineTo(x, alto + 20 + (hash2(x, 5) - .5) * 4); g.fill();
+  fibrasEn(g, 260, '#ffffff', .2, .7, 9, 30, w + 40, alto + 40); g.fillStyle = C.tinta; g.font = aj.font; g.textBaseline = 'middle'; g.fillText(aj.rs[0], 75, alto / 2 + 22 + aj.size * .04);
+  const s = mk(w + 80, alto + 80), sg = s.getContext('2d'); sg.filter = 'blur(10px)'; sg.drawImage(c, 20, 20); sg.filter = 'none'; sg.globalCompositeOperation = 'source-in'; sg.fillStyle = 'rgba(3,5,15,.6)'; sg.fillRect(0, 0, w + 80, alto + 80);
+  return { c, s, w: w + 40, h: alto + 40 }; }
+const TIRA1 = hacerTira(AJ_G, AJ_G.size * 1.15), TIRA2 = hacerTira(AJ_C, AJ_C.size * 1.5);
+const SELLO_T = sello('SÍ', 90, { col: C.acento, semilla: 8 });
+function ponerTira(tr, x, y, k) { if (k <= 0) return; const ancho = tr.w * aterriza(k);
+  ctx.save(); ctx.beginPath(); ctx.rect(x - 30, y - 30, ancho + 50, tr.h + 70); ctx.clip(); ctx.drawImage(tr.s, x - 20 + 14, y - 20 + 22); ctx.drawImage(tr.c, x, y); ctx.restore(); }
+
+// ---------- cámara: dolly lento hacia la caja, con paralaje por profundidad y una deriva de pulso ----------
+function capa(img, prof, z, dx) { const s = 1 + (z - 1) * prof, ox = W / 2, oy = H * .55; ctx.setTransform(s, 0, 0, s, ox - ox * s + dx * prof, oy - oy * s); ctx.drawImage(img, 0, 0); }
+arrancar(frame => {
+  const t = frame / FPS, z = 1 + .07 * ease(prog(t, 0, DUR - .4)), dx = Math.sin(t * .9) * 3;
+  const lit = i => aterriza(prog(t, T.capas[i], T.capas[i] + .4)), fuente = aterriza(prog(t, T.fuente, T.fuente + .35)), parp = 1 + .06 * Math.sin(7.3 * t) * Math.sin(3.1 * t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  capa(CIELO, .2, z, dx); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = .25 + .75 * fuente; capa(LZ.cielo, .2, z, dx); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  // la fuente: un agujero en el cielo que arde (luna de papel)
+  ctx.setTransform(1, 0, 0, 1, 0, 0); { const s = 1 + (z - 1) * .2; const lx = W / 2 + (LUNA.x - W / 2) * s + dx * .2, ly = H * .55 + (LUNA.y - H * .55) * s;
+    ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(lx, ly, 0, lx, ly, LUNA.r * 5); g.addColorStop(0, rgba(C.luz, .5 * fuente)); g.addColorStop(1, rgba(C.luz, 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = mezcla(C.cielo, '#fff4dc', .15 + .85 * fuente); ctx.beginPath(); ctx.arc(lx, ly, LUNA.r * s, 0, 6.283); ctx.fill(); }
+  const pila = [[L_LEJOS, S_LEJOS, LZ.lejos, .45, 0], [L_MEDIO, S_MEDIO, LZ.medio, .7, 1], [L_FRENTE, S_FRENTE, LZ.frente, 1, 2]];
+  for (const [L, S, Lz, prof, i] of pila) {
+    ctx.globalAlpha = 1; capa(S, prof - .08, z, dx + 10);                                     // la sombra cae sobre la hoja de atrás
+    if (i === 1) { ctx.globalCompositeOperation = 'lighter'; ctx.setTransform(1, 0, 0, 1, 0, 0);   // ventanas: luz detrás de los recortes del medio
+      for (const v of VENT_ON) { const k = t >= v.t ? (t < v.t + .1 ? 1.4 : 1) * parp : 0; if (!k) continue;
+        const s = 1 + (z - 1) * prof, x = W / 2 + (v.x - W / 2) * s + dx * prof, y = H * .55 + (v.y - H * .55) * s;
+        ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = mezcla(C.luz, '#fff1d0', k > 1.2 ? .5 : .1); ctx.fillRect(x - 2, y - 2, v.w * s + 4, v.h * s + 4); ctx.globalCompositeOperation = 'lighter';
+        const g = ctx.createRadialGradient(x + v.w / 2, y + v.h / 2, 0, x + v.w / 2, y + v.h / 2, 90); g.addColorStop(0, rgba(C.luz, .22 * Math.min(1.2, k))); g.addColorStop(1, rgba(C.luz, 0)); ctx.fillStyle = g; ctx.fillRect(x - 90, y - 90, 220, 220); }
+      ctx.globalCompositeOperation = 'source-over'; }
+    capa(L, prof, z, dx);
+    ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = .15 + .85 * lit(i); capa(Lz, prof, z, dx); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  }
+  // lente: viñeta suave
+  ctx.setTransform(1, 0, 0, 1, 0, 0); viñetaCalida(ctx, .5, '2,4,12');
+  // tiras de texto: papel en la caja (no flotan), lejos de la fuente de luz
+  ponerTira(TIRA1, 70, 300, prog(t, ...T.tira1)); ponerTira(TIRA2, 70, 300 + TIRA1.h + 10, prog(t, ...T.tira2));
+  if (t >= T.sello) { ctx.globalAlpha = .92; ctx.drawImage(SELLO_T, 70 + TIRA2.w - 60, 300 + TIRA1.h + 10 + TIRA2.h / 2 - 45); ctx.globalAlpha = 1; }
+});
+window.SONIDOS = [{ t: 0, tipo: 'ambiente' }, { t: .12, tipo: 'swish' }, { t: .95, tipo: 'pop' }, { t: 1.4, tipo: 'pop' }, { t: 1.85, tipo: 'papel' }, { t: 2.6, tipo: 'papel' }, { t: 3.15, tipo: 'golpe' }];
+</script>
+</body>
+</html>

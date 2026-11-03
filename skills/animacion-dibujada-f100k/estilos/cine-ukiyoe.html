@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Grabado japonés</title>
+<style>
+  html,body{margin:0;background:#2a241c;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Grabado japonés en bloques» · ingeniería inversa de lemo-opuscar/styles/ukiyoe (MIT, © 2026 LemoLab) · qué se tomó: cada color es su propio bloque con veta, baren y goma-zuri, fuera de registro 2 px y revelado con barrido de baren; bokashi por píxel, niebla kasumi, línea clave sumi encima, cartela y sello que estampa.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const TITULO_CHICO = 'lo que nadie te dice de';   // la pestaña de la cartela (máx. ~26 letras)
+const TITULO_GRANDE = 'tu bio';                   // la palabra clave, enorme (máx. ~12 letras)
+const SELLO = 'BIO';                              // el sello rojo que estampa (1 a 4 letras)
+const COLORES = {
+  papel: '#eee2c6',     // washi: el blanco ES el papel
+  azul: '#1d3a66',      // azul de Prusia: cielo y agua (la familia dominante)
+  azulClaro: '#8db0c6',
+  rojo: '#b8412f',      // el rojo es raro: el sol y el sello
+  verde: '#3e5a3a',     // pino
+  ocre: '#cf9f4a',
+  sumi: '#231f1c',      // la línea clave
+};
+const DUR = 8;
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-impresion.js"></script>
+<script>
+const C = COLORES;
+const FR = { x0: 46, y0: 70, x1: W - 46, y1: H - 70 };       // borde de tinta de la estampa
+const HZ = 1180;                                              // línea del agua
+const PAPEL = papelImpreso(C.papel, { semilla: 11 });
+const nb = () => { const c = mk(); return [c, c.getContext('2d')]; };
+const clipHoja = x => { x.beginPath(); x.rect(FR.x0 + 10, FR.y0 + 10, FR.x1 - FR.x0 - 20, FR.y1 - FR.y0 - 20); x.clip(); };
+const monte = X => { const d = clamp(Math.abs(X - 330) / 560); return HZ - 60 - 560 * Math.pow(1 - d, 1.7) - (vnoise(X * .02, 3) - .5) * 10 * d; };   // un cerro de laderas cóncavas
+
+// ---------- los bloques de color (cada uno en su canvas, entintado una vez) ----------
+const B = {};
+{ // cielo: bokashi de azul desde arriba + azul pálido cerca del horizonte
+  const [c, x] = nb(); x.save(); clipHoja(x);
+  bokashi(x, 0, FR.y0, W, 980, C.azul, .95, .12, { aspero: 26, semilla: 4 });
+  bokashi(x, 0, 760, W, HZ, C.azulClaro, 0, .55, { aspero: 22, semilla: 8 });
+  x.restore(); B.cielo = entintar(c, { veta: .16, baren: .38, motas: .3 });
+}
+{ // agua: bandas de azules con bokashi entre bandas; la espuma queda en papel
+  const [c, x] = nb(); x.save(); clipHoja(x);
+  const bandas = [[HZ, 1330, C.azulClaro], [1330, 1500, '#4d6f98'], [1500, 1700, C.azul], [1700, H, '#13284a']];
+  for (const [a, b, col] of bandas) { x.fillStyle = col; x.beginPath(); x.moveTo(0, a);
+    for (let X = 0; X <= W; X += 12) x.lineTo(X, a + Math.sin(X * .02 + a) * 6); x.lineTo(W, b + 10); x.lineTo(0, b + 10); x.fill(); }
+  bokashi(x, 0, HZ, W, HZ + 90, C.azul, .45, 0, { aspero: 12, semilla: 12 });
+  x.restore(); B.agua = entintar(c, { veta: .17, baren: .38, motas: .3, ox: 40 });
+}
+{ // cerro: gris azulado con la nieve en papel y una banda ocre al pie
+  const [c, x] = nb(); x.save(); clipHoja(x);
+  x.fillStyle = '#56697c'; x.beginPath(); x.moveTo(0, HZ); for (let X = 0; X <= W; X += 8) x.lineTo(X, monte(X)); x.lineTo(W, HZ); x.fill();
+  x.globalCompositeOperation = 'destination-out'; x.beginPath();                 // la nieve de la cumbre: papel sin imprimir
+  const nieve = X => monte(X) + 22 + 50 * clamp(1 - Math.abs(X - 330) / 180) + 26 * (.5 + .5 * Math.sin(X * .055));   // borde de nieve suave, con lenguas que bajan
+  for (let X = 150; X <= 510; X += 6) x.lineTo(X, Math.min(nieve(X), monte(X) + 110)); for (let X = 510; X >= 150; X -= 6) x.lineTo(X, monte(X) - 3);
+  x.fill(); x.globalCompositeOperation = 'source-over';
+  x.fillStyle = C.ocre; x.beginPath(); x.moveTo(0, HZ); for (let X = 0; X <= W; X += 10) x.lineTo(X, HZ - 64 + Math.sin(X * .013) * 14); x.lineTo(W, HZ); x.fill();
+  x.restore(); B.monte = entintar(c, { veta: .1, baren: .3, motas: .3, ox: -60 });
+}
+// pino recortado en primer plano (corte audaz): tronco desde la orilla derecha y almohadillas planas de agujas
+const ALMOHADAS = [[930, 470, 210], [860, 650, 170], [990, 780, 160], [900, 1000, 150], [1000, 1180, 140]];
+function almohada(px, py, r) {                       // copa plana arriba y abanico de agujas abajo (no media luna)
+  const p = new Path2D(); p.moveTo(px - r / 2, py + 6); p.quadraticCurveTo(px, py - 10, px + r / 2, py + 6);
+  for (let i = 0; i <= 18; i++) { const u = 1 - i / 18, ax = px - r / 2 + u * r, d = r * (.13 + .05 * Math.sin(u * Math.PI)) * (i % 2 ? .55 : 1); p.lineTo(ax, py + 6 + d); }
+  p.closePath(); return p; }
+const tronco = [[1090, 1560], [1040, 1380], [990, 1180], [960, 980], [930, 800], [920, 640], [930, 470]];
+{ const [c, x] = nb(); x.save(); clipHoja(x);
+  x.fillStyle = '#5e4631'; x.lineCap = x.lineJoin = 'round';
+  x.strokeStyle = '#5e4631'; x.lineWidth = 46; x.beginPath(); tronco.forEach(([a, b], i) => i ? x.lineTo(a, b) : x.moveTo(a, b)); x.stroke();
+  x.lineWidth = 18; for (const [px, py, r] of ALMOHADAS) { x.beginPath(); x.moveTo(px + r * .2, py + 20); x.quadraticCurveTo(px + r * .3, py + 50, 950 + (py % 3) * 15, py + 80); x.stroke(); }
+  x.fillStyle = C.verde;
+  for (const [px, py, r] of ALMOHADAS) x.fill(almohada(px, py, r));
+  x.restore(); B.verde = entintar(c, { veta: .12, baren: .3, motas: .3, ox: 90 });
+}
+const SOL = { x: 640, y: 760, r: 100 };
+{ const [c, x] = nb(); x.fillStyle = C.rojo; x.beginPath(); x.arc(SOL.x, SOL.y, SOL.r, 0, 6.283); x.fill(); B.rojo = entintar(c, { veta: .08, baren: .25, motas: .3 }); }
+
+// ---------- bloque clave: línea sumi encima de todo ----------
+function lineaClave(x, pts, w, sem) {               // contorno tallado: ancho variable con afinado en las puntas
+  const ws = pts.map((_, i) => { const u = i / (pts.length - 1); return w * (.25 + .75 * Math.min(1, u / .2, (1 - u) / .2)) * (.8 + .4 * vnoise(i * .08, sem)); });
+  rellenarTrazo(x, pts, ws, C.sumi, 1);
+}
+{ const [c, x] = nb(); x.save(); clipHoja(x);
+  const P = []; for (let X = 0; X <= 760; X += 6) P.push([X, monte(X)]); lineaClave(x, P, 3.2, 1);
+  for (let k = 0; k < 9; k++) { const y = HZ + 40 + k * k * 9 + k * 30, P2 = [];          // crestas del agua, más juntas a lo lejos
+    for (let X = -20; X <= W + 20; X += 10) P2.push([X, y + Math.sin(X * (.018 - k * .001) + k * 2) * (4 + k)]); lineaClave(x, P2, 1.4 + k * .25, 10 + k);
+    for (let X = 60 + k * 37 % 120; X < W; X += 170 - k * 6) {                             // rizos de espuma (papel con línea)
+      const r = 8 + k * 2.2, cy = y + Math.sin(X * (.018 - k * .001) + k * 2) * (4 + k); const A = [];
+      for (let i = 0; i <= 14; i++) { const a = Math.PI + i / 14 * Math.PI * 1.4; A.push([X + Math.cos(a) * r, cy + Math.sin(a) * r * .8]); } lineaClave(x, A, 1.2 + k * .15, 30 + k); } }
+  lineaClave(x, tronco.map(([a, b]) => [a - 23, b]), 2.6, 3); lineaClave(x, tronco.map(([a, b]) => [a + 23, b]), 2.6, 4);
+  x.lineWidth = 1.3; x.strokeStyle = C.sumi;
+  for (const [px, py, r] of ALMOHADAS) { lineaClave(x, [[px - r / 2, py], [px + r / 2, py]], 2.6, px);
+    for (let i = 0; i <= 26; i++) { const u = i / 26, ax = px - r / 2 + u * r; x.beginPath(); x.moveTo(px + (ax - px) * .35, py + 4); x.lineTo(ax, py + 6 + r * (.11 + .05 * Math.sin(u * Math.PI))); x.stroke(); } }
+  x.restore();
+  // marco: línea gruesa + fina
+  x.strokeStyle = C.sumi; x.lineWidth = 7; x.strokeRect(FR.x0, FR.y0, FR.x1 - FR.x0, FR.y1 - FR.y0);
+  x.lineWidth = 2; x.strokeRect(FR.x0 + 13, FR.y0 + 13, FR.x1 - FR.x0 - 26, FR.y1 - FR.y0 - 26);
+  B.clave = entintar(c, { motas: .12 });
+}
+const FIBRA = (() => { const c = mk(); fibrasEn(c.getContext('2d'), 3000, '#f4ead4', .09, .8, 21); return c; })();
+
+// ---------- cartela vertical con el título (se imprime en el bloque clave) ----------
+const CT = { x: 96, y: 290, w: 400 };
+const AJ_C = autoajuste(TITULO_CHICO, '"Hiragino Mincho ProN", "Big Caslon", serif', 600, CT.w - 70, 2, 46, 30);
+const AJ_G = autoajuste(TITULO_GRANDE, '"Hiragino Mincho ProN", "Big Caslon", serif', 800, CT.w - 60, 2, 150, 60);
+CT.hTab = AJ_C.rs.length * AJ_C.size * 1.2 + 40; CT.h = CT.hTab + AJ_G.rs.length * AJ_G.size * 1.08 + 70;
+function cartela(x, k, kTxt1, kTxt2) {
+  if (k <= 0) return;
+  const dy = (1 - aterriza(k)) * -26; x.save(); x.globalAlpha = clamp(k * 3); x.translate(CT.x, CT.y + dy);
+  x.fillStyle = 'rgba(0,0,0,.10)'; x.fillRect(6, 8, CT.w, CT.h);
+  x.fillStyle = '#f3e7c6'; x.fillRect(0, 0, CT.w, CT.h);
+  x.fillStyle = '#e3a08a'; x.fillRect(10, 10, CT.w - 20, CT.hTab - 10);                 // pestaña rosa pálido
+  x.strokeStyle = C.sumi; x.lineWidth = 6; x.strokeRect(0, 0, CT.w, CT.h); x.lineWidth = 1.6; x.strokeRect(9, 9, CT.w - 18, CT.h - 18);
+  x.beginPath(); x.moveTo(9, CT.hTab); x.lineTo(CT.w - 9, CT.hTab); x.stroke();
+  x.fillStyle = C.sumi; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  if (kTxt1) { x.font = AJ_C.font; AJ_C.rs.forEach((r, i) => x.fillText(r, CT.w / 2, 22 + AJ_C.size * (1 + i * 1.2))); }
+  if (kTxt2) { x.font = AJ_G.font; AJ_G.rs.forEach((r, i) => x.fillText(r, CT.w / 2, CT.hTab + 26 + AJ_G.size * (.92 + i * 1.08))); }
+  x.restore();
+}
+const SELLO_C = sello(SELLO, 150, { col: C.rojo, semilla: 5 });
+
+// pájaros a 8 cps: tres trazos de sumi que cruzan
+function pajaros(x, t) {
+  const ts = Math.floor(t * 8) / 8;
+  for (let i = 0; i < 3; i++) { const px = 1150 - (ts - .3) * 150 - i * 70, py = 820 + i * 36 + Math.sin(ts * 2 + i) * 6, al = (Math.floor(t * 8) + i) % 2 ? 10 : 4;
+    x.strokeStyle = C.sumi; x.lineWidth = 4; x.lineCap = 'round'; x.beginPath(); x.moveTo(px - 26, py - al); x.quadraticCurveTo(px - 8, py - 4, px, py); x.quadraticCurveTo(px + 8, py - 4, px + 26, py - al); x.stroke(); }
+}
+
+// tiempos de impresión (golpe: los bloques caen uno tras otro antes de 1,5 s)
+const T = { monte: [.05, .4], verde: [.45, .8], rojo: [1.0, 1.3], cartela: 1.75, txt1: 2.15, txt2: 2.55, sello: 3.1 };
+const REG = { cielo: [2, -1], agua: [-2, 1.5], monte: [1.5, 2], verde: [-1.5, -2], rojo: [2.2, 1.2] };
+const SH = { agua: [-6, 4], monte: [6, -4], verde: [-5, -6], rojo: [7, 5] };
+
+const HOJA = mk(), hx = HOJA.getContext('2d');
+arrancar(frame => {
+  const t = frame / FPS;
+  hx.setTransform(1, 0, 0, 1, 0, 0); hx.globalAlpha = 1; hx.globalCompositeOperation = 'source-over';
+  hx.drawImage(PAPEL, 0, 0);
+  hx.drawImage(B.cielo, ...REG.cielo); hx.drawImage(B.agua, ...REG.agua);
+  for (const k of ['rojo', 'monte']) estampar(hx, B[k], prog(t, ...T[k]), REG[k], SH[k]);
+  kasumi(hx, 330, 860, 700, 64, C.papel, .97); kasumi(hx, 560, 1040, 760, 58, C.papel, .92);   // niebla: papel sin imprimir
+  estampar(hx, B.verde, prog(t, ...T.verde), REG.verde, SH.verde);
+  hx.drawImage(B.clave, 0, 0);
+  pajaros(hx, t);
+  hx.drawImage(FIBRA, 0, 0);
+  cartela(hx, prog(t, T.cartela, T.cartela + .3), t >= T.txt1, t >= T.txt2);
+  if (t >= T.sello) { const k = prog(t, T.sello, T.sello + .2), s = lerp(1.35, 1, easeOut(k));
+    hx.save(); hx.translate(CT.x + 80, CT.y + CT.h + 95); hx.scale(s, s); hx.globalAlpha = .93 * clamp(k * 4); hx.drawImage(SELLO_C, -75, -75); hx.restore(); }
+  // cámara: empuje muy lento hacia la cartela, en cada cuadro (nunca a saltos)
+  const z = 1 + .03 * ease(prog(t, 0, DUR - .6));
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = C.papel; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(z, 0, 0, z, (1 - z) * 400, (1 - z) * 640); ctx.drawImage(HOJA, 0, 0);
+});
+window.SONIDOS = [{ t: .1, tipo: 'papel' }, { t: .3, tipo: 'desliz' }, { t: .55, tipo: 'papel' }, { t: 1.0, tipo: 'golpe' }, { t: 1.75, tipo: 'papel' }, { t: 3.1, tipo: 'golpe' }, { t: 0, tipo: 'ambiente' }];
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pizarra blanca</title>
+<style>
+  html,body{margin:0;background:#1b1b1d;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Pizarra blanca» · ingeniería inversa de lemo-opuscar/styles/whiteboard (MIT, © 2026 LemoLab) · qué se tomó:
+// trazo de plumón con pulso, sobrepaso y punta biselada, tinta en multiply con textura de plumón seco, fantasmas de clases
+// viejas, reflejo de ventana que se corre más lento que la cámara, plumones flotantes con sombra, imán que cae y se desliza
+// y borrador que deja fantasma.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const LO_QUE_CREES = 'publicar más';                 // la respuesta equivocada: ya está escrita y el borrador la limpia (≤ 18)
+const LINEA_CHICA = 'así funciona un reel que';      // la frase chica de arriba (≤ 30)
+const PALABRA_CLAVE = 'VENDE';                       // la palabra enorme, en el color de acento (≤ 10)
+const PASOS = [                                      // 2 o 3 pasos (≤ 36 letras c/u). El imán (tú) baja de paso en paso
+  'un gancho que duele',
+  'tu historia con prueba',
+  'pide la palabra USO',
+];
+const COLORES = {
+  tinta: '#23262c',     // plumón negro: cosas y estructura
+  senal: '#2a5cb3',     // plumón azul: proceso (círculos, flechas)
+  acento: '#d97757',    // plumón naranja: lo que importa (la palabra clave y el imán)
+  tablero: '#fbfbf9',   // blanco tibio del tablero
+};
+const DUR = 9;                                       // segundos (6 a 10)
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-dibujo.js"></script>
+<script>
+const LETRA = 'Noteworthy, "Marker Felt", "Segoe Print", cursive';
+const BX = -170, BY = -260, BW = 1420, BH = 2460;     // el tablero en el mundo (más grande que el cuadro)
+
+// ---------- tablero: degradado tibio, rayones, fantasmas de clases viejas (se pinta UNA vez) ----------
+const TABLERO = (() => {
+  const c = capa(BW, BH), p = c.getContext('2d'), r = rng(21);
+  const g = p.createLinearGradient(0, 0, BW * .3, BH); g.addColorStop(0, COLORES.tablero); g.addColorStop(1, '#ecebe6');
+  p.fillStyle = g; p.fillRect(0, 0, BW, BH);
+  for (let i = 0; i < 1400; i++) { p.fillStyle = `rgba(90,95,105,${r() * .035})`; p.beginPath(); p.arc(r() * BW, r() * BH, r() * 2.5 + .5, 0, 6.283); p.fill(); }
+  p.lineCap = 'round';
+  for (let i = 0; i < 110; i++) { p.strokeStyle = `rgba(80,86,96,${r() * .03})`; p.lineWidth = r() * 14 + 4; const x = r() * BW, y = r() * BH, a = (r() - .5) * .4, l = 60 + r() * 300;
+    p.beginPath(); p.moveTo(x, y); p.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); p.stroke(); }
+  // fantasmas: palabras, círculos y flechas de otra clase, mal borrados (5–10 %)
+  const fantasma = [['clientes', 120, 300, 70], ['¿precio?', 820, 1650, 64], ['oferta', 760, 260, 58], ['3x', 200, 1820, 80], ['meta', 870, 1080, 56]];
+  for (const [txt, x, y, s] of fantasma) { p.save(); p.globalAlpha = .06 + r() * .04; p.fillStyle = r() < .5 ? '#8f969f' : '#7f9bc4';
+    p.font = `700 ${s}px ${LETRA}`; p.translate(x - BX, y - BY); p.rotate((r() - .5) * .15); p.fillText(txt, 0, 0); p.restore(); }
+  const gctx = ctx; ctx = p;                          // reusa el trazo del motor para los fantasmas de línea
+  for (const s of [tCirculo(300 - BX, 1560 - BY, 70, { w: 10 }), ...tFlecha(640 - BX, 1880 - BY, 940 - BX, 1830 - BY, { w: 9 }), tCirculo(980 - BX, 520 - BY, 50, { w: 9 }), tLinea(60 - BX, 1300 - BY, 380 - BX, 1290 - BY, { w: 12 })])
+    pintarTrazo(p, s, 0, { p: 1, alpha: .07 + r() * .04, col: '#8f969f', gota: false });
+  ctx = gctx;
+  return c;
+})();
+const SECO = tileSeco(7);
+
+// ---------- diseño (coordenadas de mundo = cuadro final) ----------
+const AJ_CH = autoajuste(LINEA_CHICA, LETRA, 700, 860, 1, 70, 40);
+const AJ_K = autoajuste(PALABRA_CLAVE, LETRA, 700, 880, 1, 320, 120);
+const AJ_E = autoajuste(LO_QUE_CREES, LETRA, 700, 820, 1, 130, 60);
+const Y_CH = 380, Y_K = Y_CH + 40 + AJ_K.size * .82, Y_RAYA = Y_K + 46;
+const ERRADO = letras(LO_QUE_CREES, W / 2, Y_K - AJ_K.size * .2, AJ_E.font, { centro: true, col: COLORES.tinta, semilla: 3 });
+const CHICA = letras(LINEA_CHICA, W / 2, Y_CH, AJ_CH.font, { centro: true, col: COLORES.tinta, semilla: 5 });
+const CLAVE = letras(PALABRA_CLAVE, W / 2, Y_K, AJ_K.font, { centro: true, col: COLORES.acento, semilla: 9, giro: .05 });
+const RAYA = tLinea(CLAVE.x0 - 30, Y_RAYA, CLAVE.x0 + CLAVE.ancho + 30, Y_RAYA - 8, { w: 12, col: COLORES.acento, sobre: 18 });
+// pasos: círculo azul a la izquierda, texto negro, flecha azul que baja al siguiente
+const XB = 150, Y0P = Y_RAYA + 180, ALTO_P = Math.min(230, (1430 - Y0P) / Math.max(1, PASOS.length - 1));
+const AJ_P = (() => { for (let z = 88; z >= 44; z -= 2) { const f = `700 ${z}px ${LETRA}`; if (PASOS.every(s => renglones(s, f, 780).length <= 2 && renglones(s, f, 780).every(x => medir(x, f) <= 780))) return z; } return 44; })();
+const FONT_P = `700 ${AJ_P}px ${LETRA}`;
+const PASO = PASOS.map((s, i) => {
+  const cy = Y0P + i * ALTO_P, rs = renglones(s, FONT_P, 780), y0 = cy + AJ_P * .32 - (rs.length - 1) * AJ_P * .55;
+  return { cy, circ: tCirculo(XB, cy, 50, { w: 9, col: COLORES.senal, semilla: 40 + i }), palomita: tPalomita(XB, cy, 26, { w: 10, col: COLORES.senal }),
+    lineas: rs.map((r, j) => letras(r, 235, y0 + j * AJ_P * 1.1, FONT_P, { col: COLORES.tinta, semilla: 60 + i * 7 + j })),
+    flecha: i < PASOS.length - 1 ? tFlecha(XB - 8, cy + 62, XB - 6, cy + ALTO_P - 62, { w: 8, col: COLORES.senal, curva: [XB - 52, cy + ALTO_P / 2], cabeza: 24 }) : null };
+});
+const CIRC_K = [0, 1].map(k => tArco(W / 2, Y_K - AJ_K.size * .3, Math.min(CLAVE.ancho / 2 + 50, 470) + k * 10, -2.4 + k * .3, -2.4 + k * .3 + Math.PI * 2 + .3, { ry: AJ_K.size * .55 + k * 8, w: 9, col: COLORES.acento, semilla: 80 + k }));
+
+// ---------- tiempos: cada cosa termina justo en su ventana ----------
+const T = { cae: [0, .35], borra: [.42, 1.2] };
+agendar(ERRADO, -2, -1);                             // ya estaba escrito en el cuadro 0
+const T_MUEVE = []; let T_CIRC = 0;
+function programar(f) {                              // f < 1 acelera la escritura para que todo termine antes del final
+  T_MUEVE.length = 0; let tt = 1.3;
+  const d = x => x * f;
+  agendar(CHICA, tt, tt + d(.6), .02); tt += d(.6) + .08;
+  agendar(CLAVE, tt, tt + d(.9), .06); tt += d(.9) + .05;
+  agendar([RAYA], tt, tt + d(.3)); tt += d(.3) + .1;
+  PASO.forEach(p => {
+    agendar([p.circ], tt, tt + d(.26)); tt += d(.26) + .05;
+    const todas = p.lineas.flat(), dt = d(Math.min(.9, .25 + todas.length * .035));
+    agendar(todas, tt, tt + dt, .012); tt += dt + .06;
+    if (p.flecha) { agendar(p.flecha, tt, tt + d(.3), .03); T_MUEVE.push([tt + .05, tt + .45]); agendar([p.palomita], tt + .48, tt + .48 + d(.15)); tt += .48 + d(.15) + .05; }
+  });
+  T_CIRC = tt + .05; agendar(CIRC_K, T_CIRC, T_CIRC + d(.7), .05);
+  return T_CIRC + d(.7);
+}
+{ let f = 1; while (programar(f) > DUR - 1.2 && f > .45) f -= .03; }
+const PRE = [...ERRADO];
+const POST = [...CHICA, ...CLAVE, RAYA, ...PASO.flatMap(p => [p.circ, ...p.lineas.flat(), ...(p.flecha || []), ...(p.flecha ? [p.palomita] : [])]), ...CIRC_K];
+// un plumón por color, cada uno con sus trabajos y su estacionamiento fuera del cuadro
+const PLUMONES = [COLORES.tinta, COLORES.senal, COLORES.acento].map((col, i) => ({
+  col, trab: trabajosDe(POST.filter(s => s.col === col)), park: [[W + 260, 300], [W + 260, 1300], [-260, 900]][i] }));
+// el borrador: zigzag sobre la frase equivocada
+const ZZ = (() => { const x0 = ERRADO.x0 - 90, x1 = ERRADO.x0 + ERRADO.ancho + 90, y0 = ERRADO.y - AJ_E.size * .9, y1 = ERRADO.y + AJ_E.size * .38, p = [];
+  for (let i = 0; i <= 4; i++) p.push([i % 2 ? x1 : x0, lerp(y0, y1, i / 4)]); return new Trazo(p, { temblor: 0, w: 1 }); })();
+// cámara: empieza encima de la pregunta, baja montada en la flecha y abre al tablero completo
+const CAM = camara([[0, 540, 760, 1.12], [1.3, 540, 740, 1.08], [3.4, 540, 800, 1.06], [Math.max(4.6, T_CIRC - .6), 540, 960, 1.0], [DUR, 540, 960, 1.0]]);
+
+// ---------- el imán (tú): cae, se queda y baja de paso en paso ----------
+function poseIman(t) {
+  let i = 0; for (const [a] of T_MUEVE) if (t >= a) i++;
+  const k = Math.min(i, PASO.length - 1);
+  if (t < T.cae[1]) { const u = prog(t, T.cae[0], T.cae[1]); return { x: XB, y: PASO[0].cy, alza: 1 - u * u }; }
+  if (i > 0 && t < T_MUEVE[i - 1][1]) { const [a, b] = T_MUEVE[i - 1], u = prog(t, a, b), e = u * u * (3 - 2 * u);
+    return { x: XB + Math.sin(e * Math.PI) * 10, y: lerp(PASO[i - 1].cy, PASO[i].cy, e), alza: Math.sin(Math.PI * u) * .25 }; }
+  return { x: XB, y: PASO[k].cy, alza: 0 };
+}
+
+const TINTA = capa(), ig = TINTA.getContext('2d');
+function tinta(t, c) {
+  ig.setTransform(1, 0, 0, 1, 0, 0); ig.clearRect(0, 0, W, H); ponerCam(ig, c);
+  for (const s of PRE) s.pts ? pintarTrazo(ig, s, t) : pintarLetra(ig, s, t);
+  if (t > T.borra[0]) {                                // el borrador limpia al 90 %: queda el fantasma
+    const L = ZZ.len * prog(t, T.borra[0], T.borra[1]);
+    ig.save(); ig.globalCompositeOperation = 'destination-out'; ig.globalAlpha = .97; ig.lineCap = ig.lineJoin = 'round'; ig.lineWidth = AJ_E.size * .75;
+    ig.beginPath(); ig.moveTo(...ZZ.pts[0]); for (let i = 1; i < ZZ.pts.length && ZZ.cum[i] <= L; i++) ig.lineTo(...ZZ.pts[i]); ig.lineTo(...ZZ.at(L)); ig.stroke(); ig.restore();
+  }
+  for (const s of POST) s.pts ? pintarTrazo(ig, s, t) : pintarLetra(ig, s, t);
+  // plumón seco: motas y rayitas que se comen la tinta, pegadas al tablero
+  ig.save(); ig.globalCompositeOperation = 'destination-out'; const pat = ig.createPattern(SECO, 'repeat'); pat.setTransform(new DOMMatrix().scale(.9));
+  ig.fillStyle = pat; ig.globalAlpha = .9; ig.fillRect(BX, BY, BW, BH); ig.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ctx.fillStyle = '#d8d3ca'; ctx.fillRect(0, 0, W, H);
+  ponerCam(ctx, c); ctx.drawImage(TABLERO, BX, BY);
+  tinta(t, c);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(TINTA, 0, 0); ctx.restore();
+  // reflejo de ventana: diagonal suave que se corre más lento que la cámara (vende el brillo)
+  const sx = -c.y * c.z * .35 + 820, sh = ctx.createLinearGradient(sx - 700, 0, sx + 500, H);
+  sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(.45, 'rgba(255,255,255,.10)'); sh.addColorStop(.5, 'rgba(255,255,255,.16)'); sh.addColorStop(.55, 'rgba(255,255,255,.10)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
+  // objetos: imán, borrador y plumones (flotan solos, con sombra)
+  const im = poseIman(t), [ix, iy] = aPantalla(c, im.x, im.y); iman(ix, iy, im.alza, 46 * c.z, COLORES.acento);
+  if (t > T.borra[0] - .45 && t < T.borra[1] + .45) {
+    let x, y, alza = 0;
+    if (t < T.borra[0]) { const u = (t - T.borra[0] + .45) / .45; [x, y] = [ZZ.ini[0] - 600 * (1 - u), ZZ.ini[1] - 500 * (1 - u) ** 2]; alza = 1 - u; }
+    else if (t > T.borra[1]) { const u = (t - T.borra[1]) / .45; [x, y] = [ZZ.fin[0] + 700 * u, ZZ.fin[1] - 400 * u * u]; alza = u; }
+    else [x, y] = ZZ.at(ZZ.len * prog(t, T.borra[0], T.borra[1]));
+    const [bx, by] = aPantalla(c, x, y); borrador(bx, by, alza, 120 * c.z, COLORES.acento);
+  }
+  for (const P of PLUMONES) { const ps = poseHerramienta(P.trab, t, () => P.park); if (!ps) continue;
+    const [px, py] = aPantalla(c, ps.x, ps.y); plumon(px, py, ps.alza, P.col, { z: Math.min(c.z, 1.2) }); }
+});
+window.SONIDOS = [
+  { t: .33, tipo: 'golpe' },          // el imán pega en el tablero
+  { t: .42, tipo: 'desliz' },         // borrador de fieltro
+  { t: 1.3, tipo: 'papel' },          // empieza a escribir (roce grave del plumón)
+  { t: 2.05, tipo: 'papel' },
+  ...T_MUEVE.map(([a]) => ({ t: +a.toFixed(2), tipo: 'swish' })),
+  { t: +T_CIRC.toFixed(2), tipo: 'papel' },
+];
+</script>
+</body>
+</html>

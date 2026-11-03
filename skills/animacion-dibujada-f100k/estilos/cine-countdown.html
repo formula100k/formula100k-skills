@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cuenta regresiva en pantalla dividida</title>
+<style>
+  html,body{margin:0;background:#06080A;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// Estilo «Cuenta regresiva en pantalla dividida» · ingeniería inversa de lemo-opuscar/styles/countdown (MIT, © 2026 LemoLab) · qué se tomó: reloj de casillas fijas que cae 14 px por segundo con barra de décimas, celdas que se multiplican hacia el cero, chips de cámara y sello EN VIVO, lista de hitos que se palomea, franja de control, y al cero «muchas en una» con el reloj que se invierte a naranja.
+// ====================== LO QUE PUEDES CAMBIAR ======================
+const EVENTO = 'CIERRE DEL CARRITO';                 // la cabecera del reloj (≤ 22 letras)
+const SEGUNDOS = 5;                                   // desde cuántos segundos cuenta (3 a 6). SOLO cifras del guion
+const ETAPAS = ['ANUNCIO', 'CARRITO', 'CIERRE'];      // franja de control: quién manda (se pasa la posta en el camino)
+const CAMARAS = ['TU OFERTA', 'TU PERFIL', 'TUS DM', 'TU ESCRITORIO'];   // nombre de cada celda (una por foto)
+const HITOS = [                                       // la lista de hitos: se palomea cuando el reloj pasa por cada uno
+  { t: -4, txt: 'último aviso en historias' },        // t = segundos antes del cero. SOLO cifras del guion
+  { t: -2, txt: 'respondes los DM' },
+  { t: 0,  txt: 'carrito cerrado' },
+];
+const BANDERA = 'CARRITO CERRADO';                    // la barra naranja que entra en el cero (≤ 20 letras)
+const FRASE_FINAL = 'el carrito *se cerró*';          // después del cero; la clave entre *asteriscos* sale enorme
+const FOTOS = [];   // rutas a tus fotos o capturas (1 a 4), p. ej. ['fotos/oferta.jpg','fotos/perfil.jpg']. Vacío = reemplazos neutros
+const COLORES = {
+  fondo: '#06080A', panel: '#0B0E11', texto: '#F2F5F7', gris: '#7C878D',
+  acento: '#FF5B1F',      // el naranja: «ahora / en vivo / hecho»
+  linea: 'rgba(222,232,238,.16)',
+};
+// ===================================================================
+
+const W = 1080, H = 1920, FPS = 30;
+const CERO = SEGUNDOS + .5;                           // el segundo del video en que el reloj llega a cero
+const DUR = +(CERO + 3.6).toFixed(2);
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/cine-montaje.js"></script>
+<script>
+const C = COLORES;
+const F_NUM = '"DIN Condensed", "Avenir Next Condensed", Impact, sans-serif';
+const F_ROT = '"Avenir Next Condensed", "Helvetica Neue", Arial, sans-serif';
+const F_MONO = 'Menlo, "Courier New", monospace';
+const MX = 56, TOP = 262, BOT = 1462, GAP = 9;
+let IMS = [];
+material(FOTOS, ['producto', 'perfil', 'chat', 'escritorio'], 1080, 1350).then(ims => { IMS = ims.map(im => gradear(im, 'frio')); });
+
+// ---------- diseños (keyframes de celdas) ----------
+const R = (x, y, w, h) => [x, y, w, h];
+const ANCHO = W - 2 * MX;
+const RELOJ_ARRIBA = R(MX, TOP, ANCHO, 300);
+const ZONA = [TOP + 300 + GAP, BOT];                 // debajo del reloj
+const zh = ZONA[1] - ZONA[0];
+// celdas de cámara: { foto, fx, fy, zoom }
+const CAMS = {
+  c0: { foto: 0, fx: .5, fy: .45, z: 1.0, cod: 'CAM 1' },
+  c1: { foto: 1, fx: .5, fy: .2, z: 1.0, cod: 'CAM 2' },
+  c2: { foto: 2, fx: .5, fy: .3, z: 1.0, cod: 'CAM 3' },
+  c3: { foto: 3, fx: .5, fy: .5, z: 1.0, cod: 'CAM 4' },
+  c4: { foto: 0, fx: .3, fy: .3, z: 1.8, cod: 'CAM 5' },
+  c5: { foto: 1, fx: .5, fy: .75, z: 1.6, cod: 'CAM 6' },
+  c6: { foto: 2, fx: .5, fy: .7, z: 1.5, cod: 'CAM 7' },
+};
+const nombreCam = id => CAMARAS[CAMS[id].foto % CAMARAS.length] || '';
+const g3 = (() => {                                   // rejilla 3 × 4 con el reloj en el centro (2 casillas)
+  const cw = (ANCHO - 2 * GAP) / 3, chh = (BOT - TOP - 3 * GAP) / 4, cel = (c, f, w = 1, h = 1) => R(MX + c * (cw + GAP), TOP + f * (chh + GAP), cw * w + GAP * (w - 1), chh * h + GAP * (h - 1));
+  return { c0: cel(0, 0), c1: cel(1, 0), c2: cel(2, 0), reloj: cel(0, 1, 3), lista: cel(0, 2, 2), c3: cel(2, 2), c4: cel(0, 3), c5: cel(1, 3), c6: cel(2, 3) };
+})();
+const LAY = [
+  { t: 0, cells: { reloj: RELOJ_ARRIBA, c0: R(MX, ZONA[0], ANCHO, zh) } },
+  { t: 1.0, cells: { reloj: RELOJ_ARRIBA, c0: R(MX, ZONA[0], ANCHO, zh * .55), c1: R(MX, ZONA[0] + zh * .55 + GAP, ANCHO, zh * .45 - GAP) } },
+  { t: 2.4, cells: { reloj: RELOJ_ARRIBA, c0: R(MX, ZONA[0], ANCHO * .58, zh * .5), c1: R(MX + ANCHO * .58 + GAP, ZONA[0], ANCHO * .42 - GAP, zh * .5),
+                     lista: R(MX, ZONA[0] + zh * .5 + GAP, ANCHO * .58, zh * .5 - GAP), c2: R(MX + ANCHO * .58 + GAP, ZONA[0] + zh * .5 + GAP, ANCHO * .42 - GAP, zh * .5 - GAP) } },
+  { t: CERO - 2.5, cells: { ...g3 }, abre: ['c3', 'c4', 'c5', 'c6'] },   // la rejilla se llena con la cuenta: casillas en espera
+];
+const T_ABRE = { c3: CERO - 3, c4: CERO - 2, c5: CERO - 1, c6: CERO - .5 };   // cada número dicho abre una cámara
+const easeIO = t => { t = clamp(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+function layoutEn(t) {
+  let i = 0; for (let k = 0; k < LAY.length; k++) if (t >= LAY[k].t) i = k;
+  const L = LAY[i], P = LAY[i - 1], q = P ? easeIO((t - L.t) / .34) : 1, out = {};
+  for (const id in L.cells) {
+    const b = L.cells[id], a = P && P.cells[id];
+    if (a) out[id] = { r: a.map((v, j) => lerp(v, b[j], q)), nueva: 0 };
+    else out[id] = { r: [b[0], b[1], b[2] * q, b[3]], nueva: q < 1 ? 1 : clamp(1 - (t - L.t - .34) / .2), desde: L.t };
+  }
+  if (P && q < 1) for (const id in P.cells) if (!L.cells[id]) { const a = P.cells[id]; out[id] = { r: [a[0], a[1], a[2] * (1 - q), a[3]], nueva: 0 }; }
+  return out;
+}
+
+// ---------- piezas ----------
+function texto(s, x, y, font, col, al = 'left') { ctx.save(); ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y); ctx.restore(); }
+function chip(x, y, cod, nombre, gris) {
+  ctx.save(); ctx.font = `600 22px ${F_MONO}`; const w1 = medir(cod, ctx.font); ctx.font = `700 26px ${F_ROT}`; const w2 = medir(nombre, ctx.font);
+  ctx.fillStyle = 'rgba(6,8,10,.84)'; ctx.fillRect(x, y, w1 + w2 + 66, 44);
+  ctx.fillStyle = gris ? C.gris : C.acento; ctx.fillRect(x + 14, y + 16, 12, 12);
+  texto(cod, x + 36, y + 30, `600 22px ${F_MONO}`, gris ? C.gris : C.acento); texto(nombre, x + 50 + w1, y + 31, `700 26px ${F_ROT}`, C.texto);
+  ctx.restore();
+}
+function sincro(x1, y) {                              // sello EN VIVO arriba a la derecha de la celda
+  const s = 'EN VIVO', f = `600 20px ${F_MONO}`, w = medir(s, f) + 44;
+  ctx.fillStyle = 'rgba(6,8,10,.84)'; ctx.fillRect(x1 - w, y, w, 40);
+  ctx.fillStyle = C.acento; ctx.beginPath(); ctx.arc(x1 - w + 16, y + 20, 6, 0, 7); ctx.fill();
+  texto(s, x1 - 12, y + 27, f, C.acento, 'right');
+}
+function celdaCam(id, rr, t, alfaChip = 1) {
+  const [x, y, w, h] = rr; if (w < 2 || h < 2) return; const cam = CAMS[id], im = IMS[cam.foto % IMS.length];
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.fillStyle = C.panel; ctx.fillRect(x, y, w, h);
+  const empuje = 1 + .05 * prog(t, 0, DUR);           // ≤ 6 % en toda su estadía
+  if (im) cubrir(im, x, y, w, h, cam.fx, cam.fy, cam.z * empuje);
+  vineta(x, y, w, h, .36);
+  ctx.globalAlpha = alfaChip;
+  if (w > 220) { chip(x + 14, y + 14, cam.cod, nombreCam(id)); if (w > 560) sincro(x + w - 14, y + 14); }
+  ctx.restore();
+  ctx.strokeStyle = C.linea; ctx.lineWidth = 1; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+}
+function enEspera(rr, t) {                            // casilla punteada «en espera» hasta que la cuenta la abre
+  const [x, y, w, h] = rr; ctx.save(); ctx.fillStyle = C.panel; ctx.fillRect(x, y, w, h);
+  ctx.setLineDash([14, 10]); ctx.strokeStyle = 'rgba(222,232,238,.28)'; ctx.lineWidth = 2; ctx.strokeRect(x + 10, y + 10, w - 20, h - 20);
+  texto('EN ESPERA', x + w / 2, y + h / 2 + 8, `600 22px ${F_MONO}`, C.gris, 'center'); ctx.restore();
+}
+function borde(rr, a) { if (a <= 0) return; const [x, y, w, h] = rr; ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = C.acento; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3); ctx.restore(); }
+
+// el reloj: casillas fijas, cada segundo nuevo cae 14 px en 0,12 s; barra de décimas de 10 segmentos; al cero se invierte
+const CAMBIOS = [0.4, CERO];                          // cuándo pasa la posta de una etapa a la siguiente
+function reloj(t, rr, soloPlaca = false) {
+  const [x, y, w, h] = rr, M = t - CERO, neg = M < 0, inv = !neg, sub = Math.abs(M) % 1;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.fillStyle = inv ? C.acento : C.panel; ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = inv ? C.acento : C.linea; ctx.lineWidth = 1; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+  const tinta = inv ? '#0A0B0C' : C.texto, acc = inv ? '#0A0B0C' : C.acento, gris = inv ? 'rgba(10,11,12,.6)' : C.gris;
+  const esc = clamp(h / 300, .55, 1);
+  // cabecera + franja de control
+  texto(inv ? 'DESDE EL CIERRE' : EVENTO, x + 22, y + 40 * esc, `700 ${Math.round(26 * esc)}px ${F_ROT}`, gris);
+  let act = 0, tAct = -9; CAMBIOS.forEach((c, i) => { if (t >= c) { act = Math.min(ETAPAS.length - 1, i + 1); tAct = c; } });
+  const fE = `700 ${Math.round(20 * esc)}px ${F_ROT}`, pw = ETAPAS.map(s => medir(s, fE) + 22);
+  let bx = x + w - 18 - pw.reduce((a, b) => a + b + 4, -4); const by = y + 16 * esc, bh = 30 * esc;
+  ETAPAS.forEach((s, i) => { const on = i === act, k = on ? easeOut(prog(t, tAct, tAct + .3)) : 1;
+    ctx.fillStyle = on ? (inv ? '#0A0B0C' : C.acento) : (inv ? 'rgba(10,11,12,.12)' : 'rgba(255,255,255,.06)'); ctx.fillRect(bx, by, pw[i] * k, bh);
+    texto(s, bx + 11, by + bh * .72, fE, on ? (inv ? C.acento : '#0A0B0C') : gris); bx += pw[i] + 4; });
+  if (tAct > 0 && t - tAct < .6) { ctx.fillStyle = `rgba(255,248,236,${.35 * (1 - (t - tAct) / .6)})`; ctx.fillRect(x, y, w, h); }
+  if (inv) { const fl = Math.exp(-M * 6); if (fl > .01) { ctx.fillStyle = `rgba(255,255,255,${fl * .8})`; ctx.fillRect(x, y, w, h); } }
+  // dígitos
+  const secs = Math.floor(Math.abs(M)), dec = Math.floor(sub * 10), desde = neg ? 1 - sub : sub;
+  const fs = Math.min(196, (h - 90 * esc) * .95, w * .22), caida = (1 - easeOut(clamp(desde / .12))) * -14 * fs / 132;
+  const base = y + 58 * esc + fs * .9 + Math.max(0, (h - 70 * esc - fs * 1.1) * .4);
+  const fSig = `700 ${fs * .85}px ${F_NUM}`, fD = `700 ${fs}px ${F_NUM}`;
+  texto(neg ? 'T−' : 'T+', x + 22, base, fSig, acc);
+  const x0 = x + 30 + medir('T−', fSig);
+  ctx.save(); ctx.beginPath(); ctx.rect(x, base - fs * .95, w, fs * 1.05); ctx.clip();
+  const dw = digitosFijos(`00:${String(secs).padStart(2, '0')}`, x0, base + caida, fD, tinta);
+  ctx.restore();
+  digitosFijos('.' + dec, x0 + dw + 6, base, `700 ${fs * .41}px ${F_NUM}`, gris);
+  const n = 10, segW = (w - 44 - (n - 1) * 5) / n, sy = Math.min(base + 16, y + h - 14);
+  for (let i = 0; i < n; i++) { const on = neg ? i < Math.ceil((1 - sub) * 10 - 1e-6) : i < dec + 1;
+    ctx.fillStyle = on ? acc : (inv ? 'rgba(10,11,12,.18)' : 'rgba(255,255,255,.10)'); ctx.fillRect(x + 22 + i * (segW + 5), sy, segW, 8 * esc); }
+  ctx.restore();
+}
+function lista(t, rr) {                               // hitos planeados: se palomean cuando el reloj pasa por ellos
+  const [x, y, w, h] = rr; if (w < 40) return; const M = t - CERO;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.fillStyle = C.panel; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = C.acento; ctx.fillRect(x + 20, y + 26, 12, 12);
+  texto('LISTA', x + 42, y + 39, `600 22px ${F_MONO}`, C.acento); texto('HITOS', x + 130, y + 39, `700 24px ${F_ROT}`, C.texto);
+  const fila = Math.min(110, (h - 70) / HITOS.length);
+  HITOS.forEach((hh, i) => { const yy = y + 66 + i * fila, hecho = M >= hh.t, k = easeOut(prog(M, hh.t, hh.t + .2));
+    ctx.strokeStyle = hecho ? C.acento : C.gris; ctx.lineWidth = 3; ctx.strokeRect(x + 22, yy + 8, 36, 36);
+    if (hecho) { ctx.fillStyle = C.acento; ctx.fillRect(x + 22, yy + 8, 36, 36); ctx.strokeStyle = '#0A0B0C'; ctx.lineWidth = 5; ctx.beginPath();
+      ctx.moveTo(x + 30, yy + 26); ctx.lineTo(x + 38, yy + 34); ctx.lineTo(x + 38 + 12 * k, yy + 34 - 18 * k); ctx.stroke(); }
+    texto(hh.t === 0 ? 'T−0' : 'T' + (hh.t < 0 ? '−' : '+') + Math.abs(hh.t), x + 74, yy + 40, `700 36px ${F_NUM}`, hecho ? C.texto : C.gris);
+    const aj = autoajuste(hh.txt, F_ROT, 700, w - 200, 1, 34, 18);
+    texto(aj.rs[0], x + 168, yy + 38, aj.font, hecho ? C.texto : C.gris);
+    if (i < HITOS.length - 1) { ctx.fillStyle = C.linea; ctx.fillRect(x + 20, yy + fila - 8, w - 40, 1); } });
+  ctx.restore(); ctx.strokeStyle = C.linea; ctx.strokeRect(x + .5, y + .5, w - 1, h - 1);
+}
+
+// ---------- «muchas en una»: en el cero cada celda viaja a su tesela de pantalla completa ----------
+const T_MERGE = .42, PLACA = R(MX, BOT - 230, ANCHO, 230);
+const FRASE = maqueta(FRASE_FINAL, { familia: F_ROT, peso: 800, pesoChico: 700, grande: 230, chico: 96, x: SEGURA.left, y: SEGURA.top + 40, ancho: SEGURA.right - SEGURA.left, alto: 640 });
+function fondoCompleto(t) {
+  const im = IMS[0]; if (!im) return; cubrir(im, 0, 0, W, H, .5, .45, 1.02 + .04 * prog(t, CERO, DUR));
+  const g = ctx.createLinearGradient(0, H * .45, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.75)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const g2 = ctx.createLinearGradient(0, 0, 0, H * .62); g2.addColorStop(0, 'rgba(6,8,10,.9)'); g2.addColorStop(.5, 'rgba(6,8,10,.6)'); g2.addColorStop(1, 'rgba(6,8,10,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+}
+function bandera(t, x, y) {                           // barra naranja con letra negra, entra deslizando desde la izquierda
+  const k = easeOut(prog(t, CERO + .45, CERO + .75)); if (k <= 0) return;
+  const f = `800 52px ${F_ROT}`, f2 = `600 26px ${F_MONO}`, w = medir(BANDERA, f) + medir('T−0', f2) + 70;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w * k, 84); ctx.clip(); ctx.fillStyle = C.acento; ctx.fillRect(x, y, w, 84);
+  texto(BANDERA, x + 22, y + 62, f, '#0A0B0C'); texto('T−0', x + w - 22, y + 58, f2, '#0A0B0C', 'right'); ctx.restore();
+}
+
+arrancar(frame => {
+  const t = frame / FPS; BOIL = Math.floor(frame / 4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  const M = t - CERO;
+  if (M < 0) {
+    const L = layoutEn(t);
+    for (const id in L) {
+      const c = L[id]; if (id === 'reloj') continue;
+      if (id === 'lista') { lista(t, c.r); continue; }
+      if (T_ABRE[id] !== undefined && t < T_ABRE[id]) { enEspera(c.r, t); continue; }
+      celdaCam(id, c.r, t);
+      const abre = T_ABRE[id] !== undefined ? T_ABRE[id] : c.desde;
+      if (abre !== undefined) borde(c.r, 1 - clamp((t - abre - .05) / .2));
+      else if (c.nueva) borde(c.r, c.nueva);
+    }
+    reloj(t, L.reloj.r);
+  } else {
+    // muchas en una (0,42 s): las celdas van a su tesela y se funden con la misma toma
+    const q = easeIO(M / T_MERGE), L = layoutEn(CERO - .001);
+    if (q < 1) {
+      for (const id in L) { if (id === 'reloj' || id === 'lista') continue; const a = L[id].r;
+        const tes = [(a[0] - MX) / ANCHO * W, (a[1] - TOP) / (BOT - TOP) * H, a[2] / ANCHO * W, a[3] / (BOT - TOP) * H], rr = a.map((v, j) => lerp(v, tes[j], q));
+        celdaCam(id, rr, t, 1 - clamp(q * 2));
+        ctx.save(); ctx.globalAlpha = q; ctx.beginPath(); ctx.rect(...rr); ctx.clip(); fondoCompleto(t); ctx.restore(); }
+      const lr = L.lista.r; ctx.save(); ctx.globalAlpha = 1 - q; lista(t, lr); ctx.restore();
+      ctx.save(); ctx.globalAlpha = q; ctx.beginPath(); ctx.rect(...lr.map((v, j) => lerp(v, [0, (lr[1] - TOP) / (BOT - TOP) * H, W, lr[3] / (BOT - TOP) * H][j], q))); ctx.clip(); fondoCompleto(t); ctx.restore();
+    } else fondoCompleto(t);
+    flash(.7 * Math.exp(-Math.max(0, M - T_MERGE * .5) / .11) * (M > T_MERGE * .2 ? 1 : 0), '255,248,236');
+    const rr = L.reloj.r.map((v, j) => lerp(v, PLACA[j], q));
+    reloj(t, rr);
+    bandera(t, MX, PLACA[1] - 110);
+    pintarMaqueta(FRASE, t, CERO + .9, .22, { col: C.texto, colClave: C.acento });
+  }
+});
+window.SONIDOS = [
+  { t: .4, tipo: 'golpe' }, { t: 1.0, tipo: 'desliz' }, { t: 2.4, tipo: 'desliz' },
+  ...Array.from({ length: SEGUNDOS }, (_, i) => ({ t: CERO - SEGUNDOS + i, tipo: 'pop' })),
+  { t: CERO - 2.5, tipo: 'swish' }, { t: CERO, tipo: 'golpe' }, { t: CERO + .45, tipo: 'swish' }, { t: CERO + .9, tipo: 'papel' },
+];
+</script>
+</body>
+</html>

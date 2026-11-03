@@ -188,7 +188,8 @@ def build():
             fail(f"{name}: sin notas en config (escribe notas reales, no genéricas)")
         dst = OUT / name
         excl = set(sc.get("exclude", []))
-        shutil.copytree(src, dst, ignore=shutil.ignore_patterns("node_modules", ".DS_Store", "__pycache__"))
+        shutil.copytree(src, dst, ignore=shutil.ignore_patterns(
+            "node_modules", ".DS_Store", "__pycache__", ".git", ".pytest_cache", ".venv", ".env", ".env.*"))
         for src_rel, dst_rel in sc.get("blank_json", []):
             p = src / src_rel
             if not p.exists():

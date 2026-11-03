@@ -1,8 +1,8 @@
 # CATÁLOGO DE FORMATOS DE CARRUSEL · FÓRMULA 100K
 
-> El catálogo que lee la skill `carrusel-formatos-f100k`. **67 fichas**: F01–F20 (referencias miradas slide por slide)
-> y G01–G47 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
-> G41–G47, el 3-nov-2026, desde outliers de Instagram vistos en 2+ cuentas). Cada ficha tiene una categoría (listas, tutoriales,
+> El catálogo que lee la skill `carrusel-formatos-f100k`. **76 fichas**: F01–F20 (referencias miradas slide por slide)
+> y G01–G56 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
+> G41–G56, el 3-nov-2026, desde outliers de Instagram). Cada ficha tiene una categoría (listas, tutoriales,
 > opinión, historias, casos, comparaciones, noticias, interactivos, estéticos).
 > Las métricas de las referencias son las que se leyeron al revisarlas; son de esas cuentas, no un resultado prometido.
 > Los prompts de imagen NO están probados con generación real todavía: son v1 razonados desde las referencias.
@@ -92,6 +92,15 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M54 | Hype vs. realidad: cada promesa medida en dos barras (opinión, no medición) + veredicto | Comentario + guardado |
 | M55 | Plan completo escrito en la nota del celular, como si tomaras su cuenta | Guardado + compartido |
 | M56 | Detalles que solo nota quien sabe (un detalle de oficio por slide, probado con su foto) | Guardado + seguidor |
+| M57 | Anatomía con medidas (una parte por slide, cada una con su número y su unidad) | Guardado |
+| M58 | La frase que te dijeron + fotos que la desmienten (el prejuicio en la portada, la prueba en imágenes sin texto) | Compartido + comentario |
+| M59 | Informe en máquina de escribir (tesis polémica + números + tabla de comparación + verdad incómoda) | Comentario + guardado |
+| M60 | Adelanto de la carta (la historia en fragmentos, se corta al empezar la solución) | Comentario + conexión |
+| M61 | Cuaderno de trabajo para rellenar (un día por slide, con casillas vacías) | Guardado + comentario |
+| M62 | Tres niveles en filas fijas (la misma categoría en 3 niveles; el último cierre queda vacío) | Compartido + comentario |
+| M63 | Consejo y fotograma que lo prueba (un consejo por slide + la captura de tu video que lo muestra hecho) | Guardado + seguidor |
+| M64 | La búsqueda exacta y lo que trae (una palabra para el buscador por slide + sus resultados reales) | Guardado + compartido |
+| M65 | La paleta que sale de un objeto (3 colores medidos en una foto real por slide, con su código y de dónde salen) | Guardado + compartido |
 
 ### Soportes (dónde vive)
 
@@ -154,6 +163,15 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S55 | Papel liso + dos barras lado a lado + tu recorte que reacciona en medio | A |
 | S56 | Tu foto de ambiente a sangre + captura plana de la app de Notas encima | A |
 | S57 | Foto o captura real a sangre, tranquila, + rótulo de 2–4 palabras en sans pesada clara encima | A |
+| S58 | Papel liso o cuadriculado + la medida enorme en sans pesada + flechas y notas a mano que la señalan en el propio slide | A |
+| S59 | Tu foto a sangre con la frase chica entre comillas + «…ajá»; después, imágenes reales grandes sin texto | A |
+| S60 | Hoja blanca de informe: titulares numerados en sans negra, cuerpo en letra de máquina, tabla gris y foto en B/N | A |
+| S61 | Collage de 4 fotos tuyas + tarjeta del post en la portada; carta en papel claro sobre color liso, nombre arriba y firma abajo | A |
+| S62 | Papel claro liso + cabecera «Día n:» en caja con línea que cruza + casillas, líneas y tablas vacías con ejemplo en gris | A |
+| S63 | Tres franjas horizontales fijas (clara, oscura, media), nivel grande a la izquierda y su imagen a la derecha | A |
+| S64 | Fondo liso + título en serif grande + 1–3 fotogramas verticales de tu video en tarjetas redondeadas | A |
+| S65 | Barra de búsqueda con lupa arriba + cuadrícula de 4–6 resultados reales debajo + 1 línea de para qué | A |
+| S66 | Papel liso claro + 2–3 manchas de color planas con su #hex arriba + la foto del objeto debajo | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -1502,7 +1520,7 @@ Sin fechas y sin premios: se empieza cuando quieras. Tutea.
 
 ---
 
-## LAS FICHAS DE NOVIEMBRE (G41–G47, sumadas el 3-nov-2026 desde Top Carousels)
+## LAS FICHAS DE NOVIEMBRE (G41–G56, sumadas el 3-nov-2026 desde Top Carousels)
 
 Salieron de la revisión de 146 outliers de Top Carousels: solo mecánicas que aparecen en 2+ cuentas distintas. Sumadas el 3-nov-2026.
 
@@ -1638,10 +1656,180 @@ Tutea.
 
 ---
 
+---
+
+### G48 · Anatomía con medidas (una parte por lámina, con su medida)
+- **Mecánica:** M57 · **Soporte:** S58 papel liso o cuadriculado + la medida enorme en sans pesada + flechas y notas a mano que señalan la medida en el propio slide · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @redonadida · **15.673 likes** · 184 comentarios · 10 slides · https://www.instagram.com/p/DOsMdr3jvyp/
+- **Anatomía:** 1) portada: «La anatomía de [lo que enseñas]» + un plano simple (la cosa dibujada en líneas, con sus partes numeradas) · 2-N) UNA parte por lámina: el nombre de la parte chico arriba, la MEDIDA enorme (un número con su unidad: px, palabras, segundos, pasos) y 1–2 líneas de por qué esa medida; una flecha a mano señala la medida aplicada en el mismo slide («esto mide 110 px») · cierre: la última parte + comenta la palabra.
+- **Por qué funciona:** convierte un oficio difuso («haz buenos carruseles») en números que se pueden copiar y comprobar. La lectora lo guarda como plantilla para la próxima vez que se siente a crear: no tiene que entender teoría, tiene que respetar 3 medidas. Y el slide se demuestra a sí mismo: la medida que enseña es la que usa.
+- **Error típico:** medidas inventadas o sin fuente («usa 37 px») o que no se pueden comprobar. Meter dos partes en una lámina. Explicar en párrafo en vez de dejar que el número mande. Que el propio slide rompa la medida que predica (una portada de 15 palabras que dice «máximo 7»).
+- **Prompt de guion:**
+```
+Arma un carrusel «anatomía con medidas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «La anatomía de [TEMA]» en máximo 8 palabras (dame 3 opciones) + las partes que vas a medir, numeradas.
+Slides 2 a N: UNA parte por slide. Para cada una: el nombre de la parte (2–3 palabras), la medida exacta con su unidad (px, palabras, segundos, pasos) y 1–2 líneas de por qué. Solo medidas que yo uso de verdad o que se pueden comprobar; si no sabes la mía, pregúntame y no la inventes.
+En cada slide, una nota a mano que señale la medida aplicada en ese mismo slide.
+Cierre: la última parte + «comenta [PALABRA] y te mando [REGALO]». Planta [PALABRA] chica en el pie de los slides anteriores.
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S58: papel o cuadrícula del kit, medida en Inter Tight 900 y flechas a mano en Caveat).
+
+---
+
+### G49 · La frase que te dijeron + fotos que la desmienten (la prueba no se explica, se ve)
+- **Mecánica:** M58 · **Soporte:** S59 portada con tu foto a sangre y la frase entre comillas chica al centro + «…ajá»; después, solo imágenes reales a gran tamaño, sin texto · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @suprabha.bhandi · **12.734 likes** · 22 comentarios · 10 slides · https://www.instagram.com/p/Dbf85Y5l1rh/
+- **Anatomía:** 1) portada: tu foto a sangre, tranquila, y encima, chica y centrada, la frase que te dijeron (o que tu clienta ideal se repite) entre comillas + una respuesta de 1–2 palabras con sorna («…ajá», «…claro») · 2-N) UNA imagen real por lámina que desmiente la frase, grande y sin explicación (a lo sumo un número chico) · cierre: la última prueba + comenta la palabra.
+- **Por qué funciona:** pone a la lectora del lado de quien tiene razón sin discutir: la frase es un prejuicio que ella también escuchó y las imágenes lo tumban solas. El silencio de las láminas obliga a mirar (más tiempo por slide) y el «…ajá» le da tono de complicidad, que es lo que se comenta y se comparte.
+- **Error típico:** explicar cada foto (mata la gracia). Imágenes que no desmienten nada o que son de otra persona. Una frase que nadie dice de verdad (hombre de paja). Texto de la portada grande y gritón: aquí va chico y casi susurrado.
+- **Prompt de guion:**
+```
+Arma un carrusel «la frase que te dijeron + fotos que la desmienten» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: dame 5 frases reales que mi clienta ideal escucha o se repite sobre [TEMA] (entre comillas, máximo 10 palabras) + una respuesta de 1–2 palabras con sorna. Elige la más común y dime por qué.
+Slides 2 a N: UNA imagen real mía por slide que desmiente la frase (mi trabajo, mi resultado, mi proceso). Dime qué imagen va en cada una y en qué orden, de la prueba más clara a la más fuerte. Sin texto en las imágenes; si una prueba necesita explicación, cámbiala. Nada inventado: si no tengo la imagen, no la pongas.
+Cierre: la última prueba + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S59: tu foto del kit en la portada y tus piezas reales a gran tamaño sobre fondo oscuro de mesa).
+
+---
+
+### G50 · Informe en máquina de escribir (tesis + pruebas + tabla)
+- **Mecánica:** M59 · **Soporte:** S60 hoja blanca de informe: titulares numerados en sans negra, cuerpo en letra de máquina de escribir, una tabla gris de comparación y una foto en blanco y negro · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @livmanish · **24.132 likes** · 888 comentarios · 6 slides · https://www.instagram.com/p/DYeF7rHk6WK/ (mismo molde: https://www.instagram.com/p/DY_lZ93k3By/, 11.647 likes)
+- **Anatomía:** 1) portada: la TESIS en una línea tipo «pov: [creencia que se cae]» sobre hoja blanca + tu recorte en blanco y negro abajo a un lado · 2) «1. los números.»: el dato que sostiene la tesis en letra de máquina, centrado, con una foto en B/N · 3) «2. [A] vs. [B].»: una tabla gris de 3 columnas que compara lo que se mide, y una caja negra con la conclusión en una línea · 4) «3. la verdad incómoda.»: la frase que pica, en 2–4 renglones + comenta la palabra. Pie igual en todas: tu usuario a la izquierda y una flecha a la derecha.
+- **Por qué funciona:** se lee como un informe y no como una opinión: numerado, con datos y con una tabla que la lectora puede revisar sola. La tesis polémica de la portada trae los comentarios (de acuerdo o en contra) y la tabla trae los guardados. La letra de máquina le da tono de «reporte serio» sin necesidad de diseño cargado.
+- **Error típico:** una tesis sin datos (queda en opinión). Cifras sin fuente o redondeadas a conveniencia. Tablas con demasiadas filas o con celdas que dicen lo mismo. Poner el remate antes de la prueba. Llenar la hoja: aquí el blanco es parte del informe.
+- **Prompt de guion:**
+```
+Arma un carrusel «informe en máquina de escribir» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: la tesis en una línea que tumbe una creencia de mi clienta, estilo «pov: …» (dame 3 opciones, máximo 10 palabras).
+Slide 2 «1. los números.»: los datos que la sostienen, SOLO cifras mías con fuente (dime de dónde sale cada una); si no tengo, pregúntame y no inventes.
+Slide 3 «2. [A] vs. [B].»: una tabla de 3 columnas y 4–5 filas (lo que se mide · A · B) + una conclusión de una línea.
+Slide 4 «3. la verdad incómoda.»: la frase que pica en 2–4 renglones cortos + «comenta [PALABRA] y te mando [REGALO]».
+Todo en minúsculas, frases cortas. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S60: hoja blanca, Space Mono del kit para el cuerpo, Inter Tight 800 para los titulares y tu recorte en B/N).
+
+---
+
+### G51 · Adelanto de la carta en recortes (fotos + carta en papel)
+- **Mecánica:** M60 · **Soporte:** S61 collage de 4 fotos tuyas + tarjeta del post en la portada; después la carta en papel claro sobre un color liso, con el nombre de la carta arriba y tu firma abajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @itshannahzhang · **6.181 likes** · 888 comentarios · 9 slides · https://www.instagram.com/p/DZBRvjVkme8/
+- **Anatomía:** 1) portada: collage de 4 fotos tuyas a sangre y, encima, la tarjeta del post como se ve en la app de la carta (título, bajada, tu nombre con tu foto chica y los botones de reaccionar) · 2-N) un fragmento de la carta por lámina: papel claro sobre un color liso, el nombre de la carta arriba, un subtítulo en negrita y 2–4 párrafos cortos en serif, tu firma abajo · cierre: el primer paso de la carta + comenta la palabra y te mando el resto.
+- **Por qué funciona:** se lee como una carta a una amiga, no como un carrusel: la primera persona y los detalles reales ganan la confianza, y cortar la carta justo cuando empieza la solución deja el vacío que se llena comentando. El collage de fotos de la portada le pone cara y vida a quien escribe antes de leer una sola línea.
+- **Error típico:** párrafos largos que nadie lee en el celular (más de 4 por lámina). Contar la solución entera en el carrusel (ya no hay razón para comentar). Una historia sin números ni detalles que se puedan comprobar. Fotos de banco en el collage en vez de las tuyas.
+- **Prompt de guion:**
+```
+Arma un carrusel «adelanto de la carta» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: el título de la carta en máximo 14 palabras, con un resultado o una cifra real mía (dame 3 opciones) + una bajada de 1 línea + qué 4 fotos mías van en el collage.
+Slides 2 a N-1: un fragmento por slide: un subtítulo en negrita + 2 a 4 párrafos cortos en primera persona, como si le escribiera a una amiga. Primero lo que pasó (con mis números reales), después lo que creí que era, y al final el giro. Nada inventado: si no tengo el dato, quítalo.
+Cierre: el paso 1 de la solución en 2 líneas + «comenta [PALABRA] y te mando [REGALO]». No cuentes los demás pasos.
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S61: tus fotos del carrete en el collage, la carta en papel claro con cinta) · para escribir la carta con tu voz, `guionizacion-humanizada`.
+
+---
+
+### G52 · Cuaderno de trabajo para rellenar (un día por lámina, con casillas)
+- **Mecánica:** M61 · **Soporte:** S62 papel claro liso + cabecera «Día n:» en caja con una línea que cruza la lámina + casillas, líneas y tablas vacías con un ejemplo en gris · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @matthgray · **7.544 likes** · 3.402 comentarios · 10 slides · https://www.instagram.com/p/DUqsNDLEdIG/
+- **Anatomía:** 1) portada: una etiqueta en caja arriba («CUADERNO DE TRABAJO») y la promesa al centro, en sans gruesa + serif itálica, con el plazo entre paréntesis en el color de acento · 2-N) un día por lámina: cabecera «Día n: [tarea]» en caja con la línea que cruza, una pregunta grande en gris, y 1–3 bloques para rellenar (rótulo en mayúsculas con un triángulo de color + casillas, líneas o tabla), una frase corta abajo y el número de página · cierre: el último día + casillas para marcar lo hecho + comenta la palabra.
+- **Por qué funciona:** no se lee, se USA: cada lámina es una hoja para completar, así que se guarda para hacerla con calma (y se le hace captura para llenarla en el celular). La cabecera repetida y el número de página le dan forma de cuaderno de verdad, y el plazo corto («en 3 días») baja el esfuerzo.
+- **Error típico:** llenar las casillas con la respuesta (deja de ser un cuaderno y se vuelve una lista). Casillas sin ejemplo: quien empieza no sabe qué poner (va uno en gris en la primera casilla). Más de 3 bloques por lámina. Días que no siguen un orden (cada uno se apoya en el anterior). Ponerle fechas.
+- **Prompt de guion:**
+```
+Arma un carrusel «cuaderno de trabajo» de [N+2] slides para [MI CLIENTA IDEAL] sobre [TEMA], para hacerlo en [N] días.
+Portada: «[promesa en máximo 6 palabras]» + «(en [N] días)» (dame 3 opciones).
+Slides 2 a N+1: un día por slide: «Día [n]: [tarea en máximo 4 palabras]» + una pregunta corta + 1 a 3 bloques para rellenar (rótulo en mayúsculas + casillas, líneas o tabla vacía) + un ejemplo corto en gris solo en la primera casilla + una frase de 1 línea abajo.
+Cada día se apoya en el anterior, del más fácil al más difícil.
+Cierre: el último día + 3 casillas para marcar lo que ya hizo + «comenta [PALABRA] y te mando [REGALO]».
+Sin fechas. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S62: casillas y tablas en HTML, ejemplo en letra a mano gris) · para la versión imprimible, el mismo HTML a PDF.
+
+---
+
+### G53 · Tres niveles en filas fijas (la misma categoría en 3 niveles)
+- **Mecánica:** M62 · **Soporte:** S63 tres franjas horizontales fijas de 3 tonos (clara, oscura, media), el nombre del nivel grande a la izquierda y lo que usa ese nivel a la derecha · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @classyboy.0 · **14.312 likes** · 275 comentarios · 5 slides · https://www.instagram.com/p/DTQb0J-CBIH/
+- **Anatomía:** todas las láminas tienen el MISMO armado: 3 franjas iguales, cada una con su nivel (de menos a más) en letra grande a la izquierda y, a la derecha, la imagen de lo que usa o hace ese nivel. Cambia solo la categoría (una por lámina, con un rótulo chico arriba) · 1) la categoría más reconocible · 2-N) una categoría por lámina, siempre en los mismos 3 niveles · cierre: la categoría-giro, donde el nivel más alto queda VACÍO (no lo necesita) + comenta la palabra.
+- **Por qué funciona:** se entiende sin leer: el ojo compara de arriba abajo y en un segundo se ubica en un nivel. Eso provoca el «yo soy la de arriba» que se comenta y se comparte con la amiga. El cierre vacío es el remate: el nivel alto se define por lo que dejó de usar.
+- **Error típico:** cambiar los niveles o el orden de las franjas entre láminas (se rompe la comparación). Poner texto largo en vez de la imagen de lo que usa cada nivel. Niveles que se burlan de quien empieza (tiene que dar ganas de subir, no vergüenza). Terminar sin el giro.
+- **Prompt de guion:**
+```
+Arma un carrusel «tres niveles» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Los 3 niveles (de menos a más), en 1 palabra cada uno, iguales en todas las slides: dame 3 opciones de trío.
+Slides 1 a N-1: una categoría por slide (rótulo de 1–2 palabras) y, para cada nivel, qué usa o qué hace en esa categoría + qué imagen real o captura lo muestra. Empieza por la categoría que mi clienta reconoce más rápido.
+Cierre: una categoría-giro en la que el nivel más alto queda vacío porque ya no lo necesita + «comenta [PALABRA] y te mando [REGALO]».
+Nada de burlarse del primer nivel. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S63: 3 franjas fijas; a la derecha capturas o mockups planos de la app de verdad, sin íconos).
+
+---
+
+### G54 · Consejo y fotograma que lo prueba (cada consejo trae la captura de tu video que lo muestra)
+- **Mecánica:** M63 · **Soporte:** S64 fondo liso + título en serif grande + 1–3 fotogramas verticales de tu video en tarjetas redondeadas · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @connornewell__ · **1.454 likes** · 917 comentarios · 10 slides · https://www.instagram.com/p/Dd7RgzVEpK8/
+- **Anatomía:** 1) portada: un fotograma tuyo a sangre + «Cómo [hacer el video] con [lo que usas]» en serif grande · 2) opcional: el resumen en 5–6 viñetas cortas · 3-N) UN consejo por lámina: título de 2–4 palabras + 1–2 líneas que dicen qué hacer + de 1 a 3 fotogramas de TU video que muestran ese consejo hecho · cierre: el último consejo + comenta la palabra.
+- **Por qué funciona:** el consejo deja de ser opinión: el fotograma es la prueba de que tú lo haces y de cómo se ve hecho. Quien lo lee puede copiarlo mirando la imagen, por eso lo guarda, y la imagen real le dice «esta persona sí graba», que es lo que la hace seguirte.
+- **Error típico:** fotogramas que no muestran el consejo (una cara bonita que no prueba nada). Usar capturas de videos de otros. Consejos largos que se leen como un artículo. Mezclar temas (grabar, editar y publicar en el mismo carrusel). Fotogramas con subtítulos o textos a medio cortar.
+- **Prompt de guion:**
+```
+Arma un carrusel «consejo y fotograma que lo prueba» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «Cómo [hacer X] con [lo que uso]» o «Lo que tiene [un X que funciona]» en máximo 8 palabras (dame 3 opciones).
+Slides 2 a N: UN consejo por slide: un título de 2 a 4 palabras + 1 o 2 líneas con lo que hay que hacer + qué fotograma de MIS videos lo prueba (el segundo exacto o la escena). Si no tengo el fotograma que lo muestra, cambia el consejo.
+Del consejo más fácil al más fino, todos sobre [TEMA].
+Cierre: el último consejo + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S64: fotogramas sacados de tus videos con ffmpeg, en tarjetas 9:16) · si el fotograma lleva subtítulos que estorban, elige otro segundo o recórtalo.
+
+---
+
+### G55 · La búsqueda exacta y lo que trae (la palabra que escribes en el buscador + los resultados reales)
+- **Mecánica:** M64 · **Soporte:** S65 barra de búsqueda con lupa arriba + cuadrícula de resultados reales debajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @sumincreates · **35.736 likes** · 22 comentarios · 6 slides · https://www.instagram.com/p/DV58MT9Dwhw/
+- **Anatomía:** 1) portada: tu foto o una imagen del estilo + «Busca esto en [buscador]» y la promesa (qué consigues) · 2-N) UNA búsqueda por lámina: la barra con la lupa y la palabra EXACTA (en el idioma en que funciona) + 4 a 6 resultados reales de esa búsqueda + 1 línea con para qué sirve · cierre: la última búsqueda + comenta la palabra.
+- **Por qué funciona:** es un atajo que se usa en 10 segundos: copias la palabra, la pegas y te sale lo mismo. Los resultados de verdad prueban que la palabra sirve, así que la gente guarda el carrusel como lista de búsquedas y se lo manda a la amiga que hace contenido.
+- **Error típico:** palabras genéricas que traen de todo («aesthetic», «fondos bonitos»). Resultados armados o generados que no salen de esa búsqueda. Resultados con caras de otras personas o marcas visibles. Traducir la palabra cuando el buscador funciona mejor en inglés (se pone tal cual y se explica en español). Más de 6 resultados por lámina.
+- **Prompt de guion:**
+```
+Arma un carrusel «la búsqueda exacta y lo que trae» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Buscador: [Pinterest / Google / el que uses].
+Portada: «Busca esto en [buscador]» + lo que consigue en máximo 8 palabras (dame 3 opciones).
+Slides 2 a N: UNA búsqueda por slide: la palabra exacta para escribir (en el idioma en que funciona mejor) + para qué sirve en 1 línea de máximo 6 palabras. Yo hago la búsqueda y pongo 4 a 6 resultados reales: si una palabra no trae buenos resultados, cámbiala.
+Del uso más básico al más específico, todos sobre [TEMA].
+Cierre: la última búsqueda + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S65: la barra se dibuja en HTML y los resultados son capturas reales de la búsqueda, sin caras de otras personas ni marcas).
+
+---
+
+### G56 · La paleta que sale de un objeto (los colores sacados de una foto real, con su código)
+- **Mecánica:** M65 · **Soporte:** S66 papel liso claro + 2–3 manchas de color planas arriba con su código + la foto del objeto debajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @reynardlowell · **43.139 likes** · 1.392 comentarios · 11 slides · https://www.instagram.com/p/DeKVaEMmHBw/
+- **Anatomía:** 1) portada: una foto con colores fuertes a sangre + «La paleta de [lo tuyo] está en [de dónde sale]» · 2-N) UN objeto por lámina: arriba 2 o 3 manchas de color planas con su código (#hex) y de qué parte salen, abajo la foto real del objeto · cierre: la última paleta + comenta la palabra.
+- **Por qué funciona:** convierte algo cotidiano en una decisión de marca lista para usar: el código se copia y se pega en Canva o en la IA. Ver de dónde sale cada color hace que la gente mire su propio carrete con otros ojos, lo guarda para su próxima pieza y comenta su foto.
+- **Error típico:** colores inventados que no salen de la foto (el código se mide en la foto). Manchas con brillo o degradado. Fotos de bancos de imágenes o de otras personas en vez de las tuyas. Más de 3 colores por lámina. Poner la foto chica y la paleta sin decir de qué parte sale.
+- **Prompt de guion:**
+```
+Arma un carrusel «la paleta que sale de un objeto» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «La paleta de [tu marca / tu contenido] está en [tu carrete / tu casa]» en máximo 9 palabras (dame 3 opciones).
+Slides 2 a N: UNA foto mía por slide: qué foto, qué 3 colores saco de ella (de qué parte exacta) y un nombre corto para la paleta (ej.: «gris, madera y crema»). Yo mido el código de cada color en la foto: no inventes códigos.
+Ordena de la paleta más tranquila a la más fuerte.
+Cierre: la última paleta + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S66: manchas planas con border-radius irregular, código en mono; el hex se mide en la foto con un cuentagotas o con canvas, promediando una zona chica).
+
+---
+
 ## EN OBSERVACIÓN (Top Carousels, 3-nov-2026)
 
-Mecánicas vistas en UNA sola cuenta: entran al recetario si aparecen en una segunda (regla del radar).
-- Informe en máquina de escribir (tesis + pruebas + tabla) · Anatomía con medidas (una parte por slide) · La frase que te dijeron + fotos que la desmienten · Adelanto del newsletter en recortes · Cuaderno de trabajo para rellenar · Tres niveles en filas fijas · Consejo y fotograma que lo prueba · La búsqueda exacta y lo que trae · La paleta que sale de un objeto.
+Vacía: las 9 mecánicas que estaban aquí (vistas en una sola cuenta) pasaron a G48–G56 el 3-nov-2026.
 
 ## MAPA DE SKILLS
 

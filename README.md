@@ -124,6 +124,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `roadmap-producto-f100k` — Roadmap de producto con Backward Design
 
 ### Video y visual
+- `plantillas-edicion-f100k` — Catálogo único de 179 plantillas de edición: dices «edita mi video con la plantilla «Pantalla dividida»» y sabe qué skill la hace, qué material pedir y cómo instalarla si falta
 - `editor-video-formula100k` — Edita automáticamente reels desde manifest
 - `graficos-de-video-formula100k` — Genera gráficos scrapbook para reels
 - `recursos-de-video-formula100k` — Caza B-roll real + IA para reels

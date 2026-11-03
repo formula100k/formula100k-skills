@@ -124,6 +124,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `roadmap-producto-f100k` — Roadmap de producto con Backward Design
 
 ### Video y visual
+- `hoja-de-personaje-f100k` — La hoja de personaje que fija cara, cuerpo y ropa antes de cualquier video con IA: tu hoja con tu ropa del día o un avatar nuevo para tu marca (referencias, signo distintivo, historia y presentación), partida en piezas y lista como Element
 - `celular-a-cine-f100k` — Tu clip del celular vuelve a filmarse como escena de película con IA (Higgsfield): hoja de personaje primero, lista de tomas por segundo y Seedance 2.5 frente a Wan 3.0 lado a lado
 - `plantillas-edicion-f100k` — Catálogo único de 180 plantillas de edición: dices «edita mi video con la plantilla «Pantalla dividida»» y sabe qué skill la hace, qué material pedir y cómo instalarla si falta
 - `editor-video-formula100k` — Edita automáticamente reels desde manifest

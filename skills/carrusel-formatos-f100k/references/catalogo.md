@@ -1,8 +1,8 @@
 # CATÁLOGO DE FORMATOS DE CARRUSEL · FÓRMULA 100K
 
-> El catálogo que lee la skill `carrusel-formatos-f100k`. **76 fichas**: F01–F20 (referencias miradas slide por slide)
-> y G01–G56 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
-> G41–G56, el 3-nov-2026, desde outliers de Instagram). Cada ficha tiene una categoría (listas, tutoriales,
+> El catálogo que lee la skill `carrusel-formatos-f100k`. **84 fichas**: F01–F20 (referencias miradas slide por slide)
+> y G01–G64 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
+> G41–G64, el 3-nov-2026, desde outliers de Instagram). Cada ficha tiene una categoría (listas, tutoriales,
 > opinión, historias, casos, comparaciones, noticias, interactivos, estéticos).
 > Las métricas de las referencias son las que se leyeron al revisarlas; son de esas cuentas, no un resultado prometido.
 > Los prompts de imagen NO están probados con generación real todavía: son v1 razonados desde las referencias.
@@ -101,6 +101,14 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M63 | Consejo y fotograma que lo prueba (un consejo por slide + la captura de tu video que lo muestra hecho) | Guardado + seguidor |
 | M64 | La búsqueda exacta y lo que trae (una palabra para el buscador por slide + sus resultados reales) | Guardado + compartido |
 | M65 | La paleta que sale de un objeto (3 colores medidos en una foto real por slide, con su código y de dónde salen) | Guardado + compartido |
+| M66 | Historia en grabados (una escena real por lámina, el desenlace con su cifra y la lección al final) | Guardado + compartido |
+| M67 | Tour de una sola herramienta (analogía en la portada + una pantalla real por lámina con su para qué) | Guardado + compartido |
+| M68 | Pares que combinan (una dupla por slide: dos imágenes reales que funcionan juntas, cada una con su nombre) | Guardado + comentario |
+| M69 | Piedra, papel o tijera (el error común en la tijera pierde contra la decisión en la piedra; solo cambian los rótulos) | Compartido + comentario |
+| M70 | Tus ideas como videos de YouTube (cada lámina es una tarjeta de video con título en primera persona, vistas reales y un comentario fijado tuyo) | Guardado + seguidor |
+| M71 | Tu anécdota en viñetas de cómic (frase-lección en portada + tu historia real en viñetas con narrador y globos hasta la moraleja) | Compartido + conexión |
+| M72 | La misma frase, dos lecturas (la misma frase arriba y abajo; dos imágenes le cambian el sentido, de la derrota a la libertad) | Compartido + comentario |
+| M73 | Carta «no quiero / sí quiero» (portada «confesiones de X a Y» + un malentendido aclarado por slide) | Guardado + comentario |
 
 ### Soportes (dónde vive)
 
@@ -172,6 +180,14 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S64 | Fondo liso + título en serif grande + 1–3 fotogramas verticales de tu video en tarjetas redondeadas | A |
 | S65 | Barra de búsqueda con lupa arriba + cuadrícula de 4–6 resultados reales debajo + 1 línea de para qué | A |
 | S66 | Papel liso claro + 2–3 manchas de color planas con su #hex arriba + la foto del objeto debajo | A |
+| S67 | Papel claro + texto corto arriba + grabado a línea en un cuadro con filete + pie en serif itálica | A |
+| S68 | Portada con tu foto y la analogía enorme + papel liso con la función arriba, la captura real en marco de dispositivo y «para qué» abajo | A |
+| S69 | Lámina partida en dos fotos reales a sangre (arriba / abajo) + nombre en serif mayúscula sobre cada una + franja de papel en la costura | A |
+| S70 | La misma foto en todas las slides: dos manos enfrentadas (tijera / piedra) sobre pared lisa con su sombra + un rótulo serif sobre cada mano | A |
+| S71 | Tarjeta de video plana a sangre: foto arriba + barra de avance + título + vistas + canal con botón + botones + comentario fijado | A |
+| S72 | Portada con frase-lección enorme y tu personaje dibujado + láminas de 3–6 viñetas con marco negro, cajas de narrador y globos | A |
+| S73 | Lámina partida en dos mitades a sangre con una foto cada una + la misma frase en una etiqueta de papel en las dos | A |
+| S74 | Papel liso claro + hoja de carta con renglones y cinta al centro: el «no quiero» en negrita arriba y el «solo quiero» en serif debajo | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -1520,7 +1536,7 @@ Sin fechas y sin premios: se empieza cuando quieras. Tutea.
 
 ---
 
-## LAS FICHAS DE NOVIEMBRE (G41–G56, sumadas el 3-nov-2026 desde Top Carousels)
+## LAS FICHAS DE NOVIEMBRE (G41–G64, sumadas el 3-nov-2026 desde Top Carousels)
 
 Salieron de la revisión de 146 outliers de Top Carousels: solo mecánicas que aparecen en 2+ cuentas distintas. Sumadas el 3-nov-2026.
 
@@ -1824,6 +1840,163 @@ Cierre: la última paleta + «comenta [PALABRA] y te mando [REGALO]».
 Tutea.
 ```
 - **Fabrica:** `carrusel-formatos-f100k` (HTML libre S66: manchas planas con border-radius irregular, código en mono; el hex se mide en la foto con un cuentagotas o con canvas, promediando una zona chica).
+
+---
+
+### G57 · Historia en grabados (una escena por lámina hasta la lección)
+- **Mecánica:** M66 · **Soporte:** S67 papel claro + texto corto centrado arriba + un grabado a línea (rayado, cruzado, punteado) en un cuadro con filete fino + pie en serif itálica · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @sahilbloom · **114.232 likes** · 462 comentarios · 14 slides · https://www.instagram.com/p/DVTcOfEjmum/ · también @jasonrewired_ · 21.716 likes · 54 comentarios · 14 slides · https://www.instagram.com/p/DeIedMcE4kJ/
+- **Anatomía:** 1) portada: el nombre de la historia en letra enorme + una bajada con la promesa («por qué…») + un grabado grande de la escena clave, sin marco · 2-N) UNA escena por lámina: arriba 1 o 2 frases de la historia (quién, cuándo, qué pasó), al centro el grabado de ese momento en un cuadro con filete, abajo la frase que empuja a la siguiente · cierre: el desenlace (con su cifra solo si la fuente la da) + la lección en una frase + comenta la palabra. Sirve igual para la historia de una marca famosa, la de una repostera que empezó en su cocina o la de una clienta de una coach, siempre que sea real.
+- **Por qué funciona:** se lee como un libro ilustrado: cada lámina deja la historia a medias y el grabado hace que se sienta antigua y verdadera, así que nadie se va antes del final. La lección llega cuando ya te importa el desenlace, y la gente lo guarda y lo manda «para que veas esto».
+- **Error típico:** historias inventadas o «de internet» sin fuente (tiene que ser real y verificable: cita de dónde salen la fecha y la cifra). Usar una cifra que dijo la propia marca como si fuera un dato auditado. Meter la lección en la portada o a la mitad. Más de 2 frases por lámina. Grabados de caras de personas famosas: dibuja objetos, lugares y manos. Ilustraciones de colores o en 3D en vez de línea de grabado.
+- **Prompt de guion:**
+```
+Arma un carrusel «historia en grabados» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Historia: un caso REAL y verificable de una marca o persona que vendió gracias a su contenido (de mi rubro, [MI RUBRO], o de otro). Dime la fuente de cada fecha y cada cifra; si un dato no tiene fuente, no lo uses. Si la historia es mía o de una clienta mía, usa solo cifras que yo te dé.
+Portada: el nombre de la historia en máximo 5 palabras (dame 3 opciones) + una bajada «Por qué [lección en positivo]» en máximo 9 palabras.
+Slides 2 a N-1: UNA escena por slide, en orden: 1 o 2 frases de máximo 25 palabras en total + qué se ve en el grabado (objetos y lugar, sin caras de famosos) + un pie de máximo 12 palabras que deje la escena a medias.
+Cierre: el desenlace con su fecha (y su cifra solo si tiene fuente) + la lección en máximo 12 palabras + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S67: el grabado se dibuja en SVG con patrones de rayado, cruzado y punteado y un leve temblor de trazo con feTurbulence; o se genera como «engraving, black ink on white» y se pone sobre el papel).
+
+---
+
+### G58 · Tour de una sola herramienta (una pantalla por lámina, con su para qué)
+- **Mecánica:** M67 · **Soporte:** S68 portada con tu foto usando la herramienta y la analogía en letra enorme + láminas de papel liso con el nombre de la función arriba y la captura real de esa pantalla en un marco de dispositivo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @theedgarr · **15.902 likes** · 39 comentarios · 6 slides · https://www.instagram.com/p/DY5JAb3FWXk/ · también @digibutterflyplanners · 13.422 likes · 65 comentarios · 5 slides · https://www.instagram.com/p/DdrzojXkTPh/
+- **Anatomía:** 1) portada: tu foto con la herramienta a la vista + «te muestro el [algo que todos conocen] de [lo tuyo]» (la analogía en letra enorme) · 2-N) UNA pantalla por lámina: arriba qué haces ahí en una frase, al centro la captura real de esa pantalla, abajo «para qué» en una línea · cierre: la última pantalla + comenta la palabra. Sirve para cualquier herramienta que uses de verdad: la agenda de citas de una fotógrafa, el sistema de pedidos de una repostera, la app de seguimiento de una coach.
+- **Por qué funciona:** la analogía explica la herramienta en dos palabras («el GPS de», «el Duolingo de») y cada lámina es una pantalla que la gente reconoce: se siente como ver la app por dentro antes de bajarla. Como cada captura trae su para qué, se guarda para configurarla después y se manda a quien la necesita.
+- **Error típico:** inventar pantallas o usar mockups de la app que no son los reales. Más de una función por lámina. Capturas tan chicas que no se leen. Decir solo qué hace el botón y no para qué te sirve. Una analogía que necesita explicación. Mostrar precios o créditos en la captura sin querer.
+- **Prompt de guion:**
+```
+Arma un carrusel «tour de una sola herramienta» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Herramienta: [HERRAMIENTA] (la que yo uso de verdad; yo saco las capturas).
+Portada: «te muestro el [algo que todos conocen] de [lo tuyo]» en máximo 8 palabras (dame 3 analogías distintas) + qué foto mía va (usando la herramienta).
+Slides 2 a N: UNA pantalla por slide, en el orden en que se usa: qué captura saco + qué haces ahí en máximo 7 palabras + «para qué» en máximo 18 palabras, dicho como resultado para [MI CLIENTA IDEAL].
+Cierre: la última pantalla + «comenta [PALABRA] y te mando [REGALO]».
+No inventes funciones: usa solo lo que se ve en mis capturas. Si mencionas un resultado, usa solo cifras que yo te dé. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S68: la captura va recortada en un marco oscuro de esquinas redondas con `overflow:hidden`; las capturas se sacan de la app real, con el atajo de captura del celular o de la compu, y se recortan sin redibujarlas).
+
+---
+
+### G59 · Pares que combinan (una dupla por lámina: dos imágenes reales, una arriba y otra abajo, con su nombre)
+- **Mecánica:** M68 · **Soporte:** S69 lámina partida en dos fotos reales a sangre (arriba / abajo), cada una con su nombre en serif mayúscula + franja de papel en la costura con por qué combinan · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @chef.marykh · **81.270 likes** · 155 comentarios · 8 slides · https://www.instagram.com/p/DbC7hAuERJB/ · y @matterlore · **10.302 likes** · 48 comentarios · 10 slides · https://www.instagram.com/p/Dc9A2AuCgUP/
+- **Anatomía:** 1) portada: la primera dupla + el nombre de la serie («Duplas que [venden / funcionan]») en una franja de papel entre las dos fotos · 2-N) UNA dupla por lámina: arriba una imagen, abajo la que combina con ella, cada una con su nombre corto y, en la costura, una línea a mano con por qué juntas funcionan (ej.: una repostera, «TUS MANOS» + «TU PASTEL»; una coach, «TU SESIÓN» + «SU MENSAJE»; una fotógrafa, «TU CÁMARA» + «TU GALERÍA») · cierre: la última dupla + comenta la palabra.
+- **Por qué funciona:** el par se entiende en medio segundo y da ganas de decir «esa no la había pensado». Cada lámina es una receta corta que se copia tal cual, la serie se puede seguir con «parte 2» y la gente comenta cuál dupla le falta o cuál probaría primero.
+- **Error típico:** duplas que no se explican solas (si hay que leer un párrafo para entender por qué combinan, no es par). Nombres largos encima de la foto. Imágenes de banco o íconos en vez de tus fotos, tu producto y las pantallas reales de lo que nombras. Más de una dupla por lámina.
+- **Prompt de guion:**
+```
+Arma un carrusel «pares que combinan» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Nombre de la serie: dame 3 opciones de máximo 4 palabras (ej.: «Duplas que venden»).
+Slides 1 a N: UNA dupla por slide: nombre de arriba y nombre de abajo (máximo 3 palabras cada uno, empiezan con «tu»), qué foto mía, de mi producto o qué captura real va en cada mitad, y una línea de máximo 8 palabras con por qué juntas funcionan.
+Ordena de la dupla más fácil de copiar hoy a la más estratégica.
+La portada lleva la primera dupla + el nombre de la serie. Cierre: la última dupla + «comenta [PALABRA] y te mando [REGALO]».
+Nada de imágenes de banco: si una mitad es una pantalla (tu página, un mensaje, tu agenda), es la captura de verdad. Usa solo cifras que yo te dé; si no tienes una, no la pongas. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S69: dos `.mitad` con object-fit cover, nombre en Instrument Serif mayúscula sobre una caja plana tinta con borde papel, costura de papel de 70 px con la línea en Caveat).
+
+---
+
+### G60 · Piedra, papel o tijera (el error pierde, la decisión gana; la misma foto en todas)
+- **Mecánica:** M69 · **Soporte:** S70 la MISMA foto en todas las láminas (dos manos enfrentadas sobre una pared lisa, tijera a la izquierda y piedra a la derecha, con su sombra) + un rótulo serif encima de cada mano · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @savvy_stacey · **3.922 likes** · 42 comentarios · 5 slides · https://www.instagram.com/p/Ddtz9nBkalk/
+- **Anatomía:** 1) portada: la foto de las dos manos + «Piedra, papel o tijera» y de qué va (ej.: «versión: contenido que vende») + la primera ronda · 2-N) la MISMA foto, idéntica, y solo cambian los dos rótulos: sobre la tijera el error común, sobre la piedra la decisión que le gana (ej.: una repostera, «Hornear sin pedidos confirmados» / «Abrir pedidos y luego hornear»; una coach, «Regalar sesiones para que te conozcan» / «Cobrar desde la primera sesión»; una fotógrafa, «Mostrar solo fotos terminadas» / «Mostrar cómo dirige la sesión») · cierre: la última ronda + comenta la palabra.
+- **Por qué funciona:** la piedra siempre le gana a la tijera, así que la foto da el veredicto sin explicar nada. Como la imagen no cambia, el ojo va directo a los rótulos y cada pasada se lee en un segundo. La gente se reconoce en la tijera, lo guarda y lo manda a la amiga que «hace exactamente eso».
+- **Error típico:** cambiar la foto o la posición de las manos entre láminas (se pierde el juego). Rótulos largos que tapan las manos. Poner el error sobre la piedra (el que pierde es siempre la tijera). Usarlo para consejos de salud o de finanzas personales. Errores que nadie comete, puestos solo para quedar bien.
+- **Prompt de guion:**
+```
+Arma un carrusel «piedra, papel o tijera» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «Piedra, papel o tijera» + «versión: [tu tema]» en máximo 6 palabras.
+Slides 1 a N: UNA ronda por slide: en TIJERA el error que tu clienta comete hoy y en PIEDRA la decisión que le gana, cada uno en máximo 7 palabras, con un verbo al inicio.
+Que cada error sea algo que de verdad hace (si no se reconoce, no comenta).
+Ordena del error más común al más caro.
+Cierre: la última ronda + «comenta [PALABRA] y te mando [REGALO]».
+Usa solo cifras que yo te dé; si no tienes una, no la pongas.
+La foto es la misma en todas: solo cambian los dos rótulos. Nada de salud ni de finanzas personales. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S70: papel liso, las dos manos (tu foto recortada en PNG o, mientras tanto, un dibujo de línea en SVG) en la misma posición en todas las slides, sombra con drop-shadow desplazado hacia abajo; rótulos en Instrument Serif con la etiqueta «TIJERA · PIERDE» / «PIEDRA · GANA» en Space Mono).
+
+---
+
+### G61 · Tus ideas como videos de YouTube (una tarjeta de video por lámina)
+- **Mecánica:** M70 · **Soporte:** S71 tarjeta de video plana a sangre: foto arriba con barra de avance, título, vistas, canal con botón, botones y un comentario fijado · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @thejosephplacido · **174.463 likes** · 277 comentarios · 4 slides · https://www.instagram.com/p/DbtluypE9IX/ (mismo molde: https://www.instagram.com/p/Dc8fjmICAkM/, 243.528 likes)
+- **Anatomía:** 1) portada = el primer «video»: tu foto arriba, la barra de avance a un tercio y el título en primera persona con el resultado (el acto + lo que pasó) · 2-N) un «video» por lámina, en orden: misma tarjeta, otra foto, otro título y la barra que avanza; abajo un comentario fijado tuyo con la lección en una frase · cierre: el «video» que falta («el próximo es el tuyo»), con 0 vistas y el comentario fijado que dice «comenta [PALABRA]».
+- **Por qué funciona:** el ojo ya sabe leer una tarjeta de video: título que promete, vistas que prueban y un comentario que remata. Cada momento de tu recorrido se vuelve un episodio que da ganas de «abrir», y la barra que avanza de lámina en lámina hace sentir que la serie se termina al final. El comentario fijado es el lugar natural para la lección y para el CTA.
+- **Error típico:** inventar vistas o comentarios de terceros (las cifras son tuyas y reales; el comentario es TUYO, fijado). Copiar el logo de la plataforma o su rojo exacto. Títulos que describen en vez de contar el acto («Mi video de tortas» en vez de «Mostré cómo decoro una torta por dentro y me pidieron 3 para el fin de semana»; «Mi sesión de coaching» en vez de «Conté el error que me costó una clienta y me escribieron para contarme el suyo»). Cambiar el molde entre láminas: la tarjeta es idéntica, solo cambian foto, título, cifras y comentario.
+- **Prompt de guion:**
+```
+Arma un carrusel «tus ideas como videos de YouTube» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Cada slide es UNA tarjeta de video: título en primera persona (máximo 14 palabras: el acto + lo que pasó, ej.: «Mostré cómo preparo una sesión de fotos por dentro y [lo que pasó de verdad]»), la línea de vistas y un comentario fijado mío con la lección en una frase.
+Usa SOLO cifras reales que yo te dé (vistas, comentarios, seguidores, ventas); si no hay cifra, pon «reel de Instagram» sin número. No inventes comentarios de otras personas.
+Ordena los «videos» como un recorrido: del primero al más reciente.
+Dime qué foto mía va arriba en cada slide.
+Cierre: «El próximo video es [lo de mi clienta ideal]», 0 vistas, y en el comentario fijado «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S71: tarjeta plana sin brillos, foto a sangre arriba con `object-fit:cover`, barra de avance en el acento de tu marca que crece de lámina en lámina, íconos de botones en SVG de línea, sin logo de la plataforma).
+
+---
+
+### G62 · Tu anécdota en viñetas de cómic (frase-lección + viñetas hasta la moraleja)
+- **Mecánica:** M71 · **Soporte:** S72 portada con la frase-lección en grande y tu personaje dibujado + láminas de viñetas con marco negro, textos de narrador y globos · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @thetinywisdom · **66.957 likes** · 278 comentarios · 14 slides · https://www.instagram.com/p/DTfSUAtCem6/ (mismo molde: https://www.instagram.com/p/DeW6BKtCSPp/, 39.909 likes)
+- **Anatomía:** 1) portada: la frase-lección en letra enorme (la moraleja dicha como verdad incómoda) + tu personaje dibujado haciendo lo que la frase critica · 2-N) tu anécdota real en viñetas: 3 a 6 por lámina, con cajas de narrador («Por mucho tiempo…», «Hasta que…», «Entonces…») y globos de diálogo o de pensamiento; una lámina para el problema, otra para el giro · cierre: la viñeta de lo que haces ahora + la moraleja en grande + comenta la palabra.
+- **Por qué funciona:** el cómic baja la guardia: se lee como entretenimiento y no como consejo. La portada promete una lección y las viñetas la ganan con una historia que la gente reconoce como suya («yo también hago eso»), por eso la comentan y la mandan. Las cajas de narrador le dan ritmo de historia (antes, quiebre, después) sin tener que escribir párrafos.
+- **Error típico:** una anécdota inventada o «de un amigo» (tiene que ser tuya y real, con su cifra si la tiene: la repostera que horneaba todo lo que le pedían, la coach que regalaba sesiones, la fotógrafa que cobraba por hora). Viñetas llenas de texto: cada una dice una sola cosa. Dibujar caras de famosos o de gente real que no eres tú. Soltar la moraleja al principio y en el cierre con palabras distintas: es la misma frase, la portada la plantea y el cierre la confirma.
+- **Prompt de guion:**
+```
+Arma un carrusel «mi anécdota en viñetas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: la frase-lección en máximo 7 palabras, dicha como verdad incómoda (dame 3 opciones) + qué hago yo dibujada en la portada.
+Slides 2 a N-1: mi anécdota REAL en viñetas, de 3 a 6 por slide. Por cada viñeta: texto de narrador o globo (máximo 14 palabras) + qué se ve dibujado. Orden: cómo lo hacía antes → el momento en que me di cuenta (con la cifra real si la hay) → qué cambié.
+Usa solo cifras que yo te dé: si no te di una cifra, cuéntalo sin número.
+Cierre: una viñeta de lo que hago ahora + la moraleja en grande (la misma idea de la portada) + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S72: viñetas con borde negro de 5 px, personaje dibujado en SVG de línea simple, plano y sin brillos, con la ropa en el acento de tu marca; textos en Caveat; la portada con la frase en Inter Tight 900 + Instrument Serif itálica).
+
+---
+
+### G63 · La misma frase, dos lecturas (arriba y abajo, dos imágenes que la cambian)
+- **Mecánica:** M72 · **Soporte:** S73 lámina partida en dos mitades a sangre, una foto en cada una + la MISMA frase encima de las dos · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @victorianpoetry · **783.137 likes** · 6.642 comentarios · 7 slides · https://www.instagram.com/p/DdsZXLtDalO/
+- **Anatomía:** 1) portada: ya es el primer par, con la frase más reconocible de tu clienta repetida arriba y abajo, cada mitad con su foto · 2-N) UNA frase por lámina: arriba la lectura que la hunde (foto que pesa), abajo la lectura que la suelta (foto que respira), con las mismas palabras exactas (ej.: una repostera, «Me dijeron que es caro.» → «…y bajé mi precio» / «…no era mi clienta»; una coach, «Nadie me ve.» → «…y me escondo» / «…y pruebo sin miedo»; una fotógrafa, «Publiqué y nadie compró.» → «…entonces no sirvo» / «…ya sé qué no repetir») · cierre: el último par en dos mitades más bajas + «¿cuál de las dos te dices tú?» + comenta la palabra.
+- **Por qué funciona:** nadie lee una frase sola: la lee con lo que tiene delante. Ver la misma frase cambiar de sentido con solo cambiar la imagen hace que tu clienta se reconozca en la de arriba y quiera ser la de abajo, sin que nadie le dé un sermón. Se comparte porque cada lámina sirve como mensaje para la amiga que está en la de arriba, y se comenta con «yo soy la de arriba».
+- **Error típico:** cambiar una palabra entre las dos mitades (si la frase no es idéntica, se pierde el truco). Fotos que no cuentan nada y dejan todo el peso en el texto. Frases de autoayuda que no tienen que ver con lo que vendes. Explicar la lección con un párrafo: como mucho un pie de 3–5 palabras por mitad.
+- **Prompt de guion:**
+```
+Arma un carrusel «la misma frase, dos lecturas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las fotos que tengo: [LISTA DE MIS FOTOS].
+Dame [N] frases cortas (de 2 a 5 palabras) que mi clienta se dice cuando intenta [LO QUE MI CLIENTA QUIERE LOGRAR]; tienen que poder leerse como derrota y como libertad sin cambiar ni una palabra.
+Por cada frase: cuál de mis fotos va arriba (la lectura que pesa) y cuál abajo (la que respira), y un pie de máximo 5 palabras para cada mitad que empiece con «…».
+Ordena de la frase más común a la más íntima. La primera va en la portada.
+Cierre: el último par + «¿Cuál de las dos te dices tú?» + «comenta [PALABRA] y te mando [REGALO]».
+Usa solo cifras que yo te dé. Tutea. Nada de frases de autoayuda genéricas.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S73: dos `div` de 671 px con la foto a sangre y una raya de papel de 8 px entre ellas; la frase en una etiqueta de papel plana, idéntica en las dos mitades; el pie en un papelito blanco, en el acento de tu marca arriba y en tinta abajo).
+
+---
+
+### G64 · Carta «no quiero / sí quiero» (cada lámina aclara un malentendido)
+- **Mecánica:** M73 · **Soporte:** S74 una foto real de tu lugar o tu producto de fondo (algo oscurecida) + una hoja de carta al centro con cinta y una polaroid con lo que nombra la lámina · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @victoriamiretti · **8.413 likes** · 83 comentarios · 15 slides · https://www.instagram.com/p/DcctsFhjVrE/
+- **Anatomía:** 1) portada: «Confesiones de [quién] a [quién]», con las dos partes resaltadas (ej.: de la novia a su fotógrafa; de la paciente a su nutricionista; de la clienta a la repostera que no se atreve a venderle) · 2-N) UN malentendido por lámina: en negrita «No quiero [lo que la otra persona teme]» y debajo, en otra letra, «Solo quiero [lo que de verdad busco]» con el porqué en 1 o 2 frases · cierre: la última confesión firmada + comenta la palabra.
+- **Por qué funciona:** pone en palabras lo que la otra parte nunca dice en voz alta. Si la carta es de tu clienta a ti, le quita a quien te lee el miedo a vender (o a comprar) con la voz de la otra parte: «no me molesta que me vendas, me molesta no entender qué gano». Se guarda para releerla antes de publicar y se comenta con «esto me pasa».
+- **Error típico:** que el «no quiero» sea un reproche y no un miedo real de la otra parte. Párrafos largos de 6 líneas por lámina (máximo 2 frases debajo). Presentarla como testimonio real de una clienta con nombre: es una carta en su voz, no una cita. Mezclar dos malentendidos en la misma lámina.
+- **Prompt de guion:**
+```
+Arma un carrusel «carta: no quiero / sí quiero» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Lo que mis clientas me dicen o me preguntan: [SUS DUDAS Y QUEJAS REALES].
+Portada: «Confesiones de [quién habla] a [quién la lee]» en máximo 12 palabras (dame 3 opciones; ej.: de la novia a su fotógrafa, de la paciente a su nutricionista).
+Slides 2 a N: un malentendido por slide: «No quiero [lo que [MI CLIENTA IDEAL] cree que molesta]» en máximo 10 palabras + «Solo quiero [lo que de verdad se busca]» con el porqué en 1 o 2 frases.
+Ordena del malentendido más común al más íntimo. Es una carta en su voz, no un testimonio: sin nombres. Usa solo cifras que yo te dé.
+Cierre: la última confesión firmada («— [quién habla]») + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S74: foto real de fondo, hoja blanca con renglones suaves y cinta en el acento de tu marca al centro, y una polaroid con tu foto; «No quiero» en sans 900, «Solo quiero» en serif itálica con la parte clave en negrita; firma a mano en el acento).
 
 ---
 

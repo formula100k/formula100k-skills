@@ -1,4 +1,4 @@
-# Prompts por plataforma · 76 fichas de carrusel
+# Prompts por plataforma · 84 fichas de carrusel
 > Sale del catálogo (`catalogo.md`). Las capturas de las referencias no vienen en este paquete: usa el visual detallado y, si la ficha lo trae, el enlace público del ejemplo.
 
 > GENERADO por el equipo de FÓRMULA 100K. No lo edites: edita la fuente y vuelve a correrlo.
@@ -12848,6 +12848,1401 @@ Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuad
 Composición: arriba el número y el nombre de la paleta; debajo 3 manchas planas de forma irregular, cada una con su #hex y de qué parte sale; abajo la foto real en polaroid.
 (Si es la última slide, la composición es: la última paleta igual que las del medio, con la foto más chica, + la orden «comenta [PALABRA]» en una caja plana.)
 TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G57 · Historia en grabados (una escena por lámina hasta la lección)
+
+**Ejemplo:** @sahilbloom · https://www.instagram.com/p/DVTcOfEjmum/ · 114.232 likes · 462 comentarios · 14 slides (es de psicología: una parábola antigua contada en grabados lámina por lámina hasta el estudio que la vuelve lección)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 96 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas
+TIPOGRAFÍA:
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 124 px; centrado, 3 renglones, el verbo en serif
+- bajada de portada: Inter Tight 700, 42 px; gris, «Por qué…»
+- texto de la escena: Inter Tight 500 / 800, 43 px; centrado arriba, máximo 2 frases, lo clave en negrita
+- pie de la escena: Instrument Serif itálica 400, 50 px; bajo el cuadro, deja la escena a medias
+- firma: Inter Tight + Caveat 700, 26 px; handle a la izquierda, nombre de la serie a mano a la derecha
+PORTADA: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+SLIDES DEL MEDIO: arriba 1 o 2 frases centradas con lo clave en negrita; al centro el grabado de ESA escena en un cuadro horizontal con filete negro; debajo un pie en serif itálica que deja la escena a medias; abajo la firma con un filete.
+CIERRE: arriba el desenlace con lo clave resaltado (la cifra solo si tiene fuente); un grabado más chico; la lección en letra grande con una parte en serif; la caja plana «comenta [PALABRA]»; la fuente de los datos en letra de máquina (o en el texto del post).
+ELEMENTOS GRÁFICOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+EVITA: historias sin fuente; la lección antes del final; más de 2 frases por lámina; caras de famosos; ilustraciones en 3D, con brillo o degradados (el color va en rellenos planos bajo el trazo).
+```
+
+> Cada slide lleva poco texto (máx. ~25 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «historia en grabados» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Historia: un caso REAL y verificable de una marca o persona que vendió gracias a su contenido (de mi rubro, [MI RUBRO], o de otro). Dime la fuente de cada fecha y cada cifra; si un dato no tiene fuente, no lo uses. Si la historia es mía o de una clienta mía, usa solo cifras que yo te dé.
+Portada: el nombre de la historia en máximo 5 palabras (dame 3 opciones) + una bajada «Por qué [lección en positivo]» en máximo 9 palabras.
+Slides 2 a N-1: UNA escena por slide, en orden: 1 o 2 frases de máximo 25 palabras en total + qué se ve en el grabado (objetos y lugar, sin caras de famosos) + un pie de máximo 12 palabras que deje la escena a medias.
+Cierre: el desenlace con su fecha (y su cifra solo si tiene fuente) + la lección en máximo 12 palabras + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G57 (Historia en grabados (una escena por lámina hasta la lección)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 96 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas
+TIPOGRAFÍA:
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 124 px; centrado, 3 renglones, el verbo en serif
+- bajada de portada: Inter Tight 700, 42 px; gris, «Por qué…»
+- texto de la escena: Inter Tight 500 / 800, 43 px; centrado arriba, máximo 2 frases, lo clave en negrita
+- pie de la escena: Instrument Serif itálica 400, 50 px; bajo el cuadro, deja la escena a medias
+- firma: Inter Tight + Caveat 700, 26 px; handle a la izquierda, nombre de la serie a mano a la derecha
+PORTADA: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+SLIDES DEL MEDIO: arriba 1 o 2 frases centradas con lo clave en negrita; al centro el grabado de ESA escena en un cuadro horizontal con filete negro; debajo un pie en serif itálica que deja la escena a medias; abajo la firma con un filete.
+CIERRE: arriba el desenlace con lo clave resaltado (la cifra solo si tiene fuente); un grabado más chico; la lección en letra grande con una parte en serif; la caja plana «comenta [PALABRA]»; la fuente de los datos en letra de máquina (o en el texto del post).
+ELEMENTOS GRÁFICOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+EVITA: historias sin fuente; la lección antes del final; más de 2 frases por lámina; caras de famosos; ilustraciones en 3D, con brillo o degradados (el color va en rellenos planos bajo el trazo).
+TU PRODUCTO: pon la foto real de tu producto como <img src="fotos/producto.jpg"> y las variaciones como fotos/idea-1.jpg, fotos/idea-2.jpg… No las redibujes con CSS.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 96 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas
+TIPOGRAFÍA:
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; centrado, 3 renglones, el verbo en serif
+- bajada de portada: estilo Inter Tight (700), letra de ~3% del alto; gris, «Por qué…»
+- texto de la escena: estilo Inter Tight (500 / 800), letra de ~3% del alto; centrado arriba, máximo 2 frases, lo clave en negrita
+- pie de la escena: estilo Instrument Serif itálica (400), letra de ~4% del alto; bajo el cuadro, deja la escena a medias
+- firma: estilo Inter Tight + Caveat (700), letra de ~2% del alto; handle a la izquierda, nombre de la serie a mano a la derecha
+COMPOSICIÓN DE ESTA SLIDE: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+ELEMENTOS GRÁFICOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+EVITA: historias sin fuente; la lección antes del final; más de 2 frases por lámina; caras de famosos; ilustraciones en 3D, con brillo o degradados (el color va en rellenos planos bajo el trazo).
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+COMPOSICIÓN: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+ELEMENTOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+```
+**C · Solo fondo, sin texto**
+```
+Genera SOLO EL FONDO de un slide de carrusel, imagen vertical 4:5, SIN NINGÚN TEXTO, letra, número ni logo.
+grabado en tinta negra sobre papel claro, estilo ilustración de libro antiguo: rayado fino para las sombras, punteado para el polvo, sin caras de personas reales
+Deja libre de objetos la zona donde irá el texto: arriba (escena) y bajo el cuadro (pie).
+Paleta: #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: arriba 1 o 2 frases centradas con lo clave en negrita; al centro el grabado de ESA escena en un cuadro horizontal con filete negro; debajo un pie en serif itálica que deja la escena a medias; abajo la firma con un filete.
+(Si es la última slide, la composición es: arriba el desenlace con lo clave resaltado (la cifra solo si tiene fuente); un grabado más chico; la lección en letra grande con una parte en serif; la caja plana «comenta [PALABRA]»; la fuente de los datos en letra de máquina (o en el texto del post).)
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas
+TIPOGRAFÍA:
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; centrado, 3 renglones, el verbo en serif
+- bajada de portada: estilo Inter Tight (700), letra de ~3% del alto; gris, «Por qué…»
+- texto de la escena: estilo Inter Tight (500 / 800), letra de ~3% del alto; centrado arriba, máximo 2 frases, lo clave en negrita
+- pie de la escena: estilo Instrument Serif itálica (400), letra de ~4% del alto; bajo el cuadro, deja la escena a medias
+- firma: estilo Inter Tight + Caveat (700), letra de ~2% del alto; handle a la izquierda, nombre de la serie a mano a la derecha
+COMPOSICIÓN DE ESTA SLIDE: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+ELEMENTOS GRÁFICOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+EVITA: historias sin fuente; la lección antes del final; más de 2 frases por lámina; caras de famosos; ilustraciones en 3D, con brillo o degradados (el color va en rellenos planos bajo el trazo).
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: papel crema #FBEEDB con grano suave, con un filete fino arriba (portada) o abajo (medio) que separa la firma; el grabado de cada escena va en un cuadro con borde de tinta y esquinas apenas redondas, con rellenos planos de color bajo el trazo. Paleta de ejemplo (tienda de cocina): cada alumna usa la suya.
+COMPOSICIÓN: arriba la firma con un filete fino; al centro el nombre de la historia en letra enorme con el verbo en serif itálica y una bajada gris «Por qué…»; abajo, a sangre, un grabado grande de la escena clave sobre el piso, sin marco; un círculo chico «desliza».
+ELEMENTOS: una escena por lámina · grabado a línea: rayado, cruzado y punteado, sin color · la cifra solo en el desenlace · historia real con fuente citada
+```
+**C · Solo fondo, sin texto**
+```
+Crea una imagen vertical 4:5 que sirva de FONDO para un slide. Importante: SIN texto, letras, números, logos ni marcas de agua.
+grabado en tinta negra sobre papel claro, estilo ilustración de libro antiguo: rayado fino para las sombras, punteado para el polvo, sin caras de personas reales
+Deja vacía la zona de arriba (escena) y bajo el cuadro (pie): ahí pondré el texto después.
+Colores: #FBEEDB = papel de fondo (crema) · #23305A = tinta azul marino: título, texto y línea del grabado · #E2532E = acento tomate: verbo del título, base de la licuadora, sombra de la caja CTA · #F2B640 = mostaza: aserrín, palabra del CTA · #BFDCDD = agua: paredes de las escenas · #E9C38E = madera: pisos y mesas.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: arriba 1 o 2 frases centradas con lo clave en negrita; al centro el grabado de ESA escena en un cuadro horizontal con filete negro; debajo un pie en serif itálica que deja la escena a medias; abajo la firma con un filete.
+(Si es la última slide, la composición es: arriba el desenlace con lo clave resaltado (la cifra solo si tiene fuente); un grabado más chico; la lección en letra grande con una parte en serif; la caja plana «comenta [PALABRA]»; la fuente de los datos en letra de máquina (o en el texto del post).)
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G58 · Tour de una sola herramienta (una pantalla por lámina, con su para qué)
+
+**Ejemplo:** @theedgarr · https://www.instagram.com/p/DY5JAb3FWXk/ · 15.902 likes · 39 comentarios · 6 slides (es de una app para aprender a programar: portada con analogía y luego una función por lámina con su captura)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 72 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #F7EDE6 = papel de fondo (crema rosado) · #1F3B2D = tinta verde bosque: títulos, texto y marco de la pantalla · #D9607E = acento rosa peonía: etiqueta «PARA QUÉ», serif del título, sombra del CTA · #F8CBD6 = rosa claro: resaltado de la analogía y palabra del CTA · #B7CCAE = salvia: chips y lámina alterna
+TIPOGRAFÍA:
+- analogía de portada: Inter Tight 900, 150 px; 2 renglones, la palabra clave en un resaltado plano del acento claro
+- antetítulo de portada: Instrument Serif itálica 400, minúsculas, 76 px; «te muestro el»
+- función: Inter Tight + Instrument Serif itálica 900 / 400, 84 px; 2 renglones arriba a la izquierda
+- para qué: Inter Tight + Space Mono 600 / 700, 38 px; etiqueta «PARA QUÉ» en un bloque del acento + 1 frase
+- número de pantalla: Space Mono 700, mayúsculas, 23 px; «1/3 INICIO»
+PORTADA: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+SLIDES DEL MEDIO: papel liso; arriba a la izquierda el número y el nombre de la pantalla en letra de máquina y la función en 2 renglones; al centro la captura real recortada en un marco oscuro de esquinas redondas; abajo la etiqueta «PARA QUÉ» y una frase.
+CIERRE: igual que el medio con la captura más chica, + la caja plana «comenta [PALABRA]».
+ELEMENTOS GRÁFICOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+EVITA: pantallas inventadas o mockups que no son la app; capturas ilegibles; más de una función por lámina; precios o créditos a la vista; analogías que hay que explicar.
+```
+
+> Cada slide lleva poco texto (máx. ~20 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «tour de una sola herramienta» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Herramienta: [HERRAMIENTA] (la que yo uso de verdad; yo saco las capturas).
+Portada: «te muestro el [algo que todos conocen] de [lo tuyo]» en máximo 8 palabras (dame 3 analogías distintas) + qué foto mía va (usando la herramienta).
+Slides 2 a N: UNA pantalla por slide, en el orden en que se usa: qué captura saco + qué haces ahí en máximo 7 palabras + «para qué» en máximo 18 palabras, dicho como resultado para [MI CLIENTA IDEAL].
+Cierre: la última pantalla + «comenta [PALABRA] y te mando [REGALO]».
+No inventes funciones: usa solo lo que se ve en mis capturas. Si mencionas un resultado, usa solo cifras que yo te dé. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G58 (Tour de una sola herramienta (una pantalla por lámina, con su para qué)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 72 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #F7EDE6 = papel de fondo (crema rosado) · #1F3B2D = tinta verde bosque: títulos, texto y marco de la pantalla · #D9607E = acento rosa peonía: etiqueta «PARA QUÉ», serif del título, sombra del CTA · #F8CBD6 = rosa claro: resaltado de la analogía y palabra del CTA · #B7CCAE = salvia: chips y lámina alterna
+TIPOGRAFÍA:
+- analogía de portada: Inter Tight 900, 150 px; 2 renglones, la palabra clave en un resaltado plano del acento claro
+- antetítulo de portada: Instrument Serif itálica 400, minúsculas, 76 px; «te muestro el»
+- función: Inter Tight + Instrument Serif itálica 900 / 400, 84 px; 2 renglones arriba a la izquierda
+- para qué: Inter Tight + Space Mono 600 / 700, 38 px; etiqueta «PARA QUÉ» en un bloque del acento + 1 frase
+- número de pantalla: Space Mono 700, mayúsculas, 23 px; «1/3 INICIO»
+PORTADA: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+SLIDES DEL MEDIO: papel liso; arriba a la izquierda el número y el nombre de la pantalla en letra de máquina y la función en 2 renglones; al centro la captura real recortada en un marco oscuro de esquinas redondas; abajo la etiqueta «PARA QUÉ» y una frase.
+CIERRE: igual que el medio con la captura más chica, + la caja plana «comenta [PALABRA]».
+ELEMENTOS GRÁFICOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+EVITA: pantallas inventadas o mockups que no son la app; capturas ilegibles; más de una función por lámina; precios o créditos a la vista; analogías que hay que explicar.
+TU FOTO: en el HTML pon la foto como <img src="fotos/foto-1.jpg"> a sangre. Guarda tu foto con ese nombre, en una carpeta fotos/ junto al archivo.
+TU CAPTURA: deja un <img> para tu captura real y cópiala tal cual; no la redibujes con CSS.
+TU PRODUCTO: pon la foto real de tu producto como <img src="fotos/producto.jpg"> y las variaciones como fotos/idea-1.jpg, fotos/idea-2.jpg… No las redibujes con CSS.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 72 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tus fotos y tu captura (las adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #F7EDE6 = papel de fondo (crema rosado) · #1F3B2D = tinta verde bosque: títulos, texto y marco de la pantalla · #D9607E = acento rosa peonía: etiqueta «PARA QUÉ», serif del título, sombra del CTA · #F8CBD6 = rosa claro: resaltado de la analogía y palabra del CTA · #B7CCAE = salvia: chips y lámina alterna
+TIPOGRAFÍA:
+- analogía de portada: estilo Inter Tight (900), letra de ~11% del alto; 2 renglones, la palabra clave en un resaltado plano del acento claro
+- antetítulo de portada: estilo Instrument Serif itálica (400), minúsculas, letra de ~6% del alto; «te muestro el»
+- función: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~6% del alto; 2 renglones arriba a la izquierda
+- para qué: estilo Inter Tight + Space Mono (600 / 700), letra de ~3% del alto; etiqueta «PARA QUÉ» en un bloque del acento + 1 frase
+- número de pantalla: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «1/3 INICIO»
+COMPOSICIÓN DE ESTA SLIDE: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+ELEMENTOS GRÁFICOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+EVITA: pantallas inventadas o mockups que no son la app; capturas ilegibles; más de una función por lámina; precios o créditos a la vista; analogías que hay que explicar.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+COMPOSICIÓN: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+ELEMENTOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: papel liso; arriba a la izquierda el número y el nombre de la pantalla en letra de máquina y la función en 2 renglones; al centro la captura real recortada en un marco oscuro de esquinas redondas; abajo la etiqueta «PARA QUÉ» y una frase.
+(Si es la última slide, la composición es: igual que el medio con la captura más chica, + la caja plana «comenta [PALABRA]».)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tus fotos y tu captura (las adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~7% a los lados y nada importante en el 9% de abajo.
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #F7EDE6 = papel de fondo (crema rosado) · #1F3B2D = tinta verde bosque: títulos, texto y marco de la pantalla · #D9607E = acento rosa peonía: etiqueta «PARA QUÉ», serif del título, sombra del CTA · #F8CBD6 = rosa claro: resaltado de la analogía y palabra del CTA · #B7CCAE = salvia: chips y lámina alterna
+TIPOGRAFÍA:
+- analogía de portada: estilo Inter Tight (900), letra de ~11% del alto; 2 renglones, la palabra clave en un resaltado plano del acento claro
+- antetítulo de portada: estilo Instrument Serif itálica (400), minúsculas, letra de ~6% del alto; «te muestro el»
+- función: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~6% del alto; 2 renglones arriba a la izquierda
+- para qué: estilo Inter Tight + Space Mono (600 / 700), letra de ~3% del alto; etiqueta «PARA QUÉ» en un bloque del acento + 1 frase
+- número de pantalla: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «1/3 INICIO»
+COMPOSICIÓN DE ESTA SLIDE: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+ELEMENTOS GRÁFICOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+EVITA: pantallas inventadas o mockups que no son la app; capturas ilegibles; más de una función por lámina; precios o créditos a la vista; analogías que hay que explicar.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.
+COMPOSICIÓN: arriba «te muestro el» en serif itálica y la analogía en letra enorme con la palabra clave resaltada; debajo tu foto real usando la herramienta, con esquinas redondas; un papelito con el nombre de la herramienta y qué hace.
+ELEMENTOS: una pantalla por lámina · capturas reales, legibles · para qué en una frase · la analogía solo en la portada
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (papel crema rosado #F7EDE6 (y una lámina en salvia claro #E3ECDD para variar) con grano muy suave; la portada lleva una foto real usando la herramienta en un recuadro de esquinas redondas; en el medio la pantalla va dentro de un marco verde oscuro de esquinas redondas. Paleta de ejemplo (florería): cada alumna usa la suya.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: papel liso; arriba a la izquierda el número y el nombre de la pantalla en letra de máquina y la función en 2 renglones; al centro la captura real recortada en un marco oscuro de esquinas redondas; abajo la etiqueta «PARA QUÉ» y una frase.
+(Si es la última slide, la composición es: igual que el medio con la captura más chica, + la caja plana «comenta [PALABRA]».)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+TU PRODUCTO: adjunta en este mismo mensaje la foto real de tu producto y úsala tal cual: no cambies su forma, su color ni su etiqueta.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G59 · Pares que combinan (una dupla por lámina: dos imágenes reales, una arriba y otra abajo, con su nombre)
+
+**Ejemplo:** @chef.marykh · https://www.instagram.com/p/DbC7hAuERJB/ · 81.270 likes · 155 comentarios · 8 slides (es de cocina: cada slide parte la pantalla en dos fotos macro de ingredientes que combinan (cereza / pato), con el nombre en blanco encima. Segunda referencia con la misma mecánica: @matterlore, combinaciones de dos colores en un ambiente (https://www.instagram.com/p/Dc9A2AuCgUP/). Colores de la referencia (solo para estudiarla): cereza #781720, pato #882931, café #784827, naranja #E18F25.)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 60 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+PALETA (usa SOLO estos colores): #F6EEE2 = crema: costura y franja de la portada · #26180F = tinta café: caja del nombre y textos · #B4532F = barro: filete de la costura, caja de nombre alterna y resaltado del CTA · #2346A0 = cobalto: la línea a mano de la costura y el fondo del mockup de perfil · #EADBC6 = arena: fondo del mockup de chat
+TIPOGRAFÍA:
+- nombre de cada mitad: Instrument Serif 400, mayúsculas, 66 px; centrado, 1 renglón, sobre una caja plana tinta con borde papel para que se lea en cualquier foto
+- por qué combinan: Caveat 700, 46 px; en la franja de la costura, en el acento, máximo 8 palabras
+- número de la dupla: Space Mono 700, 24 px; antes de la línea a mano
+- título de la serie (portada): Inter Tight + Instrument Serif itálica 900 / 400, 116 px; en una franja de papel ancha entre las dos fotos
+PORTADA: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+SLIDES DEL MEDIO: lámina partida: arriba una foto tuya, abajo la foto o la captura real que combina con ella; cada una con su nombre corto en una caja plana; en la costura, el número y una línea a mano con por qué funcionan juntas.
+CIERRE: la última dupla un poco más chica + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana sobre papel + tu @.
+ELEMENTOS GRÁFICOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+EVITA: duplas que necesitan explicación larga; nombres largos encima de la foto; fotos de banco o íconos; dos duplas en la misma slide; texto blanco sin caja sobre capturas claras.
+```
+
+> Cada slide lleva poco texto (máx. ~14 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «pares que combinan» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Nombre de la serie: dame 3 opciones de máximo 4 palabras (ej.: «Duplas que venden»).
+Slides 1 a N: UNA dupla por slide: nombre de arriba y nombre de abajo (máximo 3 palabras cada uno, empiezan con «tu»), qué foto mía, de mi producto o qué captura real va en cada mitad, y una línea de máximo 8 palabras con por qué juntas funcionan.
+Ordena de la dupla más fácil de copiar hoy a la más estratégica.
+La portada lleva la primera dupla + el nombre de la serie. Cierre: la última dupla + «comenta [PALABRA] y te mando [REGALO]».
+Nada de imágenes de banco: si una mitad es una pantalla (tu página, un mensaje, tu agenda), es la captura de verdad. Usa solo cifras que yo te dé; si no tienes una, no la pongas. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G59 (Pares que combinan (una dupla por lámina: dos imágenes reales, una arriba y otra abajo, con su nombre)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 60 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+PALETA (usa SOLO estos colores): #F6EEE2 = crema: costura y franja de la portada · #26180F = tinta café: caja del nombre y textos · #B4532F = barro: filete de la costura, caja de nombre alterna y resaltado del CTA · #2346A0 = cobalto: la línea a mano de la costura y el fondo del mockup de perfil · #EADBC6 = arena: fondo del mockup de chat
+TIPOGRAFÍA:
+- nombre de cada mitad: Instrument Serif 400, mayúsculas, 66 px; centrado, 1 renglón, sobre una caja plana tinta con borde papel para que se lea en cualquier foto
+- por qué combinan: Caveat 700, 46 px; en la franja de la costura, en el acento, máximo 8 palabras
+- número de la dupla: Space Mono 700, 24 px; antes de la línea a mano
+- título de la serie (portada): Inter Tight + Instrument Serif itálica 900 / 400, 116 px; en una franja de papel ancha entre las dos fotos
+PORTADA: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+SLIDES DEL MEDIO: lámina partida: arriba una foto tuya, abajo la foto o la captura real que combina con ella; cada una con su nombre corto en una caja plana; en la costura, el número y una línea a mano con por qué funcionan juntas.
+CIERRE: la última dupla un poco más chica + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana sobre papel + tu @.
+ELEMENTOS GRÁFICOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+EVITA: duplas que necesitan explicación larga; nombres largos encima de la foto; fotos de banco o íconos; dos duplas en la misma slide; texto blanco sin caja sobre capturas claras.
+TUS FOTOS: en el HTML pon una <img src="fotos/foto-1.jpg">, fotos/foto-2.jpg… por slide, en orden. Guarda tus fotos con esos nombres, en una carpeta fotos/ junto al archivo.
+TU CAPTURA: deja un <img> para tu captura real y cópiala tal cual; no la redibujes con CSS.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 60 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tus fotos y tu captura (las adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+PALETA (usa SOLO estos colores): #F6EEE2 = crema: costura y franja de la portada · #26180F = tinta café: caja del nombre y textos · #B4532F = barro: filete de la costura, caja de nombre alterna y resaltado del CTA · #2346A0 = cobalto: la línea a mano de la costura y el fondo del mockup de perfil · #EADBC6 = arena: fondo del mockup de chat
+TIPOGRAFÍA:
+- nombre de cada mitad: estilo Instrument Serif (400), mayúsculas, letra de ~5% del alto; centrado, 1 renglón, sobre una caja plana tinta con borde papel para que se lea en cualquier foto
+- por qué combinan: estilo Caveat (700), letra de ~3% del alto; en la franja de la costura, en el acento, máximo 8 palabras
+- número de la dupla: estilo Space Mono (700), letra de ~2% del alto; antes de la línea a mano
+- título de la serie (portada): estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; en una franja de papel ancha entre las dos fotos
+COMPOSICIÓN DE ESTA SLIDE: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+ELEMENTOS GRÁFICOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+EVITA: duplas que necesitan explicación larga; nombres largos encima de la foto; fotos de banco o íconos; dos duplas en la misma slide; texto blanco sin caja sobre capturas claras.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+COMPOSICIÓN: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+ELEMENTOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: lámina partida: arriba una foto tuya, abajo la foto o la captura real que combina con ella; cada una con su nombre corto en una caja plana; en la costura, el número y una línea a mano con por qué funcionan juntas.
+(Si es la última slide, la composición es: la última dupla un poco más chica + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana sobre papel + tu @.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tus fotos y tu captura (las adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+PALETA (usa SOLO estos colores): #F6EEE2 = crema: costura y franja de la portada · #26180F = tinta café: caja del nombre y textos · #B4532F = barro: filete de la costura, caja de nombre alterna y resaltado del CTA · #2346A0 = cobalto: la línea a mano de la costura y el fondo del mockup de perfil · #EADBC6 = arena: fondo del mockup de chat
+TIPOGRAFÍA:
+- nombre de cada mitad: estilo Instrument Serif (400), mayúsculas, letra de ~5% del alto; centrado, 1 renglón, sobre una caja plana tinta con borde papel para que se lea en cualquier foto
+- por qué combinan: estilo Caveat (700), letra de ~3% del alto; en la franja de la costura, en el acento, máximo 8 palabras
+- número de la dupla: estilo Space Mono (700), letra de ~2% del alto; antes de la línea a mano
+- título de la serie (portada): estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; en una franja de papel ancha entre las dos fotos
+COMPOSICIÓN DE ESTA SLIDE: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+ELEMENTOS GRÁFICOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+EVITA: duplas que necesitan explicación larga; nombres largos encima de la foto; fotos de banco o íconos; dos duplas en la misma slide; texto blanco sin caja sobre capturas claras.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.
+COMPOSICIÓN: tu foto arriba y la foto de lo que vendes (o la pantalla real) abajo; entre las dos, una franja de papel con «Duplas que venden» y la bajada; cada mitad lleva su nombre en serif mayúscula.
+ELEMENTOS: una sola dupla por slide · las dos mitades del mismo tamaño · nombres de 1 a 3 palabras · imágenes reales: tus fotos, tu producto y la pantalla de verdad
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (dos imágenes reales a sangre, una arriba y otra abajo, que llenan la lámina; sin marco. Entre las dos, una franja de papel de 70 px en la costura. Paleta del ejemplo (taller de cerámica): crema, barro y cobalto; cada alumna usa los colores de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: lámina partida: arriba una foto tuya, abajo la foto o la captura real que combina con ella; cada una con su nombre corto en una caja plana; en la costura, el número y una línea a mano con por qué funcionan juntas.
+(Si es la última slide, la composición es: la última dupla un poco más chica + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana sobre papel + tu @.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+TU CAPTURA: adjunta también la captura real (tu pantalla, tu resultado o tu mensaje) y cópiala tal cual, sin reescribir los textos ni inventar números.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G60 · Piedra, papel o tijera (el error pierde, la decisión gana; la misma foto en todas)
+
+**Ejemplo:** @savvy_stacey · https://www.instagram.com/p/Ddtz9nBkalk/ · 3.922 likes · 42 comentarios · 5 slides (es de bienes raíces: la misma foto de dos manos jugando (tijera a la izquierda, piedra a la derecha) sobre una pared con sol; en cada slide solo cambian los dos rótulos (el error / la decisión). Colores de la referencia (solo para estudiarla): pared #D7CAB8, rótulo #545253, sombra #928475, piel #A5643F.)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 40 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #CFE2F2 = pared azul cielo de fondo, con dos paños planos de sol #FFF4D6 en diagonal · #1B2A4A = marino: rótulos, etiqueta «gana» y caja del CTA · #D9432B = tomate: etiqueta «TIJERA · PIERDE» y tachado del error · #F6C445 = amarillo: «RONDA n» y sombra del CTA · #B9D2E8 = zócalo de la pared
+TIPOGRAFÍA:
+- rótulo de cada mano: Instrument Serif 400, 62 px; centrado sobre su mano, 1 o 2 renglones, en tinta
+- etiqueta del rótulo: Space Mono 700, mayúsculas, 22 px; «TIJERA · PIERDE» en el acento, «PIEDRA · GANA» en tinta
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 96 px; arriba, centrado, solo en la portada
+- número de ronda: Space Mono 700, mayúsculas, 26 px; arriba al centro desde la slide 2
+PORTADA: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+SLIDES DEL MEDIO: exactamente la misma foto y en el mismo sitio; arriba «RONDA n»; sobre la tijera el error, sobre la piedra la decisión que le gana.
+CIERRE: las mismas manos con la última ronda + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana abajo + tu @.
+ELEMENTOS GRÁFICOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+EVITA: cambiar la foto o mover las manos; poner el error sobre la piedra; rótulos que tapan las manos; consejos de salud o de finanzas personales; emojis de tijera y piedra en vez de las manos.
+```
+
+> Cada slide lleva poco texto (máx. ~16 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «piedra, papel o tijera» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «Piedra, papel o tijera» + «versión: [tu tema]» en máximo 6 palabras.
+Slides 1 a N: UNA ronda por slide: en TIJERA el error que tu clienta comete hoy y en PIEDRA la decisión que le gana, cada uno en máximo 7 palabras, con un verbo al inicio.
+Que cada error sea algo que de verdad hace (si no se reconoce, no comenta).
+Ordena del error más común al más caro.
+Cierre: la última ronda + «comenta [PALABRA] y te mando [REGALO]».
+Usa solo cifras que yo te dé; si no tienes una, no la pongas.
+La foto es la misma en todas: solo cambian los dos rótulos. Nada de salud ni de finanzas personales. Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G60 (Piedra, papel o tijera (el error pierde, la decisión gana; la misma foto en todas)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 40 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #CFE2F2 = pared azul cielo de fondo, con dos paños planos de sol #FFF4D6 en diagonal · #1B2A4A = marino: rótulos, etiqueta «gana» y caja del CTA · #D9432B = tomate: etiqueta «TIJERA · PIERDE» y tachado del error · #F6C445 = amarillo: «RONDA n» y sombra del CTA · #B9D2E8 = zócalo de la pared
+TIPOGRAFÍA:
+- rótulo de cada mano: Instrument Serif 400, 62 px; centrado sobre su mano, 1 o 2 renglones, en tinta
+- etiqueta del rótulo: Space Mono 700, mayúsculas, 22 px; «TIJERA · PIERDE» en el acento, «PIEDRA · GANA» en tinta
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 96 px; arriba, centrado, solo en la portada
+- número de ronda: Space Mono 700, mayúsculas, 26 px; arriba al centro desde la slide 2
+PORTADA: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+SLIDES DEL MEDIO: exactamente la misma foto y en el mismo sitio; arriba «RONDA n»; sobre la tijera el error, sobre la piedra la decisión que le gana.
+CIERRE: las mismas manos con la última ronda + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana abajo + tu @.
+ELEMENTOS GRÁFICOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+EVITA: cambiar la foto o mover las manos; poner el error sobre la piedra; rótulos que tapan las manos; consejos de salud o de finanzas personales; emojis de tijera y piedra en vez de las manos.
+TU FOTO: en el HTML pon la foto como <img src="fotos/foto-1.jpg"> a sangre. Guarda tu foto con ese nombre, en una carpeta fotos/ junto al archivo.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 40 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tu foto (la adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #CFE2F2 = pared azul cielo de fondo, con dos paños planos de sol #FFF4D6 en diagonal · #1B2A4A = marino: rótulos, etiqueta «gana» y caja del CTA · #D9432B = tomate: etiqueta «TIJERA · PIERDE» y tachado del error · #F6C445 = amarillo: «RONDA n» y sombra del CTA · #B9D2E8 = zócalo de la pared
+TIPOGRAFÍA:
+- rótulo de cada mano: estilo Instrument Serif (400), letra de ~5% del alto; centrado sobre su mano, 1 o 2 renglones, en tinta
+- etiqueta del rótulo: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «TIJERA · PIERDE» en el acento, «PIEDRA · GANA» en tinta
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~7% del alto; arriba, centrado, solo en la portada
+- número de ronda: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; arriba al centro desde la slide 2
+COMPOSICIÓN DE ESTA SLIDE: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+ELEMENTOS GRÁFICOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+EVITA: cambiar la foto o mover las manos; poner el error sobre la piedra; rótulos que tapan las manos; consejos de salud o de finanzas personales; emojis de tijera y piedra en vez de las manos.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+COMPOSICIÓN: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+ELEMENTOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: exactamente la misma foto y en el mismo sitio; arriba «RONDA n»; sobre la tijera el error, sobre la piedra la decisión que le gana.
+(Si es la última slide, la composición es: las mismas manos con la última ronda + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana abajo + tu @.)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tu foto (la adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+PALETA (usa SOLO estos colores): #CFE2F2 = pared azul cielo de fondo, con dos paños planos de sol #FFF4D6 en diagonal · #1B2A4A = marino: rótulos, etiqueta «gana» y caja del CTA · #D9432B = tomate: etiqueta «TIJERA · PIERDE» y tachado del error · #F6C445 = amarillo: «RONDA n» y sombra del CTA · #B9D2E8 = zócalo de la pared
+TIPOGRAFÍA:
+- rótulo de cada mano: estilo Instrument Serif (400), letra de ~5% del alto; centrado sobre su mano, 1 o 2 renglones, en tinta
+- etiqueta del rótulo: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «TIJERA · PIERDE» en el acento, «PIEDRA · GANA» en tinta
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~7% del alto; arriba, centrado, solo en la portada
+- número de ronda: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; arriba al centro desde la slide 2
+COMPOSICIÓN DE ESTA SLIDE: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+ELEMENTOS GRÁFICOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+EVITA: cambiar la foto o mover las manos; poner el error sobre la piedra; rótulos que tapan las manos; consejos de salud o de finanzas personales; emojis de tijera y piedra en vez de las manos.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.
+COMPOSICIÓN: las dos manos + «Piedra, papel o tijera» arriba con «versión: [tu tema]» y la primera ronda en los rótulos.
+ELEMENTOS: la foto no cambia nunca · la tijera (izquierda) siempre es el error · rótulos de máximo 7 palabras · sombra plana de las manos, sin brillo
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (pared lisa con color y sol de ventana (dos paños planos, sin degradado); las dos manos entran desde los bordes a media altura y proyectan sombra abajo. Paleta del ejemplo (profe de inglés): azul cielo, marino, tomate y amarillo; cada alumna usa la suya.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: exactamente la misma foto y en el mismo sitio; arriba «RONDA n»; sobre la tijera el error, sobre la piedra la decisión que le gana.
+(Si es la última slide, la composición es: las mismas manos con la última ronda + «Comenta [PALABRA] y te mando [REGALO]» en una caja plana abajo + tu @.)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G61 · Tus ideas como videos de YouTube (una tarjeta de video por lámina)
+
+**Ejemplo:** @thejosephplacido · https://www.instagram.com/p/DbtluypE9IX/ · 174.463 likes · 277 comentarios · 4 slides (es de un viaje personal: cada slide es una tarjeta de video falsa con su foto, un título en primera persona («renuncié…», «me fui un mes…»), vistas, botón de suscribirse y un comentario destacado)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 48 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #F6EDE0 = café con leche: fondo de la tarjeta · #2B1A12 = espresso: título y botón de seguir · #7A6656 = gris tostado: línea de vistas y etiquetas · #EADBC6 = crema oscura: botones y caja de comentarios · #D0662B = caramelo tostado: barra de avance · #F4B860 = miel: resaltado de la palabra del CTA · #CBE6D3 = menta: nota adhesiva de la portada
+TIPOGRAFÍA:
+- título del video: Inter Tight 800, 54 px; 2 renglones máximo, en primera persona; la segunda mitad (lo que pasó) en Instrument Serif itálica
+- vistas: Inter Tight 500, 32 px; gris, una línea: tu cifra real + «reel de Instagram» (sin cifra, solo «reel de Instagram»)
+- canal y botón: Inter Tight 700, 40 px; tu foto redonda + tu @ + botón de tinta «Seguir»
+- comentario fijado: Inter Tight 500, 31 px; «FIJADO POR TU @» arriba en 23 px; la lección en una frase
+PORTADA: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+SLIDES DEL MEDIO: la MISMA tarjeta en el mismo sitio: cambian la foto, el título, la cifra y el comentario fijado; la barra de avance crece en cada slide.
+CIERRE: el «video» que falta: tu foto mirando a cámara, la barra llena, título «El próximo video es tu historia…», «0 vistas · todavía no lo publicas» y el comentario fijado con «comenta [PALABRA]» resaltada en el acento.
+ELEMENTOS GRÁFICOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+EVITA: vistas o comentarios inventados; comentarios de otras personas; el logo de la plataforma; brillos o sombras 3D en la tarjeta; cambiar el molde entre slides.
+```
+
+> OJO: esta ficha lleva más de ~25 palabras por slide. Los modelos de imagen fallan tildes y listas largas: usa la VARIANTE C (fondo sin texto) y pon el texto con la opción HTML.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «tus ideas como videos de YouTube» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Cada slide es UNA tarjeta de video: título en primera persona (máximo 14 palabras: el acto + lo que pasó, ej.: «Mostré cómo preparo una sesión de fotos por dentro y [lo que pasó de verdad]»), la línea de vistas y un comentario fijado mío con la lección en una frase.
+Usa SOLO cifras reales que yo te dé (vistas, comentarios, seguidores, ventas); si no hay cifra, pon «reel de Instagram» sin número. No inventes comentarios de otras personas.
+Ordena los «videos» como un recorrido: del primero al más reciente.
+Dime qué foto mía va arriba en cada slide.
+Cierre: «El próximo video es [lo de mi clienta ideal]», 0 vistas, y en el comentario fijado «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G61 (Tus ideas como videos de YouTube (una tarjeta de video por lámina)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 48 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #F6EDE0 = café con leche: fondo de la tarjeta · #2B1A12 = espresso: título y botón de seguir · #7A6656 = gris tostado: línea de vistas y etiquetas · #EADBC6 = crema oscura: botones y caja de comentarios · #D0662B = caramelo tostado: barra de avance · #F4B860 = miel: resaltado de la palabra del CTA · #CBE6D3 = menta: nota adhesiva de la portada
+TIPOGRAFÍA:
+- título del video: Inter Tight 800, 54 px; 2 renglones máximo, en primera persona; la segunda mitad (lo que pasó) en Instrument Serif itálica
+- vistas: Inter Tight 500, 32 px; gris, una línea: tu cifra real + «reel de Instagram» (sin cifra, solo «reel de Instagram»)
+- canal y botón: Inter Tight 700, 40 px; tu foto redonda + tu @ + botón de tinta «Seguir»
+- comentario fijado: Inter Tight 500, 31 px; «FIJADO POR TU @» arriba en 23 px; la lección en una frase
+PORTADA: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+SLIDES DEL MEDIO: la MISMA tarjeta en el mismo sitio: cambian la foto, el título, la cifra y el comentario fijado; la barra de avance crece en cada slide.
+CIERRE: el «video» que falta: tu foto mirando a cámara, la barra llena, título «El próximo video es tu historia…», «0 vistas · todavía no lo publicas» y el comentario fijado con «comenta [PALABRA]» resaltada en el acento.
+ELEMENTOS GRÁFICOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+EVITA: vistas o comentarios inventados; comentarios de otras personas; el logo de la plataforma; brillos o sombras 3D en la tarjeta; cambiar el molde entre slides.
+TUS FOTOS: en el HTML pon una <img src="fotos/foto-1.jpg">, fotos/foto-2.jpg… por slide, en orden. Guarda tus fotos con esos nombres, en una carpeta fotos/ junto al archivo.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 48 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #F6EDE0 = café con leche: fondo de la tarjeta · #2B1A12 = espresso: título y botón de seguir · #7A6656 = gris tostado: línea de vistas y etiquetas · #EADBC6 = crema oscura: botones y caja de comentarios · #D0662B = caramelo tostado: barra de avance · #F4B860 = miel: resaltado de la palabra del CTA · #CBE6D3 = menta: nota adhesiva de la portada
+TIPOGRAFÍA:
+- título del video: estilo Inter Tight (800), letra de ~4% del alto; 2 renglones máximo, en primera persona; la segunda mitad (lo que pasó) en Instrument Serif itálica
+- vistas: estilo Inter Tight (500), letra de ~2% del alto; gris, una línea: tu cifra real + «reel de Instagram» (sin cifra, solo «reel de Instagram»)
+- canal y botón: estilo Inter Tight (700), letra de ~3% del alto; tu foto redonda + tu @ + botón de tinta «Seguir»
+- comentario fijado: estilo Inter Tight (500), letra de ~2% del alto; «FIJADO POR TU @» arriba en 23 px; la lección en una frase
+COMPOSICIÓN DE ESTA SLIDE: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+ELEMENTOS GRÁFICOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+EVITA: vistas o comentarios inventados; comentarios de otras personas; el logo de la plataforma; brillos o sombras 3D en la tarjeta; cambiar el molde entre slides.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+COMPOSICIÓN: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+ELEMENTOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: la MISMA tarjeta en el mismo sitio: cambian la foto, el título, la cifra y el comentario fijado; la barra de avance crece en cada slide.
+(Si es la última slide, la composición es: el «video» que falta: tu foto mirando a cámara, la barra llena, título «El próximo video es tu historia…», «0 vistas · todavía no lo publicas» y el comentario fijado con «comenta [PALABRA]» resaltada en el acento.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~4% a los lados y nada importante en el 9% de abajo.
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #F6EDE0 = café con leche: fondo de la tarjeta · #2B1A12 = espresso: título y botón de seguir · #7A6656 = gris tostado: línea de vistas y etiquetas · #EADBC6 = crema oscura: botones y caja de comentarios · #D0662B = caramelo tostado: barra de avance · #F4B860 = miel: resaltado de la palabra del CTA · #CBE6D3 = menta: nota adhesiva de la portada
+TIPOGRAFÍA:
+- título del video: estilo Inter Tight (800), letra de ~4% del alto; 2 renglones máximo, en primera persona; la segunda mitad (lo que pasó) en Instrument Serif itálica
+- vistas: estilo Inter Tight (500), letra de ~2% del alto; gris, una línea: tu cifra real + «reel de Instagram» (sin cifra, solo «reel de Instagram»)
+- canal y botón: estilo Inter Tight (700), letra de ~3% del alto; tu foto redonda + tu @ + botón de tinta «Seguir»
+- comentario fijado: estilo Inter Tight (500), letra de ~2% del alto; «FIJADO POR TU @» arriba en 23 px; la lección en una frase
+COMPOSICIÓN DE ESTA SLIDE: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+ELEMENTOS GRÁFICOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+EVITA: vistas o comentarios inventados; comentarios de otras personas; el logo de la plataforma; brillos o sombras 3D en la tarjeta; cambiar el molde entre slides.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.
+COMPOSICIÓN: el primer «video»: tu foto a sangre arriba con una nota adhesiva que dice de qué va la serie, la barra de avance a un tercio, el título con el acto y el resultado, la cifra real de vistas, tu canal y el comentario fijado con la lección.
+ELEMENTOS: una tarjeta de video por slide, siempre igual · barra de avance que crece · cifras reales tuyas, nunca inventadas · el comentario es tuyo y va fijado · íconos de línea, sin emojis ni logo de la plataforma
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (papel café con leche #F6EDE0 liso, como una pantalla plana; la foto ocupa a sangre el 44 % de arriba y abajo va la tarjeta del video; botones y caja de comentarios un tono más oscuro #EADBC6. Paleta del EJEMPLO (cafetería de barrio): cada alumna usa la suya, la de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: la MISMA tarjeta en el mismo sitio: cambian la foto, el título, la cifra y el comentario fijado; la barra de avance crece en cada slide.
+(Si es la última slide, la composición es: el «video» que falta: tu foto mirando a cámara, la barra llena, título «El próximo video es tu historia…», «0 vistas · todavía no lo publicas» y el comentario fijado con «comenta [PALABRA]» resaltada en el acento.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G62 · Tu anécdota en viñetas de cómic (frase-lección + viñetas hasta la moraleja)
+
+**Ejemplo:** @thetinywisdom · https://www.instagram.com/p/DTfSUAtCem6/ · 66.957 likes · 278 comentarios · 14 slides (es de autoayuda: portada con la frase-lección en letras naranjas sobre fondo oscuro y un personaje dibujado; después su anécdota en viñetas de cómic con globos hasta la moraleja)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 70 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #FBF6EC = marfil: fondo de las láminas · #1B2B24 = tinta verde bosque: marcos, trazos, letras y viñeta del quiebre · #8E2F48 = borgoña: ropa del personaje, remate en serif, sello y sombra del CTA · #E3A93E = ocre: resaltado, prendedor y una viñeta · #D5E4CF = salvia: círculo de portada y viñetas · #F3DAD3 = rosa palo: viñetas · #EFE1C4 = arena: viñetas · #D4E8E1 = verde agua: viñetas · #FFFFFF = globos
+TIPOGRAFÍA:
+- frase-lección de portada: Inter Tight + Instrument Serif itálica 900 / 400, 118 px; centrada arriba, la palabra clave con resaltado en el tinte del acento, el remate en serif
+- caja de narrador: Caveat 700, 46 px; arriba de la viñeta, centrada, 1 o 2 renglones
+- globos: Caveat 700, 40 px; globo blanco con borde negro; el de pensamiento, ovalado
+- moraleja del cierre: Inter Tight + Instrument Serif itálica 900 / 400, 100 px; centrada bajo la última viñeta
+PORTADA: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+SLIDES DEL MEDIO: una cuadrícula de 3 a 6 viñetas con marco de tinta de 5 px y fondos planos (blanco, papel oscuro, tinte del acento): arriba una ancha con el narrador, en medio 2 o 3 angostas con globos, abajo una ancha que cierra el tramo (en tinta cuando es el quiebre).
+CIERRE: una viñeta ancha con lo que haces ahora, la moraleja en letra grande debajo y la caja de tinta de «comenta [PALABRA]» con sombra plana en el acento.
+ELEMENTOS GRÁFICOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+EVITA: anécdotas inventadas; viñetas con párrafos; caras de famosos o de gente real; brillos y degradados en el dibujo; cambiar el aspecto del personaje entre viñetas.
+```
+
+> Cada slide lleva poco texto (máx. ~14 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «mi anécdota en viñetas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: la frase-lección en máximo 7 palabras, dicha como verdad incómoda (dame 3 opciones) + qué hago yo dibujada en la portada.
+Slides 2 a N-1: mi anécdota REAL en viñetas, de 3 a 6 por slide. Por cada viñeta: texto de narrador o globo (máximo 14 palabras) + qué se ve dibujado. Orden: cómo lo hacía antes → el momento en que me di cuenta (con la cifra real si la hay) → qué cambié.
+Usa solo cifras que yo te dé: si no te di una cifra, cuéntalo sin número.
+Cierre: una viñeta de lo que hago ahora + la moraleja en grande (la misma idea de la portada) + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G62 (Tu anécdota en viñetas de cómic (frase-lección + viñetas hasta la moraleja)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 70 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #FBF6EC = marfil: fondo de las láminas · #1B2B24 = tinta verde bosque: marcos, trazos, letras y viñeta del quiebre · #8E2F48 = borgoña: ropa del personaje, remate en serif, sello y sombra del CTA · #E3A93E = ocre: resaltado, prendedor y una viñeta · #D5E4CF = salvia: círculo de portada y viñetas · #F3DAD3 = rosa palo: viñetas · #EFE1C4 = arena: viñetas · #D4E8E1 = verde agua: viñetas · #FFFFFF = globos
+TIPOGRAFÍA:
+- frase-lección de portada: Inter Tight + Instrument Serif itálica 900 / 400, 118 px; centrada arriba, la palabra clave con resaltado en el tinte del acento, el remate en serif
+- caja de narrador: Caveat 700, 46 px; arriba de la viñeta, centrada, 1 o 2 renglones
+- globos: Caveat 700, 40 px; globo blanco con borde negro; el de pensamiento, ovalado
+- moraleja del cierre: Inter Tight + Instrument Serif itálica 900 / 400, 100 px; centrada bajo la última viñeta
+PORTADA: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+SLIDES DEL MEDIO: una cuadrícula de 3 a 6 viñetas con marco de tinta de 5 px y fondos planos (blanco, papel oscuro, tinte del acento): arriba una ancha con el narrador, en medio 2 o 3 angostas con globos, abajo una ancha que cierra el tramo (en tinta cuando es el quiebre).
+CIERRE: una viñeta ancha con lo que haces ahora, la moraleja en letra grande debajo y la caja de tinta de «comenta [PALABRA]» con sombra plana en el acento.
+ELEMENTOS GRÁFICOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+EVITA: anécdotas inventadas; viñetas con párrafos; caras de famosos o de gente real; brillos y degradados en el dibujo; cambiar el aspecto del personaje entre viñetas.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 70 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #FBF6EC = marfil: fondo de las láminas · #1B2B24 = tinta verde bosque: marcos, trazos, letras y viñeta del quiebre · #8E2F48 = borgoña: ropa del personaje, remate en serif, sello y sombra del CTA · #E3A93E = ocre: resaltado, prendedor y una viñeta · #D5E4CF = salvia: círculo de portada y viñetas · #F3DAD3 = rosa palo: viñetas · #EFE1C4 = arena: viñetas · #D4E8E1 = verde agua: viñetas · #FFFFFF = globos
+TIPOGRAFÍA:
+- frase-lección de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; centrada arriba, la palabra clave con resaltado en el tinte del acento, el remate en serif
+- caja de narrador: estilo Caveat (700), letra de ~3% del alto; arriba de la viñeta, centrada, 1 o 2 renglones
+- globos: estilo Caveat (700), letra de ~3% del alto; globo blanco con borde negro; el de pensamiento, ovalado
+- moraleja del cierre: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~7% del alto; centrada bajo la última viñeta
+COMPOSICIÓN DE ESTA SLIDE: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+ELEMENTOS GRÁFICOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+EVITA: anécdotas inventadas; viñetas con párrafos; caras de famosos o de gente real; brillos y degradados en el dibujo; cambiar el aspecto del personaje entre viñetas.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+COMPOSICIÓN: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+ELEMENTOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: una cuadrícula de 3 a 6 viñetas con marco de tinta de 5 px y fondos planos (blanco, papel oscuro, tinte del acento): arriba una ancha con el narrador, en medio 2 o 3 angostas con globos, abajo una ancha que cierra el tramo (en tinta cuando es el quiebre).
+(Si es la última slide, la composición es: una viñeta ancha con lo que haces ahora, la moraleja en letra grande debajo y la caja de tinta de «comenta [PALABRA]» con sombra plana en el acento.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Desde la descripción (el prompt se sostiene solo: no adjuntas nada)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~6% a los lados y nada importante en el 9% de abajo.
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+PALETA (usa SOLO estos colores): #FBF6EC = marfil: fondo de las láminas · #1B2B24 = tinta verde bosque: marcos, trazos, letras y viñeta del quiebre · #8E2F48 = borgoña: ropa del personaje, remate en serif, sello y sombra del CTA · #E3A93E = ocre: resaltado, prendedor y una viñeta · #D5E4CF = salvia: círculo de portada y viñetas · #F3DAD3 = rosa palo: viñetas · #EFE1C4 = arena: viñetas · #D4E8E1 = verde agua: viñetas · #FFFFFF = globos
+TIPOGRAFÍA:
+- frase-lección de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~9% del alto; centrada arriba, la palabra clave con resaltado en el tinte del acento, el remate en serif
+- caja de narrador: estilo Caveat (700), letra de ~3% del alto; arriba de la viñeta, centrada, 1 o 2 renglones
+- globos: estilo Caveat (700), letra de ~3% del alto; globo blanco con borde negro; el de pensamiento, ovalado
+- moraleja del cierre: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~7% del alto; centrada bajo la última viñeta
+COMPOSICIÓN DE ESTA SLIDE: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+ELEMENTOS GRÁFICOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+EVITA: anécdotas inventadas; viñetas con párrafos; caras de famosos o de gente real; brillos y degradados en el dibujo; cambiar el aspecto del personaje entre viñetas.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.
+COMPOSICIÓN: papel claro; la frase-lección enorme arriba; abajo, dentro de un círculo en el tinte del acento, tu personaje dibujado haciendo lo que la frase critica, con un globo de lo que dice.
+ELEMENTOS: tu personaje dibujado de línea simple y siempre igual (pelo, ropa en el acento) · una idea por viñeta · cajas de narrador con ritmo antes → quiebre → después · la moraleja de la portada vuelve en el cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: el fondo es liso o tipográfico (marfil #FBF6EC en todas las láminas; viñetas de colores planos (salvia #D5E4CF, rosa palo #F3DAD3, arena #EFE1C4, verde agua #D4E8E1, ocre #E3A93E), todas con marco de tinta; la viñeta del quiebre va en tinta verde bosque #1B2B24. Paleta del EJEMPLO (abogada de emprendedoras): cada alumna usa la suya, la de su marca.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: una cuadrícula de 3 a 6 viñetas con marco de tinta de 5 px y fondos planos (blanco, papel oscuro, tinte del acento): arriba una ancha con el narrador, en medio 2 o 3 angostas con globos, abajo una ancha que cierra el tramo (en tinta cuando es el quiebre).
+(Si es la última slide, la composición es: una viñeta ancha con lo que haces ahora, la moraleja en letra grande debajo y la caja de tinta de «comenta [PALABRA]» con sombra plana en el acento.)
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G63 · La misma frase, dos lecturas (arriba y abajo, dos imágenes que la cambian)
+
+**Ejemplo:** @victorianpoetry · https://www.instagram.com/p/DdsZXLtDalO/ · 783.137 likes · 6.642 comentarios · 7 slides (es de poesía (soledad): cada lámina repite una frase corta arriba y abajo sobre dos ilustraciones que la vuelven abandono o libertad)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 84 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+PALETA (usa SOLO estos colores): #F4ECDF = crema (etiquetas y fondo del cierre) · #1F1A17 = tinta · #B8325E = frambuesa: pie de la mitad de arriba y la parte en serif de la frase · #4F5B2A = oliva: rótulo y caja del CTA · #E2B13C = mostaza: palabra del CTA y sombra de la caja
+TIPOGRAFÍA:
+- la frase: Inter Tight + Instrument Serif itálica 900 / 400, 84 px; igual en las dos mitades, sobre una etiqueta de papel plana; la segunda mitad de la frase en serif
+- el pie de cada lectura: Caveat 700, 48 px; empieza con «…»: en el acento arriba y en tinta abajo
+- rótulo de portada: Space Mono 700, mayúsculas, 24 px; «misma frase · dos lecturas» en una franja negra
+- pregunta del cierre: Inter Tight + Instrument Serif itálica 900 / 400, 50 px; «¿Cuál de las dos te dices tú?»
+PORTADA: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+SLIDES DEL MEDIO: una frase por lámina: arriba la foto que pesa con su pie rojo, abajo la foto que respira con su pie en tinta; la frase idéntica en las dos, en una etiqueta de papel que no tapa la cara.
+CIERRE: el último par en dos mitades más bajas; debajo, en papel, «¿Cuál de las dos te dices tú?» y la orden «comenta [PALABRA]» en una caja plana.
+ELEMENTOS GRÁFICOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+EVITA: cambiar una palabra entre las dos mitades; fotos que no cuentan nada; frases de autoayuda ajenas a lo que vendes; párrafos que explican la lección; texto encima de la cara.
+```
+
+> Cada slide lleva poco texto (máx. ~10 palabras): el modelo lo puede escribir, pero revisa tildes y eñes letra por letra antes de publicar.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «la misma frase, dos lecturas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las fotos que tengo: [LISTA DE MIS FOTOS].
+Dame [N] frases cortas (de 2 a 5 palabras) que mi clienta se dice cuando intenta [LO QUE MI CLIENTA QUIERE LOGRAR]; tienen que poder leerse como derrota y como libertad sin cambiar ni una palabra.
+Por cada frase: cuál de mis fotos va arriba (la lectura que pesa) y cuál abajo (la que respira), y un pie de máximo 5 palabras para cada mitad que empiece con «…».
+Ordena de la frase más común a la más íntima. La primera va en la portada.
+Cierre: el último par + «¿Cuál de las dos te dices tú?» + «comenta [PALABRA] y te mando [REGALO]».
+Usa solo cifras que yo te dé. Tutea. Nada de frases de autoayuda genéricas.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G63 (La misma frase, dos lecturas (arriba y abajo, dos imágenes que la cambian)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 84 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+PALETA (usa SOLO estos colores): #F4ECDF = crema (etiquetas y fondo del cierre) · #1F1A17 = tinta · #B8325E = frambuesa: pie de la mitad de arriba y la parte en serif de la frase · #4F5B2A = oliva: rótulo y caja del CTA · #E2B13C = mostaza: palabra del CTA y sombra de la caja
+TIPOGRAFÍA:
+- la frase: Inter Tight + Instrument Serif itálica 900 / 400, 84 px; igual en las dos mitades, sobre una etiqueta de papel plana; la segunda mitad de la frase en serif
+- el pie de cada lectura: Caveat 700, 48 px; empieza con «…»: en el acento arriba y en tinta abajo
+- rótulo de portada: Space Mono 700, mayúsculas, 24 px; «misma frase · dos lecturas» en una franja negra
+- pregunta del cierre: Inter Tight + Instrument Serif itálica 900 / 400, 50 px; «¿Cuál de las dos te dices tú?»
+PORTADA: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+SLIDES DEL MEDIO: una frase por lámina: arriba la foto que pesa con su pie rojo, abajo la foto que respira con su pie en tinta; la frase idéntica en las dos, en una etiqueta de papel que no tapa la cara.
+CIERRE: el último par en dos mitades más bajas; debajo, en papel, «¿Cuál de las dos te dices tú?» y la orden «comenta [PALABRA]» en una caja plana.
+ELEMENTOS GRÁFICOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+EVITA: cambiar una palabra entre las dos mitades; fotos que no cuentan nada; frases de autoayuda ajenas a lo que vendes; párrafos que explican la lección; texto encima de la cara.
+TUS FOTOS: en el HTML pon una <img src="fotos/foto-1.jpg">, fotos/foto-2.jpg… por slide, en orden. Guarda tus fotos con esos nombres, en una carpeta fotos/ junto al archivo.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 84 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+PALETA (usa SOLO estos colores): #F4ECDF = crema (etiquetas y fondo del cierre) · #1F1A17 = tinta · #B8325E = frambuesa: pie de la mitad de arriba y la parte en serif de la frase · #4F5B2A = oliva: rótulo y caja del CTA · #E2B13C = mostaza: palabra del CTA y sombra de la caja
+TIPOGRAFÍA:
+- la frase: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~6% del alto; igual en las dos mitades, sobre una etiqueta de papel plana; la segunda mitad de la frase en serif
+- el pie de cada lectura: estilo Caveat (700), letra de ~4% del alto; empieza con «…»: en el acento arriba y en tinta abajo
+- rótulo de portada: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «misma frase · dos lecturas» en una franja negra
+- pregunta del cierre: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~4% del alto; «¿Cuál de las dos te dices tú?»
+COMPOSICIÓN DE ESTA SLIDE: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+ELEMENTOS GRÁFICOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+EVITA: cambiar una palabra entre las dos mitades; fotos que no cuentan nada; frases de autoayuda ajenas a lo que vendes; párrafos que explican la lección; texto encima de la cara.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+COMPOSICIÓN: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+ELEMENTOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: una frase por lámina: arriba la foto que pesa con su pie rojo, abajo la foto que respira con su pie en tinta; la frase idéntica en las dos, en una etiqueta de papel que no tapa la cara.
+(Si es la última slide, la composición es: el último par en dos mitades más bajas; debajo, en papel, «¿Cuál de las dos te dices tú?» y la orden «comenta [PALABRA]» en una caja plana.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tus fotos (las adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~8% a los lados y nada importante en el 9% de abajo.
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+PALETA (usa SOLO estos colores): #F4ECDF = crema (etiquetas y fondo del cierre) · #1F1A17 = tinta · #B8325E = frambuesa: pie de la mitad de arriba y la parte en serif de la frase · #4F5B2A = oliva: rótulo y caja del CTA · #E2B13C = mostaza: palabra del CTA y sombra de la caja
+TIPOGRAFÍA:
+- la frase: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~6% del alto; igual en las dos mitades, sobre una etiqueta de papel plana; la segunda mitad de la frase en serif
+- el pie de cada lectura: estilo Caveat (700), letra de ~4% del alto; empieza con «…»: en el acento arriba y en tinta abajo
+- rótulo de portada: estilo Space Mono (700), mayúsculas, letra de ~2% del alto; «misma frase · dos lecturas» en una franja negra
+- pregunta del cierre: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~4% del alto; «¿Cuál de las dos te dices tú?»
+COMPOSICIÓN DE ESTA SLIDE: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+ELEMENTOS GRÁFICOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+EVITA: cambiar una palabra entre las dos mitades; fotos que no cuentan nada; frases de autoayuda ajenas a lo que vendes; párrafos que explican la lección; texto encima de la cara.
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.
+COMPOSICIÓN: dos mitades a sangre separadas por una raya de papel; la primera frase en las dos, con su pie a mano; arriba un rótulo chico «misma frase · dos lecturas».
+ELEMENTOS: la misma frase exacta en las dos mitades · una foto tuya por mitad (en la plantilla, un hueco con ícono de cámara y la etiqueta de qué foto va) · un pie de máximo 5 palabras por mitad · raya de papel entre las dos mitades
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (la lámina partida en dos mitades horizontales, cada una con su foto a sangre: arriba la que pesa (fría, cerrada o apagada), abajo la que respira (cálida y abierta); la misma frase en una etiqueta de papel encima de cada una.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: una frase por lámina: arriba la foto que pesa con su pie rojo, abajo la foto que respira con su pie en tinta; la frase idéntica en las dos, en una etiqueta de papel que no tapa la cara.
+(Si es la última slide, la composición es: el último par en dos mitades más bajas; debajo, en papel, «¿Cuál de las dos te dices tú?» y la orden «comenta [PALABRA]» en una caja plana.)
+TUS FOTOS: adjunta en este mismo mensaje las fotos de esta slide, en orden, y úsalas tal cual: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarlas.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+Edita la imagen anterior: cambia únicamente "[palabra mal escrita]" por "[palabra correcta]", con la misma letra y el mismo tamaño. Todo lo demás igual.
+```
+
+---
+
+## G64 · Carta «no quiero / sí quiero» (cada lámina aclara un malentendido)
+
+**Ejemplo:** @victoriamiretti · https://www.instagram.com/p/DcctsFhjVrE/ · 8.413 likes · 83 comentarios · 15 slides (es de parejas: portada «confesiones de una persona a su pareja» y en cada lámina un «no quiero…» en negrita y debajo un «solo quiero…»)
+
+**Visual detallado**
+```
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 96 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+PALETA (usa SOLO estos colores): #2F4A3A = verde bosque (caja del CTA y negritas del «solo quiero») · #FBF6EC = hoja de la carta · #231A14 = tinta · #C46A2B = ámbar: cinta, número, firma y palabra del CTA · #A9B98F = musgo: segunda cinta y subrayado de portada
+TIPOGRAFÍA:
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 104 px; «tu clienta» subrayado con el acento; la otra mitad en serif
+- el «no quiero»: Inter Tight 900, 84 px; 1 frase de máximo 10 palabras, arriba
+- el «solo quiero»: Instrument Serif itálica + Inter Tight 800 400 / 800, 66 px; 1 o 2 frases; lo que de verdad busca va en negrita
+- firma: Caveat 700, 54 px; «— tu clienta» en el acento, solo en el cierre
+PORTADA: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+SLIDES DEL MEDIO: la misma hoja con el número arriba (01, 02…), el «no quiero» en negrita y debajo el «solo quiero» en serif con la parte clave en negrita; centrado en vertical.
+CIERRE: la última confesión en la hoja con la firma a mano + la orden «comenta [PALABRA]» en una caja plana debajo.
+ELEMENTOS GRÁFICOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+EVITA: reproches en vez de miedos reales; párrafos largos; presentarla como testimonio con nombre; dos malentendidos en la misma lámina; fotos de stock que no son de su lugar.
+```
+
+> OJO: esta ficha lleva más de ~25 palabras por slide. Los modelos de imagen fallan tildes y listas largas: usa la VARIANTE C (fondo sin texto) y pon el texto con la opción HTML.
+
+### 1 · Guion (cualquier chat)
+```
+Arma un carrusel «carta: no quiero / sí quiero» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Lo que mis clientas me dicen o me preguntan: [SUS DUDAS Y QUEJAS REALES].
+Portada: «Confesiones de [quién habla] a [quién la lee]» en máximo 12 palabras (dame 3 opciones; ej.: de la novia a su fotógrafa, de la paciente a su nutricionista).
+Slides 2 a N: un malentendido por slide: «No quiero [lo que [MI CLIENTA IDEAL] cree que molesta]» en máximo 10 palabras + «Solo quiero [lo que de verdad se busca]» con el porqué en 1 o 2 frases.
+Ordena del malentendido más común al más íntimo. Es una carta en su voz, no un testimonio: sin nombres. Usa solo cifras que yo te dé.
+Cierre: la última confesión firmada («— [quién habla]») + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+
+### 2 · Claude Code
+```
+hazme un carrusel tipo G64 (Carta «no quiero / sí quiero» (cada lámina aclara un malentendido)) sobre [TEMA] para [MI NICHO]
+```
+
+### 3 · HTML en Claude, ChatGPT o Gemini (texto perfecto)
+```
+Actúa como diseñadora de carruseles de Instagram. Vas a construir el carrusel en HTML para que el texto salga perfecto (tildes, eñes y listas).
+
+GUION:
+[PEGA AQUÍ EL GUION APROBADO, SLIDE POR SLIDE, con el texto exacto de cada una]
+
+LIENZO: 1080 × 1350 px (vertical 4:5). Márgenes de seguridad: 96 px a los lados; nada importante en los 120 px de abajo (ahí tapa la interfaz de Instagram).
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+PALETA (usa SOLO estos colores): #2F4A3A = verde bosque (caja del CTA y negritas del «solo quiero») · #FBF6EC = hoja de la carta · #231A14 = tinta · #C46A2B = ámbar: cinta, número, firma y palabra del CTA · #A9B98F = musgo: segunda cinta y subrayado de portada
+TIPOGRAFÍA:
+- título de portada: Inter Tight + Instrument Serif itálica 900 / 400, 104 px; «tu clienta» subrayado con el acento; la otra mitad en serif
+- el «no quiero»: Inter Tight 900, 84 px; 1 frase de máximo 10 palabras, arriba
+- el «solo quiero»: Instrument Serif itálica + Inter Tight 800 400 / 800, 66 px; 1 o 2 frases; lo que de verdad busca va en negrita
+- firma: Caveat 700, 54 px; «— tu clienta» en el acento, solo en el cierre
+PORTADA: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+SLIDES DEL MEDIO: la misma hoja con el número arriba (01, 02…), el «no quiero» en negrita y debajo el «solo quiero» en serif con la parte clave en negrita; centrado en vertical.
+CIERRE: la última confesión en la hoja con la firma a mano + la orden «comenta [PALABRA]» en una caja plana debajo.
+ELEMENTOS GRÁFICOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+EVITA: reproches en vez de miedos reales; párrafos largos; presentarla como testimonio con nombre; dos malentendidos en la misma lámina; fotos de stock que no son de su lugar.
+TU FOTO: en el HTML pon la foto como <img src="fotos/foto-1.jpg"> a sangre. Guarda tu foto con ese nombre, en una carpeta fotos/ junto al archivo.
+
+CÓMO LO ENTREGAS:
+- UN solo archivo HTML. Cada slide es un <section class="slide"> de exactamente 1080×1350 px, uno debajo del otro, overflow hidden.
+- Fuentes de Google Fonts con <link>; nunca -apple-system ni fuentes del sistema.
+- Ningún texto puede salirse del slide ni quedar a menos de 96 px del borde. Si no cabe, acorta el texto: no bajes la letra por debajo de 36 px.
+- Arriba de todo, un botón "Descargar PNG" que use html2canvas (https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js) con scale: 2 y baje cada slide como slide-01.png, slide-02.png…
+- Tutea en todo el texto.
+Muéstrame el resultado en la vista previa (Canvas/Artifacts) y dime qué slide te costó más encajar.
+(Para bajar los PNG: descarga el archivo .html y ábrelo con doble clic en tu navegador; dentro de la vista previa del chat el botón puede no descargar.)
+```
+
+### 4 · Gemini (Nano Banana)
+**A · Con tu foto (la adjuntas en el mismo mensaje)**
+```
+Genera la PORTADA de un carrusel de Instagram.
+Texto exacto, tal cual, con sus tildes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+PALETA (usa SOLO estos colores): #2F4A3A = verde bosque (caja del CTA y negritas del «solo quiero») · #FBF6EC = hoja de la carta · #231A14 = tinta · #C46A2B = ámbar: cinta, número, firma y palabra del CTA · #A9B98F = musgo: segunda cinta y subrayado de portada
+TIPOGRAFÍA:
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~8% del alto; «tu clienta» subrayado con el acento; la otra mitad en serif
+- el «no quiero»: estilo Inter Tight (900), letra de ~6% del alto; 1 frase de máximo 10 palabras, arriba
+- el «solo quiero»: estilo Instrument Serif itálica + Inter Tight 800 (400 / 800), letra de ~5% del alto; 1 o 2 frases; lo que de verdad busca va en negrita
+- firma: estilo Caveat (700), letra de ~4% del alto; «— tu clienta» en el acento, solo en el cierre
+COMPOSICIÓN DE ESTA SLIDE: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+ELEMENTOS GRÁFICOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+EVITA: reproches en vez de miedos reales; párrafos largos; presentarla como testimonio con nombre; dos malentendidos en la misma lámina; fotos de stock que no son de su lugar.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+El texto debe verse nítido, sin letras inventadas ni palabras extra. Nada de marcas de agua.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**B · Con tu marca**
+```
+Genera la PORTADA de un carrusel de Instagram, imagen vertical 4:5, con MI marca en lugar de esta paleta.
+Mis colores: [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex]. Mi tipografía: [nombre o "sans ultra bold" / "serif elegante" / "manuscrita"].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+Mantén esta composición y cambia solo colores y letra:
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+COMPOSICIÓN: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+ELEMENTOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Perfecto. Ahora la slide [N] con EXACTAMENTE el mismo estilo, paleta, tipografía y márgenes que la imagen anterior. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición de esta slide: la misma hoja con el número arriba (01, 02…), el «no quiero» en negrita y debajo el «solo quiero» en serif con la parte clave en negrita; centrado en vertical.
+(Si es la última slide, la composición es: la última confesión en la hoja con la firma a mano + la orden «comenta [PALABRA]» en una caja plana debajo.)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+```
+**Arreglar una palabra**
+```
+En la última imagen, corrige SOLO esta palabra: "[palabra mal escrita]" → "[palabra correcta]". No cambies nada más.
+```
+
+### 5 · ChatGPT (Imágenes)
+**A · Con tu foto (la adjuntas en el mismo mensaje)**
+```
+Crea la imagen de la PORTADA de un carrusel de Instagram.
+Escribe este texto EXACTO, respetando tildes y eñes: "[TEXTO DE LA PORTADA]".
+FORMATO: imagen vertical 4:5. La imagen llega hasta el borde: sin marco, sin passepartout ni franjas blancas alrededor. Deja un margen limpio de ~9% a los lados y nada importante en el 9% de abajo.
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+PALETA (usa SOLO estos colores): #2F4A3A = verde bosque (caja del CTA y negritas del «solo quiero») · #FBF6EC = hoja de la carta · #231A14 = tinta · #C46A2B = ámbar: cinta, número, firma y palabra del CTA · #A9B98F = musgo: segunda cinta y subrayado de portada
+TIPOGRAFÍA:
+- título de portada: estilo Inter Tight + Instrument Serif itálica (900 / 400), letra de ~8% del alto; «tu clienta» subrayado con el acento; la otra mitad en serif
+- el «no quiero»: estilo Inter Tight (900), letra de ~6% del alto; 1 frase de máximo 10 palabras, arriba
+- el «solo quiero»: estilo Instrument Serif itálica + Inter Tight 800 (400 / 800), letra de ~5% del alto; 1 o 2 frases; lo que de verdad busca va en negrita
+- firma: estilo Caveat (700), letra de ~4% del alto; «— tu clienta» en el acento, solo en el cierre
+COMPOSICIÓN DE ESTA SLIDE: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+ELEMENTOS GRÁFICOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+EVITA: reproches en vez de miedos reales; párrafos largos; presentarla como testimonio con nombre; dos malentendidos en la misma lámina; fotos de stock que no son de su lugar.
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
+Si un elemento pide un texto que no te di (una nota al margen, una etiqueta, una pantalla), déjalo sin letras: no inventes palabras ni rellenes con texto de mentira.
+Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
+Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
+Antes de generar, repíteme en una línea el texto que vas a escribir para confirmar que está bien.
+```
+**B · Con tu marca**
+```
+Crea la PORTADA de un carrusel de Instagram, vertical 4:5, con esta composición pero con MI identidad:
+colores [FONDO #hex] · [TEXTO #hex] · [ACENTO #hex] y tipografía [descripción].
+Texto exacto: "[TEXTO DE LA PORTADA]".
+FONDO: una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.
+COMPOSICIÓN: hoja de carta al centro con cinta, rótulo chico en letra de máquina y «Confesiones de [quién habla] a [quién la lee]» (ej.: de tu clienta a la emprendedora que no se atreve a venderle); abajo, a mano, «léela hasta el final →».
+ELEMENTOS: un malentendido por slide · «no quiero» arriba, «solo quiero» debajo · máximo 2 frases debajo · firma solo en el cierre
+```
+**C · Solo fondo, sin texto**
+```
+Esta ficha no necesita un fondo generado con IA: lleva tus fotos o capturas reales (una foto real del lugar a sangre, algo oscurecida (pared de troncos, bosque, leña), con una hoja de carta con renglones al centro sujeta con cinta y una polaroid con la foto de lo que nombra la lámina.)
+Usa la opción «HTML en cualquier chat» para armarla con el texto perfecto, o la variante A/B si quieres que el modelo haga la slide completa.
+```
+**Seguir con el slide N**
+```
+Ahora la slide [N]. Mismo estilo, misma paleta, misma tipografía y mismo encuadre que la imagen anterior: es una serie. Texto exacto: "[TEXTO DE LA SLIDE N]".
+Composición: la misma hoja con el número arriba (01, 02…), el «no quiero» en negrita y debajo el «solo quiero» en serif con la parte clave en negrita; centrado en vertical.
+(Si es la última slide, la composición es: la última confesión en la hoja con la firma a mano + la orden «comenta [PALABRA]» en una caja plana debajo.)
+TU FOTO: adjunta tu foto en este mismo mensaje y úsala de fondo: soy yo. No cambies mi cara, mi pelo ni mi ropa; puedes recortarla a 4:5.
 Lo que aparece entre «» en la descripción es solo un ejemplo de tono: no lo escribas. En la imagen va SOLO el texto exacto.
 Si la slide lleva foto, conserva sus colores reales: la paleta es para el texto y los elementos, no para teñir la foto.
 ```

@@ -1,0 +1,3308 @@
+{
+ "version": 1,
+ "actualizado": "2026-11-03",
+ "nota": "Fuente de verdad de las plantillas de edición de FÓRMULA 100K. Cada plantilla tiene un nombre que la alumna dice y un comando de una línea; la skill plantillas-edicion-f100k la reconoce y delega en su motor.",
+ "instalar": {
+  "módulo Edición": "Instala el módulo Edición desde la Fábrica de contenido (formula100k.app, Instala tus módulos → Edición).",
+  "módulo Animación": "Instala el módulo Animación desde la Fábrica de contenido (formula100k.app, Instala tus módulos → Animación).",
+  "plugin formula100k": "En Claude Code: /plugin marketplace add formula100k/formula100k-skills y luego /plugin install formula100k@formula100k."
+ },
+ "total": 179,
+ "porGrupo": {
+  "Con tu video": 43,
+  "YouTube 16:9": 11,
+  "Sin grabar": 5,
+  "Animado sin cara": 13,
+  "¿Qué pasaría si…?": 56,
+  "Motion graphics": 4,
+  "Efectos": 40,
+  "Looks": 7
+ },
+ "plantillas": [
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/fitted-stacked-captions.mp4",
+   "id": "subtitulo-ajustado",
+   "nombre": "Subtítulo ajustado",
+   "grupo": "Con tu video",
+   "queSeVe": "Tú hablando y, cada dos o tres frases, la palabra clave enorme en letra de diseño.",
+   "necesita": "Tu video grabado vertical. Nada más.",
+   "comando": "edita mi video con la plantilla «Subtítulo ajustado»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "fitted-stacked-captions"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/tiktok-style-edit.mp4",
+   "id": "estilo-tiktok",
+   "nombre": "Estilo TikTok",
+   "grupo": "Con tu video",
+   "queSeVe": "Gancho en caja de texto, subtítulos chicos al pecho y capturas reales que entran por corte.",
+   "necesita": "Tu video grabado vertical. fotos o capturas de lo que nombras",
+   "comando": "edita mi video con la plantilla «Estilo TikTok»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "tiktok-style-edit"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/personal-short-form.mp4",
+   "id": "personal",
+   "nombre": "Personal",
+   "grupo": "Con tu video",
+   "queSeVe": "Una palabra grande a la vez, tus clips del día y una rejilla de fotos que se va llenando.",
+   "necesita": "Tu video grabado vertical. B-roll y fotos de lo que nombras",
+   "comando": "edita mi video con la plantilla «Personal»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "personal-short-form"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/cinematic-type-reel.mp4",
+   "id": "tipografia-de-cine",
+   "nombre": "Tipografía de cine",
+   "grupo": "Con tu video",
+   "queSeVe": "Tus clips en blanco y negro con una palabra enorme por golpe, como un tráiler de cine.",
+   "necesita": "Tu video grabado vertical. B-roll",
+   "comando": "edita mi video con la plantilla «Tipografía de cine»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "cinematic-type-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/broll-stacked-text-edit.mp4",
+   "id": "b-roll-texto-apilado",
+   "nombre": "B-roll + texto apilado",
+   "grupo": "Con tu video",
+   "queSeVe": "Tus clips horizontales enteros en una franja y, en las frases clave, una palabra enorme apilada.",
+   "necesita": "Tu video grabado vertical. B-roll horizontal",
+   "comando": "edita mi video con la plantilla «B-roll + texto apilado»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "broll-stacked-text-edit"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/vlog-editor.mp4",
+   "id": "vlog",
+   "nombre": "Vlog",
+   "grupo": "Con tu video",
+   "queSeVe": "Tus clips del día cortados con tu voz, con sello de día y hora y subtítulos en minúscula.",
+   "necesita": "Tu video grabado vertical. clips del día (B-roll)",
+   "comando": "edita mi video con la plantilla «Vlog»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "vlog-editor"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/business-short-form-reels.mp4",
+   "id": "business",
+   "nombre": "Business",
+   "grupo": "Con tu video",
+   "queSeVe": "Cambias de encuadre en cada corte: tú completa, tú arriba con un gráfico o solo el gráfico.",
+   "necesita": "Tu video grabado vertical. capturas de lo que nombras (la app, la página)",
+   "comando": "edita mi video con la plantilla «Business»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "business-short-form-reels"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Split",
+    "Tú arriba, titular abajo"
+   ],
+   "tambienEn": null,
+   "fusion": "Pantalla dividida: estaba en ESTILOS_CASA (editor-video-formula100k, formato split) y en Auto-Edición; se queda Auto-Edición (split-reel). El formato split del editor de video sigue existiendo dentro de «Edición base».",
+   "muestra": "/auto-edicion/estilos/split-reel.mp4",
+   "id": "pantalla-dividida",
+   "nombre": "Pantalla dividida",
+   "grupo": "Con tu video",
+   "queSeVe": "Tú arriba y abajo un titular de dos tamaños con un diagrama que se va llenando.",
+   "necesita": "Tu video grabado vertical. Nada más.",
+   "comando": "edita mi video con la plantilla «Pantalla dividida»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "split-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/explainer-panel-reel.mp4",
+   "id": "explainer-con-panel",
+   "nombre": "Explainer con panel",
+   "grupo": "Con tu video",
+   "queSeVe": "Fondo negro, un diagrama que se arma arriba mientras hablas y tú en una tarjeta abajo.",
+   "necesita": "Tu video grabado vertical. capturas de lo que nombras",
+   "comando": "edita mi video con la plantilla «Explainer con panel»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "explainer-panel-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/glass-explainer-reel.mp4",
+   "id": "explainer-con-cifras",
+   "nombre": "Explainer con cifras",
+   "grupo": "Con tu video",
+   "queSeVe": "Tus cifras en grande, un arco que une dos ideas y una gráfica que sube mientras hablas.",
+   "necesita": "Tu video grabado vertical. capturas de lo que nombras (opcional)",
+   "comando": "edita mi video con la plantilla «Explainer con cifras»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "glass-explainer-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/yap-and-show.mp4",
+   "id": "hablo-y-te-muestro",
+   "nombre": "Hablo y te muestro",
+   "grupo": "Con tu video",
+   "queSeVe": "Hablas a cámara y arriba de tu cabeza aparece la prueba real de cada cosa que nombras.",
+   "necesita": "Tu video grabado vertical. fotos o capturas de lo que nombras",
+   "comando": "edita mi video con la plantilla «Hablo y te muestro»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "yap-and-show"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/image-cluster-reel.mp4",
+   "id": "racimo-de-fotos",
+   "nombre": "Racimo de fotos",
+   "grupo": "Con tu video",
+   "queSeVe": "Arriba de tu cabeza aparece un racimo de fotos reales que cambia cada vez que nombras algo.",
+   "necesita": "Tu video grabado vertical. fotos reales de lo que nombras",
+   "comando": "edita mi video con la plantilla «Racimo de fotos»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "image-cluster-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/visual-essay-reel.mp4",
+   "id": "ensayo-visual",
+   "nombre": "Ensayo visual",
+   "grupo": "Con tu video",
+   "queSeVe": "Fondo negro, tú recortada abajo y la evidencia real flotando arriba de tu cabeza.",
+   "necesita": "Tu video grabado vertical. capturas reales (una página, un titular) de lo que nombras",
+   "comando": "edita mi video con la plantilla «Ensayo visual»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "visual-essay-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/natural-story-reel.mp4",
+   "id": "historia-natural",
+   "nombre": "Historia natural",
+   "grupo": "Con tu video",
+   "queSeVe": "Hablas en tu lugar y en la pared, detrás de ti, aparecen con calma tu frase y fotos reales.",
+   "necesita": "Tu video grabado vertical. fotos reales de lo que nombras y una frase tuya para la cita",
+   "comando": "edita mi video con la plantilla «Historia natural»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "natural-story-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Depth UI"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/depth-ui-reel.mp4",
+   "id": "tu-delante-de-tu-pantalla-depth-ui",
+   "nombre": "Tú delante de tu pantalla (Depth UI)",
+   "grupo": "Con tu video",
+   "queSeVe": "Tu cabeza queda delante de pantallas reales gigantes y un aviso flota a la altura de tu pecho.",
+   "necesita": "Tu video grabado vertical. capturas reales de lo que nombras (página pública o tu app) y un cuadro de tu propio video",
+   "comando": "edita mi video con la plantilla «Tú delante de tu pantalla (Depth UI)»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "depth-ui-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/cutout-backdrop-reel.mp4",
+   "id": "fondo-que-cambia",
+   "nombre": "Fondo que cambia",
+   "grupo": "Con tu video",
+   "queSeVe": "Tú recortada sobre una foto real distinta en cada idea, cambiando de tamaño y de lugar.",
+   "necesita": "Tu video grabado vertical. una foto real por idea (de lo que nombras)",
+   "comando": "edita mi video con la plantilla «Fondo que cambia»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "cutout-backdrop-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/cutout-grid-reel.mp4",
+   "id": "cuadricula-de-4",
+   "nombre": "Cuadrícula de 4",
+   "grupo": "Con tu video",
+   "queSeVe": "Cuatro fotos reales llenan la pantalla y cambian juntas con cada idea; tú vas chica al centro.",
+   "necesita": "Tu video grabado vertical. 4 fotos reales por idea",
+   "comando": "edita mi video con la plantilla «Cuadrícula de 4»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "cutout-grid-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/ranking-format.mp4",
+   "id": "ranking-por-niveles",
+   "nombre": "Ranking por niveles",
+   "grupo": "Con tu video",
+   "queSeVe": "Tabla de niveles en tu pecho: lo que nombras aparece en grande y cae a su fila.",
+   "necesita": "Tu video grabado vertical. capturas o fotos de lo que nombras; idealmente que digas el nivel de cada cosa",
+   "comando": "edita mi video con la plantilla «Ranking por niveles»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "ranking-format"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Top cinco"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/top-five-ranking.mp4",
+   "id": "top-5",
+   "nombre": "Top 5",
+   "grupo": "Con tu video",
+   "queSeVe": "Un tablero del 1 al 5 arriba de tu cabeza que se llena en cualquier orden mientras hablas.",
+   "necesita": "Tu video grabado vertical. fotos de lo que nombras",
+   "comando": "edita mi video con la plantilla «Top 5»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "top-five-ranking"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Siempre o nunca"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/this-versus-that-format.mp4",
+   "id": "siempre-nunca",
+   "nombre": "Siempre / Nunca",
+   "grupo": "Con tu video",
+   "queSeVe": "Una tabla en T arriba de tu cabeza: cada cosa que dices cae en «Siempre» o en «Nunca».",
+   "necesita": "Tu video grabado vertical. capturas o fotos de lo que nombras",
+   "comando": "edita mi video con la plantilla «Siempre / Nunca»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "this-versus-that-format"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Lista sobre tu video",
+    "Lista que se llena"
+   ],
+   "tambienEn": null,
+   "fusion": "Lista sobre tu video (lista-sobre-video-hablado-f100k, ESTILOS_EDICION y ESTILOS_CASA) hace lo mismo que «Lista rápida» de Auto-Edición: se queda Auto-Edición (rapid-list).",
+   "muestra": "/auto-edicion/estilos/rapid-list.mp4",
+   "id": "lista-rapida",
+   "nombre": "Lista rápida",
+   "grupo": "Con tu video",
+   "queSeVe": "Una lista numerada se llena a los lados de tu cabeza y cada punto sale grande al pecho.",
+   "necesita": "Tu video grabado vertical. capturas o fotos de cada ítem",
+   "comando": "edita mi video con la plantilla «Lista rápida»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "rapid-list"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/if-then-grid-reel.mp4",
+   "id": "si-entonces",
+   "nombre": "Si / entonces",
+   "grupo": "Con tu video",
+   "queSeVe": "Una rejilla de cuatro columnas de colores se llena celda por celda arriba de ti mientras explicas.",
+   "necesita": "Tu video grabado vertical. capturas verticales (vista de celular) de lo que nombras",
+   "comando": "edita mi video con la plantilla «Si / entonces»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "if-then-grid-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Clon",
+    "Dos versiones de ti"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/clone-versus-reel.mp4",
+   "id": "dos-de-ti",
+   "nombre": "Dos de ti",
+   "grupo": "Con tu video",
+   "queSeVe": "Dos versiones tuyas lado a lado: una habla, la otra calla, y gana la que tiene razón.",
+   "necesita": "Tu video grabado vertical. una segunda toma (tú escuchando o gesticulando) + capturas de lo que nombras",
+   "comando": "edita mi video con la plantilla «Dos de ti»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "clone-versus-reel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/dual-role-dialogue.mp4",
+   "id": "novato-vs-experto",
+   "nombre": "Novato vs. experto",
+   "grupo": "Con tu video",
+   "queSeVe": "Haces los dos papeles: la columna que habla se enciende y la otra se apaga.",
+   "necesita": "Tu video grabado vertical. una segunda toma (tú escuchando o gesticulando)",
+   "comando": "edita mi video con la plantilla «Novato vs. experto»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "dual-role-dialogue"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/youtube-clips.mp4",
+   "id": "clips-rankeados",
+   "nombre": "Clips rankeados",
+   "grupo": "Con tu video",
+   "queSeVe": "De tu video largo sale el mejor clip, con su puntaje, su gancho y subtítulos ajustados.",
+   "necesita": "Tu video grabado vertical. el video largo; una captura de lo que nombras.",
+   "comando": "saca clips de mi video largo con la plantilla «Clips rankeados»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video",
+    "receta": "youtube-clips"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Estilo notitas"
+   ],
+   "tambienEn": null,
+   "fusion": "Notitas: ESTILOS_CASA la hacía en Yapper Edita; en Claude Code la hace edicion-notitas-f100k (una sola entrada).",
+   "muestra": "/edicion/estilos/notitas.mp4",
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Notitas»",
+   "id": "notitas",
+   "nombre": "Notitas",
+   "queSeVe": "Tú a cámara con corte ultra fino, subtítulos de una palabra y notas escritas a mano que aparecen con corte seco.",
+   "necesita": "Tu video grabado vertical y tu guion (opcional: capturas de lo que nombras).",
+   "motor": {
+    "skill": "edicion-notitas-f100k",
+    "receta": "notitas"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Motion recortada»",
+   "id": "motion-recortada",
+   "nombre": "Motion recortada",
+   "queSeVe": "Alterna tú a pantalla completa con fondo negro, título arriba, motion graphics con tus capturas reales al centro y tú recortada abajo.",
+   "necesita": "Tu video grabado vertical (mejor con fondo verde) y capturas reales de lo que nombras.",
+   "motor": {
+    "skill": "reel-motion-recortada-f100k",
+    "receta": "motion + cara"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Infografía con clon»",
+   "id": "infografia-con-clon",
+   "nombre": "Infografía con clon",
+   "queSeVe": "Dialogas contigo: tu clon con otra ropa reacciona y cada número que dices se vuelve una lámina a pantalla completa.",
+   "necesita": "Tu video grabado vertical, una segunda toma tuya reaccionando y fotos de lo que nombras.",
+   "motor": {
+    "skill": "reel-infografia-con-clon-f100k",
+    "receta": "infografía con clon"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Palabra detrás de ti»",
+   "id": "palabra-detras-de-ti",
+   "nombre": "Palabra detrás de ti",
+   "queSeVe": "Una palabra gigante queda DETRÁS de ti, en contorno y en cursiva que se escribe cuando la dices, con subtítulos chicos.",
+   "necesita": "Tu video grabado vertical. Nada más.",
+   "motor": {
+    "skill": "look-viral-en-un-prompt-f100k",
+    "receta": "palabra"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Línea minimalista»",
+   "id": "linea-minimalista",
+   "nombre": "Línea minimalista",
+   "queSeVe": "Fondo negro, tú en blanco y negro con halo de luz y figuras de línea blanca que se dibujan solas.",
+   "necesita": "Tu video grabado vertical. Nada más.",
+   "motor": {
+    "skill": "look-viral-en-un-prompt-f100k",
+    "receta": "linea"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Edición base con formatos",
+    "Corte de silencios"
+   ],
+   "tambienEn": "plugin formula100k",
+   "fusion": "Los formatos split y pizarra del editor de video se fusionaron: split → «Pantalla dividida» (Auto-Edición) y pizarra → «Pizarra al lado» (el mismo editor dice que la pizarra la produce pizarra-explicativa-f100k).",
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Edición base»",
+   "id": "edicion-base",
+   "nombre": "Edición base",
+   "queSeVe": "Corta silencios, muletillas y tomas repetidas y monta tu toma a pantalla completa con gancho, cajas de énfasis y subtítulos.",
+   "necesita": "Tu video grabado y tu guion (opcional).",
+   "motor": {
+    "skill": "editor-video-formula100k",
+    "receta": "fullscreen"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "PiP",
+    "Recuadro"
+   ],
+   "tambienEn": "plugin formula100k",
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Pantalla con recuadro»",
+   "id": "pantalla-con-recuadro",
+   "nombre": "Pantalla con recuadro",
+   "queSeVe": "Tu grabación de pantalla de fondo y tú en un recuadro.",
+   "necesita": "Tu video grabado y una grabación de pantalla.",
+   "motor": {
+    "skill": "editor-video-formula100k",
+    "receta": "pip"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Versus"
+   ],
+   "tambienEn": "plugin formula100k",
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Antes y ahora»",
+   "id": "antes-y-ahora",
+   "nombre": "Antes y ahora",
+   "queSeVe": "El cuadro partido en dos (antes y ahora) y tú en la costura.",
+   "necesita": "Tu video grabado y dos imágenes o clips, uno por lado.",
+   "motor": {
+    "skill": "editor-video-formula100k",
+    "receta": "versus"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Motion alrededor de tu cara"
+   ],
+   "tambienEn": null,
+   "fusion": "«Motion alrededor de tu cara» (ESTILOS_EDICION) y «Motion con capturas reales» (ESTILOS_CASA) usaban la misma skill (motion-reels-f100k): una sola entrada.",
+   "muestra": "/edicion/estilos/motion-recortada.mp4",
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Motion con capturas reales»",
+   "id": "motion-con-capturas",
+   "nombre": "Motion con capturas reales",
+   "queSeVe": "Título arriba con corte seco y tarjetas con capturas reales (tu perfil, tus números) en los espacios libres, sin taparte la cara.",
+   "necesita": "Tu video grabado vertical y capturas de lo que nombras.",
+   "motor": {
+    "skill": "motion-reels-f100k",
+    "receta": "zonas libres"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Explicación en vivo"
+   ],
+   "tambienEn": null,
+   "fusion": "«Explicación en vivo» (ESTILOS_EDICION) y «Explicación arriba» (ESTILOS_CASA) eran la misma: una sola entrada. Si prefieres fondo negro y diagrama, usa «Explainer con panel».",
+   "muestra": "/edicion/estilos/explicacion-arriba.mp4",
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Explicación arriba»",
+   "id": "explicacion-arriba",
+   "nombre": "Explicación arriba",
+   "queSeVe": "Tú en una tarjeta abajo y arriba un panel dibuja lo que dices, frase por frase, con un fondo de color por tema.",
+   "necesita": "Tu video grabado vertical y tu guion.",
+   "motor": {
+    "skill": "reel-explicacion-en-vivo-f100k",
+    "receta": "paneles por tema"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Fotos y clips de internet»",
+   "id": "fotos-y-clips-de-internet",
+   "nombre": "Fotos y clips de internet",
+   "queSeVe": "Fotos de Pinterest y Google, TikToks y noticias que van con lo que dices, listos para poner sobre tu toma.",
+   "necesita": "Tu video grabado y su transcripción.",
+   "motor": {
+    "skill": "recursos-de-video-formula100k",
+    "receta": "WEB"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/scrapbook.mp4",
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Gráficos scrapbook»",
+   "id": "graficos-scrapbook",
+   "nombre": "Gráficos scrapbook",
+   "queSeVe": "Recortes, cintas y notas de papel sobre tu toma en los momentos clave. Gasta créditos de Higgsfield.",
+   "necesita": "Tu video grabado y créditos de Higgsfield.",
+   "motor": {
+    "skill": "graficos-de-video-formula100k",
+    "receta": "scrapbook"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Pizarra al lado»",
+   "id": "pizarra-al-lado",
+   "nombre": "Pizarra al lado",
+   "queSeVe": "Trazos a mano que se dibujan junto a ti mientras explicas, en pantalla dividida.",
+   "necesita": "Tu video grabado.",
+   "motor": {
+    "skill": "pizarra-explicativa-f100k",
+    "receta": "pizarra"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "El gráfico sigue tu dedo"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Gráfico en tu dedo»",
+   "id": "grafico-en-tu-dedo",
+   "nombre": "Gráfico en tu dedo",
+   "queSeVe": "Señalas y el gráfico se pega a la punta de tu dedo, cuadro por cuadro.",
+   "necesita": "Tu video grabado donde señalas con el dedo.",
+   "motor": {
+    "skill": "motion-tracking-dedo-f100k",
+    "receta": "dedo"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Capturas de tutorial»",
+   "id": "capturas-de-tutorial",
+   "nombre": "Capturas de tutorial",
+   "queSeVe": "Ventanas de terminal, flechas, pasos numerados y comandos sobre tu video cuando enseñas algo.",
+   "necesita": "Tu video de tutorial y los pasos que enseñas.",
+   "motor": {
+    "skill": "capturas-tutorial-formula100k",
+    "receta": "capturas"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Collage de cine»",
+   "id": "collage-de-cine",
+   "nombre": "Collage de cine",
+   "queSeVe": "Tu toma compuesta en paneles sobre escenas de película.",
+   "necesita": "Tu video grabado vertical.",
+   "motor": {
+    "skill": "collage-cine-f100k",
+    "receta": "collage cine"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/broll-vsl.mp4",
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «B-roll de cine para VSL»",
+   "id": "broll-de-cine-vsl",
+   "nombre": "B-roll de cine para VSL",
+   "queSeVe": "De 15 a 25 clips de cine con tu avatar para cubrir un video de ventas largo. Gasta créditos de Higgsfield.",
+   "necesita": "El guion de tu VSL y créditos de Higgsfield.",
+   "motor": {
+    "skill": "broll-vsl-formula100k",
+    "receta": "b-roll VSL"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Con tu video",
+   "comando": "edita mi video con la plantilla «Collage de gancho»",
+   "id": "collage-de-gancho",
+   "nombre": "Collage de gancho",
+   "queSeVe": "Título de 2 líneas sobre tu frente y recortes de fotos alrededor de tu cabeza y a la altura del pecho.",
+   "necesita": "Tu video grabado vertical (y fotos de tu tema, o se buscan).",
+   "motor": {
+    "skill": "collage-gancho-f100k",
+    "receta": "collage gancho"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/educational-youtube-editor.mp4",
+   "id": "youtube-educativo",
+   "nombre": "YouTube educativo",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Tú en una tarjeta a la derecha y, a tu lado, cifras, capturas reales y láminas de pasos.",
+   "necesita": "Tu video grabado horizontal. capturas o fotos reales de lo que nombras (1 por paso).",
+   "comando": "edita mi video con la plantilla «YouTube educativo»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "educational-youtube-editor"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/split-screen-document.mp4",
+   "id": "leccion-con-documento",
+   "nombre": "Lección con documento",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Un documento blanco se llena y baja solo a tu lado mientras explicas cada punto.",
+   "necesita": "Tu video grabado horizontal. una captura de lo que nombras; el texto del documento sale de lo que dices (puede ser tu regalo descargable).",
+   "comando": "edita mi video con la plantilla «Lección con documento»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "split-screen-document"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/lesson-doc-builder.mp4",
+   "id": "documento-que-se-arma",
+   "nombre": "Documento que se arma",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Una hoja grande se escribe sección por sección mientras hablas en una cajita en la esquina.",
+   "necesita": "Tu video grabado horizontal. una captura de lo que nombras; nada más.",
+   "comando": "edita mi video con la plantilla «Documento que se arma»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "lesson-doc-builder"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/tips-breakdown-youtube.mp4",
+   "id": "tips-por-capitulos",
+   "nombre": "Tips por capítulos",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Un marcador de capítulos 1-2-3 te ordena el video y la idea clave aparece enorme en tu pecho.",
+   "necesita": "Tu video grabado horizontal. capturas de lo que nombras y el recorte de la persona (node K/scripts/video.mjs mate).",
+   "comando": "edita mi video con la plantilla «Tips por capítulos»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "tips-breakdown-youtube"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/ear-to-ear-captions.mp4",
+   "id": "texto-de-oreja-a-oreja",
+   "nombre": "Texto de oreja a oreja",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Tus palabras aparecen a los lados de tu cabeza, en gris, y se encienden al decirlas.",
+   "necesita": "Tu video grabado horizontal. nada extra (el recorte de la persona con node K/scripts/video.mjs mate).",
+   "comando": "edita mi video con la plantilla «Texto de oreja a oreja»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "ear-to-ear-captions"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/coaching-call-clips.mp4",
+   "id": "clips-de-una-llamada",
+   "nombre": "Clips de una llamada",
+   "grupo": "YouTube 16:9",
+   "queSeVe": "Ves la onda de tu llamada completa, el tramo elegido en naranja y luego el clip explicado.",
+   "necesita": "Tu video grabado horizontal. la grabación completa (para la onda) y una captura de lo que nombras.",
+   "comando": "edita mi video con la plantilla «Clips de una llamada»",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Con tu video (16:9)",
+    "receta": "coaching-call-clips"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "YouTube 16:9",
+   "comando": "edita mi video con la plantilla «YouTube notitas»",
+   "id": "youtube-notitas",
+   "nombre": "YouTube notitas",
+   "queSeVe": "Corte fino, gancho editorial, títulos por sección y pantallas de papel cuadriculado con tus capturas reales.",
+   "necesita": "Tu video largo horizontal (opcional: el enlace de la fuente).",
+   "motor": {
+    "skill": "youtube-notitas-f100k",
+    "receta": "youtube notitas"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": "plugin formula100k",
+   "fusion": null,
+   "muestra": null,
+   "grupo": "YouTube 16:9",
+   "comando": "edita mi video con la plantilla «Noticiero»",
+   "id": "noticiero",
+   "nombre": "Noticiero",
+   "queSeVe": "Tu video en 16:9 con barra de noticias, rótulos y capturas.",
+   "necesita": "Tu video grabado.",
+   "motor": {
+    "skill": "editor-video-formula100k",
+    "receta": "noticiero"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "YouTube 16:9",
+   "comando": "edita mi video con la plantilla «Motion para YouTube»",
+   "id": "motion-para-youtube",
+   "nombre": "Motion para YouTube",
+   "queSeVe": "Etiquetas, comparativas, tarjetas y capítulos en 16:9 en los espacios libres del cuadro.",
+   "necesita": "Tu video horizontal (archivo o enlace).",
+   "motor": {
+    "skill": "motion-youtube-f100k",
+    "receta": "overlays 16:9"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Takeover"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "YouTube 16:9",
+   "comando": "edita mi video con la plantilla «Takeover a pantalla completa»",
+   "id": "takeover",
+   "nombre": "Takeover a pantalla completa",
+   "queSeVe": "En los momentos clave tu cara sale y entra una animación que llena la pantalla.",
+   "necesita": "Tu video horizontal.",
+   "motor": {
+    "skill": "motion-takeover-f100k",
+    "receta": "takeover"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "YouTube 16:9",
+   "comando": "hazme la pizarra para grabar con la plantilla «Pizarra para grabar» de [ENLACE]",
+   "id": "pizarra-para-grabar",
+   "nombre": "Pizarra para grabar",
+   "queSeVe": "Una pizarra blanca 16:9 por bloque, con capturas reales de la fuente, para grabar tu video de YouTube encima.",
+   "necesita": "El enlace de la entrevista, podcast o charla que vas a comentar.",
+   "motor": {
+    "skill": "pizarra-youtube-f100k",
+    "receta": "pizarra"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Caricatura",
+    "Explicado sin grabar"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/ruido.mp4",
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «Avatar con poses» sobre [TEMA]",
+   "id": "avatar-con-poses",
+   "nombre": "Avatar con poses",
+   "queSeVe": "Reel explicado: subtítulo palabra por palabra arriba, una ilustración plana por frase al centro y tu avatar abajo cambiando de pose.",
+   "necesita": "Un tema, tu voz (grabada, de la compu o con IA) y tus fotos para las poses (o sin avatar).",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Sin grabar",
+    "receta": "plantilla/ejemplo-ruido.src.html (poses)"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/sin-grabar/avatar-3d.mp4",
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «Avatar 3D» sobre [TEMA]",
+   "id": "avatar-3d",
+   "nombre": "Avatar 3D",
+   "queSeVe": "El mismo reel explicado con un personaje 3D que mueve brazos, dedos y boca con tu voz. 0 créditos de imagen.",
+   "necesita": "Un tema y tu voz (grabada, de la compu o con IA).",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Sin grabar",
+    "receta": "plantilla/sin-grabar/avatar-3d"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Habbo"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/sin-grabar/habbo.mp4",
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «Avatar pixel» sobre [TEMA]",
+   "id": "avatar-pixel",
+   "nombre": "Avatar pixel",
+   "queSeVe": "El mismo reel explicado con un personaje de cubitos en pixel art, 6 gestos y boca con tu voz. 0 créditos de imagen.",
+   "necesita": "Un tema y tu voz (grabada, de la compu o con IA).",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Sin grabar",
+    "receta": "plantilla/sin-grabar/habbo"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [
+    "Explicador con avatar"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/sin-grabar/explicador.mp4",
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «Explicador de línea» sobre [TEMA]",
+   "id": "explicador-de-linea",
+   "nombre": "Explicador de línea",
+   "queSeVe": "Tu retrato en tinta blanco y negro con 3 gestos (o sin avatar) y tarjetas de capturas reales, cifras, código y chats.",
+   "necesita": "Un tema, tu voz y HyperFrames (opcional: 1 foto tuya y ~5 créditos para el avatar).",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Sin grabar",
+    "receta": "plantilla/sin-grabar/explicador"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «iPhone y avatar» sobre [TEMA]",
+   "id": "iphone-y-avatar",
+   "nombre": "iPhone y avatar",
+   "queSeVe": "Subtítulo con la selección de texto del iPhone arriba, una ilustración iOS al centro y tu avatar abajo cambiando de pose.",
+   "necesita": "Un tema y tu voz (avatar opcional).",
+   "motor": {
+    "skill": "reel-iphone-avatar-f100k",
+    "receta": "iphone + avatar"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/regalos/animaciones/r/juego-de-cocina.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Juego de cocina» sobre [TEMA]",
+   "id": "juego-de-cocina",
+   "nombre": "Juego de cocina",
+   "queSeVe": "Tu método de 3 pasos contado como un videojuego de cocina de los 2000.",
+   "necesita": "Tu método en 3 pasos.",
+   "motor": {
+    "skill": "animacion-juego-de-cocina-f100k",
+    "receta": "juego de cocina"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/regalos/animaciones/r/collage-editorial.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Collage editorial» con este titular: [TU TITULAR]",
+   "id": "collage-editorial",
+   "nombre": "Collage editorial",
+   "queSeVe": "Objetos de tu oficio flotan sobre papel mientras tu titular aparece palabra por palabra.",
+   "necesita": "Un titular.",
+   "motor": {
+    "skill": "animacion-collage-editorial-f100k",
+    "receta": "collage editorial"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/regalos/animaciones/r/collage-stopmotion.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Collage stop motion» sobre [TEMA]",
+   "id": "collage-stop-motion",
+   "nombre": "Collage stop motion",
+   "queSeVe": "Escenarios de papel donde tu foto recortada cambia de pose a saltos.",
+   "necesita": "Varias fotos tuyas.",
+   "motor": {
+    "skill": "animacion-collage-stopmotion-f100k",
+    "receta": "collage stop motion"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Reflexión en collage» sobre [TEMA]",
+   "id": "reflexion-en-collage",
+   "nombre": "Reflexión en collage",
+   "queSeVe": "Tu voz en off sobre fotos y clips reales recortados como stickers, con datos que caen y un remate en blanco y negro.",
+   "necesita": "Un tema de reflexión y tu voz.",
+   "motor": {
+    "skill": "collage-reflexion-f100k",
+    "receta": "reflexión"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": "ESTILOS_CASA lo mandaba a animacion-recortes-papel-f100k, pero ese look (papel envejecido, recortes con borde, sellos) es el de reel-collage-explicado-f100k; «Recortes de papel» queda como su propia plantilla.",
+   "muestra": "/edicion/estilos/collage-explicado.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Collage explicado» sobre [TEMA]",
+   "id": "collage-explicado",
+   "nombre": "Collage explicado",
+   "queSeVe": "Papel envejecido, recortes de fotos, sellos y etiquetas: una idea explicada con tu voz y sin salir en cámara (70 a 95 s).",
+   "necesita": "Un tema o el enlace de un reel explicado que te gustó.",
+   "motor": {
+    "skill": "reel-collage-explicado-f100k",
+    "receta": "collage explicado"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Mundo de papel"
+   ],
+   "tambienEn": "módulo Animación",
+   "fusion": null,
+   "muestra": "/edicion/estilos/recortes-papel.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Recortes de papel» sobre [TEMA]",
+   "id": "recortes-de-papel",
+   "nombre": "Recortes de papel",
+   "queSeVe": "Un corto narrado de 20 a 30 s en un mundo de papel que es la metáfora de tu tema.",
+   "necesita": "Un tema y tu voz.",
+   "motor": {
+    "skill": "animacion-recortes-papel-f100k",
+    "receta": "mundo-metáfora"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Cubitos 3D"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/cubitos-3d.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Mundo de cubitos 3D» sobre [TEMA]",
+   "id": "mundo-de-cubitos-3d",
+   "nombre": "Mundo de cubitos 3D",
+   "queSeVe": "Un corto narrado de 20 a 40 s con mascotas de caja en una gradería, un estrado y un escritorio de jefe.",
+   "necesita": "Un tema y tu voz.",
+   "motor": {
+    "skill": "animacion-cubitos-3d-f100k",
+    "receta": "cubitos 3D"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/lista-que-suena.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Lista que suena» sobre [TEMA]",
+   "id": "lista-que-suena",
+   "nombre": "Lista que suena",
+   "queSeVe": "Una lista por categorías: cada fila trae su carátula y suena un fragmento.",
+   "necesita": "Tu lista (3 categorías con 3 recomendaciones cada una).",
+   "motor": {
+    "skill": "reel-lista-que-suena-f100k",
+    "receta": "lista que suena"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Faceless"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Reel sin cara» sobre [TEMA]",
+   "id": "reel-sin-cara",
+   "nombre": "Reel sin cara",
+   "queSeVe": "Grabas solo tu voz y el reel se arma con imágenes y clips. Puede gastar créditos de Higgsfield.",
+   "necesita": "Un tema y tu voz.",
+   "motor": {
+    "skill": "reel-faceless-f100k",
+    "receta": "faceless"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/tutorial-sin-cara.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Tutorial sin cara» sobre [TEMA]",
+   "id": "tutorial-sin-cara",
+   "nombre": "Tutorial sin cara",
+   "queSeVe": "Tu grabación de pantalla con tarjetas y subtítulos que se mueven; tú solo pones la voz.",
+   "necesita": "Tu idea, tus grabaciones de pantalla y tu voz.",
+   "motor": {
+    "skill": "tutorial-viral-f100k",
+    "receta": "tutorial"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/storytelling-animado.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Historia animada» con esta historia: [TU HISTORIA]",
+   "id": "historia-animada",
+   "nombre": "Historia animada",
+   "queSeVe": "Una anécdota o el caso de una clienta contado como reel animado de 45 a 90 s. Gasta créditos de Higgsfield.",
+   "necesita": "Tu historia y créditos de Higgsfield.",
+   "motor": {
+    "skill": "storytelling-animado-f100k",
+    "receta": "storytelling"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/infografia.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Infografía animada» sobre [TEMA]",
+   "id": "infografia-animada",
+   "nombre": "Infografía animada",
+   "queSeVe": "Un tema, un artículo o un video de YouTube convertido en infografía que se mueve.",
+   "necesita": "Un tema o un enlace.",
+   "motor": {
+    "skill": "infografia-reel-formula100k",
+    "receta": "infografía"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Curiosidad viral» sobre [TEMA]",
+   "id": "curiosidad-viral",
+   "nombre": "Curiosidad viral",
+   "queSeVe": "Una curiosidad que ya explotó, rehecha con cada cuadro dibujado con código y cierre con tu regalo en un celular.",
+   "necesita": "El enlace de la curiosidad de referencia, tu voz y tu regalo.",
+   "motor": {
+    "skill": "curiosidades-virales-f100k",
+    "receta": "curiosidad"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-gas-giant",
+   "nombre": "Gas Giant",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Descenso de cine hacia un planeta gigante, capas de nubes y lecturas de profundidad con serifa.",
+   "para": "caer, bajar o entrar a lo desconocido.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Gas Giant» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "gas-giant"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-cutaway-lab",
+   "nombre": "Cutaway Lab",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Productos en 3D cortados por la mitad, partículas que brillan y palabras en naranja.",
+   "para": "mostrar qué hay dentro de un producto.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Cutaway Lab» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "cutaway-lab"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-speed-run",
+   "nombre": "Speed Run",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Calles de ciudad en 3D realista con medidores de velocidad y calor y números con serifa.",
+   "para": "algo que se acelera sin control.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Speed Run» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "speed-run"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-mannequin-commute",
+   "nombre": "Mannequin Commute",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Multitudes de maniquíes grises, reloj de estación y brillo cálido de letreros.",
+   "para": "la rutina y el trabajo de todos los días.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Mannequin Commute» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "mannequin-commute"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-offline-grid",
+   "nombre": "Offline Grid",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "3D minimalista azul marino, figuras de maniquí blancas y fichas de estado.",
+   "para": "apagones, caídas y desconexión.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Offline Grid» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "offline-grid"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-haze-countdown",
+   "nombre": "Haze Countdown",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Calles de ciudad grises entre neblina, cuentas regresivas enormes y escombros volando.",
+   "para": "lo que pasaría en los próximos segundos.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Haze Countdown» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "haze-countdown"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-park-skyline",
+   "nombre": "Park Skyline",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Parque y edificios realistas con indicadores finos y etiquetas de datos.",
+   "para": "datos de la ciudad y la gente.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Park Skyline» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "park-skyline"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-slow-drip",
+   "nombre": "Slow Drip",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Líquido en macro sobre fondo oscuro, marco de cámara grabando y brillo naranja.",
+   "para": "lo pequeño que lo cambia todo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Slow Drip» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "slow-drip"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-gold-studio",
+   "nombre": "Gold Studio",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Producto en 3D de estudio oscuro, oro pulido y números con serifa.",
+   "para": "lujo, precio y valor.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Gold Studio» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "gold-studio"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-signal-room",
+   "nombre": "Signal Room",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Habitaciones de cine en 3D cálido con ondas turquesa encima y números finos de luz.",
+   "para": "señales, ondas y lo que no se ve.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Signal Room» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "signal-room"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-astro-hud",
+   "nombre": "Astro HUD",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Astronauta en 3D de cine entre fuego y polvo, con pantalla de videojuego.",
+   "para": "misiones extremas.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Astro HUD» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "astro-hud"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-crowd-sim",
+   "nombre": "Crowd Sim",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Cine realista con datos en pantalla",
+   "queSeVe": "Multitud blanca y pálida, una sola figura azul y mapas superpuestos.",
+   "para": "destacar entre todos.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Crowd Sim» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "crowd-sim"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-night-ledger",
+   "nombre": "Night Ledger",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Granja en 3D caricaturesca al atardecer, titulares rojos enormes y paneles de datos con estrellas.",
+   "para": "un dato que cambia una noche cualquiera.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Night Ledger» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "night-ledger"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-oval-office-toon",
+   "nombre": "Oval Office Toon",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Multitudes en 3D caricaturesco de tonos cálidos, interiores de cine y cronómetros finos.",
+   "para": "decisiones grandes con cuenta regresiva.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Oval Office Toon» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "oval-office-toon"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-brick-toy",
+   "nombre": "Brick Toy",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Juguete de bloques en 3D, globo terráqueo cortado, pasto brillante y etiquetas gruesas.",
+   "para": "explicar por dentro cómo funciona algo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Brick Toy» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "brick-toy"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-candy-diner",
+   "nombre": "Candy Diner",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Juguete brillante en 3D, cafetería retro con neón y fondo desenfocado como de macro.",
+   "para": "comida, antojos y hábitos.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Candy Diner» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "candy-diner"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-knit-sky",
+   "nombre": "Knit Sky",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Muñecos tejidos en 3D, cielo lavanda y fichas de videojuego.",
+   "para": "historias tiernas y familiares.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Knit Sky» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "knit-sky"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-voxel-city",
+   "nombre": "Voxel City",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Ciudad de cubitos con llamadas de infografía plana y etiquetas tipo sticker.",
+   "para": "una ciudad o un negocio que se transforma.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Voxel City» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "voxel-city"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-toon-mission",
+   "nombre": "Toon Mission",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Héroe en 3D estilo anime con pantallas de videojuego y menús de partida guardada.",
+   "para": "retos personales contados como misión.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Toon Mission» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "toon-mission"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-toy-planet",
+   "nombre": "Toy Planet",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Juguete en 3D con efecto miniatura, pequeños mundos en globo y nubes suaves.",
+   "para": "lo que le pasa al planeta entero.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Toy Planet» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "toy-planet"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-pastel-clay",
+   "nombre": "Pastel Clay",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Diorama de plastilina mate en tonos pastel con números gruesos en 3D.",
+   "para": "temas suaves con cifras simples.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Pastel Clay» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "pastel-clay"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-sitcom-mini",
+   "nombre": "Sitcom Mini",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Juguete, plastilina y miniatura",
+   "queSeVe": "Miniatura en 3D caricaturesco, departamentos cálidos e inserciones de chat.",
+   "para": "situaciones de pareja, amigos o clientes.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Sitcom Mini» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "sitcom-mini"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-lowpoly-skyline",
+   "nombre": "Lowpoly Skyline",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Ciudad luminosa en 3D de pocos polígonos, títulos con serifa y contadores en vivo.",
+   "para": "cifras que crecen o se desploman.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Lowpoly Skyline» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "lowpoly-skyline"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-canyon-crowd",
+   "nombre": "Canyon Crowd",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Cañón de edificios low-poly, multitudes que se mueven en enjambre y carteles de neón.",
+   "para": "lo que pasa cuando todos hacen lo mismo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Canyon Crowd» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "canyon-crowd"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-poly-captcha",
+   "nombre": "Poly Captcha",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Personajes low-poly caricaturescos con pantallas de web encima y subtítulos blancos en negrita.",
+   "para": "internet, apps y la vida digital.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Poly Captcha» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "poly-captcha"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-heatwave-park",
+   "nombre": "Heatwave Park",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Calles soleadas en low-poly, contador de temperatura y subtítulos con serifa.",
+   "para": "un cambio que sube minuto a minuto.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Heatwave Park» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "heatwave-park"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-shard-pixel",
+   "nombre": "Shard Pixel",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Low-poly facetado en rojos y azules saturados, títulos con letra de píxel.",
+   "para": "escenarios épicos y de mucha acción.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Shard Pixel» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "shard-pixel"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-quiet-lowpoly",
+   "nombre": "Quiet Lowpoly",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Low-poly realista y apagado, interiores con luz suave de día.",
+   "para": "la vida diaria en casa.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Quiet Lowpoly» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "quiet-lowpoly"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-frost-lowpoly",
+   "nombre": "Frost Lowpoly",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Low-poly helado en un solo color, con un único acento naranja y movimiento congelado.",
+   "para": "el mundo detenido o congelado.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Frost Lowpoly» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "frost-lowpoly"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-ranger-lowpoly",
+   "nombre": "Ranger Lowpoly",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Documental en 3D low-poly, un personaje de nube de tormenta y planos de plano técnico encima.",
+   "para": "naturaleza y clima explicados.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Ranger Lowpoly» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "ranger-lowpoly"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-iso-diorama",
+   "nombre": "Iso Diorama",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ciudades low-poly",
+   "queSeVe": "Bloques de terreno en vista isométrica, tonos tierra sobre gris carbón y cifras en rojo.",
+   "para": "mapas y territorios que cambian.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Iso Diorama» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "iso-diorama"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-dusk-anime",
+   "nombre": "Dusk Anime",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Atardecer pintado al estilo anime, cielo violeta y números con serifa.",
+   "para": "historias emotivas y nostálgicas.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Dusk Anime» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "dusk-anime"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-wash-atlas",
+   "nombre": "Wash Atlas",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Mapas suaves en acuarela, papel crema y subtítulos finos con serifa.",
+   "para": "viajes, distancias y lugares.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Wash Atlas» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "wash-atlas"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-ink-gold",
+   "nombre": "Ink & Gold",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Tinta japonesa aguada, siluetas y detalles en pan de oro.",
+   "para": "historias con peso y elegancia.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Ink & Gold» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "ink-gold"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-noir-panels",
+   "nombre": "Noir Panels",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Cómic negro en blanco y negro, globos de pensamiento y acentos rojos.",
+   "para": "misterio y lo que alguien piensa en secreto.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Noir Panels» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "noir-panels"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-botanical-plate",
+   "nombre": "Botanical Plate",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Láminas botánicas grabadas, papel crema y números con serifa de revista.",
+   "para": "plantas, cuerpo y bienestar.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Botanical Plate» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "botanical-plate"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-woodblock-wave",
+   "nombre": "Woodblock Wave",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Grabado japonés en madera, mar índigo y placas de papel con rótulos.",
+   "para": "el mar, el clima y la naturaleza.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Woodblock Wave» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "woodblock-wave"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-sepia-silhouette",
+   "nombre": "Sepia Silhouette",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Siluetas al atardecer en sepia, recortes de manuscrito y letra editorial.",
+   "para": "historia y momentos del pasado.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Sepia Silhouette» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "sepia-silhouette"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-paper-atlas",
+   "nombre": "Paper Atlas",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Mapas antiguos e infografías de museo, grano de papel, tinta y ocre.",
+   "para": "contar el origen de algo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Paper Atlas» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "paper-atlas"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-rubber-hose",
+   "nombre": "Rubber Hose",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Ilustración, papel y pintura",
+   "queSeVe": "Caricatura de los años 30 con brazos de manguera, papel envejecido y letreros art déco.",
+   "para": "humor y escenas absurdas.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Rubber Hose» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "rubber-hose"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-night-flat",
+   "nombre": "Night Flat",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Vector 2D plano, noche azul marino y datos en rojo intenso.",
+   "para": "cifras que asustan.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Night Flat» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "night-flat"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-swiss-grid",
+   "nombre": "Swiss Grid",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Gráfica suiza minimalista en blanco roto y negro, con un solo acento rojo anaranjado.",
+   "para": "una idea limpia y un dato fuerte.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Swiss Grid» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "swiss-grid"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-grain-primary",
+   "nombre": "Grain Primary",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Textura de impresión con grano y formas planas en rojo, azul y amarillo.",
+   "para": "explicar con formas simples.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Grain Primary» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "grain-primary"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-peach-scale",
+   "nombre": "Peach Scale",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Editorial minimalista en neblina durazno, una figura diminuta, números con serifa y notas de escala.",
+   "para": "tamaños, escalas y comparaciones.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Peach Scale» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "peach-scale"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-violet-flat",
+   "nombre": "Violet Flat",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Vector plano con brillo violeta y patrones de células.",
+   "para": "lo que pasa dentro del cuerpo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Violet Flat» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "violet-flat"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-pop-desk",
+   "nombre": "Pop Desk",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Vector plano y brillante, útiles de escritorio y tarjetas de interfaz.",
+   "para": "trabajo, estudio y productividad del negocio.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Pop Desk» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "pop-desk"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-grain-poster",
+   "nombre": "Grain Poster",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "Impresión a dos tintas con grano, coral y azul cobalto, rótulos condensados en negrita.",
+   "para": "afiches de una sola idea.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Grain Poster» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "grain-poster"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-bold-flat",
+   "nombre": "Bold Flat",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Gráfico plano",
+   "queSeVe": "2D plano y contundente, cielo estrellado azul marino y letra gruesa de caricatura.",
+   "para": "el espacio explicado con humor.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Bold Flat» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "bold-flat"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-pixel-night",
+   "nombre": "Pixel Night",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Videojuego retro",
+   "queSeVe": "Pixel art de 16 bits, pantalla de videojuego retro y ciudad de neón de noche.",
+   "para": "tu día contado como un juego.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Pixel Night» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "pixel-night"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-cube-planet",
+   "nombre": "Cube Planet",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Videojuego retro",
+   "queSeVe": "Planeta de cubitos en el espacio, menús de videojuego retro y letra de píxel.",
+   "para": "construir algo desde cero.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Cube Planet» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "cube-planet"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-retro-poly-cosmos",
+   "nombre": "Retro Poly Cosmos",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Videojuego retro",
+   "queSeVe": "3D de consola de los 90, texturas pixeladas y cajas de diálogo rojas de RPG.",
+   "para": "aventuras en el espacio.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Retro Poly Cosmos» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "retro-poly-cosmos"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-retro-poly-jungle",
+   "nombre": "Retro Poly Jungle",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Videojuego retro",
+   "queSeVe": "3D de consola de los 90 en una selva oscura, con cajas de diálogo azules de RPG.",
+   "para": "expediciones y descubrimientos.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Retro Poly Jungle» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "retro-poly-jungle"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-ops-console",
+   "nombre": "Ops Console",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Pantallas oscuras y planos técnicos",
+   "queSeVe": "Tableros de sala de control a oscuras, cifras de alerta en rojo y mapas del mundo.",
+   "para": "crisis y alertas globales.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Ops Console» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "ops-console"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-blueprint-line",
+   "nombre": "Blueprint Line",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Pantallas oscuras y planos técnicos",
+   "queSeVe": "Plano de líneas sobre azul marino con rótulos de dibujo técnico.",
+   "para": "cómo está hecho algo.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Blueprint Line» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "blueprint-line"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-phosphor-vector",
+   "nombre": "Phosphor Vector",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Pantallas oscuras y planos técnicos",
+   "queSeVe": "Líneas verdes de monitor antiguo, una figura ámbar y letra de terminal.",
+   "para": "tecnología y ciencia ficción.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Phosphor Vector» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "phosphor-vector"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "que-pasaria-night-scan",
+   "nombre": "Night Scan",
+   "grupo": "¿Qué pasaría si…?",
+   "familia": "Pantallas oscuras y planos técnicos",
+   "queSeVe": "Holograma de nube de puntos en la oscuridad, hora de cámara de seguridad y pantallas ámbar.",
+   "para": "suspenso: lo que pasa mientras duermes.",
+   "necesita": "Una pregunta «¿Qué pasaría si…?» y tu voz (o la de la compu).",
+   "comando": "hazme un video «¿Qué pasaría si…?» con la plantilla «Night Scan» sobre [TU PREGUNTA]",
+   "motor": {
+    "skill": "clonador-de-edicion-f100k",
+    "receta": "night-scan"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": "módulo Animación",
+   "fusion": null,
+   "muestra": "/regalos/animaciones/v/libreta-a-mano.mp4",
+   "grupo": "Motion graphics",
+   "comando": "hazme un motion graphic con la plantilla «Clips dibujados» para [FRASE O CIFRA DE TU REEL]",
+   "id": "clips-dibujados",
+   "nombre": "Clips dibujados",
+   "queSeVe": "13 estilos de clip de 5 s dibujados con código: libreta, chat, pizarra, pixel, polaroid, post-its, notificaciones y más.",
+   "necesita": "La frase de tu reel.",
+   "motor": {
+    "skill": "animacion-dibujada-f100k",
+    "receta": "13 estilos"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [
+    "Motion graphics para CapCut"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Motion graphics",
+   "comando": "hazme un motion graphic con la plantilla «Motion para CapCut» para [FRASE O CIFRA DE TU REEL]",
+   "id": "motion-para-capcut",
+   "nombre": "Motion para CapCut",
+   "queSeVe": "Un número que sube, una lista, una flecha o un antes y después sobre fondo verde, para ponerlo encima en CapCut.",
+   "necesita": "La cifra o la frase.",
+   "motor": {
+    "skill": "animaciones-para-tu-video-f100k",
+    "receta": "fondo verde"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Motion graphics",
+   "comando": "anima mi dibujo con la plantilla «De tu dibujo a animación»",
+   "id": "de-tu-dibujo-a-animacion",
+   "nombre": "De tu dibujo a animación",
+   "queSeVe": "Le tomas foto a un dibujo de tu cuaderno y se vuelve un clip animado vertical.",
+   "necesita": "La foto de tu dibujo.",
+   "motor": {
+    "skill": "boceto-a-animacion-f100k",
+    "receta": "boceto"
+   },
+   "seInstalaCon": "plugin formula100k"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "grupo": "Motion graphics",
+   "comando": "clona este motion graphic con la plantilla «Clona un motion graphic»: [ENLACE]",
+   "id": "clona-un-motion",
+   "nombre": "Clona un motion graphic",
+   "queSeVe": "Le pasas el enlace de un motion graphic que te gustó y lo recrea con tu tema y tu marca.",
+   "necesita": "El enlace del reel de referencia.",
+   "motor": {
+    "skill": "clonador-animaciones-f100k",
+    "receta": "clon"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/acercamiento.mp4",
+   "id": "efecto-acercamiento-seco",
+   "nombre": "Acercamiento seco",
+   "grupo": "Efectos",
+   "queSeVe": "La palabra que pega (la cifra, la orden). Ideal en el gancho.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Acercamiento seco» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #1"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/vidrio-roto.mp4",
+   "id": "efecto-vidrio-roto",
+   "nombre": "Vidrio roto",
+   "grupo": "Efectos",
+   "queSeVe": "SOLO como golpe del segundo 0–3 (algo se rompe, «se acabó»). Debajo aparece lo que pinte la escena.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Vidrio roto» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #2"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/foto-que-escapa.mp4",
+   "id": "efecto-foto-que-escapa",
+   "nombre": "Foto que escapa",
+   "grupo": "Efectos",
+   "queSeVe": "Un recuerdo, «antes», una fecha. Tu video se vuelve foto y tu cabeza se sale del marco.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Foto que escapa» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #3"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/lista-que-se-marca.mp4",
+   "id": "efecto-lista-que-se-marca",
+   "nombre": "Lista que se marca",
+   "grupo": "Efectos",
+   "queSeVe": "Enumeras 2–4 cosas.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Lista que se marca» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #4"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/tormenta-de-titulares.mp4",
+   "id": "efecto-tormenta-de-titulares",
+   "nombre": "Tormenta de titulares",
+   "grupo": "Efectos",
+   "queSeVe": "Una noticia, una polémica. Máx. 6 tiras con lo que DICES.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Tormenta de titulares» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #5"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/zoom-de-camara.mp4",
+   "id": "efecto-zoom-de-camara",
+   "nombre": "Zoom de cámara",
+   "grupo": "Efectos",
+   "queSeVe": "«Mira esto», un detalle, una decisión.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Zoom de cámara» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #6"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/portal.mp4",
+   "id": "efecto-portal",
+   "nombre": "Portal",
+   "grupo": "Efectos",
+   "queSeVe": "Cambio de tema: un círculo con tu cara y la cámara vuela adentro.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Portal» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #7"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/curva-que-sube.mp4",
+   "id": "efecto-curva-que-sube",
+   "nombre": "Curva que sube",
+   "grupo": "Efectos",
+   "queSeVe": "Crecimiento con cifra real (de 1 a 10 ×). Sin cifra exacta, texto: 'CIENTOS'.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Curva que sube» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #8"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/iphone.mp4",
+   "id": "efecto-dentro-del-iphone",
+   "nombre": "Dentro del iPhone",
+   "grupo": "Efectos",
+   "queSeVe": "Hablas de una app, tu perfil o algo del celular.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Dentro del iPhone» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #9"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/chat-que-edita.mp4",
+   "id": "efecto-chat-que-edita",
+   "nombre": "Chat que edita",
+   "grupo": "Efectos",
+   "queSeVe": "Le pides algo a la IA y lo hace.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Chat que edita» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #10"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/portada-de-revista.mp4",
+   "id": "efecto-portada-de-revista",
+   "nombre": "Portada de revista",
+   "grupo": "Efectos",
+   "queSeVe": "Una idea grande, un lanzamiento. El título va DETRÁS de tu cabeza.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Portada de revista» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #11"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/editor.mp4",
+   "id": "efecto-editor-y-linea-de-tiempo",
+   "nombre": "Editor y línea de tiempo",
+   "grupo": "Efectos",
+   "queSeVe": "Hablas de editar, de tu proceso.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Editor y línea de tiempo» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #12"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/orbita.mp4",
+   "id": "efecto-orbita-de-fotos",
+   "nombre": "Órbita de fotos",
+   "grupo": "Efectos",
+   "queSeVe": "«Todo lo que…», varias cosas a la vez. Fotos REALES, nunca íconos.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Órbita de fotos» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #13"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/zoom-que-atraviesa.mp4",
+   "id": "efecto-zoom-que-atraviesa",
+   "nombre": "Zoom que atraviesa",
+   "grupo": "Efectos",
+   "queSeVe": "Antes de un giro («¿saben qué es lo mejor?»): entra hasta desenfocar y corta.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Zoom que atraviesa» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #14"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/vertigo.mp4",
+   "id": "efecto-vertigo",
+   "nombre": "Vértigo",
+   "grupo": "Efectos",
+   "queSeVe": "Una revelación, «por fin respiro». Tú quieta y el fondo se aleja.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Vértigo» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #15"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/estudio.mp4",
+   "id": "efecto-estudio-que-se-enciende",
+   "nombre": "Estudio que se enciende",
+   "grupo": "Efectos",
+   "queSeVe": "«Empecé», «ahora sí», un antes y después.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Estudio que se enciende» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #16"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/papel.mp4",
+   "id": "efecto-recorte-de-papel",
+   "nombre": "Recorte de papel",
+   "grupo": "Efectos",
+   "queSeVe": "Tono juguetón, una lista de cosas tuyas.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Recorte de papel» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #17"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/pantalla-verde.mp4",
+   "id": "efecto-pantalla-verde",
+   "nombre": "Pantalla verde",
+   "grupo": "Efectos",
+   "queSeVe": "Nombras un lugar o una cosa: el fondo cambia a la foto real.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Pantalla verde» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #18"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos/lista-final.mp4",
+   "id": "efecto-lista-final",
+   "nombre": "Lista final",
+   "grupo": "Efectos",
+   "queSeVe": "Cierre: todo lo que viste, marcándose con contador.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Lista final» a mi video",
+   "motor": {
+    "skill": "auto-edicion",
+    "modo": "Efectos",
+    "receta": "referencia/efectos.md #19"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/palabra-ancla.mp4",
+   "id": "efecto-palabra-ancla",
+   "nombre": "Palabra ancla",
+   "grupo": "Efectos",
+   "queSeVe": "Una palabra que se repite en titulares, mensajes o documentos reales («todos hablan de X»). Las páginas cambian detrás con corte seco; la palabra se queda fija en su recuadro.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Palabra ancla» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #1"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/fotos-que-se-tachan.mp4",
+   "id": "efecto-fotos-que-se-tachan",
+   "nombre": "Fotos que se tachan",
+   "grupo": "Efectos",
+   "queSeVe": "«Antes era…», «se acabó», descartar algo. Fotos reales que entran y una línea roja las tacha.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Fotos que se tachan» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #2"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/pantalla-led.mp4",
+   "id": "efecto-pantalla-led",
+   "nombre": "Pantalla LED",
+   "grupo": "Efectos",
+   "queSeVe": "Una frase corta con peso, palabra por palabra en matriz de puntos a pantalla completa.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Pantalla LED» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #3"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "efecto-tarjeta-con-curva",
+   "nombre": "Tarjeta con curva",
+   "grupo": "Efectos",
+   "queSeVe": "Una cifra DICHA que crece (retención, ventas). Tarjeta oscura plana delante del pecho, curva verde y contador.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Tarjeta con curva» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #4"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/particulas-en-la-caja.mp4",
+   "id": "efecto-particulas-en-la-caja",
+   "nombre": "Partículas en la caja",
+   "grupo": "Efectos",
+   "queSeVe": "«Cientos», «se llena», acumular. Bolitas que caen, llenan la caja y rebalsan; la palabra cambia abajo.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Partículas en la caja» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #5"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/prueba-al-lado.mp4",
+   "id": "efecto-prueba-al-lado",
+   "nombre": "Prueba al lado",
+   "grupo": "Efectos",
+   "queSeVe": "Un resultado, un antes y después, una decisión con fecha. La tarjeta aterriza junto a tu cara (SIN el zoom de la referencia).",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Prueba al lado» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #6"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/carrusel-3d.mp4",
+   "id": "efecto-carrusel-3d",
+   "nombre": "Carrusel 3D",
+   "grupo": "Efectos",
+   "queSeVe": "«Mis reels», «mis carruseles», un portafolio. Anillo de capturas reales que gira un lugar en cada palabra.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Carrusel 3D» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #7"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/interruptores.mp4",
+   "id": "efecto-interruptores",
+   "nombre": "Interruptores",
+   "grupo": "Efectos",
+   "queSeVe": "Requisitos o pasos que se cumplen («un prompt, lo pegas, listo»). Cada switch se prende cuando lo dices.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Interruptores» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #8"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/widgets.mp4",
+   "id": "efecto-widgets-alrededor",
+   "nombre": "Widgets alrededor",
+   "grupo": "Efectos",
+   "queSeVe": "Tu sistema, tu tablero, «todo lo que hace». Hasta 6 tarjetitas planas rodean tu cara: cifra, barras, progreso, perfil, audio y anillo.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Widgets alrededor» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #9"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/tier-list.mp4",
+   "id": "efecto-tier-list",
+   "nombre": "Tier list",
+   "grupo": "Efectos",
+   "queSeVe": "Comparar herramientas, opciones o niveles. Cada cosa cae en su fila (S–D) cuando la nombras; el título es la última.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Tier list» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #10"
+   },
+   "seInstalaCon": "módulo Edición",
+   "nota": "Es un golpe dentro de UNA escena. Si todo el reel es un ranking, usa la plantilla «Ranking por niveles»."
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "efecto-barras-con-tus-datos",
+   "nombre": "Barras con tus datos",
+   "grupo": "Efectos",
+   "queSeVe": "«Mis N reels más vistos», tus números reales. Barras que suben, línea de promedio; tú abajo.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Barras con tus datos» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #11"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/pastillas-detras.mp4",
+   "id": "efecto-pastillas-detras-titular",
+   "nombre": "Pastillas detrás + titular",
+   "grupo": "Efectos",
+   "queSeVe": "Una advertencia o un giro («NO USES / ESTE SISTEMA»). Botones apilados DETRÁS de tu cabeza y titular de 2 líneas delante.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Pastillas detrás + titular» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #12"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "efecto-contador-de-vistas",
+   "nombre": "Contador de vistas",
+   "grupo": "Efectos",
+   "queSeVe": "Tus vistas o ventas reales que cuentan hasta la cifra, con la línea que crece.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Contador de vistas» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #13"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/panel-de-render.mp4",
+   "id": "efecto-panel-de-render",
+   "nombre": "Panel de render",
+   "grupo": "Efectos",
+   "queSeVe": "«Lo hace por ti», un proceso que corre. Ventana de render con checks, pistas, onda y cabezal 0→100 %.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Panel de render» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #14"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/comentario-con-la-palabra.mp4",
+   "id": "efecto-comentario-con-la-palabra",
+   "nombre": "Comentario con la palabra",
+   "grupo": "Efectos",
+   "queSeVe": "El CTA de la mitad o del cierre: la barra de comentarios escribe tu palabra letra por letra.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Comentario con la palabra» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #15"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/cuadricula-de-cierre.mp4",
+   "id": "efecto-cuadricula-de-cierre",
+   "nombre": "Cuadrícula de cierre",
+   "grupo": "Efectos",
+   "queSeVe": "El cierre: «Comenta PALABRA» + pastilla + tus tomas que llenan una cuadrícula.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Cuadrícula de cierre» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #16"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/marco-de-comando.mp4",
+   "id": "efecto-marco-de-comando",
+   "nombre": "Marco de comando",
+   "grupo": "Efectos",
+   "queSeVe": "Mostrar que se hace con un comando: escribes /comando en el chat, se envía y tu video sale en una burbuja que crece.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Marco de comando» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #17"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/contorno-bn.mp4",
+   "id": "efecto-titular-detras-de-ti",
+   "nombre": "Titular detrás de ti",
+   "grupo": "Efectos",
+   "queSeVe": "Una palabra gigante condensada que queda detrás de tu cuerpo. contorno: true = solo el borde.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video» y tu recorte (video.mjs mate).",
+   "comando": "ponle el efecto «Titular detrás de ti» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #18"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-vhs.mp4",
+   "id": "efecto-rotulo-vhs",
+   "nombre": "Rótulo VHS",
+   "grupo": "Efectos",
+   "queSeVe": "Acompaña al look VHS: «▶ REPR.» y el contador de cinta.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Rótulo VHS» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #19"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/trama-de-puntos.mp4",
+   "id": "efecto-trama-de-puntos",
+   "nombre": "Trama de puntos",
+   "grupo": "Efectos",
+   "queSeVe": "La entrada de una escena: tu video aparece como trama de puntos y se resuelve en 0,5 s. Sirve de transición, no de adorno: máximo 2 por reel.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el efecto «Trama de puntos» a mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "referencia/catalogo.md #20"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "gancho-golpe",
+   "nombre": "Gancho golpe",
+   "grupo": "Efectos",
+   "queSeVe": "De 2 a 5 palabras de 0 a 3 s: una línea enorme en letra de diseño y otra chica, con 3 variantes A/B/C para trial reels.",
+   "necesita": "Tu guion o tu video ya editado.",
+   "comando": "ponle el efecto «Gancho golpe» a mi video",
+   "motor": {
+    "skill": "gancho-golpe-f100k",
+    "receta": "A/B/C"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "look-bn",
+   "nombre": "Look Blanco y negro",
+   "grupo": "Looks",
+   "queSeVe": "Toda la escena en blanco y negro. Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Blanco y negro» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"bn\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "look-calido",
+   "nombre": "Look Cálido",
+   "grupo": "Looks",
+   "queSeVe": "Brillo cálido sobre la escena. Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Cálido» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"calido\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-duotono.mp4",
+   "id": "look-duotono",
+   "nombre": "Look Duotono",
+   "grupo": "Looks",
+   "queSeVe": "Dos colores (por defecto violeta → naranja). Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Duotono» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"duotono\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-documental.mp4",
+   "id": "look-documental",
+   "nombre": "Look Documental",
+   "grupo": "Looks",
+   "queSeVe": "Duotono amarillo; va con «Titular detrás de ti». Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Documental» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"documental\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-cine.mp4",
+   "id": "look-cine",
+   "nombre": "Look Cine 2.39",
+   "grupo": "Looks",
+   "queSeVe": "Barras de cine 2.39 arriba y abajo. Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Cine 2.39» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"cine\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-vhs.mp4",
+   "id": "look-vhs",
+   "nombre": "Look VHS",
+   "grupo": "Looks",
+   "queSeVe": "Colores corridos fijos, líneas y ruido de cinta; va con «Rótulo VHS». Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look VHS» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"vhs\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  },
+  {
+   "alias": [],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": null,
+   "id": "look-grano",
+   "nombre": "Look Grano",
+   "grupo": "Looks",
+   "queSeVe": "Grano de película y viñeta. Solo en UNA escena (un recuerdo, un cambio de clima), nunca el reel entero.",
+   "necesita": "Tu video ya editado con Auto-Edición «Con tu video».",
+   "comando": "ponle el look «Look Grano» a una escena de mi video",
+   "motor": {
+    "skill": "auto-edit-effects",
+    "complementoDe": "auto-edicion",
+    "receta": "\"efecto\": {\"tipo\": \"look\", \"estilo\": \"grano\"}"
+   },
+   "seInstalaCon": "módulo Edición"
+  }
+ ]
+}

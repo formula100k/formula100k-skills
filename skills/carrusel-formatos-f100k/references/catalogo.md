@@ -1,7 +1,9 @@
 # CATÁLOGO DE FORMATOS DE CARRUSEL · FÓRMULA 100K
 
-> El catálogo que lee la skill `carrusel-formatos-f100k`. **60 fichas**: F01–F20 (referencias miradas slide por slide)
-> y G01–G40 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después).
+> El catálogo que lee la skill `carrusel-formatos-f100k`. **67 fichas**: F01–F20 (referencias miradas slide por slide)
+> y G01–G47 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
+> G41–G47, el 3-nov-2026, desde outliers de Instagram vistos en 2+ cuentas). Cada ficha tiene una categoría (listas, tutoriales,
+> opinión, historias, casos, comparaciones, noticias, interactivos, estéticos).
 > Las métricas de las referencias son las que se leyeron al revisarlas; son de esas cuentas, no un resultado prometido.
 > Los prompts de imagen NO están probados con generación real todavía: son v1 razonados desde las referencias.
 > Las capturas de las referencias no vienen en este paquete: usa la descripción de cada ficha y su enlace público, si lo tiene.
@@ -83,6 +85,13 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M47 | Escalera de niveles (lo mismo reescrito, cada nivel dice qué se agregó) | Guardado + comentario |
 | M48 | Desambiguación: tres cosas que se confunden, una ficha gemela por cada una | Guardado + compartido |
 | M49 | Reto de N días (una tarea por slide, título fijo) | Guardado + compartido |
+| M50 | Tu equipo de IA por puestos (organigrama en portada; un puesto por slide con lo que entrega) | Guardado + comentario |
+| M51 | Caso de marca famosa en lecciones (el acto + la cifra en portada; una lección con dato verificable por slide) | Guardado + compartido |
+| M52 | Una cifra real por slide sobre tu foto (cada deslizada paga un número) | Guardado + comentario |
+| M53 | Mapa que se abre rama por rama (el mapa es el índice; una rama por slide) | Guardado + compartido |
+| M54 | Hype vs. realidad: cada promesa medida en dos barras (opinión, no medición) + veredicto | Comentario + guardado |
+| M55 | Plan completo escrito en la nota del celular, como si tomaras su cuenta | Guardado + compartido |
+| M56 | Detalles que solo nota quien sabe (un detalle de oficio por slide, probado con su foto) | Guardado + seguidor |
 
 ### Soportes (dónde vive)
 
@@ -138,6 +147,13 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S48 | Hoja con el texto reescrito + etiqueta de nivel + medidor | A |
 | S49 | Tres tarjetas gemelas + una ficha por cosa con su color | A |
 | S50 | Papel de color + tarjeta al centro + marco ilustrado en portada y cierre | A |
+| S51 | Papel claro + organigrama de tarjetas + nombre subrayado en su color + captura de lo que entrega + tarjeta de terminal con 3 tareas | A |
+| S52 | Maqueta de revista: cabecera con filete, antetítulo en versalitas, titular serif, imagen ancha y dos columnas (resumen itálico + dato) | A |
+| S53 | Foto tuya a sangre + tarjeta plana tipo app con la cifra + rótulo enorme debajo | A |
+| S54 | Papel claro + árbol de líneas finas en tinta + término subrayado a mano con un color por rama | A |
+| S55 | Papel liso + dos barras lado a lado + tu recorte que reacciona en medio | A |
+| S56 | Tu foto de ambiente a sangre + captura plana de la app de Notas encima | A |
+| S57 | Foto o captura real a sangre, tranquila, + rótulo de 2–4 palabras en sans pesada clara encima | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -1485,6 +1501,147 @@ Sin fechas y sin premios: se empieza cuando quieras. Tutea.
 - **Fabrica:** `carrusel-formatos-f100k` (HTML libre S50; el marco se dibuja con SVG o emojis de temporada).
 
 ---
+
+## LAS FICHAS DE NOVIEMBRE (G41–G47, sumadas el 3-nov-2026 desde Top Carousels)
+
+Salieron de la revisión de 146 outliers de Top Carousels: solo mecánicas que aparecen en 2+ cuentas distintas. Sumadas el 3-nov-2026.
+
+### G41 · Tu equipo de IA por puestos (cada herramienta es un cargo)
+- **Mecánica:** M50 · **Soporte:** S51 papel claro + organigrama de tarjetas + un puesto por lámina con el nombre subrayado en su color, la captura de lo que entrega y una tarjeta de terminal con 3 tareas · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @albert.olgaard · **17.172 likes** · 7.003 comentarios · 7 slides · https://www.instagram.com/p/DcnHxFDgv2y/
+- **Anatomía:** 1) portada: el acto en una frase («No contraté a nadie. Armé un equipo de IA») + el organigrama: tú arriba como directora y debajo 3–4 tarjetas con el nombre de cada puesto y un verbo · 2-N) un puesto por lámina: rótulo «Puesto n · cargo» arriba, «[NOMBRE] + lo que hace» con el nombre subrayado en su color, la captura o el documento real de lo que entrega y una tarjeta de terminal con 3 tareas («> Caza referencias virales») · cierre: tu foto de directora + con cuántos puestos se empieza + comenta la palabra.
+- **Por qué funciona:** convierte herramientas sueltas en algo que toda emprendedora entiende: un equipo con cargos. El organigrama de la portada es el índice (sabes cuántos puestos faltan) y la promesa es «tu equipo sin contratar». Cada puesto se guarda como receta y la gente comenta para pedir el suyo.
+- **Error típico:** puestos sin entregable (si no hay captura de lo que hizo, es una lista de apps, no un equipo). Más de 5 puestos. Nombrar la herramienta o la mecánica técnica en vez del cargo («skill», «agente», «tokens»). Que el organigrama y las láminas no coincidan en nombres, colores u orden. Prometer que trabaja sola: la directora sigues siendo tú.
+- **Prompt de guion:**
+```
+Arma un carrusel «mi equipo de IA por puestos» de [N+2] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: el acto en máximo 8 palabras (dame 3 opciones, del tipo «No contraté a nadie. Armé un equipo») + el organigrama: yo como directora arriba y [N] puestos debajo (entre 3 y 5), cada uno con un nombre corto y un verbo.
+Slides 2 a N+1: un puesto por slide: «Puesto [n] · [cargo]» + «[NOMBRE] [lo que hace]» en máximo 8 palabras + qué captura o documento real va al centro (lo que ese puesto me entrega) + 3 tareas de máximo 5 palabras cada una, con verbos que se pueden hacer.
+Ordena los puestos en el orden en que trabajan (uno le pasa al otro).
+Cierre: con cuántos puestos se empieza + «comenta [PALABRA] y te mando [REGALO]».
+Nada de jerga técnica: si alguien que nunca usó IA no lo entiende, reescríbelo. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S51: organigrama y tarjetas en HTML + tu recorte del kit) · las capturas de lo que entrega cada puesto con `capturas-tutorial-formula100k`.
+
+---
+
+### G42 · Caso de marca famosa en lecciones (una revista que enseña con datos)
+- **Mecánica:** M51 · **Soporte:** S52 maqueta de revista: cabecera con filete fino, antetítulo en versalitas, titular serif enorme, imagen ancha del caso y dos columnas (resumen en serif itálica + dato y «por qué importa») · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @camillemoore · **17.174 likes** · 286 comentarios · 8 slides · https://www.instagram.com/p/DcjbH6mlIuE/
+- **Anatomía:** 1) portada: cabecera «Caso de marca» + el acto y el resultado en cifra en un titular serif («Gastó 4.500 dólares en un video y sumó 12.000 clientes en 48 horas») sobre la imagen del caso · 2-N) una lección por lámina: antetítulo «Lección n · idea», titular serif de 2 renglones con la frase del acto, imagen ancha, y abajo dos columnas: a la izquierda el resumen en serif itálica, a la derecha el dato con año y cifra y una línea «por qué importa» · cierre: el desenlace en cifra + comenta la palabra.
+- **Por qué funciona:** se lee como una nota de revista de negocios: tiene autoridad prestada (una marca que todos conocen) y datos con año que se pueden comprobar. Cada lámina paga una lección aplicable, así que se guarda, y se comparte porque «mira lo que hizo esta marca» es fácil de mandar.
+- **Error típico:** contar la historia sin lección (eso es una curiosidad, no un caso). Cifras sin fuente o copiadas de otro post sin verificar (busca la nota original). Más de 5 lecciones. Lecciones que solo sirven para una multinacional: cada «por qué importa» tiene que poder hacerlo una emprendedora con su celular. Usar fotos de la persona famosa: usa la imagen del producto, una captura de su contenido o tu propia foto en la lección.
+- **Prompt de guion:**
+```
+Arma un carrusel «caso de marca en lecciones» de [N+2] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Marca o caso: [MARCA]. Usa SOLO datos públicos con fuente (nota de prensa, entrevista, informe) y dime la fuente de cada cifra. Si un dato no tiene fuente, no lo uses.
+Portada: el acto + el resultado en cifra en máximo 14 palabras (dame 3 opciones).
+Slides 2 a N+1: una lección por slide (entre 2 y 5): antetítulo «Lección [n] · [idea en 4 palabras]» + titular de máximo 8 palabras con lo que hizo la marca + un resumen de máximo 10 palabras + el dato con año y cifra en máximo 35 palabras + «por qué importa» en máximo 15 palabras, aplicado a una emprendedora como [MI CLIENTA IDEAL].
+Cierre: el desenlace en cifra + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S52: maqueta de revista en HTML; la imagen del caso como tarjeta plana o captura real con `capturas-tutorial-formula100k`, y tus fotos del kit en las lecciones).
+
+---
+
+### G43 · Una cifra real por lámina sobre tu foto (cada deslizada paga un número)
+- **Mecánica:** M52 · **Soporte:** S53 foto tuya a sangre + tarjeta plana tipo app con la cifra + rótulo enorme debajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @madlertravel · **8.746 likes** · 290 comentarios · 11 slides · https://www.instagram.com/p/DdrRQieE0ab/
+- **Anatomía:** 1) portada: tu foto a sangre + la promesa en cifra en letra gruesa abajo («N cifras reales de…») · 2-N) UNA cifra por lámina: tu foto distinta a sangre, una tarjeta plana tipo app al centro (etiqueta chica + el número enorme) y, debajo, el rótulo de qué mide (2–3 palabras) con una línea chica de contexto · cierre: la última cifra (la más grande o la más tuya) + comenta la palabra.
+- **Por qué funciona:** cada deslizada paga un premio concreto: un número. La tarjeta tipo app se lee como una captura de verdad (prueba, no opinión) y la foto real dice «esto me pasó a mí». La gente comenta para preguntar «¿cómo?» y lo guarda como referencia de lo posible.
+- **Error típico:** inventar o redondear cifras (si no tienes el número con su fuente, no hay carrusel: usa minutos, piezas o pasos que sí puedes probar). Meter dos cifras en la misma lámina. Explicar el cómo en cada lámina (eso es G07): aquí el cómo va en el regalo. Fotos de banco o la misma foto en todas.
+- **Prompt de guion:**
+```
+Arma un carrusel «una cifra real por lámina» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Usa SOLO estas cifras reales, con su fuente: [PEGA TUS CIFRAS]. Si no hay cifra con fuente, no la inventes: cámbiala por minutos, piezas o pasos que yo pueda probar.
+Portada: la promesa en cifra en máximo 8 palabras (dame 3 opciones).
+Slides 2 a N-1: UNA cifra por slide: etiqueta de la tarjeta (2–3 palabras, como la nombra la app) + el número + un rótulo de qué mide (máximo 3 palabras) + una línea de contexto de máximo 8 palabras. Dime qué foto mía va de fondo en cada una.
+Ordena de la cifra más chica a la más grande.
+Cierre: la última cifra + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S53: tus fotos del carrete a sangre + la tarjeta en HTML) · si la cifra sale de una app, la captura real con `capturas-tutorial-formula100k`.
+
+---
+
+### G44 · Mapa que se abre rama por rama (el índice es un árbol)
+- **Mecánica:** M53 · **Soporte:** S54 papel claro + árbol de líneas finas en tinta + término subrayado a mano con un color por rama · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @reputeforge · **334.224 likes** · 436 comentarios · 9 slides · https://www.instagram.com/p/DPCEqJ3EiHj/
+- **Anatomía:** 1) portada: «[Tu tema] es…» a la izquierda y una línea que se sale por el borde derecho (obliga a deslizar) · 2) el mapa: la línea llega a un nudo que se abre en 5–6 ramas, cada una con su término subrayado en su color · 3-N) una rama por lámina: número + término subrayado con el mismo color del mapa + definición de 2–3 líneas con un ejemplo, mucho aire alrededor · cierre: el mapa chico con todas las ramas + comenta la palabra.
+- **Por qué funciona:** el mapa es el índice: en la lámina 2 ya sabes cuánto falta y qué viene, y el color de cada subrayado te dice en qué rama vas. Reduce un tema grande («marketing», «finanzas») a 6 palabras, y eso es lo que se guarda y se manda a quien está empezando.
+- **Error típico:** más de 6 ramas (el árbol se vuelve una lista). Definiciones largas: cada rama cabe en 3 líneas. Cambiar el color o el orden de las ramas entre el mapa y su lámina. Ramas que no son del mismo nivel (mezclar un paso con una herramienta).
+- **Prompt de guion:**
+```
+Arma un carrusel «mapa que se abre rama por rama» de [N+3] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Slide 1: «[TEMA] es…» en máximo 5 palabras (dame 3 opciones). Slide 2: el mapa con [N] ramas (entre 5 y 6), cada una de máximo 3 palabras y todas del mismo nivel, en el orden en que se hacen.
+Slides 3 a N+2: una rama por slide: «[n]. [rama]» + la palabra que va subrayada + una definición de máximo 25 palabras que incluya un ejemplo concreto de mi nicho.
+Cierre: el mapa completo en chico + «comenta [PALABRA] y te mando [REGALO]».
+Nada de jerga sin explicar. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S54; el árbol y los subrayados a mano se dibujan con SVG).
+
+---
+
+### G45 · Hype vs. realidad en barras (dos barras por promesa y un veredicto)
+- **Mecánica:** M54 · **Soporte:** S55 papel liso + dos barras lado a lado + tu recorte que reacciona en medio · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @artem.novitckii · **24.693 likes** · 5.320 comentarios · 5 slides · https://www.instagram.com/p/DbDiZ5OlHVe/ (la misma mecánica en @olli.rasmussen: https://www.instagram.com/p/DeZjFVZALGO/ y https://www.instagram.com/p/Ddj0z3UgNL9/)
+- **Anatomía:** 1) portada: «[Tema]: Hype vs. Realidad» + una barra de muestra + el aviso «mi opinión, no es una medición» · 2-N) una herramienta o promesa por lámina, SIEMPRE en el mismo encuadre: arriba su nombre (o su logo real), al centro dos barras («lo que prometen» en rojo y «lo que entrega» en azul) con tu recorte en medio reaccionando, abajo un veredicto de 2 líneas · cierre: «¿cuál mido después?» + comenta la palabra.
+- **Por qué funciona:** el gráfico hace la crítica antes de leer: la diferencia de altura se entiende en medio segundo. Como es una opinión con postura, la gente entra a comentar para darte la razón o para pelearte una barra, y eso empuja el alcance. El encuadre fijo vuelve la serie coleccionable.
+- **Error típico:** ponerle porcentajes o puntajes como si fueran datos medidos (es tu opinión: dilo en la lámina y deja las barras sin números). Destrozar todo por igual: necesitas al menos una que SÍ cumple, o pierdes credibilidad. Cambiar el encuadre de una lámina a otra.
+- **Prompt de guion:**
+```
+Arma un carrusel «Hype vs. Realidad» de [N+2] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Slides 2 a N+1: una promesa o herramienta de moda por slide: su nombre en máximo 5 palabras, qué tan alta va la barra de «lo que prometen» y la de «lo que entrega» (alta, media o baja, sin números) y un veredicto de máximo 2 líneas que explique la diferencia.
+Al menos una tiene que salir bien parada.
+Portada: «[TEMA]: Hype vs. Realidad» + «mi opinión, no es una medición».
+Cierre: «¿cuál mido después?» + «comenta [PALABRA] y te mando [REGALO]». Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S55; barras planas en CSS, sin números ni brillos; tu recorte de tus recortes cambia de cara según el veredicto).
+
+---
+
+### G46 · Te armo tu plan en una nota del celular (como si tomara tu cuenta)
+- **Mecánica:** M55 · **Soporte:** S56 tu foto de ambiente a sangre + captura plana de la app de Notas encima · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @tinnaloaizaofficial · **15.929 likes** · 408 comentarios · 5 slides · https://www.instagram.com/p/DcN6FzSGaqf/ (la misma mecánica en @andrewcodesmith: https://www.instagram.com/p/DVgkuY6jpJB/)
+- **Anatomía:** 1) portada: «Así planearía tu [semana / ruta] si tomara tu cuenta» en serif grande sobre tu foto · 2) nota «El plan»: lo primero que harías y en qué partes divides el trabajo, con resaltados de color · 3) nota «Tu semana»: la lista con casillas, un día o paso por renglón · cierre: nota con lo que falta para empezar + «comenta [PALABRA]» seleccionado en amarillo, como texto marcado.
+- **Por qué funciona:** se siente como un mensaje privado de una experta: la nota del celular es íntima y se ve hecha a mano, no diseñada. El «si tomara tu cuenta» hace que cada persona lo lea como SU plan, y una lista con casillas se guarda para cumplirla.
+- **Error típico:** decorar la nota (la gracia es que parezca la app de verdad, plana y sin adornos). Poner más de 8 renglones por nota. Fotos de banco de fondo: van las tuyas, tranquilas, que no compitan con la nota. Fechar el plan: así envejece; escríbelo para cualquier semana.
+- **Prompt de guion:**
+```
+Arma un carrusel «así planearía tu [semana de contenido] si tomara tu cuenta» de 4 slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Escríbelo como una nota del celular que le mandarías a ella: frases cortas, en segunda persona.
+Slide 2 «El plan»: lo primero que tiene que tener claro + en qué 3 partes divides el trabajo, con una línea por parte.
+Slide 3 «Tu semana»: de lunes a domingo, un renglón por día con qué publicar y para qué (atraer, nutrir o convertir). Sin fechas.
+Cierre: lo que necesita para empezar + «comenta [PALABRA] y te mando [REGALO]».
+Marca qué frases van resaltadas (máximo 1 por párrafo). Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S56; la nota se arma en HTML plano imitando la app de Notas, sobre fotos de tus fotos que no tapen tu cara).
+
+---
+
+### G47 · Detalles que solo nota quien sabe (cada lámina enseña tu criterio)
+- **Mecánica:** M56 · **Soporte:** S57 foto o captura real a sangre, tranquila, + rótulo de 2–4 palabras en sans pesada clara encima · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @suprabha.bhandi · **10.710 likes** · 42 comentarios · 5 slides · https://www.instagram.com/p/Dd3uf8HDugF/
+- **Anatomía:** 1) portada: tu foto a sangre + «Detalles que noto como [tu oficio] en [lo que miras]» en letra gruesa, con tu nombre chico arriba · 2-N) UN detalle de oficio por lámina: la foto o captura real que lo prueba ocupa la lámina (recortada en lo que importa) y encima un rótulo de 2–4 palabras, sin explicación larga · cierre: el último detalle + comenta la palabra.
+- **Por qué funciona:** no enseña pasos, enseña CRITERIO: el detalle que la gente ve todos los días y no sabe nombrar. Quien lo lee siente que se lleva el ojo de una experta («ahora lo voy a notar en todos lados») y lo guarda para revisar lo suyo. La prueba es la imagen, no el texto: por eso cada rótulo es tan corto.
+- **Error típico:** detalles obvios que cualquiera ya sabe (ahí no hay criterio). Rótulos largos que explican en vez de nombrar. Imágenes que no muestran el detalle (una foto bonita que no prueba nada) o íconos en vez de la captura real. Mezclar detalles de cosas distintas (perfil, reel y oferta en el mismo carrusel).
+- **Prompt de guion:**
+```
+Arma un carrusel «detalles que solo nota quien sabe» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Portada: «Detalles que noto como [MI OFICIO] en [TEMA]» en máximo 10 palabras (dame 3 opciones).
+Slides 2 a N: UN detalle por slide, que mi clienta ve todos los días pero no sabe nombrar. Para cada uno: un rótulo de 2 a 4 palabras + qué foto o captura real mía lo prueba y qué parte hay que recortar. Nada obvio y nada inventado: si no tengo la imagen que lo prueba, cambia el detalle.
+Todos los detalles sobre la misma cosa ([TEMA]), del más fácil de ver al más fino.
+Cierre: el último detalle + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S57: tus fotos del carrete y tus capturas a sangre, recortadas en el detalle) · capturas limpias con `capturas-tutorial-formula100k`.
+
+---
+
+## EN OBSERVACIÓN (Top Carousels, 3-nov-2026)
+
+Mecánicas vistas en UNA sola cuenta: entran al recetario si aparecen en una segunda (regla del radar).
+- Informe en máquina de escribir (tesis + pruebas + tabla) · Anatomía con medidas (una parte por slide) · La frase que te dijeron + fotos que la desmienten · Adelanto del newsletter en recortes · Cuaderno de trabajo para rellenar · Tres niveles en filas fijas · Consejo y fotograma que lo prueba · La búsqueda exacta y lo que trae · La paleta que sale de un objeto.
 
 ## MAPA DE SKILLS
 

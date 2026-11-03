@@ -1,6 +1,6 @@
 ---
 name: carrusel-formatos-f100k
-description: Router del catálogo de 60 formatos de carrusel de FÓRMULA 100K (F01–F20 y G01–G40). Elige el formato por objetivo, escribe el guion con el prompt de la ficha y lo fabrica donde la persona trabaje: Claude Code con plantillas propias o HTML libre, o prompts listos para Gemini, ChatGPT o cualquier chat. Usar cuando se diga "qué formato de carrusel uso", "catálogo de formatos de carrusel", "hazme un carrusel tipo [ficha]", "carrusel en libreta", "tier list", "checklist", "chuleta", "carrusel tipo chat", "antes y después", "garabatos sobre mi foto", "hilo de tuits", "tabla de ranking", "yo de antes y yo de ahora", "cliente en evidencia", "carrusel interactivo", "calendario del mes", "principiante vs pro", "la frase que se escribe sola", "un miedo por lámina", "reto de N días", "dame el prompt para hacerlo en Gemini/ChatGPT". NO usar para clonar un link concreto (clonador-carrusel-formula100k) ni para un carrusel con burbujas sobre selfies (carrusel-organico-f100k).
+description: Router del catálogo de 67 formatos de carrusel de FÓRMULA 100K (F01–F20 y G01–G47), en 9 categorías. Elige el formato por objetivo, escribe el guion con el prompt de la ficha y lo fabrica donde la persona trabaje: Claude Code con plantillas propias o HTML libre, o prompts listos para Gemini, ChatGPT o cualquier chat. Usar cuando se diga "qué formato de carrusel uso", "catálogo de formatos de carrusel", "hazme un carrusel tipo [ficha]", "carrusel en libreta", "tier list", "checklist", "chuleta", "carrusel tipo chat", "antes y después", "garabatos sobre mi foto", "hilo de tuits", "tabla de ranking", "yo de antes y yo de ahora", "cliente en evidencia", "carrusel interactivo", "calendario del mes", "principiante vs pro", "la frase que se escribe sola", "un miedo por lámina", "reto de N días", "mi equipo de IA por puestos", "caso de marca famosa", "una cifra por lámina", "mapa rama por rama", "hype vs realidad", "plan en una nota del celular", "detalles que solo nota quien sabe", "dame el prompt para hacerlo en Gemini/ChatGPT". NO usar para clonar un link concreto (clonador-carrusel-formula100k) ni para un carrusel con burbujas sobre selfies (carrusel-organico-f100k).
 ---
 
 ## 🧰 ANTES DE EMPEZAR (leer antes de seguir: manda sobre lo que diga esta skill más abajo)
@@ -87,7 +87,7 @@ Convierte un tema en un carrusel terminado eligiendo **una ficha** y girando 3 p
 ## Fuentes (léelas, no las copies en esta skill)
 | Archivo | Qué trae |
 |---|---|
-| `references/catalogo.md` | Las **60 fichas**: F01–F20 (referencias miradas) y G01–G40. Mecánicas M1–M49, soportes S1–S50, anatomía, error típico, **prompt de guion** y quién lo fabrica. |
+| `references/catalogo.md` | Las **67 fichas**: F01–F20 (referencias miradas) y G01–G47 (G41–G47 sumadas el 3-nov desde carruseles virales vistos en 2+ cuentas). Mecánicas M1–M56, soportes S1–S57, anatomía, error típico, **prompt de guion** y quién lo fabrica. |
 | `references/prompts-por-plataforma.md` | Por ficha: **referencia** (cuenta y enlace del ejemplo, cuando lo hay), **visual detallado** (paleta hex, tipografía, composición por slide) y prompts para Claude Code · HTML en cualquier chat · Gemini · ChatGPT, con variantes A/B/C. |
 | `references/grimorio-carruseles.md` | Anatomía completa de los 17 carruseles del Grimorio (G01–G13 + 4 alias). |
 | `references/estilos-guia-maestra.md` | Los 25 estilos visuales con su prompt HTML (pieles y soportes S17–S28). |
@@ -119,13 +119,13 @@ Búscala en el orden de «ANTES DE EMPEZAR»: primero `~/Documents/mi-contenido/
 
 | Objetivo | Primero se proponen | También |
 |---|---|---|
-| Guardado | F07 chuleta · G01 checklist · G19 explicador de tendencia (con bonus) | F18, F04, G05 recursos, G06 glosario, G13 de A a B, G17 hilo de tuits, G18 tabla de ranking, G21 día por día en papel, G29 calendario del mes, G32 inspiración vs. mi versión, G34 principiante vs. pro, G36 una foto nueve publicaciones, G38 lo mismo en 5 niveles, G39 se ven iguales, G40 reto de N días |
-| Comentario | F17 tier list · G03 qué tipo eres · G25 yo de antes / yo de ahora | F08, F14, G08 molde, G12 confesión, G10 frases, G16 vitrina de lo que construiste, G18 tabla de ranking, G23 reporte del mes, G26 cliente en evidencia, G28 premios (pide etiquetar), G31 «soy X, obvio Y», G34 principiante vs. pro |
+| Guardado | F07 chuleta · G01 checklist · G19 explicador de tendencia (con bonus) | F18, F04, G05 recursos, G06 glosario, G13 de A a B, G17 hilo de tuits, G18 tabla de ranking, G21 día por día en papel, G29 calendario del mes, G32 inspiración vs. mi versión, G34 principiante vs. pro, G36 una foto nueve publicaciones, G38 lo mismo en 5 niveles, G39 se ven iguales, G40 reto de N días, G43 una cifra por lámina, G44 mapa rama por rama, G46 plan en nota del celular, G47 detalles de experta |
+| Comentario | F17 tier list · G03 qué tipo eres · G25 yo de antes / yo de ahora | F08, F14, G08 molde, G12 confesión, G10 frases, G16 vitrina de lo que construiste, G18 tabla de ranking, G23 reporte del mes, G26 cliente en evidencia, G28 premios (pide etiquetar), G31 «soy X, obvio Y», G34 principiante vs. pro, G45 hype vs. realidad |
 | Compartido | F01 causa y consecuencia · G22 la excusa y lo que no se ve · G10 frases | F19 mapa, G06 glosario, G24 capturas con círculo rojo, G28 premios, G31 «soy X, obvio Y», G33 meme de una imagen, G35 la frase que se escribe sola, G37 un miedo por lámina |
 | Tiempo de permanencia | G09 swipe-reveal · F20 collage | G04 lo que nadie te dice, G27 desliza y pasa algo (interactivo), G35 la frase que se escribe sola |
 | Seguidor | F07 (slide de seguir) · F10 anáfora · F13 garabatos (post fijado) | F06 |
-| Conexión | F11 historia con edades · G20 cosas que me hacen muy yo · G24 capturas que cuentan una historia | F12, G11 errores propios, G12 confesión, G25 yo de antes / yo de ahora, G30 del dibujo a la foto, G37 un miedo por lámina |
-| Venta | G07 caso de estudio · G14 antes/después · G15 FAQ en chat | F11, F20, F09, G26 cliente en evidencia, G36 una foto nueve publicaciones |
+| Conexión | F11 historia con edades · G20 cosas que me hacen muy yo · G24 capturas que cuentan una historia | F12, G11 errores propios, G12 confesión, G25 yo de antes / yo de ahora, G30 del dibujo a la foto, G37 un miedo por lámina, G42 caso de marca famosa, G47 detalles de experta |
+| Venta | G07 caso de estudio · G14 antes/después · G15 FAQ en chat | F11, F20, F09, G26 cliente en evidencia, G36 una foto nueve publicaciones, G41 tu equipo de IA por puestos, G43 una cifra por lámina |
 | Autoridad / actualidad | G02 noticia · G19 explicador de tendencia · G23 reporte de tendencias del mes | F14 hot take, G04 lo que nadie te dice, G18 tabla de ranking |
 
 ### 2. Guion
@@ -167,6 +167,7 @@ Rellena tú los corchetes que ya conozcas (texto de la portada, colores de su ma
 | G26, G27, G28, G29, G32, G33, G34, G35, G38, G39, G40 | esta skill · **HTML libre** con el soporte de la ficha (S36–S50). G27 y G35: el objeto o la libreta van clavados en el mismo punto en todas las slides. G29: los emojis salen de una fuente, nunca de un modelo de imagen |
 | G30, G31, G36 | `banana` o `higgsfield-carrusel-generador` (el dibujo a crayón, el bodegón o las variaciones del producto, SIN texto y desde la foto real) + esta skill · HTML libre S40 / S41 / S46 |
 | G37 | `carrusel-render-formula100k` (tus fotos a sangre) o esta skill · HTML libre S47 |
+| G41–G47 | esta skill · **HTML libre** con el soporte de la ficha (S51–S57). G41, G43, G47 llevan capturas reales (`capturas-tutorial-formula100k` para tapar datos); G43 y G45: cero cifras sin fuente (G45 dice en cada lámina que es opinión); G42: caso real con fuentes públicas citadas |
 | F09 | `carrusel-organico-f100k` o `carrusel-render-formula100k` |
 | F10, F11, F12, F15 | `carrusel-render-formula100k` (o `clonador-carrusel-formula100k` con el link) |
 | F14 | `higgsfield-carrusel-generador` (foto con tu cara) + texto en HTML |
@@ -216,6 +217,11 @@ Entrega: rutas de los PNG + caption con el CTA. **CTA:** comentario de una palab
 - Ninguna tiene la prueba con Nano Banana todavía.
 - Si la referencia de una ficha es animada (G27, G35), se puede entregar con las slides en video; el texto siempre en HTML.
 
+
+## Fichas de noviembre (G41–G47)
+- Salieron de revisar las slides de 146 carruseles virales: solo mecánicas vistas en 2+ cuentas distintas.
+- Las referencias se citan como enlace de Instagram.
+- Cada ficha tiene una categoría: listas, tutoriales, opinión, historias, casos, comparaciones, noticias, interactivos o estéticos.
 
 ## Gotchas conocidos
 - **Fuentes:** nunca `-apple-system` (en Chrome headless cae a Times). Las plantillas esperan `document.fonts.ready`. Requiere internet (Google Fonts).

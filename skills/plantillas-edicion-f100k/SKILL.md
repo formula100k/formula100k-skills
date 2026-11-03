@@ -1,6 +1,6 @@
 ---
 name: plantillas-edicion-f100k
-description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (179 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
+description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (179 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
 argument-hint: "[nombre de la plantilla] [ruta del video | tema]"
 ---
 
@@ -21,6 +21,7 @@ reconoce la plantilla → revisa que su motor esté instalado → pide solo el m
   Si pregunta por un grupo («qué efectos hay»), muestra ese grupo completo: nombre — `queSeVe` en una línea.
 - **Nombró una plantilla** → paso 2.
 - **No nombró plantilla** (pasó un guion, un video o un tema) → paso 5.
+- **Pegó el enlace de un reel** para copiar cómo está editado («clona la edición de este reel: …») → paso 6.
 
 ## 2. Reconoce la plantilla aunque venga aproximada
 1. Compara lo que dijo con `nombre`, `alias` e `id` **sin tildes, sin mayúsculas y sin signos** («pantalla dividida», «la de dividir la pantalla», «split» → `pantalla-dividida`).
@@ -76,6 +77,17 @@ Lee su guion, su video o su tema y propón **2 plantillas** (nombre — por qué
 | Pregunta «¿qué pasaría si…?» | 2 estilos de ese grupo cuyo `para` vaya con la pregunta |
 
 Si dice «ponle efectos» sin nombrar ninguno, el motor propone los momentos: pásale el pedido a `auto-edicion` (19 efectos) y, si está instalado, también al catálogo de `auto-edit-effects`.
+
+## 6. Pegó un enlace: clona esa edición
+Se clona **cómo está editado**, nunca el contenido: ni sus textos, ni su cara, ni su logo, ni su música.
+1. **Baja el reel** a `<proyecto>/referencia/` con `yt-dlp -o "<proyecto>/referencia/ref.%(ext)s" "<enlace>"`. Si falta `yt-dlp`, dile cómo instalarlo en 1 paso (Mac: `brew install yt-dlp` · Windows: `winget install -e --id yt-dlp.yt-dlp`). Si no baja (cuenta privada o borrado), pídele que lo descargue y te pase el archivo.
+2. **Míralo de verdad**, no por el caption: 1 cuadro por segundo (`ffmpeg -i ref.mp4 -vf fps=1 cuadros/%03d.jpg`) y, de 0 a 3 s, uno cada 0,25 s. Si tiene voz, transcríbela. Anota 5 líneas: (a) ¿sale una persona hablando o no?, (b) cómo es el gancho de 0 a 3 s, (c) letra, tamaño y colores de los textos, (d) qué aparece en pantalla (capturas, fotos, dibujos, cifras) y cada cuántos segundos, (e) el ritmo de los cortes.
+3. **Elige el motor:**
+   - Animado sin cara que responde una pregunta imposible o crece con cifras («¿qué pasaría si…?») → `clonador-de-edicion-f100k` con el enlace como referencia (él lo estudia con su propio paso).
+   - Sale una persona hablando, o ella dijo «úsala en mi video» → las 2 plantillas de «Con tu video» o «YouTube 16:9» cuyo `queSeVe` más se parece a tus 5 notas. Dile en 2 líneas cuál se parece más y en qué es distinta, y sigue con esa (pasos 3 y 4).
+   - Sin cara y no es «¿qué pasaría si…?», o ella dijo «sin grabar» → la plantilla más parecida de «Sin grabar» o «Animado sin cara», igual que arriba.
+4. Pásale al motor tus 5 notas como **dirección de arte** (gancho, letra, colores, qué aparece y ritmo) para que la plantilla se parezca a la referencia. Si la referencia hace algo que va contra las reglas del motor (texto que tiembla, brillos, sonidos agudos, olor a IA), manda la regla del motor.
+5. Al entregar, di en una línea qué plantilla usaste de base y qué tomaste de la referencia.
 
 ## Reglas de esta skill
 - **No inventes plantillas, recetas ni muestras.** Lo que no está en el JSON no existe.

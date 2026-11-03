@@ -7,9 +7,9 @@
   "módulo Animación": "Instala el módulo Animación desde la Fábrica de contenido (formula100k.app, Instala tus módulos → Animación).",
   "plugin formula100k": "En Claude Code: /plugin marketplace add formula100k/formula100k-skills y luego /plugin install formula100k@formula100k."
  },
- "total": 179,
+ "total": 180,
  "porGrupo": {
-  "Con tu video": 43,
+  "Con tu video": 44,
   "YouTube 16:9": 11,
   "Sin grabar": 5,
   "Animado sin cara": 13,
@@ -805,6 +805,27 @@
     "receta": "collage gancho"
    },
    "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Celular a cine",
+    "Mi video como película",
+    "Cine desde tu celular"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/estilos/celular-a-cine.mp4",
+   "id": "celular-a-cine",
+   "nombre": "Tu video hecho película",
+   "grupo": "Con tu video",
+   "queSeVe": "Tu toma del celular vuelve a filmarse como escena de película: los mismos movimientos, tu misma cara y un plano de cine distinto cada 2 segundos.",
+   "necesita": "Un clip de 6 a 15 s con el celular apoyado, una foto tuya de cuerpo entero con la misma ropa y créditos de Higgsfield.",
+   "comando": "convierte mi video en película con la plantilla «Tu video hecho película»",
+   "motor": {
+    "skill": "celular-a-cine-f100k",
+    "receta": "seedance-2-5-vs-wan-3"
+   },
+   "seInstalaCon": "plugin formula100k"
   },
   {
    "alias": [],

@@ -1,8 +1,8 @@
-# Plantillas de edición (179)
+# Plantillas de edición (180)
 
 Generado desde `plantillas-edicion.json` (la fuente de verdad: si cambias algo, cámbialo ahí). Una fila por plantilla: nombre · qué se ve · qué necesitas · comando · motor.
 
-## Con tu video (43)
+## Con tu video (44)
 
 | Nombre | Qué se ve | Necesita | Comando | Motor |
 |---|---|---|---|---|
@@ -49,6 +49,7 @@ Generado desde `plantillas-edicion.json` (la fuente de verdad: si cambias algo, 
 | **Collage de cine** | Tu toma compuesta en paneles sobre escenas de película. | Tu video grabado vertical. | `edita mi video con la plantilla «Collage de cine»` | `collage-cine-f100k` → collage cine · plugin formula100k |
 | **B-roll de cine para VSL** | De 15 a 25 clips de cine con tu avatar para cubrir un video de ventas largo. Gasta créditos de Higgsfield. | El guion de tu VSL y créditos de Higgsfield. | `edita mi video con la plantilla «B-roll de cine para VSL»` | `broll-vsl-formula100k` → b-roll VSL · plugin formula100k |
 | **Collage de gancho** | Título de 2 líneas sobre tu frente y recortes de fotos alrededor de tu cabeza y a la altura del pecho. | Tu video grabado vertical (y fotos de tu tema, o se buscan). | `edita mi video con la plantilla «Collage de gancho»` | `collage-gancho-f100k` → collage gancho · módulo Animación |
+| **Tu video hecho película** (también: Celular a cine, Mi video como película, Cine desde tu celular) | Tu toma del celular vuelve a filmarse como escena de película: los mismos movimientos, tu misma cara y un plano de cine distinto cada 2 segundos. | Un clip de 6 a 15 s con el celular apoyado, una foto tuya de cuerpo entero con la misma ropa y créditos de Higgsfield. | `convierte mi video en película con la plantilla «Tu video hecho película»` | `celular-a-cine-f100k` → seedance-2-5-vs-wan-3 · plugin formula100k |
 
 ## YouTube 16:9 (11)
 

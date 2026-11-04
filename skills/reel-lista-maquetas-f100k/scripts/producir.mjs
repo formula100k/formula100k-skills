@@ -27,7 +27,7 @@ const dur = tiempos.reduce((s, t) => s + t.dur, 0);
 console.log(`   ${tiempos.length} escenas · ${dur.toFixed(1)} s`);
 
 console.log('2/5 armar pieza…');
-const pieza = armar(e, join(build, 'pieza.html'));
+const pieza = armar(e, join(build, 'pieza.html'), dirname(resolve(json)));
 if (op('--solo-armar')) { console.log('vista previa: abre ' + pieza); process.exit(0); }
 
 console.log('3/5 render (Chrome)…');

@@ -13,22 +13,23 @@ import { fileURLToPath } from 'node:url';
 export function textosDeVoz(e) {
   const limpio = s => String(s || '').replace(/\*/g, '');
   return [
-    ...(e.gancho ? [e.gancho.voz || `${e.gancho.grande} ${e.gancho.chica || ''}`] : []),
-    ...(e.items || []).map(it => it.voz || limpio(it.titular)),
-    ...(e.cierre ? [e.cierre.voz || limpio(e.cierre.titular)] : []),
+    ...(e.gancho ? [limpio(e.gancho.voz) || `${e.gancho.chica || ''} ${e.gancho.grande}`] : []),
+    ...(e.intro ? [limpio(e.intro.voz) || `${e.intro.arriba || ''} ${e.intro.numero ?? ''} ${e.intro.abajo || ''}`] : []),
+    ...(e.items || []).map(it => limpio(it.voz || it.titular || it.nombre)),
+    ...(e.cierre ? [limpio(e.cierre.voz || e.cierre.titular)] : []),
   ];
 }
-const MIN = { gancho: 2.0, item: 2.3, cierre: 3.0 };
+const MIN = { gancho: 2.0, intro: 2.0, item: 2.3, cierre: 3.0 };
 const dura = f => +(+execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString()).toFixed(3);
 
 export function voz(e, build, o = {}) {
   mkdirSync(join(build, 'voz'), { recursive: true });
   const textos = textosDeVoz(e);
-  const tipos = [...(e.gancho ? ['gancho'] : []), ...(e.items || []).map(() => 'item'), ...(e.cierre ? ['cierre'] : [])];
-  const lista = [...(e.gancho ? [e.gancho] : []), ...(e.items || []), ...(e.cierre ? [e.cierre] : [])];
+  const tipos = [...(e.gancho ? ['gancho'] : []), ...(e.intro ? ['intro'] : []), ...(e.items || []).map(() => 'item'), ...(e.cierre ? ['cierre'] : [])];
+  const lista = [...(e.gancho ? [e.gancho] : []), ...(e.intro ? [e.intro] : []), ...(e.items || []), ...(e.cierre ? [e.cierre] : [])];
   const modo = o.voz || 'say', pausa = o.pausa ?? .3;
   if (modo === 'no') {
-    const t = lista.map((s, i) => ({ dur: s.dur || (tipos[i] === 'gancho' ? 2.2 : tipos[i] === 'cierre' ? 3.6 : 2.6), voz_dur: null }));
+    const t = lista.map((s, i) => ({ dur: s.dur || (tipos[i] === 'gancho' || tipos[i] === 'intro' ? 2.4 : tipos[i] === 'cierre' ? 3.6 : 2.6), voz_dur: null }));
     writeFileSync(join(build, 'tiempos.json'), JSON.stringify(t, null, 1)); return { tiempos: t, pista: null };
   }
   let fuentes;

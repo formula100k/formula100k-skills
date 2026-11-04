@@ -1,7 +1,7 @@
 ---
 name: carrusel-viral-formula100k
 description: >
-  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 37 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G17: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después, vitrina de lo que construiste, hilo de tuits…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con IA (Higgsfield u otra herramienta de imagen conectada) o con una foto real, construye el carrusel directamente en Canva solo si el usuario proporciona el enlace, y da instrucciones precisas de producción.
+  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 94 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G74: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después, vitrina de lo que construiste, hilo de tuits…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con IA (Higgsfield u otra herramienta de imagen conectada) o con una foto real, construye el carrusel directamente en Canva solo si el usuario proporciona el enlace, y da instrucciones precisas de producción.
 ---
 
 ## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
@@ -310,9 +310,9 @@ Compara la idea del usuario con los patrones encontrados:
 
 ---
 
-## PASO 3 — Elegir el FORMATO (uno de los 37) y la estructura
+## PASO 3 — Elegir el FORMATO (uno de los 94) y la estructura
 
-**Lee `references/formatos-carrusel-35.md`**: los 37 formatos del recetario de FÓRMULA 100K con su objetivo, mecánica, soporte, motor y qué tan bien los resuelve Nano Banana. No inventes un «tipo» si uno de los 37 ya lo cubre.
+**Lee `references/formatos-carrusel-35.md`**: los 94 formatos del recetario de FÓRMULA 100K con su objetivo, mecánica, soporte, motor y qué tan bien los resuelve Nano Banana. No inventes un «tipo» si uno de los 94 ya lo cubre.
 
 1. **Formato** — cruza el objetivo del PASO 1 con los patrones virales del PASO 2:
    - Si las referencias del nicho repiten una mecánica que coincide con una ficha (ej. todas son tier lists → **F17**), usa esa ficha.
@@ -753,7 +753,7 @@ Incluye siempre este bloque al final del calendario:
 
 Antes de entregar, verifica:
 
-- [ ] ¿Se eligió uno de los 37 formatos (o se dijo por qué ninguno encaja) y se respeta su anatomía y su error típico?
+- [ ] ¿Se eligió uno de los 94 formatos (o se dijo por qué ninguno encaja) y se respeta su anatomía y su error típico?
 - [ ] ¿El gancho genera curiosity gap real? ¿Hay una razón urgente para deslizar?
 - [ ] ¿El gancho está validado por al menos 1-2 referencias virales encontradas en investigación?
 - [ ] ¿Cada slide tiene UNA sola idea?
@@ -779,4 +779,4 @@ Antes de entregar, verifica:
 - **Si el input es un guion de reel:** identifica el gancho verbal del reel (los primeros 3 segundos) y conviértelo en gancho visual del Slide 1. El resto del guion se distribuye en slides interiores.
 - **El calendario (PASO 9) va solo si lo pide.** No es parte del entregable estándar.
 - **El Perfil Visual (PASO 0) se verifica en cada sesión:** primero `~/Documents/mi-contenido/mi-marca.md`, después `mi-marca/marca.md`, y solo si no hay ninguno, el respaldo. Si `references/design_profile.md` tiene el placeholder `[PERFIL NO CONFIGURADO]`, disparar el setup. Si tiene contenido real, cargarlo sin preguntar nada y continuar.
-- **Leer siempre** su marca al inicio de cada sesión (PASO 0.0; `references/design_profile.md` solo como respaldo) y `references/formatos-carrusel-35.md` en el PASO 3 (los 37 formatos; se regenera desde el recetario, no se edita a mano).
+- **Leer siempre** su marca al inicio de cada sesión (PASO 0.0; `references/design_profile.md` solo como respaldo) y `references/formatos-carrusel-35.md` en el PASO 3 (los 94 formatos; se regenera desde el recetario, no se edita a mano).

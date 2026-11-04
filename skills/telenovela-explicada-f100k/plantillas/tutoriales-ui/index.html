@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>Tutoriales Claude</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  @font-face{font-family:"Instrument";src:url("assets/InstrumentSerif-Regular.ttf")}
+  @font-face{font-family:"InstrumentIt";src:url("assets/InstrumentSerif-Italic.ttf")}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000}
+  #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;color:#1f1e1d}
+  .clip{position:absolute;inset:0;overflow:hidden;background:#c96442}
+  .rot{position:absolute;left:0;right:0;top:120px;text-align:center;color:#fff;font-family:"Instrument";font-size:118px;line-height:1}
+  .rot small{display:block;font-family:"InstrumentIt";font-size:54px;opacity:.92;margin-top:6px}
+  .win{position:absolute;zoom:1.3;left:38px;top:262px;width:754px;height:775px;background:#faf9f5;border-radius:30px;overflow:hidden;box-shadow:0 24px 50px rgba(60,20,10,.28)}
+  .bar{height:74px;border-bottom:1px solid #e8e5dc;display:flex;align-items:center;padding:0 28px;gap:14px;font-size:27px;color:#6b665c}
+  .dots{display:flex;gap:10px;margin-right:12px}.dots i{width:16px;height:16px;border-radius:50%;background:#e2ded3;display:block}
+  .tabs{margin-left:auto;margin-right:auto;display:flex;background:#efece4;border-radius:14px;padding:5px}
+  .tabs span{padding:8px 26px;border-radius:10px;font-size:25px;color:#6b665c}
+  .tabs span.on{background:#fff;color:#1f1e1d;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .ast{width:46px;height:46px;display:inline-block;background:url(assets/claude.svg) center/contain no-repeat}
+  .serif{font-family:Georgia,"Times New Roman",serif}
+  .ch{opacity:0}
+  .cursor{position:absolute;width:46px;height:46px;z-index:50}
+  .cursor svg{width:100%;height:100%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+  .input{position:absolute;left:30px;right:30px;bottom:30px;min-height:150px;border:1.5px solid #e2ded3;border-radius:22px;background:#fff;padding:24px 28px;font-size:31px;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .send{position:absolute;right:22px;bottom:20px;width:62px;height:62px;border-radius:14px;background:#c96442;display:flex;align-items:center;justify-content:center}
+  .send svg{width:30px;height:30px}
+  .bub{position:absolute;right:30px;top:100px;max-width:600px;background:#efece4;border-radius:22px;padding:22px 28px;font-size:30px;line-height:1.35;opacity:0}
+  .resp{position:absolute;left:34px;right:40px;top:230px;font-size:31px;line-height:1.45}
+  .resp p{opacity:0;margin-bottom:22px}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:#c96442;color:#fff;border-radius:14px;padding:14px 26px;font-size:27px;font-weight:600}
+  .btn.claro{background:#fff;color:#1f1e1d;border:1.5px solid #dcd8cc}
+  .row{display:flex;align-items:center;gap:20px}
+  .paso{opacity:0;display:flex;align-items:center;gap:18px;font-size:29px;margin-bottom:16px;color:#3d3929}
+  .ok{width:38px;height:38px;border-radius:50%;background:#2f8f5b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
+  .file{opacity:0;display:flex;align-items:center;gap:22px;background:#fff;border:1.5px solid #e2ded3;border-radius:18px;padding:20px 24px;font-size:29px;margin-bottom:18px}
+  .file img,.file .ic{width:62px;height:62px}
+  .ic{border-radius:10px;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-size:17px;font-weight:800;padding-bottom:8px}
+  .file small{display:block;color:#8a857a;font-size:22px;margin-top:4px}
+  .term{position:absolute;left:40px;right:40px;top:110px;bottom:40px;background:#1f1e1d;border-radius:20px;padding:30px 34px;font-family:"SF Mono",Menlo,monospace;font-size:25px;line-height:1.6;color:#e8e3d6}
+  .term .ln{opacity:0;white-space:pre}
+  .k{color:#d97757}.s{color:#9fc98a}.f{color:#8ab4f8}.c{color:#8a857a}
+  .phone{position:absolute;right:30px;top:150px;width:300px;height:600px;background:#fff;border-radius:46px;border:12px solid #1f1e1d;padding:30px 22px;opacity:0;font-size:22px}
+  .nav{position:absolute;left:0;top:74px;bottom:0;width:190px;background:#f3f1ea;padding:30px 22px;font-size:27px;color:#6b665c}
+  .nav div{padding:14px 18px;border-radius:12px;margin-bottom:6px}.nav .on{background:#e6e2d7;color:#1f1e1d;font-weight:600}
+  .skill{display:flex;align-items:center;gap:20px;border-bottom:1px solid #ebe8df;padding:24px 4px}
+  .skill b{font-size:28px;display:block}.skill small{color:#8a857a;font-size:22px;display:block;margin-top:6px}
+  .tog{margin-left:auto;flex:none;width:76px;height:44px;border-radius:22px;background:#d6d2c6;position:relative}
+  .tog i{position:absolute;left:4px;top:4px;width:36px;height:36px;border-radius:50%;background:#fff;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .tog.on{background:#3b82f6}.tog.on i{transform:translateX(32px)}
+  .con{display:flex;align-items:center;gap:22px;border:1.5px solid #e2ded3;border-radius:22px;padding:22px 24px;margin-bottom:18px;background:#fff}
+  .con img{width:84px;height:84px;object-fit:contain}
+  .con b{font-size:34px;display:block}.con small{color:#8a857a;font-size:24px}
+  .con .estado{margin-left:auto;position:relative;width:190px;height:62px;flex:none}
+  .con .estado>*{position:absolute;right:0;top:0}
+  .verde{display:inline-flex;align-items:center;gap:10px;color:#2f8f5b;font-weight:700;font-size:27px;padding:14px 4px;opacity:0}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="tutoriales" data-start="0" data-width="1080" data-height="1920" data-duration="30">
+
+<!-- 1 · CHAT -->
+<div class="clip" id="s0" data-start="0" data-duration="5" data-track-index="1">
+  <div class="rot">Chat<small>conversa contigo y te ayuda a pensar</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span class="ast" style="width:30px;height:30px"></span><span class="serif" style="color:#1f1e1d;font-size:30px">Claude</span></div>
+    <div id="s0-saludo" style="position:absolute;left:0;right:0;top:240px;text-align:center"><span class="ast" style="width:64px;height:64px"></span><div class="serif" style="font-size:52px;margin-top:18px;color:#3d3929">¿En qué te ayudo hoy?</div></div>
+    <div class="bub" id="s0-bub">Dame 3 ideas de reels para mi pastelería</div>
+    <div class="resp" id="s0-resp">
+      <div class="row" style="margin-bottom:26px"><span class="ast" id="s0-ast" style="width:44px;height:44px;opacity:0"></span></div>
+      <p><b>1.</b> El antes y después de un pastel de boda</p>
+      <p><b>2.</b> Lo que nadie ve a las 5 de la mañana</p>
+      <p><b>3.</b> El error que arruina tu merengue</p>
+    </div>
+    <div class="input"><span class="typ" id="s0-typ">Dame 3 ideas de reels para mi pastelería</span>
+      <div class="send" id="s0-send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  </div>
+  <div class="cursor" id="s0-cur"></div>
+</div>
+
+<!-- 2 · COWORK -->
+<div class="clip" id="s1" data-start="5" data-duration="5" data-track-index="1">
+  <div class="rot">Cowork<small>hace la tarea completa en tus archivos</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="tabs"><span>Chat</span><span class="on">Cowork</span><span>Code</span></div></div>
+    <div style="position:absolute;left:40px;right:40px;top:110px">
+      <div style="border:1.5px solid #e2ded3;border-radius:22px;background:#fff;padding:24px 28px;font-size:31px;min-height:170px;position:relative">
+        <span class="typ" id="s1-typ">Haz la presentación y el Excel de precios</span>
+        <div class="row" style="position:absolute;left:24px;bottom:18px;font-size:24px;color:#6b665c;gap:10px">
+          <svg width="30" height="26" viewBox="0 0 24 20"><path d="M1 3a2 2 0 0 1 2-2h6l2 2.5h10a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2z" fill="#e0a64a"/></svg>Pastelería</div>
+        <div class="btn" id="s1-go" style="position:absolute;right:20px;bottom:16px;padding:10px 22px">Empezar →</div>
+      </div>
+      <div style="margin-top:26px">
+        <div class="paso"><span class="ok">✓</span>Leí tu carpeta: 14 archivos</div>
+        <div class="paso"><span class="ok">✓</span>Creé tu lista de precios</div>
+        <div class="paso"><span class="ok">✓</span>Armé la presentación de ventas</div>
+      </div>
+      <div style="margin-top:10px;font-size:22px;color:#8a857a;margin-bottom:10px" class="paso" id="s1-res">Resultados</div>
+      <div class="file"><img src="assets/excel.svg"><div>Precios 2026.xlsx<small>Hoja de cálculo · lista</small></div></div>
+      <div class="file"><img src="assets/ppt.svg"><div>Presentación de ventas.pptx<small>12 diapositivas · lista</small></div></div>
+    </div>
+  </div>
+  <div class="cursor" id="s1-cur"></div>
+</div>
+
+<!-- 3 · CODE -->
+<div class="clip" id="s2" data-start="10" data-duration="5" data-track-index="1">
+  <div class="rot">Code<small>se lo pides normal y te arma la app</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="tabs"><span>Chat</span><span>Cowork</span><span class="on">Code</span></div></div>
+    <div class="term">
+      <div class="k">✻ Claude Code</div>
+      <div style="margin-top:18px;white-space:normal;font-size:27px">&gt; <span class="typ" id="s2-typ">Hazme una app para que mis clientas reserven su pastel</span></div>
+      <div style="margin-top:22px">
+        <div class="ln"><span class="c">● Creando la app de reservas…</span></div>
+        <div class="ln"><span class="k">export default</span> <span class="k">function</span> <span class="f">Reservas</span>() {</div>
+        <div class="ln">  <span class="k">const</span> pasteles = [<span class="s">"Boda"</span>, <span class="s">"Cumple"</span>]</div>
+        <div class="ln">  <span class="k">return</span> &lt;<span class="f">Calendario</span> dias=<span class="s">"libres"</span> /&gt;</div>
+        <div class="ln">}</div>
+        <div class="ln"><span class="s">✓ Lista en tu celular</span></div>
+      </div>
+    </div>
+    <div class="phone" id="s2-phone">
+      <div class="serif" style="font-size:36px;margin-bottom:6px">Reserva tu pastel</div>
+      <div style="color:#8a857a;margin-bottom:24px">Elige el tipo y el día</div>
+      <div style="border:1.5px solid #c96442;border-radius:14px;padding:12px;margin-bottom:10px;background:#fbefe9">Pastel de boda</div>
+      <div style="border:1.5px solid #e2ded3;border-radius:14px;padding:12px;margin-bottom:10px">Pastel de cumpleaños</div>
+      <div style="border:1.5px solid #e2ded3;border-radius:14px;padding:12px;margin-bottom:16px">Cupcakes x12</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:26px;text-align:center;font-size:21px">
+        <span>12</span><span>13</span><span style="background:#c96442;color:#fff;border-radius:8px">14</span><span>15</span><span>16</span></div>
+      <div class="btn" style="width:100%;justify-content:center">Reservar</div>
+    </div>
+  </div>
+  <div class="cursor" id="s2-cur"></div>
+</div>
+
+<!-- 4 · PROYECTO (conocerte) -->
+<div class="clip" id="s3" data-start="15" data-duration="5" data-track-index="1">
+  <div class="rot">Proyectos<small>primero le cuentas todo de tu negocio</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span style="color:#8a857a">Proyectos ›</span><span style="color:#1f1e1d;font-weight:600">Mi pastelería</span></div>
+    <div style="position:absolute;left:40px;right:40px;top:110px">
+      <div class="row" style="justify-content:space-between;margin-bottom:26px"><div class="serif" style="font-size:40px">Conocimiento del proyecto</div><div class="btn claro" id="s3-add">+ Agregar</div></div>
+      <div class="file"><div class="ic" style="background:#d9473b">PDF</div><div>Mi marca.pdf<small>3 páginas</small></div></div>
+      <div class="file"><div class="ic" style="background:#2b6fd6">DOC</div><div>Mis clientas ideales.docx<small>2 páginas</small></div></div>
+      <div class="file"><img src="assets/excel.svg"><div>Precios.xlsx<small>hoja de cálculo</small></div></div>
+      <div style="margin-top:34px;font-size:26px;color:#8a857a;margin-bottom:12px">Instrucciones</div>
+      <div style="border:1.5px solid #e2ded3;border-radius:18px;background:#fff;padding:22px 26px;font-size:29px;line-height:1.4;min-height:130px"><span class="typ" id="s3-typ">Háblame cercano, tuteando. Vendo pasteles de boda.</span></div>
+    </div>
+  </div>
+  <div class="cursor" id="s3-cur"></div>
+</div>
+
+<!-- 5 · HABILIDADES -->
+<div class="clip" id="s4" data-start="20" data-duration="5" data-track-index="1">
+  <div class="rot">Habilidades<small>se lo explicas una vez y lo repite igual</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span style="color:#1f1e1d;font-weight:600">Configuración</span></div>
+    <div class="nav"><div>General</div><div>Cuenta</div><div class="on">Capacidades</div><div>Conectores</div></div>
+    <div style="position:absolute;left:220px;right:28px;top:100px">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px"><div style="font-size:32px;font-weight:600">Habilidades</div><div class="btn claro" id="s4-up" style="font-size:22px;padding:10px 16px">Subir</div></div>
+      <div style="color:#8a857a;font-size:22px;margin-bottom:10px">Instrucciones que Claude repite cada vez</div>
+      <div class="skill" id="s4-nueva" style="opacity:0;background:#fbefe9;border-radius:14px;padding:24px 18px"><div><b>guion-de-mis-reels</b><small>Escribe mis guiones como yo hablo</small></div><div class="tog" id="s4-tog"><i></i></div></div>
+      <div class="skill"><div><b>respuestas-a-clientas</b><small>Contesta mensajes con mi tono</small></div><div class="tog on"><i></i></div></div>
+      <div class="skill"><div><b>ficha-de-producto</b><small>Describe cada pastel para vender</small></div><div class="tog on"><i></i></div></div>
+      <div class="skill"><div><b>calendario-de-posts</b><small>Arma mi semana de contenido</small></div><div class="tog"><i></i></div></div>
+    </div>
+  </div>
+  <div class="cursor" id="s4-cur"></div>
+</div>
+
+<!-- 6 · CONECTORES -->
+<div class="clip" id="s5" data-start="25" data-duration="5" data-track-index="1">
+  <div class="rot">Conectores<small>trae tu correo y tu calendario</small></div>
+  <div class="win">
+    <div class="bar"><div class="dots"><i></i><i></i><i></i></div><span style="color:#1f1e1d;font-weight:600">Conectores</span></div>
+    <div style="position:absolute;left:40px;right:40px;top:120px">
+      <div class="con"><img src="assets/gmail.svg"><div><b>Gmail</b><small>Lee y redacta tus correos</small></div>
+        <div class="estado"><div class="btn" id="s5-b1">Conectar</div><div class="verde" id="s5-v1">✓ Conectado</div></div></div>
+      <div class="con"><img src="assets/calendar.svg"><div><b>Google Calendar</b><small>Ve y agenda tus citas</small></div>
+        <div class="estado"><div class="btn" id="s5-b2">Conectar</div><div class="verde" id="s5-v2">✓ Conectado</div></div></div>
+      <div class="serif" style="font-size:32px;margin:24px 4px 14px;color:#3d3929">Claude ya ve:</div>
+      <div class="file" id="s5-r1"><img src="assets/gmail.svg"><div>3 pedidos nuevos sin responder<small>hoy</small></div></div>
+      <div class="file" id="s5-r2"><img src="assets/calendar.svg"><div>Entrega: pastel de boda, sábado 10:00<small>tu calendario</small></div></div>
+    </div>
+  </div>
+  <div class="cursor" id="s5-cur"></div>
+</div>
+
+</div>
+<script>
+(function(){
+  const CUR = '<svg viewBox="0 0 24 24"><path d="M4 2.5v17.2l4.6-4.4 2.9 6.6 3-1.3-2.9-6.5h6.4z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+  document.querySelectorAll(".cursor").forEach(c => c.innerHTML = CUR);
+  // cada letra en su span para escribir de forma determinista (sirve al adelantar o retroceder)
+  document.querySelectorAll(".typ").forEach(el => { el.innerHTML = [...el.textContent].map(ch => `<span class="ch">${ch === " " ? "&nbsp;" : ch}</span>`).join("").replace(/&nbsp;/g, " "); });
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const q = s => document.querySelector(s), qa = s => document.querySelectorAll(s);
+  const escribe = (sel, t, dur) => tl.to(qa(sel + " .ch"), { opacity: 1, duration: 0.001, stagger: dur / qa(sel + " .ch").length }, t);
+  const ROOT = document.getElementById("root");
+  const donde = sel => { const r = q(sel).getBoundingClientRect(), R = ROOT.getBoundingClientRect(); return [r.left + r.width * 0.55 - R.left - 8, r.top + r.height * 0.55 - R.top - 5]; };
+  const mueve = (sel, t, x, y, d = 0.45) => { if (typeof x === "string") { [x, y] = donde(x); } return tl.to(q(sel), { x, y, duration: d, ease: "power2.inOut" }, t); };
+  const clic = (sel, t, blanco) => { tl.to(q(sel), { scale: 0.82, duration: 0.07, transformOrigin: "10% 10%" }, t).to(q(sel), { scale: 1, duration: 0.1 }, t + 0.07);
+    if (blanco) tl.to(q(blanco), { opacity: 0.75, duration: 0.07 }, t).to(q(blanco), { opacity: 1, duration: 0.1 }, t + 0.07); };
+  const aparece = (els, t, gap = 0.3) => tl.to(els, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", stagger: gap }, t);
+  gsap.set(".paso, .file, .resp p", { y: 14 });
+
+  // 1 · Chat (base 0)
+  let B = 0;
+  tl.set("#s0-cur", { x: 820, y: 1520 }, 0);
+  escribe("#s0-typ", B + 0.1, 0.95);
+  mueve("#s0-cur", B + 0.75, "#s0-send", 0, 0.4);
+  clic("#s0-cur", B + 1.18, "#s0-send");
+  tl.set("#s0-saludo", { opacity: 0 }, B + 1.3).set("#s0-bub", { opacity: 1 }, B + 1.3).set("#s0-typ .ch", { opacity: 0 }, B + 1.3);
+  tl.set("#s0-ast", { opacity: 1 }, B + 1.35).to("#s0-ast", { rotation: 180, duration: 2.5, ease: "none" }, B + 1.35);
+  aparece(qa("#s0-resp p"), B + 1.6, 0.32);
+
+  // 2 · Cowork (base 5)
+  B = 5;
+  tl.set("#s1-cur", { x: 700, y: 1500 }, B);
+  escribe("#s1-typ", B + 0.1, 0.85);
+  mueve("#s1-cur", B + 0.6, "#s1-go", 0, 0.4);
+  clic("#s1-cur", B + 1.02, "#s1-go");
+  aparece(qa("#s1 .paso"), B + 1.2, 0.28);
+  aparece(qa("#s1 .file"), B + 2.15, 0.3);
+  mueve("#s1-cur", B + 1.3, 1150, 2050, 0.6);
+
+  // 3 · Code (base 10)
+  B = 10;
+  tl.set("#s2-cur", { x: 1200, y: 1600 }, B);
+  escribe("#s2-typ", B + 0.1, 1.0);
+  aparece(qa("#s2 .ln"), B + 1.2, 0.16);
+  tl.fromTo("#s2-phone", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, B + 2.2);
+
+  // 4 · Proyecto (base 15)
+  B = 15;
+  tl.set("#s3-cur", { x: 700, y: 1500 }, B);
+  gsap.set("#s3 .file", { x: -40, y: 0 });
+  mueve("#s3-cur", B + 0.05, "#s3-add", 0, 0.4);
+  clic("#s3-cur", B + 0.45, "#s3-add");
+  tl.to(qa("#s3 .file"), { opacity: 1, x: 0, duration: 0.25, ease: "power2.out", stagger: 0.32 }, B + 0.6);
+  mueve("#s3-cur", B + 1.0, 1150, 2050, 0.5);
+  escribe("#s3-typ", B + 1.6, 1.2);
+
+  // 5 · Habilidades (base 20)
+  B = 20;
+  tl.set("#s4-cur", { x: 700, y: 1500 }, B);
+  mueve("#s4-cur", B + 0.05, "#s4-up", 0, 0.4);
+  clic("#s4-cur", B + 0.45, "#s4-up");
+  tl.fromTo("#s4-nueva", { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" }, B + 0.65);
+  mueve("#s4-cur", B + 0.9, "#s4-tog", 0, 0.35);
+  clic("#s4-cur", B + 1.28);
+  tl.to("#s4-tog", { backgroundColor: "#3b82f6", duration: 0.15 }, B + 1.32).to("#s4-tog i", { x: 32, duration: 0.15, ease: "power2.out" }, B + 1.32);
+
+  // 6 · Conectores (base 25)
+  B = 25;
+  tl.set("#s5-cur", { x: 700, y: 1500 }, B);
+  mueve("#s5-cur", B + 0.0, "#s5-b1", 0, 0.35);
+  clic("#s5-cur", B + 0.38, "#s5-b1");
+  tl.set("#s5-b1", { opacity: 0 }, B + 0.52).set("#s5-v1", { opacity: 1 }, B + 0.52);
+  mueve("#s5-cur", B + 0.6, "#s5-b2", 0, 0.3);
+  clic("#s5-cur", B + 0.93, "#s5-b2");
+  tl.set("#s5-b2", { opacity: 0 }, B + 1.07).set("#s5-v2", { opacity: 1 }, B + 1.07);
+  mueve("#s5-cur", B + 1.15, 1150, 2050, 0.5);
+  aparece([q("#s5-r1"), q("#s5-r2")], B + 1.3, 0.3);
+
+  tl.set({}, {}, 30);
+  window.__timelines["tutoriales"] = tl;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+{
+ "salida": "frutinovela-v3.mp4",
+ "tiempos": "w/gemini.json",
+ "clips": [
+  {
+   "archivo": "clips/s01.mp4",
+   "tiempos": "s01.wav",
+   "desde": 0.0,
+   "congelar_inicio": 0.5,
+   "acercar_en": 1.3,
+   "zoom": 1.35,
+   "zoom_x": 0.02,
+   "zoom_y": 0.0,
+   "recorte_arriba": 280
+  },
+  {
+   "archivo": "clips/s02.mp4",
+   "tiempos": "s02.wav",
+   "desde": 0.7,
+   "lowpass_desde": 4.1,
+   "capturas": [
+    {
+     "archivo": "capturas/logo-claude-tarjeta.png",
+     "palabra": "Cloud",
+     "y": 300,
+     "ancho": 760,
+     "alto_max": 300,
+     "radio": 24
+    }
+   ]
+  },
+  {
+   "archivo": "clips/s03.mp4",
+   "tiempos": "s03.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t0.mp4",
+    "palabra": "converso"
+   }
+  },
+  {
+   "archivo": "clips/s04.mp4",
+   "tiempos": "s04.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t1.mp4",
+    "palabra": "Te"
+   }
+  },
+  {
+   "archivo": "clips/s05.mp4",
+   "tiempos": "s05.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t2.mp4",
+    "palabra": "Tú"
+   }
+  },
+  {
+   "archivo": "clips/s06.mp4",
+   "tiempos": "s06.wav"
+  },
+  {
+   "archivo": "clips/s07.mp4",
+   "tiempos": "s07.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t3.mp4",
+    "palabra": "primero"
+   }
+  },
+  {
+   "archivo": "clips/s08.mp4",
+   "tiempos": "s08.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t4.mp4",
+    "palabra": "cómo"
+   }
+  },
+  {
+   "archivo": "clips/s09.mp4",
+   "tiempos": "s09.wav",
+   "capturas": [],
+   "tutorial": {
+    "archivo": "tut/t5.mp4",
+    "palabra": "Traen"
+   }
+  },
+  {
+   "archivo": "clips/s10.mp4",
+   "tiempos": "s10.wav",
+   "desde": 0.75,
+   "capturas": []
+  },
+  {
+   "archivo": "clips/s11.mp4",
+   "tiempos": "s11.wav",
+   "hasta": 5.2
+  }
+ ],
+ "voces": [
+  {
+   "archivo": "voz/gancho2-t.wav",
+   "en": 0.05,
+   "gain": 1.0
+  },
+  {
+   "archivo": "voz/cta-t.wav",
+   "en": -2.6,
+   "gain": 1.0,
+   "subs": true,
+   "tiempos": "cta-t.wav"
+  }
+ ],
+ "gancho": {
+  "lineas": [
+   "TE DIJERON",
+   "que no podías crear tu app"
+  ],
+  "grande": 0,
+  "color": "rojo",
+  "letra": "chicle",
+  "y": 110,
+  "hasta": 2.9,
+  "degradado": 0.75,
+  "degradado_alto": 820
+ },
+ "claves": [
+  "app",
+  "Claude",
+  "Chat",
+  "Cowork",
+  "Code",
+  "Excel",
+  "correo",
+  "calendario",
+  "Imposible",
+  "ingeniera",
+  "ingenieros",
+  "conocerte",
+  "igual",
+  "primos",
+  "hermanas",
+  "pensar",
+  "tarea",
+  "construyo",
+  "conocerte",
+  "repito",
+  "calendario"
+ ],
+ "corregir": {
+  "cloud": "Claude.",
+  "chad": "Chat,"
+ },
+ "pie_final": 2.6,
+ "finales": [
+  {
+   "tipo": "gancho",
+   "lineas": [
+    "comenta",
+    "APP"
+   ],
+   "grande": 1,
+   "color": "amarillo",
+   "letra": "chicle",
+   "tamano": 260,
+   "y": 330,
+   "en": -2.6
+  }
+ ],
+ "subs_y": 1430
+}

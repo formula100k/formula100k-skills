@@ -1,6 +1,6 @@
 ---
 name: plantillas-edicion-f100k
-description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (249 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
+description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (251 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
 argument-hint: "[nombre de la plantilla] [ruta del video | tema]"
 ---
 
@@ -66,6 +66,8 @@ Lee su guion, su video o su tema y propón **2 plantillas** (nombre — por qué
 | Ranking, «lo mejor y lo peor» | Ranking por niveles · Top 5 |
 | Pasos, «3 errores», lista | Lista rápida · Notitas |
 | Lista por grupos sin cara («N herramientas para…», «lo que necesitas en cada etapa») | Lista en cuaderno · Lista con maquetas |
+| Explicar una app o tu producto con personajes que hablan, sin salir a cámara | Telenovela de frutas |
+| Historia real de una empresa o una persona («el nacimiento de…») con datos y fuentes | Collage documental |
 | Historia, anécdota | Historia natural · Fondo que cambia (sin grabar: Historia animada) |
 | Tutorial, demo de una app | Pantalla dividida · Capturas de tutorial |
 | Explicas con cifras o un proceso | Explainer con cifras · Explicación arriba |

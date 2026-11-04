@@ -1,0 +1,27 @@
+{
+  "estilo": "cuaderno",
+  "formato": { "fps": 30 },
+  "marca": { "acento": "#E06A3C" },
+  "etiqueta_grupo": "Grupo",
+  "gancho": {
+    "chica": "Tu contenido", "grande": "NO VENDE", "color": "rojo",
+    "voz": "Tu contenido no vende sin estos seis pasos."
+  },
+  "intro": { "arriba": "Guárdate estos", "numero": 6, "abajo": "y que tus videos vendan", "voz": "Guárdate estos seis, y que tus videos vendan." },
+  "items": [
+    { "grupo": "Antes de grabar", "nombre": "Tu avatar", "desc": "a quién le hablas y qué le duele", "icono": "persona",
+      "voz": "Primero, tu *avatar*: a quién le hablas y qué le duele.", "boceto": { "tipo": "ficha", "etiqueta": "su dolor" } },
+    { "grupo": "Antes de grabar", "nombre": "Tres ganchos", "desc": "por cada idea, y eliges el mejor", "icono": "rayo",
+      "voz": "Escribe *tres ganchos* por idea y quédate con el mejor.", "boceto": { "tipo": "opciones", "opciones": ["gancho 1", "gancho 2", "gancho 3"], "elegida": 1 } },
+    { "grupo": "Al escribir", "nombre": "Una historia", "desc": "un caso real contado en cuatro pasos", "icono": "pasos",
+      "voz": "Cuenta una *historia*: un caso real en cuatro pasos.", "boceto": { "tipo": "pasos", "pasos": ["antes", "problema", "cambio", "después"] } },
+    { "grupo": "Al escribir", "nombre": "CTA con palabra", "desc": "una palabra ligada a tu regalo", "icono": "chat",
+      "voz": "Cierra con una *palabra* ligada a tu regalo.", "boceto": { "tipo": "chat", "palabra": "GUÍA", "respuesta": "te llega el regalo" } },
+    { "grupo": "Al publicar", "nombre": "Calendario", "desc": "cada pieza con su objetivo", "icono": "calendario",
+      "voz": "Arma tu *calendario*: cada pieza con su objetivo.", "boceto": { "tipo": "calendario", "marca": [0, 2, 4] } },
+    { "grupo": "Al publicar", "nombre": "Tus métricas", "desc": "qué repetir y qué dejar de hacer", "icono": "grafica",
+      "voz": "Y lee tus *métricas*: qué repetir y qué dejar.", "boceto": { "tipo": "grafica", "etiqueta": "repetir" } }
+  ],
+  "cierre": { "arriba": "Los 6, por privado", "verbo": "comenta", "palabra": "LISTA", "regalo": "y te mando la lista completa",
+    "voz": "Comenta *lista* y te mando los seis por privado." }
+}

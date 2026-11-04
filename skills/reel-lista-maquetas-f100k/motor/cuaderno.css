@@ -1,0 +1,104 @@
+/* reel-lista-maquetas — estilo «cuaderno» (lienzo 1080x1920)
+   Papel crema cuadriculado, encabezado «GRUPO N DE T» con puntitos, lista que se acumula
+   (ícono + nombre en negrita + descripción en serif itálica), un boceto a lápiz por ítem
+   que se dibuja solo y el subtítulo en un papelito abajo.
+   Reglas: texto con corte seco, sin brillos, sin rebote ni temblor; lo único que se mueve es el trazo. */
+:root {
+  --papel: #E7E1D5;
+  --cuadro: rgba(120, 104, 80, .10);
+  --tinta: #2A2622;
+  --gris: #6F675C;
+  --acento: #E06A3C;
+  --raya: #EBA987;
+  --verde: #3E8E5A;
+  --rojo: #D9452F;
+  --amarillo: #D99A1B;
+  --sans: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--papel); }
+#lienzo { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: var(--sans); color: var(--tinta);
+  -webkit-font-smoothing: antialiased; }
+
+/* papel cuadriculado + sombra de mesa abajo (fija en todo el reel) */
+.fondo { position: absolute; inset: 0; background-color: var(--papel);
+  background-image:
+    linear-gradient(var(--cuadro) 2px, transparent 2px),
+    linear-gradient(90deg, var(--cuadro) 2px, transparent 2px);
+  background-size: 90px 90px; background-position: 0 30px; }
+.fondo::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 520px;
+  background: linear-gradient(180deg, rgba(90, 70, 40, 0), rgba(90, 70, 40, .10)); }
+.defs { position: absolute; width: 0; height: 0; }
+
+.escena { position: absolute; inset: 0; display: none; }
+.escena.activa { display: block; }
+
+/* trazo a lápiz que se dibuja: pathLength=1 y --p de 0 a 1 */
+.trazo { fill: none; stroke: var(--tinta); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--p, 1)); }
+.trazo.ac { stroke: var(--acento); stroke-width: 5; }
+.trazo.fino { stroke-width: 3; }
+.relleno { fill: var(--acento); stroke: none; opacity: .18; }
+.lapiz { filter: url(#lapiz); }
+.rot { font-family: var(--serif); font-style: italic; font-size: 40px; fill: var(--tinta); }
+.rot.ac { fill: var(--acento); }
+.rot.sans { font-family: var(--sans); font-style: normal; font-weight: 700; }
+
+/* ---------- encabezado del grupo ---------- */
+.cab { position: absolute; left: 80px; right: 80px; top: 232px; }
+.cab .eti { font-weight: 600; font-size: 25px; letter-spacing: .32em; color: var(--gris); text-transform: uppercase; }
+.cab .tit { font-family: var(--serif); font-style: italic; font-size: 74px; line-height: 1.05; margin-top: 6px; color: var(--tinta); display: inline-block; position: relative; }
+.cab .ondas { position: absolute; left: 0; bottom: -20px; height: 22px; width: 100%; overflow: visible; }
+.cab .puntos { position: absolute; right: 0; top: -4px; display: flex; gap: 9px; }
+.cab .puntos i { width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid var(--tinta); display: block; }
+.cab .puntos i.si { background: var(--acento); border-color: var(--acento); }
+
+/* ---------- lista que se acumula ---------- */
+.lista { position: absolute; left: 80px; right: 80px; top: 420px; }
+.fila { display: flex; gap: 26px; align-items: flex-start; height: 128px; }
+.fila .ico { width: 76px; height: 76px; flex: none; display: grid; place-items: center; margin-top: 2px; }
+.fila .ico img { width: 76px; height: 76px; object-fit: contain; }
+.fila .ico svg { width: 72px; height: 72px; overflow: visible; }
+.fila .nom { font-weight: 700; font-size: 48px; letter-spacing: -.02em; line-height: 1.05; position: relative; display: inline-block; }
+.fila .sub { font-family: var(--serif); font-style: italic; font-size: 33px; color: var(--gris); margin-top: 8px; line-height: 1.1; }
+.fila .raya { position: absolute; left: 0; bottom: -8px; width: 100%; height: 10px; overflow: visible; }
+
+/* ---------- boceto del ítem ---------- */
+.boceto { position: absolute; left: 140px; top: 820px; width: 800px; height: 500px; }
+.boceto svg { width: 800px; height: 500px; overflow: visible; }
+
+/* ---------- subtítulo en papelito ---------- */
+.chip { position: absolute; left: 50%; top: 1372px; transform: translateX(-50%); background: #F8F5EF; padding: 14px 26px 16px;
+  box-shadow: 0 6px 0 rgba(90, 70, 40, .10), 0 10px 24px rgba(90, 70, 40, .12); font-weight: 700; font-size: 38px;
+  letter-spacing: -.01em; white-space: nowrap; color: var(--tinta); }
+.chip .k { color: var(--acento); }
+
+/* ---------- gancho: línea chica + línea ENORME rayada ---------- */
+.gancho { position: absolute; left: 70px; right: 70px; top: 560px; }
+.gancho .g2 { font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.gancho .g1 { font-weight: 900; letter-spacing: -.04em; line-height: 1; margin-top: 10px; white-space: nowrap; }
+.rayado { position: relative; color: var(--papel); -webkit-text-stroke: 9px var(--tinta); paint-order: stroke fill; }
+.rayado::after { content: attr(data-txt); position: absolute; inset: 0; color: transparent; -webkit-text-stroke: 0;
+  background: repeating-linear-gradient(-45deg, var(--raya) 0 4px, transparent 4px 11px); -webkit-background-clip: text; background-clip: text; }
+.nota .rayado { color: #F4F0E8; }
+.gancho .dib { position: absolute; left: 0; top: -330px; width: 940px; height: 300px; }
+.gancho .dib svg { width: 940px; height: 300px; overflow: visible; }
+
+/* ---------- intro: «Guárdate estos / 6 / ?» ---------- */
+.intro { position: absolute; left: 90px; right: 90px; top: 440px; }
+.intro .arr { font-weight: 800; font-size: 64px; letter-spacing: -.03em; }
+.intro .num { font-weight: 900; font-size: 360px; line-height: .9; letter-spacing: -.05em; margin-top: 10px; }
+.intro .aba { font-family: var(--serif); font-style: italic; font-size: 46px; color: var(--tinta); margin-top: 18px; }
+.intro .caj { position: absolute; right: 0; top: 70px; display: grid; gap: 14px; }
+.intro .caj i { width: 92px; height: 92px; border: 3.5px solid var(--tinta); display: grid; place-items: center; font-style: normal;
+  font-weight: 800; font-size: 46px; background: repeating-linear-gradient(-45deg, rgba(235, 169, 135, .55) 0 3px, transparent 3px 11px); }
+
+/* ---------- cierre: nota de papel ---------- */
+.nota { position: absolute; left: 150px; width: 780px; top: 600px; height: 560px; background: #F4F0E8; transform: rotate(-2deg);
+  box-shadow: 0 2px 0 rgba(90, 70, 40, .08), 0 24px 50px rgba(90, 70, 40, .18); padding: 70px 70px; }
+.nota .cinta { position: absolute; left: 50%; top: -26px; width: 180px; height: 52px; transform: translateX(-50%) rotate(3deg); background: rgba(225, 205, 160, .75); }
+.nota .n1 { font-weight: 700; font-size: 44px; letter-spacing: -.02em; color: var(--gris); }
+.nota .n2 { font-weight: 800; font-size: 64px; letter-spacing: -.03em; margin-top: 6px; }
+.nota .n3 { font-weight: 900; letter-spacing: -.04em; line-height: 1; margin-top: 26px; white-space: nowrap; }
+.nota .n4 { font-family: var(--serif); font-style: italic; font-size: 38px; color: var(--gris); margin-top: 26px; }

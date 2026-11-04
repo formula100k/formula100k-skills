@@ -1,6 +1,6 @@
 ---
 name: reel-lista-maquetas-f100k
-description: Arma un reel faceless 9:16 de LISTA con voz, donde cada ítem es una escena de 2 a 3 s con un titular arriba (la palabra clave en color y más grande), una maqueta plana de pantalla al centro que ILUSTRA el pedido (navegador con formulario, código, servidor, base de datos, candado, registro, variables, cookies, reloj que caduca, dos tarjetas con sello ✓/✕, WhatsApp, calendario, límite, checklist) y abajo la barra «07/27 · CATEGORÍA» que avanza más la pastilla con el @. Fondo pastel plano, corte seco, sonidos graves y render local gratis con Chrome y ffmpeg. Usar cuando digan «reel de lista», «N cosas que…», «pídele a Claude que…», «checklist en video», «los pasos de un tutorial con maquetas», «reel con maquetas de app», «estilo lista con barra de progreso», «/reel-lista-maquetas». NO usar para un talking-head con lista encima (lista-sobre-video-hablado-f100k), una lista que suena con sonido por ítem sobre fotos (reel-lista-que-suena-f100k) ni una explicación animada con personaje (reel-explicado-animado-f100k).
+description: Arma un reel faceless 9:16 de LISTA con voz, donde cada ítem es una escena de 2 a 3 s con un titular arriba (la palabra clave en color y más grande), una maqueta plana de pantalla al centro que ILUSTRA el pedido (navegador con formulario, código, servidor, base de datos, candado, registro, variables, cookies, reloj que caduca, dos tarjetas con sello ✓/✕, WhatsApp, calendario, límite, checklist) y abajo la barra «07/27 · CATEGORÍA» que avanza más la pastilla con el @. Fondo pastel plano, corte seco, sonidos graves y render local gratis con Chrome y ffmpeg. Usar cuando digan «reel de lista», «N cosas que…», «pídele a Claude que…», «checklist en video», «los pasos de un tutorial con maquetas», «reel con maquetas de app», «estilo lista con barra de progreso», «/reel-lista-maquetas», «lista en cuaderno», «lista con bocetos a lápiz», «estilo papel cuadriculado con grupos». NO usar para un talking-head con lista encima (lista-sobre-video-hablado-f100k), una lista que suena con sonido por ítem sobre fotos (reel-lista-que-suena-f100k) ni una explicación animada con personaje (reel-explicado-animado-f100k).
 ---
 
 # Reel de lista con maquetas
@@ -103,6 +103,25 @@ Deja en `proyecto/build/`: `pieza.html`, `tiempos.json`, `voz.wav`, `efectos.wav
 
 El MP4 final (1080×1920, 30 fps, H.264 + AAC) va a la carpeta donde guardas tus videos editados.
 
+## Estilo «cuaderno» (`"estilo": "cuaderno"`)
+
+Otra piel para la misma lista: **papel crema cuadriculado**, encabezado «GRUPO 2 DE 5» con puntitos que se llenan y el nombre del grupo en serif itálica subrayado con una onda naranja. La lista del grupo **se acumula** (cada fila: ícono + nombre en negrita subrayado + descripción en serif itálica), debajo **un boceto a lápiz que se dibuja solo** y el subtítulo en un papelito abajo. Gancho con la línea chica en color y la ENORME con letra **rayada** (contorno + rayas, sin brillo ni degradado), intro opcional con la cifra rayada y una cajita «?» por ítem, y cierre en una **nota de papel con cinta** donde la palabra del CTA va rayada. Ejemplo completo: `ejemplo/cuaderno/escenas.json` (`ejemplo/muestra-cuaderno.png` es un cuadro).
+
+```json
+{ "estilo": "cuaderno", "marca": { "acento": "#E06A3C" }, "etiqueta_grupo": "Grupo",
+  "gancho": { "chica": "Tu contenido", "grande": "NO VENDE", "color": "rojo", "voz": "Tu contenido no vende sin estos seis pasos." },
+  "intro":  { "arriba": "Guárdate estos", "numero": 6, "abajo": "y que tus videos vendan", "voz": "Guárdate estos seis…" },
+  "items": [ { "grupo": "Antes de grabar", "nombre": "Tu avatar", "desc": "a quién le hablas y qué le duele", "icono": "persona",
+               "voz": "Primero, tu *avatar*: a quién le hablas y qué le duele.", "boceto": { "tipo": "ficha", "etiqueta": "su dolor" } } ],
+  "cierre": { "arriba": "Los 6, por privado", "verbo": "comenta", "palabra": "LISTA", "regalo": "y te mando la lista completa", "voz": "Comenta *lista*…" } }
+```
+
+- **Grupos:** los ítems seguidos con el mismo `grupo` forman un grupo; de 2 a 3 ítems por grupo (más de 4 no caben con el boceto). Los puntitos = cantidad de grupos.
+- **`icono`:** mejor el **logo o la captura real** de lo que nombra (ruta a un `.png`/`.jpg`/`.svg` junto al json; se incrusta solo). Si no hay, uno a lápiz: `persona`, `rayo`, `pasos`, `chat`, `calendario`, `grafica`, `lupa`, `play`, `dolar`, `check`, `documento`, `foco`, `objetivo`, `lapiz`, `estrella`. Nunca emojis.
+- **`boceto.tipo`:** `pantallas` (izq tachada / der con ✓), `opciones` (3 cajas, una elegida), `pasos` (cajas con flechas), `chat` (comentario con la palabra), `calendario` (semana con días marcados), `grafica` (línea que sube), `ficha` (ficha + diana), `lista` (✓ que se marcan), `buscar` (tarjetas + lupa), `video` (video → documento), `precio` (dos etiquetas $), `libre` (`svg` propio en un viewBox 800×500 con `class="trazo" pathLength="1"` y `data-a`). El trazo se dibuja durante la voz del ítem; es lo único que se mueve.
+- **Subtítulo:** sale de `voz` en trozos de hasta 3 palabras; van en color las palabras entre `*asteriscos*`, el `nombre` del ítem y la `palabra` del cierre. `"subtitulos": false` lo apaga.
+- Los mismos comandos de siempre (`producir.mjs`, `--voz say|carpeta|no`). Con `intro`, la carpeta de voz lleva un audio más: 01 gancho, 02 intro, luego los ítems y al final el cierre.
+
 ## Archivos
 
 | Archivo | Qué hace |
@@ -115,9 +134,11 @@ El MP4 final (1080×1920, 30 fps, H.264 + AAC) va a la carpeta donde guardas tus
 | `motor/estilo.css` | Fondo pastel, titular, barra, pastilla y primitivas (tarjeta, chip, pastillas, sellos) |
 | `motor/maquetas.js` | La librería de maquetas: 16 tipos + mascota + `libre` |
 | `motor/motor.js` | Arma las escenas, los tiempos y `draw(frame)` |
-| `motor/fuentes/` | Inter (variable) y JetBrains Mono, con licencia OFL |
+| `motor/cuaderno.css` · `motor/cuaderno.js` | Estilo «cuaderno»: papel cuadriculado, grupos, lista que se acumula, bocetos a lápiz y papelito |
+| `motor/fuentes/` | Inter (variable), JetBrains Mono e Instrument Serif itálica, con licencia OFL |
 | `referencias/MAQUETAS.md` | Los parámetros de cada maqueta |
 | `ejemplo/escenas.json` | Demo «blinda tu app» (gancho + 5 ítems + cierre, unos 19 s) |
+| `ejemplo/cuaderno/` | Demo del estilo cuaderno «tu contenido no vende» (3 grupos × 2 ítems, unos 28 s) |
 
 ## Errores comunes
 

@@ -1,4 +1,4 @@
-# Plantillas de edición (248)
+# Plantillas de edición (249)
 
 Generado desde `plantillas-edicion.json` (la fuente de verdad: si cambias algo, cámbialo ahí). Una fila por plantilla: nombre · qué se ve · qué necesitas · comando · motor.
 
@@ -78,7 +78,7 @@ Generado desde `plantillas-edicion.json` (la fuente de verdad: si cambias algo, 
 | **iPhone y avatar** | Subtítulo con la selección de texto del iPhone arriba, una ilustración iOS al centro y tu avatar abajo cambiando de pose. | Un tema y tu voz (avatar opcional). | `hazme un reel sin grabar con la plantilla «iPhone y avatar» sobre [TEMA]` | `reel-iphone-avatar-f100k` → iphone + avatar · módulo Animación |
 | **Todo animado** (también: Auto-Edición animado, Full Visual, Animado sin avatar) | El reel explicado sin avatar: cada frase es una escena animada que cuenta lo que dices (etiquetas, gráficos, objetos que se mueven), con golpe en el segundo 0 y nada quieto más de 1 segundo. | Un tema y tu voz (una sola toma corrida, grabada o con IA). | `hazme un reel sin grabar con la plantilla «Todo animado» sobre [TEMA]` | `auto-edicion-animado` → plantilla/pieza.src.html + scripts/revisar.mjs · módulo Edición |
 
-## Animado sin cara (14)
+## Animado sin cara (15)
 
 | Nombre | Qué se ve | Necesita | Comando | Motor |
 |---|---|---|---|---|
@@ -96,6 +96,7 @@ Generado desde `plantillas-edicion.json` (la fuente de verdad: si cambias algo, 
 | **Infografía animada** | Un tema, un artículo o un video de YouTube convertido en infografía que se mueve. | Un tema o un enlace. | `hazme un reel sin grabar con la plantilla «Infografía animada» sobre [TEMA]` | `infografia-reel-formula100k` → infografía · módulo Animación |
 | **Curiosidad viral** | Una curiosidad que ya explotó, rehecha con cada cuadro dibujado con código y cierre con tu regalo en un celular. | El enlace de la curiosidad de referencia, tu voz y tu regalo. | `hazme un reel sin grabar con la plantilla «Curiosidad viral» sobre [TEMA]` | `curiosidades-virales-f100k` → curiosidad · módulo Animación |
 | **Lista con maquetas** (también: Checklist con maquetas, Pídele a Claude) | Una lista narrada sobre fondo pastel: cada punto trae su titular con la clave en color, una maqueta de pantalla que lo muestra y la barra «07/27» que avanza. | Tu lista (de 5 a 30 puntos) y tu voz (grabada, clonada o de la compu). | `hazme un reel sin grabar con la plantilla «Lista con maquetas» sobre [TEMA]` | `reel-lista-maquetas-f100k` → lista con maquetas · módulo Animación |
+| **Lista en cuaderno** (también: Lista con bocetos, Cuaderno cuadriculado, Lista por grupos) | Una lista por grupos sobre papel cuadriculado: cada punto se suma con su ícono y su descripción en serif, un boceto a lápiz se dibuja solo y los puntitos marcan el grupo. | Tu lista (de 4 a 15 puntos en 2 a 5 grupos) y tu voz (grabada, clonada o de la compu). | `hazme un reel sin grabar con la plantilla «Lista en cuaderno» sobre [TEMA]` | `reel-lista-maquetas-f100k` → estilo cuaderno · módulo Animación |
 
 ## ¿Qué pasaría si…? (56)
 

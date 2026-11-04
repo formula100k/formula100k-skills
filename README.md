@@ -126,6 +126,7 @@ Cuando Andrea publique mejoras o skills nuevas:
 ### Video y visual
 - `celular-a-cine-f100k` — Tu clip del celular vuelve a filmarse como escena de película con IA (Higgsfield): hoja de personaje primero, lista de tomas por segundo y Seedance 2.5 frente a Wan 3.0 lado a lado
 - `plantillas-edicion-f100k` — Catálogo único de 246 plantillas de edición (con 66 estilos de cine): dices «edita mi video con la plantilla «Pantalla dividida»» y sabe qué skill la hace, qué material pedir y cómo instalarla si falta
+- `reel-lista-maquetas-f100k` — Reel faceless de lista con voz: titular con la clave en color, una maqueta plana de pantalla por ítem y la barra «07/27 · CATEGORÍA»; render local gratis
 - `editor-video-formula100k` — Edita automáticamente reels desde manifest
 - `graficos-de-video-formula100k` — Genera gráficos scrapbook para reels
 - `recursos-de-video-formula100k` — Caza B-roll real + IA para reels
@@ -145,6 +146,8 @@ Cuando Andrea publique mejoras o skills nuevas:
 - `reel-faceless-f100k` — Explainer faceless 9:16: Andrea graba la voz pero nunca sale en cámara. El Clip Director decide por gancho el visual de cada segmento (B-roll cinemático IA / card kinética / pixel-meme) y compone el reel completo. Su motor de clips también alimenta al editor de YouTube con B-roll de apoyo a medida del guion
 
 ### Crear apps (sin ser programadora)
+- `seguridad-tu-app-f100k` — Revisa, arregla y PRUEBA la seguridad de tu app antes de publicarla (27 controles, solo los que aplican a tu tipo de app) y te deja un informe en palabras simples
+- `agente-whatsapp-f100k` — Agente de IA en el WhatsApp de tu negocio que conversa, recuerda y agenda en Cal.com, solo por la API oficial de Meta (para que no te baneen el número)
 - `constructor-miniapps-f100k` — Construye mini-apps reales y las despliega: extensiones de Chrome, scrapers, calculadoras, generadores, analizadores, quizzes capta-correos, dashboards y mini-SaaS de suscripción. Motor de las 20 plantillas del artifact "40 Trucos de Claude + 20 Mini-Apps"
 - `landing-producto-formula100k` — Landing de venta con mockups, copy, Stripe y deploy en Vercel
 

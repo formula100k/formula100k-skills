@@ -1,7 +1,7 @@
 ---
 name: crea-tu-app-f100k
 description: >
-  Wizard guiado para que una alumna de FÓRMULA 100K construya y publique su propia app de IA paso a paso, sin programar y personalizada a SU negocio. Puerta de entrada del Catálogo de Apps IA. Usar cuando alguien diga: "quiero crear mi app", "ayúdame a hacer una app", "construye mi primera app", "crea tu app", "/crea-tu-app [nombre]", "quiero la app de [X] del catálogo", "no sé qué app hacer para mi negocio", "guíame para construir una app", "hazme una app con mi marca". Entrevista a la alumna (nicho, oferta, audiencia) y le RECOMIENDA qué app le conviene; captura su MARCA; construye invocando constructor-miniapps-f100k; eleva el diseño con ux-elevacion-formula100k; conecta SUS cuentas/keys narrando cada paso; y despliega en SU Vercel, con checkpoint humano entre fases. NO es el motor de build (ese es constructor-miniapps-f100k); NO usar para landings de venta (landing-producto-formula100k) ni artifacts educativos HTML (generador-artifact-educativo-formula100k).
+  Wizard guiado para que una alumna de FÓRMULA 100K construya y publique su propia app de IA paso a paso, sin programar y personalizada a SU negocio. Puerta de entrada del Catálogo de Apps IA. Usar cuando alguien diga: "quiero crear mi app", "ayúdame a hacer una app", "construye mi primera app", "crea tu app", "/crea-tu-app [nombre]", "quiero la app de [X] del catálogo", "no sé qué app hacer para mi negocio", "guíame para construir una app", "hazme una app con mi marca". Entrevista a la alumna (nicho, oferta, audiencia) y le RECOMIENDA qué app le conviene; captura su MARCA; construye invocando constructor-miniapps-f100k; eleva el diseño con ux-elevacion-formula100k; conecta SUS cuentas/keys narrando cada paso; revisa la seguridad con seguridad-tu-app-f100k; y despliega en SU Vercel, con checkpoint humano entre fases. NO es el motor de build (ese es constructor-miniapps-f100k); NO usar para landings de venta (landing-producto-formula100k) ni artifacts educativos HTML (generador-artifact-educativo-formula100k).
 argument-hint: [nombre de la app del catálogo o tu idea]
 disable-model-invocation: false
 ---
@@ -33,8 +33,9 @@ Objetivo: que la alumna salga con **una** app elegida, que sea buena para SU neg
 1. Salúdala y explícale en 2 líneas qué van a hacer juntas (construir y publicar su app hoy).
 2. Pregúntale **una a una**: (a) ¿de qué es tu negocio / nicho?, (b) ¿qué vendes o quieres vender?, (c) ¿a quién sirves?
 3. Lee `references/catalogo-apps.md` y **recomiéndale 1–3 apps** que encajen con sus respuestas, explicando *por qué para SU caso* (no genérico). Ejemplo: "Como das coaching nutricional, el **Escáner de etiquetas** te sirve de imán de leads: tus seguidoras lo usan y terminan en tu comunidad."
-4. Si ella trae su **propia idea** (no del catálogo), perfecto: acéptala y trátala igual.
-5. Cierra la fase cuando elija **una sola** app/idea. → **Checkpoint:** "Perfecto, vamos con [X]. ¿Confirmas?"
+4. Si lo que quiere es que **su WhatsApp responda y agende solo**, no es una app web: deriva a `agente-whatsapp-f100k` (usa la API oficial de Meta, para que no la baneen).
+5. Si ella trae su **propia idea** (no del catálogo), perfecto: acéptala y trátala igual.
+6. Cierra la fase cuando elija **una sola** app/idea. → **Checkpoint:** "Perfecto, vamos con [X]. ¿Confirmas?"
 
 > Si la idea es grande o ambigua (varias piezas: auth + pagos + IA + dashboard), invoca primero `superpowers:brainstorming` para acordar el diseño en lenguaje simple antes de construir.
 
@@ -89,6 +90,18 @@ Objetivo: enchufar la app a **sus** servicios, una llave a la vez, validando cad
 
 ---
 
+### Fase 4.5 — Revisión de seguridad (antes de publicar)
+
+Objetivo: que nadie pueda entrar a sus datos, robar sus llaves ni cobrar mal, antes de que la app esté en internet.
+
+1. Invoca `seguridad-tu-app-f100k`: reconoce qué tipo de app es, marca qué controles aplican (en una app de un solo archivo sin servidor aplican pocos) y le muestra lo que encontró por gravedad.
+2. Con su OK, arregla de a uno y **prueba** cada protección.
+3. → **Checkpoint:** "Tu app pasó la revisión: X de Y protecciones en verde ✅. Aquí tienes tu informe. ¿La publicamos?"
+
+> Si la app no tiene servidor, ni login, ni datos de otras personas, esta fase dura un par de minutos: igual se hace, porque revisa que ninguna llave quedó a la vista.
+
+---
+
 ### Fase 5 — Publicar y entregar
 
 Objetivo: app **en internet** con su URL + que ella sepa qué controla.
@@ -107,7 +120,9 @@ Objetivo: app **en internet** con su URL + que ella sepa qué controla.
 | 0 (idea grande/ambigua) | `superpowers:brainstorming` | Acordar diseño en simple antes de construir |
 | 2 | `constructor-miniapps-f100k` | Stack, scaffold y build del core (el motor) |
 | 3 | `ux-elevacion-formula100k` | Diseño con su marca, deja de verse genérica |
+| 4.5 | `seguridad-tu-app-f100k` | Revisa, arregla y prueba la seguridad antes de publicar |
 | 5 (si vende) | `landing-producto-formula100k` | Página de venta con Stripe |
+| 0 (si su app es atender clientes por WhatsApp) | `agente-whatsapp-f100k` | Agente que responde y agenda por la API oficial de Meta |
 | 1 (si pide marca de su IG) | `agent-browser` | Sacar colores/estilo de su perfil real |
 
 No reinventes lo que estas skills ya hacen. Tu trabajo es el **orden, la narración y la personalización**.
@@ -120,6 +135,7 @@ No reinventes lo que estas skills ya hacen. Tu trabajo es el **orden, la narraci
 - **Una pregunta a la vez.** Si te descubres pidiendo varios datos juntos, párate y pregunta uno.
 - **Sus cuentas, su costo.** La alumna usa SUS propias keys (ella las tiene). No metas keys subsidiadas de F100K.
 - **Si algo se rompe**, aplica `superpowers:systematic-debugging` por dentro, pero hacia ella comunícalo como "lo estoy arreglando", no con el error crudo.
+- **Nunca publicas sin la Fase 4.5.** La revisión de seguridad va antes del deploy, siempre.
 - **Empieza por el core.** Función central primero; pagos, extras y pulido después.
 
 ## Entregable final (lo que recibe la alumna)

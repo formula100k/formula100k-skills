@@ -1,0 +1,16 @@
+{
+  "name": "mi-agente-whatsapp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agente de WhatsApp para un negocio: conversa, recuerda, conoce servicios y agenda con Cal.com. API oficial de Meta.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/servidor.js",
+    "probar": "node --env-file-if-exists=.env src/probar.js",
+    "revisar": "node pruebas/humo.js",
+    "check": "node --check src/servidor.js && node --check src/probar.js && node --check src/agente.js && node --check src/modelo.js && node --check src/memoria.js && node --check src/agenda.js && node --check src/whatsapp.js && node --check src/firma.js && node --check src/config.js && node --check pruebas/humo.js"
+  }
+}

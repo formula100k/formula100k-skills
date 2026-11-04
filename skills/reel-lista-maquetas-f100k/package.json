@@ -1,0 +1,7 @@
+{
+  "name": "reel-lista-maquetas-f100k",
+  "private": true,
+  "type": "module",
+  "description": "Reel faceless de lista: titular + maqueta de pantalla por ítem + barra NN/TT. Render local con Chrome y ffmpeg.",
+  "dependencies": { "playwright-core": "^1.50.0" }
+}

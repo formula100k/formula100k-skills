@@ -7,12 +7,12 @@
   "módulo Animación": "Instala el módulo Animación desde la Fábrica de contenido (formula100k.app, Instala tus módulos → Animación).",
   "plugin formula100k": "En Claude Code: /plugin marketplace add formula100k/formula100k-skills y luego /plugin install formula100k@formula100k."
  },
- "total": 246,
+ "total": 248,
  "porGrupo": {
   "Con tu video": 44,
   "YouTube 16:9": 11,
-  "Sin grabar": 5,
-  "Animado sin cara": 13,
+  "Sin grabar": 6,
+  "Animado sin cara": 14,
   "¿Qué pasaría si…?": 56,
   "Motion graphics": 4,
   "Estilos de cine": 66,
@@ -508,7 +508,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/motion-recortada-perfil.mp4",
    "grupo": "Con tu video",
    "comando": "edita mi video con la plantilla «Motion recortada»",
    "id": "motion-recortada",
@@ -525,7 +525,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/infografia-con-clon.mp4",
    "grupo": "Con tu video",
    "comando": "edita mi video con la plantilla «Infografía con clon»",
    "id": "infografia-con-clon",
@@ -542,7 +542,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/contorno-bn.mp4",
    "grupo": "Con tu video",
    "comando": "edita mi video con la plantilla «Palabra detrás de ti»",
    "id": "palabra-detras-de-ti",
@@ -635,7 +635,7 @@
    "alias": [
     "Motion alrededor de tu cara"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": "«Motion alrededor de tu cara» (ESTILOS_EDICION) y «Motion con capturas reales» (ESTILOS_CASA) usaban la misma skill (motion-reels-f100k): una sola entrada.",
    "muestra": "/edicion/estilos/motion-recortada.mp4",
    "grupo": "Con tu video",
@@ -648,7 +648,7 @@
     "skill": "motion-reels-f100k",
     "receta": "zonas libres"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [
@@ -671,7 +671,7 @@
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Con tu video",
@@ -684,11 +684,11 @@
     "skill": "recursos-de-video-formula100k",
     "receta": "WEB"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/scrapbook.mp4",
    "grupo": "Con tu video",
@@ -701,11 +701,11 @@
     "skill": "graficos-de-video-formula100k",
     "receta": "scrapbook"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Con tu video",
@@ -718,13 +718,13 @@
     "skill": "pizarra-explicativa-f100k",
     "receta": "pizarra"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [
     "El gráfico sigue tu dedo"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Con tu video",
@@ -737,11 +737,11 @@
     "skill": "motion-tracking-dedo-f100k",
     "receta": "dedo"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Con tu video",
@@ -754,11 +754,11 @@
     "skill": "capturas-tutorial-formula100k",
     "receta": "capturas"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Con tu video",
@@ -771,11 +771,11 @@
     "skill": "collage-cine-f100k",
     "receta": "collage cine"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/broll-vsl.mp4",
    "grupo": "Con tu video",
@@ -788,13 +788,13 @@
     "skill": "broll-vsl-formula100k",
     "receta": "b-roll VSL"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/collage-de-gancho.mp4",
    "grupo": "Con tu video",
    "comando": "edita mi video con la plantilla «Collage de gancho»",
    "id": "collage-de-gancho",
@@ -813,7 +813,7 @@
     "Mi video como película",
     "Cine desde tu celular"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/auto-edicion/estilos/celular-a-cine.mp4",
    "id": "celular-a-cine",
@@ -826,7 +826,7 @@
     "skill": "celular-a-cine-f100k",
     "receta": "seedance-2-5-vs-wan-3"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
@@ -940,7 +940,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/youtube-notitas.mp4",
    "grupo": "YouTube 16:9",
    "comando": "edita mi video con la plantilla «YouTube notitas»",
    "id": "youtube-notitas",
@@ -972,7 +972,7 @@
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "YouTube 16:9",
@@ -985,13 +985,13 @@
     "skill": "motion-youtube-f100k",
     "receta": "overlays 16:9"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [
     "Takeover"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "YouTube 16:9",
@@ -1004,7 +1004,7 @@
     "skill": "motion-takeover-f100k",
     "receta": "takeover"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
@@ -1106,7 +1106,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/iphone-y-avatar.mp4",
    "grupo": "Sin grabar",
    "comando": "hazme un reel sin grabar con la plantilla «iPhone y avatar» sobre [TEMA]",
    "id": "iphone-y-avatar",
@@ -1118,6 +1118,27 @@
     "receta": "iphone + avatar"
    },
    "seInstalaCon": "módulo Animación"
+  },
+  {
+   "alias": [
+    "Auto-Edición animado",
+    "Full Visual",
+    "Animado sin avatar"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/auto-edicion/sin-grabar/animado.mp4",
+   "grupo": "Sin grabar",
+   "comando": "hazme un reel sin grabar con la plantilla «Todo animado» sobre [TEMA]",
+   "id": "todo-animado",
+   "nombre": "Todo animado",
+   "queSeVe": "El reel explicado sin avatar: cada frase es una escena animada que cuenta lo que dices (etiquetas, gráficos, objetos que se mueven), con golpe en el segundo 0 y nada quieto más de 1 segundo.",
+   "necesita": "Un tema y tu voz (una sola toma corrida, grabada o con IA).",
+   "motor": {
+    "skill": "auto-edicion-animado",
+    "receta": "plantilla/pieza.src.html + scripts/revisar.mjs"
+   },
+   "seInstalaCon": "módulo Edición"
   },
   {
    "alias": [],
@@ -1174,7 +1195,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/reflexion-en-collage.mp4",
    "grupo": "Animado sin cara",
    "comando": "hazme un reel sin grabar con la plantilla «Reflexión en collage» sobre [TEMA]",
    "id": "reflexion-en-collage",
@@ -1208,7 +1229,7 @@
    "alias": [
     "Mundo de papel"
    ],
-   "tambienEn": "módulo Animación",
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/recortes-papel.mp4",
    "grupo": "Animado sin cara",
@@ -1221,7 +1242,7 @@
     "skill": "animacion-recortes-papel-f100k",
     "receta": "mundo-metáfora"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
@@ -1263,7 +1284,7 @@
    "alias": [
     "Faceless"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Animado sin cara",
@@ -1276,11 +1297,11 @@
     "skill": "reel-faceless-f100k",
     "receta": "faceless"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/tutorial-sin-cara.mp4",
    "grupo": "Animado sin cara",
@@ -1293,11 +1314,11 @@
     "skill": "tutorial-viral-f100k",
     "receta": "tutorial"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/storytelling-animado.mp4",
    "grupo": "Animado sin cara",
@@ -1310,11 +1331,11 @@
     "skill": "storytelling-animado-f100k",
     "receta": "storytelling"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos/infografia.mp4",
    "grupo": "Animado sin cara",
@@ -1327,13 +1348,13 @@
     "skill": "infografia-reel-formula100k",
     "receta": "infografía"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/curiosidad-viral.mp4",
    "grupo": "Animado sin cara",
    "comando": "hazme un reel sin grabar con la plantilla «Curiosidad viral» sobre [TEMA]",
    "id": "curiosidad-viral",
@@ -1347,10 +1368,30 @@
    "seInstalaCon": "módulo Animación"
   },
   {
+   "alias": [
+    "Checklist con maquetas",
+    "Pídele a Claude"
+   ],
+   "tambienEn": null,
+   "fusion": null,
+   "muestra": "/edicion/estilos/lista-con-maquetas.mp4",
+   "grupo": "Animado sin cara",
+   "comando": "hazme un reel sin grabar con la plantilla «Lista con maquetas» sobre [TEMA]",
+   "id": "lista-con-maquetas",
+   "nombre": "Lista con maquetas",
+   "queSeVe": "Una lista narrada sobre fondo pastel: cada punto trae su titular con la clave en color, una maqueta de pantalla que lo muestra y la barra «07/27» que avanza.",
+   "necesita": "Tu lista (de 5 a 30 puntos) y tu voz (grabada, clonada o de la compu).",
+   "motor": {
+    "skill": "reel-lista-maquetas-f100k",
+    "receta": "lista con maquetas"
+   },
+   "seInstalaCon": "módulo Animación"
+  },
+  {
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/gas-giant.mp4",
    "id": "que-pasaria-gas-giant",
    "nombre": "Gas Giant",
    "grupo": "¿Qué pasaría si…?",
@@ -1369,7 +1410,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/cutaway-lab.mp4",
    "id": "que-pasaria-cutaway-lab",
    "nombre": "Cutaway Lab",
    "grupo": "¿Qué pasaría si…?",
@@ -1388,7 +1429,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/speed-run.mp4",
    "id": "que-pasaria-speed-run",
    "nombre": "Speed Run",
    "grupo": "¿Qué pasaría si…?",
@@ -1407,7 +1448,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/mannequin-commute.mp4",
    "id": "que-pasaria-mannequin-commute",
    "nombre": "Mannequin Commute",
    "grupo": "¿Qué pasaría si…?",
@@ -1426,7 +1467,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/offline-grid.mp4",
    "id": "que-pasaria-offline-grid",
    "nombre": "Offline Grid",
    "grupo": "¿Qué pasaría si…?",
@@ -1445,7 +1486,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/haze-countdown.mp4",
    "id": "que-pasaria-haze-countdown",
    "nombre": "Haze Countdown",
    "grupo": "¿Qué pasaría si…?",
@@ -1464,7 +1505,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/park-skyline.mp4",
    "id": "que-pasaria-park-skyline",
    "nombre": "Park Skyline",
    "grupo": "¿Qué pasaría si…?",
@@ -1483,7 +1524,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/slow-drip.mp4",
    "id": "que-pasaria-slow-drip",
    "nombre": "Slow Drip",
    "grupo": "¿Qué pasaría si…?",
@@ -1502,7 +1543,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/gold-studio.mp4",
    "id": "que-pasaria-gold-studio",
    "nombre": "Gold Studio",
    "grupo": "¿Qué pasaría si…?",
@@ -1521,7 +1562,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/signal-room.mp4",
    "id": "que-pasaria-signal-room",
    "nombre": "Signal Room",
    "grupo": "¿Qué pasaría si…?",
@@ -1540,7 +1581,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/astro-hud.mp4",
    "id": "que-pasaria-astro-hud",
    "nombre": "Astro HUD",
    "grupo": "¿Qué pasaría si…?",
@@ -1559,7 +1600,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/crowd-sim.mp4",
    "id": "que-pasaria-crowd-sim",
    "nombre": "Crowd Sim",
    "grupo": "¿Qué pasaría si…?",
@@ -1578,7 +1619,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/night-ledger.mp4",
    "id": "que-pasaria-night-ledger",
    "nombre": "Night Ledger",
    "grupo": "¿Qué pasaría si…?",
@@ -1597,7 +1638,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/oval-office-toon.mp4",
    "id": "que-pasaria-oval-office-toon",
    "nombre": "Oval Office Toon",
    "grupo": "¿Qué pasaría si…?",
@@ -1616,7 +1657,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/brick-toy.mp4",
    "id": "que-pasaria-brick-toy",
    "nombre": "Brick Toy",
    "grupo": "¿Qué pasaría si…?",
@@ -1635,7 +1676,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/candy-diner.mp4",
    "id": "que-pasaria-candy-diner",
    "nombre": "Candy Diner",
    "grupo": "¿Qué pasaría si…?",
@@ -1654,7 +1695,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/knit-sky.mp4",
    "id": "que-pasaria-knit-sky",
    "nombre": "Knit Sky",
    "grupo": "¿Qué pasaría si…?",
@@ -1673,7 +1714,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/voxel-city.mp4",
    "id": "que-pasaria-voxel-city",
    "nombre": "Voxel City",
    "grupo": "¿Qué pasaría si…?",
@@ -1692,7 +1733,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/toon-mission.mp4",
    "id": "que-pasaria-toon-mission",
    "nombre": "Toon Mission",
    "grupo": "¿Qué pasaría si…?",
@@ -1711,7 +1752,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/toy-planet.mp4",
    "id": "que-pasaria-toy-planet",
    "nombre": "Toy Planet",
    "grupo": "¿Qué pasaría si…?",
@@ -1730,7 +1771,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/pastel-clay.mp4",
    "id": "que-pasaria-pastel-clay",
    "nombre": "Pastel Clay",
    "grupo": "¿Qué pasaría si…?",
@@ -1749,7 +1790,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/sitcom-mini.mp4",
    "id": "que-pasaria-sitcom-mini",
    "nombre": "Sitcom Mini",
    "grupo": "¿Qué pasaría si…?",
@@ -1768,7 +1809,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/lowpoly-skyline.mp4",
    "id": "que-pasaria-lowpoly-skyline",
    "nombre": "Lowpoly Skyline",
    "grupo": "¿Qué pasaría si…?",
@@ -1787,7 +1828,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/canyon-crowd.mp4",
    "id": "que-pasaria-canyon-crowd",
    "nombre": "Canyon Crowd",
    "grupo": "¿Qué pasaría si…?",
@@ -1806,7 +1847,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/poly-captcha.mp4",
    "id": "que-pasaria-poly-captcha",
    "nombre": "Poly Captcha",
    "grupo": "¿Qué pasaría si…?",
@@ -1825,7 +1866,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/heatwave-park.mp4",
    "id": "que-pasaria-heatwave-park",
    "nombre": "Heatwave Park",
    "grupo": "¿Qué pasaría si…?",
@@ -1844,7 +1885,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/shard-pixel.mp4",
    "id": "que-pasaria-shard-pixel",
    "nombre": "Shard Pixel",
    "grupo": "¿Qué pasaría si…?",
@@ -1863,7 +1904,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/quiet-lowpoly.mp4",
    "id": "que-pasaria-quiet-lowpoly",
    "nombre": "Quiet Lowpoly",
    "grupo": "¿Qué pasaría si…?",
@@ -1882,7 +1923,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/frost-lowpoly.mp4",
    "id": "que-pasaria-frost-lowpoly",
    "nombre": "Frost Lowpoly",
    "grupo": "¿Qué pasaría si…?",
@@ -1901,7 +1942,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/ranger-lowpoly.mp4",
    "id": "que-pasaria-ranger-lowpoly",
    "nombre": "Ranger Lowpoly",
    "grupo": "¿Qué pasaría si…?",
@@ -1920,7 +1961,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/iso-diorama.mp4",
    "id": "que-pasaria-iso-diorama",
    "nombre": "Iso Diorama",
    "grupo": "¿Qué pasaría si…?",
@@ -1939,7 +1980,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/dusk-anime.mp4",
    "id": "que-pasaria-dusk-anime",
    "nombre": "Dusk Anime",
    "grupo": "¿Qué pasaría si…?",
@@ -1958,7 +1999,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/wash-atlas.mp4",
    "id": "que-pasaria-wash-atlas",
    "nombre": "Wash Atlas",
    "grupo": "¿Qué pasaría si…?",
@@ -1977,7 +2018,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/ink-gold.mp4",
    "id": "que-pasaria-ink-gold",
    "nombre": "Ink & Gold",
    "grupo": "¿Qué pasaría si…?",
@@ -1996,7 +2037,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/noir-panels.mp4",
    "id": "que-pasaria-noir-panels",
    "nombre": "Noir Panels",
    "grupo": "¿Qué pasaría si…?",
@@ -2015,7 +2056,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/botanical-plate.mp4",
    "id": "que-pasaria-botanical-plate",
    "nombre": "Botanical Plate",
    "grupo": "¿Qué pasaría si…?",
@@ -2034,7 +2075,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/woodblock-wave.mp4",
    "id": "que-pasaria-woodblock-wave",
    "nombre": "Woodblock Wave",
    "grupo": "¿Qué pasaría si…?",
@@ -2053,7 +2094,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/sepia-silhouette.mp4",
    "id": "que-pasaria-sepia-silhouette",
    "nombre": "Sepia Silhouette",
    "grupo": "¿Qué pasaría si…?",
@@ -2072,7 +2113,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/paper-atlas.mp4",
    "id": "que-pasaria-paper-atlas",
    "nombre": "Paper Atlas",
    "grupo": "¿Qué pasaría si…?",
@@ -2091,7 +2132,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/rubber-hose.mp4",
    "id": "que-pasaria-rubber-hose",
    "nombre": "Rubber Hose",
    "grupo": "¿Qué pasaría si…?",
@@ -2110,7 +2151,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/night-flat.mp4",
    "id": "que-pasaria-night-flat",
    "nombre": "Night Flat",
    "grupo": "¿Qué pasaría si…?",
@@ -2129,7 +2170,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/swiss-grid.mp4",
    "id": "que-pasaria-swiss-grid",
    "nombre": "Swiss Grid",
    "grupo": "¿Qué pasaría si…?",
@@ -2148,7 +2189,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/grain-primary.mp4",
    "id": "que-pasaria-grain-primary",
    "nombre": "Grain Primary",
    "grupo": "¿Qué pasaría si…?",
@@ -2167,7 +2208,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/peach-scale.mp4",
    "id": "que-pasaria-peach-scale",
    "nombre": "Peach Scale",
    "grupo": "¿Qué pasaría si…?",
@@ -2186,7 +2227,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/violet-flat.mp4",
    "id": "que-pasaria-violet-flat",
    "nombre": "Violet Flat",
    "grupo": "¿Qué pasaría si…?",
@@ -2205,7 +2246,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/pop-desk.mp4",
    "id": "que-pasaria-pop-desk",
    "nombre": "Pop Desk",
    "grupo": "¿Qué pasaría si…?",
@@ -2224,7 +2265,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/grain-poster.mp4",
    "id": "que-pasaria-grain-poster",
    "nombre": "Grain Poster",
    "grupo": "¿Qué pasaría si…?",
@@ -2243,7 +2284,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/bold-flat.mp4",
    "id": "que-pasaria-bold-flat",
    "nombre": "Bold Flat",
    "grupo": "¿Qué pasaría si…?",
@@ -2262,7 +2303,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/pixel-night.mp4",
    "id": "que-pasaria-pixel-night",
    "nombre": "Pixel Night",
    "grupo": "¿Qué pasaría si…?",
@@ -2281,7 +2322,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/cube-planet.mp4",
    "id": "que-pasaria-cube-planet",
    "nombre": "Cube Planet",
    "grupo": "¿Qué pasaría si…?",
@@ -2300,7 +2341,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/retro-poly-cosmos.mp4",
    "id": "que-pasaria-retro-poly-cosmos",
    "nombre": "Retro Poly Cosmos",
    "grupo": "¿Qué pasaría si…?",
@@ -2319,7 +2360,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/retro-poly-jungle.mp4",
    "id": "que-pasaria-retro-poly-jungle",
    "nombre": "Retro Poly Jungle",
    "grupo": "¿Qué pasaría si…?",
@@ -2338,7 +2379,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/ops-console.mp4",
    "id": "que-pasaria-ops-console",
    "nombre": "Ops Console",
    "grupo": "¿Qué pasaría si…?",
@@ -2357,7 +2398,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/blueprint-line.mp4",
    "id": "que-pasaria-blueprint-line",
    "nombre": "Blueprint Line",
    "grupo": "¿Qué pasaría si…?",
@@ -2376,7 +2417,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/phosphor-vector.mp4",
    "id": "que-pasaria-phosphor-vector",
    "nombre": "Phosphor Vector",
    "grupo": "¿Qué pasaría si…?",
@@ -2395,7 +2436,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/que-pasaria/night-scan.mp4",
    "id": "que-pasaria-night-scan",
    "nombre": "Night Scan",
    "grupo": "¿Qué pasaría si…?",
@@ -2412,7 +2453,7 @@
   },
   {
    "alias": [],
-   "tambienEn": "módulo Animación",
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/regalos/animaciones/v/libreta-a-mano.mp4",
    "grupo": "Motion graphics",
@@ -2425,7 +2466,7 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "13 estilos"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
@@ -2433,7 +2474,7 @@
    ],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/motion/motion-para-capcut.mp4",
    "grupo": "Motion graphics",
    "comando": "hazme un motion graphic con la plantilla «Motion para CapCut» para [FRASE O CIFRA DE TU REEL]",
    "id": "motion-para-capcut",
@@ -2448,7 +2489,7 @@
   },
   {
    "alias": [],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": null,
    "grupo": "Motion graphics",
@@ -2461,13 +2502,13 @@
     "skill": "boceto-a-animacion-f100k",
     "receta": "boceto"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/motion/clona-un-motion.mp4",
    "grupo": "Motion graphics",
    "comando": "clona este motion graphic con la plantilla «Clona un motion graphic»: [ENLACE]",
    "id": "clona-un-motion",
@@ -2485,7 +2526,7 @@
     "Archive Light Table",
     "Mesa de archivo"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/archive-lighttable.mp4",
    "id": "cine-archive-lighttable",
@@ -2500,13 +2541,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-archive-lighttable"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Art Deco"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/art-deco.mp4",
    "id": "cine-art-deco",
@@ -2521,14 +2562,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-art-deco"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "ASCII / CRT Terminal",
     "Terminal ASCII"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/ascii-crt.mp4",
    "id": "cine-ascii-crt",
@@ -2543,14 +2584,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-ascii-crt"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Liminal Found Footage",
     "Pasillos liminales"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/backrooms.mp4",
    "id": "cine-backrooms",
@@ -2565,13 +2606,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-backrooms"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Blueprint"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/blueprint.mp4",
    "id": "cine-blueprint",
@@ -2586,13 +2627,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-blueprint"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Brick Toy"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/brick-toy.mp4",
    "id": "cine-brick-toy",
@@ -2607,14 +2648,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-brick-toy"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Engineering Briefing Board",
     "Pizarra de ingeniería"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/briefing-board.mp4",
    "id": "cine-briefing-board",
@@ -2629,14 +2670,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-briefing-board"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Caption News",
     "Noticia con subtítulos"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/caption-news.mp4",
    "id": "cine-caption-news",
@@ -2651,13 +2692,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-caption-news"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "80s Cel Anime"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/cel-anime-80s.mp4",
    "id": "cine-cel-anime-80s",
@@ -2672,14 +2713,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-cel-anime-80s"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Chalkboard",
     "Pizarrón con tiza"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/chalkboard.mp4",
    "id": "cine-chalkboard",
@@ -2694,14 +2735,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-chalkboard"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Circuit Board",
     "Circuito"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/circuit-board.mp4",
    "id": "cine-circuit-board",
@@ -2716,13 +2757,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-circuit-board"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Time-lapse Symphony"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/city-symphony.mp4",
    "id": "cine-city-symphony",
@@ -2737,13 +2778,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-city-symphony"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Live Countdown Split-screen"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/countdown.mp4",
    "id": "cine-countdown",
@@ -2758,14 +2799,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-countdown"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Crayon Picture Book",
     "Cuento en crayón"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/crayon-book.mp4",
    "id": "cine-crayon-book",
@@ -2780,13 +2821,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-crayon-book"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Dark Tech Keynote"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/dark-keynote.mp4",
    "id": "cine-dark-keynote",
@@ -2801,14 +2842,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-dark-keynote"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Data Physicalization",
     "Datos en objetos"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/data-physical.mp4",
    "id": "cine-data-physical",
@@ -2823,14 +2864,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-data-physical"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Data Storytelling",
     "Historia con datos"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/dataviz.mp4",
    "id": "cine-dataviz",
@@ -2845,14 +2886,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-dataviz"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Desktop Flythrough",
     "Vuelo por el escritorio"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/desktop-flythrough.mp4",
    "id": "cine-desktop-flythrough",
@@ -2867,13 +2908,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-desktop-flythrough"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Copperplate Engraving"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/engraving.mp4",
    "id": "cine-engraving",
@@ -2888,14 +2929,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-engraving"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Game Show Flat",
     "Concurso plano"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/game-show.mp4",
    "id": "cine-game-show",
@@ -2910,13 +2951,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-game-show"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Glass Product Render"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/glass-product.mp4",
    "id": "cine-glass-product",
@@ -2931,14 +2972,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-glass-product"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Halftone Dossier",
     "Expediente en semitono"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/halftone-dossier.mp4",
    "id": "cine-halftone-dossier",
@@ -2953,14 +2994,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-halftone-dossier"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "HD-2D",
     "HD-2D"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/hd-2d.mp4",
    "id": "cine-hd-2d",
@@ -2975,14 +3016,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-hd-2d"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Sci-fi Hologram HUD",
     "Holograma sci-fi"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/hologram-hud.mp4",
    "id": "cine-hologram-hud",
@@ -2997,14 +3038,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-hologram-hud"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Impasto Oil Painting",
     "Óleo empastado"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/impasto.mp4",
    "id": "cine-impasto",
@@ -3019,14 +3060,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-impasto"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Chinese Ink Wash",
     "Tinta china"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/ink-wash.mp4",
    "id": "cine-ink-wash",
@@ -3041,13 +3082,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-ink-wash"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Isometric Infographic"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/iso-infographic.mp4",
    "id": "cine-iso-infographic",
@@ -3062,13 +3103,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-iso-infographic"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Isometric Picture Book"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/isometric-picture-book.mp4",
    "id": "cine-isometric-picture-book",
@@ -3083,13 +3124,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-isometric-picture-book"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Constructivist Montage"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/kino-montage.mp4",
    "id": "cine-kino-montage",
@@ -3104,14 +3145,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-kino-montage"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "LiDAR Survey",
     "Escaneo LiDAR"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/lidar-survey.mp4",
    "id": "cine-lidar-survey",
@@ -3126,13 +3167,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-lidar-survey"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Living Screencast"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/living-screencast.mp4",
    "id": "cine-living-screencast",
@@ -3147,13 +3188,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-living-screencast"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Low-poly Isometric Island"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/lowpoly-island.mp4",
    "id": "cine-lowpoly-island",
@@ -3168,13 +3209,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-lowpoly-island"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Memphis Diorama"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/memphis-diorama.mp4",
    "id": "cine-memphis-diorama",
@@ -3189,14 +3230,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-memphis-diorama"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Microgame Frenzy",
     "Minijuegos a toda velocidad"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/microgame.mp4",
    "id": "cine-microgame",
@@ -3211,14 +3252,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-microgame"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Microscope Story",
     "Historia al microscopio"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/microscope.mp4",
    "id": "cine-microscope",
@@ -3233,14 +3274,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-microscope"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Mid-century Cartoon",
     "Caricatura de los 50"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/midcentury-toon.mp4",
    "id": "cine-midcentury-toon",
@@ -3255,14 +3296,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-midcentury-toon"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Broadcast News Package",
     "Paquete de noticiero"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/news-package.mp4",
    "id": "cine-news-package",
@@ -3277,14 +3318,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-news-package"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "1920s Newsreel",
     "Noticiero de los 20"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/newsreel.mp4",
    "id": "cine-newsreel",
@@ -3299,13 +3340,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-newsreel"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "One-line Drawing"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/one-line.mp4",
    "id": "cine-one-line",
@@ -3320,13 +3361,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-one-line"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Paper-cut Lightbox"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/paper-lantern.mp4",
    "id": "cine-paper-lantern",
@@ -3341,14 +3382,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-paper-lantern"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Paper Pop-up Book",
     "Libro desplegable"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/paper-popup.mp4",
    "id": "cine-paper-popup",
@@ -3363,14 +3404,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-paper-popup"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Red Paper-cut",
     "Papel picado rojo"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/papercut-red.mp4",
    "id": "cine-papercut-red",
@@ -3385,14 +3426,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-papercut-red"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Pictogram Motion",
     "Pictogramas"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/pictogram-motion.mp4",
    "id": "cine-pictogram-motion",
@@ -3407,14 +3448,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-pictogram-motion"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "16-bit Pixel RPG",
     "RPG pixel de 16 bits"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/pixel-rpg.mp4",
    "id": "cine-pixel-rpg",
@@ -3429,14 +3470,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-pixel-rpg"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Printed Long Take",
     "Plano largo impreso"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/printed-long-take.mp4",
    "id": "cine-printed-long-take",
@@ -3451,13 +3492,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-printed-long-take"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Risograph Print"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/risograph.mp4",
    "id": "cine-risograph",
@@ -3472,14 +3513,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-risograph"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "1930s Rubber Hose Cartoon",
     "Caricatura de los años 30"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/rubber-hose.mp4",
    "id": "cine-rubber-hose",
@@ -3494,13 +3535,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-rubber-hose"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Satellite Briefing"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/satellite-briefing.mp4",
    "id": "cine-satellite-briefing",
@@ -3515,14 +3556,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-satellite-briefing"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Sci-Fi Sitcom Toon",
     "Caricatura sci-fi"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/scifi-toon.mp4",
    "id": "cine-scifi-toon",
@@ -3537,13 +3578,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-scifi-toon"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Shadow Puppetry"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/shadow-puppet.mp4",
    "id": "cine-shadow-puppet",
@@ -3558,14 +3599,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-shadow-puppet"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "1920s Silent Film",
     "Cine mudo de los 20"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/silent-film.mp4",
    "id": "cine-silent-film",
@@ -3580,14 +3621,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-silent-film"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Silkscreen Travel Poster",
     "Póster serigrafiado de viaje"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/silkscreen-poster.mp4",
    "id": "cine-silkscreen-poster",
@@ -3602,14 +3643,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-silkscreen-poster"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "60s Spy Title Sequence",
     "Títulos de espía de los 60"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/spy-titles.mp4",
    "id": "cine-spy-titles",
@@ -3624,13 +3665,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-spy-titles"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Stained Glass"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/stained-glass.mp4",
    "id": "cine-stained-glass",
@@ -3645,14 +3686,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-stained-glass"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Swiss Motion Graphics",
     "Motion suizo"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/swiss-motion.mp4",
    "id": "cine-swiss-motion",
@@ -3667,13 +3708,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-swiss-motion"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Exploded Teardown"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/teardown.mp4",
    "id": "cine-teardown",
@@ -3688,14 +3729,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-teardown"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Sports Telestrator",
     "Pizarra deportiva"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/telestrator.mp4",
    "id": "cine-telestrator",
@@ -3710,13 +3751,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-telestrator"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Tilt-Shift Miniature"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/tilt-shift.mp4",
    "id": "cine-tilt-shift",
@@ -3731,13 +3772,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-tilt-shift"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Transit Map"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/transit-map.mp4",
    "id": "cine-transit-map",
@@ -3752,14 +3793,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-transit-map"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Ukiyo-e",
     "Ukiyo-e"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/ukiyoe.mp4",
    "id": "cine-ukiyoe",
@@ -3774,14 +3815,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-ukiyoe"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Urban Sketch · Pen & Wash",
     "Boceto urbano con acuarela"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/urban-sketch.mp4",
    "id": "cine-urban-sketch",
@@ -3796,13 +3837,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-urban-sketch"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Visual Investigation"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/visual-investigation.mp4",
    "id": "cine-visual-investigation",
@@ -3817,14 +3858,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-visual-investigation"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Watercolor Brush",
     "Acuarela"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/watercolor.mp4",
    "id": "cine-watercolor",
@@ -3839,14 +3880,14 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-watercolor"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Projection on White Model",
     "Proyección sobre maqueta"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/white-model.mp4",
    "id": "cine-white-model",
@@ -3861,13 +3902,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-white-model"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Whiteboard Explainer"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/whiteboard.mp4",
    "id": "cine-whiteboard",
@@ -3882,13 +3923,13 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-whiteboard"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [
     "Woodcut Print"
    ],
-   "tambienEn": null,
+   "tambienEn": "plugin formula100k",
    "fusion": null,
    "muestra": "/edicion/estilos-de-cine/woodcut.mp4",
    "id": "cine-woodcut",
@@ -3903,7 +3944,7 @@
     "skill": "animacion-dibujada-f100k",
     "receta": "cine-woodcut"
    },
-   "seInstalaCon": "plugin formula100k"
+   "seInstalaCon": "módulo Animación"
   },
   {
    "alias": [],
@@ -4432,7 +4473,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/barras-con-tus-datos.mp4",
    "id": "efecto-barras-con-tus-datos",
    "nombre": "Barras con tus datos",
    "grupo": "Efectos",
@@ -4468,7 +4509,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/contador-de-vistas.mp4",
    "id": "efecto-contador-de-vistas",
    "nombre": "Contador de vistas",
    "grupo": "Efectos",
@@ -4612,7 +4653,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/edicion/estilos/gancho-golpe.mp4",
    "id": "gancho-golpe",
    "nombre": "Gancho golpe",
    "grupo": "Efectos",
@@ -4629,7 +4670,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-bn.mp4",
    "id": "look-bn",
    "nombre": "Look Blanco y negro",
    "grupo": "Looks",
@@ -4647,7 +4688,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-calido.mp4",
    "id": "look-calido",
    "nombre": "Look Cálido",
    "grupo": "Looks",
@@ -4737,7 +4778,7 @@
    "alias": [],
    "tambienEn": null,
    "fusion": null,
-   "muestra": null,
+   "muestra": "/auto-edicion/efectos-nuevos/look-grano.mp4",
    "id": "look-grano",
    "nombre": "Look Grano",
    "grupo": "Looks",

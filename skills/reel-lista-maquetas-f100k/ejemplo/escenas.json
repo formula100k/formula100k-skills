@@ -1,0 +1,50 @@
+{
+  "formato": { "fps": 30 },
+  "marca": { "handle": "@tucuenta", "dominio": "mitienda.app", "acento": "#4F5BFF" },
+  "gancho": {
+    "grande": "TE VAN A HACKEAR",
+    "chica": "si no la blindas así",
+    "color": "rojo",
+    "voz": "Te van a hackear la app si no la blindas así.",
+    "maqueta": { "tipo": "objetivo", "app": "Mi tienda", "tiles": ["Menú", "Pedidos", "Pagos"] }
+  },
+  "items": [
+    {
+      "titular": "Saca las *claves* del navegador.",
+      "categoria": "Secretos",
+      "voz": "Saca las claves del navegador.",
+      "maqueta": { "tipo": "codigo", "etiqueta": "app.js · se ejecuta en el navegador", "lineas": [{ "txt": "fetch(pagosUrl, {" }, { "txt": "  key: \"sk_demo_7f3a…\"", "marca": "mal" }, { "txt": "})" }], "clave": "sk_demo_7f3a…", "tercero": { "etiqueta": "Tercero", "titulo": "Pasarela de pago" } }
+    },
+    {
+      "titular": "Protege mi *base de datos*.",
+      "categoria": "Datos",
+      "voz": "Protege mi base de datos.",
+      "maqueta": { "tipo": "basedatos", "sesion": "Sesión: Ana", "etiqueta": "Pedidos", "filas": [{ "txt": "Pedido #18", "dueno": "ana", "mio": true }, { "txt": "Pedido #22", "dueno": "leo" }, { "txt": "Pedido #31", "dueno": "sofi" }] }
+    },
+    {
+      "titular": "Valida los formularios *en el servidor*.",
+      "categoria": "Entradas",
+      "voz": "Valida los formularios en el servidor.",
+      "maqueta": { "tipo": "regla", "campo": "cantidad", "regla": "cantidad: 1 a 10", "pruebas": [{ "valor": "2", "ok": true, "txt": "Aceptado" }, { "valor": "-50", "ok": false, "txt": "Rechazado" }] }
+    },
+    {
+      "titular": "Ponle *límite* de peticiones.",
+      "categoria": "Red",
+      "voz": "Ponle límite de peticiones.",
+      "maqueta": { "tipo": "limite", "max": 5, "ritmo": "5 por segundo", "bloqueo": "429 · más despacio" }
+    },
+    {
+      "titular": "Que los enlaces *caduquen*.",
+      "categoria": "Acceso",
+      "voz": "Que los enlaces de recuperación caduquen.",
+      "maqueta": { "tipo": "reloj", "titulo": "Restablece tu contraseña", "sub": "para ana@ejemplo.com", "vigencia": "Válido 15 min", "desde": 900 }
+    }
+  ],
+  "cierre": {
+    "titular": "Comenta *BLINDA*.",
+    "voz": "Comenta blinda y te mando la lista completa para copiar y pegar.",
+    "palabra": "BLINDA",
+    "bio": "Apps con IA para tu negocio",
+    "regalo": "La lista completa para copiar y pegar"
+  }
+}

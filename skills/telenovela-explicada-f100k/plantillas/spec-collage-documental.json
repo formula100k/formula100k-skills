@@ -1,0 +1,220 @@
+{
+ "salida": "nacimiento-claude-v3.mp4",
+ "tiempos": "voz/narracion.json",
+ "clips": [
+  {
+   "archivo": "collage-v3-base.mp4",
+   "tiempos": "narracion-t.wav",
+   "desde": 0.0,
+   "hasta": 35.6,
+   "sin_subs_hasta": 999
+  }
+ ],
+ "voces": [
+  {
+   "archivo": "voz/narracion-t.wav",
+   "en": 0.0,
+   "gain": 1.0,
+   "subs": true,
+   "tiempos": "narracion-t.wav"
+  }
+ ],
+ "gancho": {
+  "lineas": [
+   "NO CONFIABAN",
+   "en la empresa que creó ChatGPT"
+  ],
+  "grande": 0,
+  "color": "rojo",
+  "letra": "cartel",
+  "tamano": 190,
+  "y": 230,
+  "hasta": 1.75
+ },
+ "rotulos": [
+  {
+   "lineas": [
+    "DARIO AMODEI",
+    "jefe de investigación en OpenAI"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 120,
+   "y": 200,
+   "en": 1.75,
+   "hasta": 3.4
+  },
+  {
+   "lineas": [
+    "DANIELA AMODEI",
+    "seguridad y políticas en OpenAI"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 120,
+   "y": 200,
+   "en": 3.4,
+   "hasta": 5.35
+  },
+  {
+   "lineas": [
+    "2021",
+    "renuncian"
+   ],
+   "grande": 0,
+   "color": "rojo",
+   "letra": "cartel",
+   "tamano": 200,
+   "y": 200,
+   "en": 5.35,
+   "hasta": 7.35
+  },
+  {
+   "lineas": [
+    "«¿PARA QUÉ PELEAR",
+    "con alguien en quien no confías?»"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 110,
+   "y": 200,
+   "en": 9.6,
+   "hasta": 12.75
+  },
+  {
+   "lineas": [
+    "30 NOV 2022",
+    "sale ChatGPT"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 130,
+   "y": 190,
+   "en": 12.75,
+   "hasta": 16.15
+  },
+  {
+   "lineas": [
+    "15 DÍAS DESPUÉS",
+    "15 de diciembre de 2022"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 120,
+   "y": 190,
+   "en": 16.15,
+   "hasta": 20.7
+  },
+  {
+   "lineas": [
+    "CONSTITUCIÓN",
+    "las reglas de su IA"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 140,
+   "y": 190,
+   "en": 20.7,
+   "hasta": 22.2
+  },
+  {
+   "lineas": [
+    "14 MAR 2023",
+    "nace Claude"
+   ],
+   "grande": 0,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 120,
+   "y": 180,
+   "en": 22.2,
+   "hasta": 24.9
+  },
+  {
+   "lineas": [
+    "EL MISMO DÍA",
+    "que GPT-4"
+   ],
+   "grande": 0,
+   "color": "rojo",
+   "letra": "cartel",
+   "tamano": 150,
+   "y": 200,
+   "en": 24.9,
+   "hasta": 26.45
+  },
+  {
+   "lineas": [
+    "965 MIL MILLONES",
+    "de dólares vale Anthropic hoy"
+   ],
+   "grande": 0,
+   "color": "verde",
+   "letra": "cartel",
+   "tamano": 120,
+   "y": 260,
+   "en": 26.45,
+   "hasta": 29.65
+  }
+ ],
+ "finales": [
+  {
+   "tipo": "gancho",
+   "lineas": [
+    "comenta",
+    "USO"
+   ],
+   "grande": 1,
+   "color": "amarillo",
+   "letra": "cartel",
+   "tamano": 280,
+   "y": 330,
+   "en": 32.15
+  }
+ ],
+ "claves": [
+  "ChatGPT",
+  "Dario",
+  "Daniela",
+  "2021",
+  "Anthropic",
+  "OpenAI",
+  "2022",
+  "reglas",
+  "Constitución",
+  "2023",
+  "Claude",
+  "GPT-4",
+  "965.000",
+  "dólares",
+  "vender",
+  "USO",
+  "confías"
+ ],
+ "corregir": {
+  "uso": "USO",
+  "965000": "965 mil"
+ },
+ "pops_extra": [
+  1.75,
+  3.4,
+  5.35,
+  7.35,
+  9.6,
+  12.75,
+  16.15,
+  20.7,
+  22.2,
+  24.9,
+  26.45,
+  29.65,
+  32.15
+ ],
+ "subs_y": 1440
+}

@@ -1,8 +1,8 @@
 # CATÁLOGO DE FORMATOS DE CARRUSEL · FÓRMULA 100K
 
-> El catálogo que lee la skill `carrusel-formatos-f100k`. **84 fichas**: F01–F20 (referencias miradas slide por slide)
-> y G01–G64 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
-> G41–G64, el 3-nov-2026, desde outliers de Instagram). Cada ficha tiene una categoría (listas, tutoriales,
+> El catálogo que lee la skill `carrusel-formatos-f100k`. **94 fichas**: F01–F20 (referencias miradas slide por slide)
+> y G01–G74 (los carruseles del Grimorio, dos mecánicas de la guía maestra de 25 estilos y las fichas sumadas después;
+> G41–G74, el 3-nov-2026, desde outliers de Instagram). Cada ficha tiene una categoría (listas, tutoriales,
 > opinión, historias, casos, comparaciones, noticias, interactivos, estéticos).
 > Las métricas de las referencias son las que se leyeron al revisarlas; son de esas cuentas, no un resultado prometido.
 > Los prompts de imagen NO están probados con generación real todavía: son v1 razonados desde las referencias.
@@ -109,6 +109,16 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | M71 | Tu anécdota en viñetas de cómic (frase-lección en portada + tu historia real en viñetas con narrador y globos hasta la moraleja) | Compartido + conexión |
 | M72 | La misma frase, dos lecturas (la misma frase arriba y abajo; dos imágenes le cambian el sentido, de la derrota a la libertad) | Compartido + comentario |
 | M73 | Carta «no quiero / sí quiero» (portada «confesiones de X a Y» + un malentendido aclarado por slide) | Guardado + comentario |
+| M74 | Video en fotogramas subtitulados (dos cuadros del mismo video por slide; los subtítulos, leídos en orden, cuentan la reflexión completa) | Guardado + conexión |
+| M75 | «Si te gusta esto, te va a gustar aquello» (portada con algo que todos conocen + una recomendación tuya por slide unida por un rasgo en común) | Guardado + compartido |
+| M76 | Arma tu combo (portada «arma tu X: un juego» + una categoría por slide con opciones numeradas; la gente comenta su código) | Comentario + venta |
+| M77 | Cartas de preguntas (portada con la tesis «antes de X, háganse estas preguntas» + una pregunta abierta por slide, sin responderla) | Compartido + guardado |
+| M78 | Tú eliges: mismo precio, dos caminos (lo que se gasta vs. lo que te hace crecer, con el mismo número debajo y sin veredicto) | Comentario + compartido |
+| M79 | Le preguntamos a tu audiencia (la pregunta de tus historias en la portada + una respuesta real por slide, firmada con quién la dijo) | Comentario + conexión |
+| M80 | La copia perfecta vs. lo que viviste (arriba una imagen impecable «¿hecha con IA?», abajo la foto real con «No. Yo me acuerdo de…») | Comentario + conexión |
+| M81 | La frase que se completa abajo (arriba lo que crees o pides, terminado en coma; abajo el giro que la completa; variante: el giro siempre igual) | Guardado + comentario |
+| M82 | Lo mejor y lo peor de cada categoría (una categoría por slide: la mejor opción en foto grande + la peor en un círculo + una frase que nombra a las dos) | Guardado + comentario |
+| M83 | Se arma capa por capa (mismo encuadre cenital en todas las slides; cada una suma un elemento rotulado hasta la pieza terminada) | Guardado + compartido |
 
 ### Soportes (dónde vive)
 
@@ -188,6 +198,16 @@ chuleta o una frase. Lo que retiene es la mecánica; el soporte solo frena el sc
 | S72 | Portada con frase-lección enorme y tu personaje dibujado + láminas de 3–6 viñetas con marco negro, cajas de narrador y globos | A |
 | S73 | Lámina partida en dos mitades a sangre con una foto cada una + la misma frase en una etiqueta de papel en las dos | A |
 | S74 | Papel liso claro + hoja de carta con renglones y cinta al centro: el «no quiero» en negrita arriba y el «solo quiero» en serif debajo | A |
+| S75 | Dos fotogramas de tu video hablando a cámara apilados a lo ancho, cada uno con su subtítulo en serif blanca abajo y la palabra clave en el acento | A |
+| S76 | Fondo de un solo color + foto grande de cada recomendación con miniatura de lo conocido arriba, nombre subrayado, ficha de 3 datos y la razón en 2 frases | A |
+| S77 | Papel claro + título «Elige tu…» arriba + grilla 2×2 de fotos reales de producto con un número grande en círculo y su nombre debajo | A |
+| S78 | Foto real de tu mundo desenfocada de fondo + carta impresa al centro (esquinas redondeadas, sombra) con una pregunta en sans gruesa en mayúsculas y tu marca chica abajo | A |
+| S79 | Rótulo fijo «Tú eliges:» arriba + dos fotos reales iguales lado a lado con un círculo «o» al medio, lo que es cada una en serif y el mismo precio o tiempo debajo | A |
+| S80 | Foto real a sangre con velo cálido + globo de chat claro con la pregunta o la respuesta y la firma entre corchetes en serif itálica debajo | A |
+| S81 | Lámina partida en dos mitades a sangre: arriba la imagen perfecta con una píldora «¿Hecha con IA?», abajo la foto real con el recuerdo en una tarjeta con borde de acento | A |
+| S82 | Lámina partida en dos fotos a sangre: la primera mitad de la frase en una etiqueta clara sobre el corte, el giro en una etiqueta del acento justo debajo | A |
+| S83 | Foto real a sangre de la mejor opción + círculo con aro de color con la peor + franja plana abajo con la frase «la mejor es X, la peor Y» en condensada | A |
+| S84 | Base cenital fija al centro + un elemento nuevo por slide con rótulo chico en letra de máquina (lo nuevo resaltado, lo anterior en gris) + número de capa arriba y consejo abajo | A |
 
 Los estilos 06 (gradiente), 08 (scrapbook), 11 (full bleed) y 22 (data-viz) ya eran soportes de la v1:
 S12, S14, S7 y S16/S15. Los **prompts de cada estilo** viven en la guía maestra
@@ -1536,7 +1556,7 @@ Sin fechas y sin premios: se empieza cuando quieras. Tutea.
 
 ---
 
-## LAS FICHAS DE NOVIEMBRE (G41–G64, sumadas el 3-nov-2026 desde Top Carousels)
+## LAS FICHAS DE NOVIEMBRE (G41–G74, sumadas el 3-nov-2026 desde Top Carousels)
 
 Salieron de la revisión de 146 outliers de Top Carousels: solo mecánicas que aparecen en 2+ cuentas distintas. Sumadas el 3-nov-2026.
 
@@ -1997,6 +2017,213 @@ Cierre: la última confesión firmada («— [quién habla]») + «comenta [PALA
 Tutea.
 ```
 - **Fabrica:** `carrusel-formatos-f100k` (HTML libre S74: foto real de fondo, hoja blanca con renglones suaves y cinta en el acento de tu marca al centro, y una polaroid con tu foto; «No quiero» en sans 900, «Solo quiero» en serif itálica con la parte clave en negrita; firma a mano en el acento).
+
+---
+
+### G65 · Tu video en fotogramas subtitulados (dos cuadros por lámina que, leídos en orden, cuentan tu reflexión completa)
+- **Mecánica:** M74 · **Soporte:** S75 dos fotogramas de tu propio video hablando a cámara, uno sobre otro a lo ancho, cada uno con su subtítulo en serif blanca abajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @wethinkdeeply · **110.394 likes** · 233 comentarios · 6 slides · https://www.instagram.com/p/Db3OOXWDXbw/ · también @jasonrewired_ · 18.585 likes · 86 comentarios · 11 slides · https://www.instagram.com/p/DaT3M7Ak-tj/ · y @the_female_lead · 26.094 likes · 63 comentarios · 3 slides · https://www.instagram.com/p/DeND1i4DCE9/
+- **Anatomía:** 1) portada: los dos primeros fotogramas; arriba la frase que engancha («Si te tiembla la voz al empezar a hablar,») y abajo su remate corto («tranquila: a todas nos tiembla.») · 2-N) cada lámina sigue la frase: dos cuadros del MISMO video (mismo encuadre, solo cambian el gesto y las manos) y cada uno con su pedazo de subtítulo; una idea por lámina, partida en dos medias frases que se leen de corrido · cierre: el remate de la reflexión arriba y abajo, dicho por ti, «Comenta [PALABRA] y te mando [REGALO]». Las palabras clave van en el color de tu marca; el resto, blanco.
+- **Por qué funciona:** se lee como un reel pero se consume a tu ritmo: la gente ve tu cara, tu gesto y tu lugar (confianza) y aun así puede guardar la frase. Cada subtítulo deja la frase abierta, así que hay que deslizar para terminarla. Lo grabas una vez y te sirve dos veces: reel y carrusel.
+- **Error típico:** usar fotogramas donde tienes los ojos cerrados o la boca torcida (elige cuadros con gesto). Poner la frase entera en un solo cuadro y el otro de relleno: los dos cuadros cuentan. Subtítulos de 3 líneas: máximo 12 palabras por cuadro. Confundirlo con G54: en G54 el fotograma prueba un consejo y va sin subtítulos; aquí los fotogramas con subtítulo SON el texto del carrusel. Usar cuadros de videos de otras personas o de películas.
+- **Prompt de guion:**
+```
+Arma un carrusel «mi video en fotogramas subtitulados» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Tengo un video hablando a cámara donde digo esto: [PEGA LA TRANSCRIPCIÓN O LA IDEA].
+Convierte la reflexión en [N x 2] subtítulos de máximo 12 palabras cada uno, dos por slide (cuadro de arriba y cuadro de abajo), que leídos en orden cuenten la idea completa.
+Slide 1: arriba la frase que engancha a [MI CLIENTA IDEAL] (dame 3 opciones), abajo su remate corto.
+Slides 2 a N: una idea por slide, partida en dos medias frases que dejen la frase abierta para deslizar.
+Cierre: arriba el remate de toda la reflexión; abajo «comenta [PALABRA] y te mando [REGALO]».
+Marca en cada subtítulo la palabra clave que va en color. Dime en qué segundo de mi video busco cada fotograma (el gesto que va con la frase). Usa solo cifras que yo te dé. Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S75: dos cuadros de 1080×671 apilados a sangre con una línea fina entre ellos, subtítulo en serif blanca con sombra suave abajo de cada cuadro y la palabra clave en tu acento; en la portada una etiqueta chica de «video» y «desliza»; una barra de progreso entre los cuadros; tu @ solo en el cierre).
+
+---
+
+### G66 · «Si te gusta esto, te va a gustar aquello» (portada con algo que todos conocen + una recomendación tuya por lámina)
+- **Mecánica:** M75 · **Soporte:** S76 fondo de un solo color, foto grande de cada recomendación y una miniatura de lo conocido arriba, con nombre subrayado, ficha corta y la razón en 2 frases · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencia:** @bymarinamay · **112.296 likes** · 748 comentarios · 11 slides · https://www.instagram.com/p/DHTt05toS4F/ · también @interiordesign.addicts · 49.478 likes · 223 comentarios · 7 slides · https://www.instagram.com/p/DOn_3s6iPhA/ · y @bevarabia · 2.550 likes · 6 comentarios · 10 slides · https://www.instagram.com/p/DZFGTCdFnp7/
+- **Anatomía:** 1) portada: «Si te gusta [algo que tu clienta ya conoce y quiere], te van a gustar estas [N]», con foto de lo conocido (la planta que todas tienen, el postre que todas piden, la serie del momento, el corte de pelo de moda) · 2-N) una recomendación TUYA por lámina: rótulo «si te gusta [el rasgo que comparten]…», miniatura de lo conocido, foto grande de lo que recomiendas, el nombre subrayado, una ficha de 3 datos y la razón en 2 frases · cierre: la última recomendación + «comenta [PALABRA] y te mando [REGALO]».
+- **Por qué funciona:** se cuelga de algo que la gente ya ama, así que la portada no necesita explicación: «ah, yo tengo una». Cada lámina parte de un rasgo que ya le gusta y la lleva a algo tuyo, sin vender de frente. Se guarda como lista de compras y se comparte con la amiga que tiene lo mismo.
+- **Error típico:** que la recomendación no comparta ningún rasgo con lo conocido (el rótulo «si te gusta…» tiene que ser verdad). Elegir algo conocido que tu clienta ideal no conoce o no quiere. Más de 2 frases de razón. Recomendar productos de otras marcas con su logo en la foto: recomienda lo tuyo o lo del rubro. Mezclar dos recomendaciones en la misma lámina.
+- **Prompt de guion:**
+```
+Arma un carrusel «si te gusta esto, te va a gustar aquello» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Lo que vendo o recomiendo: [MIS PRODUCTOS O SERVICIOS].
+Portada: «Si te gusta [algo que [MI CLIENTA IDEAL] ya conoce y quiere], te van a gustar estas [N]» (dame 3 opciones de lo conocido).
+Slides 2 a N: una recomendación por slide: rótulo «si te gusta [el rasgo que comparte con lo conocido]…» en máximo 8 palabras, el nombre, una ficha de 3 datos cortos y la razón en máximo 2 frases.
+Ordena de la más fácil de probar a la más especial. Usa solo precios y cifras que yo te dé.
+Cierre: la última recomendación + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S76: un solo color de fondo en todas, foto grande al centro, miniatura enmarcada de lo conocido arriba a la derecha, nombre en grotesca 900 subrayado, ficha en letra de máquina con etiquetas en el acento y la razón a la derecha; numeración 01 / 03).
+
+---
+
+### G67 · Arma tu combo (una categoría por lámina con opciones numeradas; la gente comenta su código)
+- **Mecánica:** M76 · **Soporte:** S77 una categoría por lámina («Elige tu…») con 4 a 6 opciones en fotos reales de tu producto, cada una con su número grande y su nombre · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencias:** @sftclm · **25.994 likes** · 373 comentarios · 9 slides · https://www.instagram.com/p/DdtqHzNCJ6Y/ — @girls.in.research · 4.135 likes · 46 comentarios · 8 slides · https://www.instagram.com/p/Da2N7Gwk0j8/ — @studio_2am · 2.777 likes · 273 comentarios · 8 slides · https://www.instagram.com/p/DbwUAo5Eoop/
+- **Anatomía:** 1) portada: «Arma tu [lo que se arma]» presentado como un juego (ej.: arma tu juego de joyas, arma tu torta, arma tu sesión de fotos) + la regla en una línea: «elige un número por lámina y anótalo» · 2-N) UNA categoría por lámina («Elige tu collar», «Elige el relleno», «Elige el fondo») con 4 a 6 opciones numeradas del 1 al 4 (o al 6), foto real de cada una y un nombre corto; todas las láminas con el mismo número de opciones y la misma grilla · cierre: la última categoría + «comenta [PALABRA] con tu código (ej.: 2 · 4 · 1)» y lo que le mandas a cambio.
+- **Por qué funciona:** convierte tu catálogo en un juego. Nadie siente que le estás vendiendo: está eligiendo. Comentar un código cuesta 3 segundos, así que comenta mucha más gente que con una pregunta abierta, y cada comentario es una persona que ya armó en su cabeza el producto que te compraría. Con ese código sabes qué combinación pide tu audiencia y le respondes con algo concreto (la foto de su combo, el precio).
+- **Error típico:** opciones sin foto real (íconos o dibujos) o con fotos de estilos que no vendes. Más de 6 opciones por lámina o categorías con distinto número de opciones (se pierde quien juega). Láminas con dos categorías juntas. Olvidar la regla en la portada o el ejemplo de código en el cierre: la gente no sabe cómo comentar. No es «esto o aquello» (dos opciones y un voto): aquí cada lámina suma una pieza y el comentario es la combinación completa.
+- **Prompt de guion:**
+```
+Arma un carrusel «arma tu combo» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Mis productos u opciones reales, con foto: [LISTA POR CATEGORÍA].
+Portada: «Arma tu [lo que se arma]» como un juego, en máximo 8 palabras (dame 3 opciones) + la regla en una línea: «elige un número por lámina y anótalo».
+Slides 2 a N: una categoría por slide, «Elige tu [categoría]», con 4 opciones numeradas del 1 al 4: nombre corto de máximo 4 palabras + un detalle de máximo 6 palabras (material, sabor, color). Mismo número de opciones en todas.
+Ordena de la pieza principal a la de remate. Usa solo opciones que de verdad vendo y cifras que yo te dé.
+Cierre: la última categoría + «comenta [PALABRA] con tu código (ej.: [PALABRA] 2 · 4 · 1) y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S77: fondo papel claro con punteado suave, título «Elige tu…» en serif gruesa con la categoría en itálica, grilla 2×2 de fotos reales con bordes redondeados y un círculo con el número grande en el acento de tu marca, nombre en serif itálica y detalle chico debajo; pasos marcados con puntos arriba a la derecha y la caja del CTA plana en el cierre).
+
+---
+
+### G68 · Cartas de preguntas en la mano (una pregunta que da que pensar por lámina, impresa en una carta)
+- **Mecánica:** M77 · **Soporte:** S78 una carta impresa con UNA pregunta en mayúsculas, sostenida en la mano o apoyada sobre una foto real de tu mundo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @werenotreallystrangers · **462.857 likes** · 221 comentarios · 6 slides · https://www.instagram.com/p/Dc_XBYiEZjU/
+- **Anatomía:** 1) portada: una foto real de tu mundo con la tesis en una frase («antes de [decisión], háganse/hazte estas preguntas») y una carta asomando · 2-N) UNA pregunta por lámina, impresa en una carta blanca con letra gruesa en mayúsculas y el nombre de tu marca chico abajo, como un mazo de verdad; arriba el «Pregunta 1 de 3» y, si hace falta, una nota a mano de una línea que dice para qué sirve esa pregunta · cierre: la última carta + «comenta [PALABRA] y te mando el mazo completo».
+- **Por qué funciona:** una buena pregunta se queda dando vueltas más que un consejo. Quien lee se la responde en silencio, la guarda para hacerla después o se la manda a alguien («respóndeme esta»): por eso se comparte tanto. Y como cada pregunta sale de lo que tú ves en tu trabajo, la lectora siente que la conoces antes de contratarte. El mazo completo es un regalo natural para el comentario.
+- **Error típico:** preguntas genéricas que sirven para cualquier rubro («¿qué te hace feliz?») o que se contestan con sí o no. Dos preguntas en la misma carta. Responder la pregunta en la misma lámina (le quitas el silencio a quien lee). Diseñar la carta como un post y no como un objeto: tiene que parecer una carta que se puede tocar (bordes redondeados, sombra, el nombre chico abajo). Preguntas de pareja, salud o dinero personal sacadas de la referencia: toma solo la mecánica y pregunta sobre lo que tú resuelves.
+- **Prompt de guion:**
+```
+Arma un carrusel «cartas de preguntas» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las decisiones o dudas que mis clientas tienen antes de comprarme: [SUS DUDAS REALES].
+Portada: «antes de [decisión], [hazte / háganse] estas [N] preguntas» en máximo 10 palabras (dame 3 opciones).
+Slides 2 a N: UNA pregunta por slide, en máximo 14 palabras, abierta (no se contesta con sí o no), que haga pensar y que salga de mi trabajo + una nota de máximo 8 palabras que diga para qué sirve.
+Ordena de la más fácil a la que más incomoda. No respondas las preguntas. Usa solo cifras que yo te dé.
+Cierre: la última pregunta + «comenta [PALABRA] y te mando [REGALO]» (ej.: el mazo completo para imprimir).
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S78: foto real de tu mundo de fondo, desenfocada y algo oscurecida; carta blanca al centro con esquinas redondeadas, sombra y otra carta del color de tu marca asomando detrás; pregunta en sans muy gruesa en mayúsculas en el acento, número en serif itálica arriba y el nombre de tu marca chico abajo; nota a mano en una etiqueta plana debajo; en la portada, foto arriba y bloque de color con la tesis).
+
+---
+
+### G69 · Tú eliges: mismo precio, dos caminos (lo que se gasta vs. lo que te hace crecer, sin veredicto)
+- **Mecánica:** M78 · **Soporte:** S79 rótulo fijo «Tú eliges:» arriba + dos fotos del mismo tamaño lado a lado (lo que se gasta y lo que te hace crecer) con el mismo precio o el mismo tiempo debajo de cada una · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @kienobifilms · **25.995 likes** · 262 comentarios · 7 slides · https://www.instagram.com/p/DcoS2swEZeo/
+- **Anatomía:** 1) portada: «Tú eliges:» enorme + «mismo precio, dos caminos» y ya el primer par · 2-N) el MISMO rótulo y UN par por lámina: a la izquierda algo que tu clienta ya compra sin pensar (un gasto que se consume), a la derecha lo que la acerca a lo que quiere (lo que vendes o lo que tu oficio pide), con el mismo precio o el mismo tiempo debajo de cada uno (ej.: una escuela de baile, «tres tragos el viernes / un mes de salsa los viernes, $35»; una profe de inglés, «una hora de series con subtítulos / una hora de conversación»; una repostera, «un pastel del súper / un taller para hacerlo tú») · cierre: el último par + «Ninguna está mal. Tú decides.» + comenta la palabra.
+- **Por qué funciona:** al poner el mismo número debajo de las dos cosas, la comparación la hace quien lee, no tú. No hay flecha, ni tachón, ni «gana»: la lectora se juzga sola, y como nadie la regaña, no se defiende; comenta cuál elige, lo manda a su amiga y se queda con la idea de que tu clase cuesta lo mismo que algo que ya paga sin pensar.
+- **Error típico:** marcar un ganador (tachar el gasto, poner un ✓ verde, decir «la buena es…»): eso es G60, donde el error pierde; en G69 nadie gana y decide quien lee. Comparar cosas que no cuestan lo mismo de verdad (pierde la confianza). Sermonear en el texto («deja de gastar en…»). Fotos de distinto tamaño o con distinto trato (la grande parece la correcta). Usarlo con finanzas personales, salud o deudas.
+- **Prompt de guion:**
+```
+Arma un carrusel «Tú eliges: mismo precio, dos caminos» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Lo que vendo y cuánto cuesta de verdad: [MIS PRODUCTOS O SERVICIOS CON SU PRECIO REAL].
+Portada: «Tú eliges:» + «mismo precio, dos caminos» y el primer par.
+Slides 1 a N: UN par por slide: a la izquierda algo que [MI CLIENTA IDEAL] ya compra o hace sin pensar (máximo 6 palabras), a la derecha lo que la acerca a [TEMA] (máximo 6 palabras), y debajo de cada uno el MISMO precio o el mismo tiempo.
+Usa solo precios reales que yo te dé o tiempos cotidianos (una hora, un sábado); si no tienes el precio, usa tiempo.
+Sin veredicto: no taches, no digas cuál es mejor, no sermonees.
+Ordena del par más cotidiano al más sorprendente.
+Cierre: el último par + «Ninguna está mal. Tú decides.» + «comenta [PALABRA] y te mando [REGALO]».
+Tutea. Nada de salud ni de finanzas personales.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S79: fondo liso claro con una franja de color detrás de las fotos, «Tú eliges:» en una grotesca 800 enorme centrada, dos fotos reales iguales con marco blanco y esquinas redondeadas, un círculo con «o» entre las dos en tu acento, lo que es cada cosa en serif debajo y el precio en grotesca 800 del mismo color en las dos).
+
+---
+
+### G70 · Le preguntamos a tu audiencia (la pregunta en un globo + una respuesta real por lámina, firmada con quién la dijo)
+- **Mecánica:** M79 · **Soporte:** S80 una foto real a sangre por lámina, con un tono cálido parejo + un globo de chat claro con la pregunta o la respuesta y debajo, entre corchetes, quién la dijo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencias:** @qissagoi.ae · **5.000 likes** · 24 comentarios · 5 slides · https://www.instagram.com/p/DYPS-T7CTMP/ — @the_female_lead · **29.396 likes** · 166 comentarios · 8 slides · https://www.instagram.com/p/DdjwQ34jXeT/
+- **Anatomía:** 1) portada: rótulo «Le preguntamos a…» + la pregunta que hiciste en historias dentro de un globo, firmada «[Nosotras, en historias]» o «[Yo, a mis clientas]» · 2-N) UNA respuesta real por lámina, copiada tal cual (o recortada sin cambiarle el sentido) en el globo, con la parte que más pega en negrita, y debajo, entre corchetes, el tipo de persona que la dio, sin nombre (ej.: una agencia de viajes, «[Viajera que se animó sola]»; una repostera, «[Mamá que encargó su primer pastel]»; una profe de inglés, «[Alumna que estudia de noche]») · cierre: la última respuesta + comenta la palabra.
+- **Por qué funciona:** la voz no es la tuya: es la de gente como quien lee, y eso se cree más que cualquier consejo tuyo. La firma entre corchetes deja que cada lectora se reconozca en una («esa soy yo») sin exponer a nadie. Y sin decirlo, demuestra que tienes una comunidad que te contesta: al terminar, la gente quiere dejar su respuesta en los comentarios.
+- **Error típico:** inventar las respuestas o pulirlas hasta que suenan a ti (se nota y se pierde la gracia: usa solo lo que de verdad te respondieron). Poner nombres y apellidos sin permiso. Globos con párrafos de 6 líneas (máximo 3 frases). Preguntas de sí o no, que no dan respuestas para contar. Mezclar dos respuestas en el mismo globo.
+- **Prompt de guion:**
+```
+Arma un carrusel «le preguntamos a tu audiencia» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+La pregunta que hice en historias: [MI PREGUNTA]. Las respuestas que recibí, tal cual: [PEGA LAS RESPUESTAS REALES Y QUIÉN LAS DIO].
+Portada: rótulo «Le preguntamos a [quiénes]» en máximo 5 palabras + la pregunta en un globo, firmada «[Nosotras, en historias]».
+Slides 1 a N: UNA respuesta por slide, copiada de las que te di (puedes recortarla, no cambiarle el sentido), en máximo 3 frases, con la parte que más pega en negrita; debajo, entre corchetes, el tipo de persona que la dio, sin nombre (máximo 6 palabras).
+Elige las que más se repiten o las que más sorprenden; ordena de la más práctica a la más emotiva.
+No inventes respuestas ni cifras.
+Cierre: la última respuesta + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S80: foto real a sangre con un velo plano de tu color cálido en multiplicar, globo de chat claro con esquinas muy redondas y colita, la pregunta en serif y las respuestas en sans con la parte clave en negrita del segundo color, la firma entre corchetes en serif itálica blanca debajo del globo, número de lámina en un chip).
+
+---
+
+### G71 · La copia perfecta vs. lo que viviste (arriba la imagen impecable «¿hecha con IA?», abajo la foto real con el recuerdo)
+- **Mecánica:** M80 · **Soporte:** S81 lámina partida en dos mitades a sangre: arriba la imagen perfecta con la etiqueta «¿Hecha con IA?», abajo la foto real e imperfecta con el recuerdo en una tarjeta · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @_zacblake_ · **21.244 likes** · 83 comentarios · 7 slides · https://www.instagram.com/p/DeKgVAQAMCO/
+- **Anatomía:** 1) portada: la pregunta que se hace tu clienta ahora que la IA lo hace todo («Si la IA ya hace [lo que tú vendes] perfecto, ¿para qué te contrato?»), con una foto tuya trabajando · 2-N) un par por lámina: arriba la imagen impecable, sin gente o con gente sin historia, con la etiqueta «¿Hecha con IA?» (pregunta, no afirmación); abajo la foto real del mismo tipo de momento y la respuesta «No. Yo me acuerdo de que [algo que solo sabe quien estuvo ahí]», con la parte que duele o emociona en negrita · cierre: el último par en mitades más bajas + la frase que lo resume («La IA copia la foto. El recuerdo es tuyo.») + comenta la palabra.
+- **Por qué funciona:** responde la duda que todos tienen ahora («¿para qué pago si la IA lo hace?») sin discutir ni atacar a la IA: la deja ganar en lo perfecto y le quita lo único que no puede tener, lo vivido. Cada recuerdo es tan concreto que quien lee pone el suyo («yo me acuerdo de…») y lo comenta. Sirve a cualquier negocio que vende algo hecho a mano o en persona: fotografía, repostería, eventos, viajes, talleres.
+- **Error típico:** escribir el recuerdo en general («fue un día mágico») en vez de un detalle que solo vive quien estuvo (la sobrina dormida, el papá que no soltaba). Poner arriba una imagen fea para que pierda: la de arriba tiene que ser bonita de verdad, si no el contraste no pesa. Afirmar que la foto de arriba es de IA cuando no lo es: va como pregunta. Usar fotos de abajo que no son tuyas ni de tus clientas (con permiso). Convertirlo en un sermón contra la IA.
+- **Prompt de guion:**
+```
+Arma un carrusel «la copia perfecta vs. lo que viviste» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las fotos reales que tengo de mis clientas o de mi trabajo: [LISTA DE MIS FOTOS Y QUÉ PASÓ EN CADA UNA].
+Portada: la duda de [MI CLIENTA IDEAL] en máximo 14 palabras, con la forma «Si la IA ya hace [lo que vendo] perfecto, ¿para qué [contratarme / comprarte]?» (dame 3 opciones).
+Slides 2 a N: un par por slide. Arriba: qué imagen perfecta y sin historia pongo (con la etiqueta «¿Hecha con IA?»). Abajo: cuál de mis fotos reales va y el recuerdo en primera persona de la clienta: «No. Yo me acuerdo de que [un detalle concreto que solo sabe quien estuvo ahí]», en máximo 14 palabras, con la parte que emociona marcada para ir en negrita.
+Ordena del recuerdo más simpático al más emotivo. Nada de sermones contra la IA. Usa solo cifras que yo te dé.
+Cierre: el último par + una frase de 2 partes que lo resuma («La IA copia [X]. [Lo vivido] es tuyo.») + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S81: dos `div` de 671 px con la foto a sangre y una raya de 8 px entre ellas; etiqueta «¿Hecha con IA?» en una píldora plana en letra de máquina sobre la mitad de arriba; el recuerdo en una tarjeta clara con borde izquierdo en el acento de tu marca, «No.» en sans 900 versalitas y la frase en serif itálica con la parte clave en sans 900).
+
+---
+
+### G72 · La frase que se completa abajo (dos fotos por lámina: arriba lo que crees o lo que pides, abajo el giro)
+- **Mecánica:** M81 · **Soporte:** S82 lámina partida en dos fotos a sangre; la frase empieza en una etiqueta sobre la de arriba y se completa con el giro en otra etiqueta sobre la de abajo · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels · **Referencias:** @chrispnavarro · **66.169 likes** · 184 comentarios · 6 slides · https://www.instagram.com/p/DTS1p7PFCli/ — @heygurlceo · **36.486 likes** · 45 comentarios · https://www.instagram.com/p/DcEnEs4iG09/ — @highvaluegirls · **24.944 likes** · 36 comentarios · https://www.instagram.com/p/DdZ00rGDhmi/ — @madlertravel · **2.396 likes** · 3 comentarios · https://www.instagram.com/p/Dc6W7AWEs23/ — @creatorkarro · **46.716 likes** · 219 comentarios · https://www.instagram.com/p/DbIuD5pDJLS/ — @vision9motion · **24.151 likes** · 6 comentarios · https://www.instagram.com/p/DckGc1_GsXX/ (variante: el giro de abajo es siempre la misma frase)
+- **Anatomía:** 1) portada: ya es el primer par, con un rótulo chico arriba que dice de qué va («Lo que nadie te dice de [tu producto]») · 2-N) UNA frase por lámina partida en dos: arriba, sobre la primera foto, lo que la gente cree o lo que pide, terminado en coma («Corta la mecha,»); abajo, sobre la segunda foto, el giro que la completa, corto y en otra letra («antes de cada encendido.»). Cada foto muestra su mitad (arriba lo que hace la gente, abajo cómo se ve hecho bien) · cierre: el último par en mitades más bajas + una pregunta para comentar («¿Cuál no sabías?») + comenta la palabra. **Variante:** el giro de abajo es SIEMPRE la misma frase corta («Ese es el punto.», «Y está bien.») y lo que cambia es la queja de arriba.
+- **Por qué funciona:** la coma de arriba deja la frase abierta y obliga a mirar abajo; el giro llega como remate, en dos o tres palabras, y se queda en la cabeza. Cada lámina es un consejo completo que cabe en una sola mirada, se guarda como lista y se comenta con «la tercera no la sabía».
+- **Error típico:** confundirla con G63: en G63 la MISMA frase va arriba y abajo y la cambian las fotos; aquí la frase empieza arriba y se completa con un giro abajo (son dos mitades de una oración, no dos copias). Un giro largo que explica en vez de rematar (máximo 5 palabras). Fotos que no muestran lo que dice cada mitad. Arriba y abajo con la misma letra y el mismo color: el giro tiene que verse distinto.
+- **Prompt de guion:**
+```
+Arma un carrusel «la frase que se completa abajo» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las fotos que tengo: [LISTA DE MIS FOTOS].
+Dame [N] consejos o creencias de mi rubro partidos en dos: la parte de arriba es lo que la gente cree, hace o pide (máximo 6 palabras, termina en coma) y la de abajo es el giro que la completa (máximo 5 palabras, termina en punto). Leídas juntas, tienen que formar UNA sola oración.
+Por cada par: qué foto mía va arriba (lo que hace la gente) y cuál abajo (cómo se ve hecho bien).
+Portada: el primer par + un rótulo de máximo 7 palabras que diga de qué va (ej.: «Lo que nadie te dice de [MI PRODUCTO]»).
+Ordena del consejo más fácil al más sorprendente. Usa solo cifras que yo te dé o números cotidianos (horas, minutos, pasos).
+Cierre: el último par + una pregunta para comentar («¿Cuál no sabías?») + «comenta [PALABRA] y te mando [REGALO]».
+Si prefieres la variante, el giro de abajo es siempre la misma frase de 2 a 4 palabras y arriba cambia la queja de [MI CLIENTA IDEAL].
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S82: dos `div` de 671 px con la foto a sangre y una raya de 8 px; la mitad de la frase de arriba en una etiqueta clara justo sobre el corte, en serif 900; el giro en una etiqueta del acento de tu marca justo debajo del corte, en serif itálica más grande, para que las dos se lean como una sola oración).
+
+---
+
+### G73 · Lo mejor y lo peor de cada categoría (foto grande de la mejor opción + un círculo con la peor)
+- **Mecánica:** M82 · **Soporte:** S83 foto real a sangre de la MEJOR opción + un círculo con borde de color con la PEOR arriba a la derecha + una franja plana abajo con la frase que nombra a las dos · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencia:** @nutrition.protocols · **25.647 likes** · 185 comentarios · 5 slides · https://www.instagram.com/p/DdXDNCzCHlq/
+- **Anatomía:** 1) portada = la primera categoría ya resuelta (sin lámina de título aparte; como mucho un rótulo chico «lo mejor y lo peor para cada uso») · 2-N) UNA categoría por lámina con la misma composición: la foto grande es la mejor opción, el círculo es la peor, y abajo una sola frase con la fórmula «La mejor [categoría] es [X]. La peor, [Y].» con la mejor en el color «bien» y la peor en el color «mal» · cierre: la última categoría + comenta la palabra.
+- **Por qué funciona:** cada lámina es un veredicto de un vistazo: la foto dice cuál elegir y el círculo cuál evitar antes de leer. Ordena una decisión que a tu clienta le da miedo tomar sola (qué comprar, qué pedir, qué evitar) y la deja guardada como lista de consulta. Y como es tajante, se comenta: «yo tengo la peor en mi casa», «¿y la de tal?».
+- **Error típico:** poner la peor en grande y la mejor en el círculo (la foto grande es siempre lo que recomiendas). Mezclar dos categorías en una lámina o escribir un párrafo debajo: es UNA frase con la fórmula. Usar fotos de stock que no se parecen a lo que vendes. Nombrar marcas reales como «la peor»: habla de materiales, tipos o métodos, no de competidores. Dar como dato un «es lo más sano / lo que más dura» que no puedes sostener: usa tu criterio de oficio, sin cifras que no sean tuyas.
+- **Prompt de guion:**
+```
+Arma un carrusel «lo mejor y lo peor de cada categoría» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. Las decisiones que mis clientas me consultan antes de comprar: [SUS DUDAS REALES].
+Elige [N] categorías concretas de uso (ej.: para la mesa, para el exterior, para el baño). Para cada una: la MEJOR opción (la que yo recomiendo y vendo o uso) y la PEOR (un material, tipo o método, nunca una marca).
+Cada slide es UNA frase: «La mejor [categoría] es [X]. La peor, [Y].» en máximo 16 palabras + qué foto va grande (la mejor) y cuál en el círculo (la peor).
+La slide 1 ya es la primera categoría (la más común); dame 3 opciones de rótulo chico para ponerle encima.
+Sin cifras ni porcentajes que yo no te dé. Ordena de la decisión más común a la más específica.
+Cierre: la última categoría + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S83: foto real de la mejor opción a sangre arriba, círculo con borde claro y aro en el color «mal» con la peor, etiquetas «LA MEJOR / LA PEOR» en píldora, franja plana abajo en el color oscuro de tu marca con la frase en letra condensada en mayúsculas, la mejor en el color «bien» y la peor en el «mal»).
+
+---
+
+### G74 · Se arma capa por capa (mismo encuadre cenital; cada lámina suma un elemento rotulado)
+- **Mecánica:** M83 · **Soporte:** S84 el mismo encuadre cenital fijo en todas las láminas (una tabla, un plato, una mesa) + en cada lámina aparece un elemento nuevo con su rótulo chico, hasta la pieza terminada · **Motor:** A
+- **Origen:** sumada el 3-nov-2026 desde Top Carousels (vista en una sola cuenta) · **Referencias:** @oneplategirluk · **38.805 likes** · 87 comentarios · 5 slides · https://www.instagram.com/p/DYIE38djB1g/ · misma cuenta y mismo molde: https://www.instagram.com/p/DYNR2TtjI3Y/ (35.932 likes · 32 comentarios), https://www.instagram.com/p/Dcl-SMqDH76/ (32.816 likes · 25 comentarios), https://www.instagram.com/p/DWjuHilDBZw/ (8.877 likes) y https://www.instagram.com/p/DWoy1uHDDUp/ (5.357 likes)
+- **Anatomía:** 1) portada: la base con el primer elemento ya puesto y rotulado + el título de qué se arma («una tabla para 6, capa por capa») · 2-N) el MISMO encuadre, desde arriba, sin mover la cámara: en cada lámina se suma un elemento (o una capa del mismo tipo) con su rótulo; lo nuevo resaltado y lo anterior en gris · cierre: la pieza terminada con todos los rótulos + comenta la palabra.
+- **Por qué funciona:** es el «antes y después» estirado en pasos: el ojo busca qué cambió y desliza para ver lo siguiente. Muestra tu oficio sin explicarlo (el orden, las cantidades, dónde va cada cosa) y la última lámina es tu producto terminado, que es lo que se vende. Se guarda como receta o guía de armado.
+- **Error típico:** mover la cámara o cambiar el fondo entre láminas: se pierde el «qué cambió». Sumar tres cosas de golpe sin rótulo. Rótulos largos (es el nombre, máximo 3 palabras; el consejo va abajo, aparte). Diferencia con G27: allá un objeto cambia de estado para revelar un mensaje; aquí se enseña cómo se arma algo y se nombra cada parte.
+- **Prompt de guion:**
+```
+Arma un carrusel «se arma capa por capa» de [N] slides para [MI CLIENTA IDEAL] sobre [TEMA].
+Mi negocio: [QUÉ VENDO Y A QUIÉN]. La pieza que voy a armar frente a la cámara: [QUÉ ES Y PARA CUÁNTAS PERSONAS O QUÉ USO].
+Divide el armado en [N] capas en el orden real en que lo hago. Por capa: el nombre del elemento que se suma (máximo 3 palabras, es el rótulo) + un consejo de oficio de 1 frase que explica por qué va ahí o así.
+Portada: la base con la primera capa + un título de qué se arma en máximo 8 palabras (dame 3 opciones).
+Dime qué foto tomar en cada slide: la cámara cenital fija, el mismo fondo, solo cambia lo que se suma.
+Sin cifras que yo no te dé.
+Cierre: la pieza terminada + «comenta [PALABRA] y te mando [REGALO]».
+Tutea.
+```
+- **Fabrica:** `carrusel-formatos-f100k` (HTML libre S84: fondo liso con textura suave, la base cenital al centro en la misma posición en todas las láminas, cada elemento como foto real rotulada con letra de máquina; lo nuevo en píldora del acento y lo anterior en gris; título serif arriba con el número de capa y el consejo abajo).
 
 ---
 

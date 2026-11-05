@@ -1,0 +1,131 @@
+{
+ "marca": {
+  "color": "#FFD630",
+  "usuario": "tu_usuario",
+  "avatar": "assets/avatar.png"
+ },
+ "ganchos": [
+  {
+   "l1": "NO INVENTES",
+   "l2": "tus formatos",
+   "grande": 0,
+   "color": "rojo",
+   "hasta": "contenido:fin"
+  },
+  {
+   "l1": "4 FORMATOS",
+   "l2": "para todo rubro",
+   "grande": 0,
+   "color": "amarillo",
+   "hasta": "contenido:fin"
+  },
+  {
+   "l1": "tus formatos",
+   "l2": "INVENTADOS",
+   "grande": 1,
+   "color": "rojo",
+   "hasta": "contenido:fin"
+  }
+ ],
+ "piezas": [
+  {
+   "tipo": "lamina",
+   "forma": "centro",
+   "en": "cuatro",
+   "etiqueta": "Formatos",
+   "chip": "4 formatos · todo rubro",
+   "etiqueta_en": "todo"
+  },
+  {
+   "tipo": "lamina",
+   "forma": "mapa",
+   "en": "Este es",
+   "etiqueta": "Formatos",
+   "chip": "4 formatos",
+   "items": [
+    {
+     "img": "assets/ej_problema.jpg",
+     "texto": "Problema y solución",
+     "en": "problema"
+    },
+    {
+     "img": "assets/ej_antes_ahora.jpg",
+     "texto": "Antes y después",
+     "en": "antes"
+    },
+    {
+     "img": "assets/ej_dia.jpg",
+     "texto": "Un día conmigo",
+     "en": "día"
+    },
+    {
+     "img": "assets/ej_error.jpg",
+     "texto": "Error común",
+     "en": "error"
+    }
+   ],
+   "ancho_item": 220
+  },
+  {
+   "tipo": "lamina",
+   "forma": "cuadricula",
+   "en": "Analicé",
+   "chip": "+1.000 videos analizados",
+   "items": [
+    {
+     "img": "assets/gr1.jpg",
+     "texto": "26,2 M"
+    },
+    {
+     "img": "assets/gr2.jpg",
+     "texto": "25,3 M"
+    },
+    {
+     "img": "assets/ej_problema.jpg",
+     "texto": "11,7 M"
+    },
+    {
+     "img": "assets/gr3.jpg",
+     "texto": "11,7 M"
+    },
+    {
+     "img": "assets/gr4.jpg",
+     "texto": "11,2 M"
+    },
+    {
+     "img": "assets/gr5.jpg",
+     "texto": "7,1 M"
+    },
+    {
+     "img": "assets/ej_error.jpg",
+     "texto": "6,5 M"
+    },
+    {
+     "img": "assets/gr6.jpg",
+     "texto": "3,4 M"
+    },
+    {
+     "img": "assets/ej_dia.jpg",
+     "texto": "2,7 M"
+    },
+    {
+     "img": "assets/ej_antes_ahora.jpg",
+     "texto": "70,8 mil ♥"
+    }
+   ]
+  },
+  {
+   "tipo": "palabra",
+   "en": "comenta",
+   "arriba": "comenta",
+   "grande": "GANCHOS",
+   "abajo": "y te la mando",
+   "hasta": "ganchos:fin"
+  },
+  {
+   "tipo": "comentario",
+   "en": "ganchos:fin",
+   "palabra": "GANCHOS"
+  }
+ ]
+}

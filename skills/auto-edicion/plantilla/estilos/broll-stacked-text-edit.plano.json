@@ -1,0 +1,59 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.2
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.7,
+   "persona": "completa",
+   "estilo": "apilado"
+  },
+  {
+   "desde": 1.7,
+   "hasta": 3.98,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "x": 0,
+    "y": 600,
+    "w": 1080,
+    "h": 720,
+    "desde": 2
+   }
+  },
+  {
+   "desde": 3.98,
+   "hasta": 5.16,
+   "persona": "completa"
+  },
+  {
+   "desde": 5.16,
+   "hasta": 6.48,
+   "persona": "completa",
+   "estilo": "apilado"
+  },
+  {
+   "desde": 6.48,
+   "hasta": 8.06,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "x": 0,
+    "y": 600,
+    "w": 1080,
+    "h": 720,
+    "desde": 15
+   }
+  },
+  {
+   "desde": 8.06,
+   "hasta": 9.6,
+   "persona": "completa",
+   "estilo": "apilado"
+  }
+ ],
+ "gancho": "sello"
+}

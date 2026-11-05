@@ -5,6 +5,9 @@ description: Arma un reel faceless 9:16 de LISTA con voz, donde cada ítem es un
 
 # Reel de lista con maquetas
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 Un reel sin cara en el que una voz dicta una lista («Claude, blinda mi app: saca las claves del navegador, protege mi base de datos…») y cada pedido se vuelve una escena corta: **titular arriba, maqueta de pantalla al centro y barra de progreso abajo**. Engancha porque la persona ve avanzar el contador (01/12, 02/12…) y quiere llegar al final, y porque cada maqueta le muestra en un segundo QUÉ pasa (la petición rechazada, la clave que se va al servidor, el enlace que caduca).
 
 Todo lo que se entrega es genérico: el @, el dominio de ejemplo, el color y la palabra del CTA salen del `escenas.json` de quien la usa.

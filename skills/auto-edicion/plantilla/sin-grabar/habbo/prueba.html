@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Gestos del avatar Habbo</title>
+<style>html,body{margin:0;background:#F7F7F7}canvas{display:block;max-height:100vh;margin:0 auto}</style></head>
+<body><canvas id="c"></canvas>
+<script type="module">import * as THREE from './three.module.min.js'; window.THREE = THREE; window.dispatchEvent(new Event('three-listo'));</script>
+<script src="avatar-habbo.js"></script>
+<script>
+// Hoja de gestos: un cuadro por gesto. node <K>/motor/renderizar.mjs prueba.html g --cuadros 0,1,2,3,4,5
+const GESTOS = ['descanso', 'explica', 'senala', 'sorpresa', 'pulgar', 'pensar'];
+const LOOK = window.LOOK || {};
+const cv = document.getElementById('c'); cv.width = 1080; cv.height = 880; const ctx = cv.getContext('2d');
+window.FPS = 30; window.FRAMES = GESTOS.length;
+window.draw = (f) => { ctx.fillStyle = '#F7F7F7'; ctx.fillRect(0, 0, 1080, 880); AvatarHabbo.linea([{ t: 0, g: GESTOS[f] }], [], [], 30); AvatarHabbo.dibujar(ctx, 5, 0, 0);
+  ctx.fillStyle = '#111'; ctx.font = '700 44px sans-serif'; ctx.fillText(GESTOS[f], 30, 60); };
+window.LISTO = new Promise(ok => { const go = () => AvatarHabbo.iniciar({ ancho: 1080, alto: 880, look: LOOK }).then(ok); window.THREE ? go() : window.addEventListener('three-listo', go); });
+if (!location.search.includes('render')) window.LISTO.then(() => { let f = 0; setInterval(() => window.draw(f++ % GESTOS.length), 900); });
+</script></body></html>

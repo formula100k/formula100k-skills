@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Collage de reflexión</title>
+<!-- Este archivo NO se edita por pieza. Todo lo que cambia vive en config.js (y los tiempos, en tiempos.js). -->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#lienzo{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:var(--sans);color:var(--tinta)}
+.esc{position:absolute;inset:0;overflow:hidden}
+.medio{position:absolute;inset:0;overflow:hidden;background:#111}
+.medio img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hueco{position:absolute;inset:0;background:repeating-linear-gradient(45deg,#8d8d8d 0 36px,#7c7c7c 36px 72px);display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-weight:800;font-size:46px;line-height:1.15;padding:8%;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.velo{position:absolute;inset:0;pointer-events:none}
+.k{position:absolute;will-change:transform,opacity}
+.pila{position:absolute;display:flex;flex-direction:column;align-items:center}
+.pila .k{position:relative}
+.linea{white-space:nowrap;text-align:center}
+.sans{font-family:var(--sans);font-weight:var(--peso);letter-spacing:var(--tracking);line-height:.95}
+.serif{font-family:var(--serif);font-weight:400;font-style:var(--serif-estilo);letter-spacing:-.01em;line-height:1.08}
+.minus{text-transform:lowercase}.mayus{text-transform:uppercase;letter-spacing:-.02em}
+.sombra{text-shadow:0 6px 26px rgba(0,0,0,.5)}
+.pildora{background:#fff;color:var(--tinta);border-radius:44px;padding:14px 50px 20px;box-shadow:12px 12px 0 var(--tinta);margin:26px 0 34px}
+.stk{filter:drop-shadow(8px 0 0 #fff) drop-shadow(-8px 0 0 #fff) drop-shadow(0 8px 0 #fff) drop-shadow(0 -8px 0 #fff) drop-shadow(6px 6px 0 #fff) drop-shadow(-6px -6px 0 #fff) drop-shadow(6px -6px 0 #fff) drop-shadow(-6px 6px 0 #fff) drop-shadow(0 18px 24px rgba(0,0,0,.3))}
+.obj{filter:drop-shadow(0 22px 26px rgba(0,0,0,.28))}
+.chip{background:#fff;color:var(--tinta);border-radius:34px;padding:20px 34px 22px;box-shadow:0 14px 30px rgba(0,0,0,.25);font-family:var(--sans);font-weight:800;font-size:60px;letter-spacing:-.03em;white-space:nowrap;line-height:1;text-align:left}
+.chip small{display:block;font-weight:700;font-size:32px;color:#6f6a63;letter-spacing:0;margin-top:6px}
+.cal{width:240px;background:#fff;color:var(--tinta);border-radius:46px;overflow:hidden;box-shadow:0 16px 30px rgba(0,0,0,.3);text-align:center;font-family:var(--sans)}
+.cal i{display:block;background:var(--alerta);color:#fff;font-style:normal;font-weight:800;font-size:38px;padding:10px 0 12px}
+.cal b{display:block;font-weight:800;font-size:96px;letter-spacing:-.05em;padding:6px 0 22px;white-space:nowrap}
+.burbuja{background:#ECECEE;color:#1b1b1d;border-radius:38px;padding:22px 30px;max-width:600px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:500;font-size:38px;line-height:1.2;box-shadow:0 12px 26px rgba(0,0,0,.28)}
+.captura{border-radius:26px;box-shadow:0 16px 34px rgba(0,0,0,.3);background:#fff;display:block}
+.falta{border:6px dashed rgba(0,0,0,.55);background:rgba(255,255,255,.72);color:#1b1b1d;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--sans);font-weight:800;font-size:34px;line-height:1.15;padding:18px}
+.cel{background:#111;box-shadow:0 26px 40px rgba(0,0,0,.35),inset 0 0 0 3px #3a3a3c}
+.cel .pant{position:relative;width:100%;height:100%;overflow:hidden;background:#222}
+.cel .isla{position:absolute;left:50%;top:2.2%;width:30%;height:3.2%;margin-left:-15%;border-radius:99px;background:#111;z-index:3}
+.pista{position:absolute;top:0;height:100%;background:#1c1a19;box-shadow:inset 14px 0 0 #3b3835,inset -14px 0 0 #3b3835,0 0 0 10px rgba(0,0,0,.08)}
+.rodillos{position:absolute;left:34px;right:34px;top:-80px;bottom:-80px;background:repeating-linear-gradient(180deg,#3a3633 0,#8f8a83 14px,#cfcac2 24px,#77726c 40px,#2a2725 58px,#141312 70px)}
+.charola{position:absolute;border-radius:64px;box-shadow:0 30px 40px rgba(0,0,0,.45),inset 0 0 0 16px rgba(255,255,255,.28),inset 0 0 0 22px rgba(0,0,0,.08),inset 0 26px 50px rgba(0,0,0,.14)}
+.tacha{position:absolute;left:-5%;top:50%;height:12px;margin-top:-6px;border-radius:6px;background:var(--alerta);transform:rotate(-5deg);transform-origin:0 50%}
+.pend{position:absolute;left:36px;right:36px;bottom:44px;background:#FFE14A;color:#111;border:5px dashed #111;border-radius:18px;padding:14px 22px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:36px;line-height:1.15;z-index:50;text-align:left}
+.firma{font-family:var(--sans);font-weight:700;font-size:36px;letter-spacing:.04em;white-space:nowrap}
+</style></head><body>
+<div id="lienzo"></div>
+<script src="config.js"></script>
+<script src="clips/indice.js" onerror="window.CLIPS=window.CLIPS||{}"></script>
+<script src="tiempos.js" onerror="window.TIEMPOS=null"></script>
+<script src="motor.js"></script>
+</body></html>

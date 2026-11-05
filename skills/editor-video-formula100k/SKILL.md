@@ -6,6 +6,9 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 
 # Editor de video
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 Toma una grabación tuya hablando a cámara y entrega `BORRADOR_AUTO.mp4`: el video ya cortado y montado, listo para publicar o para un retoque final en tu editor de siempre.
 
 Hace dos trabajos, en este orden:

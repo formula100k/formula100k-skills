@@ -6,6 +6,9 @@ argument-hint: [tema o guion]
 
 # Animación · recortes de papel
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 Un clip narrado, 1080×1920, 30 fps. Una idea se explica dentro de un **mundo de papel**: cada frase del guion es una
 escena, y en cada escena pasa UNA cosa que se ve. La voz manda: los cortes de escena, los subtítulos y los momentos en que
 se mueve cada pieza salen de los tiempos de la voz.

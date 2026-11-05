@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>¿Qué pasaría si…? · molde low-poly 3D</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&family=Fraunces:ital,wght@1,500&family=JetBrains+Mono:wght@500&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}#gl{display:none}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<canvas id="gl"></canvas>
+<script>
+// MOLDE «low-poly 3D» de clonador-de-edicion-f100k: ciudad de bloques en 3D (three.js) con la letra encima en 2D.
+// El 3D se dibuja en #gl y cada cuadro se copia al lienzo #c, que es el que se graba (renderizar.mjs mira el primer canvas).
+// Sirve de base para Low-poly, Juguete, Cine realista y Videojuego 3D: cambia ESTILO, la escena (armarEscena) y LINEAS.
+const W = 1080, H = 1920, FPS = 30;
+const ESTILO = { cielo: 0xbfd9f2, suelo: 0x9fc98a, edificios: [0xf2c14e, 0xe76f51, 0x7fb3d5, 0xf4f1de, 0x84a98c],
+  tinta: '#ffffff', sombra: 'rgba(0,0,0,.35)', acento: '#7fd1ff', serifa: 'Fraunces, Georgia, serif', mono: '"JetBrains Mono", Menlo, monospace' };
+const PREGUNTA = '¿Qué pasaría si tu ciudad\ncreciera un piso por día?';
+const PAUSA = 0.3;
+const LINEAS = [
+  { d: 4.0, txt: '¿Qué pasaría si tu ciudad creciera un piso por día?' },
+  { d: 3.6, txt: 'Al mes, cada edificio tendría treinta pisos más.' },
+  { d: 3.6, txt: 'Al año, la ciudad entera tocaría las nubes.' },
+];
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.4;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ---------- 3D: función pura del tiempo (nada de reloj interno de three.js) ----------
+const gl = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true });
+gl.setSize(W, H, false); gl.setPixelRatio(1);
+const escena = new THREE.Scene(); escena.background = new THREE.Color(ESTILO.cielo); escena.fog = new THREE.Fog(ESTILO.cielo, 900, 2600);
+const camara = new THREE.PerspectiveCamera(38, W / H, 1, 5000);
+escena.add(new THREE.HemisphereLight(0xffffff, 0x7a8a6a, .85));
+const sol = new THREE.DirectionalLight(0xffffff, .75); sol.position.set(400, 900, 300); escena.add(sol);
+const suelo = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), new THREE.MeshLambertMaterial({ color: ESTILO.suelo }));
+suelo.rotation.x = -Math.PI / 2; escena.add(suelo);
+const r = rng(11), torres = [];
+for (let gx = -6; gx <= 6; gx++) for (let gz = -6; gz <= 6; gz++) {
+  if (r() < .25) continue;
+  const base = 40 + r() * 30, alto0 = 30 + r() * 90;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(base, 1, base), new THREE.MeshLambertMaterial({ color: ESTILO.edificios[Math.floor(r() * ESTILO.edificios.length)] }));
+  m.position.set(gx * 95 + (r() - .5) * 20, 0, gz * 95 + (r() - .5) * 20); escena.add(m);
+  torres.push({ m, alto0, extra: 200 + r() * 500 });
+}
+function pintar3D(t, crecer) {
+  for (const o of torres) { const h = o.alto0 + o.extra * crecer; o.m.scale.y = h; o.m.position.y = h / 2; }
+  const a = t * .12, rad = 1500;
+  camara.position.set(Math.cos(a) * rad, 520 + crecer * 700, Math.sin(a) * rad); camara.lookAt(0, 150 + crecer * 300, 0);
+  gl.render(escena, camara);
+  ctx.drawImage(gl.domElement, 0, 0, W, H);
+}
+
+// ---------- letra encima ----------
+function texto(s, x, y, tam, peso, color, alinear = 'left', familia = 'Inter, sans-serif') {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${familia}`; ctx.fillStyle = color; ctx.textAlign = alinear;
+  ctx.shadowColor = ESTILO.sombra; ctx.shadowBlur = 18; ctx.fillText(s, x, y); ctx.restore();
+}
+function subtitulo(txt, u, d) {
+  const palabras = txt.split(' '), dichas = Math.ceil(clamp(u / (d * .92)) * palabras.length);
+  ctx.save(); ctx.font = `italic 500 50px ${ESTILO.serifa}`; ctx.textAlign = 'center';
+  const lineas = renglones(txt, ctx.font, W - 200); let k = 0;
+  const fondo = ctx.createLinearGradient(0, 1250, 0, 1560); fondo.addColorStop(0, 'rgba(0,0,0,0)'); fondo.addColorStop(.35, 'rgba(0,0,0,.45)'); fondo.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = fondo; ctx.fillRect(0, 1250, W, 310);
+  lineas.forEach((l, i) => { const ws = l.split(' ');
+    let x = W / 2 - ctx.measureText(l).width / 2;
+    ws.forEach(w => { ctx.fillStyle = k++ < dichas ? ESTILO.tinta : 'rgba(255,255,255,.45)'; ctx.shadowColor = ESTILO.sombra; ctx.shadowBlur = 14;
+      ctx.textAlign = 'left'; ctx.fillText(w, x, 1380 + i * 62); x += ctx.measureText(w + ' ').width; }); });
+  ctx.restore();
+}
+function contador(valor, etiqueta) {
+  texto(String(valor), W - 90, 520, 150, 800, ESTILO.tinta, 'right');
+  texto(etiqueta.toUpperCase(), W - 90, 562, 22, 500, ESTILO.tinta, 'right', ESTILO.mono);
+}
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], q = clamp((t - INICIOS[i]) / L.d);
+  const mes = 30 / 365, c = i === 0 ? 0 : i === 1 ? lerp(0, mes, ease(q)) : lerp(mes, 1, ease(q));   // fracción del año
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  pintar3D(t, c);
+  PREGUNTA.split('\n').forEach((r, k) => texto(r, 80, 330 + k * 66, 56, 800, ESTILO.tinta));
+  contador(Math.round(c * 365), 'pisos más');
+  subtitulo(L.txt, t - INICIOS[i], L.d);
+}
+window.LISTO = new Promise(r => setTimeout(r, 50));
+arrancar(draw);
+</script>
+</body>
+</html>

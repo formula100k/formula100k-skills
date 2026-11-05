@@ -1,0 +1,4 @@
+/* Letras de la plantilla (todas con licencia libre OFL): Inter (texto), Fraunces itálica (notas), Anton (gancho y cifras). */
+@font-face{font-family:'Ex Sans';font-style:normal;font-weight:100 900;font-display:block;src:url('./inter.woff2') format('woff2');}
+@font-face{font-family:'Ex Serif';font-style:italic;font-weight:100 900;font-display:block;src:url('./fraunces-italic.woff2') format('woff2');}
+@font-face{font-family:'Ex Display';font-style:normal;font-weight:400;font-display:block;src:url('./anton.woff2') format('woff2');}

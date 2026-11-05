@@ -1,0 +1,80 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.4
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.0,
+   "persona": [
+    {
+     "x": 300,
+     "y": 600,
+     "w": 480,
+     "h": 853,
+     "recorte": true
+    }
+   ],
+   "estilo": "4 fotos: respirar + gancho con plantilla"
+  },
+  {
+   "desde": 2.0,
+   "hasta": 3.4,
+   "persona": [
+    {
+     "x": 300,
+     "y": 600,
+     "w": 480,
+     "h": 853,
+     "recorte": true
+    }
+   ],
+   "estilo": "4 fotos: tiempo para mí"
+  },
+  {
+   "desde": 3.4,
+   "hasta": 5.2,
+   "persona": [
+    {
+     "x": 300,
+     "y": 600,
+     "w": 480,
+     "h": 853,
+     "recorte": true
+    }
+   ],
+   "estilo": "4 fotos: diferentes clases"
+  },
+  {
+   "desde": 5.2,
+   "hasta": 6.86,
+   "persona": [
+    {
+     "x": 300,
+     "y": 600,
+     "w": 480,
+     "h": 853,
+     "recorte": true
+    }
+   ],
+   "estilo": "4 fotos: clases de arte"
+  },
+  {
+   "desde": 6.86,
+   "hasta": 10.02,
+   "persona": [
+    {
+     "x": 300,
+     "y": 600,
+     "w": 480,
+     "h": 853,
+     "recorte": true
+    }
+   ],
+   "estilo": "4 fotos: robótica"
+  }
+ ],
+ "gancho": "recorte"
+}

@@ -11,8 +11,8 @@ La persona arma su manual una sola vez en **formula100k.app/identidad-visual** y
    proyectos, pásale `cuenta`): devuelve su brandkit, este mismo manual y los enlaces de sus stickers.
    Si no hay conector, busca `mi-marca/brandkit.md` (stickers en `mi-marca/stickers/`) junto al manual.
    El brandkit suma gancho, subtítulos, elementos de marca, stickers y CTA; los colores y las letras
-   siguen saliendo del manual. Cómo se aplica en cada pieza lo dice el `SKILL.md` de cada skill; si
-   no dice nada, úsalo solo como apoyo. Si no hay brandkit, sigue con el paso 1.
+   siguen saliendo del manual. Cómo se aplica en cada pieza lo dice `references/tu-brandkit.md` (si la
+   skill lo trae) o el `SKILL.md` de cada skill; si no dicen nada, úsalo solo como apoyo. Si no hay brandkit, sigue con el paso 1.
 1. `mi-marca/marca.md` dentro de la carpeta en la que estás trabajando (la del proyecto de Claude).
 2. Si no está ahí: `~/mi-marca/marca.md`, y después cualquier carpeta `mi-marca` con un `marca.md`
    dentro de su carpeta de documentos (búscala con `find`, a pocos niveles de profundidad).

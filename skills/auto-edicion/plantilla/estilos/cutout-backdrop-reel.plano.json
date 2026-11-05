@@ -1,0 +1,80 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.4
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.32,
+   "persona": [
+    {
+     "x": 90,
+     "y": 560,
+     "w": 900,
+     "h": 1600,
+     "recorte": true
+    }
+   ],
+   "estilo": "foto: robótica · tú grande abajo"
+  },
+  {
+   "desde": 2.32,
+   "hasta": 3.5,
+   "persona": [
+    {
+     "x": -150,
+     "y": 760,
+     "w": 720,
+     "h": 1280,
+     "recorte": true
+    }
+   ],
+   "estilo": "foto: robótica · tú a la izquierda"
+  },
+  {
+   "desde": 3.5,
+   "hasta": 4.82,
+   "persona": [
+    {
+     "x": 610,
+     "y": 1180,
+     "w": 450,
+     "h": 800,
+     "recorte": true
+    }
+   ],
+   "estilo": "foto: cine · tú chica en la esquina"
+  },
+  {
+   "desde": 4.82,
+   "hasta": 8.0,
+   "persona": [
+    {
+     "x": 470,
+     "y": 700,
+     "w": 720,
+     "h": 1280,
+     "recorte": true
+    }
+   ],
+   "estilo": "foto: lo que me gustaba · tú a la derecha"
+  },
+  {
+   "desde": 8.0,
+   "hasta": 9.86,
+   "persona": [
+    {
+     "x": 40,
+     "y": 600,
+     "w": 1000,
+     "h": 1778,
+     "recorte": true
+    }
+   ],
+   "estilo": "foto: leer · tú grande abajo"
+  }
+ ],
+ "gancho": "revista"
+}

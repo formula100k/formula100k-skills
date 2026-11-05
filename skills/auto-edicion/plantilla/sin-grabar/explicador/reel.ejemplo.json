@@ -1,0 +1,242 @@
+{
+ "titulo": "Cómo Netflix elige la portada que ves",
+ "pausa": 0.28,
+ "cola": 1.2,
+ "marca": {
+  "acento": "#E50914",
+  "acentoTinta": "#ffffff"
+ },
+ "escenas": [
+  {
+   "tema": "oscuro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "gancho": {
+    "chica": "tu portada",
+    "enorme": "NO ES LA MÍA",
+    "color": "#E50914"
+   },
+   "texto": "Tu portada de Netflix no es la misma que la mía.",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 560,
+      "w": 460,
+      "h": 258
+     },
+     "rot": -3,
+     "en": 0,
+     "src": "assets/img/portada-romance.png"
+    },
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 550,
+      "y": 760,
+      "w": 460,
+      "h": 258
+     },
+     "rot": 3,
+     "en": 0,
+     "src": "assets/img/portada-comedia.png"
+    }
+   ]
+  },
+  {
+   "tema": "claro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "texto": "*Netflix* midió que | miras cada título | apenas [1,8 segundos].",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 500,
+      "w": 940,
+      "h": 266
+     },
+     "en": 0,
+     "src": "assets/img/power-cabecera.png"
+    },
+    {
+     "tipo": "cifra",
+     "pos": {
+      "x": 70,
+      "y": 800,
+      "w": 940,
+      "h": 380
+     },
+     "plano": true,
+     "en": "@midió",
+     "valor": "1,8",
+     "unidad": "segundos por título",
+     "nota": "estudio de Netflix, 2014",
+     "color": "#E50914"
+    }
+   ]
+  },
+  {
+   "tema": "claro",
+   "gesto": "pensando",
+   "avatar": "centro",
+   "texto": "Y que *la imagen* | se lleva más del [82%] | de tu atención.",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 500,
+      "w": 940,
+      "h": 428
+     },
+     "en": 0,
+     "src": "assets/img/power-parrafo.png",
+     "ajuste": "contain"
+    },
+    {
+     "tipo": "cifra",
+     "pos": {
+      "x": 70,
+      "y": 950,
+      "w": 940,
+      "h": 240
+     },
+     "plano": true,
+     "en": "@82",
+     "valor": "82 %",
+     "unidad": "o más de tu atención",
+     "nota": "se la lleva la imagen",
+     "color": "#E50914"
+    }
+   ]
+  },
+  {
+   "tema": "oscuro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "texto": "Por eso | un título puede tener | [decenas] de *portadas distintas*.",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 520,
+      "w": 940,
+      "h": 621
+     },
+     "en": 0,
+     "src": "assets/img/stranger-things.png",
+     "ajuste": "contain"
+    }
+   ]
+  },
+  {
+   "tema": "oscuro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "texto": "Si ves *comedias*, | en Good Will Hunting | te muestran a [Robin Williams].",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 500,
+      "w": 940,
+      "h": 202
+     },
+     "en": 0,
+     "src": "assets/img/fila-comedia.png",
+     "etiqueta": "lo que viste"
+    },
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 190,
+      "y": 740,
+      "w": 700,
+      "h": 393
+     },
+     "en": "@Good",
+     "src": "assets/img/portada-comedia.png"
+    }
+   ]
+  },
+  {
+   "tema": "oscuro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "texto": "Si ves *romance*, | te muestran a [la pareja] besándose.",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 500,
+      "w": 940,
+      "h": 202
+     },
+     "en": 0,
+     "src": "assets/img/fila-romance.png",
+     "etiqueta": "lo que viste"
+    },
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 190,
+      "y": 740,
+      "w": 700,
+      "h": 393
+     },
+     "en": "@te",
+     "src": "assets/img/portada-romance.png"
+    }
+   ]
+  },
+  {
+   "tema": "claro",
+   "gesto": "hablando",
+   "avatar": "centro",
+   "texto": "La película *es la misma*. | La portada | [la eligieron para ti].",
+   "tarjetas": [
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 70,
+      "y": 500,
+      "w": 940,
+      "h": 470
+     },
+     "en": 0,
+     "src": "assets/img/blog-cabecera.png"
+    },
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 120,
+      "y": 1000,
+      "w": 400,
+      "h": 180
+     },
+     "rot": -2,
+     "en": "@portada",
+     "src": "assets/img/portada-romance.png"
+    },
+    {
+     "tipo": "imagen",
+     "pos": {
+      "x": 560,
+      "y": 1000,
+      "w": 400,
+      "h": 180
+     },
+     "rot": 2,
+     "en": "@portada",
+     "src": "assets/img/portada-comedia.png"
+    }
+   ]
+  }
+ ]
+}

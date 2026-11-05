@@ -6,6 +6,9 @@ allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 
 # Motion Reels F100K — Overlays Animados Estilo Softgirlnocode
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 Pipeline completo para agregar motion graphics animados sobre un reel 9:16 de talking-head. La filosofía de Softgirlnocode: el texto que dices en cámara SE MATERIALIZA en pantalla como overlays flotantes, cards comparativas y resúmenes visuales — el video se vuelve su propio teleprompter visual.
 
 El pipeline detecta automáticamente dónde está el sujeto en el frame y coloca los overlays en las zonas libres para que nunca tapen la cara.

@@ -1,0 +1,203 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.55,
+  0.42
+ ],
+ "gancho": "gigante",
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.42,
+   "persona": "completa",
+   "efecto": {
+    "tipo": "acercamiento",
+    "en": 1.24,
+    "escala": 1.3
+   }
+  },
+  {
+   "desde": 2.42,
+   "hasta": 3.14,
+   "persona": "oculta",
+   "efecto": {
+    "tipo": "romper",
+    "en": 2.54,
+    "dur": 0.6,
+    "x": 0.55,
+    "y": 0.42
+   }
+  },
+  {
+   "desde": 3.14,
+   "hasta": 6.94,
+   "persona": "oculta",
+   "efecto": {
+    "tipo": "polaroid",
+    "en": 3.2
+   }
+  },
+  {
+   "desde": 6.94,
+   "hasta": 10.6,
+   "persona": "completa"
+  },
+  {
+   "desde": 10.6,
+   "hasta": 13.34,
+   "persona": [
+    "completa",
+    "recorte"
+   ]
+  },
+  {
+   "desde": 13.34,
+   "hasta": 17.5,
+   "persona": "completa",
+   "efecto": {
+    "tipo": "zoom-digital",
+    "pasos": [
+     [
+      15.2,
+      1.6
+     ],
+     [
+      16.26,
+      2.4
+     ]
+    ]
+   }
+  },
+  {
+   "desde": 17.5,
+   "hasta": 19.4,
+   "persona": "completa",
+   "efecto": {
+    "tipo": "portal",
+    "en": 18.82,
+    "dur": 0.55,
+    "x": 230,
+    "y": 470,
+    "r": 140
+   }
+  },
+  {
+   "desde": 19.4,
+   "hasta": 22.42,
+   "persona": "recorte"
+  },
+  {
+   "desde": 22.42,
+   "hasta": 24.58,
+   "persona": [
+    {
+     "x": 260,
+     "y": 420,
+     "w": 560,
+     "h": 1148,
+     "cara": [
+      0.55,
+      0.4
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 24.58,
+   "hasta": 28.16,
+   "persona": [
+    {
+     "x": 560,
+     "y": 560,
+     "w": 400,
+     "h": 690,
+     "cara": [
+      0.55,
+      0.38
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 28.16,
+   "hasta": 32.76,
+   "persona": "recorte"
+  },
+  {
+   "desde": 32.76,
+   "hasta": 35.82,
+   "persona": [
+    {
+     "x": 390,
+     "y": 400,
+     "w": 300,
+     "h": 534,
+     "cara": [
+      0.55,
+      0.38
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 35.82,
+   "hasta": 38.28,
+   "persona": [
+    "completa",
+    "recorte"
+   ]
+  },
+  {
+   "desde": 38.28,
+   "hasta": 39.84,
+   "persona": "completa",
+   "efecto": {
+    "tipo": "zoom-atraves",
+    "dur": 0.45
+   }
+  },
+  {
+   "desde": 39.84,
+   "hasta": 43.2,
+   "persona": "completa",
+   "efecto": {
+    "tipo": "vertigo",
+    "desde": 1.28,
+    "hasta": 1.0
+   }
+  },
+  {
+   "desde": 43.2,
+   "hasta": 45.0,
+   "persona": "oculta",
+   "efecto": {
+    "tipo": "estudio",
+    "en": 43.92
+   }
+  },
+  {
+   "desde": 45.0,
+   "hasta": 48.94,
+   "persona": "oculta",
+   "efecto": {
+    "tipo": "papel",
+    "borde": 16
+   }
+  },
+  {
+   "desde": 48.94,
+   "hasta": 51.44,
+   "persona": "recorte"
+  },
+  {
+   "desde": 51.44,
+   "hasta": 56.36,
+   "persona": "completa"
+  },
+  {
+   "desde": 56.36,
+   "hasta": 59.84,
+   "persona": "oculta"
+  }
+ ]
+}

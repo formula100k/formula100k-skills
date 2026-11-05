@@ -1,0 +1,58 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.3
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.0,
+   "persona": [
+    {
+     "x": 290,
+     "y": 320,
+     "w": 500,
+     "h": 700,
+     "cara": [
+      0.5,
+      0.35
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 1.0,
+   "hasta": 2.82,
+   "persona": "completa"
+  },
+  {
+   "desde": 2.82,
+   "hasta": 5.36,
+   "persona": [
+    {
+     "x": 0,
+     "y": 960,
+     "w": 1080,
+     "h": 960,
+     "cara": [
+      0.5,
+      0.385
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 5.36,
+   "hasta": 8.74,
+   "persona": "completa"
+  },
+  {
+   "desde": 8.74,
+   "hasta": 10.94,
+   "persona": "completa"
+  }
+ ],
+ "gancho": "gigante",
+ "titulo": "recorte"
+}

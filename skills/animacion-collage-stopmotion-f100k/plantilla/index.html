@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>Collage stop motion</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="config.js"></script>
+<script src="ritmo.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#222}
+  #root{position:relative;width:1080px;height:1920px;overflow:hidden}
+  .clip{position:absolute;inset:0;overflow:hidden}
+  .fondo{position:absolute;inset:0;background-color:#111}
+  .esc{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden}
+  .capa{position:absolute;display:block;opacity:0;visibility:hidden}
+  .capa.sombra{filter:drop-shadow(0 10px 14px rgba(0,0,0,.32))}
+  .capa img{display:block;width:100%;height:auto}
+  .forma{position:absolute;inset:0;overflow:hidden}
+  .grano{position:absolute;inset:0;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0.9 -0.18'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+  .fibra{position:absolute;inset:0;mix-blend-mode:screen;opacity:.35;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.012 0.5' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 -0.25'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>")}
+  .pose{position:absolute;display:block;opacity:0;visibility:hidden}
+  .pose img{display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+  .sticker img{filter:drop-shadow(var(--b) 0 0 var(--bc)) drop-shadow(calc(var(--b) * -1) 0 0 var(--bc)) drop-shadow(0 var(--b) 0 var(--bc)) drop-shadow(0 calc(var(--b) * -1) 0 var(--bc)) drop-shadow(0 12px 12px rgba(0,0,0,.3))}
+  #texto{position:absolute;display:block;text-align:center;line-height:1.14}
+  #texto.suelto{font-weight:700;text-shadow:0 2px 10px rgba(0,0,0,.55),0 0 3px rgba(0,0,0,.5)}
+  #texto.etiqueta{font-weight:900;letter-spacing:-.035em;padding:.55em .7em .6em;filter:drop-shadow(0 12px 16px rgba(0,0,0,.3))}
+  #texto.etiqueta .papel{position:absolute;inset:0;overflow:hidden;
+    clip-path:polygon(0 4%,4% 0,9% 3.5%,15% .5%,22% 4%,30% .8%,37% 3.6%,45% .4%,53% 3.8%,61% .6%,69% 4%,77% .8%,85% 3.6%,92% .4%,100% 3.4%,99.2% 96%,95% 100%,89% 96.6%,82% 99.6%,74% 96.2%,66% 99.4%,58% 96.4%,50% 99.8%,42% 96.2%,34% 99.4%,26% 96.4%,18% 99.6%,10% 96.2%,4% 99.6%,0 96.4%)}
+  #texto .tx{position:relative;display:block}
+  #texto .it{font-style:italic;font-weight:500;letter-spacing:-.01em}
+  #texto .hl{padding:0 .14em;border-radius:.08em}
+  #firma{position:absolute;left:0;right:0;bottom:64px;text-align:center;font-weight:800;font-size:32px;letter-spacing:.06em}
+  #apertura{position:absolute;display:block;z-index:800;left:140px;top:420px;width:800px;height:1080px;border-radius:46% 54% 50% 50% / 38% 42% 58% 62%;opacity:0;visibility:hidden}
+</style>
+</head>
+<body>
+<!-- data-duration lo escribe `node ajustar.mjs` (suma de los `dur`, o los cortes ajustados a la música) -->
+<div id="root" data-composition-id="collage" data-start="0" data-width="1080" data-height="1920" data-duration="9">
+  <div id="escena" class="clip" data-start="0" data-duration="9" data-track-index="1">
+    <div class="fondo" id="fondo"></div>
+    <div id="mundo" style="position:absolute;inset:0"></div>
+    <div id="apertura"></div>
+    <div id="texto"></div>
+    <div id="firma"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const C = window.CONFIG, W = 1080, H = 1920, FPS = 30;
+  const root = document.getElementById("root"), mundo = document.getElementById("mundo");
+  const SANS = (C.fuentes && C.fuentes.sans) || "-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif";
+  const SERIF = (C.fuentes && C.fuentes.serif) || "Georgia,'Times New Roman',serif";
+  root.style.fontFamily = SANS;
+
+  // azar con semilla: el mismo config da siempre el mismo video
+  let s = (C.semilla || 7) >>> 0;
+  const rnd = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+
+  // el reloj va a saltos: todo cambio cae en un múltiplo de `cuadrosPorSalto` cuadros de video
+  const CPS = Math.max(1, Math.round(C.cuadrosPorSalto || 4));
+  const SALTO = CPS / FPS;
+  const cuant = t => Math.round(t / SALTO) * SALTO;       // segundos → al salto más cercano
+  const saltos = seg => Math.max(1, Math.round(seg / SALTO));
+
+  const el = (tag, cls, css) => { const e = document.createElement(tag); if (cls) e.className = cls; if (css) Object.assign(e.style, css); return e; };
+  const px = v => v + "px";
+  const grano = (f, op) => { if (op === 0) return; const g = el("div", "grano"); g.style.opacity = op == null ? .55 : op; f.appendChild(g); };
+
+  /* ── formas de papel ── */
+  const FORMAS = {
+    plano(c, f){
+      f.style.backgroundColor = c.color || "#888";
+      const k = c.color2 || "rgba(0,0,0,.14)", t = c.tamano || 180;
+      if (c.patron === "baldosas") { f.style.backgroundImage = `linear-gradient(${k} 5px,transparent 5px),linear-gradient(90deg,${k} 5px,transparent 5px)`; f.style.backgroundSize = `${t}px ${Math.round(t * .62)}px`; }
+      if (c.patron === "tablas")   { f.style.backgroundImage = `repeating-linear-gradient(90deg,transparent 0 ${t - 4}px,${k} ${t - 4}px ${t}px)`; }
+      if (c.patron === "rayas")    { f.style.backgroundImage = `repeating-linear-gradient(90deg,transparent 0 ${t / 2}px,${k} ${t / 2}px ${t}px)`; }
+      if (c.patron === "ondas")    { f.style.backgroundImage = `repeating-radial-gradient(ellipse 120px 26px at 50% 0,transparent 0 16px,${k} 17px 20px,transparent 21px 30px)`; f.style.backgroundSize = "170px 46px"; }
+      if (c.patron === "cuadros")  { f.style.backgroundImage = `linear-gradient(${k} 50%,transparent 50%),linear-gradient(90deg,${k} 50%,transparent 50%)`; f.style.backgroundSize = `${t}px ${t}px`; }
+      if (c.fibra) f.appendChild(el("div", "fibra"));
+    },
+    ovalo(c, f){ f.style.backgroundColor = c.color || "#eee"; f.style.borderRadius = "50%"; },
+    rasgado(c, f){
+      f.style.backgroundColor = c.color || "#fff";
+      const p = []; const n = 14;
+      for (let i = 0; i <= n; i++) p.push(`${(i / n * 100).toFixed(1)}% ${(rnd() * 3.2).toFixed(1)}%`);
+      for (let i = n; i >= 0; i--) p.push(`${(i / n * 100).toFixed(1)}% ${(100 - rnd() * 3.2).toFixed(1)}%`);
+      f.style.clipPath = `polygon(${p.join(",")})`;
+    },
+    colinas(c, f, w, h){
+      f.style.backgroundColor = c.color || "#5d7a3a";
+      const a = c.relieve == null ? .55 : c.relieve, f1 = 1 + rnd() * 1.2, f2 = 2.2 + rnd() * 2, o1 = rnd() * 6.28, o2 = rnd() * 6.28, p = [];
+      for (let i = 0; i <= 40; i++) {
+        const u = i / 40, y = .5 + .32 * Math.sin(u * 6.28 * f1 + o1) + .18 * Math.sin(u * 6.28 * f2 + o2);
+        p.push(`${(u * 100).toFixed(1)}% ${((1 - y) * a * 100).toFixed(1)}%`);
+      }
+      f.style.clipPath = `polygon(${p.join(",")},100% 100%,0 100%)`;
+    },
+    pinos(c, f, w, h){
+      f.style.backgroundColor = c.color || "#2f4a2c";
+      const n = c.cantidad || 6, p = ["0 100%"], cell = 100 / n;
+      for (let i = 0; i < n; i++) {
+        const cx = cell * (i + .5) + (rnd() - .5) * cell * .3, half = cell * (.3 + rnd() * .12), top = rnd() * 30;
+        const lv = 3, alto = 92 - top;
+        p.push(`${(cx - half * .16).toFixed(1)}% 100%`, `${(cx - half * .16).toFixed(1)}% 92%`);
+        for (let k = 0; k < lv; k++) { const y0 = 92 - alto * k / lv, y1 = 92 - alto * (k + 1) / lv, wk = half * (1 - k * .22); p.push(`${(cx - wk).toFixed(1)}% ${y0.toFixed(1)}%`, `${(cx - (k === lv - 1 ? 0 : wk * .38)).toFixed(1)}% ${y1.toFixed(1)}%`); }
+        for (let k = lv - 1; k >= 0; k--) { const y0 = 92 - alto * k / lv, y1 = 92 - alto * (k + 1) / lv, wk = half * (1 - k * .22); if (k !== lv - 1) p.push(`${(cx + wk * .38).toFixed(1)}% ${y1.toFixed(1)}%`); p.push(`${(cx + wk).toFixed(1)}% ${y0.toFixed(1)}%`); }
+        p.push(`${(cx + half * .16).toFixed(1)}% 92%`, `${(cx + half * .16).toFixed(1)}% 100%`);
+      }
+      p.push("100% 100%");
+      f.style.clipPath = `polygon(${p.join(",")})`;
+    },
+    estrellas(c, f, w, h){
+      f.style.overflow = "visible";
+      const n = c.cantidad || 6, t = c.tamano || 70, cols = Math.ceil(Math.sqrt(n * w / h)), rows = Math.ceil(n / cols);
+      for (let i = 0; i < n; i++) {
+        const cw = w / cols, ch = h / rows, x = (i % cols) * cw + rnd() * (cw - t), y = Math.floor(i / cols) * ch + rnd() * (ch - t), k = t * (.75 + rnd() * .5);
+        const st = el("div", "", { position: "absolute", left: px(x), top: px(y), width: px(k), height: px(k), backgroundColor: c.color || "#f4d35e", transform: `rotate(${Math.round(rnd() * 50 - 25)}deg)`,
+          clipPath: "polygon(50% 0,62% 36%,100% 38%,70% 60%,80% 98%,50% 76%,20% 98%,30% 60%,0 38%,38% 36%)" });
+        grano(st, c.grano); f.appendChild(st);
+      }
+    },
+    nube(c, f, w, h){
+      f.style.overflow = "visible";
+      [[.0, .42, .46], [.24, .08, .56], [.52, .26, .48], [.14, .5, .72]].forEach(([x, y, d], i) => {
+        const b = el("div", "", { position: "absolute", left: px(x * w), top: px(y * h), width: px(d * w), height: px(i === 3 ? h * .5 : d * w), borderRadius: i === 3 ? "999px" : "50%", backgroundColor: c.color || "#fff" });
+        f.appendChild(b);
+      });
+    }
+  };
+  const SIN_GRANO = { estrellas: 1, nube: 1 };
+
+  /* ── duración ── */
+  const ESC = C.escenarios || [];
+  // HyperFrames lee la duración del HTML antes de correr este script: el total sale de data-duration.
+  // El último escenario se estira o se corta para llenar ese total.
+  const total = parseFloat(root.dataset.duration);
+  // ritmo.js lo escribe `node ajustar.mjs` cuando hay música: cortes de escenario y cambios de pose ya puestos sobre los golpes.
+  // Sin música vale null y todo se calcula como siempre.
+  const RITMO = window.RITMO && Array.isArray(window.RITMO.cortes) ? window.RITMO : null;
+  const desde = (base, d) => RITMO ? base + cuant(d) : cuant(base + d);
+  if (C.fondo) document.getElementById("fondo").style.backgroundColor = C.fondo;
+
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const ver = (e, t) => tl.set(e, { autoAlpha: 1 }, t);
+  const ocultar = (e, t) => tl.set(e, { autoAlpha: 0 }, t);
+
+  // entrada a saltos: n posiciones intermedias, cada una dura un salto; nunca se interpola
+  function entrar(e, t0, tipo, n, base, caja){
+    const b = Object.assign({ x: 0, y: 0, rotation: 0, scale: 1 }, base);
+    let dx = 0, dy = 0;
+    if (tipo === "izquierda") dx = -(caja.x + caja.w + 40);
+    if (tipo === "derecha")   dx = W - caja.x + 40;
+    if (tipo === "arriba")    dy = -(caja.y + caja.h + 40);
+    if (tipo === "abajo")     dy = H - caja.y + 40;
+    if (tipo === "corte" || !tipo) { tl.set(e, Object.assign({ autoAlpha: 1 }, b), t0); return t0; }
+    if (tipo === "pop") {
+      [.55, 1.12, 1].forEach((k, i) => tl.set(e, Object.assign({}, b, { autoAlpha: 1, scale: b.scale * k, rotation: b.rotation + (i === 0 ? -7 : i === 1 ? 4 : 0) }), t0 + i * SALTO));
+      return t0 + 2 * SALTO;
+    }
+    for (let k = 1; k <= n; k++) {
+      const u = 1 - k / n, tuerce = k === n ? 0 : (k % 2 ? 3 : -3);
+      tl.set(e, Object.assign({}, b, { autoAlpha: 1, x: b.x + dx * u, y: b.y + dy * u, rotation: b.rotation + tuerce }), t0 + (k - 1) * SALTO);
+    }
+    return t0 + (n - 1) * SALTO;
+  }
+
+  let t = 0;
+  ESC.forEach((E, ei) => {
+    let ini = cuant(t), fin = ei === ESC.length - 1 ? total : cuant(t + (E.dur || 3)); t += (E.dur || 3);
+    if (RITMO) { ini = RITMO.cortes[ei]; fin = ei === ESC.length - 1 ? total : RITMO.cortes[ei + 1]; }
+    const cambios = (RITMO && RITMO.poses && RITMO.poses[ei]) || null;   // segundo en que termina cada pose
+    const esc = el("div", "esc"); esc.id = "esc" + ei; mundo.appendChild(esc);
+    ver(esc, ini); if (ei < ESC.length - 1) ocultar(esc, fin);
+    const zDe = {};
+
+    (E.capas || []).forEach((c, i) => {
+      const x = c.x || 0, y = c.y || 0, w = c.ancho || (W - x), h = c.alto || (c.src ? null : H - y);
+      const z = c.z != null ? c.z : (i + 1) * 10; if (c.id) zDe[c.id] = z;
+      const capa = el("div", "capa" + (c.sombra ? " sombra" : "") + (c.borde ? " sticker" : ""), { left: px(x), top: px(y), width: px(w), zIndex: z });
+      if (h) capa.style.height = px(h);
+      capa.id = `e${ei}c${i}`;
+      if (c.borde) { capa.style.setProperty("--b", px(c.borde === true ? 6 : c.borde)); capa.style.setProperty("--bc", c.colorBorde || "#fff"); }
+      if (c.src) {
+        const im = el("img"); im.src = c.src; im.alt = ""; if (c.espejo) im.style.transform = "scaleX(-1)"; capa.appendChild(im);
+      } else {
+        const f = el("div", "forma"); (FORMAS[c.forma] || FORMAS.plano)(c, f, w, h); capa.appendChild(f);
+        if (!SIN_GRANO[c.forma]) grano(f, c.grano);
+      }
+      if (c.opacidad != null) capa.firstChild.style.opacity = c.opacidad;
+      esc.appendChild(capa);
+
+      const t0 = desde(ini, c.en || 0), base = { rotation: c.rot || 0 };
+      const caja = { x, y, w, h: h || w * 1.3 };
+      let listo = entrar(capa, t0, c.entra || "corte", c.pasos || 4, base, caja);
+      // vaivén: gira de un lado al otro, un cambio cada `cada` saltos
+      if (c.vaiven || c.brinco) {
+        const cada = (c.cada || 2) * SALTO; let k = 0;
+        for (let tt = listo + cada; tt < fin - 1e-6; tt += cada, k++)
+          tl.set(capa, { rotation: (c.rot || 0) + (k % 2 ? -1 : 1) * (c.vaiven || 0), y: k % 2 ? 0 : -(c.brinco || 0) }, tt);
+      }
+      // deriva: se corre un poco en cada salto (nubes, barcos, la luna que baja)
+      if (c.deriva) {
+        const cada = (c.deriva.cada || 1) * SALTO, max = c.deriva.saltos || 999; let k = 1;
+        for (let tt = listo + cada; tt < fin - 1e-6 && k <= max; tt += cada, k++)
+          tl.set(capa, { x: (c.deriva.x || 0) * k, y: (c.deriva.y || 0) * k }, tt);
+      }
+      if (c.hasta != null) ocultar(capa, desde(ini, c.hasta));
+    });
+
+    /* ── la persona: poses que se alternan con corte duro ── */
+    const P = C.persona, poses = (P && E.poses) || [];
+    if (poses.length) {
+      const pe = E.personaEntra || {}, arranca = desde(ini, pe.en == null ? .4 : pe.en);
+      const zTop = ((E.capas || []).length + 2) * 10;
+      const nodos = poses.map((p, i) => {
+        const alto = p.alto || 900, ancho = p.ancho || Math.round(alto * .62), cx = p.x == null ? W / 2 : p.x, pie = p.pie == null ? 1700 : p.pie;
+        const d = el("div", "pose" + (P.borde ? " sticker" : ""), { left: px(cx - ancho / 2), top: px(pie - alto), width: px(ancho), height: px(alto),
+          zIndex: p.detrasDe && zDe[p.detrasDe] != null ? zDe[p.detrasDe] - 1 : (p.z != null ? p.z : zTop) });
+        d.id = `e${ei}p${i}`;
+        if (P.borde) { d.style.setProperty("--b", px(P.borde)); d.style.setProperty("--bc", P.colorBorde || "#fff"); }
+        const im = el("img"); im.src = p.src; im.alt = ""; if (p.espejo) im.style.transform = "scaleX(-1)"; d.appendChild(im);
+        esc.appendChild(d);
+        return { d, p, caja: { x: cx - ancho / 2, y: pie - alto, w: ancho, h: alto } };
+      });
+      const meneo = P.meneo == null ? 1.5 : P.meneo, brinco = P.brinco == null ? 10 : P.brinco, cada = (P.cada || 2) * SALTO;
+      let tt = arranca, i = 0, primera = true;
+      while (tt < fin - 1e-6) {
+        const { d, p, caja } = nodos[i % nodos.length];
+        const dur = Math.max(SALTO, cuant(p.dur || .5)), hasta = Math.min(fin, cambios && cambios[i] != null ? cambios[i] : tt + dur);
+        let quieto = tt;
+        if (primera && pe.desde) quieto = entrar(d, tt, pe.desde, pe.pasos || 3, { rotation: p.rot || 0 }, caja);
+        else tl.set(d, { autoAlpha: 1, x: 0, y: 0, rotation: p.rot || 0 }, tt);
+        let k = 0;
+        for (let u = quieto + cada; u < hasta - 1e-6; u += cada, k++)
+          tl.set(d, { rotation: (p.rot || 0) + (k % 2 ? -1 : 1) * meneo, y: k % 2 ? 0 : -brinco }, u);
+        if (hasta < fin - 1e-6 || ei < ESC.length - 1) ocultar(d, hasta);
+        tt = hasta; i++; primera = false;
+        if (i >= nodos.length && E.repetir === false) break;
+      }
+    }
+  });
+
+  /* ── apertura: el papel se rasga y deja ver el primer escenario ── */
+  if (C.apertura) {
+    const a = document.getElementById("apertura"), col = C.apertura.color || "#b9a9a4";
+    a.style.boxShadow = `0 0 0 2400px ${col}`;
+    [.62, .95, 1.5].forEach((k, i) => tl.set(a, { autoAlpha: 1, scale: k, rotation: i * 9 - 6 }, i * SALTO));
+    ocultar(a, 3 * SALTO);
+  }
+
+  /* ── texto fijo ── */
+  const T = C.texto, tx = document.getElementById("texto");
+  if (T && T.contenido) {
+    const ancho = T.ancho || 620, cx = T.x == null ? W / 2 : T.x;
+    tx.className = T.estilo === "etiqueta" ? "etiqueta" : "suelto";
+    Object.assign(tx.style, { left: px(cx - ancho / 2), top: px(T.y == null ? 820 : T.y), width: px(ancho), fontSize: px(T.tamano || 38), color: T.color || "#fff", zIndex: 900 });
+    if (T.estilo === "etiqueta") { const pp = el("div", "papel"); pp.style.backgroundColor = T.fondo || "#fff"; grano(pp, .4); tx.appendChild(pp); }
+    const sp = el("span", "tx");
+    String(T.contenido).split(/(\*[^*]+\*|_[^_]+_)/).forEach(tr => {
+      if (!tr) return;
+      if (/^\*.+\*$/.test(tr)) { const h = el("span", "hl"); h.textContent = tr.slice(1, -1); h.style.backgroundColor = T.resalte || "#ffe066"; if (T.colorResalte) h.style.color = T.colorResalte; sp.appendChild(h); }
+      else if (/^_.+_$/.test(tr)) { const h = el("span", "it"); h.textContent = tr.slice(1, -1); h.style.fontFamily = SERIF; sp.appendChild(h); }
+      else sp.appendChild(document.createTextNode(tr));
+    });
+    tx.appendChild(sp);
+    if (T.rot) tl.set(tx, { rotation: T.rot }, 0);
+  } else tx.remove();
+
+  const F = C.firma, fi = document.getElementById("firma");
+  if (F && F.texto) { fi.textContent = F.texto; fi.style.color = F.color || "#fff"; fi.style.zIndex = 901; if (F.sombra !== false) fi.style.textShadow = "0 2px 8px rgba(0,0,0,.5)"; } else fi.remove();
+
+  // el timeline dura exactamente lo que suman los escenarios
+  tl.set({}, {}, total);
+  window.__timelines["collage"] = tl;
+})();
+</script>
+</body>
+</html>

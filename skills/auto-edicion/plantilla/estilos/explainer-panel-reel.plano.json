@@ -1,0 +1,36 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.3
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.2,
+   "persona": "panel"
+  },
+  {
+   "desde": 2.2,
+   "hasta": 4.34,
+   "persona": "completa"
+  },
+  {
+   "desde": 4.34,
+   "hasta": 6.3,
+   "persona": "panel"
+  },
+  {
+   "desde": 6.3,
+   "hasta": 8.28,
+   "persona": "panel"
+  },
+  {
+   "desde": 8.28,
+   "hasta": 10.16,
+   "persona": "panel"
+  }
+ ],
+ "gancho": "escalera",
+ "titulo": "franja"
+}

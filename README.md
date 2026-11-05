@@ -51,7 +51,7 @@ Las skills se potencian con **MCPs** (conexiones a herramientas como generadores
 
 **Resumen del mínimo viable (gratis):** Playwright + Nanobanana + Tavily + Supadata. Con eso tienes el ~80% de las skills funcionando sin pagar nada.
 
-¡Listo! Reinicia Claude Code y ya tienes acceso a las 63 skills.
+¡Listo! Reinicia Claude Code y ya tienes acceso a las 124 skills.
 
 ---
 
@@ -90,6 +90,20 @@ Cuando Andrea publique mejoras o skills nuevas:
 - **Instagram:** [@andreaestratega](https://instagram.com/andreaestratega)
 
 ---
+
+## Tu brandkit en todas las piezas
+
+Todas las skills que hacen piezas visuales (edición, animación, carruseles, miniaturas e imágenes) leen tu
+brandkit: basta con decir «usa mi brandkit» o adjuntar tu `brandkit.md` (o el ZIP que descargas de Yapper,
+Identidad visual → Tu brandkit). Si tienes el conector de Yapper, lo leen solas. Va encima del estilo que
+elijas: colores, letras, gancho, subtítulos, elementos, stickers y CTA. La guía está en
+`references/tu-brandkit.md` de cada skill.
+
+## Las 251 plantillas de edición, completas
+
+Desde la v1.59.0 el plugin trae todos los motores del catálogo de plantillas (`plantillas-edicion-f100k`):
+Auto-Edición, notitas, motion recortada, cubitos 3D, collage, pizarra, listas, telenovela y los 66 estilos
+de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar nada más.
 
 ## Lista de skills incluidas
 

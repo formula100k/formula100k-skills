@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pieza base · clonador de animaciones</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// ====================== LO QUE PUEDES CAMBIAR ======================
+// Cada renglón = una frase de la voz y su duración en segundos. voz.mjs reescribe los `d` con la voz real.
+// Ejemplo de una florería. Cambia las frases por las de tu tema y redibuja las escenas (ESC) de abajo.
+const LINEAS = [
+  { d: 2.6, txt: 'Tu ramo se marchita antes de tiempo.' },
+  { d: 2.6, txt: 'Y casi nunca es culpa de las flores.' },
+  { d: 2.8, txt: 'Uno: corta el tallo en diagonal.' },
+  { d: 2.4, txt: 'Dos: cámbiale el agua.' },
+  { d: 2.8, txt: 'Tres: aléjalo del sol directo.' },
+  { d: 3.0, txt: 'Con eso, tu ramo se ve vivo mucho más tiempo.' },
+  { d: 3.6, txt: 'Comenta RAMO y te mando la guía de cuidados.' },
+];
+const PAUSA = .3;            // respiro entre frases
+const QUIETO_FINAL = 1.6;    // el último cuadro se queda
+const PALABRA_CTA = 'RAMO';  // solo si la automatización que entrega el regalo ya existe
+const GANCHO = ['Por esto tu ramo', 'dura tan poco'];   // dos tiras grandes sobre la apertura
+const MENSAJE = ['Tu guía de cuidados', 'ya va en camino'];   // lo que «llega» en el cierre
+
+// Movimiento de toda la escena (temblor suave). VECES = cuántas veces por segundo · PIXELES = cuánto. PIXELES 0 = quieto.
+const VECES = 3, PIXELES = 8;
+// Halo de luz alrededor del dibujo en las escenas oscuras: [desenfoque, fuerza]. Lista vacía = sin halo.
+const NEON = [[14, .5], [44, .34]];
+// Escenas (por número, la primera es 0) que van sobre papel claro: no llevan halo. Las demás van sobre fondo oscuro.
+const CLARAS = [0];
+// Escenas que siguen a la anterior sin fundido (comparten el mismo objeto en pantalla).
+const CONTINUA = [3, 4];
+// Recortes PNG con fondo transparente para una apertura de collage. Ponlos en una carpeta `recortes/` junto a la
+// pieza y escribe aquí sus nombres sin extensión, por ejemplo ['ramo', 'tijera']. Vacío = la apertura se dibuja con código.
+const RECORTES = [];
+const SUBTITULOS = !new URLSearchParams(location.search).has('sinsubs');   // ?sinsubs = versión limpia
+
+const C = {
+  fondo: '#0c0d12', papel: '#f1ebdd', tinta: '#f5f2ea', oscuro: '#15161c', gris: '#9ea1ab',
+  acento: '#ff7a59',      // TU color de marca: uno solo
+  bien: '#7fe3ad', mal: '#ef5350', agua: '#6cc3ff', hoja: '#6fbf73', sol: '#ffd166',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+const INI = []; { let a = 0; for (const l of LINEAS) { INI.push(a); a += l.d + PAUSA; } var DUR = +(a + QUIETO_FINAL).toFixed(2); }
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ANATOMIA: estilizada — personaje pixel en grilla (una maceta con cara): no tiene extremidades
+const SANS = LETRA_LIMPIA, SERIF = 'Georgia, "Times New Roman", serif', MONO = 'Menlo, "SF Mono", Consolas, monospace';
+const TAU = Math.PI * 2;
+const pop = (u, a, dur = .4) => back(prog(u, a, a + dur));       // entra con rebote
+const fin = (u, a, dur = .35) => easeOut(prog(u, a, a + dur));   // entra suave
+
+// =====================================================================================
+// CAJA DE HERRAMIENTAS (reutilízala; el catálogo está en references/tecnicas.md)
+// =====================================================================================
+
+// ---------- tiempo ----------
+function escenaEn(t) { let i = 0; while (i < LINEAS.length - 1 && t >= INI[i + 1]) i++; return [i, t - INI[i]]; }
+
+// ---------- temblor de toda la escena ----------
+// Un valor nuevo VECES veces por segundo, suavizado, de PIXELES como máximo en cada eje. Función pura del tiempo.
+function ruido1(x, s) { const i = Math.floor(x), f = x - i, k = f * f * (3 - 2 * f); return lerp(hash2(i, s) * 2 - 1, hash2(i + 1, s) * 2 - 1, k); }
+const wig = t => [ruido1(t * VECES, 11) * PIXELES, ruido1(t * VECES, 47) * PIXELES];
+// Cuánto movimiento hay en cada momento: 1 = encendido, 0 = apagado. Cámbialo si quieres apagarlo en alguna frase.
+function M(t) { return 1; }
+let WX = 0, WY = 0, MOV = 1;
+const sinMover = f => { ctx.save(); ctx.translate(-WX, -WY); f(); ctx.restore(); };   // lo que se dibuja aquí queda clavado
+
+// ---------- texto y cajas ----------
+function txt(s, x, y, tam, o = {}) {
+  ctx.save();
+  ctx.globalAlpha *= o.a ?? 1;
+  ctx.font = `${o.it ? 'italic ' : ''}${o.peso ?? 800} ${tam}px ${o.mono ? MONO : o.serif ? SERIF : SANS}`;
+  ctx.textAlign = o.al || 'center'; ctx.textBaseline = o.base || 'middle';
+  ctx.fillStyle = o.col || C.tinta;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function caja(x, y, w, h, r, rel, borde, grosor = 2) {
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+  if (rel) { ctx.fillStyle = rel; ctx.fill(); }
+  if (borde) { ctx.strokeStyle = borde; ctx.lineWidth = grosor; ctx.stroke(); }
+}
+// Gancho chico y discreto (para reels de puro dibujo: manda la animación)
+function ganchoChico(s, y = 300, a = .7) { txt(s, 540, y, 46, { peso: 600, col: C.tinta, a }); }
+// Tira de papel con texto grande (para aperturas con imagen que frena el dedo). tam de 60 a 90.
+function tira(s, y, tam, fondo, col, rot = -.02, a = 1) {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a; ctx.translate(540, y); ctx.rotate(rot); ctx.font = `800 ${tam}px ${SANS}`; const w = ctx.measureText(s).width;
+  ctx.shadowColor = 'rgba(40,28,20,.3)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 8; caja(-w / 2 - 30, -tam * .72, w + 60, tam * 1.44, 8, fondo); ctx.shadowColor = 'transparent';
+  txt(s, 0, 3, tam, { col }); ctx.restore();
+}
+// Número grande de paso («1», «2», «3») dentro de un aro
+function numero(n, x, y, p, col = C.acento) {
+  if (p <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(p, p);
+  aro(0, 0, 62, 1, col, 5); txt(String(n), 0, 4, 78, { col, serif: true, it: true, peso: 700 }); ctx.restore();
+}
+
+// ---------- línea que se dibuja sola ----------
+function pluma(col, g = 3, brillo = 14) { ctx.strokeStyle = col; ctx.lineWidth = g; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = col; ctx.shadowBlur = brillo; }
+function trazo(pts, p = 1, col = C.tinta, g = 4, o = {}) {       // la línea avanza hasta la fracción p (0 a 1)
+  if (p <= 0) return; const n = Math.max(2, Math.round(pts.length * clamp(p)));
+  ctx.save(); ctx.globalAlpha *= o.a ?? 1; pluma(col, g, o.brillo ?? 14); if (o.raya) ctx.setLineDash(o.raya);
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < n; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); ctx.restore();
+}
+function aro(cx, cy, r, p = 1, col = C.tinta, g = 4, o = {}) {
+  if (p <= 0 || r <= 0) return; ctx.save(); ctx.globalAlpha *= o.a ?? 1; pluma(col, g, o.brillo ?? 14); if (o.raya) ctx.setLineDash(o.raya);
+  const a0 = o.desde ?? -Math.PI / 2; ctx.beginPath(); ctx.arc(cx, cy, r, a0, a0 + TAU * clamp(p)); ctx.stroke(); ctx.restore();
+}
+function recta(x0, y0, x1, y1, p = 1, col = C.tinta, g = 4, o = {}) { if (p > 0) trazo([[x0, y0], [lerp(x0, x1, clamp(p)), lerp(y0, y1, clamp(p))]], 1, col, g, o); }
+// curva suave por puntos de control → lista de puntos para trazo()
+function curva(ctrl, pasos = 40) {
+  const out = []; for (let s = 0; s <= pasos; s++) { const k = s / pasos * (ctrl.length - 1), i = Math.min(ctrl.length - 2, Math.floor(k)), f = k - i, e = f * f * (3 - 2 * f);
+    out.push([lerp(ctrl[i][0], ctrl[i + 1][0], e), lerp(ctrl[i][1], ctrl[i + 1][1], e)]); } return out;
+}
+function palomita(x, y, s, p = 1, col = C.bien, g = 8) {
+  if (p <= 0) return; const pts = [[-.5, 0], [-.12, .38], [.55, -.42]].map(([a, b]) => [x + a * s, y + b * s]);
+  trazo([...resample(pts.slice(0, 2), 4), ...resample(pts.slice(1), 4)], p, col, g);
+}
+function equis(x, y, s, p = 1, col = C.mal, g = 8) {
+  recta(x - s / 2, y - s / 2, x + s / 2, y + s / 2, prog(p, 0, .5), col, g); recta(x + s / 2, y - s / 2, x - s / 2, y + s / 2, prog(p, .5, 1), col, g);
+}
+
+// ---------- recortes PNG (collage) ----------
+let IM = null;
+function quitaMargen(im) {            // recorta el borde transparente: así los tamaños hablan de lo que se ve
+  try { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height).data; let x0 = c.width, y0 = c.height, x1 = 0, y1 = 0;
+    for (let j = 0; j < c.height; j += 2) for (let i = 0; i < c.width; i += 2) if (d[(j * c.width + i) * 4 + 3] > 20) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
+    const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1; o.getContext('2d').drawImage(c, -x0, -y0); return o;
+  } catch (e) { return im; }
+}
+if (RECORTES.length) cargarFotos(RECORTES.map(n => `recortes/${n}.png`)).then(a => { IM = {}; a.forEach((im, i) => IM[RECORTES[i]] = quitaMargen(im)); });
+// recorte('ramo', x, y, alto, giro) → pega el PNG con sombra de papel. Devuelve false si ese recorte no existe.
+function recorte(nombre, x, y, h, rot = 0, filtro = 'none') {
+  const im = IM && IM[nombre]; if (!im) return false; const w = h * im.width / im.height;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.filter = filtro;
+  ctx.shadowColor = 'rgba(40,28,20,.38)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 14; ctx.drawImage(im, -w / 2, -h / 2, w, h); ctx.restore(); return true;
+}
+
+// ---------- personaje pixel de ejemplo: una maceta con cara ----------
+// Cada letra es un color de PIXEL_COL; el punto es vacío. Dibuja el tuyo cambiando la grilla: que SIMBOLICE tu tema.
+const PIXEL = [
+  '.....HH.HH.....',
+  '....HHHHHHH....',
+  '.....HHHHH.....',
+  '.......T.......',
+  '..KKKKKKKKKKK..',
+  '..KMMMMMMMMMK..',
+  '..KKKKKKKKKKK..',
+  '...KMMMMMMMK...',
+  '...KMOMMMOMK...',
+  '...KMOMMMOMK...',
+  '...KMMMBMMMK...',
+  '....KMMMMMK....',
+  '....KKKKKKK....',
+];
+const PIXEL_COL = { H: C.hoja, T: '#3f8f4f', K: '#3a2a22', M: '#d98a5f', O: '#22171a', B: '#ffb4a2' };
+function personaje(gx, gy, U, t, o = {}) {          // gx, gy = dónde pisa · U = tamaño de cada pixel
+  const salto = o.salta ? Math.abs(Math.sin(t * 6)) * U * 1.6 : Math.sin(t * 2.4) * U * .12, parpadea = (t % 3.1) < .13;
+  const cols = PIXEL[0].length, x0 = Math.round(gx - cols / 2 * U), y0 = Math.round(gy - PIXEL.length * U - salto);
+  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(gx - 4 * U, gy - U * .3, 8 * U, U * .6);
+  PIXEL.forEach((fila, y) => [...fila].forEach((k, x) => { if (k === '.') return;
+    ctx.fillStyle = (k === 'O' && parpadea && y === 8) ? PIXEL_COL.M : PIXEL_COL[k]; ctx.fillRect(x0 + x * U, y0 + y * U, U + .5, U + .5); }));
+}
+
+// ---------- subtítulo: el trozo entero y la palabra que suena, en el color de acento ----------
+const TROZOS = LINEAS.map(l => { const out = []; let cur = '';
+  for (const w of l.txt.split(' ')) { if (cur && (cur + ' ' + w).length > 22) { out.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w;
+    if (/[.:?]$/.test(w) && cur.length > 9) { out.push(cur); cur = ''; } }
+  if (cur) out.push(cur);
+  const tot = out.reduce((s, x) => s + x.length + 3, 0); let a = 0;
+  return out.map(x => { const r = { x, a: a / tot, b: (a + x.length + 3) / tot }; a += x.length + 3; return r; }); });
+function subtitulo(i, u, y) {
+  if (!SUBTITULOS) return;
+  const k = u / LINEAS[i].d; if (k < 0 || k > 1.02) return;
+  const tz = TROZOS[i].find(z => k >= z.a && k < z.b) || TROZOS[i][TROZOS[i].length - 1];
+  const e = fin((k - tz.a) * LINEAS[i].d, 0, .14), pal = tz.x.split(' ');
+  const cual = Math.min(pal.length - 1, Math.floor(clamp((k - tz.a) / (tz.b - tz.a)) * pal.length));
+  ctx.save(); ctx.translate(540, y + (1 - e) * 10); ctx.globalAlpha = e;
+  ctx.font = `800 56px ${SANS}`; const w = ctx.measureText(tz.x).width, esp = ctx.measureText(' ').width;
+  caja(-w / 2 - 26, -44, w + 52, 88, 18, 'rgba(8,8,12,.84)');
+  let x = -w / 2;
+  pal.forEach((p, j) => { txt(p, x, 2, 56, { al: 'left', col: (j === cual || p.includes(PALABRA_CTA)) ? C.acento : '#ffffff' }); x += ctx.measureText(p).width + esp; });
+  ctx.restore();
+}
+
+// ---------- cierre: la caja de comentario que se escribe sola ----------
+function comentario(u, d, t, y = 760) {
+  txt('Comenta', 540, y - 250, 64, { serif: true, it: true, peso: 500, col: C.gris, a: fin(u, 0) });
+  const z = pop(u, .15); ctx.save(); ctx.translate(540, y - 110); ctx.scale(z, z); txt(PALABRA_CTA, 0, 0, 190, { col: C.acento }); ctx.restore();
+  const a = fin(u, .7); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a;
+  caja(150, y + 60, 780, 124, 62, C.oscuro, 'rgba(255,255,255,.22)', 3);
+  const n = Math.floor(prog(u, 1.0, 1.0 + PALABRA_CTA.length * .13) * PALABRA_CTA.length), escrito = PALABRA_CTA.slice(0, n), enviado = u > 1.3 + PALABRA_CTA.length * .13;
+  if (!n) txt('Agrega un comentario…', 200, y + 124, 40, { al: 'left', peso: 500, col: C.gris });
+  else txt(escrito, 200, y + 124, 46, { al: 'left', col: C.tinta });
+  if (n && !enviado && (t % .8) < .45) { ctx.font = `800 46px ${SANS}`; const w = ctx.measureText(escrito).width; ctx.fillStyle = C.acento; ctx.fillRect(206 + w, y + 100, 4, 48); }
+  ctx.fillStyle = enviado ? C.bien : C.acento; ctx.beginPath(); ctx.arc(868, y + 122, 44, 0, TAU); ctx.fill();
+  if (enviado) palomita(868, y + 122, 44, 1, '#0c0d12', 7); else { ctx.strokeStyle = '#0c0d12'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.moveTo(868, y + 142); ctx.lineTo(868, y + 102); ctx.moveTo(850, y + 120); ctx.lineTo(868, y + 102); ctx.lineTo(886, y + 120); ctx.stroke(); }
+  ctx.restore();
+  const b = pop(u, 1.75 + PALABRA_CTA.length * .13); if (b <= 0) return;
+  ctx.save(); ctx.translate(540, y + 330); ctx.scale(b, b);
+  caja(-330, -70, 660, 140, 30, C.acento); txt(MENSAJE[0], 0, -22, 40, { col: '#0c0d12' }); txt(MENSAJE[1], 0, 28, 34, { col: '#0c0d12', peso: 600 }); ctx.restore();
+}
+
+// =====================================================================================
+// TUS ESCENAS: una por frase. Cada una recibe u (segundos desde que arranca), d (su duración) y t (tiempo global).
+// Regla: en cada escena pasa UNA cosa, y es lo que la frase nombra.
+// =====================================================================================
+
+// Piezas del ejemplo (una florería). Bórralas y dibuja las de tu tema.
+function flor(x, y, r, col, abre = 1, caida = 0) {      // caida 0 = erguida, 1 = marchita
+  if (abre <= .01) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(caida * .9);
+  for (let k = 0; k < 6; k++) { const a = k / 6 * TAU; ctx.fillStyle = col; ctx.beginPath();
+    ctx.ellipse(Math.cos(a) * r * .55 * abre, Math.sin(a) * r * .55 * abre, r * .42 * abre, r * .3 * abre, a, 0, TAU); ctx.fill(); }
+  ctx.fillStyle = C.sol; ctx.beginPath(); ctx.arc(0, 0, r * .26 * abre, 0, TAU); ctx.fill(); ctx.restore();
+}
+const TALLO = (caida = 0) => curva([[540, 1180], [540 + caida * 40, 960], [540 + caida * 150, 800], [540 + caida * 290, 760 + caida * 150]]);
+function florDeLinea(p, caida = 0, col = C.acento) {      // tallo que se traza + flor en la punta
+  const pts = TALLO(caida); trazo(pts, p, C.hoja, 7);
+  if (p > .45) trazo(curva([[540, 1040], [470, 1000], [430, 940]]), prog(p, .45, .7), C.hoja, 6);
+  if (p > .8) { const [fx, fy] = pts[pts.length - 1]; flor(fx, fy, 120, caida > .5 ? C.gris : col, back(prog(p, .8, 1)), caida); }
+}
+function florero(nivel = .5, a = 1) {                     // florero de línea con agua adentro
+  ctx.save(); ctx.globalAlpha *= a;
+  const y1 = 1380, y0 = 1180, hAgua = (y1 - y0 - 16) * clamp(nivel);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(400, y0, 280, y1 - y0, [0, 0, 44, 44]); ctx.clip();
+  ctx.fillStyle = C.agua; ctx.globalAlpha *= .45; ctx.fillRect(400, y1 - hAgua, 280, hAgua); ctx.restore();
+  trazo([[400, y0], [400, y1 - 44], [444, y1], [636, y1], [680, y1 - 44], [680, y0]], 1, C.tinta, 6);
+  ctx.restore();
+}
+
+const ESC = [];
+const SUBE = -100;     // el dibujo del ejemplo sube para no chocar con el subtítulo
+const alto = f => { ctx.save(); ctx.translate(0, SUBE); f(); ctx.restore(); };
+
+// 0 · APERTURA: una imagen que frena el dedo + gancho en tiras grandes (se pintan en draw, clavadas).
+//     Con RECORTES usa tus PNG; sin ellos, se dibuja un ramo con código sobre papel claro.
+ESC[0] = (u, d, t) => {
+  const hay = recorte(RECORTES[0], 540, 900, 860, -.04);
+  if (RECORTES[1]) recorte(RECORTES[1], 800, 1150, 340, .25);
+  if (!hay) alto(() => {
+    ctx.save(); ctx.shadowColor = 'rgba(40,28,20,.3)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 14;
+    ctx.fillStyle = '#c9a57a'; ctx.beginPath(); ctx.moveTo(380, 980); ctx.lineTo(700, 980); ctx.lineTo(600, 1380); ctx.lineTo(480, 1380); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    [[410, 880, 120, C.acento], [560, 800, 140, '#ffb4a2'], [690, 900, 115, C.sol], [490, 720, 105, '#ffd9c7'], [640, 700, 95, C.acento]]
+      .forEach(([x, y, r, col], k) => { ctx.save(); ctx.shadowColor = 'rgba(40,28,20,.25)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 8; flor(x, y, r, col, 1, Math.sin(t * 1.3 + k) * .04); ctx.restore(); });
+    ctx.fillStyle = '#3a2a22'; ctx.fillRect(470, 1150, 140, 22);
+  });
+  estrellita(250, 720, 34, '255,122,89', 1); estrellita(850, 620, 24, '255,122,89', 1); estrellita(860, 1420, 18, '58,42,34', 1);
+};
+
+// 1 · EL PROBLEMA: dibujo de línea que se traza solo y luego se cae.
+ESC[1] = (u, d, t) => {
+  ganchoChico('no es la flor');
+  const p = fin(u, .05, 1.0), caida = ease(prog(u, 1.3, 2.2));
+  alto(() => florDeLinea(p, caida));
+  equis(820, 560, 110, prog(u, 2.0, 2.5));
+};
+
+// 2 · PASO 1: el corte en diagonal.
+ESC[2] = (u, d, t) => {
+  numero(1, 200, 420, pop(u, 0));
+  txt('corte en diagonal', 300, 424, 54, { al: 'left', col: C.tinta, a: fin(u, .2) });
+  trazo(curva([[540, 700], [530, 900], [540, 1200]]), fin(u, .1, .7), C.hoja, 9);
+  flor(540, 680, 130, C.acento, back(prog(u, .5, .9)));
+  recta(430, 1260, 650, 1140, fin(u, 1.1, .4), C.acento, 8, { raya: [22, 16] });
+  palomita(790, 1200, 110, prog(u, 1.6, 2.0));
+};
+
+// 3 · PASO 2: el agua sube dentro del florero.
+ESC[3] = (u, d, t) => {
+  numero(2, 200, 420, pop(u, 0));
+  txt('agua nueva', 300, 424, 54, { al: 'left', col: C.tinta, a: fin(u, .2) });
+  alto(() => { florero(lerp(.12, .86, ease(prog(u, .5, 1.7))));
+    trazo(curva([[540, 1340], [530, 1000], [540, 800]]), 1, C.hoja, 9); flor(540, 780, 130, C.acento); });
+  for (let k = 0; k < 3; k++) { const f = ((u * .9 + k / 3) % 1); if (u > .4 && u < 1.9) { ctx.fillStyle = C.agua; ctx.globalAlpha = 1 - f; ctx.beginPath(); ctx.arc(820 + k * 26, 900 + f * 240, 12, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; } }
+};
+
+// 4 · PASO 3: el sol se aleja (el florero se queda; lo que se mueve es lo que la frase nombra).
+ESC[4] = (u, d, t) => {
+  numero(3, 200, 420, pop(u, 0));
+  txt('lejos del sol', 300, 424, 54, { al: 'left', col: C.tinta, a: fin(u, .2) });
+  alto(() => { florero(.86);
+    trazo(curva([[540, 1340], [530, 1000], [540, 800]]), 1, C.hoja, 9); flor(540, 780, 130, C.acento); });
+  const k = ease(prog(u, .7, 1.9)), sx = lerp(820, 1000, k), sy = lerp(760, 560, k), a = lerp(1, .35, k);
+  aro(sx, sy, 80, 1, C.sol, 7, { a });
+  for (let r = 0; r < 8; r++) { const ang = r / 8 * TAU + t * .5; recta(sx + Math.cos(ang) * 108, sy + Math.sin(ang) * 108, sx + Math.cos(ang) * 150, sy + Math.sin(ang) * 150, 1, C.sol, 6, { a }); }
+};
+
+// 5 · EL RESULTADO: el personaje festeja. Lo que la frase promete («vivo») se ve: la flor erguida y abierta.
+ESC[5] = (u, d, t) => {
+  alto(() => { florero(.86, fin(u, 0));
+    trazo(curva([[540, 1340], [530, 1000], [540, 800]]), fin(u, 0, .6), C.hoja, 9); flor(540, 780, 150, C.acento, back(prog(u, .4, .9))); });
+  [[300, 620], [790, 560], [250, 900], [840, 880]].forEach(([x, y], k) => estrellita(x, y, 30 * pop(u, .9 + k * .12), '255,209,102', 1));
+  if (u > .8) personaje(250, 1290, 15, t, { salta: u > 1.2 });
+};
+
+// 6 · CIERRE: la palabra, la caja de comentario que se escribe sola y el regalo que llega.
+ESC[6] = (u, d, t) => { comentario(u, d, t, 700); personaje(880, 1320, 11, t, { salta: u > 2.3 }); };
+
+// =====================================================================================
+// EL CUADRO (casi nunca hay que tocarlo)
+// La escena se dibuja en una capa aparte: así se le suma su propio halo (neón) sin lavar el dibujo.
+// =====================================================================================
+const CAPA = document.createElement('canvas'); CAPA.width = W; CAPA.height = H; const capa = CAPA.getContext('2d');
+const ES_CLARA = new Set(CLARAS), ES_CONTINUA = new Set(CONTINUA);
+function draw(frame) {
+  const t = frame / FPS, [i, u] = escenaEn(t), d = LINEAS[i].d + PAUSA, clara = ES_CLARA.has(i);
+  MOV = M(t); const w = wig(t); WX = w[0] * MOV; WY = w[1] * MOV;
+  const lienzo = ctx;
+  lienzo.setTransform(1, 0, 0, 1, 0, 0); lienzo.globalAlpha = 1; lienzo.filter = 'none';
+  lienzo.fillStyle = clara ? C.papel : C.fondo; lienzo.fillRect(0, 0, W, H);
+  ctx = capa; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.setLineDash([]); ctx.shadowColor = 'transparent'; ctx.clearRect(0, 0, W, H);
+  ctx.save(); ctx.translate(WX, WY); ctx.globalAlpha = (ES_CONTINUA.has(i) || i === 0) ? 1 : fin(u, 0, .28);   // el primer cuadro ya tiene contenido
+  if (ESC[i]) ESC[i](u, d, t);
+  ctx.restore();
+  ctx = lienzo;
+  if (clara) { const g = ctx.createRadialGradient(540, 860, 300, 540, 860, 1300); g.addColorStop(0, 'rgba(120,90,60,0)'); g.addColorStop(1, 'rgba(120,90,60,.2)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+  else if (NEON.length) {
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (const [b, a] of NEON) { ctx.filter = `blur(${b}px)`; ctx.globalAlpha = a; ctx.drawImage(CAPA, 0, 0); }
+    ctx.restore(); ctx.filter = 'none';
+  }
+  ctx.drawImage(CAPA, 0, 0);
+  // el gancho grande: dos tiras clavadas (no tiemblan) mientras dura la apertura
+  if (i === 0 && GANCHO.length) { tira(GANCHO[0], 330, 62, C.oscuro, '#ffffff'); if (GANCHO[1]) tira(GANCHO[1], 436, 88, C.acento, C.oscuro, .015); }
+  subtitulo(i, u, 1410);
+}
+arrancar(draw);
+</script>
+</body>
+</html>

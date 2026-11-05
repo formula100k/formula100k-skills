@@ -1,0 +1,514 @@
+<title>Pizarra CEO de Instagram</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: barra de modos arriba · Pizarra 16:9 de pizarrón blanco con plumones · Guion como hoja de lectura */
+:root{
+  --bg:#eef0ee; --fg:#1d2321; --muted:#5d6763; --line:#cfd5d2; --panel:#ffffff; --accent:#1f5fbf;
+  --board:#fbfbf8; --ink:#1b1f22; --red:#d23a2f; --blue:#1f5fbf; --green:#1c8a4a; --yellow:#f3c623;
+  --marker:"Permanent Marker","Comic Sans MS",cursive;
+  --hand:"Caveat","Bradley Hand",cursive;
+  --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151918;--fg:#e8ecea;--muted:#9aa5a0;--line:#2c3431;--panel:#1d2321;--accent:#7fb0ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151918;--fg:#e8ecea;--muted:#9aa5a0;--line:#2c3431;--panel:#1d2321;--accent:#7fb0ff;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:16px}
+header.top h1{font-family:var(--marker);font-weight:400;font-size:1.5rem;margin:0;text-wrap:balance}
+header.top p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:inherit;font-weight:700;border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- PIZARRA ---------- */
+#stage{position:relative}
+.board{container-type:inline-size;aspect-ratio:16/9;width:100%;max-width:100%;background:var(--board);color:var(--ink);border-radius:6px;
+  box-shadow:0 0 0 1px #d9dcd6, 0 12px 30px -12px rgba(0,0,0,.35);position:relative;overflow:hidden;
+  background-image:radial-gradient(circle at 18% 22%,rgba(0,0,0,.025),transparent 40%),radial-gradient(circle at 80% 75%,rgba(0,0,0,.03),transparent 45%)}
+.board.fs{border-radius:0;box-shadow:none}
+.slide{position:absolute;inset:0;padding:5cqw 6cqw;display:flex;flex-direction:column;gap:2cqw}
+.slide[hidden]{display:none!important}
+.kick{font-family:var(--hand);font-weight:700;font-size:2.6cqw;color:var(--blue);line-height:1}
+.mk{font-family:var(--marker);line-height:1.02;letter-spacing:.01em}
+.h-xl{font-size:8.4cqw}.h-l{font-size:6cqw}.h-m{font-size:4.2cqw}.h-s{font-size:3cqw}
+.hand{font-family:var(--hand);font-weight:500;font-size:3.1cqw;line-height:1.15}
+.hand.b{font-weight:700}
+.small{font-size:2.3cqw}
+.red{color:var(--red)}.blue{color:var(--blue)}.green{color:var(--green)}
+.circ{position:relative;display:inline-block;padding:0 .25em}
+.circ::after{content:"";position:absolute;inset:-.18em -.12em -.12em -.22em;border:.09em solid var(--red);border-radius:52% 46% 55% 44%/50% 58% 42% 50%;transform:rotate(-2deg);pointer-events:none}
+.hl{background:linear-gradient(transparent 55%,rgba(243,198,35,.75) 55%,rgba(243,198,35,.75) 92%,transparent 92%);padding:0 .1em}
+.strike{position:relative;display:inline-block;opacity:.75}
+.strike::after{content:"";position:absolute;left:-4%;right:-4%;top:52%;height:.09em;background:var(--red);transform:rotate(-4deg);border-radius:.1em}
+.row{display:flex;gap:3cqw;align-items:stretch}
+.row.c{align-items:center}
+.col{display:flex;flex-direction:column;gap:1.4cqw;min-width:0}
+.box{border:.32cqw solid var(--ink);border-radius:1.2cqw 1.6cqw 1cqw 1.8cqw;padding:1.6cqw 2cqw;flex:1;min-width:0}
+.box.blue{border-color:var(--blue)}.box.red{border-color:var(--red)}.box.green{border-color:var(--green)}
+.num{font-family:var(--marker);font-size:5cqw;line-height:1}
+.arrow{width:7cqw;flex:none;align-self:center}
+.arrow path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:1.1cqw}
+.list li{font-family:var(--hand);font-size:3.1cqw;line-height:1.15;padding-left:3cqw;position:relative}
+.list li::before{content:"→";position:absolute;left:0;color:var(--blue);font-weight:700}
+.quote{font-family:var(--hand);font-weight:700;font-size:4cqw;line-height:1.1;border-left:.5cqw solid var(--red);padding-left:2cqw}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;gap:2cqw}
+.min{font-family:var(--hand);font-size:2cqw;color:#6b7370}
+.tag{display:inline-block;font-family:var(--hand);font-weight:700;font-size:2.2cqw;background:var(--ink);color:var(--board);padding:.2cqw 1.2cqw;border-radius:.6cqw;transform:rotate(-1.5deg)}
+.yt{display:flex;gap:2.4cqw;align-items:center;border:.32cqw solid var(--ink);border-radius:1.4cqw;padding:2cqw;background:#fff}
+.yt .play{width:11cqw;aspect-ratio:16/11;flex:none;border-radius:1.6cqw;background:var(--red);display:grid;place-items:center}
+.yt .play::after{content:"";border-left:3.4cqw solid #fff;border-top:2cqw solid transparent;border-bottom:2cqw solid transparent;margin-left:.8cqw}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw 3cqw}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4cqw}
+
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+.ctrl .g{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:8px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--fg)}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);min-width:5ch;text-align:center}
+.notes{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.notes h3{margin:0 0 6px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.notes p{margin:0 0 8px;max-width:75ch}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chips button{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:4px 10px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.help{color:var(--muted);font-size:.85rem;margin-top:8px}
+#stage:fullscreen{background:#000;display:grid;place-items:center}
+#stage:fullscreen .board{width:min(100vw,177.78vh)}
+
+/* ---------- CAPTURAS ---------- */
+.split{display:grid;grid-template-columns:1fr 1.1fr;gap:3cqw;flex:1;min-height:0}
+.split>.col{min-height:0}
+.shot{margin:0;display:flex;flex-direction:column;gap:.6cqw;min-height:0;flex:1 1 0}
+.shot img{display:block;width:100%;flex:1 1 0;min-height:0;object-fit:cover;object-position:center;border:.18cqw solid #d6d8d2;border-radius:.6cqw;background:#fff;box-shadow:0 .4cqw 1.2cqw -.6cqw rgba(0,0,0,.35)}
+.shot figcaption{font-family:var(--hand);font-weight:700;font-size:1.9cqw;line-height:1.1;color:#4a524f}
+.shot.sm{flex:.62 1 0}
+.shot.plain img{object-fit:contain;border:0;box-shadow:none}
+.phones{display:flex;gap:2cqw;justify-content:center;align-items:stretch;min-height:0;min-width:0}
+.shot.phone{flex:0 0 auto;width:auto}
+.shot.phone img{flex:1 1 0;width:auto;aspect-ratio:9/16;height:100%;max-height:33cqw}
+.shot.phone{max-width:19cqw}
+.shot.left img{object-position:left center}
+.shot.wide-in{flex:1 1 0;min-width:0}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;flex:1;min-height:0}
+.step{position:relative;display:flex;min-height:0}
+.step .num{position:absolute;z-index:2;top:-1.2cqw;left:-1cqw;background:var(--board);border-radius:50%;width:5.6cqw;height:5.6cqw;display:grid;place-items:center;font-size:3.6cqw;border:.3cqw solid var(--blue)}
+.h-cierre{font-size:3.3cqw}
+.list.tight li{font-size:2.6cqw}
+.facts{display:flex;flex-direction:column;gap:1cqw;margin-top:.6cqw}
+.facts>div{display:flex;flex-direction:column;border-left:.4cqw solid var(--ink);padding-left:1.4cqw}
+
+/* ---------- GUION ---------- */
+#guion{max-width:780px}
+.warn{background:var(--panel);border:1px solid var(--line);border-left:4px solid #d9a400;border-radius:8px;padding:12px 16px;margin-bottom:20px}
+.warn strong{display:block;margin-bottom:4px}
+.warn ul{margin:0;padding-left:18px}
+.sec{border-top:1px solid var(--line);padding:20px 0}
+.sec .meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;font-size:.82rem;color:var(--muted);margin-bottom:6px}
+.sec .meta b{color:var(--fg);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.sec h2{font-family:var(--marker);font-weight:400;font-size:1.35rem;margin:0 0 10px;text-wrap:balance}
+.say{font-size:1.18rem;line-height:1.6;margin:0 0 10px}
+.say p{margin:0 0 10px}
+.cta{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:8px;padding:10px 14px;font-weight:700}
+.go{font-size:.85rem;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;font:inherit;font-weight:700;text-decoration:underline}
+a{color:var(--accent)}
+@media (max-width:640px){.say{font-size:1.05rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Todo lo que dijo el CEO de Instagram</h1>
+      <p>Pizarra para grabar el video de YouTube y guion por bloques</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button id="tab-pizarra" role="tab" aria-selected="true">Pizarra</button>
+      <button id="tab-guion" role="tab" aria-selected="false">Guion</button>
+    </div>
+  </header>
+
+  <section id="pizarra">
+    <div id="stage"><div class="board" id="board"></div></div>
+    <div class="ctrl">
+      <div class="g">
+        <button class="btn" id="prev">← Anterior</button>
+        <span class="count" id="count">1 / 1</span>
+        <button class="btn" id="next">Siguiente →</button>
+      </div>
+      <div class="g">
+        <button class="btn" id="toggleNotes">Ocultar lo que digo</button>
+        <button class="btn" id="fs">Pantalla completa</button>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="notes" id="notes"><h3>Lo que digo en esta pizarra</h3><div id="notesBody"></div></div>
+    <p class="help">Teclas: ← → para pasar · F para pantalla completa · N para ocultar las notas.</p>
+  </section>
+
+  <section id="guion" hidden>
+    <div class="warn">
+      <strong>⚠️ Antes de grabar</strong>
+      <ul>
+        <li>Mosseri nunca dice «2027». Habla de lo que viene y aclara que quien promete algo a 1 o 2 años «se pasa de confiado». El título sirve como encuadre, pero en el guion no le pongas fechas en la boca.</li>
+        <li>Los anuncios dentro del video, las suscripciones y los pagos son cosas que <b>van a probar</b>, no anuncios cerrados.</li>
+        <li>Confirma en el video estos nombres, porque la transcripción pudo oírlos mal: Instants, Muse y Edits.</li>
+        <li>CTA propuesto: <b>tu regalo de carruseles</b> (uno que ya tengas). Confirma el link de la descripción antes de grabar.</li>
+      </ul>
+    </div>
+    <div id="guionBody"></div>
+  </section>
+</div>
+
+<script>
+const ARROW = '<svg class="arrow" viewBox="0 0 100 40" aria-hidden="true"><path d="M4 22 C30 14 60 26 90 19"/><path d="M76 8 L92 19 L77 31"/></svg>';
+const SRC = 'https://www.youtube.com/watch?v=sxizdQ2hRfk';
+
+const IMG = (src, cap, cls='') => `<figure class="shot ${cls}"><img src="img/${src}" alt="${cap}" loading="eager"><figcaption>${cap}</figcaption></figure>`;
+const S = [
+{ id:'portada', chip:'Portada', min:'',
+  html:`<div class="split">
+    <div class="col" style="justify-content:center">
+      <div class="kick">lo que viene en Instagram</div>
+      <div class="mk h-xl">TODO LO QUE DIJO</div>
+      <div class="mk h-l">el <span class="circ">CEO</span> de Instagram</div>
+      <div class="hand b" style="font-size:4.4cqw">para <span class="hl">2027</span></div>
+      <span class="tag" style="align-self:flex-start;margin-top:1.5cqw">1 h 11 min de entrevista → 10 min</span>
+    </div>
+    ${IMG('mosseri_portada.jpg','Adam Mosseri, jefe de Instagram · Colin and Samir','big')}
+  </div>`,
+  say:[`En una entrevista de una hora y once minutos, el jefe de Instagram contó lo que viene para la app. Hay cambios que te pueden dar alcance gratis si los usas primero, y cosas que dejaron de funcionar.`,
+       `La vi completa. Aquí va todo lo que importa si creas contenido para vender.`]},
+
+{ id:'fuente', chip:'Intro · de dónde sale', min:'',
+  html:`<div class="kick">de dónde sale todo esto</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">La entrevista completa</div>
+      <div class="hand">«Instagram CEO Reveals Biggest Update Yet»</div>
+      <div class="facts">
+        <div><span class="hand b blue small">QUIÉN HABLA</span><span class="mk h-s">Adam Mosseri</span><span class="hand small">jefe de Instagram hace casi 8 años</span></div>
+        <div><span class="hand b small">DÓNDE</span><span class="mk h-s">Colin and Samir</span><span class="hand small">podcast de creadores · link en la descripción</span></div>
+        <div><span class="hand b red small">CUÁNDO Y CUÁNTO</span><span class="mk h-s">26 oct 2026 · 1 h 11 min</span></div>
+      </div>
+    </div>
+    <div class="col">
+      ${IMG('estudio.jpg','El set de la entrevista · Colin, Samir y Mosseri')}
+      ${IMG('episodio_2024.jpg','Su entrevista anterior con ellos, junio de 2024','sm')}
+    </div>
+  </div>
+`,
+  say:[`Todo lo que te voy a contar sale de una sola fuente: la entrevista que Colin and Samir, un podcast de creadores en YouTube, le hicieron a Adam Mosseri, el jefe de Instagram. Salió el 26 de octubre y dura una hora y once minutos.`,
+       `No es la primera vez que hablan con él: hace dos años le hicieron otra entrevista, y esta vez le leyeron lo que dijo entonces. Te dejo el link en la descripción. Yo te traigo lo que dijo, con sus palabras, y lo que significa para ti si vendes con contenido.`]},
+
+{ id:'largo', chip:'1 · Videos largos', min:'min 01:00–05:30',
+  html:`<div class="kick">noticia 1 · lo más grande</div>
+  <div class="mk h-l">Instagram acepta <span class="hl">videos largos</span> <span class="hand b" style="font-size:3cqw">horizontales · de más de 1 hora</span></div>
+  <div class="trio">
+    <div class="step"><span class="num blue">1</span>${IMG('video_largo.jpg','Lo ves en el celular · el video de 15 min que mostraron')}</div>
+    <div class="step"><span class="num blue">2</span>${IMG('explorar_2x1.jpg','En Explorar ocupa 2 casillas')}</div>
+    <div class="step"><span class="num blue">3</span>${IMG('tele.jpg','Y lo sigues en la tele')}</div>
+  </div>
+  <div class="foot"><span class="min">capturas de los mockups que mostró Instagram en la entrevista</span><span class="min">«No sé si va a funcionar» · Mosseri</span></div>`,
+  say:[`Lo más grande: Instagram va a aceptar videos largos y horizontales, de más de una hora, que se ven en el celular y en la tele.`,
+       `Funciona así: ves un reel que es parte de un video largo, tocas y saltas al video completo. En Explorar aparecen como bloques que ocupan dos casillas. Y lo puedes seguir viendo en la tele.`,
+       `La idea de Instagram es que el video largo también viva como cortos. Van a crear herramientas para recortarlo en clips. El clip es la puerta, y quien quiere más entra al completo.`]},
+
+{ id:'subir', chip:'1b · Cómo se sube', min:'min 02:30',
+  html:`<div class="kick">noticia 1 · cómo se sube</div>
+  <div class="split">
+    <div class="col" style="justify-content:center">
+      <div class="mk h-m">Desde la computadora,</div>
+      <div class="mk h-m">igual que en <span class="circ">YouTube</span></div>
+      <ul class="list" style="margin-top:1.5cqw">
+        <li>subes el video horizontal</li>
+        <li>eliges o subes tu <b>miniatura</b></li>
+        <li>en los reels ya puedes elegir portada</li>
+      </ul>
+    </div>
+    <div class="col">
+      ${IMG('subir.jpg','La pantalla para subir un video largo')}
+      ${IMG('mockup_tele.jpg','El mismo video en el celular y en la tele','sm')}
+    </div>
+  </div>`,
+  say:[`Se sube desde la computadora, parecido a YouTube: subes el video y eliges o subes tu miniatura.`,
+       `Un detalle que dijo de paso: en los reels ya puedes elegir la portada. Si no lo estás haciendo, empieza hoy.`]},
+
+{ id:'porque', chip:'2 · Por qué ahora', min:'min 03:40–08:00',
+  html:`<div class="kick">noticia 2 · por qué cambió de opinión</div>
+  <div class="split">
+    <div class="col">
+      ${IMG('episodio_2024.jpg','Hace 2 años, en el mismo podcast')}
+      <div class="quote"><span class="strike">«No voy a hacer video largo»</span></div>
+      <div class="quote" style="border-color:var(--green)">Hoy: «El mundo cambió»</div>
+    </div>
+    <div class="col">
+      ${IMG('diagrama.jpg','Su idea: amigos → video corto → video largo','plain')}
+      <div class="box blue"><div class="hand b blue">YouTube, según Mosseri</div>
+        <div class="hand">en el celular: <b>plano</b> · en la tele: <span class="hl"><b>todo su crecimiento</b></span></div></div>
+    </div>
+  </div>`,
+  say:[`Hace dos años, en ese mismo podcast, Mosseri dijo que no iba a hacer video largo. Le leyeron su propia frase en la cara.`,
+       `Su respuesta: el mundo cambió. Según él, el tiempo que la gente pasa en YouTube desde el celular está plano, y todo su crecimiento viene de la tele. Instagram quiere estar donde está la gente.`]},
+
+{ id:'escuchar', chip:'3 · Cerrar y seguir escuchando', min:'min 07:00–08:30',
+  html:`<div class="kick">noticia 3 · lo que están probando</div>
+  <div class="split">
+    <div class="col" style="justify-content:center">
+      <div class="mk h-l">Cerrar la app y <span class="circ">seguir escuchando</span></div>
+      <ul class="list" style="margin-top:1cqw">
+        <li>descubres un podcast en Instagram</li>
+        <li>cierras la app y sigues en el auto</li>
+        <li>llegas a casa y sigues en la tele</li>
+      </ul>
+      <span class="tag" style="align-self:flex-start;margin-top:1cqw">todavía no está · lo hablaron «hace dos días»</span>
+    </div>
+    ${IMG('tele.jpg','Instagram en la tele, el mockup que mostraron','big')}
+  </div>`,
+  say:[`Una cosa que todavía no existe, pero que están hablando: poder cerrar Instagram y seguir escuchando, como un podcast. Y pasar el video a la tele sin cortes.`,
+       `Mosseri dijo que lo conversaron hace dos días. No está anunciado, así que tómalo como algo que están probando.`]},
+
+{ id:'dinero', chip:'4 · Cómo se cobra', min:'min 09:00–19:00 · 49:00–52:00',
+  html:`<div class="kick">noticia 4 · el dinero</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">3 formas de cobrar</div>
+      <div class="col" style="gap:1cqw">
+        <div class="box"><span class="mk h-s">1 · La plataforma</span><div class="hand small">programa chico · hoy les hace perder dinero</div></div>
+        <div class="box"><span class="mk h-s">2 · Tus fans</span><div class="hand small">suscripciones</div></div>
+        <div class="box red"><span class="mk h-s">3 · <span class="circ">Las marcas</span></span><div class="hand small">hoy es la forma principal</div></div>
+      </div>
+    </div>
+    <div class="col">
+      ${IMG('mosseri_dinero.jpg','«Si no ganan lo suficiente, no van a publicar»')}
+      <div class="hand small"><b>Van a probar:</b> anuncios antes y a mitad del video · suscripciones · bonos · un lugar para que marcas y creadoras se encuentren</div>
+    </div>
+  </div>`,
+  say:[`La pregunta que todas las creadoras le hicieron: ¿cómo se cobra?`,
+       `Él lo divide en tres: te paga la plataforma, te pagan tus fans o te pagan las marcas. Hoy en Instagram se cobra sobre todo con marcas. El programa de pagos de Instagram es chico y, según él, les hace perder dinero.`,
+       `Con el video largo van a probar de todo: anuncios antes y a mitad del video, suscripciones, bonos y un lugar para que marcas y creadoras se encuentren. Él mismo dice: si las creadoras no ganan lo suficiente, esto va a fracasar.`]},
+
+{ id:'ranking', chip:'5 · Cómo rankea', min:'min 34:00–38:00',
+  html:`<div class="kick">noticia 5 · qué premia el algoritmo</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">No rankea <span class="strike">solo por engagement</span></div>
+      <div class="col" style="gap:1cqw">
+        <div class="box blue"><span class="mk h-s blue">Original</span><div class="hand small">la creadora original le gana a la cuenta que recopila</div></div>
+        <div class="box green"><span class="mk h-s green">Oportunidad</span><div class="hand small">cualquier publicación tiene su chance</div></div>
+        <div class="box"><span class="mk h-s">Reciente</span><div class="hand small">lo que pasa hoy en el mundo</div></div>
+      </div>
+    </div>
+    <div class="col">
+      ${IMG('mosseri_ranking.jpg','Mosseri explicando cómo rankean')}
+      <div class="hand b">Una cuenta nueva puede tener <span class="hl">millones de vistas</span>. Hace 2 años era imposible.</div>
+    </div>
+  </div>`,
+  say:[`Mucha gente cree que Instagram solo premia el engagement. Mosseri dice que no.`,
+       `Premia tres cosas: que seas la creadora original y no una cuenta que recopila; que cualquier publicación tenga su oportunidad; y que el contenido sea reciente.`,
+       `Por eso dice que hoy una cuenta nueva puede tener millones de vistas, algo que hace dos años era imposible.`]},
+
+{ id:'metrica', chip:'6 · Métrica número 1', min:'min 45:00–47:00',
+  html:`<div class="kick">noticia 6 · la métrica que tienes que mirar</div>
+  <div class="split">
+    <div class="col" style="justify-content:center">
+      <div class="mk h-s">Si estás empezando, la número 1:</div>
+      <div class="mk h-xl"><span class="circ">ENVÍOS</span></div>
+      <div class="mk h-s">por cada persona que lo ve</div>
+      <div class="hand" style="margin-top:1cqw">2 · likes por persona que lo ve<br>3 · tiempo promedio que lo miran</div>
+      <div class="hand b blue">Pesa más para llegar a quien <u>no</u> te sigue</div>
+    </div>
+    ${IMG('mosseri_metrica.jpg','«Es de las métricas más importantes que puedes seguir»','big')}
+  </div>`,
+  say:[`Si estás empezando, la métrica más importante según él son los envíos: cuántas veces mandan tu video por cada persona que lo ve. Pesa todavía más para llegar a quien no te sigue.`,
+       `Después vienen los likes por cada persona que lo ve y el tiempo promedio de visualización. Y dijo que Instagram mira el tiempo de visualización menos que la competencia.`]},
+
+{ id:'carruseles', chip:'7 · Carruseles', min:'min 22:30–26:30',
+  html:`<div class="kick">noticia 7 · el formato del momento</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">Los carruseles tienen <span class="hl">su momento</span></div>
+      <div class="col" style="gap:1cqw">
+        <div class="hand"><b class="blue">1 · Con música</b> pueden salir entre los reels</div>
+        <div class="hand"><b class="blue">2 · Segunda oportunidad:</b> si no lo pasas, te lo muestra desde la lámina 2</div>
+        <div class="hand"><b class="blue">3 · Más profundo:</b> más guardados, envíos y likes</div>
+      </div>
+    </div>
+    <div class="phones">
+      ${IMG('carrusel_publish.jpg','El carrusel que les rindió más que sus videos','phone')}
+      ${IMG('bof.jpg','Cuentas de moda con carruseles tipo revista','phone')}
+    </div>
+  </div>`,
+  say:[`El formato del momento son los carruseles, y Mosseri dio tres razones.`,
+       `Uno: si le pones música, puede salir entre los reels. Dos: tiene segunda oportunidad. Si no lo pasaste, te lo vuelve a mostrar desde la lámina 2. Tres: genera más guardados, envíos y likes.`,
+       `Colin and Samir contaron que este carrusel, escrito como una revista, les dio más interacción que casi todo lo que publicaron en un tiempo.`],
+  cta:`Si quieres armar carruseles que vendan, te dejo gratis mi guía de carruseles: los formatos con el ejemplo terminado. El link está en la descripción.`},
+
+{ id:'funciones', chip:'8 · Funciones olvidadas', min:'min 26:30–33:00 · 40:00',
+  html:`<div class="kick">noticia 8 · lo que casi nadie usa</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">Funciones subestimadas</div>
+      <ul class="list tight">
+        <li><b>Canales de difusión</b>: gente que te deja avisarle cada vez que tienes una idea</li>
+        <li><b>Mejores amigos</b>: lo que más ilusión da</li>
+        <li><b>Mensajes directos</b>: ahí se comparte más que en historias o reels</li>
+        <li><b>Notas, Instants y Blends</b></li>
+      </ul>
+      <div class="quote" style="font-size:3cqw">«No tienes que usar todos los formatos.»</div>
+    </div>
+    <div class="phones">
+      ${IMG('perfil_mosseri.jpg','El canal de Mosseri, «Instagram advice»','phone')}
+    </div>
+  </div>`,
+  say:[`Le preguntaron qué funciones están más subestimadas. Para creadoras: los canales de difusión y la lista de mejores amigos. Él mismo tiene un canal con más de 300 mil personas.`,
+       `Y algo que casi nadie sabe: en Instagram se comparte más por mensajes directos que en historias o reels.`,
+       `Pero su consejo fue claro: no tienes que usar todos los formatos. Primero define quién eres, qué vendes y tu estrategia, y elige solo las herramientas que sirven a eso.`]},
+
+{ id:'ia', chip:'9 · IA', min:'min 52:00–1:01:00',
+  html:`<div class="kick">noticia 9 · inteligencia artificial</div>
+  <div class="split">
+    <div class="col">
+      <div class="mk h-m">Lo que cambia con la IA</div>
+      <div class="hand"><b>Personajes de IA:</b> rankean igual, pero <b>tienen que avisar</b> que son IA</div>
+      <div class="hand"><b class="red">Chistes robados</b> por personajes de IA → contenido <b>no original</b></div>
+      <div class="hand"><b>Hoy</b> el contenido de IA probablemente rankea peor</div>
+      <div class="hand b blue">Lo que viene: ver tu algoritmo y preguntarle «¿por qué vi esto?»</div>
+    </div>
+    <div class="phones">
+      ${IMG('ia_personaje.jpg','El personaje de IA que les mandaron','phone')}
+      ${IMG('algoritmo.jpg','«Tu algoritmo», la pantalla que revisaron en vivo','wide-in left')}
+    </div>
+  </div>`,
+  say:[`Sobre la IA: las cuentas con personajes hechos con IA rankean igual que las humanas, pero ahora tienen que avisar que son IA.`,
+       `Hay un problema nuevo: personajes de IA que roban chistes de comediantes o recrean los reels más virales. Instagram lo va a tratar como contenido no original.`,
+       `Y admitió que hoy el contenido hecho con IA probablemente rankea peor, porque el sistema todavía no lo entiende bien. A futuro quiere que puedas ver tu algoritmo y preguntarle por qué te mostró algo. En la entrevista revisaron en vivo esa pantalla de «Tu algoritmo».`]},
+
+{ id:'miedo', chip:'10 · El miedo a la IA', min:'min 1:03:00–1:06:00',
+  html:`<div class="kick">noticia 10 · lo que siente la gente</div>
+  <div class="split">
+    <div class="col" style="justify-content:center">
+      <div class="mk h-l">El rechazo a la IA <span class="red">crece mes a mes</span></div>
+      <div class="hand">y según él «va a seguir empeorando», sobre todo en las industrias creativas</div>
+      <div class="mk h-m" style="margin-top:1.5cqw">En el fondo:<br>miedo a <span class="circ">quedarse atrás</span></div>
+    </div>
+    ${IMG('mosseri_miedo.jpg','«Más ansiedad, más frustración y más enojo con la IA»','big')}
+  </div>`,
+  say:[`El dato más fuerte de la entrevista: Mosseri dice que el enojo con la IA crece mes a mes y que va a seguir empeorando, sobre todo entre creativos.`,
+       `Para él, en el fondo no es miedo a la IA. Es miedo a quedarse atrás. Y su postura es usarla para darle poder a la gente creativa.`]},
+
+{ id:'aprendio', chip:'11 · Lo que aprendió', min:'min 1:08:00–1:11:00',
+  html:`<div class="kick">lo que aprendió creando contenido</div>
+  <div class="split">
+    <div class="col">
+      <div class="quote" style="font-size:4.2cqw">«Lo que funciona hoy puede no funcionar en 6 meses»</div>
+      <div class="hand">Historia → <span class="strike">green screen</span> (funcionó un mes) → <b class="green">carrusel</b> (funciona hace 1 año)</div>
+      <div class="mk h-m" style="margin-top:auto">La misma idea, <span class="hl">otro formato</span></div>
+    </div>
+    <div class="phones">
+      ${IMG('carrusel_mosseri.jpg','Su carrusel para destacar creadoras pequeñas','phone')}
+    </div>
+  </div>`,
+  say:[`Lo último que contó fue lo que aprendió él creando contenido.`,
+       `Tiene una sección para destacar creadoras pequeñas. La hizo en historias, después con green screen, que funcionó un mes y se cayó, y hoy en carrusel, que funciona hace un año. No cambió el algoritmo: cambió lo que le llama la atención a la gente.`,
+       `Su frase: lo que funciona hoy puede no funcionar en seis meses. La idea se queda. El formato cambia.`]},
+
+{ id:'cierre', chip:'Qué haces tú', min:'',
+  html:`<div class="kick">entonces, ¿qué haces tú con esto?</div>
+  <div class="split">
+    <div class="col" style="gap:2cqw;justify-content:center">
+      <div class="row c"><div class="num blue">1</div><div class="mk h-cierre">Haz contenido que la gente <span class="hl">mande</span></div></div>
+      <div class="row c"><div class="num blue">2</div><div class="mk h-cierre">Sube <span class="circ">carruseles</span> con música</div></div>
+      <div class="row c"><div class="num blue">3</div><div class="mk h-cierre">Cuando salga el video largo, <span class="hl">pruébalo primero</span></div></div>
+    </div>
+    <div class="phones">
+      ${IMG('carrusel_publish.jpg','Un carrusel tipo revista, el formato del momento','phone')}
+    </div>
+  </div>
+  <div class="foot"><span class="tag">Guía de carruseles gratis · link en la descripción</span><span class="min">fuente: Colin and Samir × Adam Mosseri</span></div>`,
+  say:[`Entonces, ¿qué haces tú con todo esto? Tres cosas.`,
+       `Uno: haz contenido que la gente quiera mandarle a alguien. Es la métrica que más mira Instagram para mostrarte a quien no te sigue.`,
+       `Dos: sube carruseles con música, porque hoy tienen doble oportunidad.`,
+       `Tres: cuando salga el video largo, pruébalo primero. Cada formato nuevo premia a quien llega antes.`],
+  cta:`La guía de carruseles es gratis y está en la descripción. Ahí tienes los formatos con el ejemplo terminado para que tu próximo carrusel venda.`}
+];
+
+const board = document.getElementById('board');
+const chips = document.getElementById('chips');
+const notesBody = document.getElementById('notesBody');
+const count = document.getElementById('count');
+let i = 0;
+
+S.forEach((s, k) => {
+  const d = document.createElement('div');
+  d.className = 'slide'; d.hidden = k !== 0; d.innerHTML = s.html;
+  d.setAttribute('aria-label', s.chip);
+  board.appendChild(d);
+  const b = document.createElement('button');
+  b.textContent = (k+1) + '. ' + s.chip; b.onclick = () => show(k);
+  chips.appendChild(b);
+});
+
+function show(k){
+  i = Math.max(0, Math.min(S.length-1, k));
+  [...board.children].forEach((el, n) => el.hidden = n !== i);
+  [...chips.children].forEach((el, n) => el.setAttribute('aria-current', n === i));
+  count.textContent = (i+1) + ' / ' + S.length;
+  const s = S[i];
+  notesBody.innerHTML = s.say.map(p => `<p>${p}</p>`).join('') + (s.cta ? `<p class="cta">CTA: ${s.cta}</p>` : '');
+  try { localStorage.setItem('pz-i', i); } catch(e){}
+}
+document.getElementById('prev').onclick = () => show(i-1);
+document.getElementById('next').onclick = () => show(i+1);
+
+const notes = document.getElementById('notes');
+const tn = document.getElementById('toggleNotes');
+function toggleNotes(){ notes.hidden = !notes.hidden; tn.textContent = notes.hidden ? 'Mostrar lo que digo' : 'Ocultar lo que digo'; }
+tn.onclick = toggleNotes;
+
+const stage = document.getElementById('stage');
+function fs(){
+  if (document.fullscreenElement) { document.exitFullscreen?.(); return; }
+  stage.requestFullscreen?.().catch(()=>{});
+}
+document.getElementById('fs').onclick = fs;
+document.addEventListener('fullscreenchange', () => board.classList.toggle('fs', !!document.fullscreenElement));
+
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input,textarea')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i+1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i-1); }
+  else if (e.key === 'f' || e.key === 'F') fs();
+  else if (e.key === 'n' || e.key === 'N') toggleNotes();
+});
+
+// Guion
+const gb = document.getElementById('guionBody');
+gb.innerHTML = S.map((s, k) => `
+  <article class="sec">
+    <div class="meta"><b>Pizarra ${k+1}</b>${s.min ? `<span>entrevista ${s.min}</span>` : ''}<button class="go" data-k="${k}">ver pizarra</button></div>
+    <h2>${s.chip.replace(/^\d+ · /,'')}</h2>
+    <div class="say">${s.say.map(p => `<p>${p}</p>`).join('')}</div>
+    ${s.cta ? `<p class="cta">CTA: ${s.cta}</p>` : ''}
+  </article>`).join('') +
+  `<p class="help">Fuente: <a href="${SRC}" target="_blank" rel="noopener">Colin and Samir, «Instagram CEO Reveals Biggest Update Yet», YouTube, 26-oct-2026</a>.</p>`;
+
+const tabP = document.getElementById('tab-pizarra'), tabG = document.getElementById('tab-guion');
+function mode(m){
+  document.getElementById('pizarra').hidden = m !== 'pizarra';
+  document.getElementById('guion').hidden = m !== 'guion';
+  tabP.setAttribute('aria-selected', m === 'pizarra');
+  tabG.setAttribute('aria-selected', m === 'guion');
+}
+tabP.onclick = () => mode('pizarra');
+tabG.onclick = () => mode('guion');
+gb.addEventListener('click', e => { const b = e.target.closest('.go'); if (!b) return; mode('pizarra'); show(+b.dataset.k); window.scrollTo(0,0); });
+
+let start = 0; try { start = +(localStorage.getItem('pz-i') || 0); } catch(e){}
+show(start || 0);
+if (location.hash === '#guion') mode('guion');
+</script>

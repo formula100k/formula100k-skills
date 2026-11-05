@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>Collage editorial</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="config.js"></script>
+<script src="ritmo.js"></script>
+<script src="lib/rough.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#222}
+  #root{position:relative;width:1080px;height:1920px;overflow:hidden}
+  .clip{position:absolute;inset:0;overflow:hidden}
+  .capa{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+  .fondo{position:absolute;inset:0}
+  .grano{position:absolute;inset:0;opacity:.9;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.25  0 0 0 0 0.18  0 0 0 0 0.1  0 0 0 0.16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+  /* objetos que flotan */
+  .obj{position:absolute;display:block}
+  .obj img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 18px 22px rgba(0,0,0,.22))}
+  .obj.sticker img{filter:drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(0 14px 18px rgba(0,0,0,.28))}
+  .obj .emo{display:block;width:100%;height:100%;text-align:center;line-height:1}
+
+  /* titular palabra por palabra */
+  #titular{position:absolute;display:block;left:120px;width:840px}
+  #titular .linea{display:block;white-space:nowrap;line-height:.94}
+  .pal{display:inline-block;position:relative;margin-right:.2em}
+  .pal.g{font-size:1.7em;letter-spacing:-.035em}
+  .pal.c{font-size:.56em;top:-.42em;margin-right:.3em}
+  .pal.r{padding:0 .12em;border-radius:.08em}
+
+  /* carpeta */
+  .carp{position:absolute;display:block;left:330px;top:840px;width:420px;height:340px}
+  .carp .lomo{position:absolute;left:0;top:26px;width:420px;height:314px;border-radius:6px 10px 8px 8px;box-shadow:0 18px 30px rgba(0,0,0,.22)}
+  .carp .pestana{position:absolute;left:0;top:0;width:170px;height:40px;border-radius:10px 22px 0 0}
+  .carp .frente{position:absolute;left:0;top:48px;width:420px;height:292px;border-radius:4px 8px 8px 8px;box-shadow:0 -3px 8px rgba(0,0,0,.14), inset 0 2px 0 rgba(255,255,255,.25)}
+  .carp .etq{position:absolute;left:0;top:92px;width:420px;text-align:center;line-height:1}
+  .carp .etq .e1{display:block;font-size:58px;white-space:nowrap}
+  .carp .etq .e2{display:block;font-size:88px;margin-top:8px;white-space:nowrap}
+  .letra{display:inline-block;white-space:pre}
+
+  /* recortes */
+  .rec{position:absolute;display:block;background:#fff;box-shadow:0 14px 26px rgba(0,0,0,.28)}
+  .rec img{display:block;position:absolute;object-fit:cover}
+  .rec .lam{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;padding:26px;line-height:1.02}
+  .rec .cinta{position:absolute;left:50%;top:-22px;width:150px;height:44px;margin-left:-75px;opacity:.86;box-shadow:0 2px 4px rgba(0,0,0,.14)}
+  #persona{position:absolute;display:block}
+  #persona img{display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(8px 0 0 #fff) drop-shadow(-8px 0 0 #fff) drop-shadow(0 8px 0 #fff) drop-shadow(0 -8px 0 #fff) drop-shadow(0 18px 24px rgba(0,0,0,.34))}
+  #sello{position:absolute;display:block;left:190px;top:900px;width:700px;height:120px;line-height:120px;text-align:center;font-size:66px;letter-spacing:.14em;white-space:nowrap;background:#fff;box-shadow:0 10px 22px rgba(0,0,0,.3)}
+  #velo{position:absolute;inset:0;background:#050505}
+
+  /* monitor viejo */
+  #monitor-escena{position:absolute;inset:0;overflow:hidden}
+  #cuarto{position:absolute;inset:0;background:linear-gradient(180deg,#3b3833 0,#1d1b19 22%,#0c0b0a 100%)}
+  #repisa{position:absolute;left:0;top:0;width:1080px;height:190px;background:linear-gradient(180deg,#8e8a80 0,#b9b4a8 62%,#55524b 64%,#2a2825 100%)}
+  #monitor-cam{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+  #monitor{position:absolute;left:30px;top:270px;width:1020px;height:1240px;border-radius:44px 44px 30px 30px;background:linear-gradient(180deg,#d8d2c4 0,#c4bdad 70%,#a69f90 100%);box-shadow:0 40px 70px rgba(0,0,0,.6), inset 0 4px 0 rgba(255,255,255,.4), inset 0 -10px 20px rgba(0,0,0,.18)}
+  #bisel{position:absolute;left:50px;top:50px;width:920px;height:900px;border-radius:70px;background:linear-gradient(160deg,#23211e,#3a3732);box-shadow:inset 0 10px 26px rgba(0,0,0,.8)}
+  #pantalla{position:absolute;left:44px;top:44px;width:832px;height:812px;border-radius:64px / 58px;overflow:hidden;box-shadow:0 0 70px rgba(214,228,255,.45)}
+  #pantalla-luz{position:absolute;left:0;top:0;width:832px;height:812px;display:block}
+  #pantalla-fondo{position:absolute;inset:0}
+  #lineas{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(0,0,0,.07) 0 2px,transparent 2px 6px)}
+  #vineta{position:absolute;inset:0;border-radius:64px / 58px;box-shadow:inset 0 0 130px rgba(10,14,50,.55), inset 0 0 30px rgba(0,0,0,.5)}
+  #reflejo{position:absolute;left:40px;top:26px;width:420px;height:200px;border-radius:50%;background:radial-gradient(ellipse at 30% 30%,rgba(255,255,255,.28),transparent 70%)}
+  .mini{position:absolute;display:block;background:#fff;box-shadow:0 8px 14px rgba(0,0,0,.3)}
+  .mini img{display:block;position:absolute;left:5px;top:5px;object-fit:cover}
+  .mini.suelto{background:none;box-shadow:none}
+  .mini.suelto img{left:0;top:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3))}
+  .mini .lam{position:absolute;inset:5px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;line-height:1.02}
+  #mon-texto{position:absolute;left:176px;top:250px;width:480px;line-height:1.08;letter-spacing:-.01em}
+  #cursor{position:absolute;display:block;left:0;top:0;width:44px;height:60px}
+  #panel{position:absolute;left:50px;top:990px;width:920px;height:200px}
+  #panel .ranura{position:absolute;left:60px;top:60px;width:330px;height:16px;border-radius:8px;background:#6e685c;box-shadow:inset 0 3px 5px rgba(0,0,0,.5)}
+  #panel .boton{position:absolute;top:44px;width:54px;height:54px;border-radius:10px;background:linear-gradient(180deg,#b9b2a2,#958e7f);box-shadow:0 4px 0 #6f695d, inset 0 2px 0 rgba(255,255,255,.4)}
+  #panel .led{position:absolute;right:70px;top:62px;width:18px;height:18px;border-radius:50%;background:#7CFF6B;box-shadow:0 0 16px #7CFF6B}
+  #mesa-monitor{position:absolute;left:0;top:1500px;width:1080px;height:420px;background:linear-gradient(180deg,#0a0908 0,#262320 8%,#161412 100%)}
+  #mon-negro{position:absolute;inset:0;background:#050505}
+
+  /* captura con garabatos (opcional) */
+  #captura-escena{position:absolute;inset:0;overflow:hidden}
+  #captura-fondo{position:absolute;inset:0;background:#0b0b0c}
+  #captura-media{position:absolute;display:block;left:60px;top:430px;width:960px;height:1200px;border-radius:22px;overflow:hidden;background:#1a1a1c;box-shadow:0 30px 60px rgba(0,0,0,.6), 0 0 0 2px rgba(255,255,255,.08)}
+  #captura-media img, #captura-media video{position:absolute;left:0;top:0;width:960px;height:1200px;object-fit:cover;object-position:50% 0;display:block}
+  #captura-texto{position:absolute;left:70px;top:150px;width:940px;line-height:1;color:#fff}
+  #captura-texto .pal{margin-right:.22em}
+  #garabatos{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+  #garabatos path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+  #aviso{position:absolute;left:60px;top:860px;width:960px;padding:30px;background:#c00;color:#fff;font:700 40px/1.2 -apple-system,'Helvetica Neue',sans-serif;text-align:center}
+</style>
+</head>
+<body>
+<!-- data-duration lo escribe `node ajustar.mjs` a partir de config.js: no lo cambies a mano -->
+<div id="root" data-composition-id="collage" data-start="0" data-width="1080" data-height="1920" data-duration="17.8">
+  <div id="escena" class="clip" data-start="0" data-duration="17.8" data-track-index="1">
+
+    <!-- PARTE 1-3 · papel: objetos, titular, carpeta, collage -->
+    <div id="mesa" class="capa">
+      <div class="fondo" id="papel"></div><div class="grano"></div>
+      <div id="objetos" class="capa"></div>
+      <div id="carp-atras" class="carp"><div class="lomo"></div><div class="pestana"></div></div>
+      <div id="recortes" class="capa"></div>
+      <div id="titular"></div>
+      <div id="carp-frente" class="carp"><div class="frente"></div><div class="etq"><span class="e1" id="etq1"></span><span class="e2" id="etq2"></span></div></div>
+      <div id="encima" class="capa"></div>
+      <div id="velo"></div>
+    </div>
+
+    <!-- PARTE 4 · el collage dentro de un monitor viejo -->
+    <div id="monitor-escena">
+      <div id="cuarto"></div><div id="repisa"></div>
+      <div id="monitor-cam">
+        <div id="monitor">
+          <div id="bisel">
+            <div id="pantalla">
+              <div id="pantalla-luz">
+                <div id="pantalla-fondo"></div>
+                <div id="minis" class="capa" style="width:832px;height:812px"></div>
+                <div id="mon-texto"></div>
+                <svg id="cursor" viewBox="0 0 22 30"><path d="M2 2 L2 24 L8 18 L12 28 L16 26 L12 17 L20 17 Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div id="lineas"></div><div id="vineta"></div><div id="reflejo"></div>
+            </div>
+          </div>
+          <div id="panel"><div class="ranura"></div><div class="boton" style="left:560px"></div><div class="boton" style="left:640px"></div><div class="boton" style="left:720px"></div><div class="led"></div></div>
+        </div>
+        <div id="mesa-monitor"></div>
+      </div>
+      <div id="mon-negro"></div>
+    </div>
+
+    <!-- PARTE 5 (opcional) · captura o grabación de pantalla con garabatos -->
+    <div id="captura-escena">
+      <div id="captura-fondo"></div>
+      <div id="captura-media"><!--VIDEO:INI--><video id="captura-video" class="clip" data-start="14" data-duration="3.8" data-track-index="2" src="assets/captura-ejemplo.mp4" muted playsinline></video><!--VIDEO:FIN--></div>
+      <div id="captura-texto"></div>
+      <svg id="garabatos" viewBox="0 0 1080 1920"></svg>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const C = window.CONFIG || {};
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, padre) => { const e = document.createElement(tag); if (cls) e.className = cls; if (padre) padre.appendChild(e); return e; };
+
+  /* ── valores por defecto ── */
+  const col = Object.assign({ papel:"#EFE9DC", tinta:"#1F1B16", acento:"#B4472E", resalte:"transparent", carpeta:"#C8B08A", carpetaTinta:"#6B5A3E", pantalla:"#E9EEF6", garabato:"#FFFFFF" }, C.colores || {});
+  const fu = Object.assign({ titular:"Georgia,'Times New Roman',serif", acento:"Georgia,'Times New Roman',serif", pesoTitular:400, pesoAcento:400, tracking:"-0.02em" }, C.fuentes || {});
+  const T = Object.assign({ titular:5, carpeta:1.8, collage:3.6, monitor:3.6, captura:3.8 }, C.tiempos || {}, (window.RITMO && window.RITMO.tiempos) || {}); // ritmo.js: tiempos ya ajustados a la música por ajustar.mjs
+  const cap = C.captura && C.captura.src ? C.captura : null;
+  const tA = T.titular, tB = tA + T.carpeta, tM = tB + T.collage, tK = tM + T.monitor, total = tK + (cap ? T.captura : 0);
+
+  /* azar con semilla: mismo resultado en cada render */
+  let s = (C.semilla || 7) >>> 0;
+  const azar = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const entre = (a, b) => a + (b - a) * azar();
+
+  /* ancho real del texto de un elemento (aunque el elemento sea un bloque más ancho) */
+  const anchoTexto = (e) => { const r = document.createRange(); r.selectNodeContents(e); return r.getBoundingClientRect().width; };
+
+  /* parte un texto en letras para el efecto de escritura */
+  const letras = (nodo, texto) => [...String(texto || "")].map(ch => { const l = el("span", "letra", nodo); l.textContent = ch; return l; });
+
+  /* palabras con marcas: *grande*  _chica_  ~acento~  =resaltada= (se pueden combinar: *~así~*) */
+  function palabras(nodo, linea){
+    const out = [];
+    String(linea).split(/\s+/).filter(Boolean).forEach(tok => {
+      const m = tok.match(/^([*_~=]*)(.+?)([*_~=]*)([.,;:!?…]*)$/) || [0, "", tok, "", ""];
+      const marcas = m[1] + m[3];
+      const p = el("span", "pal", nodo);
+      p.textContent = m[2] + m[4];
+      if (marcas.includes("*")) p.classList.add("g");
+      if (marcas.includes("_")) p.classList.add("c");
+      if (marcas.includes("~") || marcas.includes("_")) { p.style.fontFamily = fu.acento; p.style.fontStyle = "italic"; p.style.fontWeight = fu.pesoAcento; p.style.letterSpacing = "-0.01em"; }
+      if (marcas.includes("~")) p.style.color = col.acento;
+      if (marcas.includes("=")) { p.classList.add("r"); p.style.background = col.resalte === "transparent" ? col.acento : col.resalte; }
+      out.push(p);
+    });
+    return out;
+  }
+
+  /* lámina: imagen o, si no hay, tarjeta de color con texto */
+  function lamina(caja, r, ancho, alto, borde){
+    if (r.img) { const i = el("img", "", caja); i.src = r.img; i.alt = ""; i.style.left = i.style.top = borde + "px"; i.style.width = (ancho - 2 * borde) + "px"; i.style.height = (alto - 2 * borde) + "px"; if (r.encuadre) i.style.objectPosition = r.encuadre; }
+    else { const l = el("div", "lam", caja); l.style.inset = borde + "px"; l.style.background = r.color || col.carpeta; l.style.color = r.tinta || col.tinta; l.style.fontFamily = fu.titular; l.style.fontWeight = fu.pesoTitular; l.style.fontSize = Math.round(ancho * (r.emoji ? .42 : .13)) + "px"; l.textContent = r.emoji || r.texto || ""; }
+  }
+
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused:true });
+
+  /* ══ PARTE 1 · objetos flotando + titular palabra por palabra ══ */
+  $("papel").style.background = col.papel;
+  const deriva = Object.assign({ x:-50, y:-210 }, C.deriva || {});
+  const objetos = (C.objetos || []).slice().sort((a, b) => (a.fondo ?? .6) - (b.fondo ?? .6));
+  objetos.forEach((o, i) => {
+    const w = o.ancho || 300, prof = o.fondo ?? .6;      // fondo: 0 = lejos y lento, 1 = cerca y rápido
+    const d = el("div", "obj" + (o.sticker ? " sticker" : ""), $("objetos"));
+    d.style.width = w + "px"; d.style.height = w + "px"; d.style.left = (o.x - w / 2) + "px"; d.style.top = (o.y - w / 2) + "px";
+    if (o.img) { const im = el("img", "", d); im.src = o.img; im.alt = ""; }
+    else { const e = el("span", "emo", d); e.textContent = o.emoji || "✦"; e.style.fontSize = Math.round(w * .82) + "px"; e.style.lineHeight = w + "px"; }
+    const g0 = o.giro || 0, k = .35 + prof * 1.1, sale = tA - .55 + i * .03;
+    // deriva lenta: las capas cercanas recorren más distancia (parallax)
+    tl.fromTo(d, { x:-deriva.x * k * .35, y:-deriva.y * k * .35, scale:1, rotation:g0 - 4 * k }, { x:deriva.x * k * .65, y:deriva.y * k * .65, scale:1 + .07 * k, rotation:g0 + 5 * k, duration:sale, ease:"none" }, 0);
+    // salida: cada objeto se va hacia afuera desde el centro
+    const dx = o.x - 540, dy = o.y - 860, n = Math.hypot(dx, dy) || 1;
+    tl.to(d, { x:"+=" + Math.round(dx / n * 1500), y:"+=" + Math.round(dy / n * 1500 - 300), rotation:"+=" + Math.round(entre(-40, 40)), scale:1.5, duration:.75, ease:"power2.in" }, sale);
+  });
+
+  const tit = $("titular");
+  tit.style.fontFamily = fu.titular; tit.style.fontWeight = fu.pesoTitular; tit.style.letterSpacing = fu.tracking; tit.style.color = col.tinta;
+  const todas = [];
+  (C.titular || []).forEach(l => { const ln = el("span", "linea", tit); palabras(ln, l).forEach(p => todas.push(p)); });
+  // el tamaño se ajusta solo para que la línea más ancha quepa
+  let base = (C.titularTam || 124);
+  tit.style.fontSize = base + "px";
+  const anchoMax = () => Math.max(1, ...[...tit.children].map(l => { let w = 0; [...l.children].forEach(p => { w = Math.max(w, p.offsetLeft + p.offsetWidth); }); return w; }));
+  for (let i = 0; i < 40 && (anchoMax() > 840 || tit.offsetHeight > 900); i++) { base -= 4; tit.style.fontSize = base + "px"; }
+  const titY = (C.titularY || 640);
+  const hTit = tit.offsetHeight, topTit = Math.max(230, Math.round(titY - hTit / 2));
+  tit.style.top = topTit + "px";
+  tit.style.width = "840px"; tit.style.height = hTit + "px";
+  const paso = Math.min(.42, Math.max(.12, (tA - 2.1) / Math.max(1, todas.length)));
+  tl.fromTo(todas, { opacity:0, y:34 }, { opacity:1, y:0, duration:.3, ease:"power3.out", stagger:paso }, .35);
+
+  /* ══ PARTE 2 · la frase se encoge y cae en la carpeta ══ */
+  const kp = C.carpeta || {};
+  document.querySelectorAll(".carp .lomo,.carp .pestana").forEach(e => e.style.background = "linear-gradient(180deg," + col.carpeta + "," + col.carpeta + ")");
+  document.querySelectorAll(".carp .lomo").forEach(e => e.style.filter = "brightness(.88)");
+  document.querySelectorAll(".carp .pestana").forEach(e => e.style.filter = "brightness(.88)");
+  document.querySelector(".carp .frente").style.background = col.carpeta;
+  const e1 = $("etq1"), e2 = $("etq2");
+  [e1, e2].forEach(e => { e.style.fontFamily = fu.titular; e.style.color = col.carpetaTinta; e.style.fontWeight = fu.pesoTitular; });
+  const L1 = letras(e1, kp.etiqueta || ""), L2 = letras(e2, kp.numero || "");
+  // la etiqueta se encoge sola si es larga
+  [[e1, 58], [e2, 88]].forEach(([e, f]) => { let z = f; while (anchoTexto(e) > 360 && z > 22) { z -= 3; e.style.fontSize = z + "px"; } });
+  if (!kp.numero) e1.style.marginTop = "34px";
+
+  const carp = ["#carp-atras", "#carp-frente"];           // centro de la carpeta en reposo: (540, 1010)
+  tl.fromTo(carp, { y:1100, rotation:-7, scale:1 }, { y:560, rotation:-4, scale:1, duration:.7, ease:"power3.out" }, Math.max(.2, tA - 1.0));
+  tl.to(carp, { y:0, rotation:2, duration:.65, ease:"power3.inOut" }, tA - .05);
+  // titular: se encoge, sube sobre la carpeta y cae adentro
+  const cxT = 120 + 420, cyT = topTit + hTit / 2, esc = Math.min(.36, 300 / Math.max(hTit, 420));
+  tl.to(tit, { x:540 - cxT, y:(760 - hTit * esc / 2) - cyT, scale:esc, rotation:-3, duration:.65, ease:"power3.inOut" }, tA);
+  todas.filter(p => p.classList.contains("c")).forEach((p, i) => {
+    tl.to(p, { x:(i % 2 ? 1 : -1) * entre(500, 900), y:entre(-500, 300), rotation:entre(-60, 60), opacity:0, duration:.6, ease:"power2.in" }, tA + .05);
+  });
+  tl.to(tit, { y:1040 - cyT, scale:esc * .35, rotation:4, duration:.34, ease:"power2.in" }, tA + .72);
+  tl.to(tit, { opacity:0, duration:.08 }, tA + 1.0);
+  tl.to(carp, { scale:1.1, duration:.1, ease:"power2.out" }, tA + 1.02);
+  tl.to(carp, { scale:1, rotation:-2, duration:.3, ease:"back.out(3)" }, tA + 1.12);
+  tl.fromTo(L1, { opacity:0 }, { opacity:1, duration:.04, stagger:.035 }, tA + 1.05);
+  tl.fromTo(L2, { opacity:0, y:14 }, { opacity:1, y:0, duration:.1, stagger:.06 }, tA + 1.3);
+
+  /* ══ PARTE 3 · la carpeta suelta recortes que llenan el cuadro ══ */
+  const recs = C.recortes || [], N = recs.length;
+  const cols = N <= 6 ? 2 : 3, filas = Math.max(1, Math.ceil(N / cols));
+  const cw = 980 / cols, ch = 1710 / filas, borde = C.recorteBorde ?? 10;
+  const razon = { vertical:1.25, cuadrada:1, horizontal:.72 };
+  const st = N ? Math.min(.3, (T.collage - 2.1) / N) : 0;
+  const corte = Math.ceil(N / 3);                          // tras este recorte la carpeta baja
+  const tBaja = tB + .05 + corte * st;
+  recs.forEach((r, i) => {
+    const f = Math.floor(i / cols), enFila = (f === filas - 1) ? (N - f * cols) : cols, c = i % cols;
+    const rz = razon[r.forma] || razon.vertical;
+    let w = Math.min(cw * 1.24, (ch * 1.12) / rz); if (rz < 1) w = cw * 1.3;
+    w = Math.round(w * entre(.9, 1.04)); const h = Math.round(w * rz);
+    const cx = 50 + (c + .5 + (cols - enFila) / 2) * cw + entre(-.07, .07) * cw;
+    const cy = 95 + (f + .5) * ch + entre(-.06, .06) * ch;
+    const d = el("div", "rec", $("recortes"));
+    d.style.width = w + "px"; d.style.height = h + "px"; d.style.left = Math.round(cx - w / 2) + "px"; d.style.top = Math.round(cy - h / 2) + "px";
+    lamina(d, r, w, h, borde);
+    if (C.cinta && i % 3 === 0) { const ci = el("div", "cinta", d); ci.style.background = C.cinta === true ? col.acento : C.cinta; }
+    const oy = (i < corte ? 1000 : 1500) - cy, t0 = tB + .05 + i * st + (i >= corte ? .2 : 0), giro = entre(-7, 7);
+    tl.set(d, { opacity:0 }, 0);
+    tl.set(d, { opacity:1 }, t0);
+    tl.fromTo(d, { x:540 - cx, y:oy, scale:.1, rotation:entre(-50, 50) }, { x:0, y:0, scale:1, rotation:giro, duration:.62, ease:"back.out(1.15)" }, t0);
+  });
+  tl.to(carp, { y:520, scale:1.35, rotation:3, duration:.5, ease:"power2.inOut" }, tBaja - .15);
+  tl.to(carp, { y:1500, rotation:8, duration:.5, ease:"power2.in" }, tB + .3 + N * st);
+  tl.fromTo("#recortes", { scale:1 }, { scale:1.035, duration:T.collage, ease:"none" }, tB);
+
+  const enc = $("encima");
+  if (C.persona && C.persona.img) {
+    const p = C.persona, w = p.ancho || 560, h = p.alto || 900;
+    const d = el("div", "", enc); d.id = "persona";
+    d.style.width = w + "px"; d.style.height = h + "px"; d.style.left = (p.x ?? (1080 - w - 10)) + "px"; d.style.top = (p.y ?? (1920 - h + 30)) + "px";
+    const im = el("img", "", d); im.src = p.img; im.alt = "";
+    tl.fromTo(d, { y:h + 200, rotation:9 }, { y:0, rotation:-2, duration:.5, ease:"back.out(1.3)" }, tM - 1.35);
+  }
+  if (C.sello) {
+    const d = el("div", "", enc); d.id = "sello"; d.textContent = C.sello;
+    d.style.fontFamily = fu.titular; d.style.fontWeight = fu.pesoTitular; d.style.color = col.tinta;
+    if (C.selloY) d.style.top = C.selloY + "px";
+    let z = 66; while (anchoTexto(d) > 620 && z > 26) { z -= 3; d.style.fontSize = z + "px"; }
+    tl.fromTo(d, { scale:0, rotation:-20, opacity:0 }, { scale:1, rotation:-8, opacity:1, duration:.3, ease:"back.out(2.2)" }, tM - 1.0);
+  }
+  tl.fromTo("#velo", { opacity:0 }, { opacity:.9, duration:.45, ease:"power1.in" }, tM - .45);
+
+  /* ══ PARTE 4 · el collage dentro de un monitor viejo ══ */
+  const mo = C.monitor || {};
+  $("pantalla-fondo").style.background = col.pantalla;
+  // hasta 6 recortes alrededor del texto + los 2 primeros objetos sueltos
+  const sitios = [[26,40,190,-6],[604,54,196,5],[20,318,150,4],[662,330,150,-5],[70,560,200,5],[560,548,210,-4]];
+  const minis = [];
+  recs.slice(0, 6).forEach((r, i) => {
+    const [x, y, w, g] = sitios[i], h = Math.round(w * (razon[r.forma] || 1.25));
+    const d = el("div", "mini", $("minis")); d.style.left = x + "px"; d.style.top = y + "px"; d.style.width = w + "px"; d.style.height = Math.min(h, 230) + "px";
+    if (r.img) { const im = el("img", "", d); im.src = r.img; im.alt = ""; im.style.width = (w - 10) + "px"; im.style.height = (Math.min(h, 230) - 10) + "px"; if (r.encuadre) im.style.objectPosition = r.encuadre; }
+    else { const l = el("div", "lam", d); l.style.background = r.color || col.carpeta; l.style.fontSize = (r.emoji ? 70 : 22) + "px"; l.style.fontFamily = fu.titular; l.style.color = r.tinta || col.tinta; l.textContent = r.emoji || r.texto || ""; }
+    minis.push([d, g]);
+  });
+  (C.objetos || []).filter(o => o.img).slice(0, 2).forEach((o, i) => {
+    const d = el("div", "mini suelto", $("minis")); const [x, y, w, g] = [[300, 26, 170, 8], [330, 600, 170, -8]][i];
+    d.style.left = x + "px"; d.style.top = y + "px"; d.style.width = w + "px"; d.style.height = w + "px";
+    const im = el("img", "", d); im.src = o.img; im.alt = ""; minis.push([d, g]);
+  });
+  const mt = $("mon-texto");
+  mt.style.fontFamily = fu.titular; mt.style.fontWeight = fu.pesoTitular; mt.style.color = col.tinta;
+  // palabras enteras para que no se partan al final de la línea
+  const LM = [];
+  String(mo.texto || "").split(/\s+/).filter(Boolean).forEach(pal => { const w = el("span", "", mt); w.style.display = "inline-block"; w.style.whiteSpace = "nowrap"; w.style.marginRight = ".26em"; letras(w, pal).forEach(l => LM.push(l)); });
+  let fm = 62; mt.style.fontSize = fm + "px";
+  while ((mt.offsetHeight > 270 || mt.scrollWidth > 480) && fm > 26) { fm -= 2; mt.style.fontSize = fm + "px"; }
+  mt.style.top = Math.round(406 - mt.offsetHeight / 2) + "px";
+
+  tl.set("#monitor-escena", { autoAlpha:0 }, 0);
+  tl.set("#monitor-escena", { autoAlpha:1 }, tM);
+  tl.set("#mesa", { autoAlpha:0 }, tM);
+  tl.fromTo("#mon-negro", { opacity:1 }, { opacity:0, duration:.55, ease:"power2.out" }, tM);
+  tl.fromTo("#pantalla-luz", { scaleY:.012, scaleX:.7, opacity:1 }, { scaleY:1, scaleX:1, opacity:1, duration:.32, ease:"power3.out" }, tM + .12);
+  minis.forEach(([d, g], i) => {
+    tl.fromTo(d, { scale:0, rotation:g - 25 }, { scale:1, rotation:g, duration:.3, ease:"back.out(2)" }, tM + .32 + i * .08);
+    tl.to(d, { y:(i % 2 ? -12 : 12), rotation:g + (i % 2 ? 3 : -3), duration:Math.max(.5, T.monitor - 1.6), ease:"sine.inOut" }, tM + 1.3);
+  });
+  const durEsc = Math.max(.6, T.monitor - 1.9);
+  tl.fromTo(LM, { opacity:0 }, { opacity:1, duration:.03, stagger:durEsc / Math.max(1, LM.length) }, tM + .65);
+  tl.fromTo("#cursor", { x:620, y:700 }, { x:470, y:520, duration:.9, ease:"power2.inOut" }, tM + .7);
+  tl.to("#cursor", { x:250, y:600, duration:1.1, ease:"power2.inOut" }, tM + 1.9);
+  const finEmpuje = cap ? tK - .45 : tK;
+  tl.fromTo("#monitor-cam", { scale:1, transformOrigin:"540px 770px" }, { scale:1.07, duration:finEmpuje - tM, ease:"none" }, tM);
+
+  /* ══ PARTE 5 (opcional) · captura o grabación de pantalla con garabatos ══ */
+  tl.set("#captura-escena", { autoAlpha:0 }, 0);
+  if (cap) {
+    const media = $("captura-media");
+    const esVideo = /\.(mp4|mov|webm|m4v)$/i.test(cap.src);
+    if (esVideo && !media.querySelector("video")) { const a = el("div", "", $("captura-escena")); a.id = "aviso"; a.textContent = "Falta correr «node ajustar.mjs»: el video de la captura no está montado."; }
+    if (!esVideo) { const im = el("img", "", media); im.src = cap.src; im.alt = ""; if (cap.encuadre) im.style.objectPosition = cap.encuadre; }
+    const ct = $("captura-texto");
+    ct.style.fontFamily = fu.titular; ct.style.fontWeight = fu.pesoTitular; ct.style.letterSpacing = fu.tracking;
+    const PC = []; (Array.isArray(cap.texto) ? cap.texto : [cap.texto || ""]).forEach(l => { const ln = el("span", "linea", ct); ln.style.display = "block"; ln.style.whiteSpace = "nowrap"; palabras(ln, l).forEach(p => { if (p.style.color === "") p.style.color = "#fff"; PC.push(p); }); });
+    let fc = 84; ct.style.fontSize = fc + "px";
+    const anchoC = () => Math.max(1, ...[...ct.children].map(l => { let w = 0; [...l.children].forEach(p => { w = Math.max(w, p.offsetLeft + p.offsetWidth); }); return w; }));
+    while ((anchoC() > 930 || ct.offsetHeight > 300) && fc > 30) { fc -= 3; ct.style.fontSize = fc + "px"; }
+    ct.style.top = Math.round(280 - ct.offsetHeight / 2) + "px";
+
+    // garabatos a mano: trazos con un poco de temblor
+    const NS = "http://www.w3.org/2000/svg", svg = $("garabatos"), tr = () => entre(-5, 5);
+    const formas = {
+      circulo(g){ const rx = (g.ancho || 300) / 2, ry = (g.alto || 200) / 2; let d = ""; for (let i = 0; i <= 46; i++) { const a = -2.2 + i / 40 * Math.PI * 2, k = 1 + (i / 46) * .07; d += (i ? "L" : "M") + (g.x + Math.cos(a) * rx * k + tr()).toFixed(1) + " " + (g.y + Math.sin(a) * ry * k + tr()).toFixed(1); } return d; },
+      flecha(g){ const mx = (g.x + g.x2) / 2 + (g.y2 - g.y) * .25, my = (g.y + g.y2) / 2 - (g.x2 - g.x) * .25, a = Math.atan2(g.y2 - my, g.x2 - mx), L = 46;
+        return `M${g.x} ${g.y}Q${mx.toFixed(1)} ${my.toFixed(1)} ${g.x2} ${g.y2}M${(g.x2 - Math.cos(a - .5) * L).toFixed(1)} ${(g.y2 - Math.sin(a - .5) * L).toFixed(1)}L${g.x2} ${g.y2}L${(g.x2 - Math.cos(a + .5) * L).toFixed(1)} ${(g.y2 - Math.sin(a + .5) * L).toFixed(1)}`; },
+      subrayado(g){ const w = g.ancho || 300; let d = ""; for (let i = 0; i <= 16; i++) d += (i ? "L" : "M") + (g.x + w * i / 16).toFixed(1) + " " + (g.y + Math.sin(i * 1.1) * 9 + tr() * .6).toFixed(1); return d; },
+      estrella(g){ const r = (g.ancho || 90) / 2; let d = ""; for (let i = 0; i < 4; i++) { const a = i * Math.PI / 4 + .2; d += `M${(g.x - Math.cos(a) * r).toFixed(1)} ${(g.y - Math.sin(a) * r).toFixed(1)}L${(g.x + Math.cos(a) * r).toFixed(1)} ${(g.y + Math.sin(a) * r).toFixed(1)}`; } return d; },
+      espiral(g){ const r = (g.ancho || 120) / 2; let d = ""; for (let i = 0; i <= 60; i++) { const a = i / 60 * Math.PI * 5.2, k = r * i / 60; d += (i ? "L" : "M") + (g.x + Math.cos(a) * k).toFixed(1) + " " + (g.y + Math.sin(a) * k).toFixed(1); } return d; }
+    };
+    // captura.trazo: "rough" → los mismos garabatos con trazo de lápiz de Rough.js (lib/rough.js, MIT).
+    // Un generador nuevo con semilla fija por garabato: mismo config, mismo dibujo en cada render.
+    if (cap.trazo === "rough" && window.rough) {
+      const R = (i) => window.rough.generator({ options: { seed: (C.semilla || 7) * 100 + i + 1, roughness: cap.temblor == null ? 1.8 : cap.temblor, bowing: 1.4, disableMultiStroke: true } });
+      const d = (gen, ...ds) => ds.map(x => gen.toPaths(x).map(q => q.d).join("")).join("");
+      Object.assign(formas, {
+        circulo(g, i){ const r = R(i); return d(r, r.ellipse(g.x, g.y, g.ancho || 300, g.alto || 200)); },
+        flecha(g, i){ const r = R(i), a = Math.atan2(g.y2 - g.y, g.x2 - g.x), L = 46;
+          return d(r, r.line(g.x, g.y, g.x2, g.y2), r.line(g.x2 - Math.cos(a - .5) * L, g.y2 - Math.sin(a - .5) * L, g.x2, g.y2), r.line(g.x2, g.y2, g.x2 - Math.cos(a + .5) * L, g.y2 - Math.sin(a + .5) * L)); },
+        subrayado(g, i){ const r = R(i), w = g.ancho || 300; return d(r, r.line(g.x, g.y, g.x + w, g.y + 6), r.line(g.x + w * .04, g.y + 22, g.x + w * .9, g.y + 16)); },
+        estrella(g, i){ const r = R(i), q = (g.ancho || 90) / 2, ls = []; for (let k = 0; k < 4; k++) { const a = k * Math.PI / 4 + .2; ls.push(r.line(g.x - Math.cos(a) * q, g.y - Math.sin(a) * q, g.x + Math.cos(a) * q, g.y + Math.sin(a) * q)); } return d(r, ...ls); },
+        espiral(g, i){ const r = R(i), q = (g.ancho || 120) / 2, pts = []; for (let k = 0; k <= 24; k++) { const a = k / 24 * Math.PI * 5.2, m = q * k / 24; pts.push([g.x + Math.cos(a) * m, g.y + Math.sin(a) * m]); } return d(r, r.curve(pts)); }
+      });
+    }
+    const gar = cap.garabatos || [ { tipo:"circulo", x:540, y:900, ancho:520, alto:360 }, { tipo:"flecha", x:930, y:520, x2:780, y2:740 }, { tipo:"estrella", x:130, y:520, ancho:90 }, { tipo:"espiral", x:920, y:1560, ancho:150 }, { tipo:"subrayado", x:160, y:1540, ancho:420 } ];
+    const trazos = gar.filter(g => formas[g.tipo]).map((g, gi) => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", formas[g.tipo](g, gi)); p.setAttribute("pathLength", "1"); p.setAttribute("stroke", g.color || col.garabato); p.setAttribute("stroke-width", g.grosor || 10); svg.appendChild(p); return p; });
+
+    tl.to("#monitor-cam", { scale:3.2, duration:.45, ease:"power3.in" }, tK - .45);
+    tl.to("#mon-negro", { opacity:1, duration:.2 }, tK - .2);
+    tl.set("#captura-escena", { autoAlpha:1 }, tK);
+    tl.set("#monitor-escena", { autoAlpha:0 }, tK);
+    tl.fromTo(media, { scale:1.25, opacity:0 }, { scale:1, opacity:1, duration:.5, ease:"power3.out" }, tK);
+    tl.to(media, { scale:1.04, duration:Math.max(.5, T.captura - .6), ease:"none" }, tK + .5);
+    tl.fromTo(PC, { opacity:0, y:26 }, { opacity:1, y:0, duration:.26, ease:"power3.out", stagger:Math.min(.22, 1.4 / Math.max(1, PC.length)) }, tK + .4);
+    const pg = Math.min(.5, Math.max(.2, (T.captura - 1.9) / Math.max(1, trazos.length)));
+    tl.fromTo(trazos, { strokeDashoffset:1 }, { strokeDashoffset:0, duration:.42, ease:"power1.inOut", stagger:pg }, tK + .9);
+  }
+
+  window.__timelines["collage"] = tl;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tus AirPods fabrican ruido · Auto-Edición</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Anton&family=Instrument+Serif:ital@1&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// Auto-Edición · ejemplo «Tus AirPods fabrican ruido». Subtítulo con selección de iOS arriba,
+// UNA ilustración plana al centro, tu avatar abajo cambiando de pose 2–3 veces por frase.
+// TIEMPOS lo inyecta scripts/comun.mjs (al renderizar) desde tiempos.json (duración real de cada audio + inicio de cada palabra).
+const W = 1080, H = 1920, FPS = 30;
+const TIEMPOS = __TIEMPOS__;
+const PAUSA = 0.12;
+let GOLPE = 2.0;     // segundos del gancho golpe (se ajusta a la palabra «de» de la voz)
+const C = {
+  claro: '#F7F7F7', oscuro: '#121212', tinta: '#111111', blanco: '#FFFFFF',
+  gris: 'rgba(17,17,17,.42)', grisO: 'rgba(255,255,255,.45)', rojo: '#E5383B', azul: '#0A84FF',
+  verde: '#34C759', tarjeta: '#FFFFFF', tarjetaO: '#1C1C1E', linea: '#E5E5EA',
+  sans: 'Inter, -apple-system, Helvetica, Arial, sans-serif', golpe: '"Bricolage Grotesque", Inter, sans-serif', poster: 'Anton, Impact, sans-serif', serif: '"Instrument Serif", Georgia, serif',
+};
+// texto de cada frase: *clave* = negrita; la primera clave de cada trozo lleva la selección de iPhone
+const LINEAS = [
+  { poses: [[0,1],[3,18],[6,7]],  osc: true,  txt: 'Tus *AirPods* no *apagan* el *ruido,* *fabrican* más *ruido.*' },
+  { poses: [[0,10],[5,17],[8,7]], osc: true,  txt: 'Imagina que vas en un *avión* y el *motor* ruge sin *parar.*' },
+  { poses: [[0,17],[5,5],[9,16]], osc: false, txt: 'Afuera de cada *AirPod* hay un *micrófono* que oye el *motor* *primero.*' },
+  { poses: [[0,5],[6,13],[10,3]], osc: false, txt: 'Un *chip* da vuelta esa *onda:* donde el motor *empuja,* el parlante *jala.*' },
+  { poses: [[0,3],[3,7],[9,2]],   osc: false, txt: 'Las dos *ondas* *chocan* dentro de tu *oído* y se *anulan.*' },
+  { poses: [[0,15],[4,16],[7,13]], osc: true, txt: 'Eso que sientes como *silencio* es *ruido* contra *ruido.*' },
+  { poses: [[0,6],[3,1]],         osc: false, txt: '*Comenta* *RUIDO* y te cuento cómo hice este *video* sin *grabarme.*' },
+  { poses: [[0,14],[5,8],[9,17]], osc: false, txt: 'Pero la *copia* nunca es *perfecta,* así que hay otro *micrófono* *adentro.*' },
+  { poses: [[0,2],[5,7]],         osc: false, txt: 'Según *Apple,* corrige el sonido *200* veces por *segundo.*' },
+  { poses: [[0,5],[6,18],[12,8]], osc: false, txt: 'Por eso borra el *motor,* pero no la *voz* de quien va a tu *lado.*' },
+  { poses: [[0,16],[8,9]],        osc: true,  txt: 'Y si la *goma* no *sella* tu oído, el *ruido* se *cuela* por el costado.' },
+  { poses: [[0,6],[4,17],[8,2]],  osc: false, txt: 'Tu *iPhone* tiene una *prueba* para eso: prueba de *ajuste* de *almohadillas.*' },
+  { poses: [[0,13],[6,5],[11,2]], osc: false, txt: 'Tus *AirPods* no tapan el *mundo:* tocan su *opuesto,* y juntos suman *cero.*' },
+  { poses: [[0,6],[4,1],[10,20]], osc: false, txt: '*Comenta* *RUIDO* y te paso cómo hacer un *video* así sin *grabarte.*' },
+];
+LINEAS.forEach((l, i) => { l.d = TIEMPOS[i].d; });
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.2;
+
+// palabras con su inicio: las de Whisper si cuentan igual; si no, reparto por letras
+LINEAS.forEach((l, i) => {
+  const ws = l.txt.split(' ').map(w => ({ t: w.replace(/\*/g, ''), clave: /^\*.*\*$/.test(w) }));
+  const wh = TIEMPOS[i].words;
+  if (wh.length === ws.length) ws.forEach((w, k) => w.s = wh[k].s);
+  else { const tot = ws.reduce((a, w) => a + w.t.length + 1, 0); let a = 0; ws.forEach(w => { w.s = a / tot * l.d * .95; a += w.t.length + 1; }); }
+  // trozos de hasta 3 palabras, cortando en la puntuación
+  const trozos = []; let cur = [];
+  ws.forEach((w, k) => { cur.push(k); if (cur.length === 3 || /[,.?!»]$/.test(w.t)) { trozos.push(cur); cur = []; } });
+  if (cur.length) trozos.push(cur);
+  l.ws = ws; l.trozos = trozos;
+});
+GOLPE = LINEAS[0].d + .01;   // la frase 1 entera es el gancho golpe
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+let OSC = false, FOTOS = {};
+const T = () => OSC ? C.blanco : C.tinta;
+const G = () => OSC ? C.grisO : C.gris;
+const TJ = () => OSC ? C.tarjetaO : C.tarjeta;
+
+function tx(s, x, y, tam, peso = 700, color = T(), alinear = 'center', fam = C.sans) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function tarjeta(x, y, w, h, r = 36, color = TJ(), sombra = true) {
+  ctx.save();
+  if (sombra) { ctx.shadowColor = OSC ? 'rgba(0,0,0,.6)' : 'rgba(0,0,0,.10)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12; }
+  ctx.fillStyle = color; rr(x, y, w, h, r); ctx.fill(); ctx.restore();
+}
+function pildora(x, y, w, h, color) { ctx.save(); ctx.fillStyle = color; rr(x, y, w, h, h / 2); ctx.fill(); ctx.restore(); }
+function persona(x, y, s, color) {   // personita plana tipo ícono de iOS
+  ctx.save(); ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(x, y - s * .55, s * .32, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x, y + s * .35, s * .52, s * .5, 0, Math.PI, 0); ctx.fill();
+  ctx.restore();
+}
+function burbuja(x, y, w, s, deUsuario, tam = 34) {
+  const ls = renglones(s, `600 ${tam}px ${C.sans}`, w - 56), h = ls.length * tam * 1.3 + 40;
+  ctx.save(); ctx.fillStyle = deUsuario ? C.azul : (OSC ? '#2C2C2E' : '#E9E9EB');
+  rr(deUsuario ? x - w : x, y, w, h, 30); ctx.fill(); ctx.restore();
+  ls.forEach((r, i) => tx(r, (deUsuario ? x - w : x) + 28, y + 20 + tam + i * tam * 1.3 - 6, tam, 600, deUsuario ? '#fff' : T(), 'left'));
+  return h;
+}
+function candado(x, y, s, color) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = s * .12; ctx.beginPath(); ctx.arc(x, y - s * .2, s * .3, Math.PI, 0); ctx.stroke();
+  ctx.fillStyle = color; rr(x - s * .45, y - s * .2, s * .9, s * .7, s * .12); ctx.fill(); ctx.restore();
+}
+function teclado(x, y, w, escrito) {   // teclado de iOS con la palabra que se escribe
+  tarjeta(x, y, w, 560, 40, OSC ? '#1C1C1E' : '#FFFFFF');
+  tx('Comentarios', x + w / 2, y + 62, 34, 700);
+  ctx.save(); ctx.fillStyle = C.linea; ctx.fillRect(x + 30, y + 92, w - 60, 2); ctx.restore();
+  pildora(x + 30, y + 120, w - 60, 84, OSC ? '#2C2C2E' : '#F2F2F7');
+  tx(escrito || 'Agrega un comentario…', x + 64, y + 175, 38, escrito ? 700 : 500, escrito ? T() : G(), 'left');
+  if (escrito) { const wx = medir(escrito, `700 38px ${C.sans}`); ctx.save(); ctx.fillStyle = C.azul; ctx.fillRect(x + 70 + wx, y + 140, 4, 46); ctx.restore(); tx('Publicar', x + w - 60, y + 175, 34, 700, C.azul, 'right'); }
+  const filas = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'], k = (w - 60) / 10;
+  ctx.save(); ctx.fillStyle = '#D1D3D9'; rr(x + 10, y + 230, w - 20, 320, 30); ctx.fill(); ctx.restore();
+  filas.forEach((f, j) => [...f].forEach((c, i) => {
+    const kx = x + 30 + i * k + (10 - f.length) * k / 2, ky = y + 250 + j * 96;
+    const activa = escrito && c === escrito.at(-1);
+    ctx.save(); ctx.fillStyle = activa ? '#B7BAC2' : '#fff'; rr(kx + 4, ky, k - 8, 82, 12); ctx.fill(); ctx.restore();
+    tx(c, kx + k / 2, ky + 56, 36, 500, '#111');
+  }));
+}
+
+// ---------- subtítulo «iPhone»: trozos de 2–3 palabras, entran de a una con corte seco ----------
+function subtitulo(L, u, desde = 0) {
+  let k = -1; L.ws.forEach((w, i) => { if (u >= w.s) k = i; });
+  if (k < desde) return;
+  const trozo = L.trozos.find(t => t.includes(k)); if (!trozo) return;
+  const vis = trozo.filter(i => i <= k && i >= desde);
+  let tam = 66; const f = w => `${w.clave ? 800 : 500} ${tam}px ${C.sans}`;
+  const esp = () => tam * .28;
+  let ancho = () => trozo.reduce((a, i) => a + medir(L.ws[i].t, f(L.ws[i])), 0) + esp() * (trozo.length - 1);
+  while (ancho() > 940) tam -= 4;
+  let x = W / 2 - ancho() / 2; const y = 250;
+  const sel = trozo.find(i => L.ws[i].clave);
+  trozo.forEach(i => {
+    const w = L.ws[i], ww = medir(w.t, f(w));
+    if (vis.includes(i)) {
+      if (i === sel) {   // selección de texto de iOS
+        ctx.save(); ctx.fillStyle = 'rgba(10,132,255,.20)'; ctx.fillRect(x - 6, y - tam * .86, ww + 12, tam * 1.1);
+        ctx.fillStyle = C.azul; ctx.fillRect(x - 8, y - tam * .86, 4, tam * 1.1); ctx.fillRect(x + ww + 4, y - tam * .86, 4, tam * 1.1);
+        ctx.beginPath(); ctx.arc(x - 6, y - tam * .86 - 6, 9, 0, Math.PI * 2); ctx.arc(x + ww + 6, y + tam * .24 + 6, 9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      ctx.save(); ctx.font = f(w); ctx.fillStyle = w.clave ? T() : G(); ctx.textBaseline = 'alphabetic'; ctx.fillText(w.t, x, y); ctx.restore();
+    }
+    x += ww + esp();
+  });
+}
+
+// ---------- piezas del tema: AirPod plano, ondas y rótulos ----------
+const NAR = '#FF9F0A';   // ruido del motor
+function airpod(x, y, s, o = {}) {   // AirPod Pro plano de perfil: cuerpo, goma y palito
+  ctx.save(); ctx.translate(x, y);
+  ctx.shadowColor = OSC ? 'rgba(0,0,0,.6)' : 'rgba(0,0,0,.14)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.save(); ctx.rotate(-.35); rr(-s * .62, s * .05, s * .3, s * 1.15, s * .15); ctx.fill(); ctx.restore();   // palito
+  ctx.beginPath(); ctx.ellipse(0, 0, s * .6, s * .5, 0, 0, 7); ctx.fill();                                     // cuerpo
+  ctx.shadowColor = 'transparent';
+  ctx.fillStyle = '#D9D9DE'; ctx.beginPath(); ctx.ellipse(s * .62, -s * .02, s * .26, s * .3, 0, 0, 7); ctx.fill();   // goma
+  ctx.fillStyle = '#3A3A3C'; rr(-s * .42, -s * .34, s * .3, s * .12, s * .06); ctx.fill();                 // rejilla del micrófono de afuera
+  if (o.ext) { ctx.strokeStyle = C.azul; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(-s * .27, -s * .28, s * .2, 0, 7); ctx.stroke(); }
+  if (o.int) { ctx.fillStyle = '#3A3A3C'; ctx.beginPath(); ctx.arc(s * .66, -s * .02, s * .06, 0, 7); ctx.fill();
+    ctx.strokeStyle = C.azul; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(s * .66, -s * .02, s * .17, 0, 7); ctx.stroke(); }
+  ctx.restore();
+}
+function onda(x0, x1, y, amp, lam, fase, color, lw = 10, alfa = 1) {
+  ctx.save(); ctx.globalAlpha = alfa; ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.beginPath();
+  for (let x = x0; x <= x1; x += 4) { const y2 = y + amp * Math.sin((x - x0) / lam * Math.PI * 2 + fase); x === x0 ? ctx.moveTo(x, y2) : ctx.lineTo(x, y2); }
+  ctx.stroke(); ctx.restore();
+}
+function rotulo(s, x, y, color = G(), alinear = 'center') { tx(s.toUpperCase(), x, y, 30, 800, color, alinear); }
+function etiqueta(s, x, y, color) {   // píldora con texto centrado
+  const w = medir(s, `800 44px ${C.sans}`) + 70; pildora(x - w / 2, y - 50, w, 76, color); tx(s, x, y + 2, 44, 800, '#fff');
+}
+const de = (L, k) => (L.ws[k] ? L.ws[k].s : 99) - .05;   // inicio de la palabra k
+
+// ---------- escenas (q = avance de la frase 0..1, u = segundos) ----------
+const ESC = [
+  (q, u, L) => {   // 1 · gancho golpe (toda la frase): «tus AirPods fabrican / RUIDO»
+    tx('tus AirPods fabrican', W / 2, 430, 118, 'italic 400', C.blanco, 'center', C.serif);
+    let tam = 600; while (medir('RUIDO', `400 ${tam}px ${C.poster}`) > 960) tam -= 8;
+    tx('RUIDO', W / 2, 430 + tam * .98, tam, 400, C.rojo, 'center', C.poster);
+  },
+  (q, u, L) => {   // 2 · la ventanilla del avión y el motor
+    ctx.save(); ctx.fillStyle = '#2C2C2E'; rr(250, 330, 580, 760, 290); ctx.fill();
+    ctx.fillStyle = '#5AA9E6'; rr(300, 380, 480, 660, 240); ctx.clip(); ctx.fill();
+    ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.ellipse(420, 520, 120, 40, 0, 0, 7); ctx.ellipse(650, 470, 90, 30, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#C7C7CC'; ctx.beginPath(); ctx.ellipse(540, 820, 210, 170, 0, 0, 7); ctx.fill();   // turbina
+    ctx.fillStyle = '#48484A'; ctx.beginPath(); ctx.ellipse(540, 820, 160, 130, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#8E8E93'; ctx.lineWidth = 8; for (let k = 0; k < 10; k++) { const a = k / 10 * Math.PI * 2 + u * 3; ctx.beginPath(); ctx.moveTo(540, 820); ctx.lineTo(540 + Math.cos(a) * 150, 820 + Math.sin(a) * 120); ctx.stroke(); }
+    ctx.fillStyle = '#2C2C2E'; ctx.beginPath(); ctx.arc(540, 820, 34, 0, 7); ctx.fill(); ctx.restore();
+    if (u >= de(L, 8)) { onda(60, 1020, 980, 46, 220, -u * 6, NAR, 12); rotulo('ruido del motor', W / 2, 1075, NAR); }
+  },
+  (q, u, L) => {   // 3 · el micrófono de afuera oye el motor primero
+    if (u >= de(L, 9)) { onda(40, 330, 640, 40, 200, -u * 6, NAR, 10); rotulo('motor', 150, 560, NAR); }
+    airpod(600, 660, 330, { ext: u >= de(L, 6) });
+    if (u >= de(L, 6)) { ctx.save(); ctx.strokeStyle = C.azul; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(510, 500); ctx.lineTo(510, 410); ctx.stroke(); ctx.restore(); rotulo('micrófono de afuera', 510, 390, C.azul); }
+  },
+  (q, u, L) => {   // 4 · el chip da vuelta la onda
+    rotulo('ruido del motor', W / 2, 400, NAR);
+    onda(90, 990, 520, 70, 300, -u * 4, NAR, 12);
+    if (u >= de(L, 1)) { tarjeta(430, 640, 220, 120, 28, '#1C1C1E'); tx('chip', W / 2, 718, 48, 800, '#fff'); }
+    if (u >= de(L, 9)) { tx('empuja ↑', 90, 425, 36, 800, NAR, 'left'); }
+    if (u >= de(L, 12)) { onda(90, 990, 900, 70, 300, -u * 4 + Math.PI, C.azul, 12); rotulo('anti-ruido', W / 2, 1020, C.azul); tx('jala ↓', 90, 1025, 36, 800, C.azul, 'left'); }
+  },
+  (q, u, L) => {   // 5 · las dos ondas se anulan
+    const p = ease(prog(u, de(L, 4), de(L, 10) + .2));
+    onda(90, 990, 470, 70, 300, -u * 4, NAR, 10, 1 - p * .6);
+    onda(90, 990, 470, 70, 300, -u * 4 + Math.PI, C.azul, 10, 1 - p * .6);
+    tx('=', W / 2, 640, 80, 800, G());
+    onda(90, 990, 800, 70 * (1 - p), 300, -u * 4, T(), 12);
+    if (p > .95) rotulo('tu tímpano casi no se mueve', W / 2, 920, G());
+  },
+  (q, u, L) => {   // 6 · silencio = ruido contra ruido
+    tx('silencio', W / 2, 520, 120, 800, C.blanco);
+    if (u >= de(L, 5)) tx('=', W / 2, 660, 90, 800, C.grisO);
+    if (u >= de(L, 6)) etiqueta('ruido', 330, 800, NAR);
+    if (u >= de(L, 8)) { tx('+', W / 2, 818, 70, 800, C.grisO); etiqueta('anti-ruido', 750, 800, C.azul); }
+  },
+  (q) => {   // 7 · CTA a mitad
+    teclado(90, 400, 900, 'RUIDO'.slice(0, Math.min(5, Math.floor(prog(q, .08, .4) * 6))));
+  },
+  (q, u, L) => {   // 8 · un segundo micrófono adentro
+    airpod(480, 660, 330, { int: u >= de(L, 10) });
+    onda(760, 1020, 660, 12, 90, -u * 8, NAR, 6);
+    if (u >= de(L, 3)) rotulo('lo que se escapa', 1020, 830, NAR, 'right');
+    if (u >= de(L, 10)) { ctx.save(); ctx.strokeStyle = C.azul; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(698, 720); ctx.lineTo(698, 860); ctx.stroke(); ctx.restore(); rotulo('micrófono de adentro', 698, 900, C.azul); }
+  },
+  (q, u, L) => {   // 9 · captura real de Apple + 200 veces por segundo
+    tarjeta(90, 330, 900, 420, 32, '#FFFFFF');
+    ctx.save(); rr(90, 330, 900, 420, 32); ctx.clip(); ctx.drawImage(FOTOS.apple, 290, 130, 640, 300, 90, 330, 900, 422); ctx.restore();
+    tx('Apple Newsroom · 28 oct 2019', W / 2, 800, 30, 600, G());
+    if (u >= de(L, 5)) {
+      const v = Math.round(200 * easeOut(prog(u, de(L, 5), de(L, 5) + .6)));
+      tx(String(v), W / 2, 990, 190, 800, C.azul, 'center');
+      tx('veces por segundo', W / 2, 1060, 40, 700, G());
+    }
+  },
+  (q, u, L) => {   // 10 · borra el motor, no la voz
+    tarjeta(90, 340, 900, 330, 36);
+    rotulo('motor · grave y parejo', 140, 410, NAR, 'left');
+    const b = ease(prog(u, de(L, 1), de(L, 4) + .3));
+    onda(140, 940, 540, 60 * (1 - b), 260, -u * 4, NAR, 10);
+    if (b > .9) { pildora(700, 380, 240, 56, 'rgba(52,199,89,.15)'); tx('se borra', 820, 420, 30, 800, '#248A3D'); }
+    if (u >= de(L, 8)) {
+      tarjeta(90, 710, 900, 330, 36);
+      rotulo('voz · cambia rápido', 140, 780, C.azul, 'left');
+      ctx.save(); ctx.strokeStyle = C.azul; ctx.lineWidth = 8; ctx.lineJoin = 'round'; ctx.beginPath();
+      for (let x = 140; x <= 940; x += 12) { const y = 910 + Math.sin(x * .09 + u * 9) * 40 * Math.sin(x * .013) + Math.sin(x * .31) * 18; x === 140 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+      ctx.stroke(); ctx.restore();
+      pildora(700, 750, 240, 56, 'rgba(10,132,255,.15)'); tx('pasa', 820, 790, 30, 800, C.azul);
+    }
+  },
+  (q, u, L) => {   // 11 · si la goma no sella, el ruido se cuela
+    ctx.save(); ctx.fillStyle = '#3A2A2A'; rr(560, 420, 520, 120, 40); ctx.fill(); rr(560, 800, 520, 120, 40); ctx.fill(); ctx.restore();   // paredes del oído
+    rotulo('tu oído', 820, 400, C.grisO);
+    airpod(380, 680, 300, {});
+    if (u >= de(L, 5)) {
+      ctx.save(); ctx.strokeStyle = C.rojo; ctx.lineWidth = 5; ctx.setLineDash([12, 10]); ctx.beginPath(); ctx.ellipse(575, 548, 50, 30, 0, 0, 7); ctx.stroke(); ctx.restore();
+      onda(380, 1020, 570, 14, 80, -u * 8, NAR, 7);
+    }
+    if (u >= de(L, 9)) etiqueta('se cuela', 820, 1020, C.rojo);
+  },
+  (q, u, L) => {   // 12 · la prueba de ajuste (ilustración, no pantalla falsa)
+    tarjeta(110, 340, 860, 720, 44);
+    tx('Prueba de ajuste', W / 2, 440, 56, 800);
+    tx('de almohadillas', W / 2, 500, 40, 600, G());
+    airpod(340, 700, 170, {}); airpod(740, 700, 170, {});
+    rotulo('izquierdo', 340, 880); rotulo('derecho', 740, 880);
+    if (u >= de(L, 9)) { pildora(250, 920, 580, 84, 'rgba(52,199,89,.15)'); tx('✓ sella bien', W / 2, 978, 44, 800, '#248A3D'); }
+  },
+  (q, u, L) => {   // 13 · ruido + opuesto = cero
+    onda(90, 990, 450, 60, 260, -u * 4, NAR, 10);
+    if (u >= de(L, 8)) { tx('+', W / 2, 590, 70, 800, G()); onda(90, 990, 700, 60, 260, -u * 4 + Math.PI, C.azul, 10); }
+    if (u >= de(L, 12)) { tx('=', 260, 940, 90, 800, G()); tx('0', W / 2, 990, 230, 800, T()); }
+  },
+  (q) => {   // 14 · CTA final
+    teclado(90, 400, 900, 'RUIDO'.slice(0, Math.min(5, Math.floor(prog(q, .05, .35) * 6))));
+  },
+];
+
+function avatar(L, u) {   // cambia de pose en la palabra que toca (corte seco, como la referencia)
+  let n = L.poses[0][1]; for (const [k, p] of L.poses) if (L.ws[k] && u >= L.ws[k].s - .05) n = p;
+  const im = FOTOS['p' + n]; if (!im) return;
+  const w = 640, h = w * im.height / im.width;
+  ctx.drawImage(im, W / 2 - w / 2, H - h + 40, w, h);
+}
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = Math.min(t - INICIOS[i], L.d);
+  OSC = (i === 0 && u < GOLPE) ? true : L.osc;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = OSC ? C.oscuro : C.claro; ctx.fillRect(0, 0, W, H);
+  ESC[i](clamp(u / L.d), u, L);
+  avatar(L, u);
+  if (i === 0 && u < GOLPE) return;
+  subtitulo(L, u, i === 0 ? 6 : 0);
+}
+
+const rutas = { apple: 'cap_apple.png' };
+const N_POSES = 20;   // cuántas poses tiene tu avatar (p01.png … pNN.png en la carpeta avatar); 0 = sin avatar
+for (let k = 1; k <= N_POSES; k++) rutas['p' + k] = `../avatar/p${String(k).padStart(2, '0')}.png`;
+const claves = Object.keys(rutas);
+window.LISTO = Promise.all([
+  cargarFotos(claves.map(k => rutas[k])).then(ims => claves.forEach((k, j) => FOTOS[k] = ims[j])),
+  document.fonts.load(`800 100px "Bricolage Grotesque"`), document.fonts.load(`400 100px Anton`), document.fonts.load(`italic 400 100px "Instrument Serif"`), document.fonts.load(`800 60px Inter`), document.fonts.load(`500 60px Inter`),
+  document.fonts.load(`600 60px Inter`), document.fonts.load(`700 60px Inter`),
+]);
+arrancar(draw);
+</script>
+</body>
+</html>

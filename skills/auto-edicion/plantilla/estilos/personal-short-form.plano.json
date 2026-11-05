@@ -1,0 +1,57 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.2
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.48,
+   "persona": "completa"
+  },
+  {
+   "desde": 1.48,
+   "hasta": 2.42,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 3
+   }
+  },
+  {
+   "desde": 2.42,
+   "hasta": 5.2,
+   "persona": "completa"
+  },
+  {
+   "desde": 5.2,
+   "hasta": 5.96,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 12
+   }
+  },
+  {
+   "desde": 5.96,
+   "hasta": 9.14,
+   "persona": "completa"
+  },
+  {
+   "desde": 9.14,
+   "hasta": 10.32,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 21
+   }
+  },
+  {
+   "desde": 10.32,
+   "hasta": 11.6,
+   "persona": "completa"
+  }
+ ],
+ "gancho": "compinche"
+}

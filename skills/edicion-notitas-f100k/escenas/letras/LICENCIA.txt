@@ -1,0 +1,10 @@
+Letras de las escenas scrapbook. Todas tienen licencia SIL Open Font License 1.1 (https://openfontlicense.org):
+se pueden usar en cualquier video, también comercial. Las que tienen nombre en español son versiones modificadas
+(letras redibujadas con textura) de fuentes libres; el aviso de copyright original va dentro de cada archivo.
+
+- Montserrat.ttf ............ Montserrat (The Montserrat Project Authors)
+- CartaAntigua.ttf .......... basada en una fuente de Haley Fiege (OFL)
+- PlumonSuelto.ttf .......... basada en una fuente de Kimberly Geswein (OFL)
+- Compinche.ttf ............. basada en Cutive (The Cutive Project Authors)
+- SelloVivo.ttf ............. basada en Archivo (The Archivo Project Authors)
+- TeclaTinta.ttf ............ basada en una fuente libre de The Mozilla Foundation (2017)

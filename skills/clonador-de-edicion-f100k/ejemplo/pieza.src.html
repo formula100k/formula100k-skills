@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>¿Qué pasaría si…? · molde gráfico minimal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// MOLDE «gráfico minimal» de clonador-de-edicion-f100k.
+// Gramática (sale de estudiar la referencia, no de copiarla): pregunta arriba a la izquierda, cifra gigante a la
+// derecha con su unidad diminuta, diagramas de línea fina que se dibujan, subtítulo de dos tonos abajo
+// (lo dicho en tinta, lo que falta en gris, *palabra clave* en acento), escenas oscuras para el giro, tarjeta final.
+//
+// Para un video nuevo cambia: ESTILO, PREGUNTA, LINEAS (frase + duración) y ESC (una función por frase).
+// voz.mjs reescribe solas las duraciones `d` cuando pones la voz.
+const W = 1080, H = 1920, FPS = 30;
+const ESTILO = {
+  claro: '#EEEBE4', oscuro: '#111214', tinta: '#141414', tintaOscuro: '#EEEBE4',
+  gris: 'rgba(20,20,20,.38)', grisOscuro: 'rgba(238,235,228,.38)', acento: '#E8431C',
+  sans: 'Inter, Helvetica, Arial, sans-serif', mono: '"JetBrains Mono", Menlo, monospace',
+};
+const PREGUNTA = '¿Qué pasaría si publicaras\nun reel cada día por un año?';
+const PAUSA = 0.3;   // silencio entre frases (lo usa voz.mjs)
+const LINEAS = [
+  { d: 3.57, txt: '¿Qué pasaría si publicaras un reel *cada día* durante un año?' },
+  { d: 2.32, txt: 'El primer día, casi *nadie* lo ve.' },
+  { d: 2.89, txt: 'Para el día *treinta*, ya tienes treinta reels.' },
+  { d: 3.26, txt: 'Si cada uno te toma *una hora*, son treinta horas.' },
+  { d: 3.1, txt: 'Al día *cien*, ya no te cuesta pensar qué decir.', oscuro: false },
+  { d: 2.28, txt: 'Pero la mayoría se rinde *mucho antes*.', oscuro: true },
+  { d: 2.24, txt: 'Porque mira la semana, *no el año*.', oscuro: true },
+  { d: 5.03, txt: 'Al día *365*, son trescientos sesenta y cinco intentos.' },
+  { d: 1.78, txt: 'Y basta con que *uno* funcione.' },
+  { d: 1.85, txt: '¿Qué pasaría si empezaras *hoy*?', final: true },
+];
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.6;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ---------- piezas del molde ----------
+let OSC = false;   // la escena actual va en oscuro
+const T = () => OSC ? ESTILO.tintaOscuro : ESTILO.tinta;
+const G = () => OSC ? ESTILO.grisOscuro : ESTILO.gris;
+const M = 80;      // margen
+
+function texto(s, x, y, tam, peso = 800, color = T(), alinear = 'left', familia = ESTILO.sans) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${familia}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function pregunta(a = 1) {   // arriba a la izquierda, siempre la misma
+  ctx.save(); ctx.globalAlpha = a;
+  PREGUNTA.split('\n').forEach((r, i) => texto(r, M, 330 + i * 62, 52, 800));
+  ctx.restore();
+}
+// cifra gigante a la derecha con su unidad diminuta. `resalta` = cuántos dígitos finales van en acento.
+function cifra(valor, unidad, p = 1, { y = 1130, tam = 230, resalta = 0, etiqueta = '' } = {}) {
+  if (p <= 0) return;
+  ctx.save(); ctx.globalAlpha = clamp(p * 1.6);
+  const s = String(valor), xFin = W - M - 12 - medir(unidad.toUpperCase(), `500 22px ${ESTILO.mono}`);
+  ctx.font = `800 ${tam}px ${ESTILO.sans}`;
+  const corte = s.length - resalta, a = s.slice(0, corte), b = s.slice(corte);
+  const wb = ctx.measureText(b).width, wa = ctx.measureText(a).width;
+  const dy = (1 - easeOut(p)) * 40;
+  texto(a, xFin - wb - wa, y + dy, tam, 800, T());
+  if (b) texto(b, xFin - wb, y + dy, tam, 800, ESTILO.acento);
+  texto(unidad.toUpperCase(), xFin + 12, y + dy - 6, 22, 500, G(), 'left', ESTILO.mono);
+  if (etiqueta) texto(etiqueta.toUpperCase(), xFin, y + dy + 42, 20, 500, G(), 'right', ESTILO.mono);
+  ctx.restore();
+}
+// subtítulo de dos tonos, palabra por palabra: lo dicho en tinta, lo que falta en gris, *clave* en acento
+function subtitulo(txt, u, d) {
+  const palabras = txt.split(' '), n = palabras.length, dichas = Math.floor(clamp(u / (d * .92)) * n + .999);
+  ctx.save(); ctx.font = `700 46px ${ESTILO.sans}`; ctx.textBaseline = 'alphabetic';
+  let x = M, y = 1400; const max = W - M * 2;
+  palabras.forEach((w, i) => {
+    const clave = /^\*.*\*[.,?!]*$/.test(w), limpia = w.replace(/\*/g, ''), ancho = ctx.measureText(limpia + ' ').width;
+    if (x + ancho - M > max) { x = M; y += 58; }
+    ctx.fillStyle = i < dichas ? (clave ? ESTILO.acento : T()) : (clave ? 'rgba(232,67,28,.4)' : G());
+    ctx.fillText(limpia, x, y); x += ancho;
+  });
+  ctx.restore();
+}
+function trazo(pts, p, color = T(), ancho = 2.5, punteado = false) {
+  if (p <= 0) return;
+  const n = Math.max(2, Math.round(pts.length * clamp(p)));
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = ancho; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (punteado) ctx.setLineDash([3, 9]);
+  ctx.beginPath(); pts.slice(0, n).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+const anillo = (cx, cy, r, p, color, ancho, punteado) => trazo(arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * p), 1, color, ancho, punteado);
+function punto(x, y, r, color = T()) { if (!(r > 0)) return; ctx.save(); ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+function regla(x0, x1, y, p, marcas = 10, etiqueta = '') {
+  trazo(line(x0, y, x1, y), p, T(), 2);
+  for (let i = 0; i <= marcas; i++) { const x = lerp(x0, x1, i / marcas); if ((x - x0) / (x1 - x0) <= p) trazo(line(x, y - (i % 5 ? 10 : 22), x, y), 1, T(), 2); }
+  if (etiqueta && p > .5) texto(etiqueta.toUpperCase(), x1, y - 34, 20, 500, G(), 'right', ESTILO.mono);
+}
+// rejilla de cuadritos: `llenos` de `total`, el `destacado` en acento (para días, piezas, intentos)
+function rejilla(total, llenos, { x = M + 20, y = 520, ancho = W - 2 * M - 40, alto = 470, destacado = -1, brillo = 0 } = {}) {
+  const cols = Math.ceil(Math.sqrt(total * ancho / alto)), filas = Math.ceil(total / cols), c = Math.min(ancho / cols, alto / filas), lado = c * .72;
+  for (let i = 0; i < total; i++) {
+    const cx = x + (i % cols) * c, cy = y + Math.floor(i / cols) * c;
+    ctx.save();
+    if (i === destacado) { glow(cx + lado / 2, cy + lado / 2, lado * 3, [232, 67, 28], .5 * brillo); ctx.fillStyle = ESTILO.acento; }
+    else ctx.fillStyle = i < llenos ? T() : 'transparent';
+    ctx.strokeStyle = G(); ctx.lineWidth = 1.5;
+    ctx.fillRect(cx, cy, lado, lado); if (i >= llenos && i !== destacado) ctx.strokeRect(cx, cy, lado, lado);
+    ctx.restore();
+  }
+}
+function curva(pts, p, color = ESTILO.acento) { trazo(resample(pts, 6), p, color, 3); }
+
+// ---------- escenas: (u = segundos desde que arranca la frase, d = su duración) ----------
+// Los tiempos van en FRACCIÓN de la frase (0 = arranca, 1 = termina): así la animación siempre termina
+// aunque la voz real dure más o menos que la de prueba.
+const ESC = [
+  (q) => { pregunta(); anillo(540, 760, 230, ease(prog(q, 0, .45)), T(), 2); punto(540, 760, 120 * back(prog(q, .1, .35)), ESTILO.acento); cifra(1, 'día', prog(q, .35, .55), { etiqueta: 'de 365' }); },
+  (q) => { pregunta(); anillo(540, 760, 230, 1, G(), 2, true); punto(540, 760, lerp(120, 12, ease(prog(q, 0, .6))), T()); cifra(1, 'día', 1, { etiqueta: 'de 365' }); },
+  (q) => { pregunta(); const n = Math.round(lerp(1, 30, ease(prog(q, 0, .75)))); rejilla(30, n); cifra(n, 'reels', 1, { resalta: n >= 30 ? 2 : 0 }); },
+  (q) => { pregunta(); rejilla(30, 30, { alto: 300 }); regla(M + 20, W - M - 20, 900, ease(prog(q, 0, .6)), 30, '1 h por reel'); const h = Math.round(lerp(1, 30, ease(prog(q, .1, .75)))); cifra(h, 'horas', 1, { resalta: 2 }); },
+  (q) => { pregunta(); const n = Math.round(lerp(30, 100, ease(prog(q, 0, .75)))); rejilla(100, n); cifra(n, 'días', 1, { resalta: n >= 100 ? 3 : 0 }); },
+  (q) => { // giro en oscuro: la curva de las ganas cae
+    const ejeY = 1000, x0 = M + 40, x1 = W - M - 40;
+    trazo(line(x0, 560, x0, ejeY), 1, G(), 2); trazo(line(x0, ejeY, x1, ejeY), 1, G(), 2);
+    texto('GANAS DE SEGUIR', x0 + 12, 590, 20, 500, G(), 'left', ESTILO.mono);
+    texto('DÍA 1', x0, ejeY + 40, 20, 500, G(), 'left', ESTILO.mono); texto('DÍA 21', x1, ejeY + 40, 20, 500, G(), 'right', ESTILO.mono);
+    curva([[x0, 600], [x0 + 200, 640], [x0 + 420, 780], [x0 + 600, 930], [x1, 985]], ease(prog(q, 0, .8)));
+  },
+  (q) => { // la semana contra el año: dos reglas
+    regla(M + 40, M + 40 + (W - 2 * M - 80) * 7 / 365 * 6, 700, ease(prog(q, 0, .3)), 7, 'una semana');
+    regla(M + 40, W - M - 40, 900, ease(prog(q, .2, .8)), 52, 'un año');
+    cifra(7, 'de 365 días', prog(q, .4, .6), { y: 1180, tam: 200 });
+  },
+  (q) => { pregunta(); const n = Math.round(lerp(100, 365, ease(prog(q, 0, .75)))); rejilla(365, n, { alto: 520 }); cifra(n, 'intentos', 1, { resalta: n >= 365 ? 3 : 0 }); },
+  (q) => { pregunta(.4); rejilla(365, 365, { alto: 520, destacado: 211, brillo: ease(prog(q, .1, .5)) }); cifra(1, 'que funcione', prog(q, .3, .55), { resalta: 1 }); },
+  (q) => { // tarjeta final: el signo de cierre va en acento
+    const p = ease(prog(q, 0, .4));
+    texto('¿Qué pasaría', M, 880, 140, 800, T());
+    texto('si', M, 1020, 140, 800, T());
+    ctx.save(); ctx.globalAlpha = p; texto('?', M + medir('si', `800 140px ${ESTILO.sans}`), 1020, 140, 800, ESTILO.acento); ctx.restore();
+    trazo(line(M, 1080, W - M, 1080), p, G(), 2);
+    texto('UN EXPERIMENTO MENTAL', M, 1125, 22, 500, G(), 'left', ESTILO.mono);
+  },
+];
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = t - INICIOS[i];
+  OSC = !!L.oscuro;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = OSC ? ESTILO.oscuro : ESTILO.claro; ctx.fillRect(0, 0, W, H);
+  ESC[i](clamp(u / L.d), u, L.d);
+  if (!L.final) subtitulo(L.txt, u, L.d);
+  grano(.05, 3);
+}
+arrancar(draw);
+</script>
+</body>
+</html>

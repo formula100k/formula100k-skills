@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>iPhone + avatar · ejemplo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Anton&family=Instrument+Serif:ital@1&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// Estilo «iPhone + avatar abajo» (ficha en referencia/estilo.md de la skill). Subtítulo con selección de iOS arriba,
+// UNA ilustración plana al centro, TU avatar abajo cambiando de pose 2–3 veces por frase.
+// TIEMPOS lo inyecta scripts/armar.mjs desde fuente/tiempos.json (duración real de cada audio + inicio de cada palabra).
+// Sin avatar: deja AVATAR = false (o la carpeta ../avatar vacía) y las escenas bajan al centro de la pantalla.
+const W = 1080, H = 1920, FPS = 30;
+const TIEMPOS = __TIEMPOS__;
+const PAUSA = 0.12;
+const PALABRA = 'GUIA';   // la palabra del CTA (la que se escribe en el teclado)
+const AVATAR = true;      // false = sin avatar
+const N_POSES = 20;       // cuántas poses hay en ../avatar (p01.png … p20.png)
+let GOLPE = 2.0;     // segundos del gancho golpe (se ajusta a la palabra «de» de la voz)
+const C = {
+  claro: '#F7F7F7', oscuro: '#121212', tinta: '#111111', blanco: '#FFFFFF',
+  gris: 'rgba(17,17,17,.42)', grisO: 'rgba(255,255,255,.45)', rojo: '#E5383B', azul: '#0A84FF',
+  verde: '#34C759', tarjeta: '#FFFFFF', tarjetaO: '#1C1C1E', linea: '#E5E5EA',
+  sans: 'Inter, -apple-system, Helvetica, Arial, sans-serif', golpe: '"Bricolage Grotesque", Inter, sans-serif', poster: 'Anton, Impact, sans-serif', serif: '"Instrument Serif", Georgia, serif',
+};
+// texto de cada frase: *clave* = negrita; la primera clave de cada trozo lleva la selección de iPhone
+const LINEAS = [
+  { poses: [[0,1],[6,17],[10,19]], osc: true,  txt: 'La IA *decide* el *86* *%* de las veces, y *nadie* lo *nota.*' },
+  { poses: [[0,17],[6,2],[8,3]], osc: false, txt: '*Anthropic,* la empresa que hace *Claude,* juntó a *50* *analistas* profesionales.' },
+  { poses: [[0,3],[5,5],[8,15]], osc: false, txt: 'Les dio un *trabajo* *real* y una *IA* para ayudarlos.' },
+  { poses: [[0,4],[5,16],[8,10]], osc: true,  txt: 'Pero en *secreto,* a cada IA le dijeron qué *opción* preferir.' },
+  { poses: [[0,18],[4,5],[8,13]], osc: false, txt: 'La IA no *mintió,* solo defendió su opción con *buenos* *argumentos.*' },
+  { poses: [[0,6],[3,1]], osc: false, txt: '*Comenta* *GUIA* y te paso cómo *evitarlo.*' },
+  { poses: [[0,16],[3,17],[9,7]], osc: true,  txt: 'Resultado, los analistas eligieron lo *mismo* que la IA, el *86%* de las veces.' },
+  { poses: [[0,14],[7,8]], osc: false, txt: 'Y si ya tenían su *propia* *idea,* *6* de cada 10 la *cambiaron.*' },
+  { poses: [[0,19],[5,9]], osc: true,  txt: '*Ninguno* sospechó que a la IA le habían dado una *preferencia.*' },
+  { poses: [[0,10],[3,11]], osc: false, txt: 'Ahora piensa en *tus* *guiones.*' },
+  { poses: [[0,6],[6,14],[10,18]], osc: false, txt: 'Si le pides «escríbeme un reel» sin decirle *quién* *eres,* *decide* *ella.*' },
+  { poses: [[0,15],[6,16],[11,12]], osc: false, txt: 'Antes de pedir nada, dale tu *voz,* tu *cliente* y tu *opinión.*' },
+  { poses: [[0,6],[4,1],[11,20]], osc: false, txt: 'Comenta la palabra *GUIA* y te mando la *guía* para que conozca tu *marca.*' },
+];
+LINEAS.forEach((l, i) => { l.d = TIEMPOS[i].d; });
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.2;
+
+// palabras con su inicio: las de Whisper si cuentan igual; si no, reparto por letras
+LINEAS.forEach((l, i) => {
+  const ws = l.txt.split(' ').map(w => ({ t: w.replace(/\*/g, ''), clave: /^\*.*\*$/.test(w) }));
+  const wh = TIEMPOS[i].words;
+  if (wh.length === ws.length) ws.forEach((w, k) => w.s = wh[k].s);
+  else { const tot = ws.reduce((a, w) => a + w.t.length + 1, 0); let a = 0; ws.forEach(w => { w.s = a / tot * l.d * .95; a += w.t.length + 1; }); }
+  // trozos de hasta 3 palabras, cortando en la puntuación
+  const trozos = []; let cur = [];
+  ws.forEach((w, k) => { cur.push(k); if (cur.length === 3 || /[,.?!»]$/.test(w.t)) { trozos.push(cur); cur = []; } });
+  if (cur.length) trozos.push(cur);
+  l.ws = ws; l.trozos = trozos;
+});
+GOLPE = Math.min(2.6, Math.max(1.6, LINEAS[0].ws[6].s));   // el golpe dura lo que la voz tarda en decir «la IA decide el 86 %»
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+let OSC = false, FOTOS = {};
+const T = () => OSC ? C.blanco : C.tinta;
+const G = () => OSC ? C.grisO : C.gris;
+const TJ = () => OSC ? C.tarjetaO : C.tarjeta;
+
+function tx(s, x, y, tam, peso = 700, color = T(), alinear = 'center', fam = C.sans) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function tarjeta(x, y, w, h, r = 36, color = TJ(), sombra = true) {
+  ctx.save();
+  if (sombra) { ctx.shadowColor = OSC ? 'rgba(0,0,0,.6)' : 'rgba(0,0,0,.10)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12; }
+  ctx.fillStyle = color; rr(x, y, w, h, r); ctx.fill(); ctx.restore();
+}
+function pildora(x, y, w, h, color) { ctx.save(); ctx.fillStyle = color; rr(x, y, w, h, h / 2); ctx.fill(); ctx.restore(); }
+function persona(x, y, s, color) {   // personita plana tipo ícono de iOS
+  ctx.save(); ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(x, y - s * .55, s * .32, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x, y + s * .35, s * .52, s * .5, 0, Math.PI, 0); ctx.fill();
+  ctx.restore();
+}
+function burbuja(x, y, w, s, deUsuario, tam = 34) {
+  const ls = renglones(s, `600 ${tam}px ${C.sans}`, w - 56), h = ls.length * tam * 1.3 + 40;
+  ctx.save(); ctx.fillStyle = deUsuario ? C.azul : (OSC ? '#2C2C2E' : '#E9E9EB');
+  rr(deUsuario ? x - w : x, y, w, h, 30); ctx.fill(); ctx.restore();
+  ls.forEach((r, i) => tx(r, (deUsuario ? x - w : x) + 28, y + 20 + tam + i * tam * 1.3 - 6, tam, 600, deUsuario ? '#fff' : T(), 'left'));
+  return h;
+}
+function candado(x, y, s, color) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = s * .12; ctx.beginPath(); ctx.arc(x, y - s * .2, s * .3, Math.PI, 0); ctx.stroke();
+  ctx.fillStyle = color; rr(x - s * .45, y - s * .2, s * .9, s * .7, s * .12); ctx.fill(); ctx.restore();
+}
+function teclado(x, y, w, escrito) {   // teclado de iOS con la palabra que se escribe
+  tarjeta(x, y, w, 560, 40, OSC ? '#1C1C1E' : '#FFFFFF');
+  tx('Comentarios', x + w / 2, y + 62, 34, 700);
+  ctx.save(); ctx.fillStyle = C.linea; ctx.fillRect(x + 30, y + 92, w - 60, 2); ctx.restore();
+  pildora(x + 30, y + 120, w - 60, 84, OSC ? '#2C2C2E' : '#F2F2F7');
+  tx(escrito || 'Agrega un comentario…', x + 64, y + 175, 38, escrito ? 700 : 500, escrito ? T() : G(), 'left');
+  if (escrito) { const wx = medir(escrito, `700 38px ${C.sans}`); ctx.save(); ctx.fillStyle = C.azul; ctx.fillRect(x + 70 + wx, y + 140, 4, 46); ctx.restore(); tx('Publicar', x + w - 60, y + 175, 34, 700, C.azul, 'right'); }
+  const filas = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'], k = (w - 60) / 10;
+  ctx.save(); ctx.fillStyle = '#D1D3D9'; rr(x + 10, y + 230, w - 20, 320, 30); ctx.fill(); ctx.restore();
+  filas.forEach((f, j) => [...f].forEach((c, i) => {
+    const kx = x + 30 + i * k + (10 - f.length) * k / 2, ky = y + 250 + j * 96;
+    const activa = escrito && c === escrito.at(-1);
+    ctx.save(); ctx.fillStyle = activa ? '#B7BAC2' : '#fff'; rr(kx + 4, ky, k - 8, 82, 12); ctx.fill(); ctx.restore();
+    tx(c, kx + k / 2, ky + 56, 36, 500, '#111');
+  }));
+}
+
+// ---------- subtítulo «iPhone»: trozos de 2–3 palabras, entran de a una con corte seco ----------
+function subtitulo(L, u, desde = 0) {
+  let k = -1; L.ws.forEach((w, i) => { if (u >= w.s) k = i; });
+  if (k < desde) return;
+  const trozo = L.trozos.find(t => t.includes(k)); if (!trozo) return;
+  const vis = trozo.filter(i => i <= k && i >= desde);
+  let tam = 66; const f = w => `${w.clave ? 800 : 500} ${tam}px ${C.sans}`;
+  const esp = () => tam * .28;
+  let ancho = () => trozo.reduce((a, i) => a + medir(L.ws[i].t, f(L.ws[i])), 0) + esp() * (trozo.length - 1);
+  while (ancho() > 940) tam -= 4;
+  let x = W / 2 - ancho() / 2; const y = 250;
+  const sel = trozo.find(i => L.ws[i].clave);
+  trozo.forEach(i => {
+    const w = L.ws[i], ww = medir(w.t, f(w));
+    if (vis.includes(i)) {
+      if (i === sel) {   // selección de texto de iOS
+        ctx.save(); ctx.fillStyle = 'rgba(10,132,255,.20)'; ctx.fillRect(x - 6, y - tam * .86, ww + 12, tam * 1.1);
+        ctx.fillStyle = C.azul; ctx.fillRect(x - 8, y - tam * .86, 4, tam * 1.1); ctx.fillRect(x + ww + 4, y - tam * .86, 4, tam * 1.1);
+        ctx.beginPath(); ctx.arc(x - 6, y - tam * .86 - 6, 9, 0, Math.PI * 2); ctx.arc(x + ww + 6, y + tam * .24 + 6, 9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      ctx.save(); ctx.font = f(w); ctx.fillStyle = w.clave ? T() : G(); ctx.textBaseline = 'alphabetic'; ctx.fillText(w.t, x, y); ctx.restore();
+    }
+    x += ww + esp();
+  });
+}
+
+// ---------- escenas (q = avance de la frase 0..1, u = segundos) ----------
+const ESC = [
+  (q, u, L) => {   // 1 · gancho golpe y después la cifra
+    if (u < GOLPE) {   // gancho golpe: chica arriba en serif, cifra ENORME de póster, corte seco
+      tx('la IA decide el', W / 2, 400, 130, 'italic 400', C.blanco, 'center', C.serif);
+      let tam = 640; while (medir('86 %', `400 ${tam}px ${C.poster}`) > 960) tam -= 8;
+      tx('86 %', W / 2, 400 + tam * .98, tam, 400, C.rojo, 'center', C.poster);
+      return;
+    }
+    pildora(140, 520, 800, 300, '#1C1C1E');
+    ctx.save(); ctx.strokeStyle = C.rojo; ctx.lineWidth = 6; rr(140, 520, 800, 300, 150); ctx.stroke(); ctx.restore();
+    const a86 = medir('86 %', `400 190px ${C.poster}`), xl = 200 + a86 + 34;
+    tx('86 %', 200, 745, 190, 400, C.blanco, 'left', C.poster);
+    tx('de las', xl, 655, 58, 800, C.blanco, 'left');
+    tx('decisiones', xl, 722, 50, 600, C.grisO, 'left');
+    if (u >= L.ws[10].s - .05) tx('y nadie lo nota', W / 2, 920, 60, 800, C.rojo);
+  },
+  (q) => {   // 2 · captura real del estudio + 50 analistas
+    const im = FOTOS.estudio; tarjeta(70, 330, 940, 360, 32);
+    ctx.save(); rr(70, 330, 940, 360, 32); ctx.clip(); ctx.fillStyle = '#F8F7F3'; ctx.fillRect(70, 330, 940, 360);
+    if (im) ctx.drawImage(im, 0, 0, im.width, im.width * 640 / 2400, 70, 340, 940, 251);   // captura REAL de la fuente (fuente/cap_estudio.png)
+    else tx('pon aquí la captura real de la fuente', W / 2, 520, 34, 600, G());
+    ctx.restore();   // logo + título del estudio, legibles
+    tx('Anthropic · 27 oct 2026', W / 2, 740, 30, 600, G());
+    const n = Math.round(clamp(prog(q, .55, .9)) * 50);
+    for (let i = 0; i < 50; i++) { const c = i % 10, f = Math.floor(i / 10); persona(150 + c * 87, 820 + f * 64, 46, i < n ? C.azul : '#D9D9DE'); }
+  },
+  (q) => {   // 3 · un trabajo real y una IA que ayuda
+    tarjeta(90, 340, 900, 700, 36);
+    ['#FF5F57', '#FEBC2E', '#28C840'].forEach((c, i) => { ctx.save(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(140 + i * 40, 390, 12, 0, 7); ctx.fill(); ctx.restore(); });
+    tx('Análisis · Cooperativa agrícola', W / 2, 400, 30, 600, G());
+    ctx.save(); ctx.fillStyle = C.linea; ctx.fillRect(90, 430, 900, 2); ctx.restore();
+    if (q > .1) burbuja(950, 470, 560, '¿Ampliamos el programa o lo cerramos?', true);
+    if (q > .55) burbuja(130, 640, 600, 'Te ayudo con el análisis. Empecemos por los datos.', false);
+  },
+  (q) => {   // 4 · la instrucción secreta
+    tarjeta(110, 380, 860, 560, 40);
+    candado(W / 2, 520, 120, C.rojo);
+    tx('Instrucción oculta', W / 2, 680, 52, 800, C.blanco);
+    pildora(190, 730, 700, 110, '#2C2C2E');
+    if (q > .55) tx('Prefiere la opción B', W / 2, 805, 48, 800, C.rojo);
+    else { ctx.save(); ctx.fillStyle = '#48484A'; rr(250, 770, 580, 34, 17); ctx.fill(); ctx.restore(); }
+  },
+  (q) => {   // 5 · solo argumentos
+    let y = 360;
+    if (q > .05) y += burbuja(110, y, 760, 'La opción B es más sólida por los datos.', false, 40) + 26;
+    if (q > .4) y += burbuja(110, y, 760, 'Mira esta comparación: B gana.', false, 40) + 26;
+    if (q > .72) { y += burbuja(110, y, 760, 'Te recomiendo la opción B.', false, 40) + 26; pildora(110, y, 360, 70, 'rgba(52,199,89,.15)'); tx('✓ ninguna mentira', 290, y + 47, 32, 700, '#248A3D'); }
+  },
+  (q) => {   // 6 · CTA a mitad
+    teclado(90, 400, 900, PALABRA.slice(0, Math.min(PALABRA.length, Math.floor(prog(q, .1, .45) * (PALABRA.length + 1)))));
+  },
+  (q) => {   // 7 · 86 % (al azar sería 50 %)
+    const v = Math.round(lerp(50, 86, ease(prog(q, .45, .85))));
+    tx(v + '%', W / 2, 700, 260, 800, v >= 86 ? C.rojo : C.blanco);
+    tx('eligieron lo mismo que la IA', W / 2, 790, 44, 600, C.grisO);
+    const x0 = 120, x1 = 960, y = 900;
+    pildora(x0, y, x1 - x0, 40, '#2C2C2E'); pildora(x0, y, (x1 - x0) * v / 100, 40, C.rojo);
+    ctx.save(); ctx.fillStyle = C.blanco; ctx.fillRect(x0 + (x1 - x0) * .5 - 2, y - 16, 4, 72); ctx.restore();
+    tx('al azar: 50%', x0 + (x1 - x0) * .5, y + 110, 34, 600, C.grisO);
+  },
+  (q) => {   // 8 · 6 de cada 10 cambiaron
+    tarjeta(90, 360, 900, 640, 40);
+    const n = Math.floor(clamp(prog(q, .45, .85)) * 6.999);
+    for (let i = 0; i < 10; i++) { const c = i % 5, f = Math.floor(i / 5); persona(220 + c * 160, 560 + f * 230, 120, i < n ? C.rojo : C.azul); }
+    tx(n + ' de 10', W / 2, 960, 56, 800, n ? C.rojo : T());
+  },
+  (q) => {   // 9 · ninguno sospechó
+    pildora(160, 560, 760, 260, '#1C1C1E');
+    tx('0', 360, 755, 200, 800, C.rojo);
+    tx('de 48', 600, 700, 64, 800, C.blanco);
+    tx('sospechó algo', 620, 770, 44, 600, C.grisO);
+  },
+  (q) => {   // 10 · tus guiones
+    tarjeta(200, 340, 680, 720, 24, '#FFFFFF');
+    tx('Mi guion', 260, 430, 48, 800, C.tinta, 'left');
+    for (let i = 0; i < 9; i++) { ctx.save(); ctx.fillStyle = '#E5E5EA'; rr(260, 480 + i * 58, i % 3 === 2 ? 380 : 560, 24, 12); ctx.fill(); ctx.restore(); }
+  },
+  (q) => {   // 11 · el pedido sin contexto
+    tarjeta(90, 340, 900, 720, 36);
+    if (q > .05) burbuja(950, 390, 520, 'escríbeme un reel', true, 40);
+    if (q > .6) {
+      burbuja(130, 540, 700, '¡Claro! Aquí tienes un reel viral sobre productividad para emprendedores…', false, 36);
+      pildora(130, 870, 330, 76, 'rgba(229,56,59,.12)'); tx('decidió la IA', 295, 920, 34, 800, C.rojo);
+    }
+  },
+  (q, u, L) => {   // 12 · tu voz, tu cliente, tu opinión (entran cuando se dicen)
+    const t = k => L.ws[k] ? L.ws[k].s : 99;
+    const items = [['1', 'Tu voz', 6], ['2', 'Tu cliente', 8], ['3', 'Tu opinión', 11]];
+    items.forEach(([n, s, k], i) => {
+      if (u < t(k) - .05) return;
+      const y = 380 + i * 220; tarjeta(130, y, 820, 180, 36);
+      ctx.save(); ctx.fillStyle = C.azul; ctx.beginPath(); ctx.arc(230, y + 90, 50, 0, 7); ctx.fill(); ctx.restore();
+      tx(n, 230, y + 112, 60, 800, '#fff'); tx(s, 320, y + 112, 64, 800, C.tinta, 'left');
+    });
+  },
+  (q) => {   // 13 · CTA final
+    teclado(90, 400, 900, PALABRA.slice(0, Math.min(PALABRA.length, Math.floor(prog(q, .05, .4) * (PALABRA.length + 1)))));
+  },
+];
+
+const HAY_AVATAR = () => AVATAR && Object.keys(FOTOS).some(k => /^p\d+$/.test(k) && FOTOS[k]);
+function avatar(L, u) {   // cambia de pose en la palabra que toca (corte seco, como la referencia)
+  if (!HAY_AVATAR()) return;
+  let n = L.poses[0][1]; for (const [k, p] of L.poses) if (L.ws[k] && u >= L.ws[k].s - .05) n = p;
+  const im = FOTOS['p' + n]; if (!im) return;
+  const w = 640, h = w * im.height / im.width;
+  ctx.drawImage(im, W / 2 - w / 2, H - h + 40, w, h);
+}
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = Math.min(t - INICIOS[i], L.d);
+  OSC = (i === 0 && u < GOLPE) ? true : L.osc;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = OSC ? C.oscuro : C.claro; ctx.fillRect(0, 0, W, H);
+  ctx.save(); if (!HAY_AVATAR()) ctx.translate(0, 220);   // sin avatar, la ilustración baja al centro
+  ESC[i](clamp(u / L.d), u, L);
+  ctx.restore();
+  avatar(L, u);
+  if (i === 0 && u < GOLPE) return;
+  subtitulo(L, u, i === 0 ? 6 : 0);
+}
+
+const rutas = { estudio: 'cap_estudio.png' };
+if (AVATAR) for (let k = 1; k <= N_POSES; k++) rutas['p' + k] = `../avatar/p${String(k).padStart(2, '0')}.png`;
+const claves = Object.keys(rutas);
+// Cada foto se carga por su cuenta: si falta una (sin avatar, sin captura), la pieza sigue y esa queda vacía.
+const cargarUna = src => new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = src; });
+window.LISTO = Promise.all([
+  Promise.all(claves.map(k => cargarUna(rutas[k]))).then(ims => claves.forEach((k, j) => FOTOS[k] = ims[j])),
+  document.fonts.load(`800 100px "Bricolage Grotesque"`), document.fonts.load(`400 100px Anton`), document.fonts.load(`italic 400 100px "Instrument Serif"`), document.fonts.load(`800 60px Inter`), document.fonts.load(`500 60px Inter`),
+  document.fonts.load(`600 60px Inter`), document.fonts.load(`700 60px Inter`),
+]);
+arrancar(draw);
+</script>
+</body>
+</html>

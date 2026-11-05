@@ -1,0 +1,66 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.4
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.2,
+   "persona": [
+    {
+     "x": 0,
+     "y": 420,
+     "w": 1080,
+     "h": 1920,
+     "recorte": true
+    }
+   ],
+   "estilo": "gancho con plantilla"
+  },
+  {
+   "desde": 2.2,
+   "hasta": 5.28,
+   "persona": [
+    {
+     "x": 0,
+     "y": 420,
+     "w": 1080,
+     "h": 1920,
+     "recorte": true
+    }
+   ],
+   "estilo": "evidencia: página de Wikipedia"
+  },
+  {
+   "desde": 5.28,
+   "hasta": 7.76,
+   "persona": [
+    {
+     "x": 0,
+     "y": 420,
+     "w": 1080,
+     "h": 1920,
+     "recorte": true
+    }
+   ],
+   "estilo": "evidencia: titulares reales"
+  },
+  {
+   "desde": 7.76,
+   "hasta": 10.58,
+   "persona": [
+    {
+     "x": 0,
+     "y": 420,
+     "w": 1080,
+     "h": 1920,
+     "recorte": true
+    }
+   ],
+   "estilo": "dos tarjetas que se marcan"
+  }
+ ],
+ "gancho": "gigante"
+}

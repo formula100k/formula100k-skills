@@ -1,0 +1,10 @@
+{"estilo":"linea","halo":0.55,"escenas":[
+ {"desde":0,"hasta":2.36,"modo":"persona","frase":"todos los trucos"},
+ {"desde":2.36,"hasta":4.7,"modo":"persona","figura":"circulo","frase":"y no suena a ti"},
+ {"desde":4.7,"hasta":7.0,"modo":"linea","figura":"esfera","frase":"haz esto"},
+ {"desde":7.0,"hasta":10.6,"modo":"persona","frase":"un audio de 5 minutos"},
+ {"desde":10.6,"hasta":12.45,"modo":"linea","figura":"flor","frase":"tu nota de voz"},
+ {"desde":12.45,"hasta":16.1,"modo":"persona","figura":"pendulo","frase":"que analice cómo hablas"},
+ {"desde":16.1,"hasta":18.6,"modo":"linea","figura":"espiral","frase":"tus muletillas"},
+ {"desde":18.6,"hasta":30,"modo":"persona","frase":"tu ritmo"}
+]}

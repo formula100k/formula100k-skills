@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sin grabar · avatar Habbo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Anton&family=Instrument+Serif:ital@1&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">import * as THREE from './three.module.min.js'; window.THREE = THREE; window.dispatchEvent(new Event('three-listo'));</script>
+<script src="avatar-habbo.js"></script>
+<script src="boca.js"></script>
+<script>
+// Auto-Edición «Sin grabar» · estilo Avatar pixel (Habbo): subtítulo con selección de iOS arriba,
+// UNA escena con capturas reales al centro y el avatar 3D de cubitos abajo (gestos + boca por volumen de la voz).
+// Ejemplo: «Cómo Google Maps sabe que hay tráfico» (7 frases). Para un tema nuevo cambia LOOK, LINEAS, ESC y rutas.
+// ANATOMIA: estilizada — avatar de cubitos en pixel art (three.js), no se dibuja anatomía en vector.
+// ---------- LOOK: lo único que cambia por persona ----------
+const LOOK = {
+  piel:   ['#f0c19c', '#d9a07a', '#b97c58', '#7a4a32'],   // luz, base, sombra, contorno (4 tonos de claro a oscuro)
+  pelo:   ['#6b4a35', '#4e3424', '#3a2619', '#1e120b'],
+  ropa:   ['#9fc3ff', '#6f9fe8', '#4f7cc4', '#26406b'],
+  ojos:   ['#6b3f22', '#3a2010'],                        // iris y pupila
+  labios: ['#b83a58', '#e0657f'],
+  pelo_largo: true,   // false = pelo corto
+  lentes: null,       // color del marco, p. ej. '#15110f', o null
+  diadema: null,      // 4 tonos, o null
+  aretes: false, collar: false,
+};
+const W = 1080, H = 1920, FPS = 30;
+const TIEMPOS = __TIEMPOS__;
+const PAUSA = 0.12;
+let GOLPE = 2.0;
+const C = {
+  claro: '#F7F7F7', oscuro: '#121212', tinta: '#111111', blanco: '#FFFFFF',
+  gris: 'rgba(17,17,17,.42)', grisO: 'rgba(255,255,255,.55)', rojo: '#E5383B', azul: '#0A84FF', verde: '#1E8E3E',
+  tarjeta: '#FFFFFF', tarjetaO: '#1C1C1E', linea: '#E5E5EA',
+  sans: 'Inter, -apple-system, Helvetica, Arial, sans-serif', poster: 'Anton, Impact, sans-serif', serif: '"Instrument Serif", Georgia, serif',
+};
+// g = gesto del avatar en la palabra k: 'explica', 'senala', 'sorpresa', 'pulgar', 'pensar', 'descanso'
+const LINEAS = [
+  { g: [[0, 'sorpresa'], [6, 'senala']], osc: true,  txt: 'El *tráfico* *rojo* de *Google* *Maps* *eres* *tú.*' },
+  { g: [[0, 'explica'], [5, 'senala'], [11, 'explica']], osc: false, txt: 'Cuando *navegas* con *Maps,* tu *ubicación* se *suma* a la de *todos* en esa *calle.*' },
+  { g: [[0, 'pensar'], [5, 'senala']], osc: false, txt: 'Si *todos* avanzan *lento,* *Maps* *pinta* esa calle de *rojo.*' },
+  { g: [[0, 'explica'], [9, 'pensar']], osc: false, txt: 'Además, *recuerda* cómo se *mueve* cada *calle* a cada *hora* del *día.*' },
+  { g: [[0, 'senala'], [8, 'sorpresa']], osc: false, txt: 'Con *DeepMind,* *predice* cómo estará tu *ruta* en *cincuenta* *minutos.*' },
+  { g: [[0, 'explica'], [9, 'pulgar']], osc: false, txt: 'Así *acierta* tu *hora* de *llegada* en más del *97 %.*' },
+  { g: [[0, 'explica'], [6, 'senala']], osc: true,  txt: 'La *próxima* vez que *veas* *rojo,* ese *rojo* *eres* *tú.*' },
+];
+LINEAS.forEach((l, i) => { l.d = TIEMPOS[i].d; });
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.0;
+LINEAS.forEach((l, i) => {
+  const ws = l.txt.split(' ').map(w => ({ t: w.replace(/\*/g, ''), clave: /^\*.*\*$/.test(w) }));
+  const wh = TIEMPOS[i].words;
+  if (wh.length === ws.length) ws.forEach((w, k) => w.s = wh[k].s);
+  else { console.warn(`frase ${i + 1}: Whisper oyó ${wh.length} palabras y el texto tiene ${ws.length}; reparto por letras`); const tot = ws.reduce((a, w) => a + w.t.length + 1, 0); let a = 0; ws.forEach(w => { w.s = a / tot * l.d * .95; a += w.t.length + 1; }); }
+  const trozos = []; let cur = [];
+  ws.forEach((w, k) => { cur.push(k); if (cur.length === 3 || /[,.?!»]$/.test(w.t)) { trozos.push(cur); cur = []; } });
+  if (cur.length) trozos.push(cur);
+  l.ws = ws; l.trozos = trozos;
+});
+GOLPE = LINEAS[0].d + .01;   // la frase 1 entera es el gancho golpe
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+let OSC = false, FOTOS = {};
+const T = () => OSC ? C.blanco : C.tinta;
+const G = () => OSC ? C.grisO : C.gris;
+function tx(s, x, y, tam, peso = 700, color = T(), alinear = 'center', fam = C.sans) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y); ctx.restore();
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function pildora(x, y, w, h, color) { ctx.save(); ctx.fillStyle = color; rr(x, y, w, h, h / 2); ctx.fill(); ctx.restore(); }
+function etiqueta(s, x, y, color, tam = 44) { const w = medir(s, `800 ${tam}px ${C.sans}`) + 64; pildora(x - w / 2, y - tam * 1.1, w, tam * 1.7, color); tx(s, x, y + 2, tam, 800, '#fff'); }
+// captura real recortada (sx, sy, sw, sh en pixeles de la captura) dentro de una tarjeta plana
+function captura(im, sx, sy, sw, sh, x, y, w, h, r = 28, alfa = 1) {
+  ctx.save(); ctx.globalAlpha = alfa;
+  ctx.shadowColor = OSC ? 'rgba(0,0,0,.5)' : 'rgba(0,0,0,.10)'; ctx.shadowBlur = 36; ctx.shadowOffsetY = 10;
+  ctx.fillStyle = '#fff'; rr(x, y, w, h, r); ctx.fill(); ctx.shadowColor = 'transparent';
+  rr(x, y, w, h, r); ctx.clip(); ctx.drawImage(im, sx, sy, sw, sh, x, y, w, h); ctx.restore();
+}
+function fuente(s, y) { tx(s, W / 2, y, 30, 600, G()); }
+function puntoAzul(x, y, s = 1) {   // el punto de «tu ubicación» de Google Maps
+  ctx.save(); ctx.fillStyle = 'rgba(26,115,232,.18)'; ctx.beginPath(); ctx.arc(x, y, 46 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y, 22 * s, 0, 7); ctx.fill();
+  ctx.fillStyle = '#1A73E8'; ctx.beginPath(); ctx.arc(x, y, 16 * s, 0, 7); ctx.fill(); ctx.restore();
+}
+const de = (L, k) => (L.ws[k] ? L.ws[k].s : 99) - .05;
+
+// ---------- subtítulo «iPhone» (igual que la plantilla base) ----------
+function subtitulo(L, u, desde = 0) {
+  let k = -1; L.ws.forEach((w, i) => { if (u >= w.s) k = i; });
+  if (k < desde) return;
+  const trozo = L.trozos.find(t => t.includes(k)); if (!trozo) return;
+  const vis = trozo.filter(i => i <= k && i >= desde);
+  let tam = 66; const f = w => `${w.clave ? 800 : 500} ${tam}px ${C.sans}`;
+  const esp = () => tam * .28;
+  const ancho = () => trozo.reduce((a, i) => a + medir(L.ws[i].t, f(L.ws[i])), 0) + esp() * (trozo.length - 1);
+  while (ancho() > 940) tam -= 4;
+  let x = W / 2 - ancho() / 2; const y = 250;
+  const sel = trozo.find(i => L.ws[i].clave);
+  trozo.forEach(i => {
+    const w = L.ws[i], ww = medir(w.t, f(w));
+    if (vis.includes(i)) {
+      if (i === sel) {
+        ctx.save(); ctx.fillStyle = 'rgba(10,132,255,.20)'; ctx.fillRect(x - 6, y - tam * .86, ww + 12, tam * 1.1);
+        ctx.fillStyle = C.azul; ctx.fillRect(x - 8, y - tam * .86, 4, tam * 1.1); ctx.fillRect(x + ww + 4, y - tam * .86, 4, tam * 1.1);
+        ctx.beginPath(); ctx.arc(x - 6, y - tam * .86 - 6, 9, 0, Math.PI * 2); ctx.arc(x + ww + 6, y + tam * .24 + 6, 9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      ctx.save(); ctx.font = f(w); ctx.fillStyle = w.clave ? T() : G(); ctx.textBaseline = 'alphabetic'; ctx.fillText(w.t, x, y); ctx.restore();
+    }
+    x += ww + esp();
+  });
+}
+
+// recorte del mapa real (Ciudad de México, tráfico en tiempo real): una zona con avenidas en rojo
+const MAPA = [1200, 396, 720, 624];   // sx, sy, sw, sh en la captura de 2400 × 1800
+const AV = [[675, 345], [390, 1110]]; // Av. Insurgentes dentro de la tarjeta (se revisa en la hoja)
+
+const ESC = [
+  (q, u, L) => {   // 1 · gancho golpe: «el tráfico / ERES TÚ» sobre el mapa real
+    captura(FOTOS.maps, 240, 240, 1920, 1280, 0, 300, W, 720, 0, .38);
+    ctx.save(); ctx.fillStyle = 'rgba(18,18,18,.35)'; ctx.fillRect(0, 300, W, 720); ctx.restore();
+    tx('el tráfico', W / 2, 520, 130, 'italic 400', C.blanco, 'center', C.serif);
+    let tam = 420; while (medir('ERES TÚ', `400 ${tam}px ${C.poster}`) > 980) tam -= 8;
+    tx('ERES TÚ', W / 2, 520 + tam * .95, tam, 400, C.rojo, 'center', C.poster);
+  },
+  (q, u, L) => {   // 2 · tu ubicación se suma a la de todos en esa calle
+    captura(FOTOS.maps, ...MAPA, 90, 330, 900, 780);
+    const p = (t) => [lerp(AV[0][0], AV[1][0], t), lerp(AV[0][1], AV[1][1], t)];
+    if (u >= de(L, 11)) [.12, .22, .3, .38, .62, .7, .8, .9].forEach(t => puntoAzul(...p(t), .75));
+    if (u >= de(L, 5)) puntoAzul(...p(.5), 1.15);
+    if (u >= de(L, 5)) { pildora(110, 1040, 300, 56, '#1A73E8'); tx('tu ubicación', 260, 1080, 32, 800, '#fff'); }
+  },
+  (q, u, L) => {   // 3 · todos lento → rojo (leyenda real de Maps)
+    captura(FOTOS.maps, ...MAPA, 90, 330, 900, 620);
+    if (u >= de(L, 3)) captura(FOTOS.maps, 1205, 1702, 360, 50, 165, 985, 750, 104, 22);
+    if (u >= de(L, 9)) etiqueta('lento = rojo', W / 2, 1150 - 40, C.rojo, 40);
+  },
+  (q, u, L) => {   // 4 · Google recuerda cada calle a cada hora (blog oficial + barras de un día)
+    captura(FOTOS.blog, 480, 320, 1500, 820, 90, 330, 900, 492);
+    fuente('blog.google · 3 sep 2020', 862);
+    // un día de una calle: de madrugada vacía, horas pico lentas (ilustrativo, sin cifras)
+    const x0 = 140, base = 1090, aw = 800 / 24;
+    for (let h = 0; h < 24; h++) {
+      if (u < de(L, 4) + h * 0.02) break;
+      const pico = Math.exp(-((h - 8) ** 2) / 3) + Math.exp(-((h - 18.5) ** 2) / 4) * 1.1, v = .15 + .85 * Math.min(1, pico + (h > 6 && h < 21 ? .25 : 0));
+      ctx.save(); ctx.fillStyle = v > .8 ? C.rojo : v > .5 ? '#F2A33A' : '#34A853'; rr(x0 + h * aw + 3, base - v * 160, aw - 6, v * 160, 6); ctx.fill(); ctx.restore();
+    }
+    if (u >= de(L, 4)) { tx('0 h', x0, base + 40, 26, 700, G(), 'left'); tx('24 h', x0 + 800, base + 40, 26, 700, G(), 'right'); }
+  },
+  (q, u, L) => {   // 5 · DeepMind predice tu ruta en cincuenta minutos
+    captura(FOTOS.deepmind, 560, 190, 1280, 656, 90, 330, 900, 461);
+    fuente('deepmind.google · 3 sep 2020', 840);
+    if (u >= de(L, 8)) { tx('50', W / 2 - 40, 1080, 230, 400, C.azul, 'right', C.poster); tx('minutos', W / 2 - 10, 1060, 70, 'italic 400', T(), 'left', C.serif); tx('más adelante en tu ruta', W / 2 - 10, 1000, 34, 700, G(), 'left'); }
+  },
+  (q, u, L) => {   // 6 · más del 97 % de los viajes (frase real del blog de Google)
+    captura(FOTOS.f97, 0, 98, 612, 50, 110, 360, 860, 70, 14);
+    fuente('blog.google · 3 sep 2020', 480);
+    if (u >= de(L, 7)) {   // entra con corte seco en «más del»: la cifra exacta de la fuente, sin contador
+      tx('más del', W / 2, 548, 64, 'italic 400', T(), 'center', C.serif);
+      tx('97', W / 2 + 60, 900, 380, 400, C.verde, 'right', C.poster);
+      tx('%', W / 2 + 80, 900, 200, 400, C.verde, 'left', C.poster);
+      tx('de los viajes, acierta tu hora de llegada', W / 2, 990, 38, 700, G());
+    }
+  },
+  (q, u, L) => {   // 7 · cierre: «ese rojo / ERES TÚ»
+    captura(FOTOS.maps, ...MAPA, 90, 330, 900, 780, 28, u >= de(L, 6) ? .35 : 1);
+    if (u >= de(L, 6)) {
+      tx('ese rojo', W / 2, 480, 120, 'italic 400', C.blanco, 'center', C.serif);
+      let tam = 420; while (medir('ERES TÚ', `400 ${tam}px ${C.poster}`) > 900) tam -= 8;
+      tx('ERES TÚ', W / 2, 570 + tam * .95, tam, 400, C.rojo, 'center', C.poster);
+    }
+  },
+];
+
+// avatar 3D: cada gesto empieza un poco antes de su palabra y llega en ~0,3 s
+const GESTOS = [], PALABRAS = [];
+LINEAS.forEach((L, i) => {
+  for (const [k, g] of L.g) GESTOS.push({ t: Math.max(0, INICIOS[i] + (L.ws[k] ? L.ws[k].s : 0) - .18), g });
+  for (const w of L.ws) PALABRAS.push(INICIOS[i] + w.s);
+});
+const AV_Y = H - 800;   // la cintura del avatar queda en el borde de abajo
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = Math.min(t - INICIOS[i], L.d);
+  OSC = L.osc;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = OSC ? C.oscuro : C.claro; ctx.fillRect(0, 0, W, H);
+  ESC[i](clamp(u / L.d), u, L);
+  AvatarHabbo.dibujar(ctx, t, 0, AV_Y);
+  if (i === 0 && u < GOLPE) return;
+  subtitulo(L, u);
+}
+
+const rutas = { maps: 'cap_maps.jpg', blog: 'cap_blog.jpg', deepmind: 'cap_deepmind.jpg', f97: 'cap_97.jpg' };   // capturas reales en fuente/
+const claves = Object.keys(rutas);
+window.LISTO = Promise.all([
+  cargarFotos(claves.map(k => rutas[k])).then(ims => claves.forEach((k, j) => FOTOS[k] = ims[j])),
+  document.fonts.load(`400 100px Anton`), document.fonts.load(`italic 400 100px "Instrument Serif"`),
+  document.fonts.load(`800 60px Inter`), document.fonts.load(`500 60px Inter`), document.fonts.load(`600 60px Inter`), document.fonts.load(`700 60px Inter`),
+  new Promise(ok => { const go = () => AvatarHabbo.iniciar({ ancho: 1080, alto: 880, look: LOOK }).then(() => { AvatarHabbo.linea(GESTOS, PALABRAS, window.BOCA || [], FPS); ok(); }); window.THREE ? go() : window.addEventListener('three-listo', go); }),
+]);
+arrancar(draw);
+</script>
+</body>
+</html>

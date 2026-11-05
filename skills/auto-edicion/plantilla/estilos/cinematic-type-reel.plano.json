@@ -1,0 +1,81 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.2
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.22,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 1,
+    "bn": true
+   }
+  },
+  {
+   "desde": 1.22,
+   "hasta": 2.5,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "cortado.mp4",
+    "desde": 1.22,
+    "bn": true
+   }
+  },
+  {
+   "desde": 2.5,
+   "hasta": 4.06,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 8,
+    "bn": true
+   }
+  },
+  {
+   "desde": 4.06,
+   "hasta": 5.5,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "cortado.mp4",
+    "desde": 4.06,
+    "bn": true
+   }
+  },
+  {
+   "desde": 5.5,
+   "hasta": 6.66,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 14,
+    "bn": true
+   }
+  },
+  {
+   "desde": 6.66,
+   "hasta": 7.42,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "cortado.mp4",
+    "desde": 6.66,
+    "bn": true
+   }
+  },
+  {
+   "desde": 7.42,
+   "hasta": 9.1,
+   "persona": "oculta",
+   "broll": {
+    "archivo": "broll/oficina.mp4",
+    "desde": 22,
+    "bn": true
+   }
+  }
+ ],
+ "gancho": "escalera",
+ "titulo": "fino"
+}

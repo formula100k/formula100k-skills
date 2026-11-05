@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  reel-infografia-con-clon-f100k · motor del reel (1080×1920, 30 fps)
+  NO se edita a mano: armar.py inyecta __DUR__, __PLAN__, __PALABRAS__, __TAMS__ y __YO__.
+  Todo lo que cambia de un reel a otro vive en plan.json (piezas ancladas a palabras).
+  Capas (de abajo arriba): toma montada (narradora + clon) · piezas sobre la toma · LÁMINA a pantalla completa
+  (fondo plano del color de la marca + persona recortada + contenido) · subtítulos · gancho golpe.
+-->
+<style>
+  @font-face { font-family: 'Didot'; src: local('Didot'); }
+  @font-face { font-family: 'Bodoni 72'; src: local('Bodoni 72'); }
+  :root {
+    --lam: #FFD630;                                   /* color de la lámina (marca.color) */
+    --tinta: #111111;                                 /* texto sobre la lámina */
+    --oscuro: color-mix(in srgb, var(--lam) 34%, #000);   /* etiqueta «oliva»: el color de la lámina oscurecido */
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: var(--sans); }
+  #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .oculto { opacity: 0; visibility: hidden; }
+
+  /* ── toma montada ── */
+  #base-wrap, #base-zoom { position: absolute; inset: 0; }
+  #base { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  #sombra-top { position: absolute; left: 0; right: 0; top: 0; height: 900px; opacity: 0;
+                background: linear-gradient(to bottom, rgba(0,0,0,.62), rgba(0,0,0,.25) 55%, rgba(0,0,0,0)); }
+
+  /* ── piezas sobre la toma ── */
+  #capa-toma { position: absolute; inset: 0; }
+  .pz { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; visibility: hidden; }
+
+  /* palabra en TRIPLE jerarquía: chica blanca arriba / PALABRA ENORME del color / chica abajo */
+  .tri { position: absolute; left: 0; width: 1080px; text-align: center; transform: translateY(-50%); }
+  .tri .bloque { display: inline-block; text-align: left; }
+  .tri .ch { display: block; font-weight: 700; font-size: var(--fc, 50px); line-height: 1.05; color: #fff; letter-spacing: -.5px;
+             text-shadow: 0 2px 10px rgba(0,0,0,.75), 0 0 2px rgba(0,0,0,.6); }
+  .tri .ch.abajo { text-align: right; }
+  .tri .gr { display: block; font-weight: 900; font-size: var(--fg, 190px); line-height: .92; letter-spacing: -.03em; color: var(--lam);
+             text-transform: uppercase; white-space: nowrap;
+             text-shadow: 0 4px 14px rgba(0,0,0,.5); }   /* 23-oct: sin brillo ni canto 3D */
+
+  /* llave { } que agrupa miniaturas bajo una palabra */
+  .llave .brace { position: absolute; left: 130px; width: 820px; height: 80px; overflow: visible; }
+  .llave .brace path { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
+  .llave .fila { position: absolute; left: 0; width: 1080px; display: flex; justify-content: center; gap: 14px; }
+  .llave .fila .mini { width: 150px; border-radius: 10px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 10px 24px rgba(0,0,0,.5); }
+  .llave .fila .mini img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* tabla: hoja de cálculo en el tercio inferior */
+  .tabla { position: absolute; left: 110px; width: 860px; background: var(--lam); border: 4px solid var(--tinta); border-radius: 6px; overflow: hidden;
+           box-shadow: 0 20px 50px rgba(0,0,0,.5); display: grid; }
+  .tabla .cel { border-right: 2px solid var(--tinta); border-bottom: 2px solid var(--tinta); font-weight: 800; font-size: 20px; color: var(--tinta);
+                padding: 6px 8px; line-height: 1.1; overflow: hidden; }
+  .tabla .cel.cab { font-size: 19px; background: color-mix(in srgb, var(--lam) 80%, #fff); }
+
+  /* tarjeta de video de YouTube */
+  .tvid { position: absolute; background: #fff; border-radius: 22px; padding: 14px 14px 18px; box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+  .tvid .th { position: relative; border-radius: 14px; overflow: hidden; background: #222; }
+  .tvid .th img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .tvid .th .du { position: absolute; right: 10px; bottom: 10px; padding: 3px 9px; border-radius: 6px; background: rgba(0,0,0,.82); color: #fff; font-weight: 700; font-size: 20px; }
+  .tvid .tx { position: relative; padding: 14px 40px 0 6px; }
+  .tvid .tx b { display: block; font-weight: 800; font-size: 28px; line-height: 1.15; color: #0f0f0f; }
+  .tvid .tx i { display: block; margin-top: 6px; font-style: normal; font-size: 21px; color: #606060; }
+  .tvid .tx .pts { position: absolute; right: 4px; top: 12px; font-size: 30px; color: #0f0f0f; line-height: .5; letter-spacing: -2px; writing-mode: vertical-lr; }
+
+  /* comentario: caja que teclea la palabra del CTA, envía y termina en corazón */
+  .com { position: absolute; left: 110px; width: 860px; height: 124px; border-radius: 22px; background: #fff; border: 6px solid var(--lam);
+         box-shadow: 0 0 0 3px rgba(0,0,0,.18), 0 0 40px color-mix(in srgb, var(--lam) 60%, transparent), 0 20px 50px rgba(0,0,0,.45); }
+  .com .av { position: absolute; left: 18px; top: 18px; width: 76px; height: 76px; border-radius: 50%; overflow: hidden; background: var(--oscuro);
+             color: #fff; font-weight: 900; font-size: 36px; display: flex; align-items: center; justify-content: center; }
+  .com .av img { width: 100%; height: 100%; object-fit: cover; }
+  .com .u { position: absolute; left: 112px; top: 16px; font-weight: 600; font-size: 22px; color: #737373; }
+  .com .p { position: absolute; left: 112px; top: 44px; font-weight: 900; font-size: 48px; color: #111; letter-spacing: -.5px; white-space: nowrap; line-height: 1.1; }
+  .com .p .c { display: none; }
+  .com .p i { display: inline-block; width: 4px; height: 46px; margin-left: 3px; vertical-align: -7px; background: #111; }
+  .com .env { position: absolute; right: 18px; top: 18px; width: 76px; height: 76px; border-radius: 50%; background: #ff2d55; }
+  .com .env svg, .com .cor svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .com .cor { position: absolute; right: 18px; top: 18px; width: 76px; height: 76px; opacity: 0; }
+
+  /* ── LÁMINA a pantalla completa ── */
+  #lamina { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  #lam-fondo { position: absolute; inset: 0; background: var(--lam); }
+  .lc { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  #mini-wrap { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  #mini-in { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+  #yo { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+        filter: drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff) drop-shadow(0 12px 18px rgba(0,0,0,.25)); }
+  #centro-img { position: absolute; display: none; filter: drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff); }
+  #lam-top { position: absolute; inset: 0; }
+
+  .chip { position: absolute; left: 50%; transform: translate(-50%, -50%); padding: 10px 24px 12px; background: #fff; border-radius: 6px;
+          font-weight: 800; font-size: 42px; color: #1a1a1a; white-space: nowrap; letter-spacing: -.5px; box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+  .eti { position: absolute; transform: translate(-50%, -50%); padding: 8px 22px 10px; background: var(--oscuro); color: #fff; border: 3px solid #fff;
+         border-radius: 8px; font-weight: 900; font-size: 50px; letter-spacing: .5px; text-transform: uppercase; white-space: nowrap;
+         box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+  .eti.chica { font-size: 26px; font-weight: 800; padding: 5px 12px 7px; border-width: 2px; text-transform: none; letter-spacing: 0; }
+
+  .item { position: absolute; transform: translate(-50%, -50%); }
+  .item .obj { display: block; margin: 0 auto; object-fit: contain; filter: drop-shadow(0 10px 14px rgba(0,0,0,.28)); }
+  .item .card { margin: 0 auto; border-radius: 14px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 10px 22px rgba(0,0,0,.28); background: #222; }
+  .item .card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .item .eti { position: relative; display: table; margin: 10px auto 0; transform: none; left: auto; top: auto; }
+  .flechas { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  .flechas path { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round;
+                  filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+
+  .grid { position: absolute; left: 50%; transform: translate(-50%, -50%); display: grid; }
+  .grid .cel { text-align: center; }
+  .grid .card { border-radius: 8px; overflow: hidden; background: #222; box-shadow: 0 8px 18px rgba(0,0,0,.25); }
+  .grid .card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .grid .lab { display: inline-block; margin-top: 8px; padding: 3px 7px 4px; background: var(--oscuro); color: #fff; border-radius: 4px;
+               font-weight: 800; line-height: 1.1; }
+
+  .lista { position: absolute; left: 66px; right: 50px; }
+  .lista .fila { display: flex; align-items: center; gap: 26px; }
+  .lista .fila .th { flex: none; width: 112px; border-radius: 8px; overflow: hidden; background: #222; box-shadow: 0 6px 14px rgba(0,0,0,.25); }
+  .lista .fila .th img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .lista .fila b { display: block; font-weight: 900; font-size: 40px; line-height: 1.05; color: var(--tinta); letter-spacing: -.8px; text-transform: uppercase; }
+  .lista .fila i { display: block; margin-top: 6px; font-style: normal; font-weight: 600; font-size: 24px; line-height: 1.2; color: color-mix(in srgb, var(--tinta) 80%, transparent); }
+
+  .mosaico { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 270px); grid-auto-rows: 384px; }
+  .mosaico .t { overflow: hidden; border: 2px solid rgba(0,0,0,.35); }
+  .mosaico .t img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .numero { position: absolute; left: 0; width: 1080px; text-align: center; transform: translateY(-50%); font-weight: 900; font-size: var(--fn, 330px);
+            line-height: 1; letter-spacing: -.04em; color: var(--lam); -webkit-text-stroke: 8px var(--tinta); paint-order: stroke fill;
+            text-shadow: 0 14px 0 var(--tinta), 0 0 60px rgba(0,0,0,.55); }
+
+  /* ── subtítulos: 1–2 palabras, blancos, chicos, al centro ── */
+  #subs { position: absolute; inset: 0; }
+  .sub { position: absolute; left: 0; width: 1080px; text-align: center; opacity: 0; visibility: hidden; transform: translateY(-50%); }
+  .sub span { display: inline-block; font-weight: 800; font-size: 50px; letter-spacing: -.5px; color: #fff;
+              text-shadow: 0 2px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
+  .sub.chip span { padding: 8px 20px 10px; background: #fff; color: #1a1a1a; border-radius: 6px; text-shadow: none; font-size: 40px; }
+
+  /* ── gancho GOLPE (2–5 palabras, línea enorme + chica, sin brillo) ── */
+  #gancho { position: absolute; inset: 0; }
+  .titulo.golpe { position: absolute; left: 40px; right: 40px; top: var(--gy, 190px); text-align: center; transform-origin: 50% 40%; }
+  /* 23-oct (edición sin olor a IA): color plano, sin degradado, canto 3D ni brillo; letra de diseño por tema */
+  .titulo.golpe .g { display: block; font-weight: 900; font-size: var(--fg, 190px); line-height: 1.02; letter-spacing: -4px;
+                     text-transform: uppercase; color: var(--c2); padding: 0 12px; text-shadow: 0 4px 14px rgba(0,0,0,.55); }
+  .titulo.golpe .g.condensada { font-family: 'Impact', 'DIN Condensed', 'Haettenschweiler', 'Arial Narrow', sans-serif; font-weight: 400; letter-spacing: 0; }
+  .titulo.golpe .g.serif { font-family: Didot, 'Bodoni 72', Georgia, serif; font-style: italic; font-weight: 700; letter-spacing: -3px; }
+  .titulo.golpe .ch { display: block; font-weight: 800; font-size: var(--fc, 84px); line-height: 1.1; letter-spacing: -2px;
+                      color: #fff; text-shadow: 0 4px 0 rgba(0,0,0,.35), 0 8px 26px rgba(0,0,0,.75); margin: 4px 0; }
+  .titulo.golpe .ch.serif { font-family: Didot, 'Bodoni 72', Georgia, serif; font-weight: 400; letter-spacing: -1px; font-size: calc(var(--fc, 84px) * 1.15); }
+  #destello { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="reel" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+  <div id="base-wrap"><div id="base-zoom"><video id="base" class="clip" src="assets/base.mp4" data-start="0" data-duration="__DUR__" data-track-index="1" muted playsinline></video></div></div>
+  <div id="sombra-top"></div>
+  <div id="capa-toma"></div>
+  <div id="lamina">
+    <div id="lam-fondo"></div>
+    <div id="lam-cont"></div>
+    <div id="mini-wrap"><div id="mini-in">__YO__<img id="centro-img"></div></div>
+    <div id="lam-top"></div>
+  </div>
+  <div id="subs"></div>
+  <div id="gancho"></div>
+  <div id="destello"></div>
+
+  <script>window.PLAN = __PLAN__; window.PALABRAS = __PALABRAS__; window.TAMS = __TAMS__;</script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+  (function () {
+    const P = window.PLAN, W = window.PALABRAS, TAMS = window.TAMS || {}, DUR = P.duracion;
+    const tl = gsap.timeline({ paused: true });
+    const $ = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const root = document.getElementById('root');
+    root.style.setProperty('--lam', P.marca.color); root.style.setProperty('--tinta', P.marca.tinta);
+    const prop = src => TAMS[src] || 0.5625;
+    const visible = (el, a, b) => { tl.set(el, { autoAlpha: 1 }, a); if (b < DUR - 0.01) tl.set(el, { autoAlpha: 0 }, b); };
+    // 23-oct (edición sin olor a IA): «pop» ya no rebota ni escala; es un corte seco (aparece entero en su cuadro).
+    const pop = (el, t, desde = 0.6, d = 0.3, extra = {}) => { void desde; void d;
+      gsap.set(el, { autoAlpha: 0 }); tl.set(el, { scale: 1, autoAlpha: 1, ...(extra.to || {}) }, t); };
+    const seco = (el, t) => { gsap.set(el, { autoAlpha: 0 }); tl.set(el, { scale: 1, y: 0, autoAlpha: 1 }, t); };
+    const trazo = (path, t, d) => { const L = path.getTotalLength(); gsap.set(path, { strokeDasharray: L + ' ' + (L + 2), strokeDashoffset: L });
+      tl.to(path, { strokeDashoffset: 0, duration: d, ease: 'power2.out' }, t); };
+    const anchoEm = (s, may) => [...String(s)].reduce((a, ch) => a + (ch === ' ' ? 0.28 : may || (ch === ch.toUpperCase() && ch !== ch.toLowerCase()) ? 0.72 : 0.56), 0);
+    const tramos = [];   // [a, b, tipo] ocupación de pantalla → subtítulos
+    const cajas = [];    // [el, t] para revisar el layout
+
+    // ── 1. TOMA: punch-in alterno en cada unión (disimula el salto del corte fino) ──
+    gsap.set('#base-zoom', { transformOrigin: `${P.sil.cx}px ${P.sil.cy + 260}px` });
+    (P.cortes || []).forEach((t, i) => { if (t > 0.05 && t < DUR - 0.05) tl.set('#base-zoom', { scale: i % 2 ? 1 : P.zoom_corte }, t); });
+
+    // ── 2. GANCHO GOLPE (cuadro 0) ──
+    const G = P.gancho;
+    if (G) {
+      const primeraLam = Math.min(...P.piezas.filter(p => p.tipo === 'lamina').map(p => p._en), DUR);
+      const fin = Math.min(G.hasta, primeraLam);
+      const lineas = [G.l1, G.l2].filter(Boolean), gi = Math.min(G.grande || 0, lineas.length - 1);
+      const COL = { rojo: ['#ffb1a6', '#ff3b2e', '#c30d07', '#6e0402', 'rgba(255,45,30,.75)'],
+                    verde: ['#d6ffc9', '#3ee86a', '#0e9a35', '#06501a', 'rgba(60,230,100,.7)'],
+                    amarillo: ['#fff6bf', '#ffd630', '#f09d00', '#7a4c00', 'rgba(255,200,40,.7)'] };
+      const hx = G.color && G.color[0] === '#' ? G.color : null;
+      const cc = hx ? [`color-mix(in srgb, ${hx} 35%, #fff)`, hx, `color-mix(in srgb, ${hx} 75%, #000)`, `color-mix(in srgb, ${hx} 40%, #000)`, `color-mix(in srgb, ${hx} 70%, transparent)`]
+                    : COL[G.color] || COL.amarillo;
+      const box = $('div'); document.getElementById('gancho').appendChild(box);
+      const tit = $('div', 'titulo golpe'); box.appendChild(tit);
+      ['--c1', '--c2', '--c3', '--c4', '--brillo'].forEach((k, i) => tit.style.setProperty(k, cc[i]));
+      const ls = lineas.map((txt, li) => { const l = $('span', li === gi ? 'g' : 'ch' + (G.chica === 'serif' ? ' serif' : ''), esc(txt)); tit.appendChild(l); return l; });
+      const fLetra = { condensada: 0.68, serif: 0.9 }[G.letra || 'condensada'] || 1;
+      const fg = Math.min(210, Math.floor(980 / Math.max(1, anchoEm(lineas[gi], true) * 1.03 * fLetra)));
+      const chicas = lineas.filter((_, i) => i !== gi);
+      const fc = Math.min(84, ...chicas.map(s => Math.floor(960 / Math.max(1, anchoEm(s) * (G.chica === 'serif' ? 1.15 : 1)))));
+      tit.style.setProperty('--fg', fg + 'px'); tit.style.setProperty('--fc', fc + 'px');
+      if (G.y != null) tit.style.setProperty('--gy', G.y + 'px');
+      const g = ls[gi];
+      // 23-oct: corte seco. Las dos líneas están enteras y quietas desde el cuadro 0: sin caída, latido ni destello.
+      g.classList.add(G.letra || 'condensada');
+      tl.set('#sombra-top', { opacity: 1 }, 0); tl.to('#sombra-top', { opacity: 0, duration: 0.15 }, fin - 0.1);
+      tl.set(box, { autoAlpha: 1 }, 0); tl.set(box, { autoAlpha: 0 }, fin);
+      cajas.push([tit, Math.min(0.6, fin / 2)]);
+    }
+
+    // ── 3. PIEZAS SOBRE LA TOMA ──
+    const capa = document.getElementById('capa-toma');
+    const tri = (cont, o, yC) => {   // palabra en triple jerarquía, centrada en yC
+      const t = $('div', 'tri'); t.style.top = yC + 'px'; cont.appendChild(t);
+      const b = $('div', 'bloque'); t.appendChild(b);
+      const gtxt = String(o.grande || '');
+      const fg = Math.min(o.tamano || 200, Math.floor(1000 / Math.max(1, anchoEm(gtxt, true) * 1.0)));
+      t.style.setProperty('--fg', fg + 'px'); t.style.setProperty('--fc', Math.round(Math.max(40, Math.min(56, fg * 0.3))) + 'px');
+      const ar = o.arriba ? $('span', 'ch arriba', esc(o.arriba)) : null, gr = $('span', 'gr', esc(gtxt)), ab = o.abajo ? $('span', 'ch abajo', esc(o.abajo)) : null;
+      [ar, gr, ab].forEach(x => x && b.appendChild(x));
+      return { t, ar, gr, ab, fg };
+    };
+    const TOMA = {
+      palabra(el, o) {
+        const y = o.y || 1020, r = tri(el, o, y);
+        // 23-oct: triple jerarquía con corte seco, una línea tras otra (sin escala ni deslizar)
+        seco(r.gr, o._en); [r.ar, r.ab].forEach(x => x && seco(x, o._en + 0.08));
+        tramos.push([o._en, o._hasta, 'palabra']); cajas.push([r.t.firstChild, o._en + 0.4]);
+      },
+      llave(el, o) {
+        const y = o.y || 1110, r = tri(el, o, y);
+        seco(r.gr, o._en); [r.ar, r.ab].forEach(x => x && seco(x, o._en + 0.08));   // 23-oct: corte seco
+        const yb = y + r.fg * 0.5 + (r.ab ? 60 : 20) + 10;
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'brace'); svg.setAttribute('viewBox', '0 0 820 80');
+        svg.style.top = yb + 'px';
+        svg.innerHTML = '<path d="M6 74 Q6 40 60 40 L370 40 Q404 40 410 6 Q416 40 450 40 L760 40 Q814 40 814 74"/>';
+        el.classList.add('llave'); el.appendChild(svg); trazo(svg.querySelector('path'), o._en + 0.22, 0.3);
+        const fila = $('div', 'fila'); fila.style.top = (yb + 98) + 'px'; el.appendChild(fila);
+        const imgs = o.imgs || [], w = Math.min(150, Math.floor((960 - 14 * (imgs.length - 1)) / Math.max(1, imgs.length)));
+        imgs.forEach((src, i) => { const m = $('div', 'mini'); m.style.width = w + 'px'; m.style.height = Math.round(w / prop(src)) + 'px';
+          m.innerHTML = `<img src="${esc(src)}">`; fila.appendChild(m); pop(m, o._en + 0.4 + i * 0.08, 0.4, 0.26, { from: { y: 30 }, to: { y: 0 } }); });
+        tramos.push([o._en, o._hasta, 'palabra']); cajas.push([r.t.firstChild, o._en + 0.6]); [...fila.children].forEach(m => cajas.push([m, o._en + 1.2]));
+      },
+      tabla(el, o) {
+        const cols = o.columnas || [], filas = o.filas || [], nC = cols.length + 1, nF = filas.length + 1;
+        const t = $('div', 'tabla'); el.appendChild(t);
+        const alto = o.alto || 380, y = o.y || 1250;
+        t.style.top = y + 'px'; t.style.height = alto + 'px';
+        t.style.gridTemplateColumns = `${o.ancho_primera || 130}px repeat(${cols.length}, 1fr)`; t.style.gridTemplateRows = `${o.alto_cab || 70}px repeat(${filas.length}, 1fr)`;
+        const celdas = o.celdas || [];
+        for (let f = 0; f < nF; f++) for (let c = 0; c < nC; c++) {
+          const txt = f === 0 ? (c ? cols[c - 1] : '') : c === 0 ? filas[f - 1] : ((celdas[f - 1] || [])[c - 1] || '');
+          const d = $('div', 'cel' + (f === 0 ? ' cab' : ''), esc(txt)); t.appendChild(d);
+          if (f > 0) tl.fromTo(d, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08, immediateRender: true }, o._en + 0.15 + f * 0.07 + c * 0.015);
+        }
+        tl.fromTo(t, { scaleY: 0.2, autoAlpha: 0, transformOrigin: '50% 0%' }, { scaleY: 1, autoAlpha: 1, duration: 0.25, ease: 'power3.out', immediateRender: true }, o._en);
+        cajas.push([t, o._en + 0.8]);
+      },
+      tarjeta_video(el, o) {
+        const w = o.ancho || 600, c = $('div', 'tvid'); c.style.width = w + 'px'; c.style.left = ((1080 - w) / 2) + 'px'; c.style.top = (o.y || 110) + 'px';
+        const thw = w - 28;
+        c.innerHTML = `<div class="th" style="height:${Math.round(thw * 9 / 16)}px">${o.img ? `<img src="${esc(o.img)}">` : ''}${o.duracion ? `<span class="du">${esc(o.duracion)}</span>` : ''}</div>
+          <div class="tx"><b>${esc(o.titulo || '')}</b>${o.meta ? `<i>${esc(o.meta)}</i>` : ''}<span class="pts">···</span></div>`;
+        el.appendChild(c); pop(c, o._en, 0.5, 0.32, { from: { y: -60 }, to: { y: 0 } });
+        cajas.push([c, o._en + 0.6]);
+      },
+      comentario(el, o) {
+        const c = $('div', 'com'); c.style.top = ((o.y || 1330) - 62) + 'px'; el.appendChild(c);
+        const usuario = o.usuario != null ? o.usuario : P.marca.usuario, avatar = o.avatar || P.marca.avatar;
+        c.innerHTML = `<div class="av">${avatar ? `<img src="${esc(avatar)}">` : esc((usuario || '?')[0].toUpperCase())}</div>
+          <div class="u">${esc(usuario || '')}</div><div class="p"></div>
+          <div class="env"><svg viewBox="0 0 76 76"><path d="M38 54V24M26 35l12-12 12 12" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cor"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z" fill="#ff2d55"/></svg></div>`;
+        const pp = c.querySelector('.p'), pal = String(o.palabra || ''), ritmo = o.ritmo || 0.085, t0 = o._en + 0.35;
+        [...pal].forEach((ch, i) => { const s = $('span', 'c', ch === ' ' ? '&nbsp;' : esc(ch)); pp.appendChild(s); tl.set(s, { display: 'inline' }, t0 + i * ritmo); });
+        const caret = $('i'); pp.appendChild(caret);
+        tl.fromTo(caret, { opacity: 1 }, { opacity: 0, duration: 0.25, repeat: Math.max(1, Math.floor((o._hasta - o._en) / 0.5)), yoyo: true, ease: 'steps(1)', immediateRender: true }, o._en);
+        pop(c, o._en, 0.6, 0.3);
+        const env = c.querySelector('.env'), cor = c.querySelector('.cor');
+        tl.to(env, { scale: 0.78, duration: 0.08, yoyo: true, repeat: 1 }, o._enviar_en);
+        tl.to(env, { autoAlpha: 0, scale: 0.4, duration: 0.15 }, o._corazon_en - 0.1);
+        tl.fromTo(cor, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.35, ease: 'power2.out', immediateRender: true }, o._corazon_en);
+        cajas.push([c, o._en + 0.6]);
+      }
+    };
+
+    // ── 4. LÁMINAS ──
+    const lam = document.getElementById('lamina'), cont = document.getElementById('lam-cont'), top = document.getElementById('lam-top');
+    const miniW = document.getElementById('mini-wrap'), miniIn = document.getElementById('mini-in'), cimg = document.getElementById('centro-img');
+    const yoAlto = 1920 - P.sil.cy;   // alto visible de la persona desde la coronilla
+    // pon a la persona con la coronilla en headY y alto visible altoPx; devuelve dónde termina (borde de abajo)
+    const persona = (o, t0, t1, headY, altoPx, cx = 540) => {
+      if (o.centro_img) {
+        cimg.src = o.centro_img; cimg.style.display = 'block'; const h = altoPx, w = h * prop(o.centro_img);
+        gsap.set(miniIn, { x: 0, y: 0, scale: 1 }); Object.assign(cimg.style, { left: (cx - w / 2) + 'px', top: headY + 'px', width: w + 'px', height: h + 'px' });
+        visible(miniW, t0, t1); return headY + h;
+      }
+      if (!P.hay_yo) return headY;
+      const s = altoPx / yoAlto;
+      tl.set(miniIn, { x: cx - P.sil.cx * s, y: headY - P.sil.cy * s, scale: s }, t0);
+      tl.fromTo(miniIn, { opacity: 0.0 }, { opacity: 1, duration: 0.12, immediateRender: false }, t0);
+      visible(miniW, t0, t1); return headY + altoPx;
+    };
+    const chip = (o, t0, y) => { if (!o.chip) return null; const c = $('div', 'chip', esc(o.chip)); c.style.top = (o.chip_y || y) + 'px'; return c; };
+    const itemsDe = o => (o.items || []).map(it => typeof it === 'string' ? { img: it } : it);
+    const LAM = {
+      centro(box, sup, o) {
+        const fin = persona(o, o._en, o._hasta, o.cabeza_y || 600, o.alto || 560);
+        if (o.etiqueta) { const e = $('div', 'eti', esc(o.etiqueta)); e.style.left = '540px'; e.style.top = (fin - 30) + 'px'; sup.appendChild(e); pop(e, o._en + 0.12, 0.5, 0.25); }
+        return 1500;
+      },
+      mapa(box, sup, o) {
+        const its = itemsDe(o), N = its.length, cy0 = o.cabeza_y || 690, alto = o.alto || 420;
+        const fin = persona(o, o._en, o._hasta, cy0, alto);
+        const C = { x: 540, y: cy0 + alto * 0.5 };
+        if (o.etiqueta) { const e = $('div', 'eti', esc(o.etiqueta)); e.style.left = '540px'; e.style.top = (fin - 24) + 'px'; sup.appendChild(e); pop(e, o._en + 0.1, 0.5, 0.25); }
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'flechas'); svg.setAttribute('viewBox', '0 0 1080 1920'); box.appendChild(svg);
+        const rx = o.rx || 345, ry = o.ry || 440, arco = o.arco || 120;
+        its.forEach((it, i) => {
+          const ang = (N === 1 ? 0 : -arco + 2 * arco * i / (N - 1)) * Math.PI / 180;
+          const x = C.x + rx * Math.sin(ang), y = C.y - ry * Math.cos(ang);
+          const t = it._en != null ? it._en : o._en + 0.25 + i * 0.22;
+          const d = $('div', 'item'); d.style.left = x + 'px'; d.style.top = y + 'px';
+          const ancho = it.ancho || o.ancho_item || 200;
+          if (it.forma === 'objeto') d.innerHTML = `<img class="obj" src="${esc(it.img)}" style="width:${ancho}px;max-height:${ancho}px">`;
+          else d.innerHTML = `<div class="card" style="width:${ancho}px;height:${Math.round(ancho * (it.alto_rel || 1.25))}px"><img src="${esc(it.img)}"></div>`;
+          if (it.texto) d.appendChild($('div', 'eti chica', esc(it.texto)));
+          sup.appendChild(d); pop(d, t, 0.2, 0.32);
+          // flecha a mano: del centro hacia el item, curva leve, con punta
+          const dx = x - C.x, dy = y - C.y, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+          const a = { x: C.x + ux * (o.flecha_desde || 175), y: C.y + uy * (o.flecha_desde || 175) * 1.05 }, b = { x: x - ux * (ancho * 0.72), y: y - uy * (ancho * 0.8) };
+          const mx = (a.x + b.x) / 2 - uy * 26 * (i % 2 ? -1 : 1), my = (a.y + b.y) / 2 + ux * 26 * (i % 2 ? -1 : 1);
+          const ta = Math.atan2(b.y - my, b.x - mx), k = 26;
+          const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          p.setAttribute('d', `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}` +
+            ` M${(b.x - k * Math.cos(ta - 0.55)).toFixed(1)} ${(b.y - k * Math.sin(ta - 0.55)).toFixed(1)} L${b.x.toFixed(1)} ${b.y.toFixed(1)} L${(b.x - k * Math.cos(ta + 0.55)).toFixed(1)} ${(b.y - k * Math.sin(ta + 0.55)).toFixed(1)}`);
+          svg.appendChild(p); trazo(p, t - 0.06, 0.24);
+          cajas.push([d, Math.max(t + 0.4, o._hasta - 0.1)]);
+        });
+        return 1520;
+      },
+      cuadricula(box, sup, o) {
+        const its = itemsDe(o), N = its.length;
+        const cols = o.columnas || (N <= 4 ? 2 : N <= 6 ? 3 : N <= 8 ? 4 : 5);
+        const gap = cols >= 5 ? 16 : 24, w = o.ancho_card || Math.floor((cols >= 5 ? 960 : 860) / cols - gap);
+        const g = $('div', 'grid'); g.style.top = (o.y || 880) + 'px'; g.style.gridTemplateColumns = `repeat(${cols}, ${w}px)`; g.style.gap = `${gap + 8}px ${gap}px`; box.appendChild(g);
+        const fz = cols >= 5 ? 19 : cols >= 3 ? 24 : 30;
+        its.forEach((it, i) => {
+          const c = $('div', 'cel'); const r = it.proporcion || o.proporcion || 0.5625;
+          c.innerHTML = `<div class="card" style="width:${w}px;height:${Math.round(w / r)}px"><img src="${esc(it.img)}"></div>` + (it.texto ? `<span class="lab" style="font-size:${fz}px">${esc(it.texto)}</span>` : '');
+          g.appendChild(c); pop(c, it._en != null ? it._en : o._en + 0.06 + i * 0.06, 0.5, 0.26, { from: { y: 24 }, to: { y: 0 } });
+        });
+        cajas.push([g, o._hasta - 0.05]);
+        return Math.min(1700, (o.y || 880) + g.offsetHeight / 2 + 90);
+      },
+      lista(box, sup, o) {
+        const its = itemsDe(o), N = its.length, fila = o.alto_fila || Math.min(175, Math.floor(1100 / Math.max(1, N)));
+        const L = $('div', 'lista'); L.style.top = (o.y || Math.round(860 - N * fila / 2)) + 'px'; box.appendChild(L);
+        its.forEach((it, i) => {
+          const f = $('div', 'fila'); f.style.height = fila + 'px';
+          f.innerHTML = (it.img ? `<div class="th" style="height:${fila - 16}px;width:${Math.round((fila - 16) * 0.72)}px"><img src="${esc(it.img)}"></div>` : '') +
+            `<div><b>#${i + 1}. ${esc(it.texto || '')}</b>${it.descripcion ? `<i>${esc(it.descripcion)}</i>` : ''}</div>`;
+          L.appendChild(f);
+          tl.fromTo(f, { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.26, ease: 'power3.out', immediateRender: true }, it._en != null ? it._en : o._en + 0.08 + i * 0.16);
+        });
+        cajas.push([L, o._hasta - 0.05]);
+        return Math.min(1760, (o.y || Math.round(860 - N * fila / 2)) + N * fila + 70);
+      },
+      mosaico_numero(box, sup, o) {
+        const imgs = o.imgs || [], m = $('div', 'mosaico'); box.appendChild(m);
+        for (let i = 0; i < 20; i++) { const t = $('div', 't', `<img src="${esc(imgs[i % Math.max(1, imgs.length)])}">`); m.appendChild(t);
+          tl.fromTo(t, { autoAlpha: 0, scale: 1.15 }, { autoAlpha: 1, scale: 1, duration: 0.18, immediateRender: true }, o._en + (i % 7) * 0.025); }
+        const yN = o.y || 900, n = $('div', 'numero', `<span>${esc(o.numero)}</span>`); n.style.top = yN + 'px';
+        n.style.setProperty('--fn', Math.min(360, Math.floor(1000 / Math.max(1, anchoEm(String(o.numero), true) * 0.95))) + 'px'); sup.appendChild(n);
+        seco(n, o._en + 0.3);   // 23-oct: el número gigante aparece de golpe, sin caer ni rebotar
+        cajas.push([n.firstChild, o._hasta - 0.05]);
+        return yN + 230;
+      }
+    };
+
+    const ponLamina = o => {
+      const box = $('div', 'lc'), sup = $('div', 'lc'); cont.appendChild(box); top.appendChild(sup);
+      if (o.color) { tl.set('#lam-fondo', { backgroundColor: o.color }, o._en); }
+      else tl.set('#lam-fondo', { backgroundColor: P.marca.color }, o._en);
+      const yChip = LAM[o.forma](box, sup, o);
+      const c = chip(o, o._en, yChip);
+      if (c) { sup.appendChild(c); const tc = o._etiqueta_en != null ? o._etiqueta_en : o._en + 0.15;
+        seco(c, tc);   // 23-oct: etiqueta con corte seco
+        cajas.push([c, o._hasta - 0.05]); }
+      visible(box, o._en, o._hasta); visible(sup, o._en, o._hasta); visible(lam, o._en, o._hasta);
+      tl.fromTo(box, { scale: 1.06 }, { scale: 1, duration: 0.25, ease: 'power2.out', immediateRender: false }, o._en);
+      tramos.push([o._en, o._hasta, c ? 'lamina' : 'lamina-sin-chip', yChip]);
+    };
+
+    P.piezas.filter(p => p._en != null).forEach(o => {
+      if (o.tipo === 'lamina') return ponLamina(o);
+      const el = $('div', 'pz'); capa.appendChild(el); TOMA[o.tipo](el, o); visible(el, o._en, o._hasta);
+    });
+
+    // ── 5. SUBTÍTULOS: 1–2 palabras, blancos, al centro (en una lámina sin chip, van como chip) ──
+    const limpia = s => s.replace(/^[\s"“”¿¡(]+|[\s"“”.,;:!?)…]+$/g, '');
+    const trozos = [];
+    for (let i = 0; i < W.length; i++) {
+      const a = W[i], t = limpia(a.word || ''); if (!t) continue;
+      const b = W[i + 1], tb = b ? limpia(b.word || '') : '';
+      if (b && tb && (t + ' ' + tb).length <= 12 && b.start - a.end < 0.15 && /[\wáéíóúñ]$/i.test((a.word || '').trim())) { trozos.push({ txt: t + ' ' + tb, ini: a.start, fin: b.end }); i++; }
+      else trozos.push({ txt: t, ini: a.start, fin: a.end });
+    }
+    const modo = t => { for (let i = tramos.length - 1; i >= 0; i--) { const [a, b, m, y] = tramos[i]; if (t >= a - 0.01 && t < b) return [m, y]; } return ['toma']; };
+    const subs = document.getElementById('subs');
+    trozos.forEach((k, i) => {
+      const [m, y] = modo(k.ini + 0.02);
+      if (m === 'palabra' || m === 'lamina') return;
+      const nx = trozos[i + 1], fin = nx ? Math.min(nx.ini, k.fin + 0.5) : Math.min(DUR, k.fin + 0.5);
+      const d = $('div', 'sub' + (m === 'lamina-sin-chip' ? ' chip' : ''), `<span>${esc(k.txt)}</span>`);
+      d.style.top = (m === 'lamina-sin-chip' ? y : P.sub_y) + 'px'; subs.appendChild(d);
+      tl.set(d, { autoAlpha: 1 }, k.ini); tl.from(d.firstChild, { scale: 0.88, duration: 0.08, ease: 'power2.out' }, k.ini);
+      tl.set(d, { autoAlpha: 0 }, Math.max(k.ini + 0.08, fin));
+    });
+
+    // ── 6. REVISIÓN DE LAYOUT (la lee revisar_layout.mjs): nada se sale del cuadro ──
+    const avisos = [];
+    cajas.forEach(([el, t]) => {
+      tl.seek(Math.min(Math.max(0, t), DUR - 0.01), false);
+      const r = el.getBoundingClientRect(); if (!r.width) return;
+      const nom = (el.className && el.className.baseVal == null ? el.className : 'pieza') + ` @${t.toFixed(2)}s`;
+      if (r.left < 24 || r.right > 1056) avisos.push(`${nom}: se sale por los costados (${Math.round(r.left)}–${Math.round(r.right)} px)`);
+      if (r.top < 40 || r.bottom > 1880) avisos.push(`${nom}: se sale por arriba/abajo (${Math.round(r.top)}–${Math.round(r.bottom)} px)`);
+    });
+    tl.seek(0, false);
+    window.__layout = avisos; window.__cajas = cajas.map(c => c[1]);
+
+    tl.set({}, {}, DUR);
+    window.__timelines = window.__timelines || {};
+    window.__timelines['reel'] = tl;
+  })();
+  </script>
+</div>
+</body>
+</html>

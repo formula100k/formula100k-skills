@@ -104,7 +104,7 @@ Los archivos de `references/` los mantiene el equipo de FÓRMULA 100K y llegan c
 **Voz:** tuteo siempre (tú, tienes, sube, comenta). Nunca voseo, tampoco en los textos de las slides.
 
 ## Su brandkit (antes del flujo)
-Búscalo antes que la marca: `mi_brandkit` del conector de Yapper (devuelve su brandkit, su manual y los enlaces de sus stickers); si no, `mi-marca/brandkit.md` con `mi-marca/stickers/`; si no hay ninguno, sigue con «Su marca» y nada más.
+Basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP (guía completa en `references/tu-brandkit.md`). Búscalo antes que la marca: lo que te dio en esta conversación; si no, `mi_brandkit` del conector de Yapper (devuelve su brandkit, su manual y los enlaces de sus stickers); si no, `mi-marca/brandkit.md` con `mi-marca/stickers/`; si no hay ninguno, sigue con «Su marca» y nada más.
 Si lo encuentras, va **encima de la ficha elegida**, respetando su composición, su soporte y su jerarquía:
 - **Colores y letras:** los de su manual (el que devuelve `mi_brandkit` o el de «Su marca»).
 - **Gancho → la portada.** El texto de la lámina 1 sigue su forma de gancho: de 2 a 5 palabras grandes, sin brillo ni degradado.

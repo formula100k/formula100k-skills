@@ -1,0 +1,55 @@
+{
+ "formato": "16:9",
+ "cara": [
+  0.5,
+  0.375
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.6,
+   "persona": "oculta"
+  },
+  {
+   "desde": 2.6,
+   "hasta": 5.56,
+   "persona": [
+    {
+     "x": 340,
+     "y": 0,
+     "w": 1320,
+     "h": 1080,
+     "recorte": true,
+     "cara": [
+      0.5,
+      0.375
+     ]
+    }
+   ]
+  },
+  {
+   "desde": 5.56,
+   "hasta": 8.94,
+   "persona": "oculta"
+  },
+  {
+   "desde": 8.94,
+   "hasta": 10.6,
+   "persona": [
+    {
+     "x": 340,
+     "y": 0,
+     "w": 1320,
+     "h": 1080,
+     "recorte": true,
+     "cara": [
+      0.5,
+      0.375
+     ]
+    }
+   ]
+  }
+ ],
+ "gancho": "escalera",
+ "titulo": "gastado"
+}

@@ -1,0 +1,57 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.33
+ ],
+ "tomas": {
+  "2": "toma2.mp4"
+ },
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.82,
+   "persona": [
+    {
+     "x": 40,
+     "y": 330,
+     "w": 460,
+     "h": 1400
+    }
+   ],
+   "broll": {
+    "archivo": "toma2.mp4",
+    "x": 580,
+    "y": 330,
+    "w": 460,
+    "h": 1400,
+    "desde": 0,
+    "bn": true
+   },
+   "estilo": "habla el novato (izquierda)"
+  },
+  {
+   "desde": 2.82,
+   "hasta": 8.7,
+   "persona": [
+    {
+     "x": 580,
+     "y": 330,
+     "w": 460,
+     "h": 1400
+    }
+   ],
+   "broll": {
+    "archivo": "toma2.mp4",
+    "x": 40,
+    "y": 330,
+    "w": 460,
+    "h": 1400,
+    "desde": 2.82,
+    "bn": true
+   },
+   "estilo": "habla el experto (derecha)"
+  }
+ ],
+ "gancho": "compinche"
+}

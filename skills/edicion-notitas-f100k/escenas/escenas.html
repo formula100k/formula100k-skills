@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Escenas scrapbook · vertical</title>
+<style>
+@font-face{font-family:'Montserrat';font-weight:100 900;src:url('letras/Montserrat.ttf')}
+@font-face{font-family:'Carta Antigua';src:url('letras/CartaAntigua.ttf')}
+@font-face{font-family:'Plumon Suelto';src:url('letras/PlumonSuelto.ttf')}
+@font-face{font-family:'Compinche';src:url('letras/Compinche.ttf')}
+@font-face{font-family:'Tecla Tinta';src:url('letras/TeclaTinta.ttf')}
+@font-face{font-family:'Sello Vivo';src:url('letras/SelloVivo.ttf')}
+:root{--papel:#F3ECDD;--papel2:#E9DFC9;--tinta:#1A1612;--gris:#6F665A;--rojo:#D8452E;--kraft:#C9A77A}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.pieza{position:absolute;transform-origin:50% 50%;will-change:transform,opacity}
+
+/* vertical: la toma a pantalla completa, título arriba sobre una sombra y subtítulo chico */
+#video{position:absolute;inset:0;overflow:hidden;background:#111}
+#foto{display:block;width:1080px;height:1920px;object-fit:cover}
+#sombra{position:absolute;left:0;right:0;top:0;height:520px;z-index:30;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.78) 0,rgba(0,0,0,.55) 45%,transparent 100%)}
+#titulo{position:absolute;left:70px;right:70px;top:176px;z-index:31;text-align:center;text-wrap:balance;
+  font-family:'Montserrat','Helvetica Neue',sans-serif;font-weight:700;font-size:56px;line-height:1.12;color:#fff;letter-spacing:-.005em;
+  text-shadow:0 2px 14px rgba(0,0,0,.6)}
+#sub{position:absolute;left:0;right:0;top:1400px;text-align:center;white-space:nowrap;z-index:40;
+  font-family:'Montserrat','Helvetica Neue',sans-serif;font-weight:600;font-size:44px;color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.95),0 0 4px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9)}
+
+/* recortes que se pegan DENTRO del video */
+.recorte{filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+.recorte>div:not(.libro):not(.letrero){background:#FFFEFA;padding:10px;
+  clip-path:polygon(0 3%,4% 0,12% 2%,22% 0,34% 2%,47% 0,60% 2%,73% 0,86% 2%,96% 0,100% 4%,99% 16%,100% 30%,98% 45%,100% 60%,99% 76%,100% 90%,97% 100%,86% 98%,74% 100%,61% 98%,48% 100%,35% 98%,22% 100%,10% 98%,2% 100%,0 92%,2% 78%,0 62%,2% 46%,0 30%,1% 15%)}
+.recorte img{display:block;width:100%}
+.etiqueta{background:#FFFEFA;padding:14px 24px 10px;font-family:'Compinche';font-size:36px;line-height:1.12;white-space:nowrap;color:var(--tinta);
+  clip-path:polygon(0 6%,3% 0,9% 5%,17% 1%,26% 6%,36% 0,47% 5%,58% 1%,69% 6%,80% 0,90% 5%,97% 1%,100% 7%,99% 94%,95% 100%,87% 95%,77% 100%,66% 95%,55% 100%,44% 94%,33% 100%,22% 95%,11% 100%,3% 95%,0 99%)}
+.etiqueta small{display:block;font-size:24px;color:var(--gris);letter-spacing:.04em}
+.etiqueta.marca{font-family:'Carta Antigua';font-size:74px;line-height:1;padding:16px 28px 20px}
+.etiqueta.mano{font-family:'Plumon Suelto';font-size:54px;line-height:1;color:var(--rojo);padding:14px 24px 10px}
+.sello{font-family:'Sello Vivo';font-size:54px;color:var(--rojo);border:7px solid var(--rojo);border-radius:14px;padding:8px 24px 2px;
+  white-space:nowrap;background:#FFFDF8;letter-spacing:.04em}
+.precio{position:relative;background:#FFFEFA;font-family:'Tecla Tinta';font-size:56px;padding:14px 30px 10px 54px;white-space:nowrap;color:var(--tinta);
+  clip-path:polygon(34px 0,100% 0,100% 100%,34px 100%,0 50%)}
+.precio::before{content:'';position:absolute;left:26px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#3a2a22}
+
+/* escenas: un cartón que tapa la toma mientras los recortes cuentan la historia */
+.escena{position:absolute;inset:0;z-index:5;background-color:#B4916A;
+  background-image:radial-gradient(ellipse at 50% 45%,rgba(255,240,215,.28) 0,transparent 55%,rgba(60,35,15,.38) 100%),
+    repeating-linear-gradient(92deg,rgba(90,60,30,.07) 0 2px,transparent 2px 7px)}
+.letrero{background:#1F5D43;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:34px;letter-spacing:.06em;
+  padding:12px 26px;border:4px solid #fff;border-radius:8px;white-space:nowrap;box-shadow:0 0 0 4px #1F5D43}
+.libro{position:relative;width:170px;height:232px;border-radius:4px 10px 10px 4px;background:var(--tapa,#2F6B5E);
+  box-shadow:inset 14px 0 0 rgba(0,0,0,.22),inset 18px 0 0 rgba(255,255,255,.12),inset 0 0 0 3px rgba(0,0,0,.18)}
+.libro::before{content:'';position:absolute;left:44px;right:22px;top:64px;height:74px;background:#1A1612;border:2px solid #C9A77A}
+.libro::after{content:'';position:absolute;left:58px;right:36px;top:88px;height:5px;background:#C9A77A;box-shadow:0 14px 0 #C9A77A,0 28px 0 -1px #C9A77A}
+.libro.c1{filter:saturate(.6) contrast(.9) brightness(1.08)}
+.libro.c2{filter:saturate(.3) contrast(.75) brightness(1.16) blur(.8px)}
+.pixel{background:#FFFEFA;padding:22px}
+/* collage del gancho (estilo Kate): fotos rectangulares, título de 2 líneas, un bloque de color */
+.kate{box-shadow:0 12px 30px rgba(0,0,0,.5);overflow:hidden;background:#fff}
+.kate img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.05)}
+.bloque{box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.gancho{text-align:center;color:#fff;white-space:nowrap;text-shadow:0 3px 18px rgba(0,0,0,.7),0 0 3px rgba(0,0,0,.5)}
+.gancho .l1{font:800 92px/1.02 'Montserrat',sans-serif;letter-spacing:-1px}
+.gancho .l2{font:italic 400 112px/1.02 'Didot','Bodoni 72',Georgia,serif}
+.gancho .etq{font:500 30px 'Montserrat',sans-serif;margin-top:8px;opacity:.95}
+/* animaciones que explican: tarjeta de papel con un dibujo que se mueve */
+.anim{background:#FFFEFA;padding:20px 24px}
+.anim text{font-family:'Montserrat',sans-serif;font-weight:700}
+.burbuja{position:relative}
+.picos,.circuito{background:#FFFEFA;padding:18px 22px}
+.libro.c3{filter:saturate(.05) contrast(.55) brightness(1.24) blur(1.8px)}
+.etiqueta s{text-decoration-color:var(--rojo);text-decoration-thickness:5px}
+</style>
+</head>
+<body>
+<div id="video">
+  <img id="foto" alt="">
+  <div id="piezas"></div>
+  <div id="sombra"></div>
+  <div id="titulo"></div>
+  <div id="sub"></div>
+</div>
+
+<script>
+/* Look simple: fondo negro + título + video horizontal. Lo único que se mueve son
+   recortes mix media que se pegan dentro del video, anclados a la frase que los dispara.
+   Todo sale de config.js del episodio. draw(cuadro) pinta un cuadro exacto. */
+const FPS = 30;
+const q = new URLSearchParams(location.search);
+const EP = q.get('ep') || '.';   // dirección file:// de la carpeta de escenas (la pone render.mjs)
+let CFG, PAL, GRUPOS = [], PIEZAS = [];
+
+const limpia = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, '').trim();
+const azar = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+function dondeDe(frase) {
+  const [txt, vez] = frase.split('#');
+  const meta = limpia(txt).split(' ');
+  let falta = Number(vez || 1);
+  for (let i = 0; i <= PAL.length - meta.length; i++) {
+    if (meta.every((m, k) => limpia(PAL[i + k].w) === m) && --falta === 0) return [PAL[i].a, PAL[i + meta.length - 1].b];
+  }
+  console.warn('[aviso] no encontré en la voz:', frase);
+  return null;
+}
+const tiempoDe = frase => { const d = dondeDe(frase); return d ? d[0] : null; };
+
+// gatito pixel (lo que ella vio en la puerta)
+const GATO = ['..K......K......', '.KOK....KOK.....', '.KOOKKKKOOK.....', '.KOOOOOOOOK.....', '.KOKOOOOKOK.....', '.KOOOOPOOOK.....',
+  '.KOOOWWOOOK...K.', '..KOOOOOOK...KOK', '.KOOOOOOOOK..KOK', '.KOOWWWWOOK.KOK.', '.KOOWWWWOOKKOK..', '.KOOOOOOOOOOK...', '.KOKOOOOKOKK....', '.KKKKKKKKKK.....'];
+const TINTAS = { K: '#1A1612', O: '#E8913A', W: '#FFF6E6', P: '#F08A9B' };
+function gatoSVG(tam) {
+  let r = '';
+  GATO.forEach((fila, y) => [...fila].forEach((c, x) => { if (TINTAS[c]) r += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${TINTAS[c]}"/>`; }));
+  return `<svg width="${16 * tam}" height="${14 * tam}" viewBox="0 0 16 14" shape-rendering="crispEdges">${r}</svg>`;
+}
+
+// piezas pixel del capítulo 2 (lectura, pantallas y dopamina)
+const SPRITES = {
+  control: ['..KKKK....KKKK..', '.KGGGGKKKKGGGGK.', 'KGGWGGGGGGGGRGGK', 'KGWWWGGGGGGRGRGK', 'KGGWGGGGGGGGRGGK',
+    'KGGGGGKKKKGGGGGK', '.KGGGK....KGGGK.', '..KKK......KKK..'],
+  celular: ['.KKKKKKKKK.', 'KKKKKKKKKKK', 'KKBBBBBBBKK', 'KKBPPPPPBKK', 'KKBPPPPPBKK', 'KKBBBBBBBKK', 'KKBWWWWWBKK',
+    'KKBBBBBBBKK', 'KKBOOOOOBKK', 'KKBOOOOOBKK', 'KKBBBBBBBKK', 'KKBWWWBBBKK', 'KKBBBBBBBKK', 'KKKKKWKKKKK', '.KKKKKKKKK.'],
+  libro: ['..KKKKK..KKKKK..', '.KWWWWWKKWWWWWK.', 'KWWLLLWKKWLLLWWK', 'KWWWWWWKKWWWWWWK', 'KWWLLLWKKWLLLWWK', 'KWWWWWWKKWWWWWWK',
+    'KWWLLLWKKWLLLWWK', 'KWWWWWWKKWWWWWWK', 'KRRRRRRKKRRRRRRK', '.KKKKKKKKKKKKKK.'],
+  cerebro: ['....KKKKKK....', '..KKPPKPPPKK..', '.KPPPPKPPPPPK.', 'KPPKPPKPPKPPPK', 'KPPPKPKPKPPPPK', 'KPKPPPKPPPKPPK',
+    'KPPPKPKPPKPPPK', '.KPPPPKPPPPPK.', '..KKPPKPPKKK..', '....KKKKPK....', '.......KPK....', '.......KKK....'],
+  ojo: ['....KKKKKK....', '..KKWWWWWWKK..', '.KWWWOOOOWWWK.', 'KWWWOKKKKOWWWK', 'KWWWOKKKWOWWWK', '.KWWWOOOOWWWK.', '..KKWWWWWWKK..', '....KKKKKK....'],
+  ojito: ['..............', '..............', 'KKKKKKKKKKKKKK', 'KWWWWOKKOWWWWK', '.KKKKKKKKKKKK.', '..............'],
+};
+const COLORES = { K: '#1A1612', G: '#7B6FD0', W: '#FFF6E6', R: '#D8452E', B: '#2B2B33', P: '#F08A9B', O: '#E8913A', L: '#9A8F80' };
+function spriteSVG(nombre, tam) {
+  const filas = SPRITES[nombre];
+  let r = '';
+  filas.forEach((fila, y) => [...fila].forEach((c, x) => { if (COLORES[c]) r += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${COLORES[c]}"/>`; }));
+  const w = filas[0].length, h = filas.length;
+  return `<svg width="${w * tam}" height="${h * tam}" viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges">${r}</svg>`;
+}
+// dibujos a plumón rojo
+const PICOS = '<svg width="420" height="190" viewBox="0 0 420 190"><polyline points="6,170 60,168 78,24 96,168 150,166 166,40 182,166 236,164 250,16 266,166 318,164 334,52 350,164 414,162" fill="none" stroke="#D8452E" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+const CIRCUITO = '<svg width="400" height="250" viewBox="0 0 400 250"><g stroke="#1A1612" stroke-width="6" stroke-linecap="round" fill="none"><path d="M40 200 L120 120 L200 170 L280 70 L360 130"/><path d="M120 120 L150 40"/><path d="M200 170 L240 230"/><path d="M280 70 L330 30"/></g><g fill="#D8452E"><circle cx="40" cy="200" r="16"/><circle cx="120" cy="120" r="16"/><circle cx="200" cy="170" r="16"/><circle cx="280" cy="70" r="16"/><circle cx="360" cy="130" r="16"/><circle cx="150" cy="40" r="11"/><circle cx="240" cy="230" r="11"/><circle cx="330" cy="30" r="11"/></g></svg>';
+
+// ── animaciones que explican (cada una se pinta según los segundos desde que entró)
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const T = '#1A1612', ROJO = '#D8452E', NAR = '#E8913A', ROSA = '#F08A9B', GRIS = '#9A8F80';
+const ANIMS = {
+  // picos de dopamina: la línea se dibuja sola, pico a pico
+  picos: {
+    html: () => `<svg width="460" height="230" viewBox="0 0 460 230"><line x1="10" y1="200" x2="450" y2="200" stroke="${GRIS}" stroke-width="3" stroke-dasharray="8 8"/>
+      <polyline class="lp" pathLength="1" points="10,196 70,194 90,30 110,194 170,192 188,48 206,192 266,190 282,20 298,192 352,190 370,60 388,190 450,188" fill="none" stroke="${ROJO}" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1"/></svg>`,
+    pintar: (el, d) => { el.querySelector('.lp').style.strokeDashoffset = 1 - cl(d / 1.4); },
+  },
+  // el circuito de la lectura se arma de a poco, nodo por nodo
+  circuito: {
+    html: () => {
+      const N = [[40, 210], [120, 130], [200, 180], [280, 80], [360, 140], [150, 45], [245, 240], [335, 35]];
+      const E = [[0, 1], [1, 2], [2, 3], [3, 4], [1, 5], [2, 6], [3, 7]];
+      return `<svg width="400" height="270" viewBox="0 0 400 270">${E.map(([a, b], k) => `<line class="ce" data-k="${k}" x1="${N[a][0]}" y1="${N[a][1]}" x2="${N[b][0]}" y2="${N[b][1]}" stroke="${T}" stroke-width="6" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`).join('')}
+        ${N.map(([x, y], k) => `<circle class="cn" data-k="${k}" cx="${x}" cy="${y}" r="${k < 5 ? 16 : 11}" fill="${ROJO}" opacity="0"/>`).join('')}</svg>`;
+    },
+    pintar: (el, d) => {
+      const orden = [0, 1, 5, 2, 6, 3, 7, 4];                 // nodo que se enciende en cada paso
+      el.querySelectorAll('.cn').forEach(c => { const k = orden.indexOf(+c.dataset.k); c.setAttribute('opacity', d > 0.25 + k * 0.55 ? 1 : 0); });
+      el.querySelectorAll('.ce').forEach(l => { const k = +l.dataset.k; l.style.strokeDashoffset = 1 - cl((d - 0.45 - k * 0.55) / 0.5); });
+    },
+  },
+  // la sinapsis: cae dopamina sin parar y los receptores se encogen
+  sinapsis: {
+    html: () => {
+      let pts = '';
+      for (let k = 0; k < 26; k++) pts += `<circle class="da" data-k="${k}" r="9" fill="${ROJO}"/>`;
+      let rec = '';
+      for (let k = 0; k < 5; k++) rec += `<g class="rc" transform="translate(${70 + k * 100},322)"><path d="M-34 -30 L-34 10 Q-34 30 -14 30 L14 30 Q34 30 34 10 L34 -30 L18 -30 L18 6 Q18 14 10 14 L-10 14 Q-18 14 -18 6 L-18 -30 Z" fill="${NAR}" stroke="${T}" stroke-width="4"/></g>`;
+      return `<svg width="560" height="420" viewBox="0 0 560 420">
+        <path d="M20 0 L540 0 L540 70 Q540 120 470 120 L90 120 Q20 120 20 70 Z" fill="${ROSA}" stroke="${T}" stroke-width="5"/>
+        <text x="280" y="70" text-anchor="middle" font-size="30" fill="${T}">dopamina</text>
+        ${pts}<line x1="0" y1="352" x2="560" y2="352" stroke="${T}" stroke-width="6"/>${rec}
+        <text x="280" y="405" text-anchor="middle" font-size="28" fill="${T}">receptores</text></svg>`;
+    },
+    pintar: (el, d) => {
+      el.querySelectorAll('.da').forEach(c => {
+        const k = +c.dataset.k, vel = 150 + (k % 5) * 25;
+        const y = 130 + ((d * vel + k * 37) % 170);
+        c.setAttribute('cx', 40 + ((k * 83) % 480)); c.setAttribute('cy', y);
+      });
+      const esc = 1 - 0.68 * cl((d - 1.0) / 2.6);
+      el.querySelectorAll('.rc').forEach((g, k) => {
+        const x = 70 + k * 100;
+        g.setAttribute('transform', `translate(${x},${322 + 30 * (1 - esc)}) scale(${esc})`);
+      });
+    },
+  },
+  // tolerancia: cada vez más estímulos y cada vez menos diversión
+  tolerancia: {
+    html: () => {
+      let cel = '';
+      for (let k = 0; k < 14; k++) cel += `<g class="ce2" data-k="${k}" opacity="0" transform="translate(${180 + (k % 7) * 52},${18 + Math.floor(k / 7) * 74})"><rect width="38" height="64" rx="7" fill="#2B2B33"/><rect x="5" y="8" width="28" height="12" fill="${ROSA}"/><rect x="5" y="25" width="28" height="9" fill="#FFF6E6"/><rect x="5" y="38" width="28" height="12" fill="${NAR}"/></g>`;
+      return `<svg width="560" height="300" viewBox="0 0 560 300">
+        <text x="0" y="62" font-size="30" fill="${T}">estímulos</text>${cel}
+        <text x="0" y="232" font-size="30" fill="${T}">diversión</text>
+        <rect x="180" y="200" width="360" height="46" rx="10" fill="none" stroke="${T}" stroke-width="5"/>
+        <rect class="bar" x="186" y="206" width="348" height="34" rx="6" fill="${ROJO}"/>
+        <text class="msg" x="360" y="290" text-anchor="middle" font-size="22" fill="${ROJO}" opacity="0">más estímulos, menos diversión</text></svg>`;
+    },
+    pintar: (el, d) => {
+      const n = Math.min(14, Math.floor(Math.pow(2, d / 1.6)));           // se duplican: 1, 2, 4, 8, 14
+      el.querySelectorAll('.ce2').forEach(g => g.setAttribute('opacity', +g.dataset.k < n ? 1 : 0));
+      el.querySelector('.bar').setAttribute('width', 348 * (0.85 - 0.72 * cl((d - 0.6) / 6.5)));
+      el.querySelector('.msg').setAttribute('opacity', d > 5.5 ? 1 : 0);
+    },
+  },
+  // silencio mental: las notificaciones se apagan y la onda se aplana
+  silencio: {
+    html: () => {
+      let not = '';
+      for (let k = 0; k < 9; k++) not += `<g class="nt" data-k="${k}" transform="translate(${20 + (k % 3) * 175},${10 + Math.floor(k / 3) * 46})"><rect width="160" height="36" rx="18" fill="#FFF6E6" stroke="${T}" stroke-width="3"/><circle cx="20" cy="18" r="9" fill="${ROJO}"/><rect x="38" y="13" width="100" height="10" rx="5" fill="${GRIS}"/></g>`;
+      return `<svg width="560" height="330" viewBox="0 0 560 330">${not}<path class="onda" fill="none" stroke="${T}" stroke-width="6" stroke-linecap="round"/>
+        <text class="sil" x="280" y="320" text-anchor="middle" font-size="34" fill="${ROJO}" opacity="0">silencio</text></svg>`;
+    },
+    pintar: (el, d) => {
+      el.querySelectorAll('.nt').forEach(g => g.setAttribute('opacity', d < 0.3 + +g.dataset.k * 0.28 ? 1 : 0));
+      const amp = 40 * (1 - cl((d - 0.4) / 2.4));
+      let path = 'M10 245';
+      for (let x = 10; x <= 550; x += 6) path += ` L${x} ${245 + Math.sin(x / 14 + d * 9) * amp * Math.sin(x / 37)}`;
+      el.querySelector('.onda').setAttribute('d', path);
+      el.querySelector('.sil').setAttribute('opacity', d > 2.6 ? 1 : 0);
+    },
+  },
+};
+
+// burbujas de pensamiento con un dibujo adentro (lado 1 = la cola va a la derecha, -1 = a la izquierda)
+const DIBUJOS = {
+  planeta: `<circle cx="0" cy="0" r="46" fill="${NAR}" stroke="${T}" stroke-width="5"/><ellipse cx="0" cy="4" rx="86" ry="20" fill="none" stroke="${T}" stroke-width="6" transform="rotate(-14)"/><circle cx="-14" cy="-14" r="8" fill="#FFF6E6"/>`,
+  castillo: `<path d="M-60 50 L-60 -10 L-44 -10 L-44 -24 L-30 -24 L-30 -10 L-8 -10 L-8 -50 L-18 -50 L0 -78 L18 -50 L8 -50 L8 -10 L30 -10 L30 -24 L44 -24 L44 -10 L60 -10 L60 50 Z" fill="${ROSA}" stroke="${T}" stroke-width="5" stroke-linejoin="round"/><path d="M-12 50 L-12 22 Q0 8 12 22 L12 50" fill="${T}"/>`,
+  luna: `<path d="M18 -52 A56 56 0 1 0 40 40 A44 44 0 1 1 18 -52 Z" fill="#F2D06B" stroke="${T}" stroke-width="5"/><path d="M-50 -40 l6 14 l14 6 l-14 6 l-6 14 l-6 -14 l-14 -6 l14 -6 Z" fill="${NAR}"/>`,
+  pantalla: `<rect x="-40" y="-66" width="80" height="132" rx="12" fill="#2B2B33" stroke="${T}" stroke-width="4"/><rect x="-30" y="-50" width="60" height="26" fill="${ROSA}"/><rect x="-30" y="-16" width="60" height="16" fill="#FFF6E6"/><rect x="-30" y="8" width="60" height="26" fill="${NAR}"/><circle cx="0" cy="52" r="5" fill="#FFF6E6"/>`,
+};
+function burbujaSVG(dibujo, lado) {
+  const cola = lado > 0 ? `<circle cx="250" cy="250" r="16"/><circle cx="282" cy="282" r="9"/>` : `<circle cx="50" cy="250" r="16"/><circle cx="18" cy="282" r="9"/>`;
+  return `<svg width="300" height="300" viewBox="0 0 300 300"><g fill="#FFFEFA" stroke="${T}" stroke-width="5">
+    <path d="M70 200 Q20 200 26 150 Q10 100 60 82 Q70 30 130 40 Q170 6 210 40 Q270 40 268 100 Q296 140 262 176 Q258 220 200 214 Q160 246 120 214 Q90 226 70 200 Z"/>${cola}</g>
+    <g transform="translate(148,128) scale(.95)">${DIBUJOS[dibujo]}</g></svg>`;
+}
+
+function armarGrupos() {
+  let g = [];
+  const largo = () => g.map(p => p.w).join(' ').length;
+  PAL.forEach((p, i) => {
+    if (g.length && largo() + p.w.length + 1 > (CFG.largoSub || 24)) { GRUPOS.push(g); g = []; }
+    g.push(p);
+    const sig = PAL[i + 1];
+    if (/[.,?!]$/.test(p.w) || !sig || sig.a - p.b > 0.45) { GRUPOS.push(g); g = []; }
+  });
+  if (g.length) GRUPOS.push(g);
+}
+
+function armarPiezas() {
+  const caja = document.getElementById('piezas');
+  // una escena tapa la toma; sus hijos se quedan hasta que la escena termina
+  const lista = [];
+  CFG.piezas.forEach(p => {
+    lista.push(p.tipo === 'escena' ? p : { escala: CFG.escalaToma || 1, ...p });
+    (p.hijos || []).forEach(h => lista.push({ escala: CFG.escalaEscena || 1, ...h, hasta: h.hasta || p.hasta, finMas: p.finMas }));
+  });
+  lista.forEach((p, i) => {
+    const t0 = p.t != null ? p.t : tiempoDe(p.cuando);
+    if (t0 == null) return;
+    const t = t0 + (p.mas || 0);
+    let dura = p.dura;
+    if (p.hasta) { const d = dondeDe(p.hasta); if (d) dura = d[1] + (p.finMas || 0) - t; }
+    const el = document.createElement('div');
+    if (p.tipo === 'escena') {
+      el.className = 'pieza escena';
+    } else if (p.tipo === 'foto') {
+      el.className = 'pieza recorte';
+      el.style.width = (p.ancho || 230) + 'px';
+      el.innerHTML = `<div><img src="${EP}/fotos/${p.foto}"></div>`;
+    } else if (p.tipo === 'capa') {
+      // capa entera de la skill collage-gancho-f100k (1080×1920, fondo transparente); dy la sube o la baja
+      el.className = 'pieza';
+      el.style.cssText = `left:0;top:0;width:1080px;height:1920px;z-index:35;transform:translateY(${p.dy || 0}px)`;
+      el.innerHTML = `<img src="${EP}/${p.capa}" style="display:block;width:100%;height:100%">`;
+    } else if (p.tipo === 'kate') {
+      el.className = 'pieza kate';
+      el.style.width = p.ancho + 'px'; el.style.height = p.alto + 'px';
+      el.innerHTML = `<img src="${EP}/fotos/${p.foto}">`;
+    } else if (p.tipo === 'png') {
+      // recorte con transparencia (sprites pixel, objetos sin fondo): borde blanco de sticker + sombra, sin papel rasgado
+      el.className = 'pieza';
+      el.style.width = (p.ancho || 300) + 'px';
+      el.innerHTML = `<img src="${EP}/fotos/${p.foto}" style="display:block;width:100%;image-rendering:pixelated;filter:drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff) drop-shadow(0 5px 0 #fff) drop-shadow(0 -5px 0 #fff) drop-shadow(0 14px 18px rgba(0,0,0,.45))">`;
+    } else if (p.tipo === 'bloque') {
+      el.className = 'pieza bloque';
+      el.style.cssText = `width:${p.ancho}px;height:${p.alto}px;background:${p.color || '#D8452E'}`;
+    } else if (p.tipo === 'gancho') {
+      el.className = 'pieza gancho';
+      el.innerHTML = `<div class="l1">${p.l1}</div><div class="l2">${p.l2}</div>${p.etq ? `<div class="etq">${p.etq}</div>` : ''}`;
+    } else if (p.tipo === 'anim') {
+      el.className = 'pieza recorte';
+      el.innerHTML = `<div class="anim">${ANIMS[p.anim].html(p)}</div>`;
+    } else if (p.tipo === 'burbuja') {
+      el.className = 'pieza recorte';
+      el.innerHTML = burbujaSVG(p.dibujo, p.lado || 1);
+    } else if (p.tipo === 'pixel') {
+      el.className = 'pieza recorte';
+      el.innerHTML = `<div class="pixel">${spriteSVG(p.sprite, p.tam || 12)}</div>`;
+    } else if (p.tipo === 'picos' || p.tipo === 'circuito') {
+      el.className = 'pieza recorte';
+      el.innerHTML = `<div class="${p.tipo}">${p.tipo === 'picos' ? PICOS : CIRCUITO}</div>`;
+      if (p.tam) el.style.zoom = p.tam;
+    } else if (p.tipo === 'gato') {
+      el.className = 'pieza recorte';
+      el.innerHTML = gatoSVG(p.tam || 14);
+    } else {
+      // la sombra va en la envoltura: el recorte del papel se la comería
+      el.className = 'pieza recorte';
+      el.innerHTML = `<div class="${p.tipo}"${p.tapa ? ` style="--tapa:${p.tapa}"` : ''}>${p.texto || ''}</div>`;
+      if (p.tam) el.style.zoom = p.tam;
+    }
+    if (p.tipo === 'capa') { caja.appendChild(el); PIEZAS.push({ ...p, el, t, dura, i }); return; }
+    if (p.tipo !== 'escena') { el.style.left = p.x + 'px'; el.style.top = p.y + 'px'; el.style.zIndex = 10 + i; }
+    caja.appendChild(el);
+    // en vertical x, y son el CENTRO de la pieza: así crece parejo al escalarla
+    if (p.tipo !== 'escena') { el.style.left = (p.x - el.offsetWidth / 2) + 'px'; el.style.top = (p.y - el.offsetHeight / 2) + 'px'; }
+    PIEZAS.push({ ...p, el, t, dura, i });
+  });
+}
+
+// entra a saltos, como stop motion: 4 poses y se queda
+const POSES = [[1.22, -7, 0.0], [1.22, -7, 1], [0.94, 3, 1], [1.03, -1, 1], [1, 0, 1]];
+function pintarPieza(p, seg, paso) {
+  const d = seg - p.t;
+  const dura = p.dura || 3.4;
+  if (d < 0 || d > dura) { p.el.style.opacity = 0; return; }
+  if (p.tipo === 'escena' || p.tipo === 'capa') { p.el.style.opacity = 1; return; }      // el cartón entra y sale de corte
+  if (CFG.quieto) {   // 23-oct, edición sin olor a IA: entra con corte seco y se queda quieta, sin saltos ni temblor
+    p.el.style.opacity = 1;
+    p.el.style.transform = `rotate(${p.rot || 0}deg) scale(${p.escala || 1})`;
+    return;
+  }
+  const k = Math.min(POSES.length - 1, Math.floor(d * 12));
+  let [esc, giro, op] = POSES[k];
+  if (dura - d < 0.17) { op = 1; esc = 0.9; giro = 5; }           // se despega
+  const tiembla = (azar(p.i * 31 + paso) - 0.5) * 1.1;
+  let dy = 0;
+  if (p.tipo === 'burbuja') dy = Math.sin(seg * 2.2 + p.i) * 8;                    // los pensamientos flotan
+  if (p.tipo === 'kate' || p.tipo === 'gancho' || p.tipo === 'bloque') { giro *= 0.5; }
+  p.el.style.opacity = op;
+  p.el.style.transform = `translateY(${dy}px) rotate(${(p.rot || 0) + giro + tiembla}deg) scale(${esc * (p.escala || 1)})`;
+  if (p.tipo === 'anim' && ANIMS[p.anim].pintar) ANIMS[p.anim].pintar(p.el, d, dura, p);
+}
+
+function pintarSub(seg) {
+  const sub = document.getElementById('sub');
+  if (CFG.subtitulos === false) { sub.textContent = ''; return; }
+  let g = null;
+  for (let i = 0; i < GRUPOS.length; i++) {
+    const ini = GRUPOS[i][0].a;
+    const fin = GRUPOS[i + 1] ? GRUPOS[i + 1][0].a : GRUPOS[i][GRUPOS[i].length - 1].b + 1.2;
+    if (seg >= ini - 0.03 && seg < fin) { g = GRUPOS[i]; break; }
+  }
+  sub.textContent = (g && !CFG.sinSub) ? g.map(p => p.w).join(' ') : '';   // sinSub: los subtítulos se ponen después, en el render de notitas
+}
+
+window.draw = async function (cuadro) {
+  const seg = cuadro / FPS;
+  const paso = Math.floor(cuadro / 4);
+  const foto = document.getElementById('foto');
+  foto.src = `${EP}/cuadros/${String(Math.min(cuadro + 1, CFG.cuadros)).padStart(5, '0')}.jpg`;
+  await foto.decode().catch(() => {});
+  PIEZAS.forEach(p => pintarPieza(p, seg, paso));
+  const tituloVisible = seg >= (CFG.tituloDesde || 0);
+  document.getElementById('titulo').style.opacity = tituloVisible ? 1 : 0;
+  document.getElementById('sombra').style.opacity = tituloVisible && CFG.titulo ? 1 : 0;   // sin título no hace falta la sombra
+  pintarSub(seg);
+};
+
+window.listo = (async () => {
+  await new Promise((ok, mal) => { const s = document.createElement('script'); s.src = `${EP}/config.js`; s.onload = ok; s.onerror = mal; document.head.appendChild(s); });
+  CFG = window.CFG; PAL = window.PALABRAS;
+  document.getElementById('titulo').innerHTML = CFG.titulo || '';
+  armarGrupos(); armarPiezas();
+  await Promise.all([...document.images].filter(i => i.src).map(i => i.decode().catch(() => {})));
+  await document.fonts.ready;
+  await Promise.all(['Montserrat', 'Carta Antigua', 'Plumon Suelto', 'Compinche', 'Tecla Tinta', 'Sello Vivo'].map(f => document.fonts.load(`700 40px "${f}"`)));
+  window.FRAMES = CFG.cuadros;
+  return CFG.cuadros;
+})();
+</script>
+</body>
+</html>

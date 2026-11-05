@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tu mapa te miente · clon De0C1AHxBFq</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;900&family=Instrument+Serif:ital@1&display=swap">
+<style>html,body{margin:0;background:#050509}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<canvas id="gl" width="1080" height="1920" style="display:none"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/formas.js"></script>
+<script>
+// Clon de edición de un reel de @viani.pro («¿Por qué los aviones no vuelan en línea recta?»), con marca propia.
+// Todo el mapa se reproyecta por píxel desde la textura satelital de la NASA (Blue Marble): Mercator, globo y gajos.
+// Letra (edición sin olor a IA): Inter 900 para la palabra clave, Instrument Serif itálica para los conectores, corte seco, sin entrada animada.
+const W = 1080, H = 1920, FPS = 30;
+const C = { fondo: '#050509', tinta: '#f4f1ea', oro: '#F5C542', rojo: '#E5484D', pelo: '#24242e', carbon: '#0b0b10', hilo: '#ff5a4f' };
+const PAUSA = 0.28;
+// CTA: la palabra y lo que se manda (el regalo de la persona). La captura de su página va en assets/regalo-pagina-completa.jpg.
+const PALABRA = 'GUIA', REGALO = ['y te mando', 'la guía'];
+// una frase = una escena · *palabra* = clave (grande, dorada)
+const LINEAS = [
+  { d: 1.44, txt: 'Tu mapa te miente.' },
+  { d: 1.81, txt: 'Mira este vuelo de *Santiago* a *Sídney*.' },
+  { d: 3.68, txt: 'En vez de cruzar derecho el océano, baja casi hasta la *Antártida*.' },
+  { d: 3.92, txt: 'Parece un desvío enorme. Pero esa curva es el camino más *corto*.' },
+  { d: 3.29, txt: 'Son unos *1.400 kilómetros* menos que ir derecho.' },
+  { d: 3.65, txt: 'El que te engaña es el *mapa*. La Tierra es una *pelota*.' },
+  { d: 4.4, txt: 'Y aplanar una pelota es como aplastar la cáscara de una *naranja*: se *rompe*.' },
+  { d: 4.08, txt: 'Para tapar los huecos, el mapa *estira* todo lo que está cerca de los polos.' },
+  { d: 2.8, txt: 'Por eso *Groenlandia* parece tan grande como *África*.' },
+  { d: 2.56, txt: 'Pero África es *catorce veces* más grande.' },
+  { d: 3.62, txt: 'Ahora pon un *hilo* tenso sobre el globo, de Santiago a Sídney.' },
+  { d: 3.2, txt: 'El hilo se va al sur, donde la Tierra es más *angosta*.' },
+  { d: 3.28, txt: 'Al aplanarla en el mapa, ese hilo recto se ve *torcido*.' },
+  { d: 3.32, txt: 'El avión sí vuela recto. El torcido es el *mapa*.' },
+  { d: 3.2, txt: 'Este video lo hizo *Claude*, sin cámara y sin editor.' },
+  { d: 4.16, txt: 'Comenta *GUIA* y te mando la *guía* para hacer videos así.' },
+];
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.4;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ---------------- geografía ----------------
+const RAD = Math.PI / 180, R_KM = 6371;
+const SCL = [-70.79, -33.39], SYD = [151.18, -33.95];
+const wrapPi = a => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
+const mercY = lat => Math.log(Math.tan(Math.PI / 4 + lat / 2));
+const vec = ([lo, la]) => [Math.cos(la * RAD) * Math.cos(lo * RAD), Math.cos(la * RAD) * Math.sin(lo * RAD), Math.sin(la * RAD)];
+// ortodrómica (el hilo tenso) y loxodrómica (la «recta» del mapa), de Santiago a Sídney
+const ORTO = (() => { const a = vec(SCL), b = vec(SYD), om = Math.acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]), o = [];
+  for (let i = 0; i <= 240; i++) { const t = i / 240, s1 = Math.sin((1 - t) * om) / Math.sin(om), s2 = Math.sin(t * om) / Math.sin(om);
+    const x = s1 * a[0] + s2 * b[0], y = s1 * a[1] + s2 * b[1], z = s1 * a[2] + s2 * b[2];
+    o.push([Math.atan2(y, x) / RAD, Math.asin(z) / RAD]); } return o; })();
+const LOXO = (() => { const o = [], m0 = mercY(SCL[1] * RAD), m1 = mercY(SYD[1] * RAD), l0 = SCL[0], l1 = SYD[0] - 360;   // hacia el oeste
+  for (let i = 0; i <= 240; i++) { const t = i / 240; o.push([l0 + (l1 - l0) * t, Math.atan(Math.sinh(m0 + (m1 - m0) * t)) / RAD]); } return o; })();
+
+// ---------------- textura ----------------
+let TEX, TW, TH, OUT;
+const imgTierra = new Image(); imgTierra.src = 'assets/earth-blue-marble.jpg';
+const imgRegalo = new Image(); imgRegalo.src = 'assets/regalo-pagina-completa.jpg';   // la página del regalo entera (390 px de ancho a 560): scripts/capturar-pagina.mjs
+const cargada = im => new Promise((ok, mal) => { if (im.complete && im.naturalWidth) ok(); else { im.onload = ok; im.onerror = () => mal(new Error(im.src)); } });
+
+// ---------------- vistas (reproyección por píxel) ----------------
+// Mercator: lon0 (centro, grados), mC (mercY del centro), k (px por radián), cy (fila del centro)
+function vistaMerc(v) {
+  const d = OUT.data, lon0 = v.lon0 * RAD, filas = new Int32Array(H), cols = new Int32Array(W), vale = new Uint8Array(H);
+  for (let y = 0; y < H; y++) { const m = v.mC - (y - v.cy) / v.k, la = Math.atan(Math.sinh(m)); vale[y] = Math.abs(la) < 85 * RAD;
+    filas[y] = Math.min(TH - 1, Math.max(0, Math.floor((0.5 - la / Math.PI) * TH))) * TW; }
+  for (let x = 0; x < W; x++) { const lo = wrapPi(lon0 + (x - W / 2) / v.k); cols[x] = Math.min(TW - 1, Math.floor((lo / (2 * Math.PI) + 0.5) * TW)); }
+  const os = v.oscuro ?? .86;
+  for (let y = 0; y < H; y++) { let p = y * W * 4; const f = filas[y];
+    if (!vale[y]) { for (let x = 0; x < W; x++, p += 4) { d[p] = 5; d[p + 1] = 5; d[p + 2] = 9; d[p + 3] = 255; } continue; }
+    for (let x = 0; x < W; x++, p += 4) { const t = (f + cols[x]) * 4; d[p] = TEX[t] * os; d[p + 1] = TEX[t + 1] * os; d[p + 2] = TEX[t + 2] * os; d[p + 3] = 255; } }
+  ctx.putImageData(OUT, 0, 0);
+}
+const projMerc = (v, [lo, la]) => [W / 2 + wrapPi((lo - v.lon0) * RAD) * v.k, v.cy - (mercY(la * RAD) - v.mC) * v.k];
+
+// Globo ortográfico: centro (cx, cy), radio r, mirando a (lon0, lat0)
+function vistaGlobo(v) {
+  fondoEstrellas();
+  const img = ctx.getImageData(0, 0, W, H), d = img.data;
+  const sl = Math.sin(v.lat0 * RAD), cl = Math.cos(v.lat0 * RAD), lon0 = v.lon0 * RAD, r = v.r;
+  const y0 = Math.max(0, Math.floor(v.cy - r)), y1 = Math.min(H - 1, Math.ceil(v.cy + r));
+  for (let y = y0; y <= y1; y++) { const yy = -(y - v.cy) / r;
+    for (let x = Math.max(0, Math.floor(v.cx - r)); x <= Math.min(W - 1, Math.ceil(v.cx + r)); x++) {
+      const xx = (x - v.cx) / r, rho2 = xx * xx + yy * yy; if (rho2 > 1) continue;
+      const z = Math.sqrt(1 - rho2), la = Math.asin(z * sl + yy * cl), lo = wrapPi(lon0 + Math.atan2(xx, z * cl - yy * sl));
+      const t = (Math.min(TH - 1, Math.floor((0.5 - la / Math.PI) * TH)) * TW + Math.min(TW - 1, Math.floor((lo / (2 * Math.PI) + 0.5) * TW))) * 4;
+      const luz = .42 + .58 * Math.pow(z, .6), p = (y * W + x) * 4, a = clamp((1 - Math.sqrt(rho2)) * r / 1.5);   // borde suave de 1,5 px
+      d[p] = lerp(d[p], TEX[t] * luz, a); d[p + 1] = lerp(d[p + 1], TEX[t + 1] * luz, a); d[p + 2] = lerp(d[p + 2], TEX[t + 2] * luz, a);
+    } }
+  ctx.putImageData(img, 0, 0);
+  ctx.save(); ctx.strokeStyle = 'rgba(140,190,255,.55)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(v.cx, v.cy, r + 2, 0, 7); ctx.stroke(); ctx.restore();
+}
+function projGlobo(v, [lo, la]) {
+  const sl = Math.sin(v.lat0 * RAD), cl = Math.cos(v.lat0 * RAD), p = la * RAD, l = (lo - v.lon0) * RAD;
+  const cosc = sl * Math.sin(p) + cl * Math.cos(p) * Math.cos(l);
+  return [v.cx + v.r * Math.cos(p) * Math.sin(l), v.cy - v.r * (cl * Math.sin(p) - sl * Math.cos(p) * Math.cos(l)), cosc > 0];
+}
+
+// Gajos de naranja → Mercator. s = 0: 12 gajos (la cáscara aplastada) · s = 1: Mercator completo.
+function vistaGajos(v, s) {
+  const d = OUT.data, n = 12, ancho = 2 * Math.PI / n;
+  for (let y = 0; y < H; y++) { const vv = (v.cy - y) / v.k;
+    const la = lerp(vv, Math.atan(Math.sinh(vv)), s), fuera = Math.abs(la) > 84 * RAD || (Math.abs(vv) > Math.PI / 2 && s < .02);
+    const f = lerp(Math.cos(la), 1, s), fila = Math.min(TH - 1, Math.max(0, Math.floor((0.5 - la / Math.PI) * TH))) * TW;
+    let p = y * W * 4;
+    for (let x = 0; x < W; x++, p += 4) {
+      const u = (x - W / 2) / v.k; let ok = !fuera && Math.abs(u) <= Math.PI;
+      let lo = 0;
+      if (ok) { const g = Math.min(n - 1, Math.floor((u + Math.PI) / ancho)), gc = -Math.PI + (g + .5) * ancho; lo = gc + (u - gc) / Math.max(.001, f); ok = Math.abs(lo - gc) <= ancho / 2; }
+      if (!ok) { d[p] = 5; d[p + 1] = 5; d[p + 2] = 9; d[p + 3] = 255; continue; }
+      const t = (fila + Math.min(TW - 1, Math.floor((wrapPi(lo + v.lon0 * RAD) / (2 * Math.PI) + 0.5) * TW))) * 4;
+      d[p] = TEX[t] * .86; d[p + 1] = TEX[t + 1] * .86; d[p + 2] = TEX[t + 2] * .86; d[p + 3] = 255;
+    } }
+  ctx.putImageData(OUT, 0, 0);
+}
+
+function fondoEstrellas() {
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(244,241,234,.5)';
+  for (let i = 0; i < 140; i++) { const x = hash2(i, 1) * W, y = hash2(i, 2) * H, r = hash2(i, 3) < .9 ? 1.2 : 2; ctx.fillRect(x, y, r, r); }
+}
+
+// ---------------- trazos sobre el mapa ----------------
+function trazo(pts, proj, o = {}) {
+  const { col = C.oro, w = 6, hasta = 1, guion = null, alfa = 1 } = o, n = Math.max(2, Math.round(pts.length * clamp(hasta)));
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalAlpha = alfa; if (guion) ctx.setLineDash(guion);
+  ctx.beginPath(); let antes = null;
+  for (let i = 0; i < n; i++) { const p = proj(pts[i]); if (p[2] === false) { antes = null; continue; }
+    if (!antes || Math.abs(p[0] - antes[0]) > W * .6) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); antes = p; }
+  ctx.stroke(); ctx.restore();
+}
+function avion(x, y, ang, s = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s); ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 10;
+  ctx.beginPath();   // vista cenital, nariz hacia +x
+  ctx.moveTo(34, 0); ctx.quadraticCurveTo(30, -5, 20, -5); ctx.lineTo(4, -5); ctx.lineTo(-8, -34); ctx.lineTo(-16, -34); ctx.lineTo(-10, -5);
+  ctx.lineTo(-24, -5); ctx.lineTo(-30, -15); ctx.lineTo(-35, -15); ctx.lineTo(-32, 0);
+  ctx.lineTo(-35, 15); ctx.lineTo(-30, 15); ctx.lineTo(-24, 5); ctx.lineTo(-10, 5); ctx.lineTo(-16, 34); ctx.lineTo(-8, 34); ctx.lineTo(4, 5);
+  ctx.lineTo(20, 5); ctx.quadraticCurveTo(30, 5, 34, 0); ctx.fill(); ctx.restore();
+}
+function avionEn(pts, proj, t, s) {
+  const n = pts.length - 1, i = Math.min(n - 1, Math.floor(t * n)), a = proj(pts[i]), b = proj(pts[i + 1]);
+  avion(lerp(a[0], b[0], t * n - i), lerp(a[1], b[1], t * n - i), Math.atan2(b[1] - a[1], b[0] - a[0]), s);
+}
+function ciudad(p, nombre, lado) {
+  if (p[2] === false) return;
+  ctx.save(); ctx.fillStyle = C.oro; ctx.beginPath(); ctx.arc(p[0], p[1], 9, 0, 7); ctx.fill();
+  ctx.font = '500 30px Inter'; const w = ctx.measureText(nombre).width + 32, x = lado < 0 ? p[0] - w - 18 : p[0] + 18;
+  ctx.fillStyle = 'rgba(11,11,16,.88)'; ctx.strokeStyle = C.pelo; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(x, p[1] - 64, w, 46, 10); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = C.tinta; ctx.textBaseline = 'middle'; ctx.fillText(nombre, x + 16, p[1] - 41); ctx.restore();
+}
+function forma(rings, proj, relleno, alfa, borde) {
+  ctx.save(); ctx.globalAlpha = alfa; ctx.beginPath();
+  for (const r of rings) r.forEach((c, i) => { const p = proj(c); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+  if (relleno) { ctx.fillStyle = relleno; ctx.fill('evenodd'); }
+  if (borde) { ctx.strokeStyle = borde; ctx.lineWidth = 3; ctx.stroke(); }
+  ctx.restore();
+}
+function reticula(proj, alfa) {
+  for (let lo = -180; lo < 180; lo += 30) { const p = []; for (let la = -84; la <= 84; la += 3) p.push([lo, la]); trazo(p, proj, { col: '#ffffff', w: 1.5, alfa }); }
+  for (let la = -60; la <= 60; la += 30) { const p = []; for (let lo = -180; lo <= 180; lo += 3) p.push([lo, la]); trazo(p, proj, { col: '#ffffff', w: 1.5, alfa }); }
+}
+function paralelo(la, proj, o) { const p = []; for (let lo = -180; lo <= 180; lo += 2) p.push([lo, la]); trazo(p, proj, o); }
+
+// Groenlandia a tamaño real, trasladada a (lonC, latC): cada vértice conserva su distancia en km al centroide
+const GL = FORMAS.groenlandia[0], GLc = [-41, 74];
+const glVerdadera = (lonC, latC, esc = 1) => [GL.map(([lo, la]) => {
+  const dx = (lo - GLc[0]) * Math.cos(la * RAD) * esc, dy = (la - GLc[1]) * esc;
+  return [lonC + dx / Math.cos(latC * RAD), latC + dy]; })];
+const CASILLAS = [[-6, 24], [6, 25], [18, 25], [30, 24], [-10, 12], [2, 11], [14, 12], [26, 12], [38, 9], [13, -1], [25, -1], [16, -13], [28, -13], [24, -25]];
+
+// ---------------- letra: palabras secuenciales, corte seco, tamaños distintos ----------------
+// las claves con espacio (*1.400 kilómetros*) se marcan palabra por palabra
+function fichasFrase(txt) { let dentro = false; return txt.split(' ').map(p => { const abre = p.startsWith('*'), cierra = /\*[.,:;]?$/.test(p);
+  const clave = dentro || abre; if (abre) dentro = true; if (cierra) dentro = false; return { p: p.replace(/\*/g, ''), clave }; }); }
+function trozos(fs) { const o = []; let cur = [];
+  fs.forEach((f, i) => { cur.push(f); if (/[.,:;]$/.test(f.p) || cur.length >= 6) { o.push(cur); cur = []; } }); if (cur.length) o.push(cur); return o; }
+const estiloFicha = (f, rojo) => f.clave ? { font: '900 116px Inter', ls: '-4px', col: rojo ? C.rojo : C.oro, alto: 116 } : { font: 'italic 400 64px "Instrument Serif"', ls: '0px', col: C.tinta, alto: 64 };
+function maquetar(fs, maxW, rojo) {
+  const lineas = []; let cur = [], ancho = 0;
+  for (const f of fs) { const e = estiloFicha(f, rojo); ctx.font = e.font; ctx.letterSpacing = e.ls; const w = ctx.measureText(f.p).width, esp = f.clave ? 26 : 16;
+    if (cur.length && ancho + esp + w > maxW) { lineas.push(cur); cur = []; ancho = 0; }
+    cur.push({ ...f, e, w }); ancho += (cur.length > 1 ? esp : 0) + w; }
+  if (cur.length) lineas.push(cur); return lineas;
+}
+function escribir(fs, visibles, y0, rojo = false) {
+  const lineas = maquetar(fs, 960, rojo); let y = y0, k = 0;
+  ctx.save(); ctx.textBaseline = 'alphabetic'; ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 16;
+  for (const l of lineas) { const alto = Math.max(...l.map(f => f.e.alto)); y += alto * .92;
+    const total = l.reduce((a, f, i) => a + f.w + (i ? (f.clave ? 26 : 16) : 0), 0); let x = W / 2 - total / 2;
+    l.forEach((f, i) => { if (i) x += f.clave ? 26 : 16; if (k++ < visibles) { ctx.font = f.e.font; ctx.letterSpacing = f.e.ls; ctx.fillStyle = f.e.col; ctx.fillText(f.p, x, y); } x += f.w; });
+    y += 14; }
+  ctx.restore(); ctx.letterSpacing = '0px';
+}
+// subtítulo de la frase i al avance q: muestra el trozo actual, palabra por palabra
+function subtitulo(i, q, y0 = 300) {
+  const fs = fichasFrase(LINEAS[i].txt), tr = trozos(fs), letras = fs.map(f => f.p.length + 1), total = letras.reduce((a, b) => a + b, 0);
+  const dichas = clamp(q / .9) * total; let acum = 0, n = 0; for (const l of letras) { if (acum + l * .35 <= dichas) n++; acum += l; }
+  n = Math.max(1, n); let base = 0;
+  for (const t of tr) { if (n <= base + t.length) { escribir(t, n - base, y0); return; } base += t.length; }
+  escribir(tr.at(-1), tr.at(-1).length, y0);
+}
+function sombraArriba(a = .6) { const g = ctx.createLinearGradient(0, 160, 0, 760); g.addColorStop(0, `rgba(5,5,9,${a})`); g.addColorStop(1, 'rgba(5,5,9,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 760); }
+function gancho() {   // gancho golpe: «tu mapa / TE MIENTE», en pantalla desde el cuadro 0
+  ctx.save(); ctx.textAlign = 'center'; ctx.shadowColor = 'rgba(0,0,0,.75)'; ctx.shadowBlur = 20;
+  ctx.font = 'italic 400 96px "Instrument Serif"'; ctx.fillStyle = C.tinta; ctx.fillText('tu mapa', W / 2, 400);
+  ctx.font = '900 196px Inter'; ctx.letterSpacing = '-7px'; ctx.fillStyle = C.rojo; ctx.fillText('TE MIENTE', W / 2, 590);
+  ctx.restore(); ctx.letterSpacing = '0px';
+}
+function contador(valor, unidad, y = 1430) {
+  ctx.save(); ctx.textAlign = 'center'; ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 16;
+  ctx.font = '900 170px Inter'; ctx.letterSpacing = '-6px'; ctx.fillStyle = C.tinta; ctx.fillText(valor, W / 2, y);
+  ctx.font = 'italic 400 64px "Instrument Serif"'; ctx.letterSpacing = '0px'; ctx.fillStyle = C.oro; ctx.fillText(unidad, W / 2, y + 74); ctx.restore();
+}
+
+// ---------------- vistas base ----------------
+const PAC = { lon0: -139.8, mC: mercY(-45 * RAD), k: 330, cy: 1060 };                 // el Pacífico sur: Santiago a la derecha, Sídney a la izquierda
+const MUNDO = { lon0: 0, mC: 0, k: 159, cy: 1060 };
+const ATL = { lon0: -12, mC: mercY(31 * RAD), k: 262, cy: 1040 };                   // Groenlandia arriba, África abajo
+const GLOBO = (lon0, lat0, r = 420) => ({ cx: W / 2, cy: 1080, r, lon0, lat0 });
+const mezclaMerc = (a, b, t) => ({ lon0: lerp(a.lon0, b.lon0, t), mC: lerp(a.mC, b.mC, t), k: lerp(a.k, b.k, t), cy: lerp(a.cy, b.cy, t) });
+const pm = v => c => projMerc(v, c), pg = v => c => projGlobo(v, c);
+function pacifico(v, o = {}) {
+  vistaMerc(v); const P = pm(v);
+  if (o.reticula) reticula(P, o.reticula);
+  trazo(LOXO, P, { col: '#ffffff', w: 4, guion: [16, 14], alfa: o.recta ?? .9 });
+  if (o.curva) trazo(ORTO, P, { col: o.colCurva || C.oro, w: 7, hasta: o.curva });
+  ciudad(P(SCL), 'Santiago', -1); ciudad(P(SYD), 'Sídney', 1);
+  return P;
+}
+
+// ---------------- apertura en 3D (frases 1 y 2): el avión sale de Santiago, va recto y gira al sur ----------------
+// Tierra de radio 1000 (1 unidad ≈ 6,4 km) con Blue Marble; encima, un parche de alta (NASA BMNG, 1,8 km/px) sobre Chile.
+// El avión no está a escala: mide como la cámara lo necesita, igual que en la referencia.
+const R3 = 1000, ALT = 8, VEL = 11;                       // altura de vuelo y velocidad (unidades / s)
+const RUMBO0 = 270, RUMBO1 = 214.5;                        // la «recta» del mapa va al oeste; la ruta real sale al suroeste (214,5°)
+const v3 = (lo, la, alt = 0) => { const ph = (lo + 180) * RAD, th = (90 - la) * RAD, r = R3 + alt;
+  return new THREE.Vector3(-r * Math.cos(ph) * Math.sin(th), r * Math.cos(th), r * Math.sin(ph) * Math.sin(th)); };
+const norte3 = (lo, la) => v3(lo, la + .01).sub(v3(lo, la)).normalize();
+const este3 = (lo, la) => v3(lo + .01, la).sub(v3(lo, la)).normalize();
+const rumbo3 = (lo, la, h) => norte3(lo, la).multiplyScalar(Math.cos(h * RAD)).add(este3(lo, la).multiplyScalar(Math.sin(h * RAD)));
+let G3 = null;   // se arma cuando cargan las texturas
+const cargaTex = src => new Promise((ok, mal) => new THREE.TextureLoader().load(src, ok, undefined, () => mal(new Error(src))));
+async function armar3D() {
+  const [tTierra, tAlta, tRelieve] = await Promise.all([cargaTex('assets/tierra-5400.jpg'), cargaTex('assets/chile-alta.jpg'), cargaTex('assets/earth-topology.png')]);
+  const r = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true });
+  r.setPixelRatio(1); r.setSize(W, H, false); r.outputEncoding = THREE.sRGBEncoding;
+  const an = r.capabilities.getMaxAnisotropy();
+  for (const t of [tTierra, tAlta]) { t.encoding = THREE.sRGBEncoding; t.anisotropy = an; }
+  const e = new THREE.Scene(); e.background = new THREE.Color(0x050509);
+  e.fog = new THREE.Fog(0x8fb4e8, 100, 400);
+  const cam = new THREE.PerspectiveCamera(48, W / H, .5, 30000);
+  const sol = new THREE.DirectionalLight(0xffffff, 1.05); sol.position.copy(v3(-95, -5).multiplyScalar(3).add(v3(-70, 10).multiplyScalar(2))); e.add(sol);
+  e.add(new THREE.AmbientLight(0xbfd0ff, .42));
+  const luzCam = new THREE.DirectionalLight(0xfff4e6, .55); e.add(luzCam, luzCam.target);
+  // la Tierra y el parche de Chile
+  e.add(new THREE.Mesh(new THREE.SphereGeometry(R3, 360, 180), new THREE.MeshPhongMaterial({ map: tTierra, bumpMap: tRelieve, bumpScale: 3, shininess: 4, specular: 0x040506 })));
+  e.add(new THREE.Mesh(new THREE.SphereGeometry(R3 + .12, 240, 240, 90 * RAD, 30 * RAD, 115 * RAD, 30 * RAD),
+    new THREE.MeshPhongMaterial({ map: tAlta, shininess: 4, specular: 0x040506, polygonOffset: true, polygonOffsetFactor: -2 })));
+  // atmósfera: brillo justo encima del horizonte, calculado desde donde está la cámara
+  const atm = new THREE.ShaderMaterial({ side: THREE.BackSide, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+    uniforms: { arriba: { value: new THREE.Vector3() }, caida: { value: 0 }, k: { value: 22 } },
+    vertexShader: 'varying vec3 vW; void main(){ vW = (modelMatrix * vec4(position,1.)).xyz; gl_Position = projectionMatrix * viewMatrix * vec4(vW,1.); }',
+    fragmentShader: 'uniform vec3 arriba; uniform float caida; uniform float k; varying vec3 vW; void main(){ vec3 d = normalize(vW - cameraPosition); float el = dot(d, arriba) - caida;' +
+      'float g = exp(-max(el, 0.) * 22. / k * 22.) * .95 + exp(-max(el, 0.) * 5. / k * 22.) * .18; gl_FragColor = vec4(vec3(.42,.66,1.) * g, 1.); }' });
+  e.add(new THREE.Mesh(new THREE.SphereGeometry(R3 * 1.06, 128, 64), atm));
+  // estrellas
+  const pe = []; for (let i = 0; i < 1400; i++) { const u = hash2(i, 11) * 2 - 1, a = hash2(i, 12) * 2 * Math.PI, s = Math.sqrt(1 - u * u); pe.push(s * Math.cos(a) * 20000, u * 20000, s * Math.sin(a) * 20000); }
+  const ge = new THREE.BufferGeometry(); ge.setAttribute('position', new THREE.Float32BufferAttribute(pe, 3));
+  e.add(new THREE.Points(ge, new THREE.PointsMaterial({ color: new THREE.Color(0xf4f1ea).convertSRGBToLinear(), size: 2, sizeAttenuation: false, transparent: true, opacity: .55, fog: false })));
+  // el avión: nariz hacia +Z, arriba +Y, ala izquierda hacia +X
+  const blanco = new THREE.MeshPhongMaterial({ color: new THREE.Color(0xf3f3f5).convertSRGBToLinear(), shininess: 70, specular: 0x666666, side: THREE.DoubleSide, fog: false });
+  const gris = new THREE.MeshPhongMaterial({ color: new THREE.Color(0xc9ced6).convertSRGBToLinear(), shininess: 50, specular: 0x555555, fog: false });
+  const oro = new THREE.MeshPhongMaterial({ color: new THREE.Color(0xF5C542).convertSRGBToLinear(), shininess: 40, side: THREE.DoubleSide, fog: false });
+  const negro = new THREE.MeshBasicMaterial({ color: new THREE.Color(0x15161c).convertSRGBToLinear(), fog: false });
+  const av = new THREE.Group(), pon = (g, m, x = 0, y = 0, z = 0) => { const o = new THREE.Mesh(g, m); o.position.set(x, y, z); av.add(o); return o; };
+  pon(new THREE.CylinderGeometry(.42, .42, 6.2, 32).rotateX(Math.PI / 2), blanco, 0, 0, .3);
+  pon(new THREE.SphereGeometry(.42, 32, 16).scale(1, 1, 2.3), blanco, 0, 0, 3.35);
+  pon(new THREE.CylinderGeometry(.1, .42, 2.6, 32).rotateX(-Math.PI / 2), blanco, 0, .12, -4.1);
+  const plano = (pts, grosor) => new THREE.ExtrudeGeometry(new THREE.Shape(pts.map(p => new THREE.Vector2(...p))), { depth: grosor, bevelEnabled: false });
+  const ala = plano([[.3, 1.1], [5.3, -1.5], [5.3, -2.1], [.3, -1.3]], .1).rotateX(Math.PI / 2);
+  pon(ala, blanco, 0, -.18, .7).rotation.z = 6 * RAD;
+  pon(ala.clone().scale(-1, 1, 1), blanco, 0, -.18, .7).rotation.z = -6 * RAD;
+  const cola = plano([[.15, .5], [1.9, -.45], [1.9, -.9], [.15, -.7]], .07).rotateX(Math.PI / 2);
+  pon(cola, blanco, 0, .2, -4.4); pon(cola.clone().scale(-1, 1, 1), blanco, 0, .2, -4.4);
+  pon(plano([[0, 0], [1.7, 0], [2.15, 1.95], [1.45, 1.95]], .08).rotateY(Math.PI / 2), blanco, -.04, .3, -3.1);
+  pon(plano([[1.2, 1.3], [1.96, 1.3], [2.17, 1.97], [1.45, 1.97]], .1).rotateY(Math.PI / 2), oro, -.05, .3, -3.1);
+  for (const s of [1, -1]) { pon(new THREE.CylinderGeometry(.33, .27, 1.6, 24).rotateX(Math.PI / 2), gris, 1.85 * s, -.55, 1.2);
+    pon(new THREE.CircleGeometry(.27, 24), negro, 1.85 * s, -.55, 2.01); }
+  e.add(av);
+  // la «recta» del mapa: guiones blancos hacia el oeste, a la altura del vuelo
+  const ruta = ruta3D(), p0 = ruta[0];
+  const recta = new THREE.Group(), blancoB = new THREE.MeshBasicMaterial({ color: new THREE.Color(0xffffff).convertSRGBToLinear(), transparent: true, opacity: .9 });
+  const q0 = enRutaDe(ruta, 0), o0 = v3(q0.lo, q0.la).normalize(), w0 = rumbo3(q0.lo, q0.la, RUMBO0), radio = R3 + ALT - .6;
+  const enGC = a => o0.clone().multiplyScalar(Math.cos(a)).add(w0.clone().multiplyScalar(Math.sin(a))).multiplyScalar(radio);
+  for (let k = 0; k < 160; k++) recta.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(enGC((k * 1.4 + 1) / R3), enGC((k * 1.4 + 1.8) / R3)), 1, .09, 6), blancoB));
+  e.add(recta);
+  const estela = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xF5C542).convertSRGBToLinear(), fog: false }));
+  const halo = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xF5C542).convertSRGBToLinear(), transparent: true, opacity: .22, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+  e.add(estela, halo);
+  G3 = { r, e, cam, av, atm, estela, halo, ruta, luzCam };
+}
+// ruta del avión, muestreada a 60 por segundo desde t = -1,4 s (despega de Santiago y sube) hasta el final de la frase 2
+const T_GIRO0 = () => INICIOS[1] + .15, T_GIRO1 = () => INICIOS[1] + 1.35, T_SUBE0 = () => INICIOS[1] + .75, T_FIN3D = () => INICIOS[2];
+const rumboEn = t => lerp(RUMBO0, RUMBO1, ease(prog(t, T_GIRO0(), T_GIRO1())));
+function ruta3D() {
+  const o = [], dt = 1 / 60; let lo = SCL[0] + 1.1, la = SCL[1];
+  for (let t = -1.4; t <= T_FIN3D() + .05; t += dt) { const h = rumboEn(t), alt = t < 0 ? ALT * easeOut(clamp((t + 1.4) / 1.4)) : ALT;
+    o.push({ t, lo, la, h, alt });
+    const d = VEL * dt / R3 / RAD; la += d * Math.cos(h * RAD); lo += d * Math.sin(h * RAD) / Math.cos(la * RAD); }
+  return o;
+}
+const enRutaDe = (ruta, t) => ruta[Math.max(0, Math.min(ruta.length - 1, Math.round((t + 1.4) * 60)))];
+const enRuta = t => G3.ruta[Math.max(0, Math.min(G3.ruta.length - 1, Math.round((t + 1.4) * 60)))];
+function apertura3D(t) {
+  const { r, e, cam, av, atm, estela, halo, luzCam } = G3, p = enRuta(t), pos = v3(p.lo, p.la, p.alt), arriba = pos.clone().normalize();
+  // el avión: rumbo de la ruta, alabeo según lo que está girando (gira a la izquierda → ala izquierda abajo)
+  const giro = (rumboEn(t + .05) - rumboEn(t - .05)) / .1, alabeo = clamp(-giro / 70, -1, 1) * 38 * RAD;
+  const f = rumbo3(p.lo, p.la, p.h), u0 = arriba.clone(), izq = u0.clone().cross(f).normalize();
+  const u = u0.clone().multiplyScalar(Math.cos(alabeo)).add(izq.clone().multiplyScalar(Math.sin(alabeo))).normalize(), x = u.clone().cross(f).normalize();
+  av.matrixAutoUpdate = false; av.matrix.makeBasis(x, u, f).setPosition(pos);
+  // cámara: detrás y arriba, con el rumbo atrasado (el avión se le escapa a la izquierda); al final sube a la vista cenital
+  const hc = lerp(RUMBO0, p.h, .5), fc = rumbo3(p.lo, p.la, hc);
+  const camA = pos.clone().sub(fc.clone().multiplyScalar(24)).add(arriba.clone().multiplyScalar(10.5));
+  const mirA = pos.clone().add(fc.clone().multiplyScalar(24)).add(arriba.clone().multiplyScalar(-3.2));
+  const s = ease(prog(t, T_SUBE0(), T_FIN3D())), sm = ease(prog(t, T_SUBE0() + .35, T_FIN3D())), sobre = v3(-108, -43);
+  const camB = sobre.clone().add(sobre.clone().normalize().multiplyScalar(2700)), mirB = sobre;
+  cam.position.copy(camA.clone().lerp(camB, s)); const mira = mirA.clone().lerp(pos, Math.min(1, s * 3)).lerp(mirB, sm);
+  const upB = norte3(-108, -43); cam.up.copy(arriba.clone().lerp(upB, s).normalize()); cam.lookAt(mira);
+  // estela dorada: desde el suelo de Santiago hasta la cola
+  const grosor = .16 + Math.max(0, cam.position.length() - R3 - 20) * .0016;   // desde arriba la estela engorda para seguir viéndose
+  const pasado = G3.ruta.filter(q => q.t <= t - .02).filter((q, i, a) => i % 3 === 0 || i === a.length - 1).map(q => v3(q.lo, q.la, q.alt));
+  pasado.push(pos.clone().sub(f.clone().multiplyScalar(4.6)));
+  if (pasado.length > 2) { const c = new THREE.CatmullRomCurve3(pasado); estela.geometry.dispose(); halo.geometry.dispose();
+    estela.geometry = new THREE.TubeGeometry(c, 240, grosor, 8); halo.geometry = new THREE.TubeGeometry(c, 240, grosor * 2, 8); }
+  // niebla y atmósfera según la altura de la cámara
+  const hCam = cam.position.length() - R3, hor = Math.sqrt(2 * R3 * hCam + hCam * hCam);
+  e.fog.near = hor * .55 / Math.max(.02, 1 - s * 6); e.fog.far = e.fog.near * 2.7;   // la niebla se va apenas empieza a subir atm.uniforms.k.value = 22 / (1 + hCam / 120);
+  luzCam.position.copy(cam.position).add(cam.up.clone().multiplyScalar(30)); luzCam.target.position.copy(pos);
+  atm.uniforms.arriba.value.copy(cam.position).normalize(); atm.uniforms.caida.value = -Math.sqrt(Math.max(0, 1 - Math.pow(R3 / (R3 + hCam), 2)));
+  r.render(e, cam); ctx.drawImage(r.domElement, 0, 0, W, H);
+  if (s > .6) { const sc = v3(SCL[0], SCL[1]).project(cam); ciudad([(sc.x + 1) / 2 * W, (1 - sc.y) / 2 * H], 'Santiago', -1); }
+}
+
+// ---------------- escenas: una por frase · q = avance de la frase (0..1) ----------------
+const ESC = [
+  q => { apertura3D(TG); sombraArriba(.5); gancho(); },
+  q => { apertura3D(TG); sombraArriba(.5); gancho(); subtitulo(1, q, 700); },
+  q => { const t = ease(prog(q, .05, 1)); const P = pacifico(PAC, { curva: t }); avionEn(ORTO, P, t, 1.3); sombraArriba(); subtitulo(2, q); },
+  q => { const P = pacifico(PAC, { curva: 1, recta: lerp(.9, .5, prog(q, .4, .7)) }); avionEn(ORTO, P, 1, 1.3); sombraArriba(); subtitulo(3, q); },
+  q => { const P = pacifico(PAC, { curva: 1, recta: .5 }); sombraArriba();
+    const n = Math.round(easeOut(prog(q, .1, .75)) * 1434); contador(n.toLocaleString('es-PE').replace(',', '.') + ' km', 'menos que la línea recta'); subtitulo(4, q); },
+  q => { if (q < .5) { const v = mezclaMerc(PAC, { ...PAC, k: 250 }, ease(prog(q, 0, .5))); pacifico(v, { curva: 1, recta: .5, reticula: .18 }); }
+         else { const v = GLOBO(lerp(-100, -125, prog(q, .5, 1)), -30); vistaGlobo(v); const G = pg(v); reticula(G, .16); trazo(ORTO, G, { col: C.oro, w: 6 }); ciudad(G(SCL), 'Santiago', 1); ciudad(G(SYD), 'Sídney', -1); }
+         sombraArriba(); subtitulo(5, q); },
+  q => { naranja(q); subtitulo(6, q); },
+  q => { const s = ease(prog(q, .12, .85)); vistaGajos(MUNDO, s); sombraArriba(); subtitulo(7, q); },
+  q => { const v = mezclaMerc(MUNDO, ATL, ease(prog(q, 0, .3))); vistaMerc(v); const P = pm(v);
+    forma(FORMAS.groenlandia, P, '#cfe6ff', q > .22 ? .78 : 0, q > .22 ? '#ffffff' : null);
+    forma(FORMAS.africa, P, C.oro, q > .55 ? .82 : 0);
+    sombraArriba(); subtitulo(8, q); },
+  q => { vistaMerc(ATL); const P = pm(ATL); forma(FORMAS.africa, P, C.oro, .82);
+    const viaje = ease(prog(q, 0, .32)); forma(FORMAS.groenlandia, P, '#cfe6ff', lerp(.78, .25, viaje), null);
+    // la primera copia viaja desde Groenlandia y se encoge a su tamaño real; las otras 13 se estampan
+    const c0 = CASILLAS[0];
+    forma(viaje < 1 ? interpolarForma(FORMAS.groenlandia[0], glVerdadera(c0[0], c0[1])[0], viaje) : glVerdadera(c0[0], c0[1]), P, '#e8f3ff', .92, '#5a6b80');
+    const n = q < .34 ? 1 : 1 + Math.floor(clamp((q - .34) / .5) * 13.999);
+    for (let i = 1; i < n; i++) forma(glVerdadera(CASILLAS[i][0], CASILLAS[i][1]), P, '#e8f3ff', .92, '#5a6b80');
+    sombraArriba(); contador('×' + n, n === 14 ? 'Groenlandias caben en África' : 'Groenlandias', 1560); subtitulo(9, q); },
+  q => { const v = GLOBO(-140, -42); vistaGlobo(v); const G = pg(v); reticula(G, .14);
+    trazo(ORTO, G, { col: C.hilo, w: 7, hasta: ease(prog(q, .25, .9)) }); ciudad(G(SCL), 'Santiago', 1); ciudad(G(SYD), 'Sídney', -1);
+    sombraArriba(.5); subtitulo(10, q); },
+  q => { const v = GLOBO(-140, -42); vistaGlobo(v); const G = pg(v); reticula(G, .14);
+    paralelo(-33.7, G, { col: '#ffffff', w: 3, guion: [12, 10], alfa: .8 }); paralelo(-60, G, { col: C.oro, w: 5, hasta: 1, alfa: q > .45 ? 1 : 0 });
+    trazo(ORTO, G, { col: C.hilo, w: 7 }); ciudad(G(SCL), 'Santiago', 1); ciudad(G(SYD), 'Sídney', -1); sombraArriba(.5); subtitulo(11, q); },
+  q => { const P = pacifico(PAC, { curva: 1, colCurva: C.hilo, recta: .8 }); sombraArriba(); subtitulo(12, q); },
+  q => { const t = ease(prog(q, 0, .75)); const P = pacifico(PAC, { curva: t, recta: .8 }); avionEn(ORTO, P, t, 1.3); sombraArriba(); subtitulo(13, q); },
+  q => { cierre(q, false); subtitulo(14, q); },
+  q => { cierre(q, true); ctaRegalo(q); },
+];
+function interpolarForma(a, b, t) { return [a.map((p, i) => [lerp(p[0], b[i][0], t), lerp(p[1], b[i][1], t)])]; }
+
+function naranja(q) {   // la cáscara que se rompe: 8 gajos vistos desde arriba que se separan
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = 1080, r = 330, corte = prog(q, .3, .55), abre = ease(prog(q, .55, .95));
+  for (let g = 0; g < 8; g++) { const a0 = g * Math.PI / 4 - Math.PI / 2, a1 = a0 + Math.PI / 4, am = (a0 + a1) / 2;
+    const dx = Math.cos(am) * abre * 70, dy = Math.sin(am) * abre * 70;
+    ctx.save(); ctx.translate(cx + dx, cy + dy); ctx.rotate(abre * .12 * (g % 2 ? 1 : -1));
+    const gr = ctx.createRadialGradient(-r * .3, -r * .35, r * .1, 0, 0, r); gr.addColorStop(0, '#ffb347'); gr.addColorStop(.7, '#f28c28'); gr.addColorStop(1, '#c9640d');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, r * (1 - abre * .04), a0 + abre * .03, a1 - abre * .03); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(120,50,0,.18)';   // poros de la cáscara
+    for (let i = 0; i < 60; i++) { const aa = lerp(a0, a1, hash2(g, i)), rr = Math.sqrt(hash2(i, g + 9)) * r * .95; ctx.beginPath(); ctx.arc(Math.cos(aa) * rr, Math.sin(aa) * rr, 2.4, 0, 7); ctx.fill(); }
+    ctx.restore(); }
+  if (corte > 0 && abre === 0) { ctx.save(); ctx.strokeStyle = 'rgba(255,245,225,.9)'; ctx.lineWidth = 4;
+    for (let g = 0; g < 8; g++) { const a = g * Math.PI / 4 - Math.PI / 2; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * r * corte, cy + Math.sin(a) * r * corte); ctx.stroke(); } ctx.restore(); }
+  ctx.fillStyle = '#7a3c06'; ctx.beginPath(); ctx.arc(cx, cy, 10, 0, 7); ctx.fill();
+}
+function ctaRegalo(q) {
+  ctx.save(); ctx.textAlign = 'center'; ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 16;
+  ctx.font = 'italic 400 84px "Instrument Serif"'; ctx.fillStyle = C.tinta; ctx.fillText('comenta', W / 2, 360);
+  let tam = 190; ctx.letterSpacing = '-7px'; do { ctx.font = `900 ${tam}px Inter`; tam -= 6; } while (ctx.measureText(PALABRA).width > 960 && tam > 60);   // una palabra larga se achica hasta caber
+  ctx.fillStyle = C.oro; ctx.fillText(PALABRA, W / 2, 540);
+  ctx.letterSpacing = '0px';
+  if (q > .38) { ctx.font = 'italic 400 60px "Instrument Serif"'; ctx.fillStyle = C.tinta; ctx.fillText(REGALO[0], W / 2, 640); }
+  if (q > .55) { ctx.font = '900 76px Inter'; ctx.letterSpacing = '-3px'; ctx.fillStyle = C.oro; ctx.fillText(REGALO[1], W / 2, 722); }
+  ctx.restore(); ctx.letterSpacing = '0px';
+}
+// el celular baja por toda la página del regalo: arranca en la portada y termina en el formulario
+const BAJA0 = () => INICIOS[14] + LINEAS[14].d * .25, BAJA1 = () => INICIOS[15] + LINEAS[15].d * .88;
+function cierre(q, cta) {   // captura real del regalo en un marco de celular plano
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  const w = 560, h = w * imgRegalo.naturalHeight / imgRegalo.naturalWidth, x = W / 2 - w / 2, y = 800, vis = 880;
+  const t = prog(TG, BAJA0(), BAJA1()), off = (h - vis) * (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);   // arranque y frenada suaves
+  ctx.save(); ctx.fillStyle = C.carbon; ctx.strokeStyle = C.pelo; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.roundRect(x - 18, y - 18, w + 36, vis + 36, 54); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(x, y, w, vis, 40); ctx.clip();
+  ctx.drawImage(imgRegalo, 0, off * imgRegalo.naturalWidth / w, imgRegalo.naturalWidth, imgRegalo.naturalWidth * vis / w, x, y, w, vis); ctx.restore();
+  if (cta) { ctx.save(); ctx.strokeStyle = C.oro; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(x - 30, y - 30, w + 60, vis + 60, 64); ctx.stroke(); ctx.restore(); }
+}
+
+// ---------------- efectos de sonido (los lee mezclar.mjs) ----------------
+window.SFX = (() => { const e = [], at = (i, q) => INICIOS[i] + LINEAS[i].d * q;
+  e.push({ t: 0, s: 'golpe' });
+  [2, 5, 7, 8, 10, 12, 14].forEach(i => e.push({ t: INICIOS[i] - .12, s: 'whoosh' }));
+  e.push({ t: at(5, .5) - .1, s: 'whoosh' });
+  e.push({ t: T_GIRO0() + .1, s: 'swoosh' }, { t: T_SUBE0() + .2, s: 'whoosh' });
+  e.push({ t: at(2, .08), s: 'swoosh' }, { t: at(13, .02), s: 'swoosh' });
+  for (let k = 0; k < 10; k++) e.push({ t: at(4, .1 + k * .065), s: 'tic' });
+  e.push({ t: at(4, .76), s: 'ding' });
+  e.push({ t: at(6, .3), s: 'papel' }, { t: at(6, .56), s: 'papel' });
+  e.push({ t: at(8, .22), s: 'pop' }, { t: at(8, .55), s: 'pop' });
+  e.push({ t: at(9, .32), s: 'pop' }); for (let k = 1; k < 14; k++) e.push({ t: at(9, .34 + (k - 1) / 13.999 * .5), s: 'tic' });
+  e.push({ t: at(9, .84), s: 'ding' });
+  e.push({ t: at(10, .25), s: 'plumon' }); e.push({ t: at(11, .45), s: 'pop' });
+  e.push({ t: at(12, .4) - 1.2, s: 'riser' }); e.push({ t: at(13, .8), s: 'sello' });
+  e.push({ t: at(15, .05), s: 'ding' }, { t: BAJA0(), s: 'swoosh' });
+  return e.filter(x => x.t >= 0); })();
+
+let TG = 0;   // tiempo global: la apertura 3D corre sobre dos frases seguidas
+function draw(f) {
+  const t = f / FPS; TG = t; let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const q = clamp((t - INICIOS[i]) / LINEAS[i].d);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.letterSpacing = '0px';
+  ESC[i](q);
+}
+window.LISTO = Promise.all([cargada(imgTierra), cargada(imgRegalo), document.fonts.load('900 100px Inter'), document.fonts.load('500 30px Inter'), document.fonts.load('italic 400 60px "Instrument Serif"'), armar3D()]).then(() => {
+  const c = document.createElement('canvas'); c.width = imgTierra.naturalWidth; c.height = imgTierra.naturalHeight;
+  const x = c.getContext('2d'); x.drawImage(imgTierra, 0, 0); TEX = x.getImageData(0, 0, c.width, c.height).data; TW = c.width; TH = c.height;
+  OUT = ctx.createImageData(W, H);
+});
+window.LISTO.then(() => arrancar(draw));
+</script>
+</body>
+</html>

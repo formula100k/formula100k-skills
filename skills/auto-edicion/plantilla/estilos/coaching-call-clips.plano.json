@@ -1,0 +1,31 @@
+{
+ "formato": "16:9",
+ "cara": [
+  0.5,
+  0.43
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.96,
+   "persona": "oculta"
+  },
+  {
+   "desde": 1.96,
+   "hasta": 10.58,
+   "persona": [
+    {
+     "x": 1040,
+     "y": 0,
+     "w": 880,
+     "h": 1080,
+     "cara": [
+      0.5,
+      0.43
+     ]
+    }
+   ]
+  }
+ ],
+ "gancho": "sello"
+}

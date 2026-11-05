@@ -41,8 +41,9 @@ Si falta, **no sigas** y dile en 1 paso cómo instalarlo, con el texto de `insta
 
 ## 4. Pide solo lo que esa plantilla necesita y pásale el trabajo
 1. Lee `necesita` y pide **solo** lo que falte, en UN mensaje (la ruta del video, el tema, el enlace, las capturas…). Si ya lo dio, no lo repitas.
-2. Abre el `SKILL.md` del motor y síguelo: **sus reglas mandan** (corte, gancho, marca, sonidos, cifras con fuente, CTA). Esta skill no las repite ni las cambia.
-3. Entra al motor por la receta exacta, sin volver a elegir estilo:
+2. Busca su brandkit (sección «Tu brandkit manda en el look», más abajo).
+3. Abre el `SKILL.md` del motor y síguelo: **sus reglas mandan** (corte, gancho, marca, sonidos, cifras con fuente, CTA). Esta skill no las repite ni las cambia. Su brandkit va encima del look de la plantilla.
+4. Entra al motor por la receta exacta, sin volver a elegir estilo:
 
 | `motor.skill` | Cómo entra la receta |
 |---|---|
@@ -56,7 +57,21 @@ Si falta, **no sigas** y dile en 1 paso cómo instalarlo, con el texto de `insta
 | `animacion-dibujada-f100k` con `receta` `cine-<id>` (grupo «Estilos de cine») | `node <skill>/scripts/armar.mjs cine-<id> "<proyecto>/animaciones/<nombre>.html"`, cambia solo el bloque «LO QUE PUEDES CAMBIAR» con su frase (y sus fotos si el estilo las acepta) y renderiza con `renderizar.mjs`, como dice su `SKILL.md` (sección «Estilos de cine (66)»). Es un clip de 8 a 10 s para meter en su reel. |
 | cualquier otra | Su flujo normal; la `receta` es el nombre del estilo o modo dentro de esa skill. |
 
-4. Al entregar, di en una línea qué plantilla usaste y, si tiene `muestra`, que la puede comparar en `formula100k.app` + esa ruta.
+5. Al entregar, di en una línea qué plantilla usaste (y, si hubo brandkit, qué aplicaste de él) y, si tiene `muestra`, que la puede comparar en `formula100k.app` + esa ruta.
+
+## Tu brandkit manda en el look
+Sin esto, las plantillas salen con sus colores por defecto. **Antes de producir** (y antes de pasarle el trabajo al motor), busca su brandkit en este orden y usa el primero que encuentres:
+1. **`mi_brandkit` del conector de Yapper**, si el guion viene de Yapper o el conector está disponible en la sesión (si tiene varios proyectos, pásale `cuenta`). Trae su brandkit, su manual y los enlaces de sus stickers.
+2. **`mi-marca/brandkit.md`** en la carpeta del proyecto, con sus stickers en `mi-marca/stickers/`.
+3. **`mi-marca/marca.md`**, su manual de identidad visual (colores y letras).
+4. Si no hay nada, sigue como siempre, con el look de la plantilla.
+
+Los colores y las letras salen de su manual (`mi-marca/marca.md` o lo que devuelva `mi_brandkit`). Cómo se aplica:
+- **Encima de la plantilla elegida:** colores, letras, gancho, subtítulos, elementos de marca (fondos con patrón, marco del video, listas con check, secciones numeradas, antes/después, flechas), stickers y CTA. La estructura de la plantilla se respeta: su orden, sus escenas, su ritmo y su composición. Pásale al motor el brandkit junto con la receta.
+- **Estilos con mundo propio** (cubitos 3D, telenovela, juego retro, estilos de cine, stop motion): la marca va en los textos, el gancho, los subtítulos, los stickers y el CTA. El mundo no se repinta.
+- **El brandkit no pisa las reglas de oficio:** gancho de 2 a 5 palabras que entra con corte seco; nada tiembla ni rebota (los stickers también van quietos); fotos y capturas reales antes que emojis o íconos; y ningún sonido agudo.
+- **Stickers según su modo:** `dibuja` → dibújalos tú según su descripción, con sus colores; `busca` → usa memes o imágenes reales según `que_buscar`; `propios` → sus imágenes: descarga las URLs que devuelve `mi_brandkit` o usa las de `mi-marca/stickers/`. Nunca inventes stickers que no pidió.
+- **Al terminar,** di en una línea qué aplicaste del brandkit (por ejemplo: «Del brandkit: colores y letras, gancho, subtítulos, lista con check, 3 stickers propios y tu CTA»).
 
 ## 5. No nombró plantilla: propón 2
 Lee su guion, su video o su tema y propón **2 plantillas** (nombre — por qué en una línea — su `comando` listo para copiar). Guía:
@@ -91,11 +106,11 @@ Se clona **cómo está editado**, nunca el contenido: ni sus textos, ni su cara,
    - Animado sin cara que responde una pregunta imposible o crece con cifras («¿qué pasaría si…?») → `clonador-de-edicion-f100k` con el enlace como referencia (él lo estudia con su propio paso).
    - Sale una persona hablando, o ella dijo «úsala en mi video» → las 2 plantillas de «Con tu video» o «YouTube 16:9» cuyo `queSeVe` más se parece a tus 5 notas. Dile en 2 líneas cuál se parece más y en qué es distinta, y sigue con esa (pasos 3 y 4).
    - Sin cara y no es «¿qué pasaría si…?», o ella dijo «sin grabar» → la plantilla más parecida de «Sin grabar» o «Animado sin cara», igual que arriba.
-4. Pásale al motor tus 5 notas como **dirección de arte** (gancho, letra, colores, qué aparece y ritmo) para que la plantilla se parezca a la referencia. Si la referencia hace algo que va contra las reglas del motor (texto que tiembla, brillos, sonidos agudos, olor a IA), manda la regla del motor.
+4. Pásale al motor tus 5 notas como **dirección de arte** (gancho, letra, colores, qué aparece y ritmo) para que la plantilla se parezca a la referencia. Si la referencia hace algo que va contra las reglas del motor (texto que tiembla, brillos, sonidos agudos, olor a IA), manda la regla del motor. Los colores, las letras, los stickers y el CTA son los de su brandkit, no los de la referencia.
 5. Al entregar, di en una línea qué plantilla usaste de base y qué tomaste de la referencia.
 
 ## Reglas de esta skill
 - **No inventes plantillas, recetas ni muestras.** Lo que no está en el JSON no existe.
 - **Una plantilla, un motor.** No mezcles dos motores en un reel salvo que lo pida; los estilos de Auto-Edición sí se pueden mezclar por escena (lo dice su motor).
 - **No dupliques reglas del motor.** Si una regla de la casa aplica (gancho golpe, edición sin olor a IA, sin pitidos, cifras con fuente, CTA con palabra ligada al tema y nunca «YO»), está en el `SKILL.md` del motor: síguela desde ahí.
-- **Su marca y su negocio** los lee el motor (`~/Documents/mi-contenido/`). Esta skill no pregunta colores ni letras.
+- **Su marca y su negocio** los lee el motor (`~/Documents/mi-contenido/`). Su brandkit lo buscas tú antes de producir y se lo pasas al motor (sección «Tu brandkit manda en el look»). Esta skill no pregunta colores ni letras.

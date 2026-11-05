@@ -25,6 +25,9 @@ Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows
 
 - **Su negocio.** Rubro, avatar y oferta salen de `entregables/`; su forma de hablar, de
   `entregables/`. Léelos antes de escribir. Si no existen, sigue el ANCLAJE DE RUBRO de abajo.
+- **Su brandkit, antes que todo lo demás:** primero `mi_brandkit` del conector de Yapper (si el pedido viene de Yapper o el conector está disponible; con varios proyectos, pásale `cuenta`);
+  si no, `mi-marca/brandkit.md` en la carpeta del proyecto (sus stickers, en `mi-marca/stickers/`). Trae gancho, subtítulos, elementos de marca, stickers y CTA; los colores y las letras siguen saliendo de su marca (abajo).
+  Cómo se aplica en un carrusel: «Su brandkit (antes del flujo)». Si no hay brandkit, sigue con su marca como siempre.
 - **Su marca, en este orden:**
   1. `entregables/` (colores, letras, estilo visual, @handle y tono).
   2. Si no está, su manual de identidad visual `mi-marca/marca.md` (dónde buscarlo y cómo leerlo: `references/mi-marca.md`).
@@ -113,6 +116,17 @@ Convierte un tema en un carrusel terminado eligiendo **una ficha** y girando 3 p
 Los archivos de `references/` los mantiene el equipo de FÓRMULA 100K y llegan con cada actualización del paquete: no los edites.
 
 **Voz:** tuteo siempre (tú, tienes, sube, comenta). Nunca voseo, tampoco en los textos de las slides.
+
+## Su brandkit (antes del flujo)
+Búscalo antes que la marca: `mi_brandkit` del conector de Yapper (devuelve su brandkit, su manual y los enlaces de sus stickers); si no, `mi-marca/brandkit.md` con `mi-marca/stickers/`; si no hay ninguno, sigue con «Su marca» y nada más.
+Si lo encuentras, va **encima de la ficha elegida**, respetando su composición, su soporte y su jerarquía:
+- **Colores y letras:** los de su manual (el que devuelve `mi_brandkit` o el de «Su marca»).
+- **Gancho → la portada.** El texto de la lámina 1 sigue su forma de gancho: de 2 a 5 palabras grandes, sin brillo ni degradado.
+- **CTA → la última lámina,** con su palabra y su forma de cierre.
+- **Elementos de marca** (fondos con patrón, marco, listas con check, secciones numeradas, antes/después, flechas) **y stickers → en las láminas** donde sirvan al contenido, sin tapar el texto ni la foto.
+- **Stickers según su modo:** `dibuja` → dibújalos tú según su descripción, con sus colores; `busca` → memes o imágenes reales según `que_buscar`; `propios` → sus imágenes: descarga las URLs de `mi_brandkit` o usa `mi-marca/stickers/`. Nunca inventes stickers que no pidió.
+- **El brandkit no pisa el oficio:** fotos y capturas reales antes que emojis o íconos, nada con brillo ni efecto 3D, y la ficha sigue mandando en la estructura.
+- **Al terminar,** di en una línea qué aplicaste del brandkit (por ejemplo: «Del brandkit: colores y letras, portada con tu gancho, lista con check, 2 stickers propios y tu CTA»).
 
 ## Su marca (antes del flujo)
 Búscala en el orden de «ANTES DE EMPEZAR»: primero `entregables/`; si no está, su manual `mi-marca/marca.md` (como dice `references/mi-marca.md`); si no hay ninguno, pregunta.

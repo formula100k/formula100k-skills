@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tips por capítulos · Con tu video</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Instrument+Serif:ital@0;1&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// ESTILO «Tips por capítulos» (16:9, 1920×1080). Alterna dos planos:
+//  · LÁMINA (persona oculta): marcador de capítulo arriba y 3 tarjetas 1-2-3; la del capítulo que hablas va grande y en acento,
+//    las otras chicas y atenuadas (las que aún no dices muestran solo su número).
+//  · TÚ al centro recortada sobre fondo carbón (persona = [{x:340,y:0,w:1320,h:1080,recorte:true,cara}], necesita mate.mp4):
+//    la cifra ENORME a la altura del pecho (delante de ti, en frente(…)) con su línea chica, una tarjeta de
+//    ejemplo con captura real a un lado y una frase corta al otro.
+// Piezas propias: fotoR, capitulos (CAPS + ACTIVO), alPecho. El ESC de abajo es un ejemplo: reescríbelo con tus palabras e índices.
+// Auto-Edición · modo «Con tu video». Esta pieza dibuja SOLO los gráficos: donde va tu video pinta verde #00FF00
+// y video/componer.py pone tu video debajo. La escena «recorte» te pone encima de los gráficos (Depth UI, fondo que cambia).
+// Lo que va DELANTE de ti en una escena recorte se dibuja dentro de frente(() => …) y se activa con la constante FRENTE.
+// PALABRAS, PLANO y DUR los inyecta scripts/video.mjs.
+const PALABRAS = __PALABRAS__;
+const PLANO = __PLANO__;
+const DUR = __DUR__;
+const [W, H] = PLANO.formato === '16:9' ? [1920, 1080] : [1080, 1920];
+const FPS = 30;
+const VERDE = new URLSearchParams(location.search).has('verde');   // pasada de la capa de frente
+const FRENTE = true;                                               // pon false si ninguna escena dibuja delante de ti
+// Sobre el hueco verde dibuja solo cosas OPACAS: una sombra o un velo translúcido sobre verde queda como tinte verde encima de tu video.
+const C = {
+  verde: '#00FF00',                                         // solo para el hueco del video: no lo uses en gráficos
+  fondo: '#202226', fondo2: '#141518', tarjeta: '#26282D', borde: 'rgba(255,255,255,.10)',
+  blanco: '#FFFFFF', gris: 'rgba(255,255,255,.55)', tenue: 'rgba(255,255,255,.22)',
+  acento: '#FF7A1A', bien: '#2FB85A', mal: '#E5383B',
+  sans: 'Inter, -apple-system, Helvetica, Arial, sans-serif',
+  diseno: '"Instrument Serif", Georgia, serif',             // la letra de diseño del tema (palabra clave)
+  golpe: '"Bricolage Grotesque", Inter, sans-serif',        // la línea enorme del gancho
+};
+// arreglos de la transcripción (Whisper confunde nombres propios)
+const CORREGIR = { 'cloud': 'Claude' };   // en minúscula; respeta la puntuación pegada («Cloud,» → «Claude,»)
+PALABRAS.forEach(p => { const m = p.w.match(/^(.*?)([.,;:!?¿¡]*)$/); if (CORREGIR[m[1].toLowerCase()]) p.w = CORREGIR[m[1].toLowerCase()] + m[2]; });
+const dicho = k => PALABRAS[k] ? PALABRAS[k].s : 1e9;   // segundo en que se dice la palabra k
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script src="../nucleo/titulos.js"></script>
+<script>
+let FOTOS = {}, MODO_FRENTE = false;
+// ---------- piezas del kit (planas: sin brillo, sin rebote; todo entra con corte seco) ----------
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+let CONTORNO = 0;   // >0: contorno plano oscuro para el texto que va encima del video (se lee sobre cualquier fondo, sin brillo)
+function tx(s, x, y, tam, peso = 700, color = C.blanco, alinear = 'center', fam = C.sans) {
+  const it = /^italic /.test(fam); if (it) fam = fam.slice(7);   // «italic» va antes del peso en la fuente del canvas
+  ctx.save(); ctx.font = `${it ? 'italic ' : ''}${peso} ${tam}px ${fam}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic';
+  if (CONTORNO) { ctx.strokeStyle = '#111'; ctx.lineWidth = Math.max(4, tam * CONTORNO); ctx.lineJoin = 'round'; ctx.strokeText(s, x, y); }
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function tarjeta(x, y, w, h, o = {}) {
+  ctx.save(); ctx.fillStyle = o.color || C.tarjeta; rr(x, y, w, h, o.r ?? 28); ctx.fill();
+  ctx.strokeStyle = o.activa ? C.acento : C.borde; ctx.lineWidth = o.activa ? 4 : 2; ctx.stroke(); ctx.restore();
+}
+function hueco(x, y, w, h, r = 0) { ctx.save(); ctx.fillStyle = C.verde; if (r) { rr(x, y, w, h, r); ctx.fill(); } else ctx.fillRect(x, y, w, h); ctx.restore(); }
+function fondo(oscuro = false) { const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, oscuro ? '#0E0F11' : C.fondo); g.addColorStop(1, C.fondo2); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+// en la pasada de frente (?verde) la escena dibuja en un lienzo de descarte y solo frente(…) llega al lienzo real
+const DESCARTE = document.createElement('canvas').getContext('2d'); let REAL = null;
+function frente(fn) { if (!MODO_FRENTE) return; const c = ctx; ctx = REAL; fn(); ctx = c; }   // lo que va delante de ti (escenas «recorte»)
+function detras(fn) { if (!MODO_FRENTE) fn(); }  // lo que va detrás de ti
+
+// ---------- títulos con plantilla (21 plantillas de gancho en motor/titulos.js: Titulos.lista) ----------
+// Para el gancho: 'gigante' (palabra que llena el ancho), 'cartel', 'contraste', 'recorte', 'revista', 'pixel', 'sello', 'gastado', 'compinche', 'plumon'.
+// NO uses 'titular' ni 'caramelo' en un gancho: traen brillo (regla de la casa: sin brillo ni degradado).
+// Las líneas van con la palabra que manda entre *asteriscos*. PLANO.gancho / PLANO.titulo eligen la plantilla del reel.
+// Van en la capa de GRÁFICOS, nunca dentro de frente(…): su sombra suave sobre el verde deja un borde verde. Ubícalos donde no tapen tu cara.
+function titulo(lineas, t, o = {}) {
+  if (t < (o.desde ?? 0) || (o.hasta != null && t >= o.hasta)) return;
+  const pl = o.plantilla || PLANO.titulo || PLANO.gancho || 'gigante';
+  const ancho = o.ancho ?? (W > H ? 1080 : W), x0 = o.x ?? (W - ancho) / 2;
+  ctx.save(); ctx.translate(x0, 0);
+  try { Titulos.dibujar(ctx, ancho, lineas.filter(Boolean), o.y ?? 300, pl, o.color || C.acento, { tamano: o.tamano ?? 1 }); } finally { ctx.restore(); }
+}
+// gancho golpe: línea chica + línea ENORME que se leen como UNA frase; entran con corte seco (sin animación)
+function gancho(chica, enorme, t, o = {}) {
+  const ls = [];
+  if (chica && t >= (o.tChica ?? 0)) ls.push(chica);
+  if (t >= (o.tEnorme ?? 0)) ls.push(`*${enorme.replace(/\*/g, '')}*`);
+  if (!ls.length) return;
+  titulo(o.enormeArriba ? ls.reverse() : ls, t, { ...o, plantilla: o.plantilla || PLANO.gancho || 'gigante', tamano: o.tamano ?? 1.2, y: o.y ?? 260 });
+}
+
+// subtítulo «ajustado»: la frase que se va diciendo, con su *clave* destacada por la plantilla de título del reel
+// trozos = [[desdeK, hastaK, 'texto con *clave*'], …]  (índices de PALABRAS). y = arriba del bloque.
+function subAjustado(t, trozos, y = 1080, sobreVideo = true, o = {}) {
+  const tr = trozos.find(([a, b]) => t >= dicho(a) && t < (PALABRAS[b + 1] ? dicho(b + 1) : DUR)); if (!tr) return;
+  const [a, , texto] = tr, ws = texto.split(' '); let k = -1;
+  for (let i = 0; i < ws.length; i++) if (t >= dicho(a + i)) k = i;   // palabras ya dichas (secuencial, corte seco)
+  const iClave = ws.findIndex(w => /\*/.test(w));
+  const vis = (lista, base) => lista.filter((_, j) => base + j <= k).join(' ');
+  if (iClave < 0) return titulo([vis(ws, 0)], t, { y, ...o });
+  const antes = vis(ws.slice(0, iClave), 0), clave = k >= iClave ? ws[iClave] : '', despues = vis(ws.slice(iClave + 1), iClave + 1);
+  titulo([antes, clave && despues ? `${clave} ${despues}` : clave].filter(Boolean), t, { y, ...o });
+}
+
+// lista de pasos que se acumula: el nuevo resalta, los anteriores se quedan atenuados
+function pasos(x, y, w, items, t, o = {}) {   // items = [[k, 'texto', '✓'|'✗'|''], …]
+  const h = o.h || 120, gap = o.gap || 22;
+  items.forEach(([k, s, marca], i) => {
+    if (t < dicho(k)) return;
+    const ultimo = !items[i + 1] || t < dicho(items[i + 1][0]);
+    tarjeta(x, y + i * (h + gap), w, h, { activa: ultimo });
+    ctx.save(); ctx.globalAlpha = ultimo ? 1 : .55;
+    tx(String(i + 1).padStart(2, '0'), x + 40, y + i * (h + gap) + h / 2 + 14, 36, 700, C.acento, 'left');
+    tx(s, x + 120, y + i * (h + gap) + h / 2 + 16, 46, 700, C.blanco, 'left');
+    if (marca) tx(marca, x + w - 50, y + i * (h + gap) + h / 2 + 18, 54, 800, marca === '✓' ? C.bien : C.mal, 'right');
+    ctx.restore();
+  });
+}
+// contador gigante: cifra en acento + rótulo chico
+function contador(x, y, valor, rotulo, o = {}) {
+  tarjeta(x, y, o.w || 420, o.h || 260);
+  tx(rotulo, x + 36, y + 64, 32, 600, C.gris, 'left');
+  tx(valor, x + 32, y + (o.h || 260) - 46, o.tam || 140, 800, o.color || C.acento, 'left');
+}
+// calendario de un mes; marcados = días resaltados
+function calendario(x, y, w, mes, marcados = [], o = {}) {
+  const h = w * 1.02; tarjeta(x, y, w, h);
+  tx(mes, x + 40, y + 76, 48, 800, C.blanco, 'left'); tx(o.anio || '', x + w - 40, y + 76, 34, 600, C.gris, 'right');
+  const c = (w - 80) / 7;
+  ['L', 'M', 'X', 'J', 'V', 'S', 'D'].forEach((d, i) => tx(d, x + 40 + c * i + c / 2, y + 140, 28, 600, C.gris));
+  for (let d = 1; d <= (o.dias || 31); d++) {
+    const p = d - 1 + (o.empieza || 0), cx = x + 40 + (p % 7) * c, cy = y + 170 + Math.floor(p / 7) * c * .9;
+    if (marcados.includes(d)) { ctx.save(); ctx.fillStyle = C.acento; rr(cx + 6, cy, c - 12, c * .8, 14); ctx.fill(); ctx.restore(); }
+    tx(String(d), cx + c / 2, cy + c * .52, 32, marcados.includes(d) ? 800 : 500, marcados.includes(d) ? '#111' : C.blanco);
+  }
+}
+// notificación plana tipo iOS (va delante de ti en Depth UI)
+function notificacion(x, y, w, app, texto, o = {}) {
+  ctx.save(); ctx.fillStyle = '#1E1F23'; rr(x, y, w, 150, 34); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.fillStyle = o.color || C.acento; rr(x + 28, y + 35, 80, 80, 20); ctx.fill(); ctx.restore();
+  tx(o.icono || '★', x + 68, y + 92, 44, 800, '#111');
+  tx(app, x + 132, y + 66, 30, 600, C.gris, 'left'); tx(texto, x + 132, y + 112, 40, 700, C.blanco, 'left');
+  if (o.valor) tx(o.valor, x + w - 36, y + 98, 56, 800, o.colorValor || C.bien, 'right');
+}
+// tablero que se llena (top N / niveles): filas fijas; cada item cae a su fila cuando se dice
+function tablero(x, y, w, titulo, filas, items, t) {   // items = [[k, fila, 'texto'], …]
+  tx(titulo, x + w / 2, y, 54, 800, C.acento);
+  filas.forEach((f, i) => {
+    const fy = y + 40 + i * 110;
+    ctx.save(); ctx.fillStyle = i === 0 ? C.acento : '#3A3C42'; rr(x, fy, 96, 92, 16); ctx.fill(); ctx.restore();
+    tx(f, x + 48, fy + 64, 50, 800, i === 0 ? '#111' : C.blanco);
+    tarjeta(x + 112, fy, w - 112, 92, { r: 16 });
+    const it = items.find(([k, fila]) => fila === i && t >= dicho(k));
+    if (it) tx(it[2], x + 150, fy + 62, 46, 700, C.blanco, 'left');
+  });
+}
+
+// ---------- piezas comunes de estos estilos ----------
+// foto real recortada dentro de una tarjeta redondeada (fy = 0: se ve desde arriba, ideal para capturas de páginas)
+function fotoR(im, x, y, w, h, r = 18, fx = .5, fy = 0) {
+  if (!im) return; ctx.save(); rr(x, y, w, h, r); ctx.clip(); fotoCover(im, x, y, w, h, fx, fy); ctx.restore();
+  ctx.save(); rr(x, y, w, h, r); ctx.strokeStyle = C.borde; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+}
+// la palabra k ya se dijo
+const ya = (t, k) => t >= dicho(k);
+// subtítulo en UNA línea (16:9): las palabras entran de a una con corte seco; *clave* va en letra de diseño y acento.
+// trozos = [[desdeK, hastaK, 'texto con *clave*'], …]: cada palabra del texto es la palabra desdeK + i
+function subLinea(t, trozos, y, o = {}) {
+  const tr = trozos.find(([a, b]) => t >= dicho(a) && t < (PALABRAS[b + 1] ? dicho(b + 1) : DUR)); if (!tr) return;
+  const [a, , texto] = tr, tam = o.tam || 60, cx = o.x ?? W / 2;
+  const ws = texto.split(' ').map((w, i) => ({ s: w.replace(/\*/g, ''), clave: /^\*.*\*$/.test(w), k: a + i }));
+  const f = w => w.clave ? `italic 400 ${tam * 1.3}px ${C.diseno}` : `700 ${tam}px ${C.sans}`;
+  const esp = tam * .28, total = ws.reduce((s, w) => s + medir(w.s, f(w)) + esp, -esp);
+  let x = cx - total / 2; CONTORNO = o.sobreVideo === false ? 0 : .08;
+  for (const w of ws) { if (t >= dicho(w.k)) tx(w.s, x, y, w.clave ? tam * 1.3 : tam, w.clave ? 400 : 700, w.clave ? C.acento : C.blanco, 'left', w.clave ? 'italic ' + C.diseno : C.sans); x += medir(w.s, f(w)) + esp; }
+  CONTORNO = 0;
+}
+// capítulos: [k en que se nombra, 'Título', 'línea chica']; ACTIVO = [[k, índice del capítulo], …] (cuál va grande desde la palabra k)
+const CAPS = [[0, 'Aprender', 'todo lo que he estado experimentando'], [10, '4 a 5 horas', 'de media'], [27, 'Nutrir', 'a mi comunidad']];
+const ACTIVO = [[0, 0], [10, 1], [24, 0], [27, 2]];
+function capitulos(t) {
+  fondo(true);
+  let a = 0; ACTIVO.forEach(([k, i]) => { if (ya(t, k)) a = i; });
+  if (t < PLANO.escenas[0].hasta) gancho('lo que he estado', 'experimentando', t, { y: 40, tamano: 1.2 });   // gancho golpe desde el cuadro 0 (PLANO.gancho)
+  else tx(`CAPÍTULO ${a + 1}`, W / 2, 250, 96, 800, C.acento, 'center', C.golpe);
+  const cx = [W / 2 - 560, W / 2, W / 2 + 560];
+  CAPS.forEach(([k, tit, sub], i) => {
+    const act = i === a, w = act ? 520 : 400, h = act ? 470 : 360, x = cx[i] - w / 2, y = act ? 360 : 415;
+    ctx.save(); if (!act) ctx.globalAlpha = .55; tarjeta(x, y, w, h, { activa: act, color: act ? '#2A2622' : C.tarjeta });
+    tx(String(i + 1), x + 40, y + (act ? 150 : 120), act ? 140 : 100, 800, act ? C.acento : C.gris, 'left', C.golpe);
+    if (ya(t, k)) {
+      const r = act ? renglones(sub, `500 30px ${C.sans}`, w - 80).slice(0, 2) : [];
+      const yt = y + h - 50 - r.length * 40 - (act ? 30 : 0);
+      tx(tit, x + 40, yt, act ? 62 : 46, 800, C.blanco, 'left');
+      r.forEach((l, j) => tx(l, x + 40, yt + 56 + j * 40, 30, 500, C.gris, 'left'));
+    }
+    ctx.restore();
+  });
+}
+// palabra ENORME al pecho (va delante de ti) + su línea chica en letra de diseño
+function alPecho(t, enorme, kE, chica, kC, o = {}) {
+  const y = o.y ?? 930; let tam = o.tam || 170; while (medir(enorme, `800 ${tam}px ${C.golpe}`) > 1300) tam -= 6;
+  if (ya(t, kE)) {
+    CONTORNO = .05; tx(enorme, W / 2, y, tam, 800, o.color || C.blanco, 'center', C.golpe); CONTORNO = 0; }
+  if (chica && ya(t, kC)) { CONTORNO = .06; tx(chica, W / 2, o.arriba ? y - tam * .82 : y + 95, o.arriba ? 56 : 64, 700, C.acento, 'center'); CONTORNO = 0; }   // misma familia sans, sin serif itálica
+}
+const dichas = (t, k0, texto) => texto.split(' ').filter((_, i) => ya(t, k0 + i)).join(' ');
+const ESC = [
+  (e, t) => capitulos(t),   // 1 · lámina: capítulo 1
+  (e, t) => {               // 2 · tú al centro: la cifra al pecho, la captura de ejemplo a un lado y la frase al otro
+    detras(() => {
+      fondo();
+      if (ya(t, 21)) { ctx.save(); ctx.fillStyle = C.tarjeta; rr(60, 230, 520, 400, 24); ctx.fill(); ctx.restore();
+        ctx.save(); ctx.fillStyle = C.acento; ctx.beginPath(); ctx.arc(96, 272, 10, 0, 7); ctx.fill(); ctx.restore();
+        tx('Claude', 118, 282, 30, 700, C.blanco, 'left'); fotoR(FOTOS.claude, 84, 310, 472, 296, 14); }
+      tx(dichas(t, 16, 'las uso para'), 1430, 320, 52, 700, C.blanco, 'left');
+      tx(dichas(t, 19, 'estar en'), 1430, 390, 52, 700, C.blanco, 'left');
+      if (ya(t, 21)) tx('Claude', 1430, 480, 84, 800, C.acento, 'left');
+    });
+    frente(() => alPecho(t, ya(t, 12) ? '4 A 5 HORAS' : ya(t, 11) ? '4 A' : '4', 10, ya(t, 15) ? 'de media' : '', 14));
+  },
+  (e, t) => capitulos(t),   // 3 · lámina: vuelve a «Aprender» y pasa al capítulo 3
+  (e, t) => {               // 4 · tú al centro: el llamado con la palabra ENORME al pecho
+    detras(() => { fondo(); titulo([dichas(t, 31, 'comenta la palabra'), ya(t, 34) ? '*edita*' : ''], t, { x: 20, ancho: 620, y: 260, tamano: 1.3 }); });   // el llamado a tu izquierda (capa de gráficos, con la plantilla de título)
+  },
+];
+
+function draw(f) {
+  const t = f / FPS;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  let i = PLANO.escenas.findIndex(e => t >= e.desde && t < e.hasta); if (i < 0) i = PLANO.escenas.length - 1;
+  const e = PLANO.escenas[i];
+  MODO_FRENTE = VERDE;
+  if (!VERDE) return ESC[i](e, t);
+  ctx.fillStyle = C.verde; ctx.fillRect(0, 0, W, H);   // capa de frente: todo verde salvo lo de frente(…)
+  REAL = ctx; DESCARTE.canvas.width = W; DESCARTE.canvas.height = H; ctx = DESCARTE;
+  try { ESC[i](e, t); } finally { ctx = REAL; }
+}
+
+const RUTAS = { claude: 'fotos/claude-com.jpg' };   // capturas reales de lo que nombras
+window.LISTO = Promise.all([
+  Titulos.cargar(),
+  document.fonts.load(`800 100px "Bricolage Grotesque"`), document.fonts.load(`italic 400 100px "Instrument Serif"`), document.fonts.load(`400 100px "Instrument Serif"`),
+  document.fonts.load(`500 60px Inter`), document.fonts.load(`600 60px Inter`), document.fonts.load(`700 60px Inter`), document.fonts.load(`800 60px Inter`),
+  cargarFotos(Object.values(RUTAS)).then(ims => Object.keys(RUTAS).forEach((k, i) => FOTOS[k] = ims[i])),
+]);
+arrancar(draw);
+</script>
+</body>
+</html>

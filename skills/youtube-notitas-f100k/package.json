@@ -1,0 +1,9 @@
+{
+  "name": "youtube-notitas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Edición de YouTube estilo notitas: deja listo el motor de render (Remotion) dentro de plantilla/.",
+  "scripts": {
+    "postinstall": "node scripts/preparar.mjs"
+  }
+}

@@ -1,0 +1,152 @@
+/* Plantilla «explicador con avatar» · estilos. Los colores llegan desde reel.json (marca). Nada se anima con rebote: todo entra con corte seco. */
+*{box-sizing:border-box}
+body{margin:0;background:#050509;font-family:'Ex Sans',Inter,-apple-system,'Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}
+#lienzo{position:relative;width:1080px;height:1920px;overflow:hidden}
+#capa{position:absolute;left:0;top:0;width:1080px;height:1920px}
+/*TEMAS*/
+.esc{position:absolute;left:0;top:0;width:1080px;height:1920px;visibility:hidden;opacity:0;color:var(--tinta)}
+.esc.primera{visibility:visible;opacity:1}
+.fondo{position:absolute;inset:0;background:var(--fondo)}
+
+/* frase de arriba */
+.frase{position:absolute;left:70px;top:215px;width:940px;height:240px}
+.trozo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0}
+.trozo p{margin:0;text-align:center;font-size:70px;line-height:1.16;letter-spacing:-2px;font-weight:500;color:var(--tenue);max-width:940px}
+.p{display:inline-block;opacity:0}
+.p.cola{color:var(--tenue)}
+.p.fuerte{font-weight:800;color:var(--tinta)}
+.caja{display:inline-block;background:var(--acento);border-radius:14px;padding:2px 18px 6px;visibility:hidden}
+.caja .p{font-weight:800;color:var(--acento-tinta)}
+
+/* tarjetas */
+.tj{position:absolute;visibility:hidden;opacity:0;background:var(--tarjeta);border:2px solid var(--borde);border-radius:26px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.22)}
+.tj.plano,.tj-chips,.tj-lista,.tj-comentario,.tj-tira{background:transparent;border:0;box-shadow:none;overflow:visible;border-radius:0}
+.marco{position:relative;width:100%;overflow:hidden;background:#000}
+.marco video,.marco img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block}
+.eti{height:64px;line-height:60px;padding:0 22px;font-size:26px;font-weight:800;color:var(--tinta);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{display:inline-block;background:var(--tinta);color:var(--fondo);font-weight:800;font-size:26px;padding:8px 20px 10px;border-radius:999px;white-space:nowrap}
+.chip.ac{background:var(--acento);color:#0b0b10}
+
+/* barra de ventana */
+.barra{height:62px;display:flex;align-items:center;gap:10px;padding:0 20px;background:#0b0b10;border-bottom:2px solid rgba(244,241,234,.1)}
+.barra .pt{width:14px;height:14px;border-radius:50%;background:#ef4444}
+.barra .pt:nth-child(2){background:#F5C542}
+.barra .pt:nth-child(3){background:#7fe3ad}
+.barra em{font-style:normal;font-weight:700;font-size:23px;color:#a1a1aa;margin-left:10px;font-family:ui-monospace,Menlo,monospace}
+.barra .sello{margin-left:auto;font-size:20px;font-weight:800;color:#0b0b10;background:#F5C542;border-radius:999px;padding:4px 14px 6px}
+.barra.clara{background:var(--tarjeta);border-bottom:2px solid var(--borde)}
+.barra.clara em{color:var(--tinta);font-family:inherit;font-weight:800;font-size:26px}
+.barra.clara em.url{flex:1;margin-left:14px;background:rgba(127,127,127,.16);border-radius:999px;padding:5px 18px 7px;font-size:21px;font-weight:700;color:var(--tenue);font-family:ui-monospace,Menlo,monospace}
+.astro{width:30px;height:30px;border-radius:9px;background:var(--acento)}
+
+/* código */
+.tj-codigo{background:#0b0b10;border-color:rgba(244,241,234,.16)}
+.lineas{padding:22px 10px 22px 0;font-family:ui-monospace,Menlo,monospace;line-height:1.62;color:#f4f1ea;font-weight:500}
+.ln{position:relative;white-space:pre;opacity:0;padding-left:64px}
+.ln .n{position:absolute;left:0;width:48px;text-align:right;color:#52525b}
+.ln code{font-family:inherit;position:relative}
+.ln i{color:#71717a;font-style:normal}
+.ln b.k{color:#F5C542;font-weight:700}
+.ln b.s{color:#7fe3ad;font-weight:500}
+.ln .res{position:absolute;left:56px;right:6px;top:2px;bottom:2px;background:rgba(245,197,66,.24);border-left:5px solid #F5C542;border-radius:6px;transform-origin:left center;opacity:0}
+
+/* chat */
+.mensajes{display:flex;flex-direction:column;gap:22px;padding:30px 28px}
+.msj{max-width:82%;font-size:34px;line-height:1.25;font-weight:700;padding:20px 26px;border-radius:28px;visibility:hidden}
+.msj.yo{align-self:flex-end;background:var(--tinta);color:var(--fondo);border-bottom-right-radius:8px}
+.msj.claude{align-self:flex-start;background:rgba(217,119,87,.16);color:var(--tinta);border:2px solid rgba(217,119,87,.5);border-bottom-left-radius:8px}
+
+/* tira de cuadros */
+.carril{position:relative;width:100%;overflow:hidden;border-top:14px dashed var(--borde);border-bottom:14px dashed var(--borde);padding:8px 0}
+.cinta{display:flex;gap:16px;width:max-content}
+.cuadro{position:relative;flex:none;border-radius:14px;overflow:hidden;border:2px solid var(--borde)}
+.cuadro img{width:100%;height:100%;object-fit:cover;display:block}
+.cuadro span{position:absolute;left:10px;top:10px;background:#0b0b10;color:#f4f1ea;font:700 20px ui-monospace,Menlo,monospace;padding:3px 9px;border-radius:8px}
+.cuenta{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:44px}
+.odo{overflow:hidden;min-width:150px}
+.odo .col{display:block}
+.odo span{display:block;text-align:right;font-size:104px;font-weight:900;letter-spacing:-4px;color:var(--acento)}
+.rot b{display:block;font-size:44px;font-weight:800;color:var(--tinta);letter-spacing:-1px}
+.rot i{display:block;font-family:'Ex Serif',Georgia,serif;font-style:italic;font-weight:600;font-size:36px;color:var(--tenue)}
+
+/* navegador */
+.visor{display:flex;justify-content:center;background:rgba(127,127,127,.14)}
+.visor .marco{flex:none}
+.flash{position:absolute;inset:0;background:#fff;opacity:0}
+.fila{display:flex;align-items:center;gap:12px;padding:0 20px;border-top:2px solid var(--borde)}
+.fila img{width:84px;height:105px;object-fit:cover;border-radius:10px;border:2px solid var(--borde);visibility:hidden}
+.fila .chip{margin-left:auto;visibility:hidden;background:var(--acento);color:#0b0b10}
+
+/* onda de voz */
+.tj-onda .cab{height:92px;display:flex;align-items:center;gap:16px;padding:0 28px}
+.tj-onda .cab em{font-style:normal;font-weight:800;font-size:32px;color:var(--tinta)}
+.tj-onda .cab .chip{margin-left:auto;visibility:hidden}
+.pulso{width:22px;height:22px;border-radius:50%;background:var(--mal)}
+.barras{position:absolute;left:28px;right:28px;top:92px;bottom:28px;display:flex;align-items:center;justify-content:space-between}
+.barras span{display:block;width:14px;height:100%;border-radius:8px;background:var(--tinta)}
+.barras span:nth-child(3n){background:var(--acento)}
+
+/* píldoras */
+.pildoras{width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.pil{position:relative;display:inline-block;visibility:hidden;font-size:36px;font-weight:800;padding:14px 30px 18px;border-radius:999px;border:3px solid var(--tinta);color:var(--tinta);background:var(--tarjeta);white-space:nowrap}
+.pil.tachado{color:var(--tenue);border-color:var(--tenue)}
+.pil s{position:absolute;left:14px;right:14px;top:50%;height:6px;margin-top:-1px;border-radius:3px;background:var(--mal);transform-origin:left center;opacity:0}
+.pil.ok{background:var(--ok);border-color:var(--ok);color:#0b0b10}
+.pil.acento{background:var(--acento);border-color:var(--acento);color:#0b0b10}
+
+/* lista */
+.filas{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.fila-l{display:flex;align-items:center;justify-content:space-between;gap:20px;visibility:hidden;background:var(--tarjeta);border:2px solid var(--borde);border-radius:24px;padding:26px 30px}
+.fila-l b{font-size:46px;font-weight:800;letter-spacing:-1px;color:var(--tinta)}
+.fila-l .chip{visibility:hidden;font-size:28px}
+.fila-l.tenue b{color:var(--tenue)}
+.fila-l.tenue .chip{background:transparent;color:var(--tenue);border:2px solid var(--tenue)}
+.fila-l.resaltado{border:4px solid var(--acento)}
+.fila-l.resaltado .chip{background:var(--acento);color:#0b0b10}
+
+/* hoja de guion */
+.tj-hoja{padding:34px 34px;background:#fffdf8;border-color:rgba(11,11,16,.14);overflow:visible}
+.titulo-h{font-family:'Ex Serif',Georgia,serif;font-style:italic;font-weight:700;font-size:46px;color:#0b0b10;margin-bottom:30px}
+.tj-hoja p{margin:0 0 16px;font-size:28px;line-height:1.3;font-weight:500;color:#0b0b10}
+.raya{height:20px;border-radius:10px;background:rgba(11,11,16,.11);margin-bottom:26px}
+.sello-h{position:absolute;right:-14px;bottom:60px;visibility:hidden;font-size:34px;font-weight:900;color:#ef4444;border:5px solid #ef4444;border-radius:14px;padding:6px 18px 10px;background:#fffdf8;white-space:nowrap}
+
+/* reproductor */
+.tj-reproductor{display:flex;flex-direction:column}
+.lienzo{position:relative;flex:1;overflow:hidden;background:linear-gradient(160deg,#f6c56d 0%,#e88f9c 55%,#7d6bd6 100%);display:flex;align-items:center;justify-content:center}
+.deco{position:absolute;left:50%;top:50%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,255,255,0) 68%)}
+.play{position:relative;width:0;height:0;border-left:62px solid #fff;border-top:40px solid transparent;border-bottom:40px solid transparent;margin-left:14px}
+.lienzo em{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-family:'Ex Serif',Georgia,serif;font-weight:700;font-size:38px;color:#fff}
+.pie-r{position:relative;padding:18px 24px 26px}
+.pie-r i{display:block;font-style:normal;font-weight:700;font-size:23px;color:var(--tenue);margin-bottom:12px}
+.riel{height:22px;border-radius:11px;background:rgba(127,127,127,.22);overflow:hidden}
+.relleno{width:100%;height:100%;border-radius:11px;background:var(--ok);transform-origin:left center}
+.nota-r{position:absolute;right:22px;top:10px;visibility:hidden;font-size:24px;font-weight:900;color:var(--mal)}
+
+/* comentario del CTA */
+.campo{display:flex;align-items:center;gap:18px;height:112px;padding:0 18px 0 22px;background:var(--tarjeta);border:3px solid var(--tinta);border-radius:999px;box-shadow:0 18px 44px rgba(0,0,0,.16)}
+.campo .foto{flex:none;width:64px;height:64px;border-radius:50%;background:var(--acento) center/cover}
+.escrito{flex:1;font-size:54px;font-weight:900;letter-spacing:1px;color:var(--tinta)}
+.escrito b{opacity:0}
+.boton{flex:none;display:block;font-size:30px;font-weight:800;color:#fff;background:#0095f6;padding:14px 28px 17px;border-radius:999px}
+.resp{visibility:hidden;margin:26px 0 0 60px;display:inline-block;font-size:32px;line-height:1.25;font-weight:600;color:var(--tinta);background:var(--tarjeta);border:2px solid var(--borde);border-radius:26px;border-top-left-radius:8px;padding:18px 26px 22px;box-shadow:0 14px 34px rgba(0,0,0,.12)}
+.resp b{font-weight:900}
+
+/* avatar */
+#avatar{position:absolute;left:0;filter:drop-shadow(0 10px 22px rgba(11,11,16,.2))}
+#avatar-in{position:absolute;inset:0;transform-origin:50% 100%}
+#avatar img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;opacity:0}
+#avatar #av-neutral{opacity:1}
+
+/* gancho golpe: una línea chica + una ENORME, letra de diseño, sin brillo ni degradado, quietas */
+.frase.con-gancho{top:150px;height:330px}
+.gancho{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.g-chica{margin:0 0 6px;font-family:'Ex Sans',sans-serif;font-weight:800;font-size:58px;letter-spacing:-1px;color:var(--tinta);text-transform:lowercase}
+.g-enorme{margin:0;padding-top:.06em;white-space:nowrap;font-family:'Ex Display',sans-serif;font-weight:400;line-height:1;letter-spacing:1px;text-transform:uppercase}
+
+/* cifra grande */
+.tj-cifra{display:flex;align-items:center;justify-content:center}
+.cifra-in{text-align:center;padding:10px 20px}
+.cifra-in b{display:block;font-family:'Ex Display',sans-serif;font-weight:400;line-height:.95;letter-spacing:1px}
+.cifra-in .uni{display:block;margin-top:10px;font-size:52px;font-weight:800;letter-spacing:-1px;color:var(--tinta)}
+.cifra-in i{display:block;margin-top:8px;visibility:hidden;font-family:'Ex Serif',Georgia,serif;font-style:italic;font-weight:600;font-size:40px;color:var(--tenue)}

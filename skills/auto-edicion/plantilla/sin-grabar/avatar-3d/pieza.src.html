@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sin grabar · Avatar 3D (ejemplo: Discover Weekly)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Anton&family=Instrument+Serif:ital@1&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<!-- three se carga como módulo y avisa con 'three-listo'; avatar3d.js no toca THREE hasta iniciar() -->
+<script type="module">import * as THREE from './three.module.min.js'; window.THREE = THREE; window.dispatchEvent(new Event('three-listo'));</script>
+<script src="avatar3d.js"></script>
+<script src="boca.js"></script>
+<script>
+// «Sin grabar · Avatar 3D»: subtítulo con selección de iPhone arriba, UNA escena al centro (capturas reales de la fuente),
+// el avatar 3D abajo con gestos (números de referencia/poses.md) y la boca movida por la voz (boca.js).
+// TIEMPOS lo inyecta scripts/comun.mjs (armar) desde tiempos.json (duración real de cada audio + inicio de cada palabra).
+const W = 1080, H = 1920, FPS = 30;
+const TIEMPOS = __TIEMPOS__;
+const PAUSA = 0.12;
+let GOLPE = 2.0;
+const C = {
+  claro: '#F7F7F7', oscuro: '#121212', tinta: '#111111', blanco: '#FFFFFF',
+  gris: 'rgba(17,17,17,.42)', grisO: 'rgba(255,255,255,.5)', rojo: '#E5383B', azul: '#0A84FF',
+  verde: '#1DB954', verdeO: '#168D40', tarjeta: '#FFFFFF', tarjetaO: '#1C1C1E', linea: '#E5E5EA',
+  sans: 'Inter, -apple-system, Helvetica, Arial, sans-serif', poster: 'Anton, Impact, sans-serif', serif: '"Instrument Serif", Georgia, serif',
+};
+// ANATOMIA: estilizada — el avatar es 3D (three.js, avatar3d.js); aquí no se dibuja piel ni manos en vector
+// ====== 1. LO QUE CAMBIA EN CADA REEL ======
+// look del avatar (lo que no pongas sale del LOOK de avatar3d.js)
+const MI_LOOK = {};   // vacío = el LOOK de avatar3d.js. Ej.: { pelo: '#1b1b1b', largoPelo: 'medio', ropa: '#2f9e6b', lentes: true }
+// *clave* = negrita; la primera clave de cada trozo lleva la selección de iPhone · poses: [[índiceDePalabra, gesto], …]
+const LINEAS = [
+  { poses: [[0,1],[5,3]],          osc: false, txt: 'Tu *Spotify* te *estudia,* y cada *lunes* te arma *treinta* *canciones.*' },
+  { poses: [[0,10],[4,7],[7,5]],   osc: false, txt: 'Cada *día,* Spotify anota *medio* *billón* de *búsquedas,* *escuchas* y *me* *gusta.*' },
+  { poses: [[0,17],[5,15],[8,3]],  osc: false, txt: 'Busca *gente* con tu mismo *gusto* y te *pasa* lo que ellos *escuchan.*' },
+  { poses: [[0,6],[4,16],[9,2]],   osc: false, txt: 'Si *guardas* una canción, *entiende* que no fue un *capricho* del *momento.*' },
+  { poses: [[0,14],[6,8],[9,18]],  osc: false, txt: 'Si la escuchas *una* *sola* *vez* y nada más, ni *cuenta.*' },
+  { poses: [[0,13],[4,7],[9,2]],   osc: false, txt: 'Así logra más de *cincuenta* *y* *seis* *millones* de *descubrimientos* de artistas cada *semana.*' },
+  { poses: [[0,18],[6,1],[10,4]],  osc: true,  txt: 'No es *magia:* es lo que *tú* *haces* cuando *nadie* te *mira.*' },
+];
+const GOLPE_HASTA = 4;   // el gancho golpe ocupa la pantalla hasta la palabra 4 de la frase 1 («y»)
+// ====== fin de lo que cambia (más abajo: ESC, una escena por frase, y rutas) ======
+
+LINEAS.forEach((l, i) => { l.d = TIEMPOS[i].d; });
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 1.0;
+
+LINEAS.forEach((l, i) => {
+  const ws = l.txt.split(' ').map(w => ({ t: w.replace(/\*/g, ''), clave: /^\*.*\*$/.test(w) }));
+  const wh = TIEMPOS[i].words;
+  if (wh.length === ws.length) ws.forEach((w, k) => w.s = wh[k].s);
+  else { const tot = ws.reduce((a, w) => a + w.t.length + 1, 0); let a = 0; ws.forEach(w => { w.s = a / tot * l.d * .95; a += w.t.length + 1; }); }
+  const trozos = []; let cur = [];
+  ws.forEach((w, k) => { cur.push(k); if (cur.length === 3 || /[,.:?!»]$/.test(w.t)) { trozos.push(cur); cur = []; } });
+  if (cur.length) trozos.push(cur);
+  l.ws = ws; l.trozos = trozos;
+});
+GOLPE = LINEAS[0].ws[GOLPE_HASTA].s - .02;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+let OSC = false, FOTOS = {};
+const T = () => OSC ? C.blanco : C.tinta;
+const G = () => OSC ? C.grisO : C.gris;
+const TJ = () => OSC ? C.tarjetaO : C.tarjeta;
+
+function tx(s, x, y, tam, peso = 700, color = T(), alinear = 'center', fam = C.sans) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; ctx.fillStyle = color; ctx.textAlign = alinear; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function tarjeta(x, y, w, h, r = 36, color = TJ(), sombra = true) {
+  ctx.save();
+  if (sombra) { ctx.shadowColor = OSC ? 'rgba(0,0,0,.6)' : 'rgba(0,0,0,.10)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12; }
+  ctx.fillStyle = color; rr(x, y, w, h, r); ctx.fill(); ctx.restore();
+}
+function pildora(x, y, w, h, color) { ctx.save(); ctx.fillStyle = color; rr(x, y, w, h, h / 2); ctx.fill(); ctx.restore(); }
+function etiqueta(s, x, y, color, tam = 44) {
+  const w = medir(s, `800 ${tam}px ${C.sans}`) + 64; pildora(x - w / 2, y - tam * 1.1, w, tam * 1.7, color); tx(s, x, y, tam, 800, '#fff');
+}
+function persona(x, y, s, color) {
+  ctx.save(); ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(x, y - s * .55, s * .32, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x, y + s * .35, s * .52, s * .5, 0, Math.PI, 0); ctx.fill();
+  ctx.restore();
+}
+// captura real en una tarjeta: im entera (o el trozo sy..sy+sh) escalada al ancho w; devuelve el alto
+function captura(im, x, y, w, pie, sy = 0, sh = im.height) {
+  const sw = im.width - 18, h = w * sh / sw;   // -18: sin el borde derecho de la página
+  tarjeta(x, y, w, h, 28, '#FFFFFF');
+  ctx.save(); rr(x, y, w, h, 28); ctx.clip(); ctx.drawImage(im, 0, sy, sw, sh, x, y, w, h); ctx.restore();
+  if (pie) tx(pie, x + w / 2, y + h + 46, 28, 600, G());
+  return h;
+}
+function rotulo(s, x, y, color = G(), alinear = 'center') { tx(s.toUpperCase(), x, y, 30, 800, color, alinear); }
+const de = (L, k) => (L.ws[k] ? L.ws[k].s : 99) - .05;   // inicio de la palabra k
+const miles = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+// ---------- subtítulo «iPhone» ----------
+function subtitulo(L, u, desde = 0) {
+  let k = -1; L.ws.forEach((w, i) => { if (u >= w.s) k = i; });
+  if (k < desde) return;
+  const trozo = L.trozos.find(t => t.includes(k)); if (!trozo) return;
+  const vis = trozo.filter(i => i <= k && i >= desde);
+  let tam = 66; const f = w => `${w.clave ? 800 : 500} ${tam}px ${C.sans}`;
+  const esp = () => tam * .28;
+  let ancho = () => trozo.reduce((a, i) => a + medir(L.ws[i].t, f(L.ws[i])), 0) + esp() * (trozo.length - 1);
+  while (ancho() > 940) tam -= 4;
+  let x = W / 2 - ancho() / 2; const y = 250;
+  const sel = trozo.find(i => L.ws[i].clave);
+  trozo.forEach(i => {
+    const w = L.ws[i], ww = medir(w.t, f(w));
+    if (vis.includes(i)) {
+      if (i === sel) {
+        ctx.save(); ctx.fillStyle = 'rgba(10,132,255,.20)'; ctx.fillRect(x - 6, y - tam * .86, ww + 12, tam * 1.1);
+        ctx.fillStyle = C.azul; ctx.fillRect(x - 8, y - tam * .86, 4, tam * 1.1); ctx.fillRect(x + ww + 4, y - tam * .86, 4, tam * 1.1);
+        ctx.beginPath(); ctx.arc(x - 6, y - tam * .86 - 6, 9, 0, Math.PI * 2); ctx.arc(x + ww + 6, y + tam * .24 + 6, 9, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      ctx.save(); ctx.font = f(w); ctx.fillStyle = w.clave ? T() : G(); ctx.textBaseline = 'alphabetic'; ctx.fillText(w.t, x, y); ctx.restore();
+    }
+    x += ww + esp();
+  });
+}
+
+// ---------- piezas del tema ----------
+function portadaDW(y, h, alfa = 1) {   // el collage real de Discover Weekly (cabecera de Spotify For the Record, 2025)
+  const im = FOTOS.dwTop, sh = Math.min(im.height, h * im.width / W), sy = (im.height - sh) / 2;
+  ctx.save(); ctx.globalAlpha = alfa; ctx.drawImage(im, 0, sy, im.width, sh, 0, y, W, h); ctx.restore();
+}
+function top5(x, y, titulo, colores, quinto, marca) {   // columna «top 5 artistas»
+  rotulo(titulo, x, y, G());
+  colores.forEach((c, k) => {
+    const yy = y + 30 + k * 84;
+    tarjeta(x - 170, yy, 340, 70, 20);
+    ctx.save(); ctx.fillStyle = c; rr(x - 156, yy + 9, 52, 52, 10); ctx.fill(); ctx.restore();
+    tx(k < 4 ? `artista ${k + 1}` : quinto, x - 86, yy + 47, 32, 700, k < 4 ? T() : c, 'left');
+    if (k < 4 && marca) tx('=', x + 140, yy + 49, 36, 800, C.verdeO);
+  });
+}
+
+// ---------- 2. ESCENAS (q = avance 0..1, u = segundos dentro de la frase, L = la frase) ----------
+const ESC = [
+  (q, u, L) => {   // 1 · gancho golpe «tu Spotify / TE ESTUDIA», después: 30 canciones cada lunes
+    if (u < GOLPE) {
+      portadaDW(660, 454, .9);
+      tx('tu Spotify', W / 2, 420, 120, 'italic 400', C.blanco, 'center', C.serif);
+      let tam = 400; while (medir('TE ESTUDIA', `400 ${tam}px ${C.poster}`) > 980) tam -= 6;
+      ctx.save(); ctx.fillStyle = C.oscuro; ctx.fillRect(0, 440, W, tam * 1.05); ctx.restore();
+      tx('TE ESTUDIA', W / 2, 440 + tam * .96, tam, 400, C.rojo, 'center', C.poster);
+      return;
+    }
+    captura(FOTOS.cinco3, 60, 360, 960, 'Spotify For the Record · mayo 2019');
+    if (u >= de(L, 6)) { pildora(W / 2 - 200, 660, 400, 84, 'rgba(29,185,84,.14)'); tx('cada lunes', W / 2, 718, 46, 800, C.verdeO); }
+    if (u >= de(L, 9)) { tx('30', W / 2 - 40, 990, 250, 400, T(), 'right', C.poster); tx('canciones', W / 2 - 10, 930, 70, 800, T(), 'left'); tx('nuevas para ti', W / 2 - 10, 990, 44, 600, G(), 'left'); }
+  },
+  (q, u, L) => {   // 2 · medio billón de eventos al día
+    captura(FOTOS.osk1, 60, 360, 960, 'Oskar Stål, Spotify · octubre 2021');
+    if (u >= de(L, 4)) { tx('500.000.000.000', W / 2, 740, 116, 400, T(), 'center', C.poster); rotulo('cosas que anota cada día', W / 2, 800); }
+    const p = [['búsquedas', 7, 230], ['escuchas', 8, 540], ['me gusta', 10, 850]];
+    p.forEach(([s, k, x]) => { if (u >= de(L, k)) etiqueta(s, x, 940, k === 10 ? C.verde : '#2C2C2E', 40); });
+  },
+  (q, u, L) => {   // 3 · gente con tu mismo gusto: 4 artistas iguales, el 5.º distinto
+    captura(FOTOS.osk2, 60, 330, 960);
+    const igual = ['#5E5CE6', '#FF9F0A', '#FF375F', '#64D2FF'];
+    if (u >= de(L, 1)) {
+      top5(290, 570, 'tu top 5', [...igual, '#BF5AF2'], 'artista A', u >= de(L, 5));
+      top5(790, 570, 'alguien como tú', [...igual, C.verde], 'artista B', false);
+    }
+    if (u >= de(L, 8)) {
+      ctx.save(); ctx.strokeStyle = C.verdeO; ctx.lineWidth = 8; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(610, 971); ctx.lineTo(470, 971); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(490, 951); ctx.lineTo(466, 971); ctx.lineTo(490, 991); ctx.stroke(); ctx.restore();
+      etiqueta('te lo pasa', 540, 1078, C.verde, 34);
+    }
+  },
+  (q, u, L) => {   // 4 · guardar = no es un capricho
+    captura(FOTOS.cinco1, 60, 360, 960, 'Spotify For the Record · mayo 2019');
+    if (u >= de(L, 1)) {
+      tarjeta(110, 640, 860, 150, 30);
+      ctx.save(); ctx.fillStyle = '#2C2C2E'; rr(140, 665, 100, 100, 14); ctx.fill(); ctx.restore();
+      tx('Esa canción nueva', 270, 712, 40, 700, T(), 'left'); tx('la guardaste en tu playlist', 270, 760, 32, 500, G(), 'left');
+      ctx.save(); ctx.fillStyle = C.verde; ctx.beginPath(); ctx.arc(900, 715, 34, 0, 7); ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(884, 716); ctx.lineTo(896, 728); ctx.lineTo(918, 704); ctx.stroke(); ctx.restore();
+    }
+    if (u >= de(L, 9)) { tx('no fue un capricho', W / 2, 900, 64, 800, T()); tx('→ te trae más canciones así', W / 2, 970, 40, 600, C.verdeO); }
+  },
+  (q, u, L) => {   // 5 · una sola escucha no cuenta
+    captura(FOTOS.cinco2, 60, 360, 960, 'Spotify For the Record · mayo 2019');
+    if (u >= de(L, 3)) { tx('1', 330, 950, 300, 400, T(), 'center', C.poster); tx('escucha', 330, 1010, 44, 700, G()); }
+    if (u >= de(L, 9)) {
+      tx('=', 560, 880, 110, 800, G());
+      tx('no', 790, 870, 110, 400, C.rojo, 'center', C.poster); tx('cuenta', 790, 950, 70, 800, C.rojo);
+    }
+  },
+  (q, u, L) => {   // 6 · cincuenta y seis millones por semana
+    captura(FOTOS.dw1, 60, 360, 960, 'Spotify For the Record · junio 2025');
+    if (u >= de(L, 4)) {
+      const v = Math.round(56000000 * easeOut(prog(u, de(L, 4), de(L, 7) + .3)));
+      tx(miles(v), W / 2, 830, 150, 400, C.verdeO, 'center', C.poster);
+    }
+    if (u >= de(L, 9)) tx('descubrimientos de artistas', W / 2, 910, 48, 700, T());
+    if (u >= de(L, 12)) { pildora(W / 2 - 170, 950, 340, 76, 'rgba(29,185,84,.14)'); tx('cada semana', W / 2, 1002, 42, 800, C.verdeO); }
+  },
+  (q, u, L) => {   // 7 · cierre: no es magia, es lo que tú haces
+    portadaDW(330, 300, .55);
+    if (u >= de(L, 2)) {
+      tx('magia', W / 2, 790, 150, 400, C.grisO, 'center', C.poster);
+      ctx.save(); ctx.strokeStyle = C.rojo; ctx.lineWidth = 14; ctx.beginPath(); const mw = medir('magia', `400 150px ${C.poster}`); ctx.moveTo(W / 2 - mw / 2 - 20, 735); ctx.lineTo(W / 2 + mw / 2 + 20, 735); ctx.stroke(); ctx.restore();
+    }
+    if (u >= de(L, 6)) tx('lo que TÚ haces', W / 2, 940, 104, 400, C.blanco, 'center', C.poster);
+    if (u >= de(L, 8)) tx('cuando nadie te mira', W / 2, 1020, 64, 'italic 400', C.grisO, 'center', C.serif);
+  },
+];
+
+// avatar: cada pose de LINEAS es un gesto que arranca un poco antes de su palabra
+const GESTOS = [], PALABRAS = [];
+LINEAS.forEach((L, i) => {
+  for (const [k, g] of L.poses) GESTOS.push({ t: Math.max(0, INICIOS[i] + (L.ws[k] ? L.ws[k].s : 0) - .18), g });
+  for (const w of L.ws) PALABRAS.push(INICIOS[i] + w.s);
+});
+
+function draw(f) {
+  const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = Math.min(t - INICIOS[i], L.d);
+  const golpe = i === 0 && u < GOLPE;
+  OSC = golpe ? true : L.osc;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = OSC ? C.oscuro : C.claro; ctx.fillRect(0, 0, W, H);
+  ESC[i](clamp(u / L.d), u, L);
+  Avatar3D.dibujar(ctx, t, 0, 820);
+  if (golpe) return;
+  subtitulo(L, u, i === 0 ? GOLPE_HASTA : 0);
+}
+
+// ---------- 3. CAPTURAS REALES (en fuente/) ----------
+const rutas = { dwTop: 'cap_dw_portada.jpg', dw1: 'm_dw10_1.png', osk1: 'm_osk_1.png', osk2: 'm_osk_2.png', cinco1: 'm_cinco_1.png', cinco2: 'm_cinco_2.png', cinco3: 'm_cinco_3.png' };
+const claves = Object.keys(rutas);
+window.LISTO = Promise.all([
+  new Promise(ok => { const go = () => Avatar3D.iniciar({ ancho: 1080, alto: 1100, palabra: 'Guardar', look: MI_LOOK }).then(() => { Avatar3D.linea(GESTOS, PALABRAS, window.BOCA, FPS); ok(); }); window.THREE ? go() : window.addEventListener('three-listo', go); }),
+  cargarFotos(claves.map(k => rutas[k])).then(ims => claves.forEach((k, j) => FOTOS[k] = ims[j])),
+  document.fonts.load(`400 100px Anton`), document.fonts.load(`italic 400 100px "Instrument Serif"`),
+  ...[500, 600, 700, 800].map(p => document.fonts.load(`${p} 60px Inter`)),
+]);
+arrancar(draw);
+</script>
+</body>
+</html>

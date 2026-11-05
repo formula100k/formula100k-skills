@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITULO_CORTO}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: barra de modos arriba · Pizarra 16:9 de pizarrón blanco con plumones · Guion como hoja de lectura */
+:root{
+  --bg:#eef0ee; --fg:#1d2321; --muted:#5d6763; --line:#cfd5d2; --panel:#ffffff; --accent:#1f5fbf;
+  --board:#fbfbf8; --ink:#1b1f22; --red:#d23a2f; --blue:#1f5fbf; --green:#1c8a4a; --yellow:#f3c623;
+  --marker:"Permanent Marker","Comic Sans MS",cursive;
+  --hand:"Caveat","Bradley Hand",cursive;
+  --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151918;--fg:#e8ecea;--muted:#9aa5a0;--line:#2c3431;--panel:#1d2321;--accent:#7fb0ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151918;--fg:#e8ecea;--muted:#9aa5a0;--line:#2c3431;--panel:#1d2321;--accent:#7fb0ff;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:16px}
+header.top h1{font-family:var(--marker);font-weight:400;font-size:1.5rem;margin:0;text-wrap:balance}
+header.top p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{font:inherit;font-weight:700;border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- PIZARRA ---------- */
+#stage{position:relative}
+.board{container-type:inline-size;aspect-ratio:16/9;width:100%;max-width:100%;background:var(--board);color:var(--ink);border-radius:6px;
+  box-shadow:0 0 0 1px #d9dcd6, 0 12px 30px -12px rgba(0,0,0,.35);position:relative;overflow:hidden;
+  background-image:radial-gradient(circle at 18% 22%,rgba(0,0,0,.025),transparent 40%),radial-gradient(circle at 80% 75%,rgba(0,0,0,.03),transparent 45%)}
+.board.fs{border-radius:0;box-shadow:none}
+.slide{position:absolute;inset:0;padding:5cqw 6cqw;display:flex;flex-direction:column;gap:2cqw}
+.slide[hidden]{display:none!important}
+.kick{font-family:var(--hand);font-weight:700;font-size:2.6cqw;color:var(--blue);line-height:1}
+.mk{font-family:var(--marker);line-height:1.02;letter-spacing:.01em}
+.h-xl{font-size:8.4cqw}.h-l{font-size:6cqw}.h-m{font-size:4.2cqw}.h-s{font-size:3cqw}
+.hand{font-family:var(--hand);font-weight:500;font-size:3.1cqw;line-height:1.15}
+.hand.b{font-weight:700}
+.small{font-size:2.3cqw}
+.red{color:var(--red)}.blue{color:var(--blue)}.green{color:var(--green)}
+.circ{position:relative;display:inline-block;padding:0 .25em}
+.circ::after{content:"";position:absolute;inset:-.18em -.12em -.12em -.22em;border:.09em solid var(--red);border-radius:52% 46% 55% 44%/50% 58% 42% 50%;transform:rotate(-2deg);pointer-events:none}
+.hl{background:linear-gradient(transparent 55%,rgba(243,198,35,.75) 55%,rgba(243,198,35,.75) 92%,transparent 92%);padding:0 .1em}
+.strike{position:relative;display:inline-block;opacity:.75}
+.strike::after{content:"";position:absolute;left:-4%;right:-4%;top:52%;height:.09em;background:var(--red);transform:rotate(-4deg);border-radius:.1em}
+.row{display:flex;gap:3cqw;align-items:stretch}
+.row.c{align-items:center}
+.col{display:flex;flex-direction:column;gap:1.4cqw;min-width:0}
+.box{border:.32cqw solid var(--ink);border-radius:1.2cqw 1.6cqw 1cqw 1.8cqw;padding:1.6cqw 2cqw;flex:1;min-width:0}
+.box.blue{border-color:var(--blue)}.box.red{border-color:var(--red)}.box.green{border-color:var(--green)}
+.num{font-family:var(--marker);font-size:5cqw;line-height:1}
+.arrow{width:7cqw;flex:none;align-self:center}
+.arrow path{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:1.1cqw}
+.list li{font-family:var(--hand);font-size:3.1cqw;line-height:1.15;padding-left:3cqw;position:relative}
+.list li::before{content:"→";position:absolute;left:0;color:var(--blue);font-weight:700}
+.quote{font-family:var(--hand);font-weight:700;font-size:4cqw;line-height:1.1;border-left:.5cqw solid var(--red);padding-left:2cqw}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;gap:2cqw}
+.min{font-family:var(--hand);font-size:2cqw;color:#6b7370}
+.tag{display:inline-block;font-family:var(--hand);font-weight:700;font-size:2.2cqw;background:var(--ink);color:var(--board);padding:.2cqw 1.2cqw;border-radius:.6cqw;transform:rotate(-1.5deg)}
+.yt{display:flex;gap:2.4cqw;align-items:center;border:.32cqw solid var(--ink);border-radius:1.4cqw;padding:2cqw;background:#fff}
+.yt .play{width:11cqw;aspect-ratio:16/11;flex:none;border-radius:1.6cqw;background:var(--red);display:grid;place-items:center}
+.yt .play::after{content:"";border-left:3.4cqw solid #fff;border-top:2cqw solid transparent;border-bottom:2cqw solid transparent;margin-left:.8cqw}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw 3cqw}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4cqw}
+
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+.ctrl .g{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:8px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--fg)}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);min-width:5ch;text-align:center}
+.notes{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.notes h3{margin:0 0 6px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.notes p{margin:0 0 8px;max-width:75ch}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chips button{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:4px 10px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.help{color:var(--muted);font-size:.85rem;margin-top:8px}
+#stage:fullscreen{background:#000;display:grid;place-items:center}
+#stage:fullscreen .board{width:min(100vw,177.78vh)}
+
+/* ---------- CAPTURAS ---------- */
+.split{display:grid;grid-template-columns:1fr 1.1fr;gap:3cqw;flex:1;min-height:0}
+.split>.col{min-height:0}
+.shot{margin:0;display:flex;flex-direction:column;gap:.6cqw;min-height:0;flex:1 1 0}
+.shot img{display:block;width:100%;flex:1 1 0;min-height:0;object-fit:cover;object-position:center;border:.18cqw solid #d6d8d2;border-radius:.6cqw;background:#fff;box-shadow:0 .4cqw 1.2cqw -.6cqw rgba(0,0,0,.35)}
+.shot figcaption{font-family:var(--hand);font-weight:700;font-size:1.9cqw;line-height:1.1;color:#4a524f}
+.shot.sm{flex:.62 1 0}
+.shot.plain img{object-fit:contain;border:0;box-shadow:none}
+.phones{display:flex;gap:2cqw;justify-content:center;align-items:stretch;min-height:0;min-width:0}
+.shot.phone{flex:0 0 auto;width:auto}
+.shot.phone img{flex:1 1 0;width:auto;aspect-ratio:9/16;height:100%;max-height:33cqw}
+.shot.phone{max-width:19cqw}
+.shot.left img{object-position:left center}
+.shot.right img{object-position:right center}
+.shot.wide-in{flex:1 1 0;min-width:0}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;flex:1;min-height:0}
+.step{position:relative;display:flex;min-height:0}
+.step .num{position:absolute;z-index:2;top:-1.2cqw;left:-1cqw;background:var(--board);border-radius:50%;width:5.6cqw;height:5.6cqw;display:grid;place-items:center;font-size:3.6cqw;border:.3cqw solid var(--blue)}
+.h-cierre{font-size:3.3cqw}
+.list.tight li{font-size:2.6cqw}
+.facts{display:flex;flex-direction:column;gap:1cqw;margin-top:.6cqw}
+.facts>div{display:flex;flex-direction:column;border-left:.4cqw solid var(--ink);padding-left:1.4cqw}
+
+/* ---------- GUION ---------- */
+#guion{max-width:780px}
+.warn{background:var(--panel);border:1px solid var(--line);border-left:4px solid #d9a400;border-radius:8px;padding:12px 16px;margin-bottom:20px}
+.warn strong{display:block;margin-bottom:4px}
+.warn ul{margin:0;padding-left:18px}
+.sec{border-top:1px solid var(--line);padding:20px 0}
+.sec .meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;font-size:.82rem;color:var(--muted);margin-bottom:6px}
+.sec .meta b{color:var(--fg);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.sec h2{font-family:var(--marker);font-weight:400;font-size:1.35rem;margin:0 0 10px;text-wrap:balance}
+.say{font-size:1.18rem;line-height:1.6;margin:0 0 10px}
+.say p{margin:0 0 10px}
+.cta{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:8px;padding:10px 14px;font-weight:700}
+.go{font-size:.85rem;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;font:inherit;font-weight:700;text-decoration:underline}
+a{color:var(--accent)}
+@media (max-width:640px){.say{font-size:1.05rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>{{TITULO}}</h1>
+      <p>Pizarra para grabar el video y guion por bloques · {{QUIEN}}</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button id="tab-pizarra" role="tab" aria-selected="true">Pizarra</button>
+      <button id="tab-guion" role="tab" aria-selected="false">Guion</button>
+    </div>
+  </header>
+
+  <section id="pizarra">
+    <div id="stage"><div class="board" id="board"></div></div>
+    <div class="ctrl">
+      <div class="g">
+        <button class="btn" id="prev">← Anterior</button>
+        <span class="count" id="count">1 / 1</span>
+        <button class="btn" id="next">Siguiente →</button>
+      </div>
+      <div class="g">
+        <button class="btn" id="toggleNotes">Ocultar lo que digo</button>
+        <button class="btn" id="fs">Pantalla completa</button>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="notes" id="notes"><h3>Lo que digo en esta pizarra</h3><div id="notesBody"></div></div>
+    <p class="help">Teclas: ← → para pasar · F para pantalla completa · N para ocultar las notas.</p>
+  </section>
+
+  <section id="guion" hidden>
+    <div class="warn">
+      <strong>⚠️ Antes de grabar</strong>
+      <ul>
+        {{AVISOS: <li> con lo que hay que confirmar (cifras dudosas, CTA y su automatización de mensajes, nombres que la transcripción pudo oír mal, cambios al guion)}}
+      </ul>
+    </div>
+    <div id="guionBody"></div>
+  </section>
+</div>
+
+<script>
+const ARROW = '<svg class="arrow" viewBox="0 0 100 40" aria-hidden="true"><path d="M4 22 C30 14 60 26 90 19"/><path d="M76 8 L92 19 L77 31"/></svg>';
+const FUENTES = [
+  // ['https://www.youtube.com/watch?v=ID', 'Canal, «Título», YouTube, dd-mmm-aaaa, N min'],
+  {{FUENTES}}
+];
+
+// Monito con su fábrica: el mismo dibujo repetido = todas con la misma máquina
+const MONO = (c='var(--ink)') => `<svg viewBox="0 0 60 80" style="width:100%;height:auto" aria-hidden="true" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="20" cy="18" r="8"/><path d="M20 26 V52 M20 34 L8 44 M20 34 L32 40 M20 52 L11 72 M20 52 L29 72"/>
+  <path d="M34 72 V46 L42 52 V46 L50 52 V36 H56 V72 Z"/><path d="M52 36 V28"/><path d="M50 24 q3 -4 6 0" stroke-width="2"/></svg>`;
+
+const IMG = (src, cap, cls='') => `<figure class="shot ${cls}"><img src="img/${src}" alt="${cap}" loading="eager"><figcaption>${cap}</figcaption></figure>`;
+// === DATOS: una entrada por lámina. Copia el patrón de las que ya existen en ejemplos/ ===
+// { id, chip (nombre corto del botón), min ('Gary · min 18:00' = minuto en la FUENTE), html (la lámina), say:[frases que dices], cta? }
+const S = [
+{{LAMINAS}}
+];
+
+const board = document.getElementById('board');
+const chips = document.getElementById('chips');
+const notesBody = document.getElementById('notesBody');
+const count = document.getElementById('count');
+let i = 0;
+
+S.forEach((s, k) => {
+  const d = document.createElement('div');
+  d.className = 'slide'; d.hidden = k !== 0; d.innerHTML = s.html;
+  d.setAttribute('aria-label', s.chip);
+  board.appendChild(d);
+  const b = document.createElement('button');
+  b.textContent = (k+1) + '. ' + s.chip; b.onclick = () => show(k);
+  chips.appendChild(b);
+});
+
+function show(k){
+  i = Math.max(0, Math.min(S.length-1, k));
+  [...board.children].forEach((el, n) => el.hidden = n !== i);
+  [...chips.children].forEach((el, n) => el.setAttribute('aria-current', n === i));
+  count.textContent = (i+1) + ' / ' + S.length;
+  const s = S[i];
+  notesBody.innerHTML = s.say.map(p => `<p>${p}</p>`).join('') + (s.cta ? `<p class="cta">CTA: ${s.cta}</p>` : '');
+  try { localStorage.setItem('pz-fabrica-i', i); } catch(e){}
+}
+document.getElementById('prev').onclick = () => show(i-1);
+document.getElementById('next').onclick = () => show(i+1);
+
+const notes = document.getElementById('notes');
+const tn = document.getElementById('toggleNotes');
+function toggleNotes(){ notes.hidden = !notes.hidden; tn.textContent = notes.hidden ? 'Mostrar lo que digo' : 'Ocultar lo que digo'; }
+tn.onclick = toggleNotes;
+
+const stage = document.getElementById('stage');
+function fs(){
+  if (document.fullscreenElement) { document.exitFullscreen?.(); return; }
+  stage.requestFullscreen?.().catch(()=>{});
+}
+document.getElementById('fs').onclick = fs;
+document.addEventListener('fullscreenchange', () => board.classList.toggle('fs', !!document.fullscreenElement));
+
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input,textarea')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i+1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i-1); }
+  else if (e.key === 'f' || e.key === 'F') fs();
+  else if (e.key === 'n' || e.key === 'N') toggleNotes();
+});
+
+// Guion
+const gb = document.getElementById('guionBody');
+gb.innerHTML = S.map((s, k) => `
+  <article class="sec">
+    <div class="meta"><b>Pizarra ${k+1}</b>${s.min ? `<span>${s.min}</span>` : ''}<button class="go" data-k="${k}">ver pizarra</button></div>
+    <h2>${s.chip.replace(/^\d+ · /,'')}</h2>
+    <div class="say">${s.say.map(p => `<p>${p}</p>`).join('')}</div>
+    ${s.cta ? `<p class="cta">CTA: ${s.cta}</p>` : ''}
+  </article>`).join('') +
+  `<p class="help">Fuentes:<br>${FUENTES.map(([u,t]) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join('<br>')}</p>`;
+
+const tabP = document.getElementById('tab-pizarra'), tabG = document.getElementById('tab-guion');
+function mode(m){
+  document.getElementById('pizarra').hidden = m !== 'pizarra';
+  document.getElementById('guion').hidden = m !== 'guion';
+  tabP.setAttribute('aria-selected', m === 'pizarra');
+  tabG.setAttribute('aria-selected', m === 'guion');
+}
+tabP.onclick = () => mode('pizarra');
+tabG.onclick = () => mode('guion');
+gb.addEventListener('click', e => { const b = e.target.closest('.go'); if (!b) return; mode('pizarra'); show(+b.dataset.k); window.scrollTo(0,0); });
+
+let start = 0; try { start = +(localStorage.getItem('pz-fabrica-i') || 0); } catch(e){}
+show(start || 0);
+if (location.hash === '#guion') mode('guion');
+
+</script>
+</body></html>

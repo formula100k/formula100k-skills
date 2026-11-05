@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  reel-motion-recortada-f100k · motor del reel (1080×1920)
+  NO se edita a mano: armar.py inyecta __DUR__, __PLAN__, __PALABRAS__ y __TAMS__.
+  Todo lo que cambia de un reel a otro vive en plan.json.
+-->
+<style>
+  :root {
+    --fondo: #050509;     /* negro de la marca */
+    --tinta: #f4f1ea;     /* blanco cálido */
+    --blanco: #ffffff;
+    --oro: #F5C542;       /* EL acento, uno solo */
+    --oro-suave: rgba(245,197,66,.22);
+    --pelo: #24242e;      /* bordes de un pelo */
+    --carbon: #0b0b10;
+    --gris: #a1a1aa;
+    --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --serif: Georgia, 'Times New Roman', Times, serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; overflow: hidden; background: var(--fondo); color: var(--tinta); font-family: var(--sans); }
+  #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+  /* ── FONDO: negro con brillo cálido. En modo cara brilla detrás de la cabeza; en motion, detrás de la franja ── */
+  #fondo { position: absolute; inset: 0; background: var(--fondo); }
+  .halo { position: absolute; border-radius: 50%; filter: blur(90px); }
+  #halo-cara { width: 900px; height: 900px; left: 90px; top: 260px; background: radial-gradient(circle, rgba(245,197,66,.30), rgba(245,197,66,0) 70%); }
+  #halo-motion { width: 1000px; height: 520px; left: 40px; top: 1440px; background: radial-gradient(ellipse, rgba(245,197,66,.26), rgba(245,197,66,0) 70%); opacity: 0; }
+  #viñeta { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,.65) 100%); }
+
+  /* ── GANCHO CON SU TOMA REAL (22-oct, como «ELIMINA / tus destacadas»): la toma original más abajo, el hueco de
+     arriba con la misma toma desenfocada y oscura, y el título golpe encima ── */
+  #golpe-real { position: absolute; inset: 0; overflow: hidden; background: #000; }
+  #golpe-bg { position: absolute; left: -108px; top: -192px; width: 1296px; height: 2304px; object-fit: cover;
+              filter: blur(30px) brightness(.5) saturate(1.15); }
+  #golpe-fg { position: absolute; left: 0; top: var(--gdy, 0px); width: 1080px; height: 1920px; object-fit: cover;
+              -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 300px); mask-image: linear-gradient(to bottom, transparent 0, #000 300px); }
+  #golpe-real .sombra { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.5) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,0) 55%, rgba(0,0,0,.35) 100%); }
+
+  /* ── ESCENARIO (modo motion): título + piezas. Ocupa todo el cuadro; la persona va encima, abajo ── */
+  #escenario { position: absolute; inset: 0; opacity: 0; }
+  .escena { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+
+  /* Título tecleado (el de la referencia, 19-oct): línea 1 en blanco y la línea 2 dentro de un bloque dorado
+     que se barre de izquierda a derecha, con letra negra. Misma sans gruesa en las dos; nada de serif ni subrayado. */
+  /* 19-oct (2): a 56 px y pegado arriba «no impacta». Va grande (84 px, baja si la línea es larga) y más cerca del objeto. */
+  .titulo { position: absolute; left: 40px; right: 40px; top: 250px; text-align: center; transform-origin: 50% 40%; }
+  .titulo .l { display: block; font-weight: 800; font-size: var(--fs, 84px); line-height: 1.16; letter-spacing: -2px; color: var(--blanco);
+               text-shadow: 0 3px 14px rgba(0,0,0,.6); }
+  .titulo .c { opacity: 0; }
+  .titulo .l.bloque { margin-top: 6px; }
+  .titulo .bt { position: relative; z-index: 0; display: inline-block; padding: 2px 18px 6px; color: var(--fondo); text-shadow: none; }
+  .titulo .bt .fc { position: absolute; inset: 0; background: var(--oro); border-radius: 8px; transform-origin: 0 50%; z-index: -1;
+                      box-shadow: 0 0 40px rgba(245,197,66,.35); }
+  .titulo .bt .c { position: relative; }
+
+  /* Título GOLPE (22-oct: «el gancho con las letras doradas no está llamando la atención»; refs «ELIMINA /
+     tus destacadas» y «IDEAS DE REELS / en historias»). Es el título del GANCHO por defecto: una línea ENORME en
+     mayúsculas con relleno degradado, canto 3D y brillo de su color (rojo · verde · amarillo) y otra chica en blanco
+     (sans gruesa o serif). Opcional: un ícono del tema encima. Nada de bloque dorado. */
+  .titulo.golpe { top: var(--gy, 230px); }
+  .titulo.golpe .ico { display: block; margin: 0 auto 18px; height: var(--ih, 170px); width: auto;
+                       filter: drop-shadow(0 14px 26px rgba(0,0,0,.55)); }
+  /* 23-oct (edición sin olor a IA): color plano, sin degradado, canto 3D ni brillo; letra de diseño por tema.
+     .g.condensada = póster condensado (default) · .g.serif = itálica elegante · .g.palo = la sans gruesa de antes */
+  .titulo.golpe .g { display: block; font-weight: 900; font-size: var(--fg, 190px); line-height: 1.02; letter-spacing: -4px;
+                     text-transform: uppercase; color: var(--c2); padding: 0 12px;
+                     text-shadow: 0 4px 14px rgba(0,0,0,.55); }
+  .titulo.golpe .g.condensada { font-family: 'Impact', 'DIN Condensed', 'Haettenschweiler', 'Arial Narrow', sans-serif; font-weight: 400; letter-spacing: 0; }
+  .titulo.golpe .g.serif { font-family: Didot, 'Bodoni 72', Georgia, serif; font-style: italic; font-weight: 700; letter-spacing: -3px; }
+  .titulo.golpe .ch { display: block; font-weight: 800; font-size: var(--fc, 84px); line-height: 1.1; letter-spacing: -2px;
+                      color: #fff; text-shadow: 0 4px 0 rgba(0,0,0,.35), 0 8px 26px rgba(0,0,0,.75); margin: 4px 0; }
+  .titulo.golpe .ch.serif { font-family: Didot, 'Bodoni 72', Georgia, serif; font-weight: 400; letter-spacing: -1px;
+                            font-size: calc(var(--fc, 84px) * 1.15); }
+
+  /* Flecha dibujada a mano: baja del título y apunta a lo que se muestra (19-oct: «no sale una flecha ni nada») */
+  .flecha { position: absolute; z-index: 3; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; pointer-events: none; }
+  .flecha path { fill: none; stroke: var(--oro); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round;
+                 filter: drop-shadow(0 0 14px rgba(245,197,66,.55)); }
+
+  /* ── SKILL: tarjeta de una skill de Claude que se instala y trabaja (mockup para «usa este skill») ── */
+  .skl { width: 900px; padding: 44px 46px 46px; border-radius: 36px; background: #121219; text-align: left;
+         border: 2px solid rgba(245,197,66,.35); box-shadow: 0 0 90px rgba(245,197,66,.20), 0 40px 90px rgba(0,0,0,.7); }
+  .skl .cab { display: flex; align-items: center; gap: 30px; }
+  .skl .ico { flex: none; width: 128px; height: 128px; border-radius: 30px; background: linear-gradient(145deg, #F7C66A, #D9922E);
+              display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(245,197,66,.35); }
+  .skl .ico img { width: 82px; height: 82px; border-radius: 18px; }
+  .skl .nom { flex: 1; min-width: 0; }
+  .skl .nom b { display: block; font-weight: 800; font-size: 48px; line-height: 1.08; letter-spacing: -1.2px; color: var(--blanco); }
+  .skl .nom i { display: block; margin-top: 8px; font-style: normal; font-weight: 600; font-size: 30px; color: rgba(244,241,234,.55); }
+  .skl .btn { flex: none; position: relative; min-width: 250px; text-align: center; white-space: nowrap; padding: 14px 26px; border-radius: 999px; font-weight: 800; font-size: 30px;
+              border: 2px solid var(--oro); color: var(--oro); }
+  .skl .btn .ok { position: absolute; inset: -2px; border-radius: 999px; background: var(--oro); color: var(--fondo);
+                  display: flex; align-items: center; justify-content: center; white-space: nowrap; opacity: 0; }
+  .skl .sep { height: 2px; margin: 36px 0 32px; background: rgba(255,255,255,.08); }
+  .skl .vid { display: flex; align-items: center; gap: 28px; padding: 18px; border-radius: 22px; background: rgba(255,255,255,.05); }
+  .skl .vid .th { position: relative; flex: none; width: 128px; height: 170px; border-radius: 14px; overflow: hidden; }
+  .skl .vid .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .skl .vid .th:after { content: ''; position: absolute; left: 50%; top: 50%; margin: -22px 0 0 -14px; border-left: 38px solid #fff;
+                        border-top: 22px solid transparent; border-bottom: 22px solid transparent; filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
+  .skl .vid b { display: block; font-weight: 800; font-size: 38px; color: var(--tinta); }
+  .skl .vid i { display: block; margin-top: 8px; font-style: normal; font-size: 28px; color: rgba(244,241,234,.5); }
+  .skl .sal { margin-top: 30px; }
+  .skl .sal .et { font-weight: 800; font-size: 26px; letter-spacing: 3px; color: var(--oro); text-transform: uppercase; }
+  .skl .sal .it { display: flex; align-items: center; gap: 22px; margin-top: 18px; font-weight: 700; font-size: 42px; color: var(--tinta); }
+  .skl .sal .it em { flex: none; width: 58px; height: 58px; border-radius: 14px; background: var(--oro); color: var(--fondo);
+                     font-style: normal; font-weight: 800; font-size: 32px; display: flex; align-items: center; justify-content: center; }
+
+  /* ── POST_IG: un post ya publicado en Instagram (modo oscuro). La imagen va completa en su proporción (4:5 carrusel) ── */
+  .pig { width: 780px; background: #000; border-radius: 30px; overflow: hidden; text-align: left; border: 2px solid rgba(255,255,255,.14);
+         box-shadow: 0 0 80px rgba(245,197,66,.18), 0 40px 90px rgba(0,0,0,.7); }
+  .pig .hd { display: flex; align-items: center; gap: 18px; padding: 22px 24px; }
+  .pig .av { width: 66px; height: 66px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7); }
+  .pig .av img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid #000; object-fit: cover; display: block; }
+  .pig .hd b { font-weight: 700; font-size: 30px; color: #fff; }
+  .pig .hd .vf { display: inline-block; width: 26px; height: 26px; margin-left: 6px; vertical-align: -3px; border-radius: 50%; background: #3897f0;
+                 color: #fff; font-size: 18px; line-height: 26px; text-align: center; font-weight: 800; }
+  .pig .hd .mas { margin-left: auto; font-size: 36px; color: #fff; letter-spacing: 2px; }
+  .pig .ft { position: relative; overflow: hidden; background: #111; }
+  .pig .ft .tira { display: flex; height: 100%; }
+  .pig .ft .tira img { flex: none; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pig .ft .cnt { position: absolute; right: 20px; top: 20px; padding: 6px 16px; border-radius: 999px; background: rgba(0,0,0,.7); color: #fff; font-size: 24px; font-weight: 700; }
+  .pig .ac { display: flex; align-items: center; gap: 28px; padding: 20px 24px 8px; }
+  .pig .ac svg { width: 48px; height: 48px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+  .pig .ac .gu { margin-left: auto; }
+  .pig .ac .pts { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+  .pig .ac .pts i { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.35); }
+  .pig .ac .pts i.on { background: #3897f0; }
+  .pig .tx { padding: 6px 24px 26px; font-size: 27px; line-height: 1.35; color: #fff; }
+  .pig .tx b { font-weight: 700; }
+  .pig .tx .lk { display: block; font-weight: 700; margin-bottom: 6px; }
+  /* Destello del golpe del cuadro 0 */
+  #destello { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(255,214,140,.55), rgba(245,197,66,.18) 60%, rgba(0,0,0,0) 85%);
+              opacity: 0; pointer-events: none; }
+
+  /* Pieza: .pz (entra/sale) > .flota (respira) > .in (centrado en su lugar) */
+  .pz { position: absolute; width: 0; height: 0; opacity: 0; visibility: hidden; }
+  .flota { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+  .in { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); }
+
+  .marco { border-radius: 26px; border: 2px solid rgba(255,255,255,.16); background: var(--carbon); overflow: hidden;
+           box-shadow: 0 0 0 1px rgba(245,197,66,.10), 0 0 70px rgba(245,197,66,.18), 0 30px 80px rgba(0,0,0,.6); }
+  .marco img, .marco video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  .tel { border-radius: 46px; border: 3px solid #2c2c36; padding: 10px; background: #0d0d12;
+         box-shadow: 0 0 0 1px rgba(245,197,66,.12), 0 0 80px rgba(245,197,66,.20), 0 40px 90px rgba(0,0,0,.7); }
+  .tel .pant { border-radius: 36px; overflow: hidden; width: 100%; height: 100%; background: #111; }
+  .tel .pant img, .tel .pant video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .chip-vistas { margin: 18px auto 0; width: max-content; padding: 8px 18px; border-radius: 999px; background: rgba(255,255,255,.06);
+                 border: 1px solid var(--pelo); font-weight: 700; font-size: 26px; color: var(--tinta); }
+  .chip-vistas b { color: var(--oro); }
+
+  .grilla { display: grid; grid-template-columns: repeat(3, 230px); gap: 22px; }
+  .grilla .card { width: 230px; height: 400px; }
+  .grilla .card .vis { position: absolute; left: 12px; bottom: 12px; font-weight: 800; font-size: 22px; color: #fff;
+                       text-shadow: 0 2px 8px rgba(0,0,0,.9); }
+  .grilla .cw { position: relative; }
+
+  .graf { width: 900px; }
+  .graf .et { text-align: center; font-weight: 700; font-size: 40px; color: var(--tinta); margin-bottom: 14px; }
+  .graf svg { width: 900px; height: 460px; overflow: visible; }
+  .graf .eje { stroke: rgba(255,255,255,.18); stroke-width: 2; fill: none; }
+  .graf .guia { stroke: rgba(255,255,255,.08); stroke-width: 2; fill: none; }
+  .graf .linea { stroke: var(--oro); stroke-width: 9; fill: none; stroke-linecap: round; filter: drop-shadow(0 0 14px rgba(245,197,66,.65)); }
+  .graf .punto { fill: var(--fondo); stroke: #fff; stroke-width: 5; }
+
+  .barra { width: 880px; }
+  .barra .riel { height: 40px; border-radius: 8px; border: 2px solid rgba(255,255,255,.22); padding: 4px; }
+  .barra .lleno { height: 26px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #c8892c, var(--oro));
+                  box-shadow: 0 0 22px rgba(245,197,66,.7); transform-origin: 0 50%; transform: scaleX(0); display: block; }
+  .barra .num { margin-top: 14px; font-weight: 800; font-size: 56px; color: var(--oro); }
+  .barra .et { display: inline-block; margin-top: 16px; padding: 10px 22px; border: 2px solid rgba(255,255,255,.85); border-radius: 8px;
+               font-weight: 700; font-size: 40px; color: #fff; }
+
+  .caja { padding: 18px 34px; border: 2.5px solid rgba(255,255,255,.88); border-radius: 12px; background: rgba(5,5,9,.85);
+          font-weight: 700; font-size: 46px; color: #fff; text-align: center; max-width: 900px; box-shadow: 0 0 40px rgba(255,255,255,.08); }
+  .caja .c { opacity: 0; }
+
+  .doc { width: 780px; padding: 40px 56px 48px 90px; }
+  .doc .dt { font-family: var(--serif); font-style: italic; font-size: 48px; text-align: center; color: var(--tinta); margin-bottom: 18px; }
+  .doc .sec { position: relative; margin-top: 26px; }
+  .doc .sn { font-weight: 800; font-size: 36px; color: #fff; margin-bottom: 8px; }
+  .doc .ln { display: block; height: 12px; border-radius: 5px; background: rgba(255,255,255,.28); margin: 9px 0; transform-origin: 0 50%; }
+  .doc .sec.oro .ln { background: var(--oro); box-shadow: 0 0 12px rgba(245,197,66,.55); }
+  .doc .sec.oro .sn { color: var(--oro); }
+  .doc .marca { position: absolute; left: -66px; top: 0; width: 48px; height: 48px; border-radius: 10px; background: var(--oro);
+                color: #111; font-weight: 900; font-size: 30px; display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 0 22px rgba(245,197,66,.6); }
+
+  .obj img { display: block; filter: drop-shadow(0 0 40px rgba(245,197,66,.35)) drop-shadow(0 30px 40px rgba(0,0,0,.6)); }
+
+  .lista { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .lista .it { display: block; padding: 12px 30px; border-radius: 10px; background: var(--oro); color: #111; font-weight: 800; font-size: 40px;
+               letter-spacing: -.8px; box-shadow: 0 0 34px rgba(245,197,66,.45); white-space: nowrap; }
+  .lista .it.ultimo { background: transparent; color: var(--oro); border: 2.5px solid var(--oro); }
+
+  .pant-gr { position: relative; }
+  .pant-gr .marco { position: relative; }
+  .pant-gr .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  .pant-gr .scroll img { width: 100%; height: auto; display: block; }
+
+  .numero { text-align: center; white-space: nowrap; }
+  .numero .n { font-weight: 800; font-size: 230px; line-height: 1; letter-spacing: -8px; color: #fff; text-shadow: 0 4px 14px rgba(0,0,0,.5); }
+  .numero .n i { font-family: var(--serif); font-style: italic; font-weight: 600; color: var(--oro); letter-spacing: -3px; font-size: 170px; }
+  .numero .et { margin-top: 10px; font-weight: 700; font-size: 38px; color: var(--tinta); }
+
+  .frase { width: 900px; text-align: center; font-weight: 800; font-size: 104px; line-height: 1.04; letter-spacing: -4px; color: #fff; }
+  .frase .w { display: inline-block; opacity: 0; margin: 0 .12em; }
+  .frase .w.clave { font-family: var(--serif); font-style: italic; font-weight: 600; color: var(--oro); letter-spacing: -2px; }
+
+  /* ── CAPTURA REAL con resaltes dorados que aparecen cuando se nombran ── */
+  .cap { position: relative; }
+  .cap .marco { position: relative; }
+  .cap img { display: block; width: 100%; height: auto; }
+  .cap .res { position: absolute; border: 4px solid var(--oro); border-radius: 12px; background: rgba(245,197,66,.10);
+              box-shadow: 0 0 26px rgba(245,197,66,.55), inset 0 0 18px rgba(245,197,66,.18); }
+  .cap .res .marca { position: absolute; left: -26px; top: 50%; margin-top: -24px; width: 48px; height: 48px; border-radius: 10px;
+                     background: var(--oro); color: #111; font-weight: 900; font-size: 30px; display: flex; align-items: center;
+                     justify-content: center; box-shadow: 0 0 22px rgba(245,197,66,.6); }
+  .cap .velo { position: absolute; inset: 0; background: rgba(5,5,9,.55); opacity: 0; }
+  .tel .pant img { object-position: top center; }
+  .tel-wrap { position: relative; }
+  .tel .barra-t { position: absolute; left: 10px; right: 10px; bottom: 10px; height: 14px; border-radius: 0 0 36px 36px; overflow: hidden; background: rgba(0,0,0,.55); }
+  .tel .barra-t i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #c8892c, var(--oro)); transform-origin: 0 50%;
+                    box-shadow: 0 0 18px rgba(245,197,66,.8); }
+  .crono { position: absolute; width: 230px; height: 230px; border-radius: 50%; background: rgba(5,5,9,.92);
+           box-shadow: 0 0 0 2px rgba(245,197,66,.35), 0 0 60px rgba(245,197,66,.35), 0 20px 50px rgba(0,0,0,.7); }
+  .crono svg { position: absolute; inset: 0; width: 230px; height: 230px; transform: rotate(-90deg); }
+  .crono circle { fill: none; stroke-width: 12; }
+  .crono .fondo-c { stroke: rgba(255,255,255,.12); }
+  .crono .arco { stroke: var(--oro); stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(245,197,66,.8)); }
+  .crono .cn { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .crono .cn b { font-weight: 800; font-size: 104px; line-height: .9; color: #fff; letter-spacing: -4px; }
+  .crono .cn i { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 38px; color: var(--oro); }
+
+  .tachado { display: flex; gap: 46px; align-items: center; }
+  .tachado .item { position: relative; text-align: center; }
+  .tachado .ft { position: relative; overflow: hidden; border: 2px solid rgba(255,255,255,.16); background: var(--carbon);
+                 box-shadow: 0 0 50px rgba(245,197,66,.14), 0 30px 70px rgba(0,0,0,.6); }
+  .tachado .ft.circulo { border-radius: 50%; }
+  .tachado .ft.tarjeta { border-radius: 26px; }
+  .tachado .ft img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .tachado .ft .velo { position: absolute; inset: 0; background: rgba(5,5,9,.6); opacity: 0; }
+  .tachado svg.x { position: absolute; inset: -8%; width: 116%; height: 116%; overflow: visible; }
+  .tachado svg.x path { fill: none; stroke: var(--oro); stroke-width: 14; stroke-linecap: round; filter: drop-shadow(0 0 12px rgba(245,197,66,.75)); }
+  .tachado .et { margin-top: 18px; font-weight: 800; font-size: 38px; color: var(--tinta); }
+
+  /* ── LA PERSONA · estilo VENTANA (por defecto): abajo en una franja con un poco de su fondo real ── */
+  #cara-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; transform-origin: 540px 700px; }
+  #cara-in, #vent-in { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+  #cara-in video, #vent-in video { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  #ventana { position: absolute; left: 36px; top: __VT__px; width: 1008px; height: __VH__px; overflow: hidden;
+             border-radius: 34px 34px 0 0; border: 2px solid rgba(255,255,255,.16); border-bottom: 0;
+             box-shadow: 0 0 0 1px rgba(245,197,66,.14), 0 -10px 70px rgba(245,197,66,.20); }
+  #ventana .fundido { position: absolute; left: 0; right: 0; bottom: 0; height: 130px; background: linear-gradient(to bottom, rgba(5,5,9,0), rgba(5,5,9,.85)); }
+
+  /* ── LA PERSONA · estilo RECORTADA (video con transparencia, sin caja) ── */
+  #yo-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+  #yo { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover;
+        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%); }
+
+  /* ── CARA REAL (escena con "real": true): la toma original a pantalla completa, con su fondo, para la dramatización ── */
+  #real-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; opacity: 0; visibility: hidden; }
+  #real-wrap video { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+  /* ── FLUJO: imágenes unidas por flechas doradas que se dibujan (para escenas a pantalla completa) ── */
+  .flujo { position: relative; width: 1000px; height: 1000px; }
+  .flujo .nodo { position: absolute; transform: translate(-50%, -50%); text-align: center; }
+  .flujo .nodo img { display: block; margin: 0 auto; filter: drop-shadow(0 0 40px rgba(245,197,66,.28)); }
+  .flujo .nodo .et { margin-top: 16px; font-weight: 800; font-size: 46px; letter-spacing: -1px; color: var(--tinta); white-space: nowrap; }
+  .flujo svg { position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; overflow: visible; }
+  .flujo svg path { fill: none; stroke: var(--oro); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 10px rgba(245,197,66,.6)); }
+
+  /* ── ESCRIBE: una hoja (guion) o el chat de Claude donde el texto se teclea o se pega ── */
+  .esc-hoja { width: 860px; padding: 54px 60px 60px; border-radius: 28px; background: #f6f1e7; color: #1b1b22; text-align: left;
+              box-shadow: 0 0 0 1px rgba(245,197,66,.25), 0 0 90px rgba(245,197,66,.22), 0 40px 90px rgba(0,0,0,.6); }
+  .esc-hoja .et { font-weight: 800; font-size: 30px; letter-spacing: 3px; text-transform: uppercase; color: #b07a1c; margin-bottom: 22px; }
+  .esc-hoja .ln { font-family: var(--serif); font-size: 44px; line-height: 1.34; min-height: 59px; }
+  .esc-hoja .ln.marca { background: linear-gradient(transparent 58%, rgba(245,197,66,.55) 58%); }
+  .esc-chat { width: 960px; text-align: left; }
+  .esc-chat .cab { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; font-weight: 800; font-size: 42px; color: var(--tinta); }
+  .esc-chat .cab img { width: 64px; height: 64px; border-radius: 16px; }
+  .esc-chat .caja-in { position: relative; padding: 34px 36px 92px; border-radius: 30px; background: #1d1c22; border: 2px solid rgba(255,255,255,.14);
+                       font-size: 42px; line-height: 1.36; color: #ecebe6; box-shadow: 0 0 80px rgba(245,197,66,.18); }
+  .esc-chat .caja-in .ph { position: absolute; left: 36px; top: 34px; color: rgba(255,255,255,.35); }
+  .esc-chat .pegado { position: absolute; left: 36px; bottom: 26px; padding: 6px 16px; border-radius: 8px; background: var(--oro); color: #111; font-weight: 800; font-size: 24px; }
+  .esc-chat .env { position: absolute; right: 24px; bottom: 22px; width: 58px; height: 58px; border-radius: 16px; background: #d97757;
+                   display: flex; align-items: center; justify-content: center; color: #fff; font-size: 34px; font-weight: 900; }
+  .esc-chat .resp { margin-top: 28px; padding: 0 8px; font-size: 40px; line-height: 1.4; color: var(--tinta); }
+  .cursor { display: inline-block; width: 4px; height: 1em; margin-left: 3px; vertical-align: -0.12em; background: currentColor; }
+
+  /* ── EDICIÓN: el editor con la toma arriba y la línea de tiempo abajo; el cabezal corre y las tijeras cortan ── */
+  .edi { width: 900px; padding: 26px; border-radius: 30px; background: #141419; border: 2px solid rgba(255,255,255,.12);
+         box-shadow: 0 0 90px rgba(245,197,66,.18), 0 40px 90px rgba(0,0,0,.6); }
+  .edi .prev { position: relative; width: 300px; height: 533px; margin: 0 auto 26px; border-radius: 18px; overflow: hidden; background: #000; }
+  .edi .prev img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+  .edi .prev .sb { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-weight: 800; font-size: 30px; color: #fff; text-shadow: 0 2px 8px #000; }
+  .edi .tl { position: relative; height: 150px; border-radius: 14px; background: #0b0b0f; overflow: hidden; }
+  .edi .clip-t { position: absolute; top: 18px; height: 114px; border-radius: 10px; overflow: hidden; border: 2px solid var(--oro); background: #222; }
+  .edi .clip-t img { height: 100%; width: auto; display: inline-block; }
+  .edi .cab { position: absolute; top: 0; bottom: 0; width: 5px; margin-left: -2px; background: #fff; box-shadow: 0 0 12px #fff; }
+  .edi .tij { position: absolute; top: -6px; font-size: 54px; margin-left: -27px; }
+  .edi .et { margin-top: 18px; text-align: center; font-weight: 800; font-size: 34px; color: var(--oro); }
+
+  /* ── NOTA DE VOZ: burbuja con play, onda que se mueve y contador ── */
+  .nv { display: flex; align-items: center; gap: 26px; padding: 34px 40px; border-radius: 60px; background: #1f2c25; border: 2px solid rgba(37,211,102,.35);
+        box-shadow: 0 0 90px rgba(37,211,102,.18), 0 30px 80px rgba(0,0,0,.6); }
+  .nv .play { width: 96px; height: 96px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; }
+  .nv .play i { display: block; width: 0; height: 0; margin-left: 8px; border-left: 34px solid #fff; border-top: 21px solid transparent; border-bottom: 21px solid transparent; }
+  .nv .onda { display: flex; align-items: center; gap: 7px; height: 110px; }
+  .nv .onda b { display: block; width: 9px; border-radius: 5px; background: #cfe9d9; }
+  .nv .t { font-weight: 800; font-size: 36px; color: #cfe9d9; min-width: 92px; }
+  .nv-wrap { position: relative; }
+  .nv-wrap .mic { position: absolute; right: -40px; top: -70px; width: 110px; height: 110px; border-radius: 50%; background: var(--oro);
+                  display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px rgba(245,197,66,.6); }
+  .nv-wrap .mic svg { width: 54px; height: 54px; }
+
+  /* ── CARPETA: las imágenes vuelan y entran a una carpeta dorada ── */
+  .carp { position: relative; width: 900px; height: 900px; }
+  .carp .vuela { position: absolute; left: 50%; top: 22%; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+  .carp .vuela img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .carp .folder { position: absolute; left: 50%; bottom: 40px; width: 560px; height: 400px; margin-left: -280px; }
+  .carp .folder .tras, .carp .folder .frente { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 26px; }
+  .carp .folder .tras { height: 360px; background: #b8862e; }
+  .carp .folder .tras:before { content: ''; position: absolute; left: 0; top: -44px; width: 220px; height: 60px; border-radius: 20px 20px 0 0; background: #b8862e; }
+  .carp .folder .frente { height: 300px; background: linear-gradient(#f3c164, #e0a33e); box-shadow: 0 -6px 30px rgba(0,0,0,.25), 0 0 80px rgba(245,197,66,.35);
+                          display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 40px; color: #3a2606; }
+  .carp .cuenta { position: absolute; right: 150px; bottom: 330px; min-width: 96px; height: 96px; padding: 0 20px; border-radius: 48px; background: #fff; color: #111;
+                  font-weight: 900; font-size: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(255,255,255,.4); }
+
+  /* ── SUBTÍTULOS: una o dos palabras, al centro ── */
+  #subs { position: absolute; inset: 0; }
+  .sub { position: absolute; left: 0; width: 1080px; text-align: center; opacity: 0; visibility: hidden; }
+  .sub span { display: inline-block; font-weight: 800; font-size: 62px; letter-spacing: -1.5px; color: #fff;
+              text-shadow: 0 3px 16px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
+  .sub.clave span { font-size: 70px; color: var(--oro); }
+
+  #firma { position: absolute; left: 0; right: 0; top: 96px; text-align: center; font-weight: 700; font-size: 24px; letter-spacing: 3px;
+           color: rgba(255,255,255,.55); text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="reel" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+  <div id="fondo"><div id="halo-cara" class="halo"></div><div id="halo-motion" class="halo"></div></div>
+__GOLPE__
+  <div id="escenario"></div>
+__PERSONA__
+__REAL__
+  <div id="viñeta"></div>
+  <div id="destello"></div>
+  <div id="subs"></div>
+  <div id="firma"></div>
+
+  <script>window.PLAN = __PLAN__; window.PALABRAS = __PALABRAS__; window.TAMS = __TAMS__;</script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+  (function () {
+    const P = window.PLAN, W = window.PALABRAS, DUR = P.duracion;
+    const tl = gsap.timeline({ paused: true });
+    const $ = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+    // Trazo que se dibuja: largo real en px y oculto hasta que empieza (el remate redondo deja un punto)
+    const trazo = (el, at, dur, ease) => {
+      const L = el.getTotalLength();
+      gsap.set(el, { strokeDasharray: L + ' ' + (L + 2), strokeDashoffset: L, opacity: 0 });
+      tl.set(el, { opacity: 1 }, at);
+      tl.to(el, { strokeDashoffset: 0, duration: dur, ease: ease || 'power2.inOut' }, at);
+    };
+    const esc = s => String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+
+    // ── 1. MODOS: las escenas son modo motion; los huecos entre ellas, modo cara ──
+    //   variaciones por escena: "completa": true → motion a pantalla completa (la persona sale por abajo)
+    //                           "real": true     → la toma original con su fondo, a pantalla completa (dramatización)
+    const todas = (P.escenas || []).slice().sort((a, b) => a.desde - b.desde);
+    const reales = todas.filter(e => e.real);
+    const escenas = todas.filter(e => !e.real);
+    const modoEn = t => {
+      const e = todas.find(e => t >= e.desde && t < e.hasta);
+      return !e ? 'cara' : e.real ? 'real' : e.golpe_real ? 'golpe' : e.completa ? 'completa' : 'motion';
+    };
+    const conEscenario = m => m === 'motion' || m === 'completa' || m === 'golpe';
+    const Y = P.yo;   // {cara:{s,x,y}, motion:{s,x,y}} calculado por armar.py desde silueta.json
+    const pose = m => m === 'completa' ? { scale: Y.motion.s, x: Y.motion.x, y: Y.motion.y + 1000 }
+                    : m === 'real' || m === 'golpe' ? pose('cara') : { scale: Y[m].s, x: Y[m].x, y: Y[m].y };
+    const T = 0.6;    // duración del cambio de modo (más corta se siente brusca)
+    const SALIDA = 0.35;   // escena → escena sin pasar por la cara: la vieja sube y se funde antes de que entre la nueva
+
+    const VENT = (Y.estilo || 'ventana') === 'ventana';
+    const ini = modoEn(0);
+    if (VENT) {
+      tl.set('#cara-in', pose('cara'), 0); tl.set('#vent-in', pose('motion'), 0);
+      tl.set('#cara-wrap', { autoAlpha: ini === 'cara' ? 1 : 0 }, 0);
+      tl.set('#ventana', { autoAlpha: ini === 'motion' ? 1 : 0 }, 0);
+    } else tl.set('#yo-wrap', pose(ini), 0);
+    tl.set('#escenario', { opacity: conEscenario(ini) ? 1 : 0 }, 0);
+    tl.set('#halo-cara', { opacity: !VENT && ini === 'cara' ? 1 : 0 }, 0);
+    tl.set('#halo-motion', { opacity: !VENT && ini === 'motion' ? 1 : 0 }, 0);
+    // la toma real: entra con un empuje corto (corte de cámara) y sale de golpe a lo que sigue
+    // gancho con su toma real: la recortada se esconde debajo y la capa se funde al pasar a lo que sigue
+    const G = todas.find(e => e.golpe_real);
+    if (G) {
+      tl.set('#yo-wrap', { autoAlpha: 0 }, 0);
+      tl.set('#yo-wrap', { autoAlpha: 1 }, Math.max(0, G.hasta - 0.3));
+      tl.to('#golpe-real', { autoAlpha: 0, duration: 0.25, ease: 'power1.in' }, Math.max(0, G.hasta - 0.2));
+      tl.set('#halo-cara', { opacity: 0 }, 0);
+    }
+    reales.forEach(e => {
+      tl.fromTo('#real-wrap', { autoAlpha: 0, scale: 1.06 }, { autoAlpha: 1, scale: 1, duration: e.desde < 0.05 ? 0.001 : 0.22, ease: 'power2.out', immediateRender: false }, Math.max(0, e.desde - 0.08));
+      tl.to('#real-wrap', { autoAlpha: 0, duration: 0.18, ease: 'power1.in' }, Math.max(0, e.hasta - 0.1));
+    });
+    const bordes = [];
+    todas.forEach(e => { bordes.push(e.desde, e.hasta); });
+    const cambios = [...new Set(bordes)].filter(t => t > 0.05 && t < DUR - 0.05).sort((a, b) => a - b)
+      .filter(t => modoEn(t - 0.01) !== modoEn(t + 0.01));
+    cambios.forEach(t => {
+      const m = modoEn(t + 0.01), a = Math.max(0, t - T * 0.45), on = conEscenario(m);
+      if (conEscenario(modoEn(t - 0.01)) !== on)
+        tl.to('#escenario', { opacity: on ? 1 : 0, duration: on ? 0.4 : 0.3, ease: 'power2.inOut' }, on ? a + 0.12 : a);
+      if (VENT) {   // la cara se va y la ventana sube desde abajo; al volver, la cara entra con un leve empuje
+        const b = Math.max(0, t - 0.12);
+        if (m === 'motion') {
+          tl.to('#cara-wrap', { autoAlpha: 0, duration: 0.14, ease: 'power1.in' }, b);
+          tl.fromTo('#ventana', { autoAlpha: 0, y: 170 }, { autoAlpha: 1, y: 0, duration: 0.42, ease: 'power3.out', immediateRender: false }, b);
+        } else {
+          tl.to('#ventana', { autoAlpha: 0, y: 70, duration: 0.16, ease: 'power1.in' }, b);
+          tl.fromTo('#cara-wrap', { autoAlpha: 0, scale: 1.07 }, { autoAlpha: 1, scale: 1, duration: 0.34, ease: 'power2.out', immediateRender: false }, b);
+        }
+        return;
+      }
+      // a la toma real se llega con un corte: la persona recortada ya espera en pose de cara debajo
+      if (m === 'real') tl.set('#yo-wrap', pose(m), t);
+      else if (modoEn(t - 0.01) === 'real') tl.set('#yo-wrap', pose(m), t - 0.12);
+      else tl.to('#yo-wrap', { ...pose(m), duration: T, ease: 'power2.inOut' }, a);
+      tl.to('#halo-cara', { opacity: m === 'cara' ? 1 : 0, duration: T }, a);
+      tl.to('#halo-motion', { opacity: m === 'motion' ? 1 : 0, duration: T }, a);
+    });
+
+    // Saltos del corte fino: en cada unión el encuadre alterna entre normal y un poco más cerrado (punch-in),
+    // así el salto se lee como cambio de plano y no como un brinco. No se aplica si la unión cae en un cambio de modo.
+    const Z = P.zoom_corte || 1.08, sil = P.silueta || { cx: 540, cy: 540 };
+    gsap.set('.zoom-corte', { transformOrigin: sil.cx + 'px ' + (sil.cy + 220) + 'px' });
+    let zin = false;
+    (P.cortes || []).filter(t => t > 0.1 && t < DUR - 0.1 && !cambios.some(c => Math.abs(c - t) < 0.5)).sort((a, b) => a - b).forEach(t => {
+      zin = !zin; tl.set('.zoom-corte', { scale: zin ? Z : 1 }, t);
+    });
+    cambios.forEach(t => { if (zin) { zin = false; tl.set('.zoom-corte', { scale: 1 }, t); } });
+
+    // ── 2. ESCENAS + TÍTULO TECLEADO ──
+    const SLOTS = { centro: [540, 800], arriba: [540, 700], abajo: [540, 1040], izq: [290, 800], der: [790, 800], completo: [540, 1010],
+                    'arriba-izq': [300, 700], 'arriba-der': [780, 700], 'abajo-izq': [300, 1040], 'abajo-der': [780, 1040] };
+    const raiz = document.getElementById('escenario');
+    let tituloPrevio = null;
+
+    const CAJAS = [], FLECHAS = [];   // revisión de layout (ver revisarLayout)
+    const revisarLayout = () => {
+      const av = [], M = 36;
+      CAJAS.forEach(c => {
+        const q = `escena ${c.esc} (${c.tipo}, ${c.en.toFixed(1)}–${c.hasta.toFixed(1)} s)`;
+        if (c.x0 < M || c.x1 > 1080 - M) av.push(`${q}: se sale por los costados (${Math.round(c.x0)}–${Math.round(c.x1)} px)`);
+        if (c.techo && c.y0 < c.techo + 10) av.push(`${q}: pisa el título (empieza en ${Math.round(c.y0)} px, el título baja hasta ${Math.round(c.techo)})`);
+        if (c.y1 > c.piso) av.push(`${q}: pisa el subtítulo o la persona (termina en ${Math.round(c.y1)} px, límite ${Math.round(c.piso)})`);
+      });
+      CAJAS.forEach((a, i) => CAJAS.slice(i + 1).forEach(b => {
+        if (a.esc !== b.esc || a.hasta <= b.en + 0.3 || b.hasta <= a.en + 0.3) return;   // no conviven en pantalla
+        const ix = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), iy = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+        if (ix > 20 && iy > 20) av.push(`escena ${a.esc}: ${a.tipo} y ${b.tipo} se encima ${Math.round(ix)}×${Math.round(iy)} px mientras conviven`);
+      }));
+      FLECHAS.forEach(f => CAJAS.forEach(c => {
+        if (c.esc !== f.esc || c.hasta <= f.en + 0.2 || f.hasta <= c.en + 0.2) return;
+        const ix = Math.min(f.x1, c.x1) - Math.max(f.x0, c.x0), iy = Math.min(f.y1, c.y1) - Math.max(f.y0, c.y0);
+        if (ix > 25 && iy > 25) av.push(`escena ${f.esc}: la flecha cruza ${c.tipo} (${Math.round(ix)}×${Math.round(iy)} px)`);
+      }));
+      window.__layout = av; window.__cajas = CAJAS;
+      av.forEach(t => console.warn('[layout] ' + t));
+    };
+    const armarEscenas = () => escenas.forEach((E, ei) => {
+      const el = $('div', 'escena'); el.id = 'esc' + ei; raiz.appendChild(el);
+      // ¿la escena de antes / la de después está pegada a esta (motion → motion, sin cara de por medio)?
+      const pegadaAntes = ei > 0 && Math.abs(escenas[ei - 1].hasta - E.desde) < 0.3;
+      const pegadaDespues = ei < escenas.length - 1 && Math.abs(escenas[ei + 1].desde - E.hasta) < 0.3;
+      tl.set(el, { autoAlpha: 1 }, E.desde);
+      if (pegadaDespues) {   // sale con movimiento, nunca desaparece de golpe
+        tl.to(el, { autoAlpha: 0, y: -50, scale: 0.96, duration: SALIDA, ease: 'power2.in' }, E.hasta - 0.08);
+      } else tl.set(el, { autoAlpha: 0 }, Math.min(E.hasta + T * 0.6, DUR));
+
+      let bordeTit = 0;   // dónde termina el título: ninguna pieza puede subir más arriba (19-oct: superposiciones)
+      let dibujarFlecha = null, primera = null;   // la flecha se dibuja después de medir la primera pieza
+      // el gancho (escena del cuadro 0) va con título GOLPE salvo "estilo": "bloque"; cualquier otra escena puede pedirlo
+      const golpe = E.titulo && (E.titulo.estilo === 'golpe' || (E.desde < 0.05 && E.titulo.estilo !== 'bloque'));
+      if (golpe) {
+        const tt = E.titulo, lineas = [tt.l1, tt.l2].filter(Boolean), gi = Math.min(tt.grande || 0, lineas.length - 1);
+        const COL = { rojo: ['#ffb1a6', '#ff3b2e', '#c30d07', '#6e0402', 'rgba(255,45,30,.75)'],
+                      verde: ['#d6ffc9', '#3ee86a', '#0e9a35', '#06501a', 'rgba(60,230,100,.7)'],
+                      amarillo: ['#fff6bf', '#ffd630', '#f09d00', '#7a4c00', 'rgba(255,200,40,.7)'] };
+        const hx = tt.color && tt.color[0] === '#' ? tt.color : null;
+        const cc = hx ? [`color-mix(in srgb, ${hx} 35%, #fff)`, hx, `color-mix(in srgb, ${hx} 75%, #000)`, `color-mix(in srgb, ${hx} 40%, #000)`, `color-mix(in srgb, ${hx} 70%, transparent)`]
+                      : COL[tt.color] || COL.amarillo;
+        const tit = $('div', 'titulo golpe'); el.appendChild(tit);
+        ['--c1', '--c2', '--c3', '--c4', '--brillo'].forEach((k, i) => tit.style.setProperty(k, cc[i]));
+        let ico = null;
+        if (tt.icono) { ico = $('img', 'ico'); ico.src = tt.icono; if (tt.icono_alto) tit.style.setProperty('--ih', tt.icono_alto + 'px'); tit.appendChild(ico); }
+        const ls = lineas.map((txt, li) => { const l = $('span', li === gi ? 'g' : 'ch' + (tt.chica === 'serif' ? ' serif' : ''), esc(txt)); tit.appendChild(l); return l; });
+        // tamaños: la grande llena el ancho (hasta 210 px), la chica hasta 88 px
+        const anchoEm = (s, may) => [...s].reduce((a, ch) => a + (ch === ' ' ? 0.28 : may || (ch === ch.toUpperCase() && ch !== ch.toLowerCase()) ? 0.74 : 0.56), 0);
+        const fLetra = { condensada: 0.68, serif: 0.9 }[tt.letra || 'condensada'] || 1;   // la condensada ocupa ~2/3 del ancho
+        const fg = Math.min(210, Math.floor(980 / Math.max(1, anchoEm(lineas[gi], true) * fLetra)));
+        const chicas = lineas.filter((_, i) => i !== gi);
+        const fc = Math.min(88, ...chicas.map(s => Math.floor(960 / Math.max(1, anchoEm(s) * (tt.chica === 'serif' ? 1.15 : 1)))));
+        tit.style.setProperty('--fg', fg + 'px'); tit.style.setProperty('--fc', fc + 'px');
+        if (tt.y != null) tit.style.setProperty('--gy', tt.y + 'px');
+        // 23-oct (edición sin olor a IA): corte seco. La grande, la chica y el ícono aparecen enteros y quietos en su
+        // cuadro: sin rebote, sin latido, sin destello. El golpe de 0–2 s lo da el corte + el whoosh.
+        const t0 = E.desde < 0.05 ? 0 : E.desde + (pegadaAntes && escenas[ei - 1].titulo ? SALIDA : 0.05);
+        const g = ls[gi];
+        g.classList.add(tt.letra || 'condensada');
+        if (t0 > 0.01) [...ls, ico].filter(Boolean).forEach(x => { gsap.set(x, { opacity: 0 }); tl.set(x, { opacity: 1 }, t0); });   // en el cuadro 0 ya están puestos
+        tituloPrevio = (tt.l1 || '') + '|' + (tt.l2 || '');
+        bordeTit = tit.offsetTop + (tit.offsetHeight || fg * 1.05 + fc * 1.2 + (ico ? 190 : 0));
+        // sin flecha: el golpe ya apunta solo y la flecha dorada le quitaba fuerza
+      } else if (E.titulo) {
+        const tt = E.titulo, clave = (tt.clave || '').trim();
+        const key = (tt.l1 || '') + '|' + (tt.l2 || '');
+        const tit = $('div', 'titulo'); el.appendChild(tit);
+        const chars = [];
+        let caja = null, cajaDesde = 0;
+        const pon = (s, cont) => { for (const ch of s) { const c = $('span', 'c', ch === ' ' ? '&nbsp;' : esc(ch)); cont.appendChild(c); chars.push(c); } };
+        // sin l2, el bloque va en la línea 1; la clave ya no cambia de letra (solo marca los subtítulos)
+        const lineas = [tt.l1, tt.l2].filter(Boolean);
+        lineas.forEach((txt, li) => {
+          const ultima = li === lineas.length - 1;
+          const l = $('span', 'l' + (ultima ? ' bloque' : '')); tit.appendChild(l);
+          if (!ultima) { pon(txt, l); return; }
+          caja = $('span', 'bt'); caja.appendChild($('span', 'fc')); l.appendChild(caja);
+          cajaDesde = chars.length; pon(txt, caja);
+        });
+        // si el título anterior sigue en pantalla, el nuevo espera a que se vaya (ver SALIDA abajo)
+        const tras = pegadaAntes && !!escenas[ei - 1].titulo;
+        const yaVisto = key === tituloPrevio || E.desde < 0.05;   // cuadro 0 lleno: sin tecleo
+        const t0 = E.desde + (tras && !yaVisto ? SALIDA : 0.05);
+        const paso = Math.min(0.028, 0.9 / Math.max(1, chars.length));
+        const fc = caja && caja.querySelector('.fc');
+        // 23-oct (edición sin olor a IA): sin tecleo ni barrido. Línea 1 en su cuadro y el bloque, entero, un corte después.
+        void paso;
+        if (yaVisto) { chars.forEach(c => tl.set(c, { opacity: 1 }, E.desde)); if (fc) tl.set(fc, { scaleX: 1 }, 0); }
+        else {
+          chars.forEach((c, i) => tl.set(c, { opacity: 1 }, t0 + (i >= cajaDesde && cajaDesde > 0 ? 0.25 : 0)));
+          if (fc) { gsap.set(fc, { scaleX: 0 }); tl.set(fc, { scaleX: 1 }, t0 + (cajaDesde > 0 ? 0.25 : 0)); }
+        }
+        tituloPrevio = key;
+
+        // tamaño: 84 px salvo que la línea más larga no quepa en 1000 px (ancho aproximado por letra)
+        const anchoEm = s => [...s].reduce((a, ch) => a + (ch === ' ' ? 0.27 : ch === ch.toUpperCase() && ch !== ch.toLowerCase() ? 0.7 : 0.53), 0);
+        const fs = Math.min(84, Math.floor(1000 / Math.max(1, ...lineas.map(anchoEm))));
+        tit.style.setProperty('--fs', fs + 'px');
+
+        // golpe del cuadro 0: el título ya está entero y cae de grande a su tamaño con un destello dorado
+        const gancho = E.desde < 0.05;
+        if (gancho) {
+          // 23-oct: sin caída con rebote ni destello; el título ya está quieto en el cuadro 0
+        }
+
+        // flecha a mano que baja del título hacia lo que se muestra (E.flecha: false o P.flechas: false la quitan)
+        const p0 = (E.piezas || [])[0];
+        const fondoTit = tit.offsetTop + (tit.offsetHeight || lineas.length * fs * 1.2 + 20);
+        bordeTit = fondoTit;
+        // la punta llega cerca de donde empieza la pieza; si la pieza está pegada al título no hay sitio y se omite
+        const yPieza = p0 ? (p0.y != null ? p0.y : (SLOTS[p0.pos || (E.completa ? 'completo' : 'centro')] || SLOTS.centro)[1]) : 0;
+        // borde de arriba de la pieza: medido en grilla y teléfono (son las altas); en las demás, centro − 240
+        let topePieza = yPieza - 220;
+        if (p0 && p0.tipo === 'grilla') { const [pw, ph] = String(p0.proporcion || '9:16').split(':').map(Number);
+          const filas = Math.ceil(Math.min(6, (p0.imgs || []).length) / 3); topePieza = yPieza - (filas * (p0.ancho_card || 230) * ph / pw + (filas - 1) * 20) / 2; }
+        if (p0 && p0.tipo === 'telefono') topePieza = yPieza - (p0.ancho || 330) * 2.05 / 2;
+        if (p0 && p0.tipo === 'objeto') topePieza = yPieza - (p0.ancho || 380) * 0.75;
+        const n0 = p0 && p0.tipo === 'flujo' && (p0.nodos || [])[0];   // en un flujo la flecha va al primer nodo
+        if (n0) topePieza = yPieza - 500 + n0.y - (n0.ancho || 260) / 2;
+        dibujarFlecha = () => {
+        if (primera && !n0) topePieza = primera.y0;   // borde real, ya movido/achicado por la regla de superposiciones
+        const hayEspacio = topePieza - fondoTit >= 160;
+        // en el gancho la flecha va siempre: si no cabe arriba, baja por el costado y apunta al objeto de lado
+        const lateral = !hayEspacio && E.desde < 0.05 && p0 && (p0.tipo === 'objeto' || p0.tipo === 'telefono');
+        if (p0 && (hayEspacio || lateral) && E.flecha !== false && P.flechas !== false) {
+          const izq = (E.flecha && E.flecha.lado) ? E.flecha.lado === 'izq' : n0 ? n0.x < 500 : ei % 2 === 1;
+          const X = x => izq ? 1080 - x : x;
+          const y0 = fondoTit + 22;
+          const y1 = lateral ? yPieza - 160 : Math.max(fondoTit + 140, Math.min(topePieza - 22, fondoTit + 380));
+          const xF = lateral ? Math.min(900, 540 + (p0.ancho || 380) * 0.36 + 40) : 640;   // punta junto al borde del objeto
+          const xI = lateral ? 960 : 840, xC = lateral ? 1000 : 820;
+          const d = `M${X(xI)},${y0} C${X(xI + 65)},${y0 + 90} ${X(xC)},${y1 - 20} ${X(xF)},${y1}`;
+          const ang = Math.atan2(20, X(xF) - X(xC)), h = 38;
+          const punta = `M${X(xF) - h * Math.cos(ang - 0.55)},${y1 - h * Math.sin(ang - 0.55)} L${X(xF)},${y1} L${X(xF) - h * Math.cos(ang + 0.55)},${y1 - h * Math.sin(ang + 0.55)}`;
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'flecha');
+          svg.setAttribute('viewBox', '0 0 1080 1920'); svg.innerHTML = `<path d="${d}"/><path d="${punta}"/>`; el.appendChild(svg);
+          const [cuerpo, cabeza] = svg.querySelectorAll('path');
+          const L = (cuerpo.getTotalLength ? cuerpo.getTotalLength() : 0) || 640, Lp = 2 * h + 4;
+          gsap.set(cuerpo, { strokeDasharray: L, strokeDashoffset: L }); gsap.set(cabeza, { strokeDasharray: Lp, strokeDashoffset: Lp });
+          const enP = Math.max(E.desde + (pegadaAntes ? SALIDA * 0.75 : 0), p0.en != null ? p0.en : E.desde + 0.1);
+          const tf = gancho ? 0.3 : enP + 0.3;
+          tl.to(cuerpo, { strokeDashoffset: 0, duration: 0.32, ease: 'power2.inOut' }, tf);
+          tl.to(cabeza, { strokeDashoffset: 0, duration: 0.12, ease: 'power2.out' }, tf + 0.3);
+          const fin = (p0.hasta != null && p0.hasta < E.hasta - 0.05) ? p0.hasta : E.hasta;
+          if (fin < E.hasta) tl.to(svg, { autoAlpha: 0, duration: 0.2 }, fin - 0.25);   // se va con su pieza
+          // caja de la flecha (sin la punta) para la revisión: no puede cruzar otra pieza
+          FLECHAS.push({ esc: ei, en: tf, hasta: fin, x0: Math.min(X(xI), X(xF), X(xC)), x1: Math.max(X(xI), X(xF), X(xC)) + (izq ? 0 : 65), y0, y1: y1 - 40 });
+        }
+        };
+      }
+
+      (E.piezas || []).forEach((pz, pi) => {
+        const cons = PIEZAS[pz.tipo];
+        if (!cons) { console.warn('pieza desconocida', pz.tipo); return; }
+        const en = Math.max(E.desde + (pegadaAntes ? SALIDA * 0.75 : 0), pz.en != null ? pz.en : E.desde + 0.1);
+        const hasta = Math.min(pz.hasta != null ? pz.hasta : E.hasta, E.hasta);
+        const s = SLOTS[pz.pos || (E.completa ? 'completo' : 'centro')] || SLOTS.centro;
+        const box = $('div', 'pz'); box.style.left = (pz.x != null ? pz.x : s[0]) + 'px'; box.style.top = (pz.y != null ? pz.y : s[1]) + 'px';
+        const fl = $('div', 'flota'); const inn = $('div', 'in'); fl.appendChild(inn); box.appendChild(fl); el.appendChild(box);
+        cons(inn, pz, en, hasta, en <= E.desde + 0.02 && E.desde < 0.05);
+        // imágenes aún sin cargar: su proporción (de armar.py) les da alto para que la pieza se mida bien
+        inn.querySelectorAll('img').forEach(im => { const r = (window.TAMS || {})[im.getAttribute('src')]; if (r && !im.complete && !im.style.aspectRatio) im.style.aspectRatio = String(r); });
+        // ── sin superposiciones: la pieza mide su alto; si tapa el título baja, y si no cabe hasta el subtítulo se achica ──
+        let esc0 = pz.escala || 1;
+        if (pz.tipo !== 'flujo' && pz.y == null && pz.encima !== true) {
+          let h = inn.offsetHeight;
+          if (!h && pz.tipo === 'objeto') h = (pz.ancho || 380) * 1.4;
+          if (h) {
+            h *= esc0;
+            const techo = bordeTit ? bordeTit + 40 : 120;
+            const piso = E.golpe_real ? P.golpe_cabeza_y - 40 : E.completa ? (P.sub_y_completa || 1640) - 60 : (P.sub_y_motion || 1253) - 50;
+            let yc = parseFloat(box.style.top);
+            if (yc - h / 2 < techo || yc + h / 2 > piso) {
+              const k = Math.min(1, (piso - techo) / h);
+              esc0 *= k;
+              const hk = h * k;
+              yc = Math.min(Math.max(yc, techo + hk / 2), piso - hk / 2);
+              box.style.top = yc + 'px';
+            }
+          }
+        }
+        const quieto = en <= E.desde + 0.02 && E.desde < 0.05;   // la primera pieza del reel ya está al cuadro 0
+        tl.set(box, { scale: esc0 }, 0);
+        if (quieto) {   // golpe del cuadro 0: la pieza ya está, entra empujada y sigue acercándose despacio
+          tl.set(box, { autoAlpha: 1 }, en);
+          tl.fromTo(fl, { scale: 1.12 }, { scale: 1, duration: 0.38, ease: 'power3.out', immediateRender: true }, en);
+          if (hasta - en > 0.8) tl.to(fl, { scale: 1.08, duration: hasta - en - 0.4, ease: 'none' }, en + 0.38);
+        }
+        else tl.fromTo(box, { autoAlpha: 0, y: 70, scale: esc0 * 0.86 }, { autoAlpha: 1, y: 0, scale: esc0, duration: 0.5, ease: 'power2.out' }, en);
+        // 23-oct: la pieza ya no «respira» (flotar arriba-abajo); queda quieta
+        if (hasta < E.hasta - 0.05) tl.to(box, { autoAlpha: 0, y: -30, duration: 0.25, ease: 'power2.in' }, hasta - 0.25);
+        {   // caja final de la pieza para la revisión de layout
+          const hh = (inn.offsetHeight || 0) * esc0, ww = (inn.offsetWidth || 0) * esc0;
+          const cx = parseFloat(box.style.left), cy = parseFloat(box.style.top);
+          if (pz.tipo === 'flujo') {   // el flujo es un lienzo de 1000×1000: se revisa cada imagen, no el lienzo
+            const k = esc0, piso = E.golpe_real ? P.golpe_cabeza_y - 40 : E.completa ? (P.sub_y_completa || 1640) - 40 : (P.sub_y_motion || 1253) - 30;
+            (pz.nodos || []).forEach(n => { const a = (n.ancho || 260) * k, ny = cy + (n.y - 500) * k, nx = cx + (n.x - 500) * k;
+              CAJAS.push({ esc: ei, tipo: 'flujo:' + (n.etiqueta || 'nodo'), en: n.en != null ? n.en : en, hasta, x0: nx - a / 2, x1: nx + a / 2,
+                           y0: ny - a / 2, y1: ny + a / 2 + (n.etiqueta ? 70 : 0), techo: bordeTit, piso }); });
+          } else if (hh && ww) CAJAS.push({ esc: ei, tipo: pz.tipo, en, hasta, x0: cx - ww / 2, x1: cx + ww / 2, y0: cy - hh / 2, y1: cy + hh / 2,
+                                     techo: bordeTit, piso: E.golpe_real ? P.golpe_cabeza_y - 40 : E.completa ? (P.sub_y_completa || 1640) - 40 : (P.sub_y_motion || 1253) - 30 });
+          if (pi === 0 && hh) primera = { y0: cy - hh / 2, y1: cy + hh / 2 };
+        }
+      });
+      if (dibujarFlecha) dibujarFlecha();
+    });
+
+    // ── 3. PIEZAS (todas en dorado; ninguna inventa cifras: los números salen del plan) ──
+    const PIEZAS = {
+      telefono(inn, o, en) {
+        const w = o.ancho || 330, h = Math.round(w * 2.05);
+        const t = $('div', 'tel'); t.style.width = w + 'px'; t.style.height = h + 'px';
+        const pant = $('div', 'pant'); t.appendChild(pant);
+        pant.innerHTML = o.video ? '' : `<img src="${esc(o.img)}">`;
+        if (o.video) { const v = $('video', 'clip'); v.src = o.video; v.muted = true; v.setAttribute('playsinline', ''); v.id = 'v' + Math.round(en * 1000);
+          v.setAttribute('data-start', en); v.setAttribute('data-duration', o.dur || 4); v.setAttribute('data-track-index', 20 + Math.round(en)); pant.appendChild(v); }
+        inn.appendChild(t);
+        if (o.cuenta) {   // cronómetro pegado al celular + barra que se agota en la pantalla: «tienes N segundos»
+          const k = o.cuenta, n0 = k.desde || 3, t0 = k.en != null ? k.en : en + 0.4, d = k.dur || n0;
+          t.style.position = 'relative';
+          const bt = $('div', 'barra-t', '<i></i>'); t.appendChild(bt);
+          const cr = $('div', 'crono'); cr.style.left = (w - 120) + 'px'; cr.style.top = (-70) + 'px';
+          cr.innerHTML = '<svg viewBox="0 0 230 230"><circle class="fondo-c" cx="115" cy="115" r="100"/><circle class="arco" cx="115" cy="115" r="100"/></svg><div class="cn"><b>' + n0 + '</b><i>seg</i></div>';
+          t.appendChild(cr);
+          const arco = cr.querySelector('.arco'), L = 2 * Math.PI * 100, num = cr.querySelector('b');
+          gsap.set(arco, { strokeDasharray: L, strokeDashoffset: 0 });
+          if (t0 > en + 0.05) tl.fromTo(cr, { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.45, ease: 'power2.out' }, Math.max(en, t0 - 0.35));
+          tl.to(arco, { strokeDashoffset: L, duration: d, ease: 'none' }, t0);
+          tl.to(bt.firstChild, { scaleX: 0, duration: d, ease: 'none' }, t0);
+          const pr = { v: n0 };   // el número baja por segundos enteros (contador por proxy, como la barra)
+          tl.to(pr, { v: 0, duration: d, ease: 'none', onUpdate: () => { num.textContent = String(Math.ceil(pr.v - 1e-6)); } }, t0);
+          for (let i = 1; i <= n0; i++) tl.fromTo(num, { scale: 1.35 }, { scale: 1, duration: 0.25, ease: 'power2.out', immediateRender: false }, t0 + d * i / n0 - 0.001);
+        }
+        if (o.vistas || o.chip) { const c = $('div', 'chip-vistas', o.chip ? esc(o.chip) : '▶ <b>' + esc(o.vistas) + '</b>' + (o.vistas_texto ? ' ' + esc(o.vistas_texto) : '')); inn.appendChild(c);
+          tl.from(c, { autoAlpha: 0, y: 14, duration: 0.3, ease: 'power2.out' }, en + 0.35); }
+      },
+      // nodos [{img, etiqueta, x, y (px dentro de un cuadro de 1000×1000), ancho, en}] + flechas [{de, a, en, curva}]:
+      // cada nodo entra con rebote y cada flecha se dibuja de un nodo al otro. Poco texto: la imagen cuenta.
+      flujo(inn, o, en) {
+        const f = $('div', 'flujo'); inn.appendChild(f);
+        const ns = (o.nodos || []).map((n, i) => {
+          const d = $('div', 'nodo', `<img src="${esc(n.img)}" style="width:${n.ancho || 260}px">` + (n.etiqueta ? `<div class="et">${esc(n.etiqueta)}</div>` : ''));
+          d.style.left = n.x + 'px'; d.style.top = n.y + 'px'; f.appendChild(d);
+          const at = n.en != null ? n.en : en + 0.1 + i * 0.4;
+          tl.fromTo(d, { autoAlpha: 0, scale: 0.5 }, { autoAlpha: 1, scale: 1, duration: 0.42, ease: 'power2.out', immediateRender: true }, at);
+          return n;
+        });
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 1000 1000'); f.appendChild(svg);
+        (o.flechas || []).forEach((fl, i) => {
+          const A = ns[fl.de], B = ns[fl.a]; if (!A || !B) return;
+          const ra = (A.ancho || 260) * 0.62, rb = (B.ancho || 260) * 0.62;
+          const dx = B.x - A.x, dy = B.y - A.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+          const x1 = A.x + ux * ra, y1 = A.y + uy * ra, x2 = B.x - ux * rb, y2 = B.y - uy * rb;
+          const k = fl.curva != null ? fl.curva : 0.18, cx = (x1 + x2) / 2 - uy * L * k, cy = (y1 + y2) / 2 + ux * L * k;
+          const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          p.setAttribute('d', `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`); svg.appendChild(p);
+          const ang = Math.atan2(y2 - cy, x2 - cx), h = 30;
+          const pt = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          pt.setAttribute('d', `M${x2 - h * Math.cos(ang - 0.5)},${y2 - h * Math.sin(ang - 0.5)} L${x2},${y2} L${x2 - h * Math.cos(ang + 0.5)},${y2 - h * Math.sin(ang + 0.5)}`);
+          svg.appendChild(pt);
+          const at = fl.en != null ? fl.en : en + 0.5 + i * 0.4;
+          trazo(p, at, 0.45); trazo(pt, at + 0.42, 0.12, 'none');
+        });
+      },
+      // texto real que se teclea en una hoja (estilo "hoja") o que se pega en el chat de Claude (estilo "chat", pegar: true)
+      escribe(inn, o, en) {
+        const lineas = o.lineas || [], ritmo = o.ritmo || 38;   // caracteres por segundo
+        let t = o.desde_en != null ? o.desde_en : en + 0.35;
+        const tipea = (el, txt, cur) => {   // letra por letra con cursor
+          el.textContent = ''; const sp = $('span'); el.appendChild(sp); if (cur) el.appendChild(cur);
+          const pr = { n: 0 }, d = Math.max(0.25, txt.length / ritmo);
+          tl.to(pr, { n: txt.length, duration: d, ease: 'none', onUpdate: () => { sp.textContent = txt.slice(0, Math.round(pr.n)); } }, t);
+          t += d + 0.08;
+        };
+        if ((o.estilo || 'hoja') === 'hoja') {
+          const h = $('div', 'esc-hoja'); if (o.titulo) h.appendChild($('div', 'et', esc(o.titulo))); inn.appendChild(h);
+          const cur = $('span', 'cursor');
+          lineas.forEach((txt, i) => {
+            const l = $('div', 'ln' + ((o.marcar || []).includes(i) ? ' marca' : '')); h.appendChild(l);
+            if (o.tiempos && o.tiempos[i] != null) t = o.tiempos[i];
+            tipea(l, txt, i === lineas.length - 1 ? cur : null);
+          });
+          tl.to(cur, { opacity: 0, duration: 0.01, repeat: 9, yoyo: true, repeatDelay: 0.25 }, t);
+          return;
+        }
+        const c = $('div', 'esc-chat'); inn.appendChild(c);
+        c.appendChild($('div', 'cab', (o.icono ? `<img src="${esc(o.icono)}">` : '') + esc(o.titulo || 'Claude')));
+        const box = $('div', 'caja-in'); c.appendChild(box);
+        const txt = lineas.join('\n');
+        const ph = $('span', 'ph', esc(o.placeholder || 'Escribe tu mensaje…')); box.appendChild(ph);
+        const cuerpo = $('span'); cuerpo.style.whiteSpace = 'pre-wrap'; box.appendChild(cuerpo);
+        box.appendChild($('div', 'env', '↑'));
+        if (o.pegar) {   // todo el bloque aparece de una (cmd+V) con un destello y la etiqueta «Pegado»
+          const pg = $('div', 'pegado', 'Pegado'); box.appendChild(pg); gsap.set(pg, { autoAlpha: 0 });
+          cuerpo.textContent = txt; gsap.set(cuerpo, { autoAlpha: 0 });
+          tl.set(ph, { autoAlpha: 0 }, t); tl.set(cuerpo, { autoAlpha: 1 }, t);
+          tl.fromTo(box, { boxShadow: '0 0 0 6px rgba(245,197,66,.9), 0 0 120px rgba(245,197,66,.6)' }, { boxShadow: '0 0 0 0px rgba(245,197,66,0), 0 0 80px rgba(245,197,66,.18)', duration: 0.7 }, t);
+          tl.fromTo(pg, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.25 }, t + 0.05);
+          t += 0.6;
+        } else { tl.set(ph, { autoAlpha: 0 }, t); tipea(cuerpo, txt, $('span', 'cursor')); }
+        if (o.respuesta) {
+          const r = $('div', 'resp'); c.appendChild(r); gsap.set(r, { autoAlpha: 0 });
+          if (o.respuesta_en != null) t = o.respuesta_en;
+          tl.set(r, { autoAlpha: 1 }, t); tipea(r, o.respuesta, $('span', 'cursor'));
+        }
+      },
+      // editor de video: cuadros reales de la toma; el cabezal recorre la línea de tiempo y en cada «corte» caen las tijeras
+      edicion(inn, o, en, hasta) {
+        const e = $('div', 'edi'); inn.appendChild(e);
+        const pv = $('div', 'prev'); e.appendChild(pv);
+        const imgs = o.imgs || [];
+        imgs.forEach(src => pv.appendChild($('img', null)).setAttribute('src', src));
+        const sb = $('div', 'sb'); pv.appendChild(sb);
+        const tlb = $('div', 'tl'); e.appendChild(tlb);
+        const W = 848, n = Math.max(1, imgs.length), cw = W / n;
+        imgs.forEach((src, i) => { const c = $('div', 'clip-t', `<img src="${esc(src)}"><img src="${esc(src)}"><img src="${esc(src)}">`);
+          c.style.left = (i * cw + 4) + 'px'; c.style.width = (cw - 8) + 'px'; tlb.appendChild(c);
+          tl.from(c, { autoAlpha: 0, x: 60, duration: 0.3, ease: 'power2.out' }, en + 0.15 + i * 0.08); });
+        const cab = $('div', 'cab'); tlb.appendChild(cab);
+        const d = Math.max(0.8, (o.dur || (hasta - en - 0.3)));
+        const pr = { x: 0 };
+        const fotos = pv.querySelectorAll('img');
+        if (fotos[0]) fotos[0].style.opacity = 1;
+        tl.to(pr, { x: W, duration: d, ease: 'none', onUpdate: () => {
+          cab.style.left = pr.x + 'px'; const k = Math.min(n - 1, Math.floor(pr.x / cw));
+          fotos.forEach((f, i) => { f.style.opacity = i === k ? 1 : 0; });
+          const subs = o.subs || []; sb.textContent = subs.length ? subs[Math.min(subs.length - 1, Math.floor(pr.x / W * subs.length))] : '';
+        } }, en + 0.3);
+        (o.cortes || []).forEach(ct => {   // ct = fracción 0–1 de la línea de tiempo
+          const tj = $('div', 'tij', '✂️'); tj.style.left = (ct * W) + 'px'; tlb.appendChild(tj);
+          tl.fromTo(tj, { autoAlpha: 0, y: -40 }, { autoAlpha: 1, y: 0, duration: 0.2, ease: 'power2.out' }, en + 0.3 + d * ct - 0.15);
+          tl.to(tj, { autoAlpha: 0, duration: 0.2 }, en + 0.3 + d * ct + 0.35);
+        });
+        if (o.etiqueta) { const et = $('div', 'et', esc(o.etiqueta)); e.appendChild(et); tl.from(et, { autoAlpha: 0, y: 12, duration: 0.3 }, en + 0.5); }
+      },
+      // nota de voz: el play se aprieta, la onda se mueve y el contador avanza
+      nota_voz(inn, o, en, hasta) {
+        const w = $('div', 'nv-wrap'); inn.appendChild(w);
+        const b = $('div', 'nv'); w.appendChild(b);
+        const play = $('div', 'play', '<i></i>'); b.appendChild(play);
+        const onda = $('div', 'onda'); b.appendChild(onda);
+        const N = o.barras || 26, alt = Array.from({ length: N }, (_, i) => 22 + Math.round(70 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.6))));
+        const bars = alt.map(h => { const x = $('b'); x.style.height = h + 'px'; onda.appendChild(x); return x; });
+        const tt = $('div', 't', '0:00'); b.appendChild(tt);
+        const mic = $('div', 'mic', '<svg viewBox="0 0 24 24" fill="#111"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12z"/></svg>');
+        w.appendChild(mic);
+        const t0 = (o.play_en != null ? o.play_en : en + 0.45), d = Math.max(0.8, (hasta - t0 - 0.1));
+        tl.fromTo(play, { scale: 1 }, { scale: 0.85, duration: 0.1, yoyo: true, repeat: 1 }, t0 - 0.1);
+        bars.forEach((x, i) => tl.to(x, { scaleY: 0.35, duration: 0.18, ease: 'sine.inOut', yoyo: true, repeat: Math.max(1, Math.floor(d / 0.36) * 2 - 1) }, t0 + (i % 5) * 0.05));
+        bars.forEach((x, i) => tl.to(x, { backgroundColor: '#25d366', duration: 0.05 }, t0 + d * i / N));
+        const pr = { s: 0 }; const segs = o.segundos || 12;
+        tl.to(pr, { s: segs, duration: d, ease: 'none', onUpdate: () => { const s = Math.floor(pr.s); tt.textContent = '0:' + String(s).padStart(2, '0'); } }, t0);
+        tl.to(mic, { scale: 1.15, duration: 0.4, ease: 'sine.inOut', yoyo: true, repeat: Math.max(1, Math.floor(d / 0.8) * 2 - 1) }, en + 0.3);
+      },
+      // las imágenes vuelan una por una y caen en la carpeta; el contador sube
+      carpeta(inn, o, en) {
+        const c = $('div', 'carp'); inn.appendChild(c);
+        const f = $('div', 'folder', '<div class="tras"></div>'); c.appendChild(f);
+        const imgs = o.imgs || [], w = o.ancho_img || 220, h = Math.round(w * (o.proporcion_alto || 1.25));
+        const vs = imgs.map((src, i) => { const v = $('div', 'vuela', `<img src="${esc(src)}">`); v.style.width = w + 'px'; v.style.height = h + 'px';
+          v.style.marginLeft = (-w / 2) + 'px'; c.appendChild(v); return v; });
+        const fr = $('div', 'frente', esc(o.etiqueta || '')); f.appendChild(fr);
+        const cu = $('div', 'cuenta', '0'); c.appendChild(cu);
+        const ats = imgs.map((_, i) => (o.tiempos && o.tiempos[i] != null) ? o.tiempos[i] : en + 0.3 + i * (o.ritmo || 0.35));
+        // el contador se calcula desde el tiempo de la línea (sirve aunque el render salte de cuadro en cuadro)
+        tl.to({ k: 0 }, { k: 1, duration: Math.max(0.1, ats[ats.length - 1] + 0.8 - en), ease: 'none',
+          onUpdate: () => { const now = tl.time(); cu.textContent = String(ats.filter(a => now >= a + 0.67).length); } }, en);
+        imgs.forEach((_, i) => {
+          const at = ats[i];
+          const dx = (i % 2 ? 1 : -1) * (120 + 60 * (i % 3)), rot = (i % 2 ? 8 : -8);
+          tl.fromTo(vs[i], { autoAlpha: 0, x: dx, y: -40, rotation: rot * 2, scale: 0.8 }, { autoAlpha: 1, x: dx * 0.4, y: 40, rotation: rot, scale: 1, duration: 0.3, ease: 'power2.out', immediateRender: true }, at);
+          tl.to(vs[i], { x: 0, y: 470, rotation: 0, scale: 0.55, duration: 0.35, ease: 'power2.in' }, at + 0.32);
+          tl.set(vs[i], { autoAlpha: 0 }, at + 0.67);
+          tl.fromTo(cu, { scale: 1.4 }, { scale: 1, duration: 0.25, ease: 'power2.out', immediateRender: false }, at + 0.67);
+        });
+      },
+      grilla(inn, o, en, hasta, quieto) {
+        const g = $('div', 'grilla'); inn.appendChild(g);
+        const [pw, ph] = String(o.proporcion || '9:16').split(':').map(Number), cwid = o.ancho_card || 230;
+        g.style.gridTemplateColumns = `repeat(3, ${cwid}px)`;
+        (o.imgs || []).slice(0, 6).forEach((src, i) => {
+          const cw = $('div', 'cw'); const c = $('div', 'marco card', `<img src="${esc(src)}">`); cw.appendChild(c);
+          c.style.width = cwid + 'px'; c.style.height = Math.round(cwid * ph / pw) + 'px';
+          const v = (o.vistas || [])[i]; if (v) cw.appendChild($('div', 'vis', '▶ ' + esc(v)));
+          g.appendChild(cw);
+          if (quieto) tl.fromTo(cw, { scale: 0.82, rotation: i % 2 ? 4 : -4 }, { scale: 1, rotation: 0, duration: 0.4, ease: 'power2.out', immediateRender: true }, en + i * 0.03);   // cuadro 0 lleno
+          else tl.from(cw, { autoAlpha: 0, scale: 0.7, duration: 0.35, ease: 'power2.out' }, en + 0.08 + i * 0.09);
+        });
+      },
+      curva(inn, o, en) {
+        const box = $('div', 'graf'); inn.appendChild(box);
+        if (o.etiqueta) box.appendChild($('div', 'et', esc(o.etiqueta)));
+        const F = { cae: 'M40 40 C 120 40, 150 300, 300 330 S 700 350, 790 352',
+                    sube: 'M40 370 C 200 360, 380 300, 520 200 S 720 60, 790 40',
+                    sostiene: 'M40 40 C 200 52, 420 70, 600 92 S 760 110, 790 118',
+                    rebota: 'M40 40 C 160 46, 260 70, 330 150 C 360 190, 390 70, 470 66 C 600 72, 720 96, 790 110' }[o.forma || 'cae'];
+        box.insertAdjacentHTML('beforeend', `<svg viewBox="0 0 820 400"><path class="guia" d="M40 40 H 800 M40 200 H 800"/><path class="eje" d="M40 10 V 380 H 800"/><path class="linea" d="${F}"/></svg>`);
+        const ln = box.querySelector('.linea');
+        trazo(ln, en + 0.25, o.dibujo || 1.4);
+        if (o.punto != null) {
+          const svg = box.querySelector('svg'); const L = ln.getTotalLength(); const pt = ln.getPointAtLength(L * o.punto);
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('class', 'punto'); c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.setAttribute('r', 13); svg.appendChild(c);
+          tl.from(c, { scale: 0, transformOrigin: '50% 50%', duration: 0.3, ease: 'power2.out' }, en + 0.25 + (o.dibujo || 1.4) * o.punto);
+        }
+      },
+      barra(inn, o, en) {
+        const b = $('div', 'barra'); inn.appendChild(b);
+        b.innerHTML = `<div class="riel"><span class="lleno"></span></div>` + (o.hasta_num != null ? `<div class="num">0${esc(o.unidad || '')}</div>` : '') + (o.etiqueta ? `<div style="text-align:center"><span class="et">${esc(o.etiqueta)}</span></div>` : '');
+        const d = o.dur || 2;
+        tl.to(b.querySelector('.lleno'), { scaleX: o.llena != null ? o.llena : 1, duration: d, ease: 'none' }, en + 0.3);
+        const num = b.querySelector('.num');
+        if (num) { const pr = { v: 0 }; tl.to(pr, { v: o.hasta_num, duration: d, ease: 'none', onUpdate: () => { num.textContent = Math.round(pr.v) + (o.unidad || ''); } }, en + 0.3); }
+      },
+      caja(inn, o, en) {
+        const c = $('div', 'caja'); inn.appendChild(c);
+        const cs = []; for (const ch of String(o.texto)) { const s = $('span', 'c', ch === ' ' ? '&nbsp;' : esc(ch)); c.appendChild(s); cs.push(s); }
+        // 23-oct: sin tecleo; el concepto aparece entero con corte seco
+        cs.forEach(s => tl.set(s, { opacity: 1 }, en + 0.3));
+      },
+      documento(inn, o, en) {
+        const d = $('div', 'marco doc'); inn.appendChild(d);
+        d.appendChild($('div', 'dt', esc(o.titulo || 'Guion')));
+        let k = 0;
+        (o.secciones || []).forEach((s, si) => {
+          const sec = $('div', 'sec' + (s.resaltar ? ' oro' : '')); sec.appendChild($('div', 'sn', esc(s.nombre)));
+          const n = s.lineas || 2;
+          for (let i = 0; i < n; i++) { const l = $('span', 'ln'); l.style.width = (92 - ((i * 37 + si * 13) % 30)) + '%'; sec.appendChild(l);
+            tl.from(l, { scaleX: 0, duration: 0.28, ease: 'power2.out' }, en + 0.3 + (k++) * 0.05); }
+          if (s.marca != null) { const m = $('div', 'marca', esc(s.marca)); sec.appendChild(m);
+            tl.from(m, { scale: 0, duration: 0.3, ease: 'power2.out' }, s.marca_en != null ? s.marca_en : en + 0.8 + si * 0.3); }
+          d.appendChild(sec);
+        });
+      },
+      objeto(inn, o, en, hasta) {
+        const b = $('div', 'obj', `<img src="${esc(o.img)}" style="width:${o.ancho || 380}px">`); inn.appendChild(b);
+        if (o.gira_en != null) tl.to(b, { rotation: '+=180', duration: 0.7, ease: 'power2.inOut' }, o.gira_en);
+      },
+      lista(inn, o, en) {
+        const l = $('div', 'lista'); inn.appendChild(l);
+        const items = o.items || [];
+        items.forEach((t, i) => {
+          const it = $('span', 'it' + (o.ultimo_contorno && i === items.length - 1 ? ' ultimo' : ''), esc(t)); l.appendChild(it);
+          const at = (o.tiempos && o.tiempos[i] != null) ? o.tiempos[i] : en + 0.15 + i * (o.ritmo || 0.4);
+          tl.fromTo(it, { autoAlpha: 0, scale: 0.6, y: 20 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.32, ease: 'power2.out' }, at);
+        });
+      },
+      pantalla(inn, o, en, hasta) {
+        const w = o.ancho || 880, h = o.alto || 560;
+        const g = $('div', 'pant-gr'); inn.appendChild(g);
+        const m = $('div', 'marco'); m.style.width = w + 'px'; m.style.height = h + 'px'; g.appendChild(m);
+        const sc = $('div', 'scroll', `<img src="${esc(o.img)}">`); m.appendChild(sc);
+        if (o.scroll) tl.to(sc, { yPercent: -(o.scroll === true ? 45 : o.scroll), duration: Math.max(1, hasta - en - 0.6), ease: 'sine.inOut' }, en + 0.5);
+      },
+      numero(inn, o, en) {
+        const b = $('div', 'numero'); inn.appendChild(b);
+        const n = $('div', 'n'); b.appendChild(n); const span = $('span'); n.appendChild(span);
+        if (o.despues) n.appendChild($('i', null, esc(o.despues)));
+        if (o.etiqueta) b.appendChild($('div', 'et', esc(o.etiqueta)));
+        const dec = o.decimales || 0, fmt = v => (o.antes || '') + v.toLocaleString('es-PE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+        span.textContent = fmt(0);
+        const pr = { v: 0 }; tl.to(pr, { v: o.valor, duration: o.dur || 1.2, ease: 'power2.out', onUpdate: () => { span.textContent = fmt(pr.v); } }, en + 0.2);
+      },
+      frase(inn, o, en) {
+        const f = $('div', 'frase'); inn.appendChild(f);
+        const clave = (o.clave || '').toLowerCase();
+        String(o.texto).split(/\s+/).forEach((w, i) => {
+          const s = $('span', 'w' + (clave && w.toLowerCase().replace(/[.,!?¿¡]/g, '') === clave ? ' clave' : ''), esc(w)); f.appendChild(s);
+          // 23-oct: palabra por palabra con corte seco (sin deslizar ni fundir)
+          gsap.set(s, { opacity: 0 }); tl.set(s, { opacity: 1 }, en + 0.1 + i * 0.12);
+        });
+      },
+      tachado(inn, o, en) {
+        // lo que NO es: cada imagen se tacha con una X dorada cuando se nombra. items: [{img, en, forma: circulo|tarjeta, etiqueta, ancho, alto}]
+        const box = $('div', 'tachado'); inn.appendChild(box);
+        (o.items || []).forEach((it, i) => {
+          const w = it.ancho || 360, h = it.alto || (it.forma === 'circulo' ? w : Math.round(w * 1.25));
+          const d = $('div', 'item'); box.appendChild(d);
+          const ft = $('div', 'ft ' + (it.forma || 'tarjeta'), `<img src="${esc(it.img)}"><div class="velo"></div>`);
+          ft.style.width = w + 'px'; ft.style.height = h + 'px'; d.appendChild(ft);
+          if (it.etiqueta) d.appendChild($('div', 'et', esc(it.etiqueta)));
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'x');
+          svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.style.left = '-8%'; svg.style.top = (-8 * w / h) + '%';
+          svg.style.height = (h + 0.16 * w) + 'px'; svg.style.width = (w * 1.16) + 'px'; svg.setAttribute('preserveAspectRatio', 'none');
+          const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'path'), p2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const m = 0.18;
+          p1.setAttribute('d', `M ${w * m} ${h * m} L ${w * (1 - m)} ${h * (1 - m)}`); p2.setAttribute('d', `M ${w * (1 - m)} ${h * m} L ${w * m} ${h * (1 - m)}`);
+          svg.appendChild(p1); svg.appendChild(p2); d.appendChild(svg);
+          const at = it.en != null ? it.en : en + 0.8 + i * 0.8;
+          const entra = it.entra != null ? it.entra : (i === 0 ? en : Math.max(en, at - 0.9));
+          if (i > 0 || entra > en + 0.05) tl.fromTo(d, { autoAlpha: 0, y: 40, scale: 0.85 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out' }, entra);
+          trazo(p1, at, 0.18, 'power2.out'); trazo(p2, at + 0.14, 0.18, 'power2.out');
+          tl.to(ft.querySelector('.velo'), { opacity: 1, duration: 0.25 }, at);
+        });
+      },
+      captura(inn, o, en) {
+        // imagen real (perfil, bio, mensaje, resultado) + recuadros dorados en fracciones de la imagen: {x,y,w,h,en,marca}
+        const c = $('div', 'cap'); c.style.width = (o.ancho || 900) + 'px'; inn.appendChild(c);
+        const m = $('div', 'marco', `<img src="${esc(o.img)}">`); c.appendChild(m);
+        const velo = $('div', 'velo'); m.appendChild(velo);
+        const rs = o.resaltes || [];
+        rs.forEach((r, i) => {
+          const pad = 0.012;
+          const b = $('div', 'res'); b.style.left = ((r.x - pad) * 100) + '%'; b.style.top = ((r.y - (r.pad_y != null ? r.pad_y : 0.01)) * 100) + '%';
+          b.style.width = ((r.w + pad * 2) * 100) + '%'; b.style.height = ((r.h + 2 * (r.pad_y != null ? r.pad_y : 0.01)) * 100) + '%';
+          if (r.marca != null) b.appendChild($('div', 'marca', esc(r.marca)));
+          c.appendChild(b);
+          const at = r.en != null ? r.en : en + 0.6 + i * 0.5;
+          tl.fromTo(b, { autoAlpha: 0, scale: 1.12 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power2.out' }, at);
+          if (i === 0 && o.velo) tl.to(velo, { opacity: 1, duration: 0.3 }, at);
+        });
+      },
+      // skill: tarjeta que pasa de «Instalar» a «Instalada ✓»; luego se pega un video y salen sus partes una por una
+      skill(inn, o, en) {
+        const c = $('div', 'skl'); inn.appendChild(c);
+        c.innerHTML = `<div class="cab"><div class="ico">${o.icono ? `<img src="${esc(o.icono)}">` : ''}</div>
+          <div class="nom"><b>${esc(o.nombre || 'Skill')}</b><i>${esc(o.subtitulo || 'Skill para Claude')}</i></div>
+          <div class="btn">Instalar<span class="ok">Instalada ✓</span></div></div>`;
+        const ok = c.querySelector('.ok');
+        tl.fromTo(ok, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out', immediateRender: true }, o.instala_en != null ? o.instala_en : en + 0.6);
+        if (o.video_img || o.items) c.appendChild($('div', 'sep'));
+        if (o.video_img) {
+          const v = $('div', 'vid', `<div class="th"><img src="${esc(o.video_img)}"></div><div><b>${esc(o.video_texto || 'Pegaste un video viral')}</b><i>${esc(o.video_sub || 'instagram.com/reel/…')}</i></div>`);
+          c.appendChild(v);
+          // esqueleto: se ve tenue desde que entra la tarjeta (nunca una caja vacía) y se enciende al pegar el video
+          tl.fromTo(v, { opacity: 0.14, x: -20 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power3.out', immediateRender: true }, o.video_en != null ? o.video_en : en + 1.2);
+        }
+        if (o.items) {
+          const sal = $('div', 'sal'); c.appendChild(sal);
+          const et = $('div', 'et', esc(o.salida || 'Su estructura')); sal.appendChild(et);
+          const t0 = o.tiempos ? o.tiempos[0] : en + 1.8;
+          tl.fromTo(et, { opacity: 0.14 }, { opacity: 1, duration: 0.2, immediateRender: true }, t0 - 0.1);
+          o.items.forEach((t, i) => {
+            const it = $('div', 'it', `<em>${i + 1}</em>${esc(t)}`); sal.appendChild(it);
+            const at = (o.tiempos && o.tiempos[i] != null) ? o.tiempos[i] : t0 + i * 0.4;
+            tl.fromTo(it, { opacity: 0.14, x: 20 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out', immediateRender: true }, at);
+          });
+        }
+      },
+      // post_ig: un post publicado. imgs = las láminas del carrusel (se desliza a la siguiente en cada tiempo de `pasa`)
+      post_ig(inn, o, en) {
+        const w = o.ancho || 780, imgs = o.imgs || [o.img], [pw, ph] = String(o.proporcion || '4:5').split(':').map(Number);
+        const c = $('div', 'pig'); c.style.width = w + 'px'; inn.appendChild(c);
+        const ic = d => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+        const n = Math.max(imgs.length, o.laminas || 1);
+        c.innerHTML = `<div class="hd"><div class="av">${o.avatar ? `<img src="${esc(o.avatar)}">` : ''}</div><b>${esc(o.usuario || 'tu_usuario')}</b>${o.verificado !== false ? '<span class="vf">✓</span>' : ''}<span class="mas">···</span></div>
+          <div class="ft" style="height:${Math.round(w * ph / pw)}px"><div class="tira">${imgs.map(i => `<img src="${esc(i)}">`).join('')}</div>${n > 1 ? `<span class="cnt">1/${n}</span>` : ''}</div>
+          <div class="ac" style="position:relative">${ic('M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z')}${ic('M20.5 11.5a8.5 8.5 0 1 1-3.6-6.9A8.4 8.4 0 0 1 20.5 11.5L21.5 20.5l-4.6-2.3')}${ic('M21.5 3.5 10 14.5M21.5 3.5 14.5 21l-4.5-6.5L3 10z')}
+            ${n > 1 ? `<span class="pts">${Array.from({ length: Math.min(n, 6) }, (_, i) => `<i${i ? '' : ' class="on"'}></i>`).join('')}</span>` : ''}
+            <span class="gu">${ic('M5.5 3.5h13v17l-6.5-5-6.5 5z')}</span></div>
+          <div class="tx">${o.likes ? `<span class="lk">${esc(o.likes)} Me gusta</span>` : ''}<b>${esc(o.usuario || 'tu_usuario')}</b> ${esc(o.texto || '')}</div>`;
+        const tira = c.querySelector('.tira'), cnt = c.querySelector('.cnt'), pts = c.querySelectorAll('.pts i');
+        (o.pasa || []).forEach((t, i) => {
+          if (i + 1 >= imgs.length) return;
+          tl.to(tira, { xPercent: -100 * (i + 1), duration: 0.45, ease: 'power3.inOut' }, t);
+          tl.call(() => { if (cnt) cnt.textContent = `${i + 2}/${n}`; pts.forEach((p, k) => p.classList.toggle('on', k === Math.min(i + 1, pts.length - 1))); }, null, t + 0.2);
+        });
+        if (o.corazon_en != null) { const h = c.querySelector('.ac svg path'); tl.to(h, { fill: '#ff3040', stroke: '#ff3040', duration: 0.15 }, o.corazon_en);
+          tl.fromTo(c.querySelector('.ac svg'), { scale: 1 }, { scale: 1.35, duration: 0.15, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, o.corazon_en); }
+      },
+      // html a la medida; [data-en="s"] entra en ese segundo (pop) y [data-traza="s"] (path de svg) se dibuja en ese segundo
+      html(inn, o) { inn.innerHTML = o.html;
+        inn.querySelectorAll('[data-en]').forEach(el => tl.fromTo(el, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.32, ease: 'power2.out', immediateRender: true }, parseFloat(el.dataset.en)));
+        inn.querySelectorAll('[data-traza]').forEach(el => trazo(el, parseFloat(el.dataset.traza), 0.35)); }
+    };
+    armarEscenas();
+    revisarLayout();
+
+    // ── 4. SUBTÍTULOS: 1–2 palabras; las palabras clave en dorado, misma sans ──
+    const limpia = s => s.replace(/^[\s"“”¿¡(]+|[\s"“”.,;:!?)…]+$/g, '');
+    const norma = s => limpia(s).toLowerCase();
+    // marca las palabras que forman una clave (una palabra o una frase: «tres líneas»)
+    const grupo = new Array(W.length).fill(-1);
+    (P.claves || []).forEach((c, ci) => {
+      const ws = c.toLowerCase().split(/\s+/).filter(Boolean);
+      for (let i = 0; i + ws.length <= W.length; i++) {
+        if (ws.every((w, j) => norma(W[i + j].word || W[i + j].text || '') === w) && grupo.slice(i, i + ws.length).every(g => g < 0))
+          for (let j = 0; j < ws.length; j++) grupo[i + j] = ci * 1000 + i;
+      }
+    });
+    const trozos = [];
+    for (let i = 0; i < W.length; i++) {
+      const a = W[i], t = limpia(a.word || a.text || ''); if (!t) continue;
+      if (grupo[i] >= 0) {   // la clave entera, junta
+        let j = i; while (j + 1 < W.length && grupo[j + 1] === grupo[i]) j++;
+        trozos.push({ txt: W.slice(i, j + 1).map(x => limpia(x.word || x.text || '')).join(' '), ini: a.start, fin: W[j].end, clave: true });
+        i = j; continue;
+      }
+      const b = W[i + 1], tb = b ? limpia(b.word || b.text || '') : '';
+      if (b && tb && grupo[i + 1] < 0 && (t + ' ' + tb).length <= 11 && b.start - a.end < 0.15 && /[\wáéíóúñ]$/i.test((a.word || '').trim())) {
+        trozos.push({ txt: t + ' ' + tb, ini: a.start, fin: b.end, clave: false }); i++;
+      } else trozos.push({ txt: t, ini: a.start, fin: a.end, clave: false });
+    }
+    const subs = document.getElementById('subs');
+    trozos.forEach((k, i) => {
+      const nx = trozos[i + 1];
+      const fin = nx ? Math.min(nx.ini, k.fin + 0.6) : Math.min(DUR, k.fin + 0.6);
+      const d = $('div', 'sub' + (k.clave ? ' clave' : ''), `<span>${esc(k.txt)}</span>`);
+      const mk = modoEn(k.ini);
+      d.style.top = (mk === 'golpe' ? (P.sub_y_golpe || 1660) : mk === 'motion' ? P.sub_y_motion : mk === 'completa' ? P.sub_y_completa : P.sub_y_cara) + 'px';
+      subs.appendChild(d);
+      tl.set(d, { autoAlpha: 1 }, k.ini);
+      tl.set(d, { autoAlpha: 0 }, Math.max(k.ini + 0.08, fin));
+    });
+
+    if (P.firma) document.getElementById('firma').textContent = P.firma;
+
+    tl.set({}, {}, DUR);
+    window.__timelines = window.__timelines || {};
+    window.__timelines['reel'] = tl;
+  })();
+  </script>
+</div>
+</body>
+</html>

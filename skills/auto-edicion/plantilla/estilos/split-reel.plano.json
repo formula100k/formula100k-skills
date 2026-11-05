@@ -1,0 +1,67 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.35
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.22,
+   "persona": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 1080,
+     "h": 960,
+     "cara": [
+      0.5,
+      0.2
+     ]
+    }
+   ],
+   "estilo": "split: titular + días"
+  },
+  {
+   "desde": 2.22,
+   "hasta": 6.02,
+   "persona": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 1080,
+     "h": 960,
+     "cara": [
+      0.5,
+      0.2
+     ]
+    }
+   ],
+   "estilo": "split: titular + pasos conectados"
+  },
+  {
+   "desde": 6.02,
+   "hasta": 8.06,
+   "persona": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 1080,
+     "h": 960,
+     "cara": [
+      0.5,
+      0.2
+     ]
+    }
+   ],
+   "estilo": "split: titular + tercer paso"
+  },
+  {
+   "desde": 8.06,
+   "hasta": 10.2,
+   "persona": "completa",
+   "estilo": "giro: completa + subtítulo ajustado"
+  }
+ ],
+ "gancho": "escalera"
+}

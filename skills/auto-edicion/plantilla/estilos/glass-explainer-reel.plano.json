@@ -1,0 +1,35 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.33
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 4.2,
+   "persona": "panel",
+   "estilo": "gancho con plantilla + arco que une dos tarjetas"
+  },
+  {
+   "desde": 4.2,
+   "hasta": 6.1,
+   "persona": "completa",
+   "estilo": "giro: completa + subtítulo ajustado"
+  },
+  {
+   "desde": 6.1,
+   "hasta": 9.12,
+   "persona": "panel",
+   "estilo": "gráfica que se dibuja + contador"
+  },
+  {
+   "desde": 9.12,
+   "hasta": 11.22,
+   "persona": "panel",
+   "estilo": "contador + 2 capturas"
+  }
+ ],
+ "gancho": "gastado",
+ "titulo": "sello"
+}

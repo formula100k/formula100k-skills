@@ -1,0 +1,119 @@
+/* Cubitos 3D · estilos. No se edita: los colores salen de config.js (tema). */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--noche);
+  font-family: system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 800; color: var(--tinta); }
+#stage, #gl, #papel, .pp, #grano, #vin, #destello { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+#stage { transform-origin: 50% 50%; }
+#gl { display: block; }
+.pp { opacity: 0; overflow: hidden; background: var(--noche); }
+.pp > *, .zoom > * { position: absolute; left: 0; top: 0; }
+#grano { mix-blend-mode: overlay; pointer-events: none; }
+#vin { background: radial-gradient(ellipse at 50% 45%, transparent 46%, rgba(0,0,0,.55) 100%); }
+#destello { background: var(--luz); opacity: 0; }
+i, em { font-style: normal; }
+.k { font-family: Georgia, 'Times New Roman', serif; font-style: italic; color: var(--acento); letter-spacing: -1px; }
+
+/* encabezado: ventanita oscura con tres puntos */
+#cab { position: absolute; left: 50%; top: 262px; transform-origin: 50% 50%; white-space: nowrap; display: flex; align-items: center; gap: 22px;
+  background: rgba(11,11,16,.94); border: 2px solid rgba(245,197,66,.45); border-radius: 26px; padding: 18px 34px 20px 26px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.55); font-size: 54px; line-height: 1; letter-spacing: -1.6px; color: var(--tinta); }
+#cab .pts { display: flex; gap: 9px; flex: none; }
+#cab .pts b { width: 15px; height: 15px; border-radius: 50%; background: #ff5f57; }
+#cab .pts b:nth-child(2) { background: #febc2e; } #cab .pts b:nth-child(3) { background: #28c840; }
+#cab .k { font-size: 60px; font-weight: 800; }
+
+/* subtítulos: una ficha oscura por palabra; la clave va en serif dorada */
+#sub { position: absolute; left: 0; width: 1080px; top: 1440px; display: flex; justify-content: center; gap: 12px; }
+#sub span { display: inline-block; font-size: 64px; line-height: 1; letter-spacing: -2px; padding: 12px 20px 16px; border-radius: 16px;
+  background: rgba(11,11,16,.94); border: 2px solid rgba(255,255,255,.14); color: var(--tinta); box-shadow: 0 10px 22px rgba(0,0,0,.5); }
+#sub span.k { font-size: 70px; padding: 8px 20px 14px; border-color: rgba(245,197,66,.55); }
+#usr { position: absolute; left: 0; width: 1080px; top: 1610px; text-align: center; font-size: 30px; letter-spacing: 1px; color: rgba(255,255,255,.72); opacity: 0; }
+
+/* ---------- piezas de papel ---------- */
+.pared { width: 1080px; height: 1920px; background: var(--pared);
+  background-image: radial-gradient(circle, rgba(245,197,66,.16) 3px, transparent 4px), radial-gradient(ellipse at 50% 22%, rgba(245,197,66,.16), transparent 62%);
+  background-size: 72px 72px, 100% 100%; }
+.zocalo { width: 1080px; height: 190px; background: repeating-linear-gradient(90deg, var(--madera) 0 150px, var(--madera2) 150px 180px); box-shadow: inset 0 14px 0 var(--madera2), inset 0 -10px 0 var(--madera2); }
+.suelo { width: 1080px; height: 760px; background: var(--madera2); box-shadow: inset 0 14px 0 var(--madera); }
+.masc { width: 190px; }
+.masc svg { display: block; }
+.tarj { background: var(--papel); color: #15110f; box-shadow: 0 12px 0 rgba(0,0,0,.35); }
+
+/* sello (golpes de sello sobre una hoja) */
+.zoom { width: 1080px; height: 1920px; transform-origin: 540px 900px; }
+.pp.sello .suelo { top: 1260px; }
+.luna { left: 560px !important; top: 640px !important; width: 430px; height: 430px; border-radius: 50%; background: var(--acento); opacity: .9; }
+.diploma { left: 640px !important; top: 430px !important; width: 370px; height: 250px; border: 10px solid var(--madera); transform: rotate(3deg); text-align: center; padding-top: 44px; }
+.diploma b { display: block; font-size: 48px; letter-spacing: -1.5px; }
+.diploma i { display: block; font-family: Georgia, serif; font-style: italic; font-size: 30px; color: #b0721a; margin-top: 4px; }
+.hoja { width: 580px; height: 350px; padding: 30px 40px; font-size: 96px; line-height: 1; letter-spacing: -4px; }
+.hoja i { font-family: Georgia, serif; font-style: italic; color: #b0721a; letter-spacing: -2px; }
+.marca { font-size: 90px; line-height: 1; letter-spacing: -3px; color: #0b0b10; background: var(--si); padding: 14px 34px 18px; border: 8px solid #0b0b10; outline: 8px solid var(--si); opacity: 0; box-shadow: 0 10px 0 rgba(0,0,0,.3); }
+.sellador { width: 190px; }
+.sellador .palo { position: absolute; left: 78px; top: 205px; width: 34px; height: 130px; background: var(--madera); border-radius: 17px 17px 0 0; }
+.sellador .taco { position: absolute; left: -15px; top: 320px; width: 220px; height: 90px; background: var(--madera2); border: 6px solid var(--madera); display: flex; align-items: center; justify-content: center; }
+.sellador .taco span { background: var(--papel); color: #0b0b10; font-size: 38px; padding: 2px 24px; }
+.sellador .goma { position: absolute; left: -22px; top: 410px; width: 234px; height: 24px; background: var(--si); }
+
+/* marcador (ventana con dos contadores) */
+.pp.marcador .zocalo { top: 1250px; } .pp.marcador .suelo { top: 1420px; }
+.vent { background: #0b0b10; border: 3px solid rgba(255,255,255,.16); border-radius: 30px; box-shadow: 0 24px 50px rgba(0,0,0,.6); overflow: hidden; }
+.vent .barra { height: 64px; background: #16161d; display: flex; align-items: center; gap: 12px; padding-left: 26px; }
+.vent .barra b { width: 20px; height: 20px; border-radius: 50%; background: #ff5f57; }
+.vent .barra b:nth-child(2) { background: #febc2e; } .vent .barra b:nth-child(3) { background: #28c840; }
+.vent .barra span { margin-left: 16px; font-size: 26px; letter-spacing: 3px; color: rgba(255,255,255,.6); text-transform: uppercase; }
+.tabla { left: 130px !important; top: 520px !important; width: 820px; height: 660px; }
+.tabla .col { position: absolute; top: 92px; width: 50%; text-align: center; }
+.tabla .col.l { left: 0; color: var(--no); } .tabla .col.r { right: 0; color: var(--si); }
+.tabla small { display: block; font-size: 36px; letter-spacing: 2px; }
+.tabla .col b { display: block; font-size: 220px; line-height: .95; letter-spacing: -8px; font-variant-numeric: tabular-nums; }
+.tabla .medio { position: absolute; left: 50%; top: 110px; width: 3px; height: 300px; background: rgba(255,255,255,.14); }
+.voto { position: absolute; left: 0; top: 0; width: 122px; height: 58px; background: var(--papel); border-radius: 8px; border-top: 16px solid; opacity: 0; text-align: center; font-size: 30px; line-height: 40px; box-shadow: 0 5px 0 rgba(0,0,0,.35); }
+.voto.si { border-color: var(--si); color: #12925c; } .voto.no { border-color: var(--no); color: var(--no); }
+.urna { left: 380px !important; top: 1190px !important; width: 320px; height: 210px; background: var(--madera); border-radius: 12px; box-shadow: inset 0 26px 0 var(--madera2), 0 10px 0 rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; }
+.urna span { background: #0b0b10; color: var(--tinta); font-size: 34px; letter-spacing: 2px; padding: 8px 26px; margin-top: 30px; border-radius: 10px; }
+.timbre { text-align: center; line-height: 1; padding: 20px 46px 26px; color: var(--acento); background: rgba(11,11,16,.92); border: 10px solid var(--acento); border-radius: 22px; outline: 4px solid rgba(11,11,16,.92); opacity: 0; font-family: Georgia, serif; font-style: italic; letter-spacing: -3px; box-shadow: 0 16px 30px rgba(0,0,0,.5); white-space: nowrap; }
+.timbre.si { color: var(--si); border-color: var(--si); }
+
+/* edificio (etiqueta que se corta + sello) */
+.cielo { width: 1080px; height: 1920px; background: var(--pared); background-image: radial-gradient(circle, rgba(255,255,255,.5) 2px, transparent 3px), radial-gradient(circle, rgba(245,197,66,.5) 2px, transparent 3px), radial-gradient(ellipse at 50% 30%, rgba(245,197,66,.2), transparent 60%); background-size: 170px 150px, 230px 210px, 100% 100%; background-position: 20px 30px, 110px 90px, 0 0; }
+.calle { top: 1300px !important; width: 1080px; height: 620px; background: #1b1826; box-shadow: inset 0 16px 0 #0f0d18; }
+.casa { left: 120px !important; top: 560px !important; width: 840px; height: 760px; filter: drop-shadow(0 14px 0 rgba(0,0,0,.4)); }
+.fronton { position: absolute; left: 0; top: 0; width: 840px; height: 190px; background: var(--papel); clip-path: polygon(8% 100%, 8% 55%, 50% 0, 92% 55%, 92% 100%); text-align: center; }
+.fronton span { position: absolute; left: 0; right: 0; top: 96px; font-size: 50px; letter-spacing: 3px; color: #15110f; }
+.casa .cuerpo { position: absolute; left: 68px; top: 190px; width: 704px; height: 570px; background: #e6dcc6; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 10px, transparent 10px 88px); }
+.cornisa { position: absolute; left: 0; right: 0; top: 0; height: 30px; background: var(--acento); }
+.puerta { position: absolute; left: 257px; bottom: 0; width: 190px; height: 300px; background: #0b0b10; border-radius: 95px 95px 0 0; overflow: hidden; display: flex; }
+.puerta i { flex: 1; background: var(--madera); border: 6px solid var(--madera2); }
+.puerta i:first-child { transform-origin: 0 50%; } .puerta i:last-child { transform-origin: 100% 50%; }
+.farol { top: 1040px !important; width: 26px; height: 270px; background: #0b0b10; }
+.farol::before { content: ''; position: absolute; left: -32px; top: -70px; width: 90px; height: 90px; border-radius: 50%; background: var(--luz); box-shadow: 0 0 70px 30px rgba(255,217,138,.35); }
+.colg { width: 400px; height: 200px; background: #d9b77a; border-radius: 14px; clip-path: polygon(14% 0, 100% 0, 100% 100%, 14% 100%, 0 50%); text-align: center; padding: 28px 0 0 44px; transform-origin: 8% 50%; color: #3a2616; }
+.colg small { display: block; font-size: 26px; }
+.colg b { display: block; font-size: 76px; line-height: 1.1; letter-spacing: -2px; color: var(--no); }
+.tij { transform-origin: 50% 50%; }
+
+/* comentario */
+.pp.comentario .zocalo { top: 1090px; } .pp.comentario .suelo { top: 1330px; }
+.caja { width: 940px; height: 170px; background: #fff; border-radius: 85px; display: flex; align-items: center; padding: 0 44px 0 26px; box-shadow: 0 14px 0 rgba(0,0,0,.4); transform-origin: 50% 50%; color: #15110f; }
+.caja .ava { width: 110px; height: 110px; border-radius: 50%; background: var(--acento); flex: none; margin-right: 26px; }
+.caja .ph { position: absolute; left: 164px; font-weight: 400; font-size: 44px; color: #a3a3a3; }
+.caja b { font-size: 92px; line-height: 1; flex: 1; letter-spacing: -2px; }
+.caja em { font-size: 38px; color: #8fc4f5; }
+.regalo { width: 520px; padding: 30px 36px 36px; border-radius: 24px; transform-origin: 50% 100%; }
+.regalo small { display: block; font-size: 24px; letter-spacing: 4px; color: #8a6a2a; }
+.regalo b { display: block; font-size: 52px; line-height: 1.05; letter-spacing: -2px; margin-top: 8px; }
+.candado { width: 100px; height: 90px; background: var(--acento); border-radius: 12px; text-align: center; font-size: 60px; line-height: 90px; color: #15110f; }
+.candado::before { content: ''; position: absolute; left: 22px; top: -44px; width: 56px; height: 50px; border: 12px solid #8a8f98; border-bottom: 0; border-radius: 28px 28px 0 0; }
+
+/* ventana (titular + lista que se va marcando) */
+.pp.ventana .zocalo { top: 1250px; } .pp.ventana .suelo { top: 1420px; }
+.nota { left: 70px !important; top: 470px !important; width: 940px; min-height: 420px; transform-origin: 50% 50%; }
+.nota .cont { padding: 40px 48px 50px; }
+.nota small { display: block; font-size: 28px; letter-spacing: 5px; color: var(--acento); text-transform: uppercase; }
+.nota h2 { font-size: 90px; line-height: 1.04; letter-spacing: -3px; margin-top: 14px; color: #fff; }
+.nota ul { list-style: none; margin-top: 30px; }
+.nota li { display: flex; align-items: center; gap: 22px; font-size: 54px; letter-spacing: -1.5px; color: var(--tinta); padding: 12px 0; opacity: .35; }
+.nota li u { flex: none; width: 54px; height: 54px; border-radius: 14px; border: 4px solid rgba(255,255,255,.4); text-decoration: none; text-align: center; line-height: 46px; font-size: 38px; color: transparent; }
+.nota li.ok { opacity: 1; } .nota li.ok u { background: var(--si); border-color: var(--si); color: #0b0b10; }

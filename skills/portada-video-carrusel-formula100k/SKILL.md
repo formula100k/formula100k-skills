@@ -7,6 +7,9 @@ argument-hint: [carpeta del carrusel o foto gancho]
 
 # Portada en VIDEO para carruseles (cinemagraph + título HTML)
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 > Convierte la imagen gancho de un carrusel en un clip de 5s donde la foto cobra vida
 > (nubes a la deriva, pelo, parpadeo, respiración) con el título nítido encima.
 > El movimiento frena el scroll; Instagram permite mezclar video + imágenes en un carrusel.

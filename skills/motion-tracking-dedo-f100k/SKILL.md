@@ -7,6 +7,9 @@ disable-model-invocation: false
 
 # Motion Tracking del Dedo — F100K
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 Motion graphics que **siguen la punta del dedo** en un reel 9:16. La creadora señala hacia arriba y un elemento (glow + etiqueta) se queda pegado a la yema y se mueve con la mano. Es la diferencia entre un overlay decorativo y un overlay que "interactúa" con el gesto.
 
 ## Cuándo usar esta skill (vs. las otras de motion)

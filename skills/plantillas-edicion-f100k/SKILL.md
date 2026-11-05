@@ -1,6 +1,6 @@
 ---
 name: plantillas-edicion-f100k
-description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (251 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
+description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (251 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "hazme un clip en el estilo X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
 argument-hint: "[nombre de la plantilla] [ruta del video | tema]"
 ---
 
@@ -26,7 +26,7 @@ reconoce la plantilla → revisa que su motor esté instalado → pide solo el m
 ## 2. Reconoce la plantilla aunque venga aproximada
 1. Compara lo que dijo con `nombre`, `alias` e `id` **sin tildes, sin mayúsculas y sin signos** («pantalla dividida», «la de dividir la pantalla», «split» → `pantalla-dividida`).
 2. Si hay **una** coincidencia clara, sigue. Si hay **dos o más** (p. ej. «recorte de papel» es un efecto y «Recortes de papel» un corto animado; «tier list» es efecto y «Ranking por niveles» un estilo entero), pregunta en UNA línea con las opciones y su `queSeVe`.
-3. Las palabras del pedido desempatan: «efecto» → grupo Efectos; «look» → Looks; «sin grabar», «sin cara», «sobre [tema]» → Sin grabar o Animado sin cara; «mi video», «edita» → Con tu video o YouTube 16:9; «qué pasaría si» → ese grupo.
+3. Las palabras del pedido desempatan: «efecto» → grupo Efectos; «look» → Looks; «sin grabar», «sin cara», «sobre [tema]» → Sin grabar o Animado sin cara; «mi video», «edita» → Con tu video o YouTube 16:9; «qué pasaría si» → ese grupo; «estilo», «clip», «inserto» → Estilos de cine.
 4. Si no hay ninguna, di que no la encuentras y propón las 3 más parecidas por `queSeVe`. Nunca inventes una plantilla.
 5. Si la plantilla tiene `fusion`, no lo expliques salvo que pregunte por el nombre viejo: úsala tal cual.
 
@@ -60,9 +60,10 @@ Si falta, **no sigas** y dile en 1 paso cómo instalarlo, con el texto de `insta
 5. Al entregar, di en una línea qué plantilla usaste (y, si hubo brandkit, qué aplicaste de él) y, si tiene `muestra`, que la puede comparar en `formula100k.app` + esa ruta.
 
 ## Tu brandkit manda en el look
-Sin esto, las plantillas salen con sus colores por defecto. **Antes de producir** (y antes de pasarle el trabajo al motor), busca su brandkit en este orden y usa el primero que encuentres:
+Sin esto, las plantillas salen con sus colores por defecto. Basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP; si no lo dice, búscalo igual. La guía completa (dónde buscarlo y cómo se aplica en cada pieza) está en `references/tu-brandkit.md`, igual que en cada motor. **Antes de producir** (y antes de pasarle el trabajo al motor), busca su brandkit en este orden y usa el primero que encuentres:
+0. **Lo que te dio en esta conversación** (archivo, carpeta, ZIP o texto pegado).
 1. **`mi_brandkit` del conector de Yapper**, si el guion viene de Yapper o el conector está disponible en la sesión (si tiene varios proyectos, pásale `cuenta`). Trae su brandkit, su manual y los enlaces de sus stickers.
-2. **`mi-marca/brandkit.md`** en la carpeta del proyecto, con sus stickers en `mi-marca/stickers/`.
+2. **`mi-marca/brandkit.md`** en la carpeta del proyecto, con sus stickers en `mi-marca/stickers/`, o en `~/Documents/mi-contenido/mi-marca/`.
 3. **`mi-marca/marca.md`**, su manual de identidad visual (colores y letras).
 4. Si no hay nada, sigue como siempre, con el look de la plantilla.
 

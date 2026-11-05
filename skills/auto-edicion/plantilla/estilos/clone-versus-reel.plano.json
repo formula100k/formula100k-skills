@@ -1,0 +1,53 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.33
+ ],
+ "tomas": {
+  "2": "toma2.mp4"
+ },
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 4.42,
+   "persona": [
+    {
+     "x": 0,
+     "y": 330,
+     "w": 540,
+     "h": 1420
+    },
+    {
+     "x": 540,
+     "y": 330,
+     "w": 540,
+     "h": 1420,
+     "toma": 2
+    }
+   ],
+   "estilo": "habla la izquierda"
+  },
+  {
+   "desde": 4.42,
+   "hasta": 11.12,
+   "persona": [
+    {
+     "x": 0,
+     "y": 330,
+     "w": 540,
+     "h": 1420,
+     "toma": 2
+    },
+    {
+     "x": 540,
+     "y": 330,
+     "w": 540,
+     "h": 1420
+    }
+   ],
+   "estilo": "habla la derecha"
+  }
+ ],
+ "gancho": "franja"
+}

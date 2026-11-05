@@ -1,0 +1,40 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.3
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.58,
+   "persona": "completa"
+  },
+  {
+   "desde": 2.58,
+   "hasta": 3.58,
+   "persona": "completa"
+  },
+  {
+   "desde": 3.58,
+   "hasta": 4.46,
+   "persona": "completa"
+  },
+  {
+   "desde": 4.46,
+   "hasta": 5.96,
+   "persona": "completa"
+  },
+  {
+   "desde": 5.96,
+   "hasta": 8.16,
+   "persona": "completa"
+  },
+  {
+   "desde": 8.16,
+   "hasta": 10.82,
+   "persona": "completa"
+  }
+ ],
+ "gancho": "gigante"
+}

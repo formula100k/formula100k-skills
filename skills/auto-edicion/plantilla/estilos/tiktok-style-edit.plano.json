@@ -1,0 +1,16 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.2
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 11.07,
+   "persona": "completa",
+   "estilo": "tiktok"
+  }
+ ],
+ "gancho": "gigante"
+}

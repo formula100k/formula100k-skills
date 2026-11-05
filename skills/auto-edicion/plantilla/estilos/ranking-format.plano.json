@@ -1,0 +1,30 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.3
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 2.18,
+   "persona": "completa"
+  },
+  {
+   "desde": 2.18,
+   "hasta": 4.14,
+   "persona": "completa"
+  },
+  {
+   "desde": 4.14,
+   "hasta": 8.22,
+   "persona": "completa"
+  },
+  {
+   "desde": 8.22,
+   "hasta": 11.18,
+   "persona": "completa"
+  }
+ ],
+ "gancho": "recorte"
+}

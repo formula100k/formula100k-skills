@@ -1,0 +1,24 @@
+{
+  "name": "edicion-notitas-render",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "tsx scripts/render.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.460",
+    "@remotion/cli": "4.0.460",
+    "@remotion/google-fonts": "4.0.460",
+    "@remotion/renderer": "4.0.460",
+    "puppeteer-core": "^24.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.460"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.6.0"
+  }
+}

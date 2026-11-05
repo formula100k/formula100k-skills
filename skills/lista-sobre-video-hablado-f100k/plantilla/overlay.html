@@ -1,0 +1,226 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Lista sobre video hablado</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--acento:#FF7A59;--oscuro:#0b0b10;--claro:#f4f1ea;--borde:#2c2c38;--sobre-acento:#0b0b10;
+  --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;--serif:Georgia,"Times New Roman",serif;
+  --panel:color-mix(in srgb,var(--oscuro) 92%,transparent)}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+body{font-family:var(--sans);color:var(--claro);position:relative}
+body.vista{background:#2a2a30}
+#fondo,#fondoImg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;display:none}
+body.vista #fondo,body.vista #fondoImg{display:block}
+#guias{position:absolute;inset:0;display:none;pointer-events:none;z-index:200}
+body.guias #guias{display:block}
+#guias i{position:absolute;left:0;right:0;background:#ff3b3b33;border:0 dashed #ff5f57}
+#capa{position:absolute;inset:0}
+#titulo{position:absolute;left:50%;transform:translateX(-50%);text-align:center;white-space:nowrap;
+  background:var(--panel);border:2px solid var(--borde);border-radius:22px;padding:20px 34px 22px;
+  box-shadow:0 14px 40px rgba(0,0,0,.35)}
+#titulo .l{font-size:60px;font-weight:800;letter-spacing:-2.4px;line-height:1.1;color:#fff}
+#titulo .l b{color:var(--acento);font-weight:800}
+#titulo .l em{font-family:var(--serif);font-style:italic;font-weight:500;letter-spacing:-1px;color:var(--acento)}
+#titulo .n{font-family:var(--serif);font-style:italic;font-size:32px;color:var(--claro);margin-top:6px}
+.fila{position:absolute;left:0;width:1080px}
+.num{position:absolute;right:calc(1080px - var(--xnum));text-align:right;font-weight:800;letter-spacing:-2px;color:#fff;
+  -webkit-text-stroke:5px rgba(5,5,9,.9);paint-order:stroke fill;text-shadow:0 4px 14px rgba(0,0,0,.6);
+  transform-origin:100% 50%;font-variant-numeric:tabular-nums;line-height:1}
+.nombre{position:absolute;white-space:nowrap;font-weight:800;letter-spacing:-.6px;line-height:1;
+  background:var(--panel);color:var(--claro);border:2px solid var(--borde);border-radius:10px;padding:6px 12px 7px;z-index:90;
+  transform-origin:0 50%;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.nombre.activa{background:var(--acento);color:var(--sobre-acento);border-color:var(--acento)}
+.mini{position:absolute;overflow:hidden;border-radius:12px;background:var(--oscuro);border:3px solid var(--claro);
+  box-shadow:0 8px 22px rgba(0,0,0,.45);transform-origin:0 50%}
+.mini.nueva{border-color:var(--acento)}
+.mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.mini span{position:absolute;left:0;right:0;top:0;text-align:center;background:var(--panel);color:var(--claro);
+  font-weight:800;letter-spacing:-.4px;line-height:1;padding:6px 4px 7px;white-space:nowrap}
+#sub{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-size:52px;font-weight:800;letter-spacing:-1.6px;color:#fff;
+  -webkit-text-stroke:7px rgba(5,5,9,.92);paint-order:stroke fill;text-shadow:0 4px 16px rgba(0,0,0,.6)}
+#cta{position:absolute;left:0;width:1080px;text-align:center}
+#cta .a{font-size:64px;font-weight:800;letter-spacing:-2.4px;color:#fff;-webkit-text-stroke:10px rgba(5,5,9,.55);paint-order:stroke fill;text-shadow:0 4px 16px rgba(0,0,0,.6)}
+#caja{position:relative;margin:18px auto 0;width:800px;height:132px;background:var(--claro);border:6px solid var(--acento);border-radius:66px;
+  box-shadow:0 16px 40px rgba(0,0,0,.45);text-align:left;transform-origin:50% 50%}
+#caja .av{position:absolute;left:18px;top:18px;width:84px;height:84px;border-radius:50%;background:var(--oscuro);color:var(--acento);
+  font:800 44px/84px var(--sans);text-align:center}
+#caja .u{position:absolute;left:122px;top:20px;font-size:25px;font-weight:600;color:#6b6b74;letter-spacing:-.3px}
+#caja .p{position:absolute;left:122px;top:50px;font-size:54px;font-weight:800;letter-spacing:-1px;color:var(--oscuro);line-height:1.1;white-space:nowrap}
+#caja .p i{display:inline-block;width:4px;height:50px;background:var(--oscuro);margin-left:4px;vertical-align:-8px}
+#caja .env{position:absolute;right:18px;top:18px;width:84px;height:84px;border-radius:50%;background:var(--acento)}
+#caja .env:before{content:"";position:absolute;left:38px;top:24px;width:8px;height:38px;background:var(--sobre-acento);border-radius:4px}
+#caja .env:after{content:"";position:absolute;left:27px;top:22px;width:22px;height:22px;border-left:8px solid var(--sobre-acento);border-top:8px solid var(--sobre-acento);border-radius:3px;transform:rotate(45deg)}
+#cta .d{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:46px;color:#fff;-webkit-text-stroke:8px rgba(5,5,9,.55);paint-order:stroke fill;text-shadow:0 4px 16px rgba(0,0,0,.6)}
+</style></head><body>
+<video id="fondo" muted playsinline></video><img id="fondoImg" alt="">
+<div id="guias"><i style="top:0;height:220px;border-bottom-width:3px"></i><i style="bottom:0;height:420px;border-top-width:3px"></i><i style="left:auto;right:0;width:130px;top:900px;bottom:420px;border-left-width:3px"></i></div>
+<div id="capa"><div id="titulo"></div><div id="filas"></div><div id="sub"></div></div>
+<div id="cta"><div class="a"></div><div id="caja"><div class="av"></div><div class="u"></div><div class="p"></div><div class="env"></div></div><div class="d"></div></div>
+<script>
+// ESTE ARCHIVO NO SE EDITA POR PIEZA. Todo lo que cambia vive en config.js.
+// Vista previa: overlay.html (en vivo) · ?t=31 (un segundo fijo) · ?guias (zonas de Instagram)
+//               ?fondo=toma.mp4 (sobre tu toma, que debe estar en esta carpeta) · ?c=otro-config.js
+// Internos de render.js: ?render (transparente) · ?revision&img=cuadro.jpg (un cuadro de la toma detrás)
+const Q = new URLSearchParams(location.search);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const marca = s => esc(s).replace(/\*([^*]+)\*/g, '<b>$1</b>').replace(/_([^_]+)_/g, '<em>$1</em>');
+const lim = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => lim((t - a) / (b - a));
+const sale3 = x => 1 - Math.pow(1 - lim(x), 3);
+const suave = x => { x = lim(x); return x * x * (3 - 2 * x); };
+const rebote = x => { x = lim(x); const c = 1.70158; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const $ = id => document.getElementById(id);
+
+let C, A, Z, FPS, FRAMES, FILAS = [], ESPEJO = false, FIN_TITULO = 0, listo = false;
+const anchoSub = {};
+function cargar(src) { return new Promise((ok, mal) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => mal(new Error('No encontré ' + src)); document.head.appendChild(s); }); }
+
+// El acercamiento del cierre. Lo usan la vista previa y (con la misma fórmula) montar.js.
+function acercamiento(C, espejo) {
+  if (C.acercar === false || C.acercar === null) return null;
+  const a = typeof C.acercar === 'object' && C.acercar ? C.acercar : {};
+  const t = a.t != null ? a.t : (C.sale != null ? C.sale + .2 : null);
+  if (t == null) return null;
+  return { t, segundos: a.segundos || 1, escala: a.escala || 1.25, x: a.x != null ? a.x : (espejo ? .08 : .92), y: a.y != null ? a.y : .36 };
+}
+
+async function preparar() {
+  await cargar(Q.get('c') || 'config.js');
+  C = window.CONFIG;
+  ESPEJO = C.lado === 'derecha';
+  A = Object.assign({ yTitulo: 236, yFin: 1500, xNumero: 132, xMinis: 154, anchoMax: 500, altoMini: 150, foco: 2, cadaMini: 1, xSubs: 800, ySubs: 1215, yCta: 1080 }, C.acomodo || {});
+  // Espejo: el acomodo se escribe SIEMPRE como si la lista fuera a la izquierda; aquí se pasa al otro lado.
+  // La lista conserva el orden de lectura (número y luego miniaturas) y deja libres los botones de Instagram (x > 950).
+  if (ESPEJO) { A.anchoMax = Math.min(A.anchoMax, 448); const d = 940 - A.anchoMax - A.xMinis; A.xMinis += d; A.xNumero += d; A.xSubs = 1080 - A.xSubs; }
+  Z = acercamiento(C, ESPEJO);
+  FPS = C.fps || 30; FRAMES = Math.round((C.duracion || 60) * FPS);
+  const R = document.documentElement.style, E = C.estilo || {};
+  if (C.acento) R.setProperty('--acento', C.acento);
+  [['oscuro', '--oscuro'], ['claro', '--claro'], ['borde', '--borde'], ['sobreAcento', '--sobre-acento'], ['fuente', '--sans'], ['fuenteCursiva', '--serif']].forEach(([k, v]) => { if (E[k]) R.setProperty(v, E[k]); });
+  R.setProperty('--xnum', A.xNumero + 'px');
+
+  // rótulo
+  const T = C.titulo || {}, tit = $('titulo');
+  tit.innerHTML = (T.lineas || []).map(l => `<div class="l">${marca(l)}</div>`).join('') + (T.nota ? `<div class="n">${marca(T.nota)}</div>` : '');
+  tit.style.top = A.yTitulo + 'px';
+  if (!(T.lineas || []).length) tit.style.display = 'none';
+  const anchoT = tit.offsetWidth; if (anchoT > 960) tit.style.zoom = 960 / anchoT;
+  const finTitulo = FIN_TITULO = (T.lineas || []).length ? A.yTitulo + tit.getBoundingClientRect().height : A.yTitulo - 40;
+
+  // filas: se mide TODO antes, así nada se mueve cuando llega el siguiente paso
+  const P = C.pasos || [], N = P.length, y0 = finTitulo + 44;
+  const paso = Math.min(190, (A.yFin - y0) / N);
+  const hBase = Math.min(A.altoMini, paso - 34);
+  const tamNum = Math.round(Math.min(74, paso * .44)), tamNom = Math.round(lim(paso * .19, 24, 31)), tamRot = Math.round(lim(hBase * .19, 22, 27));
+  const cont = $('filas');
+  const medir = (txt, css) => { const s = document.createElement('span'); s.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;' + css; s.textContent = txt; document.body.appendChild(s); const w = s.offsetWidth; s.remove(); return w; };
+  window.AVISOS = [];
+  for (let i = 0; i < N; i++) {
+    const p = P[i], f = document.createElement('div'); f.className = 'fila';
+    const yc = y0 + paso * (i + .5);
+    const num = document.createElement('div'); num.className = 'num'; num.textContent = (i + 1) + '.'; num.style.fontSize = tamNum + 'px'; num.style.top = (yc - tamNum / 2) + 'px';
+    f.appendChild(num);
+    const minis = (p.minis || []).slice(0, 4), ims = await Promise.all(minis.map(m => new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => { window.AVISOS.push('No encontré la imagen ' + m.src); ok(null); }; im.src = m.src; })));
+    // ancho de cada miniatura: su proporción real (entre 3:4 y 16:10), o lo que pida su rótulo si es más largo
+    let h = hBase, anchos;
+    const anchosCon = hh => minis.map((m, j) => { const im = ims[j], r = im ? lim(im.naturalWidth / im.naturalHeight, .75, 1.6) : .8; const rot = m.rotulo ? medir(m.rotulo, `font:800 ${tamRot}px var(--sans);letter-spacing:-.4px`) + 18 : 0; return Math.max(Math.round(hh * r), rot); });
+    anchos = anchosCon(h);
+    const total = a => a.reduce((s, w) => s + w, 0) + 10 * (a.length - 1);
+    if (total(anchos) > A.anchoMax) { h = Math.floor(h * A.anchoMax / total(anchos)); anchos = anchosCon(h); }
+    let x = A.xMinis; const els = [];
+    minis.forEach((m, j) => {
+      const d = document.createElement('div'); d.className = 'mini'; d.style.cssText = `left:${x}px;top:${yc - h / 2 - 8}px;width:${anchos[j]}px;height:${h}px`;
+      if (ims[j]) { ims[j].removeAttribute('width'); d.appendChild(ims[j]); }
+      if (m.rotulo) { const s = document.createElement('span'); s.textContent = m.rotulo; s.style.fontSize = tamRot + 'px'; d.appendChild(s); }
+      f.appendChild(d); els.push({ el: d, t: m.t != null ? m.t : p.t + .25 + j * A.cadaMini, x, w: anchos[j], h, yc: yc - 8 }); x += anchos[j] + 10;
+    });
+    const nom = document.createElement('div'); nom.className = 'nombre'; nom.textContent = p.nombre || ''; nom.style.fontSize = tamNom + 'px';
+    nom.style.left = (A.xMinis - 8) + 'px'; nom.style.top = (yc + h / 2 - 8 - 12) + 'px'; if (!p.nombre) nom.style.display = 'none';
+    f.appendChild(nom); cont.appendChild(f);
+    FILAS.push({ t: p.t, fin: i + 1 < N ? P[i + 1].t : (C.sale != null ? C.sale : 1e9), num, nom, minis: els });
+  }
+  $('sub').style.top = A.ySubs + 'px';
+  const cta = C.cta || null; $('cta').style.top = A.yCta + 'px';
+  if (cta) {
+    $('cta').querySelector('.a').textContent = cta.antes || 'Comenta'; $('cta').querySelector('.d').textContent = cta.despues || ''; $('cta').querySelector('.u').textContent = cta.usuario || '';
+    $('cta').querySelector('.av').textContent = (cta.usuario || '·')[0].toUpperCase();
+    const wd = medir(cta.despues || '', 'font:italic 46px var(--serif)'); if (wd > 1000) $('cta').querySelector('.d').style.zoom = 1000 / wd;
+    const wp = medir(cta.palabra || '', 'font:800 54px var(--sans);letter-spacing:-1px'); if (wp > 540) $('cta').querySelector('.p').style.zoom = 540 / wp;
+  }
+  (C.subs || []).forEach(s => { if (!(s.texto in anchoSub)) anchoSub[s.texto] = medir(s.texto, 'font:800 52px var(--sans);letter-spacing:-1.6px'); });
+  window.FRAMES = FRAMES; window.FPS = FPS; listo = true;
+}
+
+// Pura función del cuadro: el mismo cuadro pinta siempre lo mismo. Devuelve una firma del estado
+// (render.js la usa para no volver a fotografiar cuadros idénticos).
+function draw(frame) {
+  if (!listo) return '';
+  const t = frame / FPS, firma = [];
+  const sale = C.sale != null ? C.sale : 1e9, q = sale3(prog(t, sale, sale + .4));           // 0 → 1 cuando la lista se va
+  const capa = $('capa'); capa.style.opacity = (1 - q).toFixed(3); capa.style.transform = `translateX(${((ESPEJO ? 60 : -60) * q).toFixed(1)}px)`;
+  firma.push(q.toFixed(3));
+  const tope = A.xMinis + A.anchoMax + 16;                                                    // una miniatura grande nunca pasa de aquí (más allá está la cara)
+  FILAS.forEach((F, i) => {
+    const activa = t >= F.t && t < F.fin, hecha = t >= F.t;
+    // pulsos: el número late sin llenarse
+    let pul = 0; (C.pulsos || []).forEach(p => { if (p.paso === i + 1 && t >= p.t && t < p.t + .9) pul = Math.sin(Math.PI * prog(t, p.t, p.t + .9)); });
+    const pop = hecha ? 1 + .28 * Math.sin(Math.PI * prog(t, F.t, F.t + .35)) : 1;
+    const e = pop + .38 * pul;
+    F.num.style.transform = `scale(${e.toFixed(3)})`;
+    F.num.style.color = (activa || pul > .02) ? 'var(--acento)' : '#fff';
+    F.num.style.opacity = (hecha || pul > .02) ? 1 : .82;
+    const en = rebote(prog(t, F.t + .05, F.t + .3));
+    F.nom.style.opacity = hecha ? lim(prog(t, F.t + .05, F.t + .15)) : 0; F.nom.style.transform = `scale(${hecha ? en.toFixed(3) : 0})`;
+    F.nom.className = 'nombre' + (activa ? ' activa' : '');
+    firma.push(e.toFixed(3), activa ? 1 : 0, hecha ? en.toFixed(3) : 0);
+    F.minis.forEach((m, j) => {
+      // entra grande (para que se vea en el teléfono), se queda un momento y se acomoda en su lugar.
+      // Mientras está grande se corre lo necesario para no salirse de la zona de la lista ni tapar el rótulo.
+      const foco = Math.min(A.foco, (A.anchoMax + 16) / m.w);
+      const a = prog(t, m.t, m.t + .16), b = sale3(prog(t, m.t + .7, m.t + .95));
+      const s = t < m.t ? 0 : (foco * (.7 + .3 * rebote(a))) * (1 - b) + 1 * b;
+      const dx = Math.min(0, tope - (m.x + m.w * s));
+      const dy = Math.max(0, FIN_TITULO + 10 - (m.yc - m.h * s / 2)) + Math.min(0, A.yFin + 40 - (m.yc + m.h * s / 2));
+      const grande = t >= m.t && t < m.t + .95;
+      m.el.style.opacity = t < m.t ? 0 : lim(a * 2); m.el.style.transform = `translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) scale(${s.toFixed(3)})`;
+      m.el.style.zIndex = grande ? 100 + j : 10; m.el.className = 'mini' + (t >= m.t && t < m.t + 1.4 ? ' nueva' : '');
+      firma.push(s.toFixed(3), m.el.className.length);
+    });
+  });
+  // subtítulo corto, del lado de la cara; se corre (y si hace falta se achica) para no salirse de su zona
+  let st = ''; const S = C.subs || [];
+  for (let k = 0; k < S.length; k++) { const fin = S[k].hasta != null ? S[k].hasta : (k + 1 < S.length ? S[k + 1].t : S[k].t + 1.5); if (t >= S[k].t && t < fin) st = S[k].texto; }
+  if (t >= sale) st = '';
+  const sub = $('sub'); sub.textContent = st;
+  if (st) {   // en espejo no puede pisar la columna de números, que queda a su derecha
+    const izq = 16, der = ESPEJO ? A.xNumero - 78 : 1064, w0 = (anchoSub[st] || 0) + 28, k = Math.min(1, (der - izq) / w0), w = w0 * k / 2;
+    sub.style.fontSize = Math.round(52 * k) + 'px'; sub.style.left = lim(A.xSubs, izq + w, der - w) + 'px';
+  }
+  firma.push(st);
+  // cierre
+  const cta = C.cta, el = $('cta');
+  if (!cta || t < cta.t) { el.style.opacity = 0; firma.push('x'); }
+  else {
+    const e = prog(t, cta.t, cta.t + .3); el.style.opacity = lim(e * 1.6).toFixed(3);
+    $('caja').style.transform = `scale(${(.8 + .2 * rebote(e)).toFixed(3)})`;
+    const pal = [...String(cta.palabra || '')], n = Math.min(pal.length, Math.max(0, Math.floor((t - cta.t - .55) / .13) + 1));
+    const cursor = n < pal.length || Math.floor((t - cta.t) * 2) % 2 === 0;
+    $('cta').querySelector('.p').innerHTML = esc(pal.slice(0, n).join('')) + (cursor ? '<i></i>' : '');
+    const d = lim(prog(t, cta.t + .55 + pal.length * .13 + .2, cta.t + .55 + pal.length * .13 + .5));
+    $('cta').querySelector('.d').style.opacity = d.toFixed(3);
+    firma.push(e.toFixed(3), n, cursor ? 1 : 0, d.toFixed(3));
+  }
+  // solo en vista previa: la toma se acerca igual que lo hará montar.js
+  if (Z && !Q.has('render')) { const z = 1 + (Z.escala - 1) * suave(prog(t, Z.t, Z.t + Z.segundos)); [$('fondo'), $('fondoImg')].forEach(v => { v.style.transformOrigin = `${Z.x * 100}% ${Z.y * 100}%`; v.style.transform = `scale(${z.toFixed(4)})`; }); }
+  return firma.join('|');
+}
+window.draw = draw;
+window.LISTO = preparar().then(() => {
+  draw(0);
+  if (Q.has('render')) return;
+  document.body.classList.add('vista'); if (Q.has('guias')) document.body.classList.add('guias');
+  if (Q.has('revision')) { if (Q.get('img')) $('fondoImg').src = Q.get('img'); return; }
+  document.documentElement.style.zoom = Math.min(1, innerHeight / 1920);
+  const v = $('fondo');
+  if (Q.get('fondo')) { v.src = Q.get('fondo'); v.loop = true; v.play().catch(() => {}); }
+  if (Q.has('t')) { draw(Math.round(parseFloat(Q.get('t')) * FPS)); if (Q.get('fondo')) v.currentTime = parseFloat(Q.get('t')); return; }
+  const t0 = performance.now(); (function tic() { const s = Q.get('fondo') && v.readyState > 1 ? v.currentTime : (performance.now() - t0) / 1000; draw(Math.floor((s * FPS) % FRAMES)); requestAnimationFrame(tic); })();
+});
+</script></body></html>

@@ -4,6 +4,9 @@ description: >
   Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 94 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G74: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después, vitrina de lo que construiste, hilo de tuits…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con IA (Higgsfield u otra herramienta de imagen conectada) o con una foto real, construye el carrusel directamente en Canva solo si el usuario proporciona el enlace, y da instrucciones precisas de producción.
 ---
 
+## Tu brandkit (antes de producir)
+Si la persona tiene brandkit, la pieza sale con su look. Antes de producir, búscalo y aplícalo como dice `references/tu-brandkit.md`: basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP, y si no lo dice, búscalo igual (`mi_brandkit` del conector de Yapper, `mi-marca/brandkit.md` del proyecto o `~/Documents/mi-contenido/mi-marca/`). Va encima del estilo de esta skill (colores, letras, gancho, subtítulos, elementos, stickers y CTA), respeta su estructura y no pisa sus reglas de oficio. Al entregar, di en una línea qué aplicaste. Si no hay brandkit, sigue como siempre.
+
 ## 🧰 ANTES DE EMPEZAR (manda sobre lo que diga esta skill más abajo)
 
 Corre igual en Mac y en Windows.

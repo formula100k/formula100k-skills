@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sesgo de supervivencia · reel animado</title>
+<style>
+  html,body{margin:0;background:#141210;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// ====================== LO QUE PUEDES CAMBIAR ======================
+// Cada renglón = una frase de la voz y su duración en segundos. voz.mjs reescribe los `d` con la voz real.
+const LINEAS = [
+  { d: 3.6, txt: 'Si entiendes esta imagen, no vas a volver a mirar el mundo igual.' },
+  { d: 3.36, txt: 'Son los aviones que volvían del combate en la Segunda Guerra Mundial.' },
+  { d: 2.24, txt: 'Cada punto rojo es un balazo.' },
+  { d: 4.54, txt: 'Los generales lo tenían clarísimo: hay que blindar justo donde están los puntos.' },
+  { d: 2.84, txt: 'Suena lógico. Y era un error completo.' },
+  { d: 2.8, txt: 'Un matemático, Abraham Wald, lo vio al revés.' },
+  { d: 2.24, txt: 'Solo estaban mirando los aviones que volvieron.' },
+  { d: 5.44, txt: 'Los que recibieron balazos en las zonas limpias nunca regresaron. Por eso no estaban en los datos.' },
+  { d: 5.12, txt: 'Los puntos rojos solo mostraban dónde te pueden disparar, y aun así volver.' },
+  { d: 7.76, txt: 'Hace más de dos mil años, a un filósofo griego, Diágoras, le mostraron tablillas de marineros que rezaron y se salvaron del naufragio.' },
+  { d: 3.69, txt: 'Él respondió: ¿y dónde están los retratos de los que rezaron y se ahogaron?' },
+  { d: 4.78, txt: 'Eso se llama sesgo de supervivencia: mirar solo a los que pasaron el filtro.' },
+  { d: 4.47, txt: 'Lo ves en el gimnasio: miras a alguien fuerte y piensas, quiero ese cuerpo.' },
+  { d: 4.56, txt: 'Pero los que se quedaron eran los que ya tenían facilidad. Los demás lo dejaron.' },
+  { d: 3.84, txt: 'Y en redes es igual: copias el trend que le funcionó a otra cuenta.' },
+  { d: 4.02, txt: 'Sin ver a los miles que hicieron exactamente lo mismo y nunca volvieron.' },
+  { d: 5.34, txt: 'Cuando ves a alguien que lo logró, no estás viendo el método. Estás viendo a un sobreviviente.' },
+  { d: 3.87, txt: 'Antes de copiar un formato, pregúntate cuántos aviones no volvieron.' },
+  { d: 6.3, txt: 'Este video lo armé con IA, recorte por recorte. Comenta GUIA y te mando la guía para animar los tuyos.' },
+];
+const PAUSA = .3;            // respiro entre frases
+const QUIETO_FINAL = 1.6;    // el último cuadro se queda
+// Efectos de sonido: [escena, cuándo, sonido, volumen, repeticiones?, separación?]
+// «cuándo» y «separación» van en segundos desde que arranca la escena, o como '45%' de la escena (frase + pausa).
+// Sonidos: pop tic ding sello metal whoosh plumon ola riser papel. Cada escena que NO está en CONTINUA ya lleva un whoosh al entrar.
+// Regla: cada cosa que entra en pantalla suena en el mismo segundo en que su animación la mete (mismos números que en ESC).
+const EFECTOS = [
+  [0, 0.02, 'sello', .8], [0, .05, 'papel', .7],
+  [1, .3, 'whoosh', .7], [1, 1.2, 'sello', .9], [1, 1.9, 'pop', 1],
+  [2, 0, 'tic', .8, 14, '5.7%'], [2, .2, 'pop', 1],
+  [3, .05, 'papel', 1], [3, .5, 'pop', .8], [3, '45%', 'metal', 1], [3, '62%', 'sello', .9],
+  [4, .15, 'ding', .7], [4, '45%', 'plumon', 1, 2, .22], [4, '62%', 'sello', 1],
+  [5, .05, 'papel', 1], [5, .4, 'pop', 1], [5, '50%', 'whoosh', .8],
+  [6, .1, 'pop', .7, 6, .14],
+  [7, .2, 'riser', .35], [7, .3, 'pop', .7], [7, '45%', 'sello', .8], [7, '62%', 'pop', 1],
+  [8, .1, 'pop', .8], [8, '50%', 'pop', .8], [8, '60%', 'ding', .7],
+  [9, .05, 'papel', 1], [9, 1.6, 'pop', .7], [9, '45%', 'papel', 1, 3, .45], [9, '52%', 'ding', .45, 3, .45],
+  [10, .3, 'ola', .9], [10, .9, 'pop', .75, 3, .3],
+  [11, 0, 'pop', .8], [11, .3, 'sello', .7], [11, .9, 'tic', .6, 10, .25], [11, '60%', 'ding', .5],
+  [12, 0, 'pop', .8], [12, '50%', 'pop', 1],
+  [13, .1, 'pop', .7], [13, '30%', 'ding', .5], [13, '45%', 'whoosh', .6],
+  [14, 0, 'pop', .8], [14, '55%', 'sello', 1],
+  [15, .05, 'tic', .6, 12, .105], [15, '50%', 'whoosh', .5],
+  [16, 0, 'pop', .8], [16, '30%', 'plumon', 1], [16, '55%', 'sello', .8],
+  [17, 0, 'riser', .5],
+  [18, .1, 'papel', .8, 7, .2], [18, '40%', 'whoosh', .7], [18, '46%', 'sello', .9], [18, '57%', 'ding', .5],
+];
+const PALABRA_CTA = 'GUIA';   // la palabra del CTA (sale del regalo de la persona)
+const GANCHO = ['Si entiendes esta imagen,', 'no ves el mundo igual'];
+const VECES = 3, PIXELES = 0;       // temblor de collage APAGADO (regla 23-oct, sin olor a IA). Antes: 7 px
+const SUBTITULOS = !new URLSearchParams(location.search).has('sinsubs');   // ?sinsubs = versión limpia
+const C = {
+  fondo: '#050509', panel: '#0b0b10', pelo: '#24242e', pelo2: '#3f3f46',
+  tinta: '#f4f1ea', crema: '#efe7d8', gris: '#a1a1aa', oro: '#F5C542', verde: '#7fe3ad', rojo: '#ef4444',
+};
+// ===================================================================
+const W = 1080, H = 1920, FPS = 30;
+const INI = []; { let a = 0; for (const l of LINEAS) { INI.push(a); a += l.d + PAUSA; } var DUR = +(a + QUIETO_FINAL).toFixed(2); }
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ANATOMIA: estilizada — monigotes de pictograma (cápsula + círculo, sin manos ni cara)
+const SANS = LETRA_LIMPIA, SERIF = 'Georgia, "Times New Roman", serif', MONO = 'Menlo, "SF Mono", Consolas, monospace';
+const pop = (u, a, dur = .4) => easeOut(prog(u, a, a + dur));   // 23-oct: crece y frena, sin rebote (antes back)
+const fin = (u, a, dur = .35) => easeOut(prog(u, a, a + dur));
+const TINTA = '#16161d', SANGRE = '#d7263d', VERDE_P = '#23885a', PAPEL = '#efe7d8', HOJA = '#fbf8f1';
+
+// ---------- el temblor de collage ----------
+function ruido1(x, s) { const i = Math.floor(x), f = x - i, k = f * f * (3 - 2 * f); return lerp(hash2(i, s) * 2 - 1, hash2(i + 1, s) * 2 - 1, k); }
+const wig = t => [ruido1(t * VECES, 11) * PIXELES, ruido1(t * VECES, 47) * PIXELES];
+function escenaEn(t) { let i = 0; while (i < LINEAS.length - 1 && t >= INI[i + 1]) i++; return [i, t - INI[i]]; }
+let WX = 0, WY = 0;
+const sinMover = f => { ctx.save(); ctx.translate(-WX, -WY); f(); ctx.restore(); };
+
+function txt(s, x, y, tam, o = {}) {
+  ctx.save();
+  ctx.globalAlpha *= o.a ?? 1;
+  ctx.font = `${o.it ? 'italic ' : ''}${o.peso ?? 800} ${tam}px ${o.mono ? MONO : o.serif ? SERIF : SANS}`;
+  ctx.textAlign = o.al || 'center'; ctx.textBaseline = o.base || 'middle';
+  ctx.fillStyle = o.col || TINTA;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function caja(x, y, w, h, r, rel, borde, grosor = 2) {
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+  if (rel) { ctx.fillStyle = rel; ctx.fill(); }
+  if (borde) { ctx.strokeStyle = borde; ctx.lineWidth = grosor; ctx.stroke(); }
+}
+function palomita(x, y, s, p = 1, col = VERDE_P, g = 7) {
+  if (p <= 0) return;
+  const pts = [[-.5, 0], [-.12, .38], [.55, -.42]], L1 = .55, L = 1.5, d = p * L;
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = g; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(x + pts[0][0] * s, y + pts[0][1] * s);
+  const k1 = Math.min(1, d / L1); ctx.lineTo(x + lerp(pts[0][0], pts[1][0], k1) * s, y + lerp(pts[0][1], pts[1][1], k1) * s);
+  if (d > L1) { const k2 = Math.min(1, (d - L1) / (L - L1)); ctx.lineTo(x + lerp(pts[1][0], pts[2][0], k2) * s, y + lerp(pts[1][1], pts[2][1], k2) * s); }
+  ctx.stroke(); ctx.restore();
+}
+// una X trazada en dos golpes
+function equis(x, y, s, p, col = SANGRE, g = 16) {
+  if (p <= 0) return;
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = g; ctx.lineCap = 'round';
+  const a = clamp(p * 2), b = clamp(p * 2 - 1);
+  ctx.beginPath(); ctx.moveTo(x - s, y - s); ctx.lineTo(x - s + 2 * s * a, y - s + 2 * s * a); ctx.stroke();
+  if (b > 0) { ctx.beginPath(); ctx.moveTo(x + s, y - s); ctx.lineTo(x + s - 2 * s * b, y - s + 2 * s * b); ctx.stroke(); }
+  ctx.restore();
+}
+
+// ---------- papelería del collage ----------
+// tira de papel con texto (gancho y títulos)
+function tira(s, y, tam, fondo, col, rot = -.02, a = 1, x = 540) {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.rotate(rot); ctx.font = `800 ${tam}px ${SANS}`; const w = ctx.measureText(s).width;
+  ctx.shadowColor = 'rgba(40,28,20,.3)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 8;
+  // orilla rasgada arriba y abajo
+  const x0 = -w / 2 - 30, x1 = w / 2 + 30, y0 = -tam * .72, y1 = tam * .72;
+  ctx.beginPath(); ctx.moveTo(x0, y0);
+  for (let k = 0, n = Math.ceil((x1 - x0) / 14); k <= n; k++) ctx.lineTo(x0 + k * (x1 - x0) / n, y0 + (hash2(k, tam) - .5) * 6);
+  for (let k = 0, n = Math.ceil((x1 - x0) / 14); k <= n; k++) ctx.lineTo(x1 - k * (x1 - x0) / n, y1 + (hash2(k, tam + 9) - .5) * 6);
+  ctx.closePath(); ctx.fillStyle = fondo; ctx.fill(); ctx.shadowColor = 'transparent';
+  txt(s, 0, 3, tam, { col }); ctx.restore();
+}
+// cinta washi
+function cinta(x, y, w, rot, col = 'rgba(245,197,66,.55)') {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = col;
+  ctx.beginPath(); ctx.moveTo(-w / 2, -22);
+  for (let k = 0; k <= 6; k++) ctx.lineTo(-w / 2 + (k % 2 ? 6 : 0), -22 + k * 44 / 6);
+  for (let k = 0; k <= 6; k++) ctx.lineTo(w / 2 - (k % 2 ? 6 : 0), 22 - k * 44 / 6);
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+// etiqueta de rotuladora: cinta negra con letras blancas en relieve
+function etiqueta(s, x, y, tam, rot = -.03, a = 1, fondo = TINTA, col = '#f4f1ea') {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.rotate(rot);
+  ctx.font = `700 ${tam}px ${MONO}`; const w = ctx.measureText(s).width;
+  ctx.shadowColor = 'rgba(0,0,0,.28)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 5;
+  caja(-w / 2 - 22, -tam * .8, w + 44, tam * 1.6, 4, fondo); ctx.shadowColor = 'transparent';
+  txt(s, 0, 2, tam, { mono: true, peso: 700, col }); ctx.restore();
+}
+// sello de goma que cae con golpe (p de 0 a 1)
+function sello(s, x, y, tam, rot, p, col = SANGRE) {
+  if (p <= 0) return;
+  const k = lerp(1.9, 1, easeOut(clamp(p * 1.6)));
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(k, k); ctx.globalAlpha *= clamp(p * 3) * .9;
+  ctx.font = `800 ${tam}px ${SANS}`; const w = ctx.measureText(s).width;
+  ctx.strokeStyle = col; ctx.lineWidth = tam * .09; caja(-w / 2 - tam * .35, -tam * .78, w + tam * .7, tam * 1.56, tam * .18, null, col, tam * .09);
+  txt(s, 0, 3, tam, { col });
+  // tinta gastada: puntitos de papel que no agarraron tinta
+  ctx.globalCompositeOperation = 'destination-out';
+  for (let n = 0; n < 60; n++) { ctx.fillStyle = 'rgba(0,0,0,.7)'; ctx.fillRect((hash2(n, 3) - .5) * (w + tam * .7), (hash2(n, 5) - .5) * tam * 1.5, 3 + hash2(n, 7) * 4, 2 + hash2(n, 8) * 3); }
+  ctx.restore();
+}
+
+// ---------- recortes (fotos reales o libres, o hechas con IA, sin fondo) ----------
+const RUTAS = ['bombardero', 'restos', 'gorra', 'busto', 'tablilla', 'mancuerna', 'ola', 'lentes'];
+let IM = null, PAPEL_IM = null;
+function recorta(im) {
+  if (!im) return null;
+  try { const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.drawImage(im, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height).data; let x0 = c.width, y0 = c.height, x1 = 0, y1 = 0;
+    for (let j = 0; j < c.height; j += 2) for (let i = 0; i < c.width; i += 2) if (d[(j * c.width + i) * 4 + 3] > 20) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (j < y0) y0 = j; if (j > y1) y1 = j; }
+    const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1; o.getContext('2d').drawImage(c, -x0, -y0); return o;
+  } catch (e) { return im; }
+}
+// Cada foto se carga por su cuenta: si falta una, la pieza sigue (sin papel.jpg queda el color de papel; sin un recorte, ese hueco queda vacío).
+const cargarUna = src => new Promise(ok => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => { console.warn('falta ' + src); ok(null); }; im.src = src; });
+window.LISTO = Promise.all([...RUTAS.map(n => `collage/${n}.png`), 'collage/papel.jpg'].map(cargarUna)).then(a => {
+  IM = {}; RUTAS.forEach((n, i) => IM[n] = recorta(a[i])); PAPEL_IM = a[RUTAS.length];
+});
+// recorte con borde blanco de tijera y sombra de papel
+function recorte(nombre, x, y, h, rot = 0, o = {}) {
+  if (!IM || !IM[nombre]) return;
+  const im = IM[nombre], w = h * im.width / im.height;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.globalAlpha *= o.a ?? 1;
+  if (o.esc) ctx.scale(o.esc, o.esc);
+  ctx.shadowColor = o.sombra ?? 'rgba(40,28,20,.38)'; ctx.shadowBlur = 26; ctx.shadowOffsetY = 12;
+  ctx.filter = o.filtro || 'none';
+  ctx.drawImage(im, -w / 2, -h / 2, w, h);
+  ctx.restore();
+}
+
+// ---------- el avión del diagrama (vista desde arriba), dibujado a mano ----------
+const ALA = [[-36, -82], [-462, -22], [-470, 8], [-36, 40]], COLA = [[-30, 252], [-190, 286], [-196, 312], [-30, 318]];
+const espejo = P => P.map(([x, y]) => [-x, y]);
+const MOTORES = [-272, -142, 142, 272].map(x => [x, -82 + (Math.abs(x) - 36) / 426 * 60 - 6]);
+const CABINA = [0, -300];
+function dentro(P, x, y) { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+// los balazos: solo donde un avión puede recibirlos y aun así volver (alas, fuselaje del medio, cola)
+const BALAS = (() => { const out = [];
+  for (let k = 0; out.length < 112 && k < 6000; k++) {
+    const x = (hash2(k, 1) * 2 - 1) * 466, y = hash2(k, 2) * 700 - 360;
+    const enAla = (dentro(ALA, x, y) || dentro(espejo(ALA), x, y)) && Math.abs(x) > 70 && MOTORES.every(([mx]) => Math.abs(x - mx) > 44);
+    const enFuse = Math.abs(x) < 26 && y > -170 && y < 236;
+    const enCola = dentro(COLA, x, y) || dentro(espejo(COLA), x, y);
+    if ((enAla || enFuse || enCola) && out.every(([a, b]) => Math.hypot(a - x, b - y) > 17)) out.push([x, y, hash2(k, 3)]);
+  }
+  return out; })();
+// o.puntos 0..1 = cuántos balazos se ven · o.blindaje 0..1 · o.limpias 0..1 (marca motores y cabina) · o.fantasma = solo contorno punteado
+function avion(cx, cy, s, t, o = {}) {
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s); ctx.rotate(o.rot || 0); if (o.voltea) ctx.scale(1, o.voltea);
+  ctx.globalAlpha *= o.a ?? 1;
+  const linea = o.linea || TINTA, relleno = o.fantasma ? null : (o.relleno || HOJA);
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.lineWidth = (o.grosor || 4) / Math.max(s, .3) * .5 + 2;
+  if (o.fantasma) ctx.setLineDash([14, 12]);
+  const forma = P => { ctx.beginPath(); P.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); if (relleno) { ctx.fillStyle = relleno; ctx.fill(); } ctx.strokeStyle = linea; ctx.stroke(); };
+  forma(ALA); forma(espejo(ALA)); forma(COLA); forma(espejo(COLA));
+  for (const [mx, my] of MOTORES) { ctx.beginPath(); ctx.ellipse(mx, my - 18, 21, 50, 0, 0, 7); if (relleno) { ctx.fillStyle = relleno; ctx.fill(); } ctx.strokeStyle = linea; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(mx - 30, my - 70); ctx.lineTo(mx + 30, my - 70); ctx.stroke(); }
+  ctx.beginPath(); ctx.roundRect(-38, -366, 76, 712, 38); if (relleno) { ctx.fillStyle = relleno; ctx.fill(); } ctx.strokeStyle = linea; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, 262); ctx.lineTo(0, 352); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(0, -300, 20, 34, 0, 0, 7); ctx.stroke();
+  ctx.setLineDash([]);
+  // blindaje que querían los generales: placas grises sobre lo punteado
+  const b = o.blindaje || 0;
+  if (b > 0) { ctx.save(); ctx.globalAlpha *= b * .85; ctx.fillStyle = '#7d8590';
+    const placa = P => { ctx.beginPath(); P.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#3a3f47'; ctx.lineWidth = 4; ctx.stroke(); };
+    const PL = [[-320, -50], [-462, -22], [-470, 8], [-320, 18]];
+    placa(PL); placa(espejo(PL)); placa([[-200, -62], [-312, -46], [-312, 20], [-200, 26]]); placa(espejo([[-200, -62], [-312, -46], [-312, 20], [-200, 26]]));
+    placa([[-30, -160], [30, -160], [30, 230], [-30, 230]]); placa(COLA); placa(espejo(COLA));
+    ctx.fillStyle = '#c9ced6'; for (let k = 0; k < 40; k++) { const [x, y] = BALAS[k * 2]; ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill(); }
+    ctx.restore(); }
+  // los balazos
+  const n = Math.floor((o.puntos ?? 1) * BALAS.length);
+  for (let k = 0; k < n; k++) { const [x, y, r] = BALAS[k], aparece = o.puntos < 1 ? clamp((o.puntos * BALAS.length - k) / 3) : 1;
+    const late = o.late ? 1 + .25 * Math.max(0, Math.sin(t * 5 - r * 6)) : 1;
+    ctx.fillStyle = o.balaCol || SANGRE; ctx.beginPath(); ctx.arc(x, y, 9.5 * back(aparece) * late, 0, 7); ctx.fill(); }
+  // zonas limpias: motores y cabina
+  const l = o.limpias || 0;
+  if (l > 0) { ctx.save(); ctx.setLineDash([16, 11]); ctx.lineDashOffset = -t * 30; ctx.strokeStyle = o.limpiaCol || '#c98a12'; ctx.lineWidth = 7;
+    for (const [x, y, r] of [...MOTORES.map(([mx, my]) => [mx, my - 18, 66]), [0, -296, 80]]) {
+      if (o.relleno2) { ctx.fillStyle = `rgba(245,197,66,${.35 * l})`; ctx.beginPath(); ctx.arc(x, y, r * l, 0, 7); ctx.fill(); }
+      ctx.beginPath(); ctx.arc(x, y, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * l); ctx.stroke(); }
+    ctx.restore(); }
+  ctx.restore();
+}
+// el diagrama impreso en una hoja, sujeta con cinta
+function hoja(cx, cy, s, t, o = {}) {
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(o.rotHoja ?? -.025); ctx.scale(s, s);
+  ctx.shadowColor = 'rgba(40,28,20,.35)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 14;
+  caja(-500, -420, 1000, 840, 6, o.hojaCol || HOJA); ctx.shadowColor = 'transparent';
+  // renglones tenues de papel cuadriculado
+  ctx.strokeStyle = 'rgba(70,110,160,.08)'; ctx.lineWidth = 2; for (let y = -400; y < 420; y += 40) { ctx.beginPath(); ctx.moveTo(-490, y); ctx.lineTo(490, y); ctx.stroke(); }
+  avion(0, 10, .98, t, o);
+  if (o.pie !== false) txt(o.pie || 'FIG. 1 — aviones que volvieron', -470, 392, 22, { al: 'left', mono: true, peso: 600, col: 'rgba(22,22,29,.55)' });
+  cinta(-440, -400, 170, -.5); cinta(440, -400, 170, .45);
+  ctx.restore();
+}
+
+// ---------- monigote de pictograma (sin cara ni manos) ----------
+function monigote(x, y, s, col, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha *= o.a ?? 1; ctx.fillStyle = col;
+  ctx.beginPath(); ctx.arc(0, -118, 26, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(-30, -86, 60, 96, 26); ctx.fill();
+  const p = o.paso || 0;
+  ctx.save(); ctx.translate(-14, 4); ctx.rotate(p * .4); ctx.beginPath(); ctx.roundRect(-11, 0, 22, 70, 11); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.translate(14, 4); ctx.rotate(-p * .4); ctx.beginPath(); ctx.roundRect(-11, 0, 22, 70, 11); ctx.fill(); ctx.restore();
+  ctx.restore();
+}
+
+// ---------- subtítulos: el trozo entero y la palabra que suena, en dorado ----------
+const TROZOS = LINEAS.map(l => { const out = []; let cur = '';
+  for (const w of l.txt.split(' ')) { if (cur && (cur + ' ' + w).length > 22) { out.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w;
+    if (/[.:?,]$/.test(w) && cur.length > 9) { out.push(cur); cur = ''; } }
+  if (cur) out.push(cur);
+  const tot = out.reduce((s, x) => s + x.length + 3, 0); let a = 0;
+  return out.map(x => { const r = { x, a: a / tot, b: (a + x.length + 3) / tot }; a += x.length + 3; return r; }); });
+function subtitulo(i, u, y) {
+  if (!SUBTITULOS) return;
+  const k = u / LINEAS[i].d; if (k < 0 || k > 1.02) return;
+  const tz = TROZOS[i].find(z => k >= z.a && k < z.b) || TROZOS[i][TROZOS[i].length - 1];
+  const e = fin((k - tz.a) * LINEAS[i].d, 0, .14), pal = tz.x.split(' ');
+  const cual = Math.min(pal.length - 1, Math.floor(clamp((k - tz.a) / (tz.b - tz.a)) * pal.length));
+  ctx.save(); ctx.translate(540, y + (1 - e) * 10); ctx.globalAlpha = e;
+  ctx.font = `800 54px ${SANS}`; const w = ctx.measureText(tz.x).width, esp = ctx.measureText(' ').width;
+  caja(-w / 2 - 26, -44, w + 52, 88, 18, 'rgba(5,5,9,.84)');
+  let x = -w / 2;
+  pal.forEach((p, j) => { txt(p, x, 2, 54, { al: 'left', col: (j === cual || p.includes(PALABRA_CTA)) ? C.oro : '#ffffff' }); x += ctx.measureText(p).width + esp; });
+  ctx.restore();
+}
+
+// ---------- ESCENAS: cada una recibe u (segundos desde que arranca), d (duración) y t (tiempo global) ----------
+const ESC = [];
+const HX = 540, HY = 840;
+// 0 · si entiendes esta imagen (la portada: el diagrama ya completo)
+ESC[0] = (u, d, t) => {
+  recorte('bombardero', 250, 1200, 190, -.18, { a: .95 });
+  hoja(HX, HY, .98, t, { late: true });
+  recorte('gorra', 900, 1215, 170, .16);
+};
+// 1 · los aviones que volvían del combate
+ESC[1] = (u, d, t) => {
+  const k = ease(prog(u, 0, .7));
+  hoja(lerp(HX, 770, k), lerp(HY, 560, k), lerp(.98, .42, k), t, { rotHoja: lerp(-.025, .06, k) });
+  const x = lerp(1250, 470, easeOut(prog(u, .25, 1.4)));
+  recorte('bombardero', x, 980 - Math.sin(u * 2) * 10, 330, -.08);
+  sello('II GUERRA MUNDIAL', 330, 560, 44, -.12, prog(u, 1.2, 1.6));
+  etiqueta('volvían del combate', 560, 1240, 40, .02, fin(u, 1.9));
+};
+// 2 · cada punto rojo es un balazo
+ESC[2] = (u, d, t) => {
+  hoja(HX, HY, .98, t, { puntos: lerp(.05, 1, ease(prog(u, 0, d * .8))) });
+  const [bx, by] = BALAS[0], px = HX + bx * .98 * .98, py = HY + 10 + by * .98 * .98, a = fin(u, .2);
+  sinMover(() => { ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = SANGRE; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.arc(px + WX, py + WY, 30, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px + WX + 24, py + WY - 24); ctx.quadraticCurveTo(px + 120, 360, 700, 340); ctx.stroke(); ctx.restore(); });
+  tira('= 1 balazo', 340, 66, SANGRE, '#ffffff', .02, a, 800);
+};
+// 3 · los generales: blindar donde están los puntos
+ESC[3] = (u, d, t) => {
+  hoja(HX, HY, .98, t, { blindaje: ease(prog(u, d * .45, d * .8)) });
+  const g = easeOut(prog(u, 0, .6));
+  recorte('gorra', lerp(-200, 190, g), 330, 230, -.15);
+  etiqueta('los generales', 520, 330, 40, -.02, fin(u, .5));
+  sello('BLINDAR AQUÍ', 540, 1250, 70, -.06, prog(u, d * .62, d * .62 + .4), '#3a3f47');
+};
+// 4 · suena lógico… y era un error
+ESC[4] = (u, d, t) => {
+  const err = prog(u, d * .45, d * .45 + .3);
+  ctx.save(); if (err > 0) ctx.filter = `grayscale(${err * .8})`;
+  hoja(HX, HY, .98, t, { blindaje: 1 }); ctx.restore();
+  recorte('gorra', 190, 330, 230, -.15, { filtro: err > 0 ? `grayscale(${err})` : 'none' });
+  etiqueta('lógico', 640, 330, 48, -.02, 1 - err);
+  palomita(820, 330, 60, prog(u, .1, .6) * (1 - err), VERDE_P, 10);
+  equis(HX, HY, 330, prog(u, d * .45, d * .45 + .45), SANGRE, 26);
+  sello('ERROR', 540, 1250, 110, -.1, prog(u, d * .62, d * .62 + .4));
+};
+// 5 · Abraham Wald lo vio al revés
+ESC[5] = (u, d, t) => {
+  const g = ease(prog(u, d * .5, d * .85));
+  hoja(HX, 900, .86, t, { voltea: Math.cos(g * Math.PI) || .001, rotHoja: lerp(-.025, .02, g), pie: g > .5 ? 'FIG. 1 — al revés' : undefined });
+  recorte('lentes', 290, 400, 280, -.12, { esc: lerp(.6, 1, back(prog(u, 0, .5))) });
+  etiqueta('ABRAHAM WALD', 700, 360, 46, .03, fin(u, .4));
+  txt('matemático', 700, 440, 44, { serif: true, it: true, peso: 500, a: fin(u, .7) });
+};
+// 6 · solo miraban los que volvieron
+ESC[6] = (u, d, t) => {
+  tira('lo único que miraban', 330, 60, TINTA, '#ffffff', -.02, fin(u, 0));
+  for (let k = 0; k < 6; k++) { const p = pop(u, .1 + k * .14), x = 210 + (k % 3) * 330, y = 640 + Math.floor(k / 3) * 400;
+    if (p <= 0) continue;
+    ctx.save(); ctx.translate(x, y); ctx.scale(p, p); ctx.rotate((hash2(k, 4) - .5) * .12);
+    ctx.shadowColor = 'rgba(40,28,20,.3)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 8; caja(-140, -150, 280, 300, 4, HOJA); ctx.shadowColor = 'transparent';
+    avion(0, -12, .27, t, {}); etiqueta('VOLVIÓ', 0, 118, 24, 0, 1, VERDE_P, '#ffffff'); ctx.restore(); }
+};
+// 7 · los de las zonas limpias nunca regresaron: no estaban en los datos
+ESC[7] = (u, d, t) => {
+  hoja(HX, 760, .9, t, { limpias: ease(prog(u, .2, d * .4)) });
+  const caida = caer(u - d * .45, { desde: 1500, piso: 1180, gravedad: 5200 });
+  if (u > d * .45) { recorte('restos', 540, caida, 230, .08, { filtro: 'grayscale(1) contrast(1.1)' }); }
+  etiqueta('NO VOLVIERON = SIN DATOS', 540, 1300, 36, -.02, fin(u, d * .62), SANGRE);
+  tira('zonas limpias', 300, 60, '#f3c25d', TINTA, -.03, fin(u, .3), 540);
+};
+// 8 · los puntos rojos solo mostraban dónde te pueden disparar y volver
+ESC[8] = (u, d, t) => {
+  hoja(HX, 760, .9, t, { limpias: 1, relleno2: true, late: true });
+  tira('aquí te disparan y vuelves', 300, 54, SANGRE, '#ffffff', -.02, fin(u, .1));
+  const a = fin(u, d * .5);
+  tira('aquí no se vuelve', 1260, 58, '#f3c25d', TINTA, .02, a);
+  palomita(900, 1258, 54, prog(u, d * .6, d * .6 + .5), TINTA, 9);
+};
+// 9 · Diágoras y las tablillas
+const TAB = [[810, 520, -.08], [790, 780, .06], [820, 1040, -.04]];
+ESC[9] = (u, d, t) => {
+  tira('hace más de 2000 años', 320, 58, TINTA, '#ffffff', -.02, fin(u, 0));
+  recorte('busto', 330, 780, 640, 0, { esc: lerp(.9, 1, ease(prog(u, 0, 1.2))) });
+  etiqueta('DIÁGORAS · filósofo griego', 330, 1150, 34, .02, fin(u, 1.6));
+  TAB.forEach(([x, y, r], k) => { const p = pop(u, d * .45 + k * .45); if (p <= 0) return;
+    recorte('tablilla', x, y, 190, r, { esc: p }); palomita(x + 150, y + 60, 50, prog(u, d * .45 + k * .45 + .3, d * .45 + k * .45 + .8), VERDE_P, 9); });
+  txt('se salvaron', 810, 1210, 44, { serif: true, it: true, peso: 600, col: VERDE_P, a: fin(u, d * .8) });
+};
+// 10 · ¿y dónde están los retratos de los que se ahogaron?
+ESC[10] = (u, d, t) => {
+  txt('«¿Y los que rezaron', 540, 300, 58, { serif: true, it: true, peso: 700, a: fin(u, 0) });
+  txt('y se ahogaron?»', 540, 372, 58, { serif: true, it: true, peso: 700, col: SANGRE, a: fin(u, .4) });
+  [200, 540, 880].forEach((x, k) => recorte('tablilla', x, 560, 150, (k - 1) * .06));
+  [200, 540, 880].forEach((x, k) => { const p = pop(u, .9 + k * .3); if (p <= 0) return;
+    ctx.save(); ctx.translate(x, 820); ctx.scale(p, p); ctx.rotate((k - 1) * -.05); ctx.setLineDash([14, 10]); ctx.strokeStyle = TINTA; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.roundRect(-130, -80, 260, 160, 8); ctx.stroke(); ctx.setLineDash([]);
+    txt('?', 0, 6, 100, { serif: true, peso: 700, col: TINTA }); ctx.restore(); });
+  const o = easeOut(prog(u, .3, 2));
+  recorte('ola', 540, lerp(1500, 1140, o), 380, .02);
+  txt('Cicerón, De natura deorum III, 89', 1010, 1318, 22, { al: 'right', mono: true, peso: 600, col: 'rgba(22,22,29,.6)', a: fin(u, 2) });
+};
+// 11 · sesgo de supervivencia: mirar solo a los que pasaron el filtro
+ESC[11] = (u, d, t) => {
+  tira('sesgo de', 320, 60, TINTA, '#ffffff', -.03, fin(u, 0));
+  tira('supervivencia', 420, 92, SANGRE, '#ffffff', .02, fin(u, .3));
+  // el filtro: una rejilla con pocos huecos
+  const Y = 900; ctx.strokeStyle = TINTA; ctx.lineWidth = 10; ctx.lineCap = 'round';
+  const HUECOS = [300, 640];
+  ctx.beginPath(); ctx.moveTo(130, Y); ctx.lineTo(HUECOS[0] - 34, Y); ctx.moveTo(HUECOS[0] + 34, Y); ctx.lineTo(HUECOS[1] - 34, Y); ctx.moveTo(HUECOS[1] + 34, Y); ctx.lineTo(950, Y); ctx.stroke();
+  for (let k = 0; k < 26; k++) {
+    const x0 = 150 + hash2(k, 21) * 780, sale = 1 + hash2(k, 22) * 2.2 + k * .04, pasa = k % 9 === 0, tt = u - sale * .6;
+    if (tt < 0) continue;
+    const xh = pasa ? HUECOS[k % 2] : x0, x = lerp(x0, xh, clamp(tt * 2));
+    let y = 560 + tt * tt * 900;
+    if (!pasa && y > Y - 22) y = Y - 22 - Math.abs(Math.sin(tt * 6)) * 12 * Math.exp(-tt * 2);
+    if (pasa) y = Math.min(y, 1180);
+    ctx.fillStyle = pasa ? C.oro : 'rgba(22,22,29,.45)'; ctx.beginPath(); ctx.arc(x, y, pasa ? 22 : 18, 0, 7); ctx.fill();
+  }
+  txt('los que ves', 540, 1250, 50, { serif: true, it: true, peso: 700, col: '#a86e05', a: fin(u, d * .6) });
+};
+// 12 · el gimnasio: quiero ese cuerpo
+ESC[12] = (u, d, t) => {
+  etiqueta('EL GIMNASIO', 540, 320, 44, -.02, fin(u, 0));
+  recorte('mancuerna', 540, 820 - Math.abs(Math.sin(u * 2.4)) * 30, 380, -.1 + Math.sin(u * 2.4) * .05);
+  const p = pop(u, d * .5);
+  if (p > 0) { ctx.save(); ctx.translate(560, 1170); ctx.scale(p, p); ctx.rotate(-.03);
+    ctx.shadowColor = 'rgba(40,28,20,.3)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 8; caja(-300, -70, 600, 140, 70, '#ffffff'); ctx.shadowColor = 'transparent';
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(-180, 60); ctx.lineTo(-230, 120); ctx.lineTo(-120, 64); ctx.fill();
+    txt('«quiero ese cuerpo»', 0, 4, 54, { serif: true, it: true, peso: 700 }); ctx.restore(); }
+};
+// 13 · se quedaron los que ya tenían facilidad; los demás lo dejaron
+ESC[13] = (u, d, t) => {
+  for (let k = 0; k < 10; k++) {
+    const queda = k === 2 || k === 7, x = 150 + (k % 5) * 195, y0 = 720 + Math.floor(k / 5) * 360;
+    const v = queda ? 0 : prog(u, d * .45 + hash2(k, 9) * .8, d * .45 + hash2(k, 9) * .8 + 1.2);
+    const x1 = x + (k % 2 ? 1 : -1) * ease(v) * 520;
+    monigote(x1, y0, .95, queda ? '#c98a12' : TINTA, { a: queda ? 1 : 1 - v * .85 * fin(u, d * .45), paso: v > 0 && v < 1 ? Math.sin(u * 14) : 0 });
+    if (queda) palomita(x1, y0 - 205, 50, prog(u, d * .3, d * .3 + .5), VERDE_P, 9);
+  }
+  recorte('mancuerna', 900, 360, 150, .2);
+  tira('se quedaron', 330, 58, '#f3c25d', TINTA, -.03, fin(u, .1), 380);
+  txt('los demás lo dejaron', 540, 1290, 50, { serif: true, it: true, peso: 600, col: 'rgba(22,22,29,.75)', a: fin(u, d * .55) });
+};
+// 14 · en redes: copias el trend de otra cuenta
+function celular(x, y, s, t, o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha *= o.a ?? 1;
+  ctx.shadowColor = 'rgba(40,28,20,.35)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 12;
+  caja(-210, -390, 420, 780, 56, '#121218'); ctx.shadowColor = 'transparent';
+  caja(-190, -370, 380, 740, 42, o.gris ? '#3a3a42' : '#24203a');
+  monigote(0, 150, 1.5, o.gris ? '#6b6b72' : '#f4f1ea', { paso: Math.sin(t * 8) });
+  caja(-60, -350, 120, 14, 7, '#000');
+  if (!o.gris) for (let k = 0; k < 5; k++) { const f = ((t * .7 + k / 5) % 1); ctx.save(); ctx.globalAlpha *= 1 - f; ctx.translate(150 + Math.sin(f * 9 + k) * 14, 260 - f * 420);
+    ctx.fillStyle = '#ff4d7a'; ctx.beginPath(); ctx.moveTo(0, 14); ctx.bezierCurveTo(-26, -4, -14, -22, 0, -10); ctx.bezierCurveTo(14, -22, 26, -4, 0, 14); ctx.fill(); ctx.restore(); }
+  ctx.restore();
+}
+ESC[14] = (u, d, t) => {
+  tira('el trend de otra cuenta', 320, 58, TINTA, '#ffffff', -.02, fin(u, 0));
+  celular(540, 820, .95, t);
+  sello('COPIAR', 540, 1250, 90, -.08, prog(u, d * .55, d * .55 + .4));
+};
+// 15 · los miles que hicieron lo mismo y nunca volvieron
+ESC[15] = (u, d, t) => {
+  tira('hicieron lo mismo', 320, 60, TINTA, '#ffffff', -.02, fin(u, 0));
+  const COL = 7, FIL = 5;
+  for (let k = 0; k < COL * FIL; k++) { const x = 130 + (k % COL) * 137, y = 520 + Math.floor(k / COL) * 165, yo = k === 17;
+    const p = pop(u, .05 + k * .035); if (p <= 0) continue;
+    const apaga = yo ? 0 : prog(u, d * .5 + hash2(k, 5) * .6, d * .5 + hash2(k, 5) * .6 + .5);
+    ctx.save(); ctx.globalAlpha *= 1 - apaga * .75; celular(x, y, .27 * p, t + k * .3, { gris: !yo }); ctx.restore();
+    if (yo && u > d * .5) { ctx.save(); ctx.strokeStyle = C.oro; ctx.lineWidth = 7; ctx.beginPath(); ctx.roundRect(x - 64, y - 112, 128, 224, 18); ctx.stroke(); ctx.restore(); }
+  }
+  txt('y nunca los viste', 540, 1300, 52, { serif: true, it: true, peso: 700, col: SANGRE, a: fin(u, d * .65) });
+};
+// 16 · no estás viendo el método: estás viendo a un sobreviviente
+ESC[16] = (u, d, t) => {
+  glow(540, 800, 520, '245,197,66', .35 * fin(u, d * .5));
+  recorte('bombardero', 540, 800, 360, -.06, { esc: lerp(.92, 1, ease(prog(u, 0, d))) });
+  tira('el método', 360, 74, TINTA, '#ffffff', -.03, fin(u, 0));
+  const tz = prog(u, d * .3, d * .45); if (tz > 0) { ctx.save(); ctx.strokeStyle = SANGRE; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(340, 372); ctx.lineTo(340 + 400 * tz, 352); ctx.stroke(); ctx.restore(); }
+  tira('un sobreviviente', 1180, 84, '#f3c25d', TINTA, .02, fin(u, d * .55));
+};
+// 17 · pregúntate cuántos aviones no volvieron (oscura)
+ESC[17] = (u, d, t) => {
+  for (let k = 0; k < 16; k++) { const a = fin(u, .2 + k * .16, .6); if (a <= 0) continue;
+    const x = 100 + hash2(k, 31) * 880, y = 520 + hash2(k, 32) * 760, s = .13 + hash2(k, 33) * .08;
+    avion(x, y + Math.sin(t + k) * 6, s, t, { fantasma: true, puntos: 0, linea: 'rgba(244,241,234,.45)', rot: (hash2(k, 34) - .5) * .8, a, grosor: 9 }); }
+  avion(540, 880, .42, t, { relleno: '#f4f1ea', linea: '#f4f1ea', late: true });
+  txt('¿cuántos aviones', 540, 330, 66, { serif: true, it: true, peso: 700, col: C.tinta, a: fin(u, 0) });
+  txt('no volvieron?', 540, 412, 66, { serif: true, it: true, peso: 700, col: C.oro, a: fin(u, .5) });
+};
+// 18 · hecho con IA, recorte por recorte · comenta la palabra (oscura)
+ESC[18] = (u, d, t) => {
+  const corte = d * .4, k = ease(prog(u, corte, corte + .7));
+  const PILA = [['bombardero', 300, 150, -.2], ['busto', 180, 210, .05], ['tablilla', 140, 120, .15], ['mancuerna', 110, 100, -.1], ['lentes', 130, 110, .12], ['gorra', 120, 120, -.06], ['restos', 130, 260, .08]];
+  PILA.forEach(([n, h, dx, r], j) => { const p = pop(u, .1 + j * .2); if (p <= 0) return;
+    const ang = j / PILA.length * Math.PI * 2 + t * .3, rx = lerp(Math.cos(ang) * 300, (j - 3) * 140, k), ry = lerp(780 + Math.sin(ang) * 300, 1170 + (j % 2) * 40, k);
+    recorte(n, 540 + rx, ry, h * lerp(1.3, .75, k), r, { esc: p, sombra: 'rgba(0,0,0,.6)' }); });
+  etiqueta('recorte por recorte', 540, 330, 40, -.02, fin(u, .3) * (1 - k), C.oro, TINTA);
+  if (k > 0) {
+    txt('Comenta', 540, 450, 72, { col: C.tinta, a: k });
+    const p = pop(u, corte + .4, .5); ctx.save(); ctx.translate(540, 650); ctx.scale(p, p);
+    txt(PALABRA_CTA, 0, 0, 205, { serif: true, it: true, col: C.oro, peso: 700 }); ctx.restore();
+    txt('y te mando la guía', 540, 830, 60, { col: C.tinta, a: fin(u, corte + 1.1) });
+    txt('para animar los tuyos', 540, 905, 60, { serif: true, it: true, peso: 500, col: C.crema, a: fin(u, corte + 1.4) });
+  }
+};
+
+// ---------- el cuadro ----------
+const CAPA = document.createElement('canvas'); CAPA.width = W; CAPA.height = H; const capa = CAPA.getContext('2d');
+const NEON = [[14, .45], [44, .32]];
+const CONTINUA = new Set([3, 4, 8, 10]);
+const OSCURA = new Set([17, 18]);
+function draw(frame) {
+  const t = frame / FPS, [i, u] = escenaEn(t), d = LINEAS[i].d + PAUSA, oscura = OSCURA.has(i);
+  const w = wig(t); WX = w[0]; WY = w[1];
+  const lienzo = ctx;
+  lienzo.setTransform(1, 0, 0, 1, 0, 0); lienzo.globalAlpha = 1; lienzo.filter = 'none';
+  if (oscura) { lienzo.fillStyle = C.fondo; lienzo.fillRect(0, 0, W, H); }
+  else if (PAPEL_IM) { lienzo.drawImage(PAPEL_IM, 0, 0, W, H); }
+  else { lienzo.fillStyle = PAPEL; lienzo.fillRect(0, 0, W, H); }
+  ctx = capa; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none'; ctx.setLineDash([]); ctx.shadowColor = 'transparent'; ctx.clearRect(0, 0, W, H);
+  ctx.save(); ctx.translate(WX, WY); ctx.globalAlpha = (CONTINUA.has(i) || i === 0) ? 1 : fin(u, 0, .28);
+  ESC[i](u, d, t);
+  ctx.restore();
+  ctx = lienzo;
+  if (oscura) {
+    glow(540 + WX, 800 + WY, 900, '245,197,66', .05);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (const [b, a] of NEON) { ctx.filter = `blur(${b}px)`; ctx.globalAlpha = a; ctx.drawImage(CAPA, 0, 0); }
+    ctx.restore(); ctx.filter = 'none';
+  }
+  ctx.drawImage(CAPA, 0, 0);
+  if (!oscura) { const g = ctx.createRadialGradient(540, 820, 300, 540, 820, 1300); g.addColorStop(0, 'rgba(120,90,60,0)'); g.addColorStop(1, 'rgba(120,90,60,.24)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+  grano(oscura ? .06 : .1, 1 + Math.floor(t * 12) % 3);
+  // el gancho: dos tiras grandes, clavadas, en la portada
+  if (i === 0) { tira(GANCHO[0], 300, 60, TINTA, '#ffffff', -.02); tira(GANCHO[1], 405, 76, SANGRE, '#ffffff', .015); }
+  subtitulo(i, u, 1402);
+}
+arrancar(draw);
+</script>
+</body>
+</html>

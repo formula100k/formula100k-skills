@@ -1,0 +1,58 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.2
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.7,
+   "persona": "completa",
+   "sello": "DÍA 1"
+  },
+  {
+   "desde": 1.7,
+   "hasta": 3.7,
+   "persona": "oculta",
+   "sello": "28-10-26 · 12:38 P. M.",
+   "broll": {
+    "archivo": "broll/oficina-1238.mp4",
+    "desde": 0.3
+   }
+  },
+  {
+   "desde": 3.7,
+   "hasta": 5.06,
+   "persona": "completa",
+   "sello": "DÍA 1"
+  },
+  {
+   "desde": 5.06,
+   "hasta": 7.04,
+   "persona": "oculta",
+   "sello": "28-10-26 · 12:38 P. M.",
+   "broll": {
+    "archivo": "broll/oficina-1238.mp4",
+    "desde": 5
+   }
+  },
+  {
+   "desde": 7.04,
+   "hasta": 8.23,
+   "persona": "completa",
+   "sello": "DÍA 1"
+  },
+  {
+   "desde": 8.23,
+   "hasta": 10.17,
+   "persona": "oculta",
+   "sello": "28-10-26 · 12:38 P. M.",
+   "broll": {
+    "archivo": "broll/oficina-1238b.mp4",
+    "desde": 0.5
+   }
+  }
+ ],
+ "gancho": "plumon"
+}

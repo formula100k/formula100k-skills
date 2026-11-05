@@ -1,0 +1,45 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.35
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 3.14,
+   "persona": "completa",
+   "estilo": "gancho con plantilla"
+  },
+  {
+   "desde": 3.14,
+   "hasta": 5.32,
+   "persona": [
+    {
+     "x": 0,
+     "y": 0,
+     "w": 1080,
+     "h": 960,
+     "cara": [
+      0.5,
+      0.03
+     ]
+    }
+   ],
+   "estilo": "calendario abajo"
+  },
+  {
+   "desde": 5.32,
+   "hasta": 9.12,
+   "persona": "oculta",
+   "estilo": "captura + botones de pasos"
+  },
+  {
+   "desde": 9.12,
+   "hasta": 11.06,
+   "persona": "completa",
+   "estilo": "captura arriba de la cabeza"
+  }
+ ],
+ "gancho": "franja"
+}

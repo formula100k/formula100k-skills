@@ -1,0 +1,13 @@
+{
+  "tomas": {
+    "narradora": {"video": "/ruta/a/mis-videos-editados/MI-REEL/narradora/_source_cut.mov", "captions": "/ruta/a/mis-videos-editados/MI-REEL/narradora/captions.json"},
+    "clon": {"video": "/ruta/a/mis-videos-editados/MI-REEL/clon/_source_cut.mov", "captions": "/ruta/a/mis-videos-editados/MI-REEL/clon/captions.json"}
+  },
+  "tramos": [
+    {"toma": "narradora", "desde": "Deja", "hasta": "rubro"},
+    {"toma": "clon", "desde": "sí", "hasta": "sí"},
+    {"toma": "narradora", "desde": "Este es", "hasta": "común"},
+    {"toma": "narradora", "desde": "Analicé", "hasta": "videos"},
+    {"toma": "narradora", "desde": "comenta", "hasta": "minuto"}
+  ]
+}

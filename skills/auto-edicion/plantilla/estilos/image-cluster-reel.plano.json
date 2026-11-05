@@ -1,0 +1,46 @@
+{
+ "formato": "9:16",
+ "cara": [
+  0.5,
+  0.4
+ ],
+ "escenas": [
+  {
+   "desde": 0,
+   "hasta": 1.7,
+   "persona": [
+    "completa",
+    "recorte"
+   ],
+   "estilo": "gancho con plantilla + racimo: arte"
+  },
+  {
+   "desde": 1.7,
+   "hasta": 6.04,
+   "persona": [
+    "completa",
+    "recorte"
+   ],
+   "estilo": "racimo: robótica"
+  },
+  {
+   "desde": 6.04,
+   "hasta": 7.04,
+   "persona": [
+    "completa",
+    "recorte"
+   ],
+   "estilo": "racimo: cine"
+  },
+  {
+   "desde": 7.04,
+   "hasta": 9.6,
+   "persona": [
+    "completa",
+    "recorte"
+   ],
+   "estilo": "racimo: lo que me gustaba"
+  }
+ ],
+ "gancho": "cartel"
+}

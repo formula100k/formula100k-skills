@@ -1,0 +1,44 @@
+{
+  "titulo": "Panadería · dos cuentas que se entienden mejor dibujadas",
+  "palabraCta": "HORNO",
+  "temas": {
+    "pan":    { "fondo": "#f3ead9", "tinta": "#2b2118", "ac": "#b8642a", "gris": "#8b7a68", "panel": "#e7dcc6", "pelo": "#cfc1a6" },
+    "horno":  { "fondo": "#14213a", "tinta": "#f2f4fb", "ac": "#ffb56b", "gris": "#93a0bd", "panel": "#1c2c4b", "pelo": "#33456c" },
+    "cierre": { "fondo": "#0c1512", "tinta": "#f1f5f0", "ac": "#5ec9a5", "gris": "#93a39c", "panel": "#131f1b", "pelo": "#2a3c35", "brillo": true }
+  },
+  "bloques": [
+    {
+      "nombre": "pan", "rotulo": "el pan", "tema": "pan", "ceja": "SI VENDES PAN", "nota": "ejemplo: precio ilustrativo",
+      "utileria": "una hogaza en la mano",
+      "frases": [
+        { "txt": "Si vendes pan.", "encuadre": "completa", "panel": { "tipo": "titulo", "arriba": "Si vendes", "palabra": "pan", "icono": "pan" } },
+        { "txt": "Esta hogaza cuesta ocho dólares.", "panel": { "tipo": "contador", "objeto": "pan", "prefijo": "$", "hasta": 8, "remate": "¿cara?", "queda": true } },
+        { "txt": "Rinde dieciséis rebanadas.", "panel": { "tipo": "puntos", "n": 16, "singular": "rebanada", "plural": "rebanadas", "division": { "cuenta": "$8 ÷ 16 =", "resultado": "50 ¢", "etiqueta": "por rebanada" } } },
+        { "txt": "Cada rebanada sale a cincuenta centavos.", "panel": { "sigue": true } }
+      ]
+    },
+    {
+      "nombre": "horno", "rotulo": "el horno", "tema": "horno", "ceja": "SI HORNEAS CADA MAÑANA", "nota": "ejemplo ilustrativo",
+      "utileria": "un delantal puesto",
+      "frases": [
+        { "txt": "Si horneas cada mañana.", "encuadre": "completa", "panel": { "tipo": "titulo", "arriba": "Si horneas", "palabra": "cada mañana", "icono": "horno" } },
+        { "txt": "Preparas una sola masa.", "panel": { "tipo": "ramas", "color2": "#ff8a6b",
+            "origen": { "tipo": "caja", "icono": "pan", "etiqueta": "1 masa" },
+            "salidas": [ { "n": 2, "forma": "ovalo", "etiqueta": "hogazas" }, { "n": 6, "forma": "circulo", "etiqueta": "bollos" }, { "n": 1, "forma": "plato", "etiqueta": "pizza" } ],
+            "remate": { "a": "1 masa", "b": "9 productos" } } },
+        { "txt": "De ahí salen dos hogazas, seis bollos y una pizza.", "panel": { "sigue": true } },
+        { "txt": "Una masa. Nueve productos.", "panel": { "sigue": true } }
+      ]
+    },
+    {
+      "nombre": "cierre", "tema": "cierre", "utileria": "nada en las manos",
+      "frases": [
+        { "txt": "Dos cuentas, un solo formato.", "panel": { "tipo": "mosaico", "tomas": "clip",
+            "celdas": [ { "bloque": "pan", "cifra": "50 ¢", "sub": "por rebanada" }, { "bloque": "horno", "cifra": "1 → 9", "sub": "productos" } ],
+            "pie": { "a": "2 cuentas ·", "b": "1 formato" } } },
+        { "txt": "Yo solo hablé. Lo de arriba se dibujó solo.", "encuadre": "panel", "panel": { "tipo": "pastillas", "a": { "icono": "microfono", "txt": "Yo: solo hablé" }, "b": { "txt": "lo de arriba se dibujó solo" }, "nota": "con código, cuadro a cuadro" } },
+        { "txt": "Si lo tuyo hay que explicarlo, comenta HORNO y te mando la guía.", "panel": { "tipo": "comentario", "mensaje": { "txt": "La guía para explicar con dibujos" } } }
+      ]
+    }
+  ]
+}

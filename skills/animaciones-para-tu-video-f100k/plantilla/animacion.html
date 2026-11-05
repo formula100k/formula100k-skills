@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi animación</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; min-height: 100vh; background: #222; color: #fff; font-family: Poppins, system-ui, sans-serif;
+         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; box-sizing: border-box; }
+  canvas { max-height: 72vh; max-width: 94vw; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  .botones { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  button { font: 800 17px Poppins, system-ui, sans-serif; padding: 14px 26px; border-radius: 999px; border: 0; cursor: pointer; }
+  #ver { background: #fff; color: #1A1A1A; }
+  #bajar { background: #FF8B6B; color: #1A1A1A; }
+  button:disabled { opacity: .5; cursor: wait; }
+  #estado { font-size: 15px; min-height: 22px; text-align: center; }
+  #estado.grabando { color: #FFD166; font-weight: 800; }
+</style>
+</head>
+<body>
+<canvas id="lienzo"></canvas>
+<div class="botones">
+  <button id="ver">▶ Ver de nuevo</button>
+  <button id="bajar">⬇ Descargar video</button>
+</div>
+<div id="estado"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   LO QUE PUEDES CAMBIAR (todo está aquí arriba)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+// Qué animación es: "numero" | "lista" | "flecha" | "barras" | "gancho" | "cartel"
+const TIPO = "numero";
+
+// "vertical" (reels 9:16) | "horizontal" (YouTube 16:9)
+const FORMATO = "vertical";
+
+// Tus colores. NINGUNO puede ser verde (el verde se borra en CapCut).
+const COLOR_TEXTO  = "#FFFFFF";   // letras principales
+const COLOR_ACENTO = "#FF8B6B";   // lo más importante: el número, la palabra fuerte, la barra de después
+const COLOR_OSCURO = "#1A1A1A";   // contornos y cajas
+
+// Nombre del archivo que se descarga (sin extensión)
+const NOMBRE_ARCHIVO = "mi-animacion";
+
+// Textos de cada tipo (solo se usa el del TIPO elegido)
+const NUMERO = { desde: 0, hasta: 127, antes: "", despues: "", frase: "tortas entregadas este año" };
+const LISTA  = { titulo: "", puntos: ["Pedirla con 2 días", "Mandar solo una foto", "No decir cuántos invitados"] };
+const FLECHA = { texto: "esto es lo que nadie revisa", lado: "izquierda" };   // lado del texto: "izquierda" | "derecha"
+const BARRAS = { antes: 2, despues: 9, etiquetaAntes: "Antes", etiquetaDespues: "Después", unidad: "pedidos por semana" };
+const GANCHO = { frase: "tu torta no llegó distinta por el pastelero", palabraFuerte: "pastelero" };
+const CARTEL = { nombre: "Carla Ruiz", queHace: "Tortas personalizadas" };
+
+// Duración en segundos
+const DURACION = 5;
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DE AQUÍ PARA ABAJO NO HACE FALTA TOCAR NADA
+   Reglas para que el verde se borre limpio: colores sólidos, sin sombras
+   ni brillos ni degradados, y contorno oscuro en todo lo que toca el verde.
+   ═══════════════════════════════════════════════════════════════════════ */
+const VERDE = "#00FF00";
+const FPS = 30;
+const W = FORMATO === "vertical" ? 1080 : 1920;
+const H = FORMATO === "vertical" ? 1920 : 1080;
+// Zona segura: en vertical, Instagram tapa arriba y abajo con sus botones.
+const SEGURA = FORMATO === "vertical"
+  ? { x: 90, y: 250, w: W - 180, h: H - 250 - 450 }
+  : { x: 100, y: 100, w: W - 200, h: H - 200 };
+const FUENTE = "Poppins, system-ui, sans-serif";
+
+const lienzo = document.getElementById("lienzo");
+lienzo.width = W; lienzo.height = H;
+const ctx = lienzo.getContext("2d", { alpha: false });
+
+const lim = (t) => Math.min(Math.max(t, 0), 1);
+const suave = (t) => 1 - Math.pow(1 - lim(t), 3);
+const rebote = (t) => { t = lim(t); const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+
+function fuente(px, peso = 800) { ctx.font = `${peso} ${px}px ${FUENTE}`; }
+
+// Texto con contorno oscuro sólido (12 % del tamaño) — nunca con sombra.
+function texto(str, x, y, px, color, { align = "center", alfa = 1, peso = 800 } = {}) {
+  if (!str) return;
+  ctx.save();
+  ctx.globalAlpha = alfa;
+  fuente(px, peso);
+  ctx.textAlign = align; ctx.textBaseline = "middle";
+  ctx.lineJoin = "round"; ctx.lineWidth = px * 0.12; ctx.strokeStyle = COLOR_OSCURO;
+  ctx.strokeText(str, x, y);
+  ctx.fillStyle = color; ctx.fillText(str, x, y);
+  ctx.restore();
+}
+
+// Achica la letra hasta que el texto quepa en el ancho dado.
+function tamanoQueCabe(str, pxMax, ancho, peso = 800) {
+  let px = pxMax;
+  fuente(px, peso);
+  while (px > 18 && ctx.measureText(str).width + px * 0.12 > ancho) { px -= 2; fuente(px, peso); }
+  return px;
+}
+
+// Parte un texto en renglones que quepan en el ancho.
+function renglones(str, px, ancho) {
+  fuente(px);
+  const palabras = String(str).split(/\s+/); const out = []; let linea = "";
+  for (const p of palabras) {
+    const prueba = linea ? linea + " " + p : p;
+    if (ctx.measureText(prueba).width > ancho && linea) { out.push(linea); linea = p; } else linea = prueba;
+  }
+  if (linea) out.push(linea);
+  return out;
+}
+
+function caja(x, y, w, h, r, color, alfa = 1) {
+  ctx.save(); ctx.globalAlpha = alfa; ctx.fillStyle = color;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
+}
+
+const ESCENAS = {
+  numero(t) {
+    const cx = W / 2, cy = SEGURA.y + SEGURA.h * 0.42;
+    const k = suave(t / 2);
+    const n = Math.round(NUMERO.desde + (NUMERO.hasta - NUMERO.desde) * k);
+    const str = `${NUMERO.antes}${n.toLocaleString("es")}${NUMERO.despues}`;
+    const strFinal = `${NUMERO.antes}${Number(NUMERO.hasta).toLocaleString("es")}${NUMERO.despues}`;
+    const px = tamanoQueCabe(strFinal, FORMATO === "vertical" ? 300 : 260, SEGURA.w);
+    const golpe = t > 2 ? 1 + 0.07 * Math.sin(lim((t - 2) / 0.35) * Math.PI) : 1;
+    texto(str, cx, cy, px * golpe, COLOR_ACENTO);
+    const pxF = FORMATO === "vertical" ? 72 : 64;
+    renglones(NUMERO.frase, pxF, SEGURA.w).forEach((l, i) =>
+      texto(l, cx, cy + px * 0.72 + i * pxF * 1.2, pxF, COLOR_TEXTO, { alfa: suave((t - 1.6) / 0.5) }));
+  },
+
+  lista(t) {
+    const puntos = LISTA.puntos.slice(0, 5);
+    const px = FORMATO === "vertical" ? 62 : 54;
+    const alto = px * 2.1, sep = px * 0.5;
+    let y = SEGURA.y + (FORMATO === "vertical" ? SEGURA.h * 0.12 : 20);
+    if (LISTA.titulo) {
+      const pxT = tamanoQueCabe(LISTA.titulo, px * 1.35, SEGURA.w);
+      texto(LISTA.titulo, W / 2, y + pxT / 2, pxT, COLOR_ACENTO, { alfa: suave(t / 0.4) });
+      y += pxT * 1.6;
+    }
+    const inicio = LISTA.titulo ? 0.5 : 0.2;
+    const paso = Math.min(1.2, (DURACION - 1.5 - inicio) / Math.max(puntos.length, 1));
+    puntos.forEach((p, i) => {
+      const k = suave((t - inicio - i * paso) / 0.45);
+      if (k <= 0) return;
+      const x = SEGURA.x + (1 - k) * -80, yy = y + i * (alto + sep);
+      caja(x, yy, SEGURA.w, alto, alto * 0.28, COLOR_OSCURO, k);
+      // círculo con check que se dibuja
+      const r = alto * 0.3, ccx = x + alto * 0.55, ccy = yy + alto / 2;
+      ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = COLOR_ACENTO;
+      ctx.beginPath(); ctx.arc(ccx, ccy, r, 0, Math.PI * 2); ctx.fill();
+      const c = suave((t - inicio - i * paso - 0.2) / 0.35);
+      ctx.strokeStyle = COLOR_OSCURO; ctx.lineWidth = r * 0.28; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(ccx - r * 0.45, ccy);
+      if (c > 0) ctx.lineTo(ccx - r * 0.45 + r * 0.3 * Math.min(c * 2, 1), ccy + r * 0.3 * Math.min(c * 2, 1));
+      if (c > 0.5) ctx.lineTo(ccx - r * 0.15 + r * 0.6 * (c - 0.5) * 2, ccy + r * 0.3 - r * 0.7 * (c - 0.5) * 2);
+      ctx.stroke(); ctx.restore();
+      const anchoTxt = SEGURA.w - alto * 1.3;
+      const pxP = tamanoQueCabe(p, px, anchoTxt);
+      texto(p, x + alto * 1.05, ccy, pxP, COLOR_TEXTO, { align: "left", alfa: k });
+    });
+  },
+
+  flecha(t) {
+    const izq = FLECHA.lado !== "derecha";
+    const cx = W / 2, cy = H / 2;
+    const px = FORMATO === "vertical" ? 70 : 60;
+    const anchoTxt = SEGURA.w * 0.62;
+    const lineas = renglones(FLECHA.texto, px, anchoTxt);
+    const tx = izq ? SEGURA.x : SEGURA.x + SEGURA.w;
+    const ty = cy - (FORMATO === "vertical" ? 420 : 300);
+    lineas.forEach((l, i) => texto(l, tx, ty + i * px * 1.2, px, COLOR_TEXTO, { align: izq ? "left" : "right", alfa: suave((t - 0.2) / 0.5) }));
+    // flecha curva que se traza sola hacia el centro
+    const x0 = izq ? SEGURA.x + 120 : SEGURA.x + SEGURA.w - 120, y0 = ty + lineas.length * px * 1.2 + 30;
+    const x1 = cx + (izq ? -60 : 60), y1 = cy - 40;
+    const mx = izq ? x0 - 40 : x0 + 40, my = y1;
+    const k = suave((t - 0.6) / 1.1);
+    const pts = [];
+    for (let i = 0; i <= 60 * k; i++) { const u = i / 60; pts.push([(1-u)*(1-u)*x0 + 2*(1-u)*u*mx + u*u*x1, (1-u)*(1-u)*y0 + 2*(1-u)*u*my + u*u*y1]); }
+    const grosor = FORMATO === "vertical" ? 18 : 15;
+    const trazo = (color, ancho) => {
+      if (pts.length < 2) return;
+      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = ancho; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); pts.forEach(p => ctx.lineTo(p[0], p[1])); ctx.stroke();
+      if (k >= 1) {
+        const ang = Math.atan2(y1 - my, x1 - mx), L = grosor * 3.2;
+        ctx.beginPath();
+        ctx.moveTo(x1 - L * Math.cos(ang - 0.5), y1 - L * Math.sin(ang - 0.5)); ctx.lineTo(x1, y1);
+        ctx.lineTo(x1 - L * Math.cos(ang + 0.5), y1 - L * Math.sin(ang + 0.5)); ctx.stroke();
+      }
+      ctx.restore();
+    };
+    trazo(COLOR_OSCURO, grosor * 1.9);
+    trazo(COLOR_ACENTO, grosor);
+  },
+
+  barras(t) {
+    const px = FORMATO === "vertical" ? 64 : 52;
+    const baseY = SEGURA.y + SEGURA.h * (FORMATO === "vertical" ? 0.78 : 0.8);
+    const altoMax = SEGURA.h * (FORMATO === "vertical" ? 0.5 : 0.55);
+    const max = Math.max(BARRAS.antes, BARRAS.despues, 1);
+    const anchoB = Math.min(SEGURA.w * 0.3, 320), hueco = anchoB * 0.6;
+    const x0 = W / 2 - anchoB - hueco / 2;
+    [[BARRAS.antes, BARRAS.etiquetaAntes, COLOR_TEXTO, 0.3], [BARRAS.despues, BARRAS.etiquetaDespues, COLOR_ACENTO, 1.4]].forEach(([v, et, color, t0], i) => {
+      const k = suave((t - t0) / 1.0);
+      const x = x0 + i * (anchoB + hueco), h = altoMax * (v / max) * k;
+      caja(x - 8, baseY - h - 8, anchoB + 16, h + 16, 22, COLOR_OSCURO, k > 0 ? 1 : 0);
+      caja(x, baseY - h, anchoB, h, 16, color);
+      if (k > 0) texto(String(Math.round(v * k)), x + anchoB / 2, baseY - h - px * 0.9, px * 1.5, color);
+      texto(et, x + anchoB / 2, baseY + px * 0.95, px * 0.8, COLOR_TEXTO, { alfa: suave((t - t0) / 0.4) });
+    });
+    const pxU = tamanoQueCabe(BARRAS.unidad, px * 0.8, SEGURA.w);
+    texto(BARRAS.unidad, W / 2, baseY + px * 2.1, pxU, COLOR_TEXTO, { alfa: suave((t - 2.4) / 0.5), peso: 600 });
+  },
+
+  gancho(t) {
+    const palabras = GANCHO.frase.split(/\s+/);
+    const fuerte = (GANCHO.palabraFuerte || "").toLowerCase();
+    let px = FORMATO === "vertical" ? 120 : 110;
+    let lineas = renglones(GANCHO.frase, px, SEGURA.w);
+    while (lineas.length > (FORMATO === "vertical" ? 5 : 3) && px > 40) { px -= 6; lineas = renglones(GANCHO.frase, px, SEGURA.w); }
+    const altoL = px * 1.18, y0 = H / 2 - (lineas.length - 1) * altoL / 2;
+    let idx = 0; const paso = Math.min(0.28, 2.6 / palabras.length);
+    lineas.forEach((l, li) => {
+      fuente(px);
+      const ps = l.split(" "); const anchoTotal = ctx.measureText(l).width; let x = W / 2 - anchoTotal / 2;
+      ps.forEach(p => {
+        const w = ctx.measureText(p).width, esp = ctx.measureText(" ").width;
+        const k = (t - idx * paso) / 0.22;
+        if (k > 0) {
+          const esc = rebote(k) * 0.35 + 0.65 * lim(k);
+          const limpia = p.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+          const color = fuerte && fuerte.split(/\s+/).some(f => f.replace(/[^\p{L}\p{N}]/gu, "") === limpia) ? COLOR_ACENTO : COLOR_TEXTO;
+          ctx.save(); ctx.translate(x + w / 2, y0 + li * altoL); ctx.scale(esc, esc);
+          texto(p, 0, 0, px, color); ctx.restore();
+        }
+        x += w + esp; idx++;
+      });
+    });
+  },
+
+  cartel(t) {
+    const entra = suave(t / 0.6), sale = DURACION - 0.7, kSale = suave((t - sale) / 0.6);
+    const desliz = (1 - entra) + kSale;
+    const pxN = FORMATO === "vertical" ? 78 : 70, pxQ = pxN * 0.58;
+    fuente(pxN); const wN = ctx.measureText(CARTEL.nombre).width; fuente(pxQ, 600); const wQ = ctx.measureText(CARTEL.queHace).width;
+    const ancho = Math.min(Math.max(wN, wQ) + pxN * 1.4, SEGURA.w);
+    const alto = pxN * 2.3;
+    const y = FORMATO === "vertical" ? SEGURA.y + SEGURA.h - alto : SEGURA.y + SEGURA.h - alto;
+    const x = SEGURA.x - desliz * (ancho + SEGURA.x + 40);
+    caja(x, y, ancho, alto, 18, COLOR_OSCURO);
+    caja(x, y, pxN * 0.22, alto, 8, COLOR_ACENTO);
+    const kT = suave((t - 0.35) / 0.4) * (1 - kSale);
+    texto(CARTEL.nombre, x + pxN * 0.6, y + alto * 0.36, tamanoQueCabe(CARTEL.nombre, pxN, ancho - pxN * 0.8), COLOR_TEXTO, { align: "left", alfa: kT });
+    texto(CARTEL.queHace, x + pxN * 0.6, y + alto * 0.72, tamanoQueCabe(CARTEL.queHace, pxQ, ancho - pxN * 0.8, 600), COLOR_ACENTO, { align: "left", alfa: kT, peso: 600 });
+  },
+};
+
+function cuadro(t) {
+  ctx.fillStyle = VERDE; ctx.fillRect(0, 0, W, H);
+  (ESCENAS[TIPO] || ESCENAS.numero)(Math.min(t, DURACION));
+}
+
+const listaFuente = document.fonts.load(`800 100px Poppins`).then(() => document.fonts.load(`600 100px Poppins`)).catch(() => {});
+
+let raf;
+function reproducir() {
+  cancelAnimationFrame(raf);
+  const t0 = performance.now();
+  const bucle = (ahora) => { const t = (ahora - t0) / 1000; cuadro(t); if (t < DURACION) raf = requestAnimationFrame(bucle); };
+  raf = requestAnimationFrame(bucle);
+}
+
+function tipoDeVideo() {
+  const opciones = ["video/mp4;codecs=avc1.640034", "video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9", "video/webm"];
+  return opciones.find((o) => window.MediaRecorder && MediaRecorder.isTypeSupported(o));
+}
+
+async function descargar() {
+  const estado = document.getElementById("estado");
+  const botones = document.querySelectorAll("button");
+  const tipo = tipoDeVideo();
+  if (!tipo) {
+    estado.textContent = "Tu navegador no puede grabar video. Ábrela en Google Chrome, o graba la pantalla (en Mac: Cmd + Shift + 5).";
+    return;
+  }
+  await listaFuente;
+  cancelAnimationFrame(raf);
+  botones.forEach((b) => (b.disabled = true));
+  estado.className = "grabando";
+  estado.textContent = "Grabando… no cambies de pestaña ni minimices la ventana";
+  const flujo = lienzo.captureStream(FPS);
+  const grabadora = new MediaRecorder(flujo, { mimeType: tipo, videoBitsPerSecond: 12000000 });
+  const trozos = [];
+  grabadora.ondataavailable = (e) => e.data.size && trozos.push(e.data);
+  const listo = new Promise((r) => (grabadora.onstop = r));
+  grabadora.start(250);
+  const t0 = performance.now();
+  await new Promise((fin) => {
+    const bucle = (ahora) => { const t = (ahora - t0) / 1000; cuadro(t); if (t < DURACION + 0.25) requestAnimationFrame(bucle); else fin(); };
+    requestAnimationFrame(bucle);
+  });
+  grabadora.stop();
+  await listo;
+  const archivo = new Blob(trozos, { type: tipo });
+  const ext = tipo.startsWith("video/mp4") ? "mp4" : "webm";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(archivo);
+  a.download = `${NOMBRE_ARCHIVO}.${ext}`;
+  document.body.appendChild(a); a.click(); a.remove();
+  botones.forEach((b) => (b.disabled = false));
+  estado.className = "";
+  estado.textContent = `✓ Listo: busca «${a.download}» en tu carpeta de Descargas`;
+  window.__resultado = { tipo, bytes: archivo.size, nombre: a.download };
+}
+
+document.getElementById("ver").onclick = reproducir;
+document.getElementById("bajar").onclick = descargar;
+listaFuente.then(reproducir);
+</script>
+</body>
+</html>

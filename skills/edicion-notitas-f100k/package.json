@@ -1,0 +1,9 @@
+{
+  "name": "edicion-notitas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Edición estilo notitas: deja listo el motor de render (Remotion) dentro de render/.",
+  "scripts": {
+    "postinstall": "node scripts/preparar.mjs"
+  }
+}

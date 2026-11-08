@@ -38,6 +38,35 @@ export function leerLlave(entorno = process.env, archivo = ARCHIVO_LLAVE) {
   return { llave: null, origen: null };
 }
 
+export const ARCHIVO_LLAVE_GEMINI = join(homedir(), '.editor-video', 'llave-gemini.txt');
+
+// Llave de Gemini para la revisión del guion (segunda lectura del corte).
+export function leerLlaveGemini(entorno = process.env, archivo = ARCHIVO_LLAVE_GEMINI) {
+  for (const v of ['GEMINI_API_KEY', 'GOOGLE_API_KEY']) {
+    if (entorno[v] && entorno[v].trim()) return { llave: entorno[v].trim(), origen: `la variable ${v}` };
+  }
+  if (existsSync(archivo)) {
+    const m = readFileSync(archivo, 'utf8').match(/AIza[0-9A-Za-z_-]{20,}/);
+    if (m) return { llave: m[0], origen: archivo };
+  }
+  return { llave: null, origen: null };
+}
+
+export const FRASE_GEMINI = {
+  ok: 'Revisión Gemini: SÍ corrió. Quitó muletillas, repeticiones o re-enunciados que quedaban (detalle arriba, líneas «revisión Gemini»).',
+  nothing: 'Revisión Gemini: SÍ corrió y el guion quedó limpio.',
+  no_key: `Revisión Gemini: NO corrió (sin llave). Guárdala en ${ARCHIVO_LLAVE_GEMINI}.`,
+  api_fail: 'Revisión Gemini: NO corrió. Hay llave, pero la llamada falló (arriba dice por qué).',
+  aborted_overbudget: 'Revisión Gemini: NO se aplicó. Quiso borrar demasiado y se descartó por seguridad.',
+  apagado: 'Revisión Gemini: apagada a propósito (--no-gemini).',
+};
+
+function avisoGemini(l) {
+  return l.llave
+    ? `Revisión del guion con Gemini: ENCENDIDA (llave en ${l.origen}).`
+    : `Revisión del guion con Gemini: APAGADA (no hay llave). Para encenderla, guarda tu llave de Google AI Studio en: ${ARCHIVO_LLAVE_GEMINI}`;
+}
+
 export function motorTranscripcion(entorno = process.env) {
   const forzado = (entorno.EDITOR_TRANSCRIPCION || '').trim().toLowerCase();
   if (forzado === 'mlx' || forzado === 'faster') return forzado;
@@ -112,12 +141,14 @@ function principal() {
   const a = leerArgs(process.argv.slice(2));
   const filas = revisar();
   const llave = leerLlave();
+  const llaveGemini = leerLlaveGemini();
 
   if (a.revisar) {
     console.log('Editor de video · revisión\n');
     for (const f of filas) console.log(`${f.ok ? '✓' : '✗'} ${f.nombre}${f.ok ? '' : `\n    Se arregla con: ${f.arreglo}`}`);
     console.log(`\nTranscripción: ${motorTranscripcion() === 'mlx' ? 'mlx-whisper (Mac con chip Apple)' : 'faster-whisper'}. La primera vez descarga el modelo de voz.`);
     console.log(avisoLlave(llave));
+    console.log(avisoGemini(llaveGemini));
     process.exit(filas.every((f) => f.ok) ? 0 : 1);
   }
 
@@ -145,12 +176,14 @@ function principal() {
   }
 
   console.error(avisoLlave(llave));
+  console.error(avisoGemini(llaveGemini));
   const motor = motorTranscripcion();
   const con = ['--with', 'numpy', '--with', 'certifi', ...(motor === 'faster' ? ['--with', 'faster-whisper'] : [])];
   const args = ['run', '--no-project', '--python', '3.12', ...con, 'python', join(scripts, 'render.py'), carpeta, video,
     ...(a.soloCorte ? ['--solo-corte'] : []), ...(a.recortar ? ['--recortar'] : []), ...a.resto];
   const entorno = { ...process.env, PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8', EDITOR_TRANSCRIPCION: motor };
   if (llave.llave) entorno.ANTHROPIC_API_KEY = llave.llave; else delete entorno.ANTHROPIC_API_KEY;
+  if (llaveGemini.llave) entorno.GEMINI_API_KEY = llaveGemini.llave;
 
   const r = spawnSync('uv', args, { cwd: skill, stdio: 'inherit', env: entorno });
   if (r.status !== 0) {
@@ -167,8 +200,14 @@ function principal() {
   console.error(`  Original: ${s(antes)} → cortado: ${s(existsSync(corte) ? duracion(corte) : null)}`);
   if (!a.soloCorte && existsSync(final)) console.error(`  Video final: ${final} (${s(duracion(final))})`);
   let estado = llave.llave ? 'ok' : 'no_key';
-  try { estado = JSON.parse(readFileSync(join(carpeta, 'corte.json'), 'utf8')).corte_fino || estado; } catch { /* corte hecho por una versión anterior */ }
+  let estadoGemini = llaveGemini.llave ? 'ok' : 'no_key';
+  try {
+    const c = JSON.parse(readFileSync(join(carpeta, 'corte.json'), 'utf8'));
+    estado = c.corte_fino || estado;
+    estadoGemini = c.revision_gemini || estadoGemini;
+  } catch { /* corte hecho por una versión anterior */ }
   console.error(`  ${FRASE_CORTE_FINO[estado] || FRASE_CORTE_FINO.no_key}`);
+  console.error(`  ${FRASE_GEMINI[estadoGemini] || FRASE_GEMINI.no_key}`);
 }
 
 if (process.argv[1] && realpathSync(resolve(process.argv[1])) === realpathSync(fileURLToPath(import.meta.url))) principal();

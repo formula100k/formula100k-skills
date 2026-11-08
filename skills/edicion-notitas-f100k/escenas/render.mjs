@@ -31,6 +31,33 @@ await pag.setViewport({width: 1080, height: 1920, deviceScaleFactor: 1});
 await pag.goto(url);
 const total = await pag.evaluate(() => window.listo);
 
+// ── 🔴 Cartón quieto = video muerto ──────────────────────────────────────
+// Cada escena dura de 2 a 6 s y entra algo nuevo (foto, etiqueta, sello…) cada 3 s como mucho.
+// Una frase de `cuando` que no se encuentra deja la pieza fuera y el cartón vacío: también bloquea.
+const tiempos = await pag.evaluate(() => window.TIEMPOS || null);
+const sinResolver = await pag.evaluate(() => window.SIN_RESOLVER || []);
+if (tiempos && resto[0] !== '--cuadro') {
+  const fallas = sinResolver.map((x) => `no encontré la frase de ${x} en PALABRAS: esa pieza no aparece`);
+  for (const e of tiempos.filter((t) => t.tipo === 'escena')) {
+    const largo = e.hasta - e.desde;
+    if (largo > 6.5) fallas.push(`escena «${e.cuando}» dura ${largo.toFixed(1)} s (máximo 6): pártela en dos o córtala antes`);
+    const entradas = tiempos.filter((t) => t.tipo !== 'escena' && t.desde >= e.desde - 0.05 && t.desde < e.hasta).map((t) => t.desde).sort((a, b) => a - b);
+    let antes = e.desde;
+    for (const d of [...entradas, e.hasta]) {
+      if (d - antes > 3.5) fallas.push(`escena «${e.cuando}»: ${(d - antes).toFixed(1)} s de cartón quieto entre ${antes.toFixed(1)} y ${d.toFixed(1)} s (suma una foto, etiqueta o sello anclado a lo que se dice)`);
+      antes = Math.max(antes, d);
+    }
+  }
+  const lado = salida.replace(/\.[^.\/\\]+$/, '') + '.escenas.json';
+  (await import('node:fs')).writeFileSync(lado, JSON.stringify(tiempos, null, 1));
+  for (const f of fallas) console.log('[bloqueo] ' + f);
+  if (fallas.length && process.env.ESCENAS_FORZAR !== '1') {
+    console.error(`\n${fallas.length} bloqueo(s) en las escenas: no horneo un cartón vacío o quieto. Arregla config.js y vuelve a correr.`);
+    await nav.close();
+    process.exit(1);
+  }
+}
+
 if (resto[0] === '--cuadro') {
   for (let i = 1; i < resto.length; i += 2) {
     await pag.evaluate(f => window.draw(f), Number(resto[i]));

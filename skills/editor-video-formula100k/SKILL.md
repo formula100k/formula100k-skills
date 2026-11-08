@@ -120,6 +120,22 @@ Crea la carpeta y el archivo vacío y ábrelo para que la persona pegue la llave
 
 El modelo del corte fino se cambia con la variable `EDITOR_MODELO_CORTE` o con `--semantic-model <modelo>` (por ejemplo, uno más económico).
 
+## Revisión del guion con Gemini (segunda lectura)
+
+Después del corte fino (o en su lugar, si no hay llave de Anthropic), **Gemini relee el guion que quedó** palabra por palabra y
+saca lo que todavía sobra: muletillas («este», «o sea», «bueno», «¿no?», «tipo»), repeticiones, arranques en falso, frases
+dichas dos veces y re-enunciados que no suman. Protege el gancho, los pasos, los datos y el CTA, y nunca borra más del 25 % de
+lo que queda (si lo intenta, se descarta). Corre sola en cada corte y deja su resultado en `corte.json` → `revision_gemini`
+(`ok` · `nothing` · `no_key` · `api_fail` · `aborted_overbudget` · `apagado`).
+
+- **La llave** se saca gratis en aistudio.google.com → «Get API key» (empieza con `AIza`). Se guarda igual que la de Anthropic,
+  en su archivo propio, y la pega la persona (nunca en el chat):
+  ```
+  ~/.editor-video/llave-gemini.txt
+  ```
+- Modelo: `gemini-2.5-flash` de fábrica; se cambia con `EDITOR_MODELO_GEMINI` o `--gemini-model <modelo>`. `--no-gemini` la apaga.
+- 🔴 En `edicion-notitas-f100k` esta revisión es **obligatoria**: sin `revision_gemini: ok | nothing` el render no arranca.
+
 ## Flujo completo
 
 `EDITAR` es `node "$SKILL/scripts/editar.mjs"`.
@@ -380,6 +396,8 @@ Si `[warn]` dice que una keyword no está en el transcript, cámbiala por palabr
 |---|---|
 | `--semantic-level ajustado` | Corte fino más apretado: también quita preámbulos, divagaciones y frases que repiten la idea. Protege gancho, pasos, datos y llamado a la acción. De fábrica es `conservador` (solo tomas falladas). Úsalo cuando grabaste limpio y el video quedó largo y flojo. |
 | `--no-semantic` | Apaga el corte fino aunque haya llave. |
+| `--no-gemini` | Apaga la revisión del guion con Gemini. |
+| `--gemini-model <modelo>` | Otro modelo de Gemini para la revisión (de fábrica `gemini-2.5-flash`). |
 | `--min-silence 0.15` | Deja más respiración entre frases (de fábrica 0.08; `0.05` aprieta más). |
 | `--pad 0.09` | Si se comen el final de las palabras (de fábrica 0.06; `0.03` da un ritmo más apretado). |
 | `--no-dedupe` | Conserva repeticiones a propósito («muy, muy bueno»). |
@@ -482,6 +500,8 @@ Guárdalo en <carpeta>/IA/motion-paso1/ y renderiza el .mp4.
 | `No puedo editar todavía. Falta: …` | Instala lo que lista, con el comando que indica, y vuelve a correr. |
 | `Falta instalar el motor de montaje` | `node "$SKILL/scripts/preparar.mjs"` |
 | `semantic OFF` | No hay llave: no hubo corte fino. No es un error. Dilo y ofrece ponerla. |
+| `revisión Gemini OFF` | No hay llave de Gemini en `~/.editor-video/llave-gemini.txt`. En notitas bloquea el render; ofrece ponerla. |
+| `revisión Gemini: la API respondió 400/403` | Llave mal copiada o sin permiso para ese modelo. Revisa el archivo o cambia `EDITOR_MODELO_GEMINI`. |
 | `corte fino: la API respondió 401` | La llave está mal copiada o fue borrada. Revisa el archivo de la llave. |
 | `corte fino: la API respondió 400` o `403` con un texto de saldo o crédito | La cuenta no tiene saldo: se carga en «Billing» de console.anthropic.com. |
 | `semantic: Claude propuso borrar >40%` | Sugerencia descartada por seguridad. Si el video de verdad tiene mucho descarte, `--recortar --semantic-max-drop 0.6`. |

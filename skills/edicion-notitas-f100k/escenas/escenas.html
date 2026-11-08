@@ -263,12 +263,15 @@ function armarPiezas() {
     lista.push(p.tipo === 'escena' ? p : { escala: CFG.escalaToma || 1, ...p });
     (p.hijos || []).forEach(h => lista.push({ escala: CFG.escalaEscena || 1, ...h, hasta: h.hasta || p.hasta, finMas: p.finMas }));
   });
+  // Tiempos resueltos: render.mjs los revisa (escena ≤ 6 s, una pieza nueva cada ≤ 3 s) y los deja junto al video.
+  window.TIEMPOS = []; window.SIN_RESOLVER = [];
   lista.forEach((p, i) => {
     const t0 = p.t != null ? p.t : tiempoDe(p.cuando);
-    if (t0 == null) return;
+    if (t0 == null) { window.SIN_RESOLVER.push(`${p.tipo}: «${p.cuando}»`); return; }
     const t = t0 + (p.mas || 0);
     let dura = p.dura;
     if (p.hasta) { const d = dondeDe(p.hasta); if (d) dura = d[1] + (p.finMas || 0) - t; }
+    window.TIEMPOS.push({ tipo: p.tipo, cuando: p.cuando || null, desde: +t.toFixed(3), hasta: +(t + (dura || 3.4)).toFixed(3) });
     const el = document.createElement('div');
     if (p.tipo === 'escena') {
       el.className = 'pieza escena';

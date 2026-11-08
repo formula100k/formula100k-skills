@@ -51,6 +51,39 @@ if (VARIANTE !== undefined) {
 const crudas: {word?: string; text?: string; start: number; end: number}[] = leer('captions.json');
 const edl: {newStart: number; newEnd: number}[] = fs.existsSync(path.join(DEST, 'edl.json')) ? leer('edl.json') : [];
 const avisos: string[] = [];
+// Lo que impide entregar: se imprime como [bloqueo] y el render no arranca.
+const bloqueos: string[] = [];
+
+// ── 🔴 Protocolo de corte obligatorio ─────────────────────────────────────
+// Ningún video se renderiza si no pasó por la skill de cortes (editor-video:
+// silencios, muletillas, tomas falladas) y por la revisión del guion con Gemini.
+// El sello es <DEST>/corte.json, que dejan editar.mjs --solo-corte y corte_fino.py.
+const ED_CMD = 'node "$ED/editar.mjs" "$VIDEO" --solo-corte --carpeta "$DEST" --semantic-level ajustado';
+const corteJson = path.join(DEST, 'corte.json');
+if (!fs.existsSync(corteJson)) {
+  bloqueos.push(`este video NO pasó por el corte obligatorio (falta corte.json). Corre primero: ${ED_CMD}`);
+} else {
+  const c = JSON.parse(fs.readFileSync(corteJson, 'utf8'));
+  const orig = Number(c.duracion_original) || 0;
+  const cort = Number(c.duracion_cortada) || 0;
+  if (orig > 0 && cort >= orig * 0.97)
+    bloqueos.push(`el corte no quitó casi nada (${orig.toFixed(1)} s → ${cort.toFixed(1)} s): eso es unir el video, no cortarlo. Rehaz el paso 2`);
+  const g = String(c.revision_gemini ?? 'falta');
+  if (!['ok', 'nothing'].includes(g) && process.env.NOTITAS_SIN_GEMINI !== '1')
+    bloqueos.push(
+      `la revisión del guion con Gemini no corrió (revision_gemini: ${g}). ` +
+        (g === 'no_key' || g === 'falta'
+          ? 'Guarda la llave de Google AI Studio en ~/.editor-video/llave-gemini.txt y rehaz el corte'
+          : g === 'sin_palabras'
+            ? 'corre corte_fino.py con PALABRAS=crudo.json delante'
+            : 'mira el registro del corte y rehazlo'),
+    );
+}
+for (const s of edl) {
+  const largo = s.newEnd - s.newStart;
+  if (largo > 5)
+    bloqueos.push(`tramo de ${largo.toFixed(1)} s sin un solo corte (${s.newStart.toFixed(1)}–${s.newEnd.toFixed(1)} s): el corte fino no se hizo (corte_fino.py)`);
+}
 
 // ── anclaje por frase ────────────────────────────────────────────────────
 const norm = (s: string) =>
@@ -423,6 +456,24 @@ sfx.sort((a, b) => a.t - b.t);
 const sfxLimpio = sfx.filter((s, i) => i === 0 || s.t - sfx[i - 1].t >= 0.12);
 
 // ── reporte de ritmo: una cosa a la vez y nunca 5 s vacíos ───────────────
+// Las escenas de cartón kraft horneadas en la base dejan sus tiempos en
+// <video>.escenas.json (lo escribe escenas/render.mjs). Cada pieza que entra
+// cuenta como estímulo por 3 s como mucho: un cartón quieto 10 s NO pasa.
+const escenasHorneadas: {desde: number; hasta: number; que: string}[] = [];
+{
+  const v = String(plan.video ?? '_source_cut.mov');
+  const side = path.join(DEST, v.replace(/\.[^.]+$/, '') + '.escenas.json');
+  if (fs.existsSync(side)) {
+    const ts: {tipo: string; desde: number; hasta: number}[] = JSON.parse(fs.readFileSync(side, 'utf8'));
+    const esc = ts.filter((t) => t.tipo === 'escena');
+    for (const t of ts.filter((t) => t.tipo !== 'escena')) {
+      const tope = esc.find((e) => t.desde >= e.desde - 0.05 && t.desde <= e.hasta)?.hasta ?? t.hasta;
+      escenasHorneadas.push({desde: t.desde, hasta: Math.min(t.desde + 3, tope, t.hasta), que: `escena: ${t.tipo}`});
+    }
+  } else if (v !== '_source_cut.mov') {
+    avisos.push(`${v} no trae ${path.basename(side)}: hornea las escenas con la versión nueva de hornear.mjs para que el ritmo las cuente`);
+  }
+}
 const elementos = [
   ...(gancho ? [{desde: 0, hasta: gancho.hasta, que: 'gancho'}] : []),
   ...notitas.map((n) => ({desde: n.desde, hasta: n.hasta, que: `notita «${n.texto}»`})),
@@ -430,13 +481,14 @@ const elementos = [
   ...laminas.map((l) => ({desde: l.desde, hasta: l.hasta, que: 'lámina'})),
   ...mockups.map((m) => ({desde: m.desde, hasta: m.hasta, que: `mockup ${m.tipo}`})),
   ...camara.filter((c) => c.zoom !== 1 && c.zoom !== 1.1 || c.bn || c.marco).map((c) => ({desde: c.desde, hasta: c.hasta, que: 'cámara'})),
+  ...escenasHorneadas,
 ].sort((a, b) => a.desde - b.desde);
 let ultimo = 0;
 for (const e of elementos) {
-  if (e.desde - ultimo > 5) avisos.push(`ritmo: ${(e.desde - ultimo).toFixed(1)} s sin nada entre ${ultimo.toFixed(1)} y ${e.desde.toFixed(1)}`);
+  if (e.desde - ultimo > 5) bloqueos.push(`ritmo: ${(e.desde - ultimo).toFixed(1)} s sin nada entre ${ultimo.toFixed(1)} y ${e.desde.toFixed(1)}`);
   ultimo = Math.max(ultimo, e.hasta);
 }
-if (DURACION - ultimo > 5) avisos.push(`ritmo: ${(DURACION - ultimo).toFixed(1)} s sin nada al final`);
+if (DURACION - ultimo > 5) bloqueos.push(`ritmo: ${(DURACION - ultimo).toFixed(1)} s sin nada al final`);
 for (let i = 0; i < stickers.length; i++)
   for (let k = i + 1; k < stickers.length; k++)
     if (stickers[k].desde < stickers[i].hasta && stickers[i].desde < stickers[k].hasta)
@@ -487,7 +539,13 @@ console.log(
     `${laminas.length} láminas · ${mockups.length} mockups · ${camara.length} tramos de cámara · ${sfxLimpio.length} efectos · un elemento cada ${cadencia.toFixed(1)} s`,
 );
 for (const a of avisos) console.log(`[warn] ${a}`);
-if (SOLO_RESOLVER) process.exit(0);
+for (const b of bloqueos) console.log(`[bloqueo] ${b}`);
+if (SOLO_RESOLVER) process.exit(bloqueos.length ? 1 : 0);
+// Un tramo de prueba (--desde/--hasta) puede salir para mirar el plan; el video entero, no.
+if (bloqueos.length && flag('--desde') === undefined) {
+  console.error(`\n[error] ${bloqueos.length} bloqueo(s): este video no cumple el protocolo y no se renderiza. Arréglalos arriba y vuelve a correr.`);
+  process.exit(1);
+}
 
 if (!fs.existsSync(path.join(DEST, props.video))) {
   console.error(`[error] no existe el video ${props.video} en ${DEST}`);

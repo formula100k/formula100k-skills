@@ -38,6 +38,25 @@ Esta skill viaja en el módulo de Edición y corre igual en Mac y en Windows (en
 - **Otras skills:** `gancho-golpe-f100k` y `editor-video-formula100k` vienen en el mismo módulo; `collage-gancho-f100k`
   (fotos para las escenas) viene en el de Animación. Si alguna no está instalada, sigue sin ella y avisa en una línea.
 
+## 🔴 Protocolo de corte obligatorio (nov-2026: un video salió unido, sin cortes y con 10 s de cartón quieto)
+
+Ningún video se entrega sin pasar por la skill de cortes. No hay atajo «lo uno y le pongo las escenas encima».
+1. **Todo video pasa por el paso 2** (`editar.mjs --solo-corte … --semantic-level ajustado`, y si hace falta `corte_fino.py`
+   con `PALABRAS=crudo.json`). Aunque venga «ya editado», aunque sea una serie o aunque sea casi todo cartón.
+2. **Gemini revisa el guion** en ese mismo corte: muletillas, repeticiones, arranques en falso y frases dichas dos veces.
+   Llave en `~/.editor-video/llave-gemini.txt` (ver `editor-video-formula100k`, «Revisión del guion con Gemini»).
+3. **El render lo verifica solo y se niega** (`[bloqueo]`, sale con error) si:
+   - falta `corte.json` en `DEST` (el video no pasó por el corte);
+   - el corte quitó menos del 3 % (eso es unir, no cortar);
+   - `revision_gemini` no es `ok` ni `nothing` (solo `NOTITAS_SIN_GEMINI=1` lo salta, y solo si la persona lo pide);
+   - hay un tramo del EDL de más de 5 s sin un corte (no se hizo el corte fino);
+   - hay más de 5 s sin un estímulo nuevo (`ritmo`), **contando las escenas de cartón**: cada pieza que entra vale 3 s.
+4. **Escenas de cartón**: `hornear.mjs` se niega si una escena dura más de 6 s, si pasan más de 3,5 s sin que entre una pieza
+   nueva (foto, etiqueta, sello, precio, letrero) o si una frase de `cuando` no se encuentra (la pieza no aparecería).
+   Deja los tiempos en `<salida>.escenas.json`, que el render usa para el ritmo.
+5. Un `[bloqueo]` no se entrega «con aviso»: se arregla y se vuelve a renderizar. Al entregar di la duración original → cortada
+   y lo que quitaron el corte fino y Gemini.
+
 ## Reglas que mandan (por encima de la referencia)
 
 0. **Sin frase puente** después del gancho («Pero antes, una cosa…»): suena robótica. Se entra directo a la historia o al
@@ -86,7 +105,7 @@ Un tramo donde solo se ve la cara hablando de algo que se puede mostrar (un luga
 en la cara con una notita**: lleva una **escena** = cartón kraft a pantalla completa que tapa la toma (la voz sigue) con fotos
 reales de borde rasgado, etiquetas de papel, sellos, precios y letreros que entran con corte seco, cada uno anclado a la frase
 que lo nombra, y quietos.
-- De 3 a 5 escenas por cada 90 s, de 2 a 6 s cada una. No reemplazan a los memes ni a las capturas: van en los huecos de pura cara.
+- De 3 a 5 escenas por cada 90 s, de 2 a 6 s cada una (más de 6 s bloquea el horneado) y una pieza nueva cada ≤ 3 s. No reemplazan a los memes ni a las capturas: van en los huecos de pura cara.
 - Fotos reales siempre: las de la persona (su carrete, su local, su producto), capturas, o la biblioteca de `collage-gancho-f100k`
   si está instalada.
 - Se hornean en la toma ANTES del render de notitas: `node "$SK/escenas/hornear.mjs" <carpeta con config.js y fotos/> <base.mp4> <base_escenas.mp4>`
@@ -94,7 +113,7 @@ que lo nombra, y quietos.
   · `etiqueta` · `etiqueta mano` · `sello` · `precio` · `letrero`; `x, y` = centro; `cuando`/`hasta` = frases; `quieto: true` siempre).
   Las letras de las escenas vienen en `escenas/letras/` (todas con licencia libre OFL).
 - En el PLAN: saca las notitas, memes y zooms que caían dentro de una escena y borra de `cortes.json` los cortes que caen dentro
-  (si no, el cartón salta con el zoom de corte). El aviso `[warn] ritmo` en un tramo con escena es falso.
+  (si no, el cartón salta con el zoom de corte). Dentro de una escena el ritmo lo ponen sus piezas: una nueva cada ≤ 3 s.
 - Clips de apoyo de la persona (su pantalla, un objeto real) también se hornean en la base antes, con ffmpeg (`overlay` con
   `enable='between(t,a,b)'`).
 - En `PLAN.json` un `hasta` numérico no es segundo absoluto: para cortar a un tiempo exacto usa `dur`.
@@ -165,6 +184,7 @@ Si el video ya tiene un corte fino aprobado en otra carpeta (`_source_cut.mov` +
 guarda sus `cortes` en `cortes.json`. No lo vuelvas a cortar.
 
 ### 2 · Corte ultra fino (siempre, aunque el video venga de otra edición)
+🔴 Obligatorio (ver «Protocolo de corte obligatorio»): sin `corte.json` con la revisión de Gemini, el render no arranca.
 Primero **transcribe el crudo entero y entiende el guion**: qué quiere decir, cuál es la toma buena de cada frase, dónde repitió
 o se corrigió. Un corte heredado de otra carpeta también se audita así antes de usarlo.
 ```bash
@@ -179,6 +199,7 @@ node "$ED/editar.mjs" "$VIDEO" --solo-corte --carpeta "$DEST" --semantic-level a
 - 🔴 **Los tramos a mano NO son el corte fino**: pásalos SIEMPRE por `uv run --no-project --python 3.12 --with numpy python -X utf8 "$SK/scripts/corte_fino.py" VIDEO "$DEST" tramos.json`
   (saca toda pausa > 0,12 s dentro de cada tramo; con `PALABRAS=crudo.json` delante no parte palabras), pega a su vecino los
   pedacitos < 0,2 s que marque `revisar_uniones` y recién ahí monta. Un tramo de más de 5 s en el EDL = no se hizo.
+- El registro tiene que decir `revisión Gemini: …` con `ok` o «el guion quedó limpio». Si dice `OFF`, pide la llave y rehaz el corte.
 - El registro tiene que decir `snap=on`. Con `snap=off` los cortes se comen el final de las palabras: para y arréglalo antes de seguir.
 - **Verifica tramo por tramo**: `uv run --no-project --python 3.12 --with numpy --with openai-whisper python -X utf8 "$SK/scripts/auditar.py" VIDEO "$DEST/edl.json" aud.txt`
   transcribe CADA tramo por separado; whisper sobre el corte entero funde las repeticiones en una palabra larga y no las ves.

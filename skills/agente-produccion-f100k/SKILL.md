@@ -192,6 +192,10 @@ Si la persona tiene la toma grabada **y** `editor-video-formula100k` está insta
 
 Si no está instalado: «El montaje automático viene en el módulo de Edición. Te dejo las piezas listas para ponerlas en tu editor.»
 
+🔴 **Protocolo obligatorio de corte:** ninguna toma se monta (ni se le hornean escenas o láminas encima) sin pasar antes por el
+corte de `editor-video-formula100k` con la revisión del guion con Gemini (`corte.json` con `revision_gemini: ok | nothing`).
+Unir clips sin cortar no es editar. Si el corte no corrió, dilo y no entregues el video.
+
 ### PASO 3 — Reporte de producción
 
 ```

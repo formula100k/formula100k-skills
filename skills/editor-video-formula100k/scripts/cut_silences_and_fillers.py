@@ -630,6 +630,57 @@ def semantic_clean(
     return kept, removed, 'ok'
 
 
+def gemini_review(
+    words: list[dict],
+    api_key: str | None,
+    model: str | None = None,
+    guion: str | None = None,
+    max_drop_ratio: float | None = None,
+) -> tuple[list[dict], list[str], str]:
+    """Segunda lectura con Gemini: quita muletillas, repeticiones y re-enunciados
+    que quedaron después del pase de Claude. Siempre seguro (misma guarda).
+
+    status ∈ {'ok', 'nothing', 'no_key', 'api_fail', 'aborted_overbudget'}.
+    """
+    import revision_gemini as rg
+    if not api_key:
+        return words, [], 'no_key'
+    if len(words) < 4:
+        return words, [], 'nothing'
+    reply = rg.call_gemini(build_semantic_prompt(words, guion), api_key,
+                           model or rg.DEFAULT_GEMINI_MODEL)
+    if reply is None:
+        return words, [], 'api_fail'
+    ranges = parse_semantic_response(reply, len(words))
+    if not ranges:
+        return words, [], 'nothing'
+    kept, removed, aborted = apply_drops(
+        words, ranges, rg.DEFAULT_GEMINI_MAX_DROP if max_drop_ratio is None else max_drop_ratio)
+    if aborted:
+        return words, [], 'aborted_overbudget'
+    return kept, removed, 'ok'
+
+
+def reportar_gemini(status: str, removed: list[str], n_quitadas: int, model: str) -> None:
+    """Imprime el resultado de la revisión de Gemini en el registro."""
+    import revision_gemini as rg
+    if status == 'ok':
+        print(f'      revisión Gemini ({model}): {n_quitadas} palabras de relleno, '
+              f'muletillas o repeticiones borradas ({len(removed)} tramos)', file=sys.stderr)
+        for snip in removed[:10]:
+            print(f'        − {snip if len(snip) <= 80 else snip[:77] + "..."}', file=sys.stderr)
+    elif status == 'nothing':
+        print('      revisión Gemini: el guion quedó limpio, nada más que borrar', file=sys.stderr)
+    elif status == 'no_key':
+        print('      ⚠ revisión Gemini OFF: no hay llave de Gemini. Guárdala en '
+              f'{rg.ARCHIVO_LLAVE_GEMINI} (empieza con «AIza»).', file=sys.stderr)
+    elif status == 'api_fail':
+        print('      ⚠ revisión Gemini: la llamada falló (arriba dice por qué).', file=sys.stderr)
+    elif status == 'aborted_overbudget':
+        print('      ⚠ revisión Gemini: quiso borrar demasiado — descartada por seguridad.',
+              file=sys.stderr)
+
+
 def run(cmd: list[str]) -> str:
     return subprocess.check_output(cmd, text=True, stderr=subprocess.STDOUT)
 
@@ -1126,6 +1177,12 @@ def main() -> int:
     ap.add_argument('--semantic-max-drop', type=float, default=DEFAULT_SEMANTIC_MAX_DROP,
                     help=f'fracción máxima de palabras que el pase semántico puede '
                          f'borrar antes de abortar por seguridad (default {DEFAULT_SEMANTIC_MAX_DROP})')
+    ap.add_argument('--no-gemini', action='store_true',
+                    help='apaga la revisión del guion con Gemini (segunda lectura '
+                         'que quita muletillas y repeticiones que quedaron)')
+    ap.add_argument('--gemini-model', default=None,
+                    help='modelo de Gemini para la revisión (default '
+                         'EDITOR_MODELO_GEMINI o gemini-2.5-flash)')
     ap.add_argument('--audio-only', action='store_true',
                     help='Salida solo-audio (_voz_cut.m4a) para el preset faceless: '
                          'corta silencios/muletillas del voiceover sin pista de video.')
@@ -1218,6 +1275,22 @@ def main() -> int:
                 print('      semantic: sin tomas descartadas que borrar',
                       file=sys.stderr)
 
+        # ── Revisión del guion con Gemini (segunda lectura, obligatoria en el
+        # protocolo de corte): lo que el pase de Claude dejó, Gemini lo relee
+        # buscando muletillas, repeticiones y re-enunciados.
+        estado_gemini = 'apagado'
+        if not args.no_gemini:
+            import revision_gemini as rg
+            g_key, _ = rg.leer_llave_gemini()
+            g_model = args.gemini_model or rg.DEFAULT_GEMINI_MODEL
+            g_guion = None
+            g_path = Path(args.guion).expanduser() if args.guion else (dest / 'guion.txt')
+            if g_path.is_file():
+                g_guion = g_path.read_text(encoding='utf-8')
+            n_before = len(words)
+            words, g_removed, estado_gemini = gemini_review(words, g_key, g_model, g_guion)
+            reportar_gemini(estado_gemini, g_removed, n_before - len(words), g_model)
+
         if args.no_dedupe:
             stutters: list[str] = []
         else:
@@ -1287,8 +1360,10 @@ def main() -> int:
         (dest / 'edl.json').write_text(json.dumps(edl, indent=2), encoding='utf-8')
         # Para que quien lance el corte sepa, sin leer el registro, si el corte
         # fino ocurrió: ok | nothing | no_key | api_fail | aborted_overbudget | apagado
+        # revision_gemini: mismo vocabulario, para la segunda lectura con Gemini.
         (dest / 'corte.json').write_text(json.dumps({
             'corte_fino': estado_semantico,
+            'revision_gemini': estado_gemini,
             'duracion_original': round(total, 2),
             'duracion_cortada': round(cut_total, 2),
             'tramos': len(segments),

@@ -3,6 +3,14 @@ name: lista-sobre-video-hablado-f100k
 description: Arma el reel «lista sobre video hablado», una sola toma tuya hablando a cámara con una lista numerada a un costado que se va llenando con miniaturas justo cuando dices cada paso; al final la lista se va, la toma se acerca y una caja de comentario escribe sola la palabra del CTA. Incluye el guion de grabación, el script que saca de tu audio el segundo real de cada paso, la capa con transparencia y el montaje a MP4. Usar cuando digan «lista que se llena mientras hablo», «lista sobre mi video», «lista numerada al lado de mi cara», «los pasos aparecen cuando los digo», «caja de comentario que se escribe sola», o pasen una toma hablada con pasos numerados y pidan ponerle la lista. NO usar para un reel sin cara con lista y audios (reel-lista-que-suena-f100k), para cortar silencios o subtitular (editor-video-formula100k), para el antes y después con golpe a cámara (reel-manotazo-f100k), para escribir el guion desde cero (guionizacion-formula100k) ni para animaciones sin persona.
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Lista sobre video hablado
 
 ## Tu brandkit (antes de producir)

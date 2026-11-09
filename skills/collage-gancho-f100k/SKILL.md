@@ -3,6 +3,14 @@ name: collage-gancho-f100k
 description: Arma el collage de gancho estilo @improvewithkate (título de 2 líneas sobre la frente y recortes aesthetic alrededor de la cabeza y a la altura del pecho) desde una BIBLIOTECA PROPIA de imágenes que crece con cada uso. Primero busca en la biblioteca; solo si falta, baja de Openverse (gratis, libres para ads) o, si la persona tiene cuenta de Apify, de Pinterest (centavos), con etiquetas, hoja de muestras numerada para elegir, recorte sin fondo en la computadora y registro de usos para no repetir. Sale una capa PNG transparente de 1080×1920 para poner encima del video. Usar cuando digan «collage de gancho», «gancho como Kate», «imágenes aesthetic para el gancho», «busca imágenes para el gancho», «recortes alrededor de mi cabeza», «arma el collage de este reel», «qué imágenes pongo en el gancho», «llena la biblioteca de imágenes» o pasen uno o varios ganchos para vestirlos con imágenes. NO usar para portadas de carrusel ni para animaciones con movimiento (animacion-collage-editorial-f100k).
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Collage de gancho · biblioteca que se reutiliza
 
 ## Tu brandkit (antes de producir)

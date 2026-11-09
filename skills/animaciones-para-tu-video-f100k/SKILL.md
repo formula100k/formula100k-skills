@@ -3,6 +3,14 @@ name: animaciones-para-tu-video-f100k
 description: Fabrica animaciones cortas (5 s) para poner ENCIMA de un video en CapCut, sin saber editar. Deja un archivo HTML que se abre con doble clic en Chrome, dibuja la animación sobre fondo verde puro y trae un botón «Descargar video» que baja un MP4 listo para quitarle el verde en CapCut. Seis tipos probados: número que sube, lista que aparece, flecha que señala, antes y después en barras, gancho en letras y cartel con tu nombre. Usar SIEMPRE que pidan «hazme una animación para mi video», «un número que suba», «una lista que aparezca encima de mi reel», «un cartel con mi nombre», «texto animado para CapCut», «overlay», «algo que se mueva encima de mi video», «animación con fondo verde». NO edita el video completo (no corta silencios ni pone subtítulos) y NO genera video con IA.
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Animaciones para tu video
 
 ## Tu brandkit (antes de producir)

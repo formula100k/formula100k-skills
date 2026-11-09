@@ -3,6 +3,14 @@ name: collage-reflexion-f100k
 description: Arma una reflexión en voz en off de 30 a 45 s editada como collage en movimiento, sin cara a cámara, con fotos y clips reales, recortes tipo sticker con tarjetas de dato, objetos que se abren, capturas reales que caen como tarjetas, texto que entra en el segundo en que la voz lo dice y un remate en blanco y negro. La pieza sale de una lista de bloques en config.js; incluye la sincronía con la voz, la preparación de clips y el render a MP4 con hoja de contacto. Usar cuando digan «reflexión en collage», «reflexión en voz en off», «collage con mi voz», «texto que entra al ritmo de mi voz», o pasen una nota de voz o un texto reflexivo y pidan volverlo reel sin grabarse hablando. NO usar para un video hablado a cámara (editor-video-formula100k, lista-sobre-video-hablado-f100k), para una apertura de pocos segundos sin voz, para un tutorial de pantalla, para una lista por categorías (reel-lista-que-suena-f100k), ni cuando la persona no tiene ni una cifra, foto o captura propia que mostrar.
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Collage de reflexión
 
 ## Tu brandkit (antes de producir)

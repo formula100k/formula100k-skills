@@ -9,6 +9,14 @@ metadata:
   origen: "reel @rajhere.in DbqARtpJnw4 (5-ago-2026, 344K vistas) + su skill first-last-frame-prompts, corregida y llevada de punta a punta"
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Boceto → Animación — F100K
 
 ## Tu brandkit (antes de producir)

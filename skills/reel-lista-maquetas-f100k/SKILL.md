@@ -3,6 +3,14 @@ name: reel-lista-maquetas-f100k
 description: Arma un reel faceless 9:16 de LISTA con voz, donde cada ítem es una escena de 2 a 3 s con un titular arriba (la palabra clave en color y más grande), una maqueta plana de pantalla al centro que ILUSTRA el pedido (navegador con formulario, código, servidor, base de datos, candado, registro, variables, cookies, reloj que caduca, dos tarjetas con sello ✓/✕, WhatsApp, calendario, límite, checklist) y abajo la barra «07/27 · CATEGORÍA» que avanza más la pastilla con el @. Fondo pastel plano, corte seco, sonidos graves y render local gratis con Chrome y ffmpeg. Usar cuando digan «reel de lista», «N cosas que…», «pídele a Claude que…», «checklist en video», «los pasos de un tutorial con maquetas», «reel con maquetas de app», «estilo lista con barra de progreso», «/reel-lista-maquetas», «lista en cuaderno», «lista con bocetos a lápiz», «estilo papel cuadriculado con grupos». NO usar para un talking-head con lista encima (lista-sobre-video-hablado-f100k), una lista que suena con sonido por ítem sobre fotos (reel-lista-que-suena-f100k) ni una explicación animada con personaje (reel-explicado-animado-f100k).
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Reel de lista con maquetas
 
 ## Tu brandkit (antes de producir)

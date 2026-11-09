@@ -3,6 +3,14 @@ name: reel-manotazo-f100k
 description: Arma el reel del manotazo, un reel vertical de unos 7 segundos de problema y solución. Sobre una toma tuya a cámara va un texto con el problema y UNA imagen; das un manotazo hacia la cámara y, en ese cuadro exacto, el texto cambia a tu respuesta y la imagen se convierte en una cuadrícula de hasta nueve piezas. Usar cuando digan «reel del manotazo», «antes y después con un golpe a la cámara», «una imagen se convierte en nueve», «reel de problema y solución en 7 segundos», «reel de clienta dice / yo digo», «el reel donde le pego a la cámara y cambia», «muestra mis nueve publicaciones en un reel», o pasen un clip con un gesto brusco y pidan que el cambio caiga ahí. NO usar para editar un video hablado largo, cortar silencios o poner subtítulos (editor-video-formula100k), ni para animaciones sin persona a cámara (las skills de animación hermanas), ni para fabricar las imágenes del resultado (eso va antes, con tus skills de carrusel o con Higgsfield).
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Reel del manotazo
 
 ## Tu brandkit (antes de producir)

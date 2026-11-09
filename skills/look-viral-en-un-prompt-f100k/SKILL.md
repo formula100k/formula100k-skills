@@ -3,6 +3,14 @@ name: look-viral-en-un-prompt-f100k
 description: Le pone a una toma hablada a cámara (vertical) uno de dos looks virales de edición, con un solo prompt y sin editor - «palabra detrás de ti» (una palabra gigante va DETRÁS de la persona, arriba en contorno transparente y abajo en cursiva con degradé que se escribe letra por letra cuando la dices, más subtítulos chicos) y «línea minimalista» (fondo negro, la persona en blanco y negro con halo de luz, figuras de línea blanca que se dibujan solas y una frase chica en serif, alternando con pantallas solo de línea). Recorta a la persona cuadro por cuadro, transcribe palabra por palabra, elige las palabras que pegan y renderiza el MP4 con el audio original, todo local y gratis. Usar cuando digan «ponle el look de palabra detrás», «texto detrás de mí», «la palabra gigante detrás de la cabeza», «subtítulos transparentes que se mueven con mis palabras», «estilo línea minimalista», «fondo negro con líneas blancas», «en blanco y negro con halo», «el look de los videos de storytelling minimalistas», «look viral en un prompt», «edítame este video con uno de los estilos» o pasen una toma vertical pidiendo uno de estos looks. NO usar para cortar silencios o muletillas (editor de video), para animaciones sin persona, ni para carruseles.
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Look viral en un prompt
 
 ## Tu brandkit (antes de producir)

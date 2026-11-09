@@ -3,6 +3,14 @@ name: animacion-collage-editorial-f100k
 description: Arma una animación vertical de 14 a 18 s tipo collage editorial - objetos recortados que flotan con parallax sobre papel mientras un titular aparece palabra por palabra con tamaños mezclados, la frase se encoge y cae dentro de una carpeta, la carpeta suelta recortes que llenan el cuadro, el collage pasa a verse dentro de un monitor viejo y, si quieres, cierra con una captura o grabación de pantalla con garabatos blancos encima. Usar cuando digan «hazme una animación tipo collage editorial», «objetos flotando con texto palabra por palabra», «carpeta que suelta recortes», «titular serif con cosas flotando», «intro tipo revista para mi reel», «mis fotos saliendo de una carpeta», «collage dentro de una pantalla vieja», «captura de pantalla con garabatos encima» o pasen un titular y un puñado de imágenes para abrir un reel. NO usar para editar un video ya grabado (editor-video-formula100k), ni para carruseles, ni para dibujos cuadro a cuadro (animacion-dibujada-f100k), ni cuando la pieza necesita a la persona hablando a cámara (reel-manotazo-f100k) o movimiento a saltos de papel recortado (animacion-collage-stopmotion-f100k).
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Animación · collage editorial
 
 ## Tu brandkit (antes de producir)

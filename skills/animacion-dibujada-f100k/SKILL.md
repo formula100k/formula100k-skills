@@ -3,6 +3,14 @@ name: animacion-dibujada-f100k
 description: "Fabrica clips y cortos animados 9:16 donde CADA CUADRO SE DIBUJA CON CÓDIGO (canvas + JavaScript): sin IA de video y sin créditos. 13 estilos de clip propios + 66 estilos de cine (pizarra blanca, acuarela, ukiyo-e, vitral, anime de los 80, RPG pixel, noticiero, cuenta regresiva, isla low-poly, despiece…) para meter como inserto en un reel (libreta a mano, pizarra, post-its, chat, notificaciones, ticket, gráfica, mapa, pixel art, tinta, scrapbook y polaroid con tus fotos), mascotas pixel chiquitas que caminan sobre tu mesa ENCIMA del video (tu sello de marca) y un sistema de cortos de 30-90 s: tu mascota dibujada a partir de tu foto (vector, pixel o papel), tu propio personaje animado como títere, escenarios y objetos de 12 rubros, transiciones, subtítulos y tu voz. Render local en segundos. Activar con: 'animación dibujada', 'como las de Opus 5.5', 'animación en JavaScript', 'pixel art', 'mi mascota', 'mascotas pixel en mi mesa', 'pixel mascots en mi video', 'hazme un personaje', 'anima mi personaje', 'corto animado', 'video explicativo animado', 'B-roll dibujado', 'anima esta frase del guion'. NO hace video realista ni con personas reales en movimiento (eso es Higgsfield)."
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Animación dibujada (cada cuadro en código)
 
 ## Tu brandkit (antes de producir)

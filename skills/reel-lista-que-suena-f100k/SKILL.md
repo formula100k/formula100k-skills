@@ -3,6 +3,14 @@ name: reel-lista-que-suena-f100k
 description: Arma el reel «lista que suena», un reel vertical SIN CARA con fondo liso, título fijo y una lista numerada de categorías que se va llenando; por cada categoría entran tres filas con carátula, nombre y onda de audio mientras suena un fragmento, y cierra con un CTA de palabra clave. Sirve para canciones y para cualquier lista de recomendaciones por categoría. Incluye la voz por frases, el render a MP4, la tabla de montaje (qué fragmento entra en qué segundo) y la mezcla automática de los audios. Usar cuando digan «reel de canciones por categoría», «lista de músicas de fondo», «lista que suena», «reel de recomendaciones por categoría sin cara», «top 3 por categoría en un reel», «reel tipo playlist», o pasen una lista por categorías y pidan un reel sin grabarse. NO usar para un reel hablado a cámara (editor-video-formula100k), para una lista simple sin categorías ni carátulas, para un carrusel (carrusel-formatos-f100k), para elegir las canciones o los ítems ni para conseguir música o portadas con derechos.
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Reel «lista que suena»
 
 ## Tu brandkit (antes de producir)

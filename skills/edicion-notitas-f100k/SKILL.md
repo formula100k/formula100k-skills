@@ -4,6 +4,14 @@ description: "Edita un talking-head 9:16 con el estilo «notitas»: corte ultra 
 argument-hint: "[ruta del video o carpeta]"
 ---
 
+> 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue
+> `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` con todas sus optimizaciones: (0) preparar la toma (30 fps, espejo, volumen si es bajita);
+> (1) la skill de cortes con pase semántico, nunca un script suelto de silencios; (2) transcripción leída entera y muletillas o repeticiones fuera a mano
+> (`recortar.py`); (3) `escuchar_corte.py` tramo por tramo + segundo pase de aire (`apretar.py`) y subtítulos sobre una transcripción nueva;
+> (4) oído Gemini sobre el corte y el final si hay llave (si no, se avisa en la primera línea de la entrega); (5) el sello del protocolo en NOTAS.
+> Sin el sello, el video no está terminado.
+
+
 # Edición «notitas»
 
 ## Tu brandkit (antes de producir)
@@ -99,6 +107,19 @@ que lo nombra, y quietos.
   `enable='between(t,a,b)'`).
 - En `PLAN.json` un `hasta` numérico no es segundo absoluto: para cortar a un tiempo exacto usa `dur`.
 
+### 🔴 Series de análisis y tomas difíciles
+Lo que se aprendió editando una serie de análisis larga (4 vueltas en un día); vale para todo talking-head largo:
+- **Antes de tocar un capítulo ya entregado**, mira su última versión (carpeta de entregables + LEEME del proyecto) y edita SOBRE esa.
+- **Toma de celular muy bajita**: primero `loudnorm` a -16 LUFS en la base y recién ahí el corte (protocolo, paso 0).
+- **Tomas en espejo** (un libro se lee al revés): `hflip` en la base antes de todo. **60 fps → 30** antes de hornear escenas.
+- **Anclas sobre un corte nuevo**: transcribe el corte otra vez con Whisper large-v3; no reuses la transcripción vieja remapeada.
+- **Frase repetida = `#2`** en el `cuando` de escenas (el motor busca desde el inicio).
+- **Superposición**: prueba 2–3 cuadros por escena nueva antes de hornear y cero avisos `tapado`, `encime` o `respiro`.
+- **Escenas ≤ 5 s con 3–5 recortes** y ≥ 0,6 s de cara entre dos escenas; una escena > 5,5 s o con 1–2 recortes se ve vacía.
+- **Nunca un título que dure todo el video** en los verticales: solo el del gancho.
+- **Sus clips reales primero**: si la persona manda un clip propio (cuaderno, objeto, lugar), va sobre la frase que lo nombra y
+  reemplaza la escena de cartón de esa idea.
+
 ## 🔴 Memes de reacción a sus caras
 Como hacen las editoras de reels: **cada vez que la persona hace una cara o dice algo con sarcasmo o risa, va el meme**.
 No es decoración: el meme traduce el gesto.
@@ -168,8 +189,11 @@ guarda sus `cortes` en `cortes.json`. No lo vuelvas a cortar.
 Primero **transcribe el crudo entero y entiende el guion**: qué quiere decir, cuál es la toma buena de cada frase, dónde repitió
 o se corrigió. Un corte heredado de otra carpeta también se audita así antes de usarlo.
 ```bash
-node "$ED/editar.mjs" "$VIDEO" --solo-corte --carpeta "$DEST" --semantic-level ajustado
+node "$ED/editar.mjs" "$VIDEO" --solo-corte --carpeta "$DEST"      # conservador (por defecto)
 ```
+- 🔴 Sigue `~/.claude/skills/editor-video-formula100k/PROTOCOLO-CORTE.md` entero (paso 0 + 5 pasos + aire y anclas).
+  Nivel `conservador` para análisis, series y videos largos; `--semantic-level ajustado` solo en reels de venta cortos y
+  **leyendo la lista de lo que borró** (puede llevarse un nombre, un punto de la lista o el cierre).
 - Si el registro dice `semantic OFF` (no hay llave), el corte por comprensión **no ocurrió**. Busca en `captions.json` las palabras
   que «duran» > 0,9 s: casi siempre esconden una toma repetida. Transcribe el original aislado
   (`node ~/.claude/skills/animacion-dibujada-f100k/scripts/sistema.mjs transcribir audio.wav` si está esa skill, o
@@ -260,6 +284,10 @@ chirrido en ✓ y bocina en ✗/tachado. Cualquier elemento acepta `"sfx": "boin
 ```bash
 ffmpeg -y -loglevel error -i "$DEST/BORRADOR_NOTITAS.mp4" -vf "fps=1,scale=230:-1,tile=8x6:padding=4:color=white" -frames:v 1 "$DEST/_hoja.jpg"
 ```
+Antes de la hoja: `uv run --no-project --python 3.12 python -X utf8 "$SK/scripts/auditar_estimulo.py" "$DEST"` tiene que dar ✅
+(lista cada tramo de cara sola de más de 5 s: se tapa con una escena o una notita que cuente lo que se dice). Y en NOTAS.md, el sello
+del protocolo de corte.
+
 Lee la hoja: cada prompt/skill/voz/carpeta nombrado tiene su mockup, textos dentro del cuadro, nada encima de los ojos, una cosa a
 la vez, notitas legibles sobre el fondo. Abre 2–3 cuadros a tamaño real en los momentos más cargados. Di qué no pudiste verificar
 (nadie escuchó el audio).

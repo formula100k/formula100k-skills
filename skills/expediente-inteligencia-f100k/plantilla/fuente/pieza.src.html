@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Expediente de inteligencia · ejemplo Dollar Shave Club</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@700;800&display=swap">
+<style>html,body{margin:0;background:#000}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script src="tierra.js"></script>
+<script src="caras.js"></script>     <!-- herramientas/caras.py: la cara de cada foto y de cada cuadro de clip -->
+<script src="ganchos.js"></script>   <!-- herramientas/ganchos.py: las cajas de los ganchos A/B/C -->
+<script src="tiempos.js"></script>   <!-- herramientas/construir.py: variante, duración de cada frase y hora de cada palabra -->
+<script>
+// ============================================================================
+// EL CASO (lo único que se cambia para otro caso de negocio): frases, fotos, anclas, escenas y tu CTA.
+// El motor (cámara, etiquetas, subtítulos, transiciones, revisión) está en motor.js.
+// Este archivo trae el caso Dollar Shave Club como EJEMPLO comentado frase por frase. Sus imágenes no vienen con la
+// skill (son de terceros): para un caso nuevo se reescriben LINEAS, FOTOS, CLIPS, AN y ESC con tus imágenes reales.
+// ============================================================================
+const W = 1080, H = 1920, FPS = 30;
+const PAUSA = 0.28, COLA = 1.6;
+const VAR = window.VARIANTE || 'A';
+// TU CTA: la palabra que tienen que comentar y el regalo que les mandas (la frase 13 de LINEAS los dice con tu voz).
+// Pon la captura plana de tu regalo en img/regalo.png.
+const CTA = { palabra: 'PALABRA', regalo: 'TU REGALO' };
+// *asteriscos* = palabra clave del subtítulo (amarilla y más grande). La frase 1 es el gancho: no lleva subtítulo.
+const LINEAS = [
+  { d: 3.95, txt: { A: 'Cuatro mil quinientos dólares en un video valieron mil millones.', B: 'Mil millones de dólares por un video de cuatro mil quinientos.', C: 'Doce mil pedidos en dos días, con un solo video.' }[VAR], gancho: true },
+  { d: 5.02, txt: 'Marzo de *2012.* Michael Dubin sube este video a *YouTube.*', tr: 'barrido' },
+  { d: 3.8, txt: 'Vende máquinas de afeitar por *suscripción,* desde un dólar al mes.', tr: 'lado' },
+  { d: 2.81, txt: 'Lo protagoniza *él mismo,* en su propia bodega.', tr: 'empuje' },
+  { d: 3.09, txt: 'Producirlo le costó *4.500 dólares.*', tr: 'barrido' },
+  { d: 2.98, txt: 'En dos días le llegaron *12.000 pedidos.*', tr: 'empuje' },
+  { d: 2.46, txt: 'Se quedaron *sin inventario* en cuestión de horas.', tr: 'lado' },
+  { d: 3.96, txt: '¿Por qué funcionó? *No vendía* máquinas de afeitar.', tr: 'barrido' },
+  { d: 4.08, txt: 'Vendía el *fastidio* de pagar de más por algo que usas cada mañana.', tr: 'empuje' },
+  { d: 3.1, txt: 'Cuatro años después, *Unilever* compró la empresa.', tr: 'lado' },
+  { d: 4.18, txt: 'El precio reportado: *mil millones* de dólares, en efectivo.', tr: 'barrido' },
+  { d: 4.09, txt: 'Tú puedes hacer lo mismo: *nombra el dolor,* ríete de él y di tu precio.', tr: 'empuje' },
+  { d: 4.31, txt: 'Si quieres tu regalo, comenta *PALABRA* y te lo mando.', tr: 'barrido' },   // tu CTA con tus palabras (siempre entre comillas simples) y la misma palabra que en CTA.palabra
+];
+</script>
+<script src="motor.js"></script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+// ---------- fotos y capturas REALES (cada una con su fuente en LEEME.md) ----------
+const FOTOS = { 'dsc_1.5': 'jpg', 'dsc_16.5': 'jpg', 'dsc_20.6': 'jpg', 'dsc_30.5': 'jpg', 'dsc_47.0': 'jpg', 'dsc_58.0': 'jpg', 'dsc_68.6': 'jpg', 'dsc_73.5': 'jpg',
+  yt_captura: 'png', web2012_blades: 'png', web2012_entrega: 'png', titular_fortune: 'png', unilever_logo: 'jpg', unilever_house: 'jpg', regalo: 'png', ['gancho_' + VAR]: 'png' };
+const CLIPS = { clipA: 5, clipC: 35, clipD: 52 };   // cuadros del anuncio real a 15 por segundo
+const IM = {};
+{
+  const nombres = Object.keys(FOTOS), rutas = nombres.map(n => `img/${n}.${FOTOS[n]}`);
+  for (const [c, n] of Object.entries(CLIPS)) for (let k = 1; k <= n; k++) { nombres.push(`${c}#${k - 1}`); rutas.push(`img/${c}/${String(k).padStart(3, '0')}.jpg`); }
+  const p = cargarFotos(rutas).then(a => a.forEach((im, i) => { const [c, k] = nombres[i].split('#'); if (k === undefined) IM[c] = im; else (IM[c] ||= [])[+k] = im; }));
+  window.LISTO = Promise.all([p, ...['500 52px "Work Sans"', '600 52px "Work Sans"', '500 26px "JetBrains Mono"', '400 20px "JetBrains Mono"', '700 160px "Inter Tight"', '800 160px "Inter Tight"']
+    .map(f => document.fonts.load(f))]).then(() => document.fonts.ready);
+}
+
+// ---------- ANCLAS: qué hay en cada foto y dónde (fracciones de la foto: x, y, ancho, alto) ----------
+// Toda etiqueta, mira o visor se cuelga de una de estas. Si lo que quieres señalar no tiene ancla, es que no está en la foto.
+const AN = {
+  yt_reproductor:  ['yt_captura', 'el reproductor de YouTube con el video', [0, 0, 1, .468]],
+  yt_duracion:     ['yt_captura', 'la duración «0:12 / 1:33» en el reproductor de YouTube', [.228, .405, .142, .042]],
+  yt_fecha:        ['yt_captura', 'la fecha «6 mar 2012» bajo el video en YouTube', [.374, .636, .148, .038]],
+  web_maquinas:    ['web2012_blades', 'las tres máquinas de afeitar del sitio de 2012', [.03, .2, .94, .78]],
+  web_precio:      ['web2012_blades', 'la etiqueta «$1/mo» del sitio de 2012', [.197, .575, .163, .276]],
+  web_entrega:     ['web2012_entrega', 'el recuadro «Delivered each month» (camión de correo a la casa)', [.04, .02, .92, .94]],
+  bodega_cajas:    ['dsc_68.6', 'la pila de cajas de la bodega', [.27, .07, .14, .4]],
+  maquina_en_mano: ['dsc_20.6', 'la máquina de afeitar que Dubin sostiene', [.262, .625, .066, .115]],
+  titular_precio:  ['titular_fortune', 'el «$1 Billion» del titular de Fortune', [.755, .52, .2, .15]],
+  titular_medio:   ['titular_fortune', 'el logo de Fortune en la captura', [.085, .03, .2, .115]],
+  unilever_logo:   ['unilever_logo', 'el logo de Unilever (letrero real)', [0, 0, 1, 1]],
+  unilever_puerta: ['unilever_house', 'la entrada de Unilever House, Londres', [.24, .3, .52, .6]],
+};
+const ancla = (m, k, margen = 0) => m.ancla(AN[k][1], AN[k][2], margen);
+// la pista de la cara en los clips, suavizada (para que la cámara y la mira no vibren)
+for (const c of Object.keys(CLIPS)) { const p = CARAS[c]; CARAS[c] = p.map((_, i) => [0, 1, 2, 3].map(j => { let s = 0, n = 0; for (let d = -3; d <= 3; d++) if (p[i + d]) { s += p[i + d][j]; n++; } return s / n; })); }
+const centro = ([x, y, w, h]) => [x + w / 2, y + h / 2];
+
+// tarjeta con una captura que se desplaza por dentro (cierre): plana y a color, como la pantalla real
+function tarjeta(im, x, y, w, h, sube, z = 1, nombre = '') {
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  const e = w / im.width * z, alto = im.height * e;
+  ctx.drawImage(im, x - (w * z - w) / 2, y - Math.max(0, alto - h) * clamp(sube), w * z, alto); ctx.restore();
+  ctx.save(); ctx.strokeStyle = 'rgba(237,237,237,.5)'; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, h); ctx.restore();
+  return { n: nombre, foto: nombre, c: [x, y, x + w, y + h] };
+}
+// tira de fotogramas reales del anuncio, moviéndose
+function tira(y, alto, corre) {
+  const lista = ['dsc_1.5', 'dsc_16.5', 'dsc_20.6', 'dsc_47.0', 'dsc_73.5', 'dsc_68.6'], w = alto * 16 / 9, paso = w + 22, borde = 44;
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(0, y - borde, W, alto + borde * 2);
+  linea(0, y - borde, W, y - borde, { a: .35, w: 1.5 }); linea(0, y + alto + borde, W, y + alto + borde, { a: .35, w: 1.5 });
+  for (let k = -1; k < 60; k++) { const x = k * 46 - (corre % 46); ctx.fillStyle = 'rgba(237,237,237,.35)'; ctx.fillRect(x, y - borde + 13, 22, 18); ctx.fillRect(x, y + alto + 13, 22, 18); }
+  lista.forEach((n, k) => { const x = 70 + k * paso - corre; if (x > W || x + w < 0) return;
+    ctx.save(); ctx.filter = GRIS(.9, 1.15); ctx.drawImage(IM[n], x, y, w, alto); ctx.restore(); });
+  return { n: 'la tira de fotogramas del anuncio', foto: 'dsc_*', c: [0, y - borde, W, y + alto + borde] };
+}
+
+// ---------- escenas: una por frase. u = segundos dentro de la escena · E.q = avance 0→1 de la escena en pantalla ----------
+// Regla: lo que la voz nombra se ve EN ESE MOMENTO (T('palabra') da la hora en que se dice) y la cámara nunca para.
+const ESC = [
+  // 1 · GANCHO. Escena a pantalla completa (3 planos del anuncio real, corte seco) y el gancho centrado encima.
+  //     La cara va DEBAJO del bloque. Sin subtítulos. Abajo, el rótulo del expediente con la marca.
+  (u, E) => { const c1 = E.d * .46, GA = GANCHOS[VAR].caja, tope = GA[3] + 110;   // tope: donde empieza la cara, justo bajo el bloque
+    if (u < c1) {   // plano 1 · él frente a la bandera, en cámara lenta; la cámara va enganchada a su cara, que cabe entera bajo el bloque
+      const k = Math.min(IM.clipA.length - 1, Math.floor(u * .1 * CLIP_FPS)), im = IM.clipA[k], [x, y, w, h] = CARAS.clipA[k], arriba = y - h * .24;
+      const m = foto(im, [x + w / 2, arriba, Math.max(1.05, zoomPara(im, arriba, tope)) * lerp(1, 1.07, u / c1)], { sy: tope, br: .82, nombre: 'clipA' });
+      const a = cara(m, [x, y, w, h], 'la cara de Michael Dubin (anuncio real)');
+      if (u < c1 * .5) visor(a, prog(u, .05, .45)); else { on(c1 * .5); mira(a, prog(u, c1 * .5, c1 * .5 + .3)); }
+    } else { on(c1, 'swish'); const im = IM.clipC[idxClip(IM.clipC, u - c1)];   // plano 2 · la lluvia de billetes del anuncio: «valieron mil millones»
+      foto(im, camara([.45, .62, 1.05], [.45, .64, 1.2], (u - c1) / (E.tramo - c1)), { sy: 1150, br: .85, nombre: 'clipC' }); barrido(u - c1); }
+    penumbra(1440, 1700, .55);
+    rotulo('EXPEDIENTE 001', 'DOLLAR SHAVE CLUB · 2012', 80, 1560);
+    rotulo('● REC', '00:0' + Math.floor(u) + ':' + String(Math.floor(u * 30) % 30).padStart(2, '0'), 1000, 1560, 'right');
+    ctx.drawImage(IM['gancho_' + VAR], 0, 0, W, H); reg('gancho', GANCHOS[VAR].texto, ...GA); },
+
+  // 2 · «Marzo de 2012. Michael Dubin [mira en su cara] sube este video a YouTube [captura real de YouTube]»
+  (u, E) => { const tM = T('michael'), tS = T('sube'), tY = T('youtube');
+    if (u < tS) { const m = foto(IM['dsc_47.0'], camara([.433, .25, 1.3], [.433, .25, 1.38], u / tS), { sy: 640 });
+      vineta(.8, 540, 640); rotulo('DOLLAR SHAVE CLUB', 'MARZO · 2012', 80, 1250);
+      if (on(tM)) { const a = cara(m, CARAS['dsc_47.0'], 'la cara de Michael Dubin'); mira(a, prog(u, tM, tM + .3));
+        if (on(tM + .3)) etiqueta(a, 'MICHAEL DUBIN', 'FUNDADOR', { lado: 'abajo', sep: 46 }); }
+    } else { on(tS, 'swish'); fondo();
+      const m = escena(540, 720, lerp(1, 1.07, viva((u - tS) / (E.tramo - tS))), () => lamina(IM.yt_captura, 90, 300, 900, { nombre: 'yt_captura', recorte: [0, 0, 1, .74] }), { sy: 720 });
+      barrido(u - tS);
+      if (on(tY - .25)) { const a = ancla(m, 'yt_duracion'); visor(a, prog(u, tY - .25, tY)); etiqueta(a, 'YOUTUBE · 1:33', 'DURACIÓN DEL VIDEO', { lado: 'arriba', sep: 44, corre: -40 }); }
+      if (on(tY + .45)) { const a = ancla(m, 'yt_fecha'); visor(a, prog(u, tY + .45, tY + .7)); etiqueta(a, 'SUBIDO · 6 MAR 2012', '', { lado: 'abajo', sep: 120 }); } } },
+
+  // 3 · «Vende máquinas de afeitar [sitio real de 2012] por suscripción [entrega mensual] desde un dólar al mes [$1/mo]»
+  (u, E) => { const tQ = T('maquinas'), tS = T('suscripcion'), tD = T('desde'), tU = T('dolar');
+    fondo(); let cam = camara([540, 825, .98], [540, 825, 1.05], u / tS);
+    if (u >= tS) cam = camara([540, 825, 1.05], [1540, 825, 1.05], prog(u, tS - .05, tS + .4));
+    if (u >= tD) cam = camara([1540, 825, 1.05], [337, 938, 1.75], prog(u, tD - .05, tD + .5));
+    const [m1, m2] = escena(cam[0], cam[1], cam[2], () => [lamina(IM.web2012_blades, 90, 560, 900, { nombre: 'web2012_blades' }), lamina(IM.web2012_entrega, 1090, 560, 900, { nombre: 'web2012_entrega' })], { sy: 800 });
+    if (u < tD) rotulo('DOLLARSHAVECLUB.COM', 'CAPTURA DEL SITIO · MARZO 2012', 80, 290);
+    if (u < tS) { if (on(tQ)) etiqueta(ancla(m1, 'web_maquinas'), 'MÁQUINAS DE AFEITAR', '', { lado: 'arriba', sep: 150 }); }
+    else if (u < tD) { on(tS, 'swish'); if (on(tS + .4)) etiqueta(ancla(m2, 'web_entrega'), 'SUSCRIPCIÓN', 'LLEGA CADA MES', { lado: 'abajo', sep: 50 }); }
+    else { on(tD, 'swish'); const tV = Math.max(tU, tD + .5); if (on(tV)) { const a = ancla(m1, 'web_precio'); visor(a, prog(u, tV, tV + .3), { color: '#0a0a0a', w: 5 }); etiqueta(a, 'DESDE 1 USD / MES', '', { lado: 'abajo', sep: 60 }); } } },
+
+  // 4 · «Lo protagoniza él mismo [mira que lo sigue en el anuncio] en su propia bodega [las cajas]»
+  (u, E) => { const tE = T('el'), tB = T('en');
+    if (u < tB) { const k = idxClip(IM.clipD, u), [fx, fy] = centro(CARAS.clipD[k]);
+      const m = foto(IM.clipD[k], [fx, fy, lerp(1.08, 1.2, u / tB)], { sy: 640, nombre: 'clipD' }); vineta(.75, 540, 640);
+      const a = cara(m, CARAS.clipD[k], 'la cara de Michael Dubin (anuncio real)'); mira(a, prog(u, .1, .5));
+      if (on(tE)) etiqueta(a, 'ÉL MISMO', 'FUNDADOR Y PROTAGONISTA', { lado: 'abajo', sep: 46 });
+    } else { on(tB, 'swish'); const m = foto(IM['dsc_68.6'], camara([.42, .33, 1.0], [.4, .33, 1.14], (u - tB) / (E.tramo - tB)), { sy: 640, nombre: 'dsc_68.6' }); vineta(.7);
+      barrido(u - tB); const a = ancla(m, 'bodega_cajas');
+      if (on(tB + .3)) { visor(a, prog(u, tB + .3, tB + .6)); etiqueta(a, 'SU BODEGA', 'AQUÍ GRABÓ EL VIDEO', { lado: 'abajo', sep: 50, corre: 60 }); } } },
+
+  // 5 · «Producirlo [tira de fotogramas del anuncio] le costó 4.500 dólares [la cifra cuenta y cae en la palabra]»
+  (u, E) => { const tC = T('costo'), tN = T('4.500');
+    fondo(540, 560); const a = tira(800, 330, 60 + u * 150);
+    if (on(.25)) etiqueta(a, 'EL ANUNCIO', '1 MIN 33 S', { lado: 'abajo', sep: 36 });
+    const n = lerp(0, 4500, ease(prog(u, tC, tN + .45))); on(tN + .45, 'golpe');
+    cifra('$' + fmt(Math.round(n / 50) * 50), 500, { label: 'COSTO DE PRODUCCIÓN · USD' }); },
+
+  // 6 · «En dos días [barra día 1 → día 2] le llegaron 12.000 pedidos [la cifra cuenta sobre las cajas reales]»
+  (u, E) => { const tD = T('dos'), tN = T('12.000');
+    foto(IM['dsc_58.0'], camara([.86, .22, 1.7], [.9, .2, 1.95], E.q), { br: .78, sy: 620 }); vineta(.5); penumbra(240, 820, .5);
+    const n = lerp(0, 12000, ease(prog(u, tD, tN + .5))); on(tN + .5, 'golpe');
+    cifra(fmt(Math.round(n / 100) * 100), 500, { label: 'PEDIDOS' });
+    if (on(tD)) barra(240, 660, 600, prog(u, tD, tN + .5), { izq: 'DÍA 1', der: 'DÍA 2' }); },
+
+  // 7 · «Se quedaron sin inventario [título + barra que se vacía] en cuestión de horas»
+  (u, E) => { const tS = T('sin'), tH = T('cuestion');
+    foto(IM['dsc_30.5'], camara([.12, .84, 1.3], [.1, .88, 1.6], E.q), { br: .62, sy: 1150 }); vineta(.5, 540, 1100); penumbra(330, 880, .55);
+    const p = 1 - ease(prog(u, tS, tH + .7));
+    if (on(tS)) titulo('SIN INVENTARIO', 560, { tam: 130 });
+    barra(240, 650, 600, p, { izq: 'INVENTARIO', der: Math.round(p * 100) + ' %' });
+    if (on(tH)) rotulo('EN CUESTIÓN DE HORAS', '', 540, 800, 'center'); },
+
+  // 8 · «¿Por qué funcionó? [él frente a su letrero] No vendía máquinas de afeitar [las máquinas del sitio, tachadas]»
+  (u, E) => { const tN = T('no'), tM = T('maquinas');
+    if (u < tN) { foto(IM['dsc_16.5'], camara([.6, .3, 1.02], [.66, .27, 1.3], u / tN), { sy: 620 }); vineta(.7, 540, 620); penumbra(820, 1300, .6);
+      if (on(.05)) titulo('¿POR QUÉ', 1010, { tam: 150 }); if (on(T('funciono'))) titulo('FUNCIONÓ?', 1170, { tam: 150 });
+    } else { on(tN, 'swish'); fondo();
+      const m = escena(540, 885, lerp(.98, 1.08, viva((u - tN) / (E.tramo - tN))), () => lamina(IM.web2012_blades, 90, 620, 900, { nombre: 'web2012_blades' }), { sy: 860 });
+      barrido(u - tN); rotulo('DOLLARSHAVECLUB.COM', 'CAPTURA DEL SITIO · MARZO 2012', 80, 290);
+      const a = ancla(m, 'web_maquinas');
+      if (on(tM)) { const p = easeOut(prog(u, tM, tM + .35)), [x0, y0, x1, y1] = a.c;   // el tachado se dibuja sobre las máquinas
+        linea(x0 - 10, y1 - 30, lerp(x0 - 10, x1 + 10, p), lerp(y1 - 30, y0 + 30, p), { a: 1, w: 7 });
+        etiqueta(a, 'NO ERA EL PRODUCTO', '', { lado: 'arriba', sep: 150 }); } } },
+
+  // 9 · «Vendía el fastidio de pagar de más [título] por algo que usas cada mañana [la máquina que tiene en la mano]»
+  (u, E) => { const tF = T('fastidio'), tP = T('pagar'), tA = T('algo'), tU = T('usas');
+    const m = foto(IM['dsc_20.6'], camara([.33, .45, 1.0], [.295, .683, 1.9], prog(u, tF, tU + .3)), { sy: 900, nombre: 'dsc_20.6' }); vineta(.7, 540, 800);
+    if (u < tA) { penumbra(960, 1320, .65);
+      if (on(tF)) titulo('EL FASTIDIO', 1170, { tam: 150 });
+      if (on(tP)) rotulo('PAGAR DE MÁS', '', 540, 1240, 'center');
+    } else if (on(tU)) { const a = ancla(m, 'maquina_en_mano', .15); visor(a, prog(u, tU, tU + .3)); etiqueta(a, 'LO USAS CADA MAÑANA', '', { lado: 'arriba', sep: 70 }); } },
+
+  // 10 · «Cuatro años después [globo: 2012 → 2016, ruta a Londres] Unilever [su logo real] compró la empresa [su sede]»
+  (u, E) => { const tU = T('unilever'), tH = Math.max(T('compro'), tU + .85), tC = tH;
+    if (u < tU) { const p = prog(u, .1, tU - .1), P = globo(lerp(-104, -52, viva(u / tU)), 36);
+      cifra(String(Math.round(lerp(2012, 2016, p))), 400, { tam: 150 });
+      const la = marcaGlobo(P, -118.47, 33.99, 'Venice, California, en el globo'); arcoGlobo([-118.47, 33.99], [-0.1, 51.5], p, P);
+      if (la && u < tU * .6) etiqueta(la, 'DOLLAR SHAVE CLUB', 'VENICE, CALIFORNIA', { lado: 'abajo', sep: 40 });
+      if (p >= .98) { const lo = marcaGlobo(P, -0.1, 51.5, 'Londres en el globo'); if (lo) etiqueta(lo, 'LONDRES', '', { lado: 'abajo', sep: 40 }); }
+    } else if (u < tH) { on(tU, 'golpe'); fondo();
+      const m = escena(540, 730, lerp(1, 1.1, viva((u - tU) / (tH - tU))), () => lamina(IM.unilever_logo, 290, 440, 500, { nombre: 'unilever_logo' }), { sy: 730 });
+      barrido(u - tU); etiqueta(ancla(m, 'unilever_logo'), 'UNILEVER', 'EL COMPRADOR', { lado: 'abajo', sep: 44 });
+    } else { on(tC, 'swish'); const m = foto(IM.unilever_house, camara([.5, .62, 1.0], [.5, .6, 1.2], (u - tC) / (E.tramo - tC)), { br: .7, nombre: 'unilever_house' }); vineta(.75);
+      barrido(u - tC); rotulo('ADQUISICIÓN', '19 · 07 · 2016', 80, 290);
+      if (on(tC + .3)) { const a = ancla(m, 'unilever_puerta'); visor(a, prog(u, tC + .3, tC + .6)); etiqueta(a, 'UNILEVER HOUSE', 'SEDE · LONDRES', { lado: 'arriba', sep: 50 }); } } },
+
+  // 11 · «El precio reportado [titular real de Fortune, visor en «$1 Billion»]: mil millones de dólares, en efectivo [la cifra cuenta]»
+  (u, E) => { const tP = T('precio'), tM = T('mil'), tE = T('efectivo');
+    fondo(540, 900);
+    const m = escena(540, 1000, lerp(.97, 1.07, viva(E.q)), () => lamina(IM.titular_fortune, 60, 700, 960, { nombre: 'titular_fortune', br: 1, con: 1 }), { sy: 990 });
+    etiqueta(ancla(m, 'titular_medio'), 'FORTUNE · 19 JUL 2016', '', { lado: 'arriba', sep: 26, corre: 110 });
+    if (on(tP)) visor(ancla(m, 'titular_precio'), prog(u, tP, tP + .3), { color: '#0a0a0a', w: 5 });
+    if (on(tM)) { const n = lerp(0, 1000, ease(prog(u, tM, tM + .9))); on(tM + .9, 'golpe');
+      cifra('$' + fmt(Math.round(n / 10) * 10) + ' M', 420, { tam: 170, label: 'PRECIO REPORTADO · USD', l2: on(tE) ? 'EN EFECTIVO' : '' }); } },
+
+  // 12 · «Tú puedes hacer lo mismo: nombra el dolor [él a cámara], ríete de él [la carrera en carretilla del anuncio] y di tu precio [$1/mo]»
+  (u, E) => { const t1 = T('nombra'), t2 = T('riete'), t3 = T('di');
+    const paso = (n, s) => { rotulo('PASO 0' + n + ' DE 03', '', 540, 1090, 'center'); titulo(s, 1230, { tam: 118 }); };
+    if (u < t1) { foto(IM['dsc_73.5'], camara([.51, .45, 1.0], [.51, .45, 1.12], u / t1), { sy: 580 }); vineta(.7, 540, 580); penumbra(980, 1320, .65);
+      titulo('TU TURNO', 1180, { tam: 150 }); if (on(T('hacer'))) rotulo('TRES PASOS', '', 540, 1250, 'center');
+    } else if (u < t2) { on(t1, 'swish'); foto(IM['dsc_1.5'], camara([.47, .45, 1.0], [.47, .45, 1.08], (u - t1) / (t2 - t1)), { sy: 560 }); vineta(.7, 540, 560); penumbra(980, 1320, .7); barrido(u - t1); paso(1, 'NOMBRA EL DOLOR');
+    } else if (u < t3) { on(t2, 'swish'); foto(IM['dsc_58.0'], camara([.5, .36, 1.0], [.5, .36, 1.1], (u - t2) / (t3 - t2)), { sy: 600, br: .88 }); vineta(.5, 540, 600); penumbra(1000, 1320, .7); barrido(u - t2); paso(2, 'RÍETE DE ÉL');
+    } else { on(t3, 'swish'); fondo();
+      const m = escena(...camara([540, 785, 1.0], [337, 898, 1.5], (u - t3) / (E.tramo - t3)), () => lamina(IM.web2012_blades, 90, 520, 900, { nombre: 'web2012_blades' }), { sy: 740 });
+      barrido(u - t3); if (on(t3 + .3)) visor(ancla(m, 'web_precio'), prog(u, t3 + .3, t3 + .6), { color: '#0a0a0a', w: 5 }); penumbra(1000, 1320, .7); paso(3, 'DI TU PRECIO'); } },
+
+  // 13 · CIERRE: tu palabra y la captura REAL de tu regalo (plana y a color, como la pantalla de verdad), que se desplaza despacio
+  (u, E) => { const tC = T('comenta'); fondo(540, 900);
+    rotulo('COMENTA', '', 540, 320, 'center'); titulo(CTA.palabra, 500, { tam: 176 });
+    const a = tarjeta(IM.regalo, 90, 600, 900, 620, viva(u / E.tramo) * .55, lerp(1, 1.06, viva(u / E.tramo)), 'la captura de tu regalo');
+    if (on(tC, 'swish')) etiqueta(a, CTA.regalo.toUpperCase(), 'TE LO MANDO', { lado: 'abajo', sep: 26 }); },
+];
+arrancar(draw);
+</script>
+</body>
+</html>

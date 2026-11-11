@@ -1,6 +1,6 @@
 ---
 name: plantillas-edicion-f100k
-description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (251 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "hazme un clip en el estilo X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
+description: Router del catálogo único de plantillas de edición de video de FÓRMULA 100K (252 plantillas con nombre y comando de una línea - con tu video, YouTube 16:9, sin grabar, animado sin cara, «¿Qué pasaría si…?», motion graphics, 66 estilos de cine, 40 efectos y 7 looks). Con solo nombrar la plantilla sabe qué skill la hace, con qué receta y qué material pedir; revisa que esa skill esté instalada (si no, dice cómo instalarla en 1 paso) y le pasa el trabajo. Usar cuando digan "edita mi video con la plantilla X", "hazme un reel sin grabar con la plantilla X sobre…", "ponle el efecto X a mi video", "ponle el look X", "hazme un clip en el estilo X", "qué plantillas de edición hay", "qué estilos de edición hay", "/plantillas", "lista de plantillas", "cuál plantilla me sirve para este guion", "con qué plantilla edito esto", "clona la edición de este reel [enlace]", "edita mi video como este reel [enlace]". NO usar para carruseles (carrusel-formatos-f100k) ni para escribir el guion (guionizacion-formula100k).
 argument-hint: "[nombre de la plantilla] [ruta del video | tema]"
 ---
 
@@ -33,7 +33,7 @@ reconoce la plantilla → revisa que su motor esté instalado → pide solo el m
 
 ## 2. Reconoce la plantilla aunque venga aproximada
 1. Compara lo que dijo con `nombre`, `alias` e `id` **sin tildes, sin mayúsculas y sin signos** («pantalla dividida», «la de dividir la pantalla», «split» → `pantalla-dividida`).
-2. Si hay **una** coincidencia clara, sigue. Si hay **dos o más** (p. ej. «recorte de papel» es un efecto y «Recortes de papel» un corto animado; «tier list» es efecto y «Ranking por niveles» un estilo entero), pregunta en UNA línea con las opciones y su `queSeVe`.
+2. Si hay **una** coincidencia clara, sigue. Si hay **dos o más** (p. ej. «recorte de papel» es un efecto y «Recortes de papel» un corto animado; «tier list» es efecto y «Ranking por niveles» un estilo entero; un «expediente» a secas puede ser «Expediente de inteligencia», el reel sin cara de un caso real, o «Expediente de semitono», el clip de cine de una frase), pregunta en UNA línea con las opciones y su `queSeVe`.
 3. Las palabras del pedido desempatan: «efecto» → grupo Efectos; «look» → Looks; «sin grabar», «sin cara», «sobre [tema]» → Sin grabar o Animado sin cara; «mi video», «edita» → Con tu video o YouTube 16:9; «qué pasaría si» → ese grupo; «estilo», «clip», «inserto» → Estilos de cine.
 4. Si no hay ninguna, di que no la encuentras y propón las 3 más parecidas por `queSeVe`. Nunca inventes una plantilla.
 5. Si la plantilla tiene `fusion`, no lo expliques salvo que pregunte por el nombre viejo: úsala tal cual.
@@ -92,6 +92,7 @@ Lee su guion, su video o su tema y propón **2 plantillas** (nombre — por qué
 | Lista por grupos sin cara («N herramientas para…», «lo que necesitas en cada etapa») | Lista en cuaderno · Lista con maquetas |
 | Explicar una app o tu producto con personajes que hablan, sin salir a cámara | Telenovela de frutas |
 | Historia real de una empresa o una persona («el nacimiento de…») con datos y fuentes | Collage documental |
+| Caso real de negocio con cifras que se pueden verificar, contado como noticia («cómo X ganó Y») | Expediente de inteligencia |
 | Historia, anécdota | Historia natural · Fondo que cambia (sin grabar: Historia animada) |
 | Tutorial, demo de una app | Pantalla dividida · Capturas de tutorial |
 | Explicas con cifras o un proceso | Explainer con cifras · Explicación arriba |

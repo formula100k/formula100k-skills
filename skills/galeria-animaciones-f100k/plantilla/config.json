@@ -1,0 +1,30 @@
+{
+  "titulo_chico": "toda una galería de",
+  "titulo_grande": "ANIMACIONES",
+  "ventana": "tu estudio",
+  "pedido": "Anima cada idea de mi lista",
+  "respuesta": "Listo. Aquí va cada una:",
+  "lista": "tu lista",
+  "acento": "#F5C842",
+  "fondo": "#0B0C0B",
+  "t0": 0.12,
+  "paso": 0.45,
+  "sosten": 0.5,
+  "cta": "GUÍA",
+  "comenta": "Comenta",
+  "cta_sub": "y te la mando",
+  "cta_dur": 1.6,
+  "voz": null,
+  "musica": null,
+  "items": [
+    { "nombre": "Ruta en mapa", "mini": "mapa", "texto": "Ruta más corta" },
+    { "nombre": "Titular", "mini": "titular", "cabecera": "La Gaceta del Barrio", "texto": "Una panadería / abre de noche / y se llena" },
+    { "nombre": "Letrero de tablas", "mini": "tablas", "texto": "SIGUE TU RUTA HOY" },
+    { "nombre": "Gráfica", "mini": "grafica", "texto": "Tu crecimiento" },
+    { "nombre": "Plano", "mini": "plano", "texto": "fachada · norte" },
+    { "nombre": "Rejilla suiza", "mini": "suiza", "texto": "Menos, pero mejor." },
+    { "nombre": "Avisos", "mini": "avisos" },
+    { "nombre": "Globo", "mini": "globo" },
+    { "nombre": "Antes y después", "mini": "antesDespues", "texto": "Vende / con historias" }
+  ]
+}

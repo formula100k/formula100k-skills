@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pizarra negra con tiza</title>
+<!--FUENTES-->
+<style>html,body{margin:0;background:#0c0d0c;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<!--CONFIG-->
+<script>
+// Estilo «Pizarra negra con tiza» (parábola con medidor). Monigote de tiza sobre pizarra casi negra, medidor con
+// aguja que se mueve con la historia, rótulo en tiza, acentos en tiza de color (rojo = malo, amarillo = bueno).
+// Al final el rótulo se borra con el borrador y en su lugar se escribe el CTA.
+// Ejemplo: el pescador al que se le rompe la red. Para tu tema cambia el bloque «EL DIBUJO» (más abajo).
+// ANATOMIA: estilizada — monigote de palitos de tiza (círculo + líneas), la convención del estilo
+// ====================== LO QUE SALE DE config.json ======================
+const CF = window.CONFIG || {};
+const TITULO = CF.titulo ?? 'ESTO ES';
+const IZQ = CF.izquierda ?? 'MALO', DER = CF.derecha ?? 'BUENO';
+const ROTULO = CF.rotulo ?? 'SE ROMPIÓ SU RED';
+const PREGUNTA = CF.pregunta ?? '?';
+const CTA_CHICA = CF.cta_frase ?? 'Comenta', CTA = (CF.cta ?? 'GUÍA').toUpperCase();
+const COLORES = Object.assign({
+  pizarra: '#181b19', tiza: '#efede4',
+  rojo: '#ec8a6c',     // tiza salmón: lo malo
+  amarillo: '#f1cf6a', // tiza amarilla: lo bueno, la pregunta y la palabra del CTA
+  verde: '#8fae8c', cafe: '#b98a62',
+}, CF.colores || {});
+const ESC = CF.duracion_escena ?? 4.0;     // la parábola dibujándose (s)
+const CTA_DUR = CF.duracion_cta ?? 2.8;    // borrador + CTA escrito + aire (s)
+const DUR = ESC + CTA_DUR;
+const ADELANTO = .35;                      // el primer cuadro ya trae trazo empezado
+// ========================================================================
+const W = 1080, H = 1920, FPS = 30;
+const LETRA = (CF.fuente ? '"Marca", ' : '') + '"Kalam-Bold", "Chalkboard SE", cursive';
+</script>
+<!--MOTOR-->
+<script>
+let DIBUJAR = null;
+// la letra tiene que estar cargada ANTES de medir los glifos: el render espera a window.LISTO
+window.LISTO = Promise.all(['54px', '96px'].map(s => document.fonts.load(`${s} ${LETRA}`, 'AÓ?'))).then(construir);
+arrancar(frame => { if (DIBUJAR) DIBUJAR(frame); });
+
+function construir() {
+// ---------- la pizarra (se hornea una vez, más grande que el cuadro para la cámara) ----------
+const BX = -200, BY = -200, BW = W + 400, BH = H + 400;
+const PIZARRA = (() => {
+  const c = capa(BW, BH), p = c.getContext('2d'), r = rng(11);
+  p.translate(-BX, -BY);
+  p.fillStyle = COLORES.pizarra; p.fillRect(BX, BY, BW, BH);
+  for (let y = BY; y < BY + BH; y += 8) for (let x = BX; x < BX + BW; x += 8) {
+    const n = vnoise(x * .003, y * .003) * .65 + vnoise(x * .015 + 4, y * .015) * .35;
+    p.fillStyle = n > .5 ? `rgba(150,170,160,${(n - .5) * .07})` : `rgba(0,0,0,${(.5 - n) * .22})`; p.fillRect(x, y, 8, 8);
+  }
+  // pasadas viejas de borrador: arcos anchos de neblina blanca
+  p.save(); p.filter = 'blur(22px)';
+  for (let i = 0; i < 9; i++) {
+    const cx = BX + r() * BW, cy = BY + r() * BH, R = 220 + r() * 380, a0 = r() * 6.28;
+    p.strokeStyle = `rgba(220,225,215,${.025 + r() * .03})`; p.lineWidth = 70 + r() * 90; p.lineCap = 'round';
+    p.beginPath(); p.arc(cx, cy, R, a0, a0 + 1 + r() * 1.6); p.stroke();
+  }
+  p.restore();
+  // fantasmas de una clase vieja mal borrada (palabras del tema, casi invisibles)
+  p.save(); p.filter = 'blur(3px)'; p.fillStyle = 'rgba(230,230,220,.045)'; p.font = '70px ' + LETRA;
+  (CF.fantasmas || ['tres redes', 'mar', 'x = ?', 'viento']).slice(0, 4).forEach((s, i) => p.fillText(s, [120, 760, 820, 90][i], [230, 300, 1700, 1760][i]));
+  p.restore();
+  for (let i = 0; i < 90000; i++) { p.fillStyle = r() < .5 ? 'rgba(255,255,255,.03)' : 'rgba(0,0,0,.12)'; p.fillRect(BX + r() * BW, BY + r() * BH, 1.4, 1.4); }
+  return c;
+})();
+
+// ---------- relleno de tiza de color: rayado de ida y vuelta que se va llenando ----------
+function rayado(poly, col, ang = -1.05, paso = 11, ancho = 7) {
+  const cs = Math.cos(ang), sn = Math.sin(ang);
+  let mn = 1e9, mx = -1e9, mnu = 1e9, mxu = -1e9;
+  for (const [x, y] of poly) { const v = -x * sn + y * cs, u = x * cs + y * sn; mn = Math.min(mn, v); mx = Math.max(mx, v); mnu = Math.min(mnu, u); mxu = Math.max(mxu, u); }
+  const L = [];
+  let i = 0;
+  for (let v = mn + paso * .5; v < mx; v += paso, i++) {
+    const j = (hash2(i, 7) - .5) * 9, j2 = (hash2(i, 8) - .5) * 9, m0 = mnu + hash2(i, 9) * 14, m1 = mxu - hash2(i, 10) * 14;
+    const a = [m0 * cs - (v + j) * sn, m0 * sn + (v + j) * cs], b = [m1 * cs - (v + j2) * sn, m1 * sn + (v + j2) * cs];
+    const seg = i % 2 ? [b, a] : [a, b]; seg.w = ancho * (.65 + hash2(i, 12) * .6); L.push(seg);
+  }
+  return { poly, col, L, ancho, len: L.length * 40, t0: 1e9, t1: 1e9 };
+}
+function pintarRayado(g, R, t) {
+  const u = t <= R.t0 ? 0 : t >= R.t1 ? 1 : (t - R.t0) / (R.t1 - R.t0); if (u <= 0) return;
+  g.save(); g.beginPath(); R.poly.forEach(([x, y], k) => k ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.clip();
+  g.strokeStyle = R.col; g.lineCap = 'round'; g.lineWidth = R.ancho;
+  const n = R.L.length * u, full = Math.floor(n);
+  for (let k = 0; k < Math.min(R.L.length, full + 1); k++) {
+    const [a, b] = R.L[k], f = k < full ? 1 : n - full; if (f <= 0) continue;
+    g.globalAlpha = .55 + hash2(k, 3) * .4; g.lineWidth = R.L[k].w;
+    g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(lerp(a[0], b[0], f), lerp(a[1], b[1], f)); g.stroke();
+  }
+  g.restore();
+}
+function puntaRayado(R, t) {
+  const u = clamp((t - R.t0) / (R.t1 - R.t0)), n = R.L.length * u, k = Math.min(R.L.length - 1, Math.floor(n)), f = n - Math.floor(n);
+  const [a, b] = R.L[k]; return [lerp(a[0], b[0], f), lerp(a[1], b[1], f)];
+}
+
+// ====================== EL DIBUJO (cámbialo para tu tema) ======================
+// Piezas: tLinea, tCurva, tArco, tCirculo (trazos de tiza), letras(...) (texto que se escribe), rayado(...) (relleno de color).
+// Coordenadas en el mundo de 1080×1920. El suelo va en y = G. El medidor queda fijo arriba: es el hilo de la parábola.
+const T = { w: 9, col: COLORES.tiza, temblor: .9, alpha: .97 };
+const G = 1330;
+const SUELO = tLinea(-60, G + 4, W + 60, G - 2, { ...T, w: 7, comba: .004 });
+// medidor
+const MC = { x: 540, y: 640, r: 190 };
+const A0 = Math.PI + .38, A1 = 2 * Math.PI - .38, AM = (A0 + A1) / 2;
+const ARCO_M = tArco(MC.x, MC.y, MC.r, A0, AM - .02, { ...T, w: 13, col: COLORES.rojo });
+const ARCO_B = tArco(MC.x, MC.y, MC.r, AM + .02, A1, { ...T, w: 13, col: COLORES.amarillo });
+const MARCAS = [0.17, .34, .66, .83].map(f => { const a = lerp(A0, A1, f); return tLinea(MC.x + Math.cos(a) * MC.r * .72, MC.y + Math.sin(a) * MC.r * .72, MC.x + Math.cos(a) * MC.r * .84, MC.y + Math.sin(a) * MC.r * .84, { ...T, w: 6 }); });
+const BASE = tCurva([[MC.x - 46, MC.y + 34], [MC.x - 22, MC.y + 4], [MC.x + 22, MC.y + 4], [MC.x + 46, MC.y + 34], [MC.x - 46, MC.y + 34]], { ...T, w: 7, suave: 1 });
+const L_TIT = letras(TITULO, MC.x, MC.y - MC.r - 70, '54px ' + LETRA, { centro: true, col: COLORES.tiza, semilla: 3, giro: .05, grosor: 1.5 });
+const L_IZQ = letras(IZQ, MC.x - 165, MC.y + 82, '66px ' + LETRA, { centro: true, col: COLORES.rojo, semilla: 5, giro: .05, grosor: 1.5 });
+const L_DER = letras(DER, MC.x + 180, MC.y + 82, '66px ' + LETRA, { centro: true, col: COLORES.amarillo, semilla: 6, giro: .05, grosor: 1.5 });
+// el personaje (monigote con sombrero y poncho)
+const P = { x: 300, cy: 1004, r: 50 };
+const CABEZA = tCirculo(P.x, P.cy, P.r, { ...T, vuelta: .25 });
+const SOMBRERO = tCurva([[P.x - 92, P.cy - 36], [P.x, P.cy - 112], [P.x + 92, P.cy - 36], [P.x - 92, P.cy - 36]], { ...T, w: 8, suave: 1 });
+const POLY_SOMB = [[P.x - 88, P.cy - 38], [P.x, P.cy - 108], [P.x + 88, P.cy - 38]];
+const CARA = [tArco(P.x - 19, P.cy - 4, 10, .3, 2.8, { ...T, w: 5, temblor: .3 }), tArco(P.x + 19, P.cy - 4, 10, .3, 2.8, { ...T, w: 5, temblor: .3 }),
+  tCurva([[P.x - 22, P.cy + 22], [P.x - 8, P.cy + 15], [P.x, P.cy + 19], [P.x + 8, P.cy + 15], [P.x + 22, P.cy + 22]], { ...T, w: 6, temblor: .3 })];
+const PONCHO = [[P.x, P.cy + 56], [P.x - 72, P.cy + 190], [P.x + 72, P.cy + 190]];
+const CUERPO = tCurva([...PONCHO, PONCHO[0]], { ...T, w: 8, suave: 1 });
+const PALOS = [tLinea(P.x - 26, P.cy + 190, P.x - 40, G - 2, T), tLinea(P.x + 26, P.cy + 190, P.x + 42, G - 2, T),
+  tLinea(P.x - 34, P.cy + 120, P.x - 78, P.cy + 205, T), tLinea(P.x + 34, P.cy + 116, P.x + 132, P.cy + 150, T)];
+const HILO = tCurva([[P.x + 132, P.cy + 150], [P.x + 190, P.cy + 190], [P.x + 230, P.cy + 150], [P.x + 290, P.cy + 168], [620, 1205]], { ...T, w: 5, temblor: 1.4 });
+// el objeto del problema: bote con su red rota
+const CASCO = [[548, 1236], [978, 1236], [918, G - 6], [606, G - 6]];
+const BOTE = tCurva([...CASCO, CASCO[0]], { ...T, w: 9, suave: 1 });
+const MASTIL = tLinea(782, 1236, 782, 880, T);
+const VERGA = tLinea(782, 900, 600, 940, { ...T, w: 7 });
+const RED = []; const HOYO = { x: 690, y: 1080, r: 50 };
+{ const X = [606, 640, 674, 708, 742, 776], Y = [944, 986, 1028, 1070, 1112, 1154, 1196];
+  const nodo = (i, j) => [X[i] + Math.sin(j * 1.3 + i) * 3, Y[j] - (X[i] - 600) * .2 + Math.sin(i * 2.1) * 2];
+  const fuera = (a, b) => Math.hypot((a[0] + b[0]) / 2 - HOYO.x, (a[1] + b[1]) / 2 - HOYO.y) > HOYO.r;
+  for (let i = 0; i < X.length; i++) for (let j = 0; j < Y.length; j++) {
+    if (j < Y.length - 1 && fuera(nodo(i, j), nodo(i, j + 1))) RED.push(tLinea(...nodo(i, j), ...nodo(i, j + 1), { ...T, w: 4.5, temblor: .6 }));
+    if (i < X.length - 1 && fuera(nodo(i, j), nodo(i + 1, j))) RED.push(tLinea(...nodo(i, j), ...nodo(i + 1, j), { ...T, w: 4.5, temblor: .6 }));
+  }
+  [[-.6, 40], [.4, 52], [1.6, 36], [2.6, 46]].forEach(([a, l]) => { const x0 = HOYO.x + Math.cos(a) * HOYO.r, y0 = HOYO.y + Math.sin(a) * HOYO.r;
+    RED.push(tCurva([[x0, y0], [x0 - Math.cos(a) * 10 + 8, y0 + l * .5], [x0 - Math.cos(a) * 4 - 6, y0 + l]], { ...T, w: 4, temblor: 1 })); });
+}
+const CIRCULO_HOYO = tCirculo(HOYO.x, HOYO.y, HOYO.r + 32, { ...T, w: 9, col: COLORES.rojo, vuelta: .35, ry: HOYO.r + 26 });
+const R_SOMB = rayado(POLY_SOMB, COLORES.amarillo, -1.0, 12, 7);
+const R_PONCHO = rayado(PONCHO, COLORES.verde, -1.1, 12, 7);
+const R_CASCO = rayado(CASCO, COLORES.cafe, -1.15, 12, 7);
+// ===============================================================================
+
+// rótulo (2 renglones) con su subrayado rojo, y la pregunta junto al medidor
+const ROT = ROTULO.split(' '), ROT1 = ROT.slice(0, Math.ceil(ROT.length / 2)).join(' '), ROT2 = ROT.slice(Math.ceil(ROT.length / 2)).join(' ');
+const tamRot = s => Math.min(96, 96 * 900 / Math.max(1, medir(s, '96px ' + LETRA)));
+const L_ROT1 = letras(ROT1, 550, 1490, `${tamRot(ROT1)}px ${LETRA}`, { centro: true, col: COLORES.tiza, semilla: 9, giro: .05, grosor: 1.6 });
+const L_ROT2 = ROT2 ? letras(ROT2, 550, 1610, `${tamRot(ROT2)}px ${LETRA}`, { centro: true, col: COLORES.tiza, semilla: 10, giro: .05, grosor: 1.6 }) : [];
+const L_ROT = [...L_ROT1, ...L_ROT2];
+const ULT = L_ROT2.length ? L_ROT2 : L_ROT1, yUlt = L_ROT2.length ? 1640 : 1520;
+const SUBRAYA = tLinea(ULT.x0 - 10, yUlt, ULT.x0 + ULT.ancho + 14, yUlt - 8, { ...T, w: 8, col: COLORES.rojo });
+const L_PREG = letras(PREGUNTA, MC.x + MC.r + 70, MC.y - MC.r + 10, '170px ' + LETRA, { centro: true, col: COLORES.amarillo, semilla: 2, grosor: 2 });
+// el CTA: se escribe donde estaba el rótulo, después del borrador
+const TC = ESC + ADELANTO;                                     // arranca el cierre (en tiempo de tiza)
+const tamCta = Math.min(150, 150 * 860 / Math.max(1, medir(CTA, '150px ' + LETRA)));
+const L_CTA1 = letras(CTA_CHICA, 550, 1450, '76px ' + LETRA, { centro: true, col: COLORES.tiza, semilla: 21, giro: .04, grosor: 1.5 });
+const L_CTA2 = letras(CTA, 550, 1620, `${tamCta}px ${LETRA}`, { centro: true, col: COLORES.amarillo, semilla: 22, giro: .04, grosor: 2 });
+const SUB_CTA = tLinea(L_CTA2.x0 - 14, 1656, L_CTA2.x0 + L_CTA2.ancho + 18, 1648, { ...T, w: 10, col: COLORES.rojo });
+
+// ---------- agenda (segundos de tiza; el video arranca en ADELANTO) ----------
+const k = ESC / 4;                                             // la escena de ejemplo está pensada para 4 s
+agendar([SUELO], 0, .55 * k);
+agendar([ARCO_M, ARCO_B, ...MARCAS, BASE], .1 * k, 1.0 * k, .02);
+agendar(L_TIT, .55 * k, .95 * k, .02);
+agendar([CABEZA, SOMBRERO, ...CARA, CUERPO, ...PALOS], .35 * k, 1.45 * k, .02);
+agendar([BOTE, MASTIL, VERGA, ...RED], .8 * k, 2.0 * k, .005);
+agendar(L_IZQ, 1.0 * k, 1.35 * k, .02); agendar(L_DER, 1.25 * k, 1.65 * k, .02);
+R_SOMB.t0 = 1.45 * k; R_SOMB.t1 = 1.8 * k; R_PONCHO.t0 = 1.6 * k; R_PONCHO.t1 = 2.05 * k; R_CASCO.t0 = 2.0 * k; R_CASCO.t1 = 2.45 * k;
+agendar([HILO], 1.9 * k, 2.15 * k);
+agendar(L_ROT, 1.95 * k, 2.85 * k, .025);
+agendar([CIRCULO_HOYO], 2.5 * k, 2.95 * k);
+agendar([SUBRAYA], 2.9 * k, 3.15 * k);
+agendar(L_PREG, 3.55 * k, 3.95 * k);
+const BORRA0 = TC + .1, BORRA1 = TC + .6;                      // pasada del borrador sobre el rótulo
+agendar(L_CTA1, TC + .7, TC + 1.1, .02);
+agendar(L_CTA2, TC + 1.1, TC + 1.75, .03);
+agendar([SUB_CTA], TC + 1.8, TC + 2.05);
+// la aguja: arriba → cae a MALO → empieza a dudar (y se queda ahí en el cierre)
+function anguloAguja(t) {
+  const caer = ease(prog(t, 2.55 * k, 3.25 * k)), dudar = ease(prog(t, 3.55 * k, ESC + ADELANTO + .4));
+  return AM - .95 * caer + .32 * dudar;
+}
+// cámara: acercamiento lento; en el cierre baja al CTA (que queda dentro de la zona segura)
+const CAM = camara([[0, 556, 1010, 1.18], [1.9 * k, 560, 1005, 1.23], [ESC, 566, 995, 1.3], [ESC + .9, 556, 1250, 1.24], [DUR, 552, 1262, 1.27]]);
+
+const TRAZOS = [SUELO, ARCO_M, ARCO_B, ...MARCAS, BASE, CABEZA, SOMBRERO, ...CARA, CUERPO, ...PALOS, BOTE, MASTIL, VERGA, ...RED, HILO, CIRCULO_HOYO];
+const LETRAS = [...L_TIT, ...L_IZQ, ...L_DER, ...L_PREG];
+const BORRABLES = { trazos: [SUBRAYA], letras: L_ROT };
+const CIERRE = { trazos: [SUB_CTA], letras: [...L_CTA1, ...L_CTA2] };
+const RAYADOS = [R_SOMB, R_PONCHO, R_CASCO];
+
+// polvo: de cada punta que dibuja se sueltan granitos que caen despacio y se apagan
+const FUENTES = [];
+for (const s of [...TRAZOS, SUBRAYA, SUB_CTA]) for (let q = 0; q < Math.max(2, s.len / 60); q++) FUENTES.push({ s, u: (q + .5) / Math.max(2, s.len / 60), sem: FUENTES.length });
+for (const L of [...LETRAS, ...L_ROT, ...CIERRE.letras]) FUENTES.push({ L, sem: FUENTES.length });
+for (const R of RAYADOS) for (let q = 0; q < 14; q++) FUENTES.push({ R, u: (q + .5) / 14, sem: FUENTES.length });
+function polvo(g, t) {
+  g.save(); g.fillStyle = COLORES.tiza;
+  for (const F of FUENTES) {
+    let te, x, y;
+    if (F.s) { te = lerp(F.s.t0, F.s.t1, F.u); if (t < te) continue; [x, y] = F.s.punto(F.u); }
+    else if (F.L) { te = F.L.t1; if (t < te) continue; x = F.L.x + F.L.w * .7; y = F.L.y - F.L.size * .3; }
+    else { te = lerp(F.R.t0, F.R.t1, F.u); if (t < te) continue; [x, y] = puntaRayado(F.R, te); }
+    const dt = t - te, vida = 1.6 + hash2(F.sem, 1) * 1.2; if (dt > vida) continue;
+    for (let i = 0; i < 3; i++) {
+      const h1 = hash2(F.sem, i + 5), h2 = hash2(i + 11, F.sem), sz = 1.6 + hash2(F.sem + 3, i) * 2.6;
+      const px = x + (h1 - .5) * 18 + (h2 - .5) * 30 * dt, py = y + 4 + 60 * dt * dt * (0.6 + h2) + 14 * dt;
+      g.globalAlpha = (1 - dt / vida) * (.35 + h1 * .45); g.fillRect(px, py, sz, sz);
+    }
+  }
+  g.restore();
+}
+
+// ---------- capas ----------
+const GRANO = granoTiza(5, 512, .4);
+const CT = capa(), gt = CT.getContext('2d');
+function granear(g, c) {
+  g.save(); ponerCam(g, c); g.globalCompositeOperation = 'destination-out'; g.fillStyle = g.createPattern(GRANO, 'repeat');
+  g.fillRect(BX, BY, BW, BH); g.restore();
+}
+const ZONA_ROT = { x0: 40, x1: 1060, y0: 1380, y1: 1680 };
+
+DIBUJAR = frame => {
+  const t = frame / FPS + ADELANTO, c = CAM.at(t - ADELANTO);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ponerCam(ctx, c); ctx.drawImage(PIZARRA, BX, BY);
+  // tiza
+  gt.setTransform(1, 0, 0, 1, 0, 0); gt.clearRect(0, 0, W, H); ponerCam(gt, c);
+  for (const R of RAYADOS) pintarRayado(gt, R, t);
+  for (const s of TRAZOS) pintarTrazo(gt, s, t, { gota: false });
+  for (const L of LETRAS) pintarLetra(gt, L, t);
+  // rótulo: se borra de izquierda a derecha cuando pasa el borrador
+  const xb = lerp(ZONA_ROT.x0 - 80, ZONA_ROT.x1 + 80, ease(prog(t, BORRA0, BORRA1)));
+  gt.save(); if (t > BORRA0) { gt.beginPath(); gt.rect(xb, ZONA_ROT.y0, 3000, ZONA_ROT.y1 - ZONA_ROT.y0); gt.clip(); }
+  for (const s of BORRABLES.trazos) pintarTrazo(gt, s, t, { gota: false });
+  for (const L of BORRABLES.letras) pintarLetra(gt, L, t);
+  gt.restore();
+  // lo que deja el borrador: una neblina blanca tenue
+  if (t > BORRA0) { gt.save(); gt.filter = 'blur(30px)'; gt.fillStyle = COLORES.tiza; gt.globalAlpha = .045;
+    gt.fillRect(ZONA_ROT.x0, ZONA_ROT.y0 + 30, Math.max(0, xb - ZONA_ROT.x0 - 60), ZONA_ROT.y1 - ZONA_ROT.y0 - 60); gt.restore(); }
+  for (const s of CIERRE.trazos) pintarTrazo(gt, s, t, { gota: false });
+  for (const L of CIERRE.letras) pintarLetra(gt, L, t);
+  // aguja (de tiza; aparece con el medidor)
+  if (t > .7 * k) {
+    const a = anguloAguja(t), kk = ease(prog(t, .7 * k, 1.0 * k)), l = MC.r * .86 * kk;
+    gt.save(); gt.fillStyle = COLORES.tiza; gt.globalAlpha = .97; gt.beginPath();
+    gt.moveTo(MC.x + Math.cos(a + 1.57) * 9, MC.y + Math.sin(a + 1.57) * 9); gt.lineTo(MC.x + Math.cos(a) * l, MC.y + Math.sin(a) * l);
+    gt.lineTo(MC.x + Math.cos(a - 1.57) * 9, MC.y + Math.sin(a - 1.57) * 9); gt.closePath(); gt.fill();
+    gt.beginPath(); gt.arc(MC.x, MC.y, 15, 0, 6.29); gt.fill(); gt.restore();
+  }
+  // la punta de la aguja deja un rastro tenue cuando cae
+  if (t > 2.55 * k) { const a1 = anguloAguja(t); gt.save(); gt.strokeStyle = COLORES.tiza; gt.globalAlpha = .16; gt.lineWidth = 16; gt.lineCap = 'round';
+    gt.beginPath(); gt.arc(MC.x, MC.y, MC.r * .78, Math.min(AM, a1), Math.max(AM, a1)); gt.stroke(); gt.restore(); }
+  granear(gt, c);
+  polvo(gt, t);
+  // halo de polvo de tiza alrededor de todo lo escrito
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.save(); ctx.filter = 'blur(7px)'; ctx.globalAlpha = .22; ctx.drawImage(CT, 0, 0); ctx.restore();
+  ctx.save(); ctx.filter = 'blur(26px)'; ctx.globalAlpha = .12; ctx.drawImage(CT, 0, 0); ctx.restore();
+  ctx.globalAlpha = .96; ctx.drawImage(CT, 0, 0); ctx.globalAlpha = 1;
+  // el borrador de fieltro (sin mano) mientras pasa
+  if (t > BORRA0 - .12 && t < BORRA1 + .15) {
+    const alza = 1 - prog(t, BORRA0 - .12, BORRA0) * (1 - prog(t, BORRA1, BORRA1 + .15));
+    const [sx, sy] = aPantalla(c, clamp(xb, ZONA_ROT.x0, ZONA_ROT.x1), 1530 + Math.sin(t * 14) * 28);
+    borrador(sx, sy, alza, 150 * c.z, COLORES.rojo);
+  }
+  const v = ctx.createRadialGradient(W / 2, H * .48, H * .25, W / 2, H * .5, H * .78); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.45)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+};
+}
+window.QUIETO = 0;
+</script>
+</body>
+</html>

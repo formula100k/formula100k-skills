@@ -1,0 +1,28 @@
+{
+  "cta": "GUÍA",
+  "maqueta": true,
+  "frases": [
+    [0.00, 1.50, "Un *sándwich* cobrado doble…"],
+    [1.50, 2.95, "…y cayó el *director*."],
+    [2.95, 4.50, "Lo chico tumba lo *grande*."],
+    [4.50, 7.00, "Comenta *{CTA}* y te la mando."]
+  ],
+  "ticket": {
+    "titulo": "CAFETERÍA",
+    "subtitulo": "consumo en mesa",
+    "lineas": ["café con leche", "jugo de naranja", "sándwich de jamón", "sándwich de jamón", "galleta"],
+    "marcada": [2, 3],
+    "nota": "cobrado doble",
+    "pie": "gracias por su visita"
+  },
+  "diario": {
+    "cabecera": "EL DIARIO DE LA MAÑANA",
+    "titular": "Renuncia el director tras el caso del sándwich",
+    "bajada": "La junta acepta su salida después de la queja de un cliente."
+  },
+  "sello": "ESCÁNDALO",
+  "etiquetas": ["lo absurdo", "la caída"],
+  "cierre": { "pide": "Comenta", "debajo": "y te la mando" },
+  "fotos": { "ticket": null, "titular": null },
+  "colores": { "amarillo": "#F5C842", "rojo": "#E5383B", "cielo": ["#1F3263", "#0A1128"] }
+}

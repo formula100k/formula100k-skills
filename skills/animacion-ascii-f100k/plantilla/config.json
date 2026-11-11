@@ -1,0 +1,15 @@
+{
+  "cta": "GUÍA",
+  "textos": [
+    { "f0": 22,  "f1": 84,  "chica": "tu equipo", "grande": "TRABAJA",  "fila": 9 },
+    { "f0": 90,  "f1": 152, "chica": "mientras",  "grande": "DUERMES",  "fila": 9 },
+    { "f0": 158, "f1": 224, "chica": "1 idea →",  "grande": "8 VIDEOS", "fila": 50 },
+    { "f0": 264, "f1": 999, "chica": "comenta",   "grande": null,       "fila": 49 }
+  ],
+  "colores": {
+    "cerca": "#33FF6B",
+    "lejos": "#089E66",
+    "blanco": "#E6FFED",
+    "clave": "#E6FFED"
+  }
+}

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cuento dibujado</title>
+<!--FUENTES-->
+<style>
+  html,body{margin:0;background:#111;display:grid;place-items:center;height:100vh}
+  canvas{height:100vh;width:auto;max-width:100vw}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<!--CONFIG-->
+<script>
+// Estilo «Cuento dibujado»: libro ilustrado plano que se mueve. El mundo arranca gris y frío; UN objeto (la ficha) tiene
+// color desde el cuadro 0, se enciende y el color vuelve al mundo en una ola que nace de él. Luz única, viñeta, grano,
+// subtítulo a mano con halo y cámara que respira. Cierra con tu palabra de CTA escrita a mano.
+// Ejemplo: un caracol con un farol de papel en la concha. Para tu cuento cambia el bloque «EL MUNDO» y «EL PERSONAJE».
+// ====================== LO QUE SALE DE config.json ======================
+const CF = window.CONFIG || {};
+const DH = CF.duracion_historia ?? 5;          // el cuento (s): los golpes se reparten en proporción
+const CTA_DUR = CF.duracion_cta ?? 2.8;        // el cierre con el CTA (s)
+const DUR = DH + CTA_DUR;
+const FRASES = CF.frases || ['Un farol chiquito…', '…le devolvió el color.'];
+const CTA_CHICA = CF.cta_frase ?? 'Comenta', CTA = (CF.cta ?? 'GUÍA').toUpperCase(), CTA_BAJADA = CF.cta_bajada ?? '';
+const PALETA = Object.assign({                 // el mundo EN COLOR (el gris sale solo con el filtro)
+  cieloArriba: '#6fa6da', cieloAbajo: '#d4ebf4', sol: '#ffe08a',
+  fachadas: ['#9fcbb5', '#efc47c', '#eaa58e', '#aab7e4', '#f2d49c'],
+  ventana: '#fbedcb', marco: '#ffffff', puerta: '#8a5a44',
+  acera: '#ddd2c3', junta: '#c7bcab', bordillo: '#bdb2a2', calle: '#6c7282',
+  concha: '#ea8b6c', espiral: '#c4644d', cuerpo: '#f0e6d6',
+  farolApagado: '#c79a45', farol: '#ffc247', luz: '255,196,92',
+  flores: ['#f47d8c', '#ffd166', '#ffffff', '#c59bf0'], tallo: '#5daa58',
+}, CF.colores || {});
+const LETRA = (CF.fuente ? '"Marca", ' : '') + '"PatrickHand-Regular", "Chalkboard SE", "Marker Felt", cursive';
+// ========================================================================
+// los golpes están escritos para un cuento de 5 s: tc(t) pasa el tiempo real al tiempo del cuento
+const T = { llega: 1.05, enciende: 1.12, ola0: 1.22, ola1: 3.4, feliz: 3.1 };
+const CAM = [ // [s del cuento, centroX, centroY, zoom] · un movimiento por golpe, siempre con easing; el cierre sigue empujando suave
+  [0.0, 462, 1012, 1.6], [1.1, 470, 1002, 1.72], [1.6, 478, 996, 1.68], [3.5, 536, 930, 1.2], [5.0, 546, 918, 1.25], [5.0 + .8, 548, 1000, 1.27], [5.0 + Math.max(.9, CTA_DUR), 552, 1010, 1.3],
+];
+const tc = t => t < DH ? t * 5 / DH : 5 + (t - DH);
+// subtítulos: las frases se reparten entre 0,25 s y el final del cuento según su largo (usa las palabras exactas de la voz)
+const SUBS = (() => { const tot = FRASES.reduce((a, f) => a + f.length + 6, 0); let a = .25 * DH / 5; return FRASES.map(f => { const b = a + (DH - .25 * DH / 5) * (f.length + 6) / tot; const s = [a, b, f]; a = b; return s; }); })();
+const W = 1080, H = 1920, FPS = 30;
+</script>
+<!--MOTOR-->
+<script>
+const P = PALETA;
+const capa = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
+const COL = capa(), MASK = capa();
+const gc = COL.getContext('2d'), gm = MASK.getContext('2d');
+
+// ---------- cámara ----------
+function camara(t) {
+  for (let i = 0; i < CAM.length - 1; i++) {
+    const [t0, x0, y0, z0] = CAM[i], [t1, x1, y1, z1] = CAM[i + 1];
+    if (t <= t1 || i === CAM.length - 2) { const e = ease(prog(t, t0, t1)); return { x: lerp(x0, x1, e), y: lerp(y0, y1, e), z: lerp(z0, z1, e) }; }
+  }
+}
+const aPantalla = (c, x, y) => [(x - c.x) * c.z + W / 2, (y - c.y) * c.z + H / 2];
+
+// ---------- formas ----------
+function rr(g, x, y, w, h, r, col) { g.fillStyle = col; g.beginPath(); g.roundRect(x, y, w, h, r); g.fill(); }
+function elipse(g, x, y, rx, ry, col) { g.fillStyle = col; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); g.fill(); }
+function brillo(g, x, y, r, rgb, a) { const k = g.createRadialGradient(x, y, 0, x, y, r); k.addColorStop(0, `rgba(${rgb},${a})`); k.addColorStop(1, `rgba(${rgb},0)`); g.fillStyle = k; g.fillRect(x - r, y - r, 2 * r, 2 * r); }
+
+// ---------- el mundo (siempre en color; el gris se aplica después) ----------
+const EDIF = [
+  { x: -200, w: 330, top: 560, col: 0, cols: 3, chim: 1 },
+  { x: 130, w: 285, top: 430, col: 1, cols: 2, tanque: 1 },
+  { x: 415, w: 310, top: 585, col: 2, cols: 3 },
+  { x: 725, w: 275, top: 470, col: 3, cols: 2, chim: 1 },
+  { x: 1000, w: 300, top: 545, col: 4, cols: 3 },
+];
+const SUELO = 1125, BORDE = 1205;
+const GRIETAS = [60, 238, 372, 655, 818, 1005];
+const LIMITE_FONDO = 1130;
+
+function cielo(g, c, t) {
+  const k = g.createLinearGradient(0, -300, 0, 1150);
+  k.addColorStop(0, P.cieloArriba); k.addColorStop(1, P.cieloAbajo);
+  g.fillStyle = k; g.fillRect(-400, -400, 1900, 1600);
+  // sol con su halo
+  brillo(g, 800, 470, 260, '255,228,150', .55); elipse(g, 800, 470, 58, 58, P.sol);
+  // nubes que derivan despacio
+  for (let i = 0; i < 4; i++) {
+    const x = ((i * 410 + t * (14 + i * 4)) % 1700) - 300, y = 330 + (i % 2) * 120 + i * 10;
+    g.fillStyle = 'rgba(255,255,255,.92)';
+    g.beginPath(); g.ellipse(x, y, 92, 26, 0, 0, 7); g.ellipse(x + 40, y - 18, 52, 26, 0, 0, 7); g.ellipse(x - 34, y - 8, 46, 20, 0, 0, 7); g.fill();
+  }
+}
+function horizonte(g, c) { // perfil lejano con paralaje (se mueve la mitad que la cámara)
+  g.save(); g.translate((c.x - 540) * .45, (c.y - 960) * .25);
+  const r = rng(11); let x = -260;
+  while (x < 1340) { const w = 70 + r() * 110, h = 260 + r() * 260; rr(g, x, LIMITE_FONDO - h, w, h + 40, 4, 'rgba(168,184,206,.85)');
+    if (r() < .4) rr(g, x + w * .3, LIMITE_FONDO - h - 30, 14, 34, 2, 'rgba(168,184,206,.85)'); x += w - 6; }
+  g.restore();
+}
+function edificio(g, e, crec) {
+  const col = P.fachadas[e.col], h = SUELO - e.top;
+  // cuerpo con un degradado suave (nunca un plano liso)
+  const k = g.createLinearGradient(e.x, 0, e.x + e.w, 0); k.addColorStop(0, col); k.addColorStop(1, sombra(col, .9));
+  g.fillStyle = k; g.fillRect(e.x, e.top, e.w, h);
+  rr(g, e.x - 8, e.top - 14, e.w + 16, 18, 4, sombra(col, .82));                   // cornisa
+  if (e.chim) rr(g, e.x + e.w * .7, e.top - 70, 34, 58, 3, sombra(col, .75));
+  if (e.tanque) { rr(g, e.x + 40, e.top - 76, 70, 52, 8, '#9a7b62'); rr(g, e.x + 48, e.top - 26, 8, 14, 1, '#7d6350'); rr(g, e.x + 94, e.top - 26, 8, 14, 1, '#7d6350'); }
+  // ventanas
+  const vw = 54, vh = 74, gapx = (e.w - e.cols * vw) / (e.cols + 1);
+  let n = 0;
+  for (let y = e.top + 50; y < SUELO - 190; y += 128) for (let i = 0; i < e.cols; i++, n++) {
+    const x = e.x + gapx + i * (vw + gapx);
+    rr(g, x - 5, y - 5, vw + 10, vh + 10, 8, sombra(col, .8));
+    rr(g, x, y, vw, vh, 6, P.ventana);
+    g.fillStyle = sombra(col, .8); g.fillRect(x + vw / 2 - 2, y, 4, vh); g.fillRect(x, y + vh * .45, vw, 4);
+    // jardinera con flores: brota cuando la ola de color la alcanza
+    if (hash2(e.col * 31 + n, 7) < .45) { const s = crec(x + vw / 2, y + vh + 8);
+      if (s > 0) { rr(g, x - 6, y + vh + 4, vw + 12, 12, 3, '#b8653f');
+        for (let j = 0; j < 5; j++) elipse(g, x + 2 + j * 12.5, y + vh + 2 - 6 * s, 6.5 * s, 6.5 * s, P.flores[(j + n) % 4]); } }
+  }
+  // puerta
+  const px = e.x + e.w / 2 - 34; rr(g, px, SUELO - 128, 68, 128, [26, 26, 0, 0], P.puerta);
+  elipse(g, px + 54, SUELO - 62, 4, 4, '#e8c27a');
+}
+function sombra(hex, f) { const n = parseInt(hex.slice(1), 16); const r = Math.min(255, (n >> 16) * f), g = Math.min(255, (n >> 8 & 255) * f), b = Math.min(255, (n & 255) * f); return `rgb(${r | 0},${g | 0},${b | 0})`; }
+function farola(g, x) {
+  rr(g, x - 7, 760, 14, SUELO - 760 + 20, 4, '#5b5f6c'); rr(g, x - 16, SUELO + 6, 32, 16, 4, '#4d515c');
+  g.strokeStyle = '#5b5f6c'; g.lineWidth = 10; g.lineCap = 'round'; g.beginPath(); g.moveTo(x, 768); g.quadraticCurveTo(x, 728, x + 44, 732); g.stroke();
+  rr(g, x + 30, 728, 48, 18, 6, '#4d515c'); elipse(g, x + 54, 748, 16, 6, '#f6e7c4');
+}
+function suelo(g) {
+  // acera con juntas y bordillo
+  g.fillStyle = P.acera; g.fillRect(-400, SUELO, 1900, BORDE - SUELO);
+  g.strokeStyle = P.junta; g.lineWidth = 3;
+  for (let x = -380; x < 1500; x += 150) { g.beginPath(); g.moveTo(x, SUELO); g.lineTo(x - 26, BORDE); g.stroke(); }
+  rr(g, -400, BORDE - 6, 1900, 20, 3, P.bordillo);
+  // calle
+  const k = g.createLinearGradient(0, BORDE, 0, 2100); k.addColorStop(0, P.calle); k.addColorStop(1, sombra(P.calle, .7));
+  g.fillStyle = k; g.fillRect(-400, BORDE + 14, 1900, 1000);
+  for (let i = 0; i < 7; i++) rr(g, -300 + i * 260, 1560, 130, 14, 7, 'rgba(255,255,255,.28)');   // raya central
+  elipse(g, 300, 1300, 120, 14, 'rgba(200,214,232,.35)'); elipse(g, 860, 1340, 90, 11, 'rgba(200,214,232,.3)');   // charcos
+}
+function grieta(g, x) {
+  g.strokeStyle = 'rgba(70,64,58,.75)'; g.lineWidth = 3; g.lineJoin = 'round'; g.beginPath();
+  g.moveTo(x - 30, SUELO + 46); g.lineTo(x - 14, SUELO + 38); g.lineTo(x - 2, SUELO + 50); g.lineTo(x + 12, SUELO + 40); g.lineTo(x + 30, SUELO + 48); g.stroke();
+}
+function brote(g, x, s, i) { // tallo + 2 hojas + flor, crece desde la grieta
+  if (s <= 0) return; const y = SUELO + 44, h = 64 * s;
+  g.strokeStyle = P.tallo; g.lineWidth = 6; g.lineCap = 'round'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 6, y - h * .5, x, y - h); g.stroke();
+  g.save(); g.translate(x + 2, y - h * .45); g.rotate(-.6); elipse(g, 12 * s, 0, 14 * s, 6 * s, P.tallo); g.restore();
+  g.save(); g.translate(x + 2, y - h * .62); g.rotate(.6 + Math.PI); elipse(g, 12 * s, 0, 13 * s, 6 * s, P.tallo); g.restore();
+  const fs = clamp((s - .55) / .45); if (fs > 0) { const fc = P.flores[i % 4];
+    for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; elipse(g, x + Math.cos(a) * 9 * fs, y - h + Math.sin(a) * 9 * fs, 7 * fs, 7 * fs, fc); }
+    elipse(g, x, y - h, 5 * fs, 5 * fs, '#ffcc4d'); }
+}
+
+// ---------- Tilo, el caracol (un solo dibujo con props: postura, ánimo, mirada) ----------
+function tiloX(t) { return lerp(318, 470, aterriza(prog(t, 0, T.llega + .25))); }
+function tilo(g, x, y, t) {
+  const mov = 1 - prog(t, T.llega - .2, T.llega + .25);
+  const estira = 1 + .07 * Math.sin(t * Math.PI * 2 * 1.5) * mov;            // se estira al reptar
+  const resp = 1 + .025 * Math.sin(t * Math.PI * 2 * .8);                      // respira
+  g.save(); g.translate(x, y); g.scale(estira, resp / Math.sqrt(estira));
+  elipse(g, 0, 8, 150, 14, 'rgba(40,40,60,.18)');                              // sombra de contacto
+  // cuerpo (pie) + cabeza
+  g.fillStyle = P.cuerpo; g.beginPath(); g.roundRect(-140, -40, 260, 44, 22); g.fill();
+  g.beginPath(); g.moveTo(60, -36); g.quadraticCurveTo(92, -40, 102, -84); g.lineTo(140, -70); g.quadraticCurveTo(138, -20, 118, 0); g.lineTo(60, 0); g.fill();
+  elipse(g, 120, -86, 40, 40, P.cuerpo);
+  // antenas con ojos grandes
+  const mira = prog(t, .75, 1.05) * (1 - prog(t, 2.6, 3.1));                  // mira hacia arriba, al farol
+  const sorpresa = prog(t, T.enciende, T.enciende + .12) * (1 - prog(t, 2.4, 2.9));
+  const feliz = prog(t, T.feliz, T.feliz + .15);
+  const parp = (t > 2.3 && t < 2.42) ? .15 : 1;                                 // un parpadeo
+  const ojos = [[96, -168, 98, -112], [146, -158, 132, -110]];
+  g.strokeStyle = P.cuerpo; g.lineWidth = 11; g.lineCap = 'round';
+  for (const [ex, ey, bx, by] of ojos) {
+    g.beginPath(); g.moveTo(bx, by); g.quadraticCurveTo(bx + (ex - bx) * .3, ey + 20, ex, ey); g.stroke();
+    const r = 23 + 3 * sorpresa;
+    elipse(g, ex, ey, r, r, '#ffffff');
+    if (parp < 1 && feliz <= .5) { g.strokeStyle = '#2d2a34'; g.lineWidth = 6; g.beginPath(); g.arc(ex, ey - 4, 12, Math.PI * .15, Math.PI * .85); g.stroke(); g.strokeStyle = P.cuerpo; g.lineWidth = 11; }
+    else if (feliz > .5) { g.strokeStyle = '#2d2a34'; g.lineWidth = 6; g.beginPath(); g.arc(ex, ey + 6, 11, Math.PI * 1.1, Math.PI * 1.9); g.stroke(); g.strokeStyle = P.cuerpo; g.lineWidth = 11; }
+    else if (parp === 1) { const px = ex + 4 - 7 * mira, py = ey + 2 - 9 * mira; elipse(g, px, py, 11 - 2 * sorpresa, 11 - 2 * sorpresa, '#2d2a34'); elipse(g, px + 4, py - 4, 3.5, 3.5, '#ffffff'); }
+  }
+  elipse(g, 140, -74, 11, 7, 'rgba(244,125,140,.55)');                          // rubor
+  g.strokeStyle = '#6b4a44'; g.lineWidth = 4; g.beginPath();
+  if (sorpresa > .5 && feliz < .5) { g.ellipse(132, -60, 5, 7, 0, 0, 7); } else { g.arc(128, -66, 9, .2, Math.PI - .4); } g.stroke();
+  // concha con espiral
+  const cx = -18, cy = -112;
+  const kc = g.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, 96); kc.addColorStop(0, sombra(P.concha, 1.1)); kc.addColorStop(1, sombra(P.concha, .82));
+  g.fillStyle = kc; g.beginPath(); g.arc(cx, cy, 92, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = P.espiral; g.lineWidth = 9; g.lineCap = 'round'; g.beginPath();
+  for (let a = 0; a < Math.PI * 5.2; a += .08) { const r = 8 + a * 4.9; const px = cx + Math.cos(a + 2.4) * r, py = cy + Math.sin(a + 2.4) * r; a === 0 ? g.moveTo(px, py) : g.lineTo(px, py); }
+  g.stroke();
+  elipse(g, cx - 34, cy - 50, 18, 10, 'rgba(255,255,255,.35)');
+  // varilla del farol (sale de la concha)
+  g.strokeStyle = '#8a6a4a'; g.lineWidth = 7; g.beginPath(); g.moveTo(cx + 20, cy - 86); g.quadraticCurveTo(cx + 30, cy - 160, cx + 78, cy - 182); g.stroke();
+  g.restore();
+}
+// el farol: la ficha del cuento. Se dibuja ENCIMA del gris: tiene color desde el cuadro 0.
+function farolPos(t) { const x = tiloX(t); return [x - 18 + 78 + 2, 1195 - 112 - 182 + 8]; }   // punta de la varilla
+function farol(g, c, t) {
+  const [wx, wy] = farolPos(t);
+  const lit = prog(t, T.enciende, T.enciende + .1);
+  const vaiven = Math.sin(t * 2.1) * .07 + Math.sin(t * 3.3) * .03 * (1 - lit * .5);      // vaivén de péndulo, suave
+  g.save(); const [sx, sy] = aPantalla(c, wx, wy); g.translate(sx, sy); g.scale(c.z, c.z); g.rotate(vaiven);
+  if (lit > 0) brillo(g, 0, 62, 230, P.luz, .45 * lit * (.92 + .08 * vnoise(t * 6, 2)));
+  g.strokeStyle = '#5a4634'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, 20); g.stroke();
+  rr(g, -16, 18, 32, 9, 3, '#7b3f2c');
+  const col = lit > 0 ? P.farol : P.farolApagado;
+  const k = g.createRadialGradient(-6, 54, 4, 0, 60, 44); k.addColorStop(0, lit > 0 ? '#fff4c8' : sombra(col, 1)); k.addColorStop(1, lit > 0 ? '#ffb22e' : sombra(col, .78));
+  g.fillStyle = lit > 0 ? k : col; g.beginPath(); g.ellipse(0, 62, 34, 38, 0, 0, Math.PI * 2); g.fill();
+  if (lit < 1) { g.globalAlpha = 1 - lit; g.fillStyle = sombra(P.farolApagado, .85); g.beginPath(); g.ellipse(0, 62, 34, 38, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
+  g.strokeStyle = lit > 0 ? 'rgba(196,96,30,.55)' : 'rgba(110,80,40,.6)'; g.lineWidth = 2.5;
+  for (const dx of [-18, 0, 18]) { g.beginPath(); g.ellipse(0, 62, Math.abs(dx) + 2, 38, 0, -Math.PI / 2, Math.PI / 2, dx < 0); g.stroke(); }
+  rr(g, -14, 96, 28, 8, 3, '#7b3f2c'); g.strokeStyle = '#c0392b'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, 104); g.lineTo(0, 122); g.stroke();
+  g.restore();
+}
+
+// ---------- el cuadro ----------
+function radioOla(t) { return 1750 * ease(prog(t, T.ola0, T.ola1)); }
+function draw(frame) {
+  const treal = frame / FPS, t = tc(treal), c = camara(t);
+  const [fx, fy] = farolPos(t), [fsx, fsy] = aPantalla(c, fx, fy + 62);
+  const R = radioOla(t);
+  const crec = (wx, wy) => { const [sx, sy] = aPantalla(c, wx, wy); const d = Math.hypot(sx - fsx, sy - fsy); return aterriza(clamp((R - d - 40) / 300)); };
+
+  // 1) el mundo en color, en la capa COL
+  gc.setTransform(1, 0, 0, 1, 0, 0); gc.clearRect(0, 0, W, H);
+  gc.setTransform(c.z, 0, 0, c.z, W / 2 - c.x * c.z, H / 2 - c.y * c.z);
+  cielo(gc, c, t); horizonte(gc, c);
+  for (const e of EDIF) edificio(gc, e, crec);
+  farola(gc, 70); farola(gc, 930);
+  suelo(gc);
+  GRIETAS.forEach((x, i) => { grieta(gc, x); brote(gc, x, crec(x, SUELO + 40), i); });
+  // pájaros cuando ya hay color
+  const pa = prog(t, 3.0, 3.6); if (pa > 0) { gc.strokeStyle = 'rgba(60,70,90,.7)'; gc.lineWidth = 4; gc.lineCap = 'round';
+    for (let i = 0; i < 3; i++) { const bx = 120 + (t - 3) * 120 + i * 70, by = 420 - i * 26 + Math.sin(t * 4 + i) * 6, w = 16 * (1 + .25 * Math.sin(t * 12 + i * 2));
+      gc.globalAlpha = pa; gc.beginPath(); gc.moveTo(bx - w, by - 6); gc.quadraticCurveTo(bx - w * .4, by - 10, bx, by); gc.quadraticCurveTo(bx + w * .4, by - 10, bx + w, by - 6); gc.stroke(); } gc.globalAlpha = 1; }
+  tilo(gc, tiloX(t), 1195, t);
+
+  // 2) la versión gris y fría en la pantalla
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.filter = 'grayscale(1) brightness(.8) contrast(.9)'; ctx.drawImage(COL, 0, 0); ctx.filter = 'none';
+  ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = '#bcc6d6'; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over';
+
+  // 3) el color vuelve desde el farol: círculo de borde suave
+  if (R > 0) {
+    gm.setTransform(1, 0, 0, 1, 0, 0); gm.globalCompositeOperation = 'source-over'; gm.clearRect(0, 0, W, H); gm.drawImage(COL, 0, 0);
+    gm.globalCompositeOperation = 'destination-in';
+    const k = gm.createRadialGradient(fsx, fsy, 0, fsx, fsy, R + 1); k.addColorStop(0, 'rgba(0,0,0,1)'); k.addColorStop(Math.max(0, 1 - 180 / (R + 1)), 'rgba(0,0,0,1)'); k.addColorStop(1, 'rgba(0,0,0,0)');
+    gm.fillStyle = k; gm.fillRect(0, 0, W, H); gm.globalCompositeOperation = 'source-over';
+    ctx.drawImage(MASK, 0, 0);
+    // frente de la ola: anillo de luz tibia que se apaga al alejarse
+    const fa = .22 * (1 - prog(R, 900, 2000)); if (fa > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen';
+      const kr = ctx.createRadialGradient(fsx, fsy, Math.max(0, R - 120), fsx, fsy, R + 30); kr.addColorStop(0, 'rgba(255,214,140,0)'); kr.addColorStop(.75, `rgba(255,214,140,${fa})`); kr.addColorStop(1, 'rgba(255,214,140,0)');
+      ctx.fillStyle = kr; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  }
+
+  // 4) lluvia fina mientras todo es gris
+  const lluvia = 1 - prog(t, 1.5, 2.7);
+  if (lluvia > 0) { ctx.strokeStyle = `rgba(226,232,242,${.4 * lluvia})`; ctx.lineWidth = 2.2; ctx.beginPath();
+    for (let i = 0; i < 140; i++) { const x = hash2(i, 1) * (W + 200) - 100, sp = 1500 + hash2(i, 2) * 600, y = ((hash2(i, 3) * (H + 300) + t * sp) % (H + 300)) - 150;
+      ctx.moveTo(x, y); ctx.lineTo(x - 9, y + 46); } ctx.stroke(); }
+  // pétalos que flotan cuando vuelve el color
+  const pt = prog(t, 2.2, 3.0); if (pt > 0) for (let i = 0; i < 26; i++) {
+    const x = (hash2(i, 9) * W + t * (30 + hash2(i, 4) * 40) + Math.sin(t * 1.6 + i) * 30) % W, y = (hash2(i, 5) * 1300 + 260 - t * 20 + Math.sin(t * 2 + i * 1.3) * 18);
+    ctx.globalAlpha = pt * .85; ctx.save(); ctx.translate(x, y); ctx.rotate(t * 1.4 + i); elipse(ctx, 0, 0, 7, 4, P.flores[i % 4]); ctx.restore(); } ctx.globalAlpha = 1;
+
+  // 5) la ficha, siempre en color, y el destello al encenderse
+  const litS = prog(t, T.enciende, T.enciende + .1);
+  if (litS > 0) { const [gx, gy] = aPantalla(c, fx, BORDE + 30); ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.translate(gx, gy); ctx.scale(1, .22);
+    brillo(ctx, 0, 0, 330 * c.z, P.luz, .5 * litS * (1 - .5 * prog(t, 2.6, 3.6))); ctx.restore(); }
+  farol(ctx, c, t);
+  const fl = prog(t, T.enciende, T.enciende + .45);
+  if (fl > 0 && fl < 1) { ctx.save(); ctx.globalCompositeOperation = 'screen'; brillo(ctx, fsx, fsy, 640, '255,214,140', .6 * (1 - fl)); ctx.restore(); }
+  if (t >= T.enciende && t < T.enciende + .12) { ctx.fillStyle = 'rgba(255,240,205,.22)'; ctx.fillRect(0, 0, W, H); }   // flash de 3-4 cuadros
+
+  // 6) viñeta, grano y subtítulo a mano
+  const v = ctx.createRadialGradient(W / 2, H * .46, H * .32, W / 2, H * .5, H * .78); v.addColorStop(0, 'rgba(18,22,34,0)'); v.addColorStop(1, 'rgba(18,22,34,.42)');
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  grano(.07, 5);
+  const franja = (y0, alto) => { const k = ctx.createLinearGradient(0, y0, 0, y0 + alto); k.addColorStop(0, 'rgba(10,12,20,0)'); k.addColorStop(.5, 'rgba(10,12,20,.34)'); k.addColorStop(1, 'rgba(10,12,20,0)'); ctx.fillStyle = k; ctx.fillRect(0, y0, W, alto); };
+  const escribe = (txt, x, y, px, col, borde = 10) => { ctx.font = `${px}px ${LETRA}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'rgba(20,22,32,.55)'; ctx.lineWidth = borde; ctx.strokeText(txt, x, y); ctx.fillStyle = col; ctx.fillText(txt, x, y); };
+  const ajusta = (txt, px, ancho) => { ctx.font = `${px}px ${LETRA}`; return Math.min(px, px * ancho / Math.max(1, ctx.measureText(txt).width)); };
+  if (treal < DH) {
+    const s = SUBS.find(([a, b]) => treal >= a && treal < b);
+    if (s) { franja(1290, 230); escribe(s[2], W / 2, 1400, ajusta(s[2], 72, 940), '#fff6e6'); }
+  } else {
+    // cierre: entra con corte seco (sin animación), la palabra del CTA enorme en el color de la ficha y subrayada a mano
+    franja(1240, 420);
+    escribe(CTA_CHICA, W / 2, 1335, 66, '#fff6e6');
+    const px = ajusta(CTA, 170, 900); escribe(CTA, W / 2, 1455, px, P.farol, 14);
+    if (treal >= DH + .35) { ctx.font = `${px}px ${LETRA}`; const w = ctx.measureText(CTA).width;
+      ctx.strokeStyle = P.farol; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(W / 2 - w / 2 - 6, 1532); ctx.quadraticCurveTo(W / 2, 1520, W / 2 + w / 2 + 10, 1528); ctx.stroke(); }
+    if (CTA_BAJADA) escribe(CTA_BAJADA, W / 2, 1600, ajusta(CTA_BAJADA, 52, 900), '#fff6e6', 8);
+  }
+}
+window.QUIETO = 0;
+// la letra tiene que estar cargada antes del primer cuadro: el render espera a window.LISTO
+window.LISTO = document.fonts.load(`72px ${LETRA}`, 'AÍÓ…');
+arrancar(draw);
+</script>
+</body>
+</html>

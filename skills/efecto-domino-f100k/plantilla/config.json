@@ -1,0 +1,15 @@
+{
+  "cta": "GUÍA",
+  "textos": {
+    "inicio": {"grande": "1", "chica": "idea"},
+    "fila1": {"chica": "Una cosa", "grande": "LLEVA"},
+    "fila2": {"chica": "a la", "grande": "OTRA"},
+    "cta_chica": "Comenta"
+  },
+  "colores": {
+    "cadena": "#CE3F27",
+    "letras": "#ED9C00",
+    "ficha": "#CEC7B6",
+    "texto": "#E4DAC2"
+  }
+}

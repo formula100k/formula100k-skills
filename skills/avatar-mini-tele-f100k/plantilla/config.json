@@ -1,0 +1,15 @@
+{
+  "cta": "GUÍA",
+  "avatar": {
+    "piel": "#F4C29E",
+    "pelo": "#3B2418",
+    "ropa": "#2F6FD6",
+    "lunares_ropa": false,
+    "collar": false,
+    "aretes": true,
+    "lunares_cara": false,
+    "pecas": true,
+    "labios": "#C9373F",
+    "iris": "#5B2E1A"
+  }
+}

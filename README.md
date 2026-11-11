@@ -99,7 +99,7 @@ Identidad visual → Tu brandkit). Si tienes el conector de Yapper, lo leen sola
 elijas: colores, letras, gancho, subtítulos, elementos, stickers y CTA. La guía está en
 `references/tu-brandkit.md` de cada skill.
 
-## Las 252 plantillas de edición, completas
+## Las 253 plantillas de edición, completas
 
 Desde la v1.59.0 el plugin trae todos los motores del catálogo de plantillas (`plantillas-edicion-f100k`):
 Auto-Edición, notitas, motion recortada, cubitos 3D, collage, pizarra, listas, telenovela y los 66 estilos
@@ -143,6 +143,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 - `reel-lista-maquetas-f100k` — Reel faceless de lista con voz: titular con la clave en color, una maqueta plana de pantalla por ítem y la barra «07/27 · CATEGORÍA»; render local gratis
 - `telenovela-explicada-f100k` — Telenovela para explicar sin salir a cámara: frutas 3D que dialogan con tutoriales animados de la app, o la historia real en collage documental con fotos y documentos; corta en el punto más silencioso
 - `expediente-inteligencia-f100k` — Reel sin cara de un caso real de negocio como noticiero en blanco y negro con HUD: fotos y capturas reales, mira en la cara, etiquetas que cuelgan de lo que nombran, cifra que cuenta y revisión automática de cuadros; render local gratis
+- `avatar-mini-tele-f100k` — Reel sin cara en Blender: tu avatar 3D con volumen y textura explica abajo y una mini tele retro cambia de canal con cada frase (trama de puntos, tarjeta de la app, palabra clave enorme y tu CTA tecleándose); render local gratis
 - `editor-video-formula100k` — Edita automáticamente reels desde manifest
 - `graficos-de-video-formula100k` — Genera gráficos scrapbook para reels
 - `recursos-de-video-formula100k` — Caza B-roll real + IA para reels

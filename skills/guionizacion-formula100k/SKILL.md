@@ -163,7 +163,7 @@ Este paso garantiza que el gancho no sea genérico sino basado en lo que ya prob
 ### Paso 6.5 — El pase de reescritura (OBLIGATORIO)
 
 Nadie escribe bien de una. Lo que acabas de terminar es el **borrador**, no el entregable.
-Antes del Chequeo Neuro, córrele los cuatro movimientos contra la sección **EL OFICIO**
+Antes del Chequeo Neuro, córrele los seis movimientos contra la sección **EL OFICIO**
 (más abajo en esta skill). Cada movimiento deja un número: si no puedes mostrar el número,
 no lo corriste.
 

@@ -1,7 +1,6 @@
 ---
 name: metricas-semanales-f100k
-description: >
-  Reporte semanal: extrae las métricas de los posts de la semana del perfil del usuario en Instagram y/o TikTok, identifica el post ganador y por qué funcionó, compara con la semana anterior, y entrega un reporte claro con la recomendación de qué replicar la semana siguiente. Usar cuando alguien diga: "muéstrame mis métricas de la semana", "qué funcionó esta semana", "cuál fue mi mejor post", "reporte semanal de métricas", "ejecutar módulo métricas". Necesita el @handle de Instagram o TikTok de la persona. Con Apify lee las métricas; sin Apify trabaja con las capturas o números que la persona pase.
+description: "Reporte semanal de métricas de Instagram o TikTok: post ganador y por qué, comparación con la semana anterior y qué replicar. Usar con «muéstrame mis métricas de la semana», «cuál fue mi mejor post», «reporte semanal de métricas»."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

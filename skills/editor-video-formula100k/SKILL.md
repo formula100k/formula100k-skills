@@ -1,6 +1,6 @@
 ---
 name: editor-video-formula100k
-description: "Toma un video grabado (hablando a cámara) y lo deja cortado y montado: quita silencios, muletillas y palabras repetidas, y con una llave de Anthropic también las frases reformuladas y los arranques en falso (corte fino). Después lo monta en el formato que elijas: fullscreen, split, pip, versus, pizarra o noticiero, con gancho en texto, cajas de énfasis, subtítulos, imágenes y B-roll anclados a lo que dices. Lee tu negocio y tu marca (mi-contenido o tu manual de identidad visual) para que el gancho y los gráficos suenen y se vean como tú. Extra: motion graphics animados como overlay o B-roll. Activar con 'edita este video', 'córtale los silencios', 'monta mi video', 'auto-edita', 'renderiza', 'cámbiale el formato', 'genera un motion graphic', 'overlay animado', '/edita <video>' o '/render <carpeta>', o cuando haya una carpeta con MANIFEST.md lista para producir el video. Entrega BORRADOR_AUTO.mp4. Funciona en Mac y en Windows; se corre con Node y uv, sin instalar Python aparte."
+description: "Corta un video hablado a cámara (silencios, muletillas, repeticiones) y lo monta en fullscreen, split, pip, versus, pizarra o noticiero con gancho, subtítulos y B-roll. Usar con «edita este video», «córtale los silencios», «monta mi video», «auto-edita», «renderiza»."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 

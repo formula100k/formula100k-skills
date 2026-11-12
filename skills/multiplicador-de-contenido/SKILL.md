@@ -1,7 +1,6 @@
 ---
 name: multiplicador-de-contenido
-description: >
-  Skill para multiplicar un guion o idea en múltiples formatos de contenido. Activar SIEMPRE que alguien pida: multiplicar un video, reciclar un guion, transformar un script en diferentes formatos, sacar más contenido de una idea, remasterizar un guion, convertir un video en varios, reutilizar contenido, o cualquier variación que implique tomar una pieza de contenido existente y expandirla a múltiples formatos. También activar cuando digan "tengo este guion y quiero hacer más", "¿cómo saco más contenido de esto?", "quiero publicar más sin grabar tanto", "multiplica esto", "¿en qué formatos puedo usar esta idea?".
+description: "Multiplica un guion o idea en varios formatos de contenido para reciclarlo sin grabar tanto. Usar con «multiplica esto», «tengo este guion y quiero hacer más», «en qué formatos puedo usar esta idea», «recicla este video»."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)

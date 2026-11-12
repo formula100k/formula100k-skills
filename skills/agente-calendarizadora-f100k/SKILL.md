@@ -1,6 +1,6 @@
 ---
 name: agente-calendarizadora-f100k
-description: "Agente que arma un calendario semanal completo de punta a punta: busca referencias virales, desarrolla guiones, escribe carruseles si aplica, evalúa ganchos, corrige, afina los CTA y exporta CSV + XLSX listo para producir. Orquesta: analizador-referencias-virales + calendarizador-contenido + guionizacion + carrusel-viral + generador-ganchos + evaluador-ganchos + corrector-guiones + optimizador-cta. Usar cuando se pida 'arma el calendario completo de la semana', 'necesito todo el contenido de la semana listo', 'calendariza con referencias y guiones incluidos'."
+description: "Agente que arma el calendario semanal completo de punta a punta: referencias virales, guiones, carruseles, ganchos, corrección, CTA y exporta CSV + XLSX. Usar con «arma el calendario completo de la semana», «todo el contenido de la semana listo», «calendariza con referencias y guiones»."
 argument-hint: "[rubro o cliente] [fase: experimentacion/crecimiento/nutricion/venta] [semana opcional]"
 ---
 

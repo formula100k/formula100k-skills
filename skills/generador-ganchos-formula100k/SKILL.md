@@ -1,6 +1,6 @@
 ---
 name: generador-ganchos-formula100k
-description: "GENERA ganchos virales nuevos (composición visual del primer segundo + gancho textual) y los filtra con el Virality Predictor de Higgsfield antes de grabar. Activar SIEMPRE que se pida 'genera un gancho', 'propón ganchos para este guion', 'haz variantes de gancho', 'qué gancho uso para este video', 'lab de ganchos', 'testea ganchos antes de grabar', 'dame 3 opciones de primer segundo', 'adapta este gancho viral a mi estilo', 'convierte esta referencia en gancho mío', o cualquier variación de DISEÑAR/PROPONER ganchos (no evaluar uno ya hecho). Input: un guion ya escrito (guionizacion-formula100k) o una referencia viral (URL de IG/TikTok/YouTube). Genera 2-4 variantes con composición + texto + hipótesis de viralidad, las produce como clip AI con Nanobanana + Seedance vía Higgsfield, las pasa por virality_predictor, las rankea por Hook Strength + Creative Performance y entrega la ganadora con brief. NO usar para evaluar un gancho ya grabado (evaluador-ganchos-formula100k)."
+description: "Genera variantes de gancho, las produce como clip y las rankea con el Virality Predictor. Usar con «genera un gancho», «propón ganchos para este guion», «dame 3 opciones de primer segundo». NO para evaluar un gancho ya hecho (evaluador-ganchos-formula100k)."
 argument-hint: [guion o URL/referencia | número de variantes]
 ---
 

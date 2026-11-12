@@ -1,6 +1,6 @@
 ---
 name: graficos-de-video-formula100k
-description: Skill que convierte un video grabado por el usuario en una serie de gráficos scrapbook listos para superponerse sobre la toma. Pipeline completo, transcribe el audio con timestamps, identifica momentos visuales clave, propone gráficos con la estética FÓRMULA 100K (paleta crema, washi tape, post-its, Caveat + Poppins) y los genera en paralelo con Higgsfield nano_banana_2. Activar SIEMPRE que el usuario pase un archivo de video (.mov/.mp4) y diga "transcribe y hazme gráficos", "saca timestamps y genera scrapbook para este reel", "haz los b-roll de este video", "convierte este video en gráficos", "acompáñame esta toma con scrapbook", o cualquier variación que combine un video grabado con la intención de generar overlays visuales. Output va a ~/Documents/FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_nombre/.
+description: "Transcribe un video grabado, detecta momentos clave y genera gráficos scrapbook (crema, washi, post-its) con Higgsfield para superponer. Usar con «transcribe y hazme gráficos», «haz los b-roll de este video», «acompáñame esta toma con scrapbook»."
 ---
 
 > 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue

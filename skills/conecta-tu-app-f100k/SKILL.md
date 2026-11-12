@@ -1,16 +1,6 @@
 ---
 name: conecta-tu-app-f100k
-description: >
-  Guía paso a paso para conectar una app a lo que la vuelve un negocio: base de datos (Supabase),
-  login (Google o enlace por correo), el PORTERO (solo entran los correos de quienes pagaron, validado
-  contra Skool, Hotmart, Kajabi, Stripe, Mercado Pago o pagos a mano, sin que estén conectadas entre sí), cobros según el país,
-  centro de control /admin con refresco de la lista, y publicación en Vercel. Claude hace lo técnico y
-  pide solo lo que no puede hacer (crear cuentas, copiar llaves, clics en paneles). Trae plantillas
-  probadas y prompts para copiar y pegar. Usar cuando digan "cómo conecto el login", "conecta Supabase",
-  "base de datos para mi app", "que solo entren mis alumnos", "cómo valido que pagó", "que solo entre
-  quien compró mi curso", "pasarela de pagos", "cómo cobro desde Colombia", "Stripe no está en mi país",
-  "centro de control", "panel admin", "webhook de pagos" o "conecta mi app". NO construye la app desde
-  cero (constructor-miniapps-f100k, crea-tu-app-f100k) ni landings de venta.
+description: "Guía para conectar tu app a base de datos (Supabase), login, portero de alumnas que pagaron, cobros, panel /admin y publicación en Vercel. Usar con «cómo conecto el login», «conecta Supabase», «que solo entren mis alumnos», «base de datos para mi app»."
 argument-hint: "[login | base | portero | cobros | control | publicar | todo]"
 ---
 

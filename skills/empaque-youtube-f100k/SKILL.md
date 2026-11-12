@@ -1,7 +1,6 @@
 ---
 name: empaque-youtube-f100k
-description: >
-  Arma el EMPAQUE de un video largo de YouTube antes de grabarlo: 3 títulos y, para cada uno, el concepto de miniatura que lo completa (composición, texto de 1 a 4 palabras, objeto, gesto), sacados de un catálogo de estructuras que se repiten en videos ganadores reales, con su nivel de evidencia y un plan de prueba A/B. Dos modos: EDUCATIVO (video a cámara, tutorial, curso, IA, negocio) y ROLEPLAY (educación + roleplay estilo ASMR, con personaje y escena). También AUDITA un título o una miniatura que ya existe. Usar SIEMPRE que digan «título para mi video de YouTube», «dame títulos y miniatura», «arma el empaque», «empaqueta este video», «qué título le pongo», «título para el roleplay», «título y miniatura del episodio X», «revisa este título», «audita mi miniatura». NO genera la imagen (entrega el brief para generarla), NO escribe el guion y NO es para reels, Shorts ni carruseles.
+description: "Arma el empaque de un video largo de YouTube antes de grabarlo: 3 títulos con su concepto de miniatura; también audita títulos o miniaturas existentes. Usar con «título para mi video de YouTube», «arma el empaque», «audita mi miniatura». NO genera la imagen (usa miniatura-youtube-formula100k)."
 argument-hint: "<tema, guion o episodio> [educativo | roleplay]"
 metadata:
   version: "1.0.0"

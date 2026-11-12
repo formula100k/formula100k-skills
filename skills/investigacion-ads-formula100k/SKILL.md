@@ -1,6 +1,6 @@
 ---
 name: investigacion-ads-formula100k
-description: "Investigación de ANUNCIOS PAGOS (paid ads) con la metodología FÓRMULA 100K + framework GOAT de Hormozi (Hook + Meat + CTA). Activar SIEMPRE que se pida 'investiga ads', 'busca ads de referencia', 'espía a la competencia en ads', 'biblioteca de anuncios de Meta', 'meta/facebook ads library', 'tiktok creative center', 'top ads', 'ads de [competidor]', 'qué anuncios corre X', 'dame 30 ideas de ads', '30-50 variantes de anuncios', 'guionízame este ad', 'variantes de un ad ganador', 'H x M x C', 'modulariza este ad'. NO confundir con investigacion-contenido-formula100k (contenido orgánico). Entra a Meta Ads Library y TikTok Creative Center vía agent-browser logueado, caza 30-50 ads, los desglosa con GOAT (Hook 80% / Meat 15% / CTA 5%), saca ángulos y ganchos ganadores, y opcionalmente guioniza con H x M x C para variantes masivas. Stack: agent-browser SIEMPRE; Apify (facebook-ads-library-scraper, tiktok-ads-scraper) para batch; vidIQ y Tavily opcionales."
+description: "Investiga anuncios pagos en Meta Ads Library y TikTok Creative Center, los desglosa en Hook+Meat+CTA y saca variantes. Usar con «investiga ads», «espía a la competencia en ads», «qué anuncios corre X», «dame 30 ideas de ads». NO para contenido orgánico (investigacion-contenido-formula100k)."
 ---
 
 # Skill: Investigación de Ads — Fórmula 100K

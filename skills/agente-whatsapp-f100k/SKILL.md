@@ -1,7 +1,6 @@
 ---
 name: agente-whatsapp-f100k
-description: >
-  Construye con la alumna, paso a paso y sin que programe, un agente de IA en el WhatsApp de SU negocio que conversa, recuerda la conversación, conoce sus servicios, precios y horarios, y AGENDA citas en su Cal.com, usando SOLO la API oficial de Meta (WhatsApp Cloud API) para que no le bloqueen el número. Parte de una plantilla funcional en Node (webhook con firma verificada, OpenRouter, memoria, Cal.com y simulador por terminal), la personaliza con un negocio.md hecho en entrevista, la prueba hasta romperla y la deja encendida en un servidor. Usar cuando alguien diga: "quiero un agente de WhatsApp", "bot de WhatsApp que agende", "que mi WhatsApp responda solo", "asistente de WhatsApp para mi negocio", "que me agende citas por WhatsApp", "conecta WhatsApp con IA", "/agente-whatsapp". NO hace envíos masivos ni mensajes en frío, NO arma bots que se conectan escaneando un QR (Baileys, whatsapp-web.js, venom, wppconnect) y NO construye asistentes de propósito general tipo "pregúntame lo que quieras": Meta los prohíbe. Para apps web sin WhatsApp usa crea-tu-app-f100k.
+description: "Construye paso a paso, sin programar, un agente de IA en el WhatsApp del negocio que conversa, recuerda y agenda citas en Cal.com con la API oficial de Meta. Usar con «quiero un agente de WhatsApp», «bot de WhatsApp que agende», «que mi WhatsApp responda solo». NO envíos masivos ni bots por QR."
 argument-hint: [tu negocio o lo que quieres que haga tu agente]
 disable-model-invocation: false
 ---

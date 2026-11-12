@@ -1,6 +1,6 @@
 ---
 name: analiza-tu-contenido-f100k
-description: Hace el módulo «Analiza tu Contenido» de FÓRMULA 100K sobre la cuenta de la alumna y lo entrega en La Hoja del Mes (infografía imprimible). Baja y transcribe sus últimos 30 Reels, lee sus estadísticas básicas (Chrome logueado) y pide las avanzadas por captura de la app (retención y actividad en el perfil), lee los 5 filtros y el filtro tapado, corona moldes y ángulos, saca 3 conclusiones fijas (formato ganador, ángulo que más viraliza y posible ángulo de venta, aterrizados a su tema) y arma el calendario pieza por pieza con ángulo exacto, gancho, estructura, CTA y Reel de referencia. Usar SIEMPRE que digan «analiza mi contenido», «hazme la hoja del mes», «lee mis filtros», «cuál es mi filtro tapado», «haz el informe de mis 30 reels», «analiza tu contenido», o manden su @ con capturas de insights. NO usar para auditar la cuenta de OTRA persona sin sus estadísticas (analizador-perfiles-formula100k) ni para desglosar UN video (analisis-video-viral-f100k).
+description: "Analiza los últimos Reels de la alumna (transcripciones, estadísticas, filtros) y entrega La Hoja del Mes con formato ganador, ángulos y calendario. Usar con «analiza mi contenido», «hazme la hoja del mes», «lee mis filtros». NO para cuentas ajenas (analizador-perfiles-formula100k)."
 ---
 
 # Analiza tu Contenido — La Hoja del Mes

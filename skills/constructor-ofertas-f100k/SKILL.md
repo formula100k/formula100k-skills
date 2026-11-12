@@ -1,6 +1,6 @@
 ---
 name: constructor-ofertas-f100k
-description: "Skill especializada en construir OFERTAS IRRESISTIBLES, LEAD MAGNETS e INFOPRODUCTOS LOW-TICKET aplicando la Ecuación de Valor (Hormozi), la fórmula M-A-G-I-C para nombres, bonificaciones apiladas y garantías. Activar SIEMPRE que el usuario o un usuario pida \"haz mi oferta más irresistible\", \"diseña mi oferta\", \"construye una oferta para X\", \"crea un lead magnet\", \"necesito un infoproducto low-ticket\", \"qué bonos pongo\", \"cómo apilo bonos\", \"qué garantía uso\", \"qué precio le pongo\", \"cómo justifico el precio\", \"estructura mi oferta para Skool\", \"estructura mi oferta para venta\", \"haz un name para mi programa\", \"MAGIC para mi oferta\", \"cómo escalo el valor percibido\", o cualquier variación que combine intención de vender con la necesidad de estructurar la oferta. NO usar para escribir el VSL/landing/email — para eso está `vsl-expert-f100k`. NO usar para audios de venta — para eso está `audios-venta-f100k`. Sí se complementa con esas dos: primero se construye la oferta aquí, después se vende allá."
+description: "Construye ofertas irresistibles, lead magnets e infoproductos low-ticket: ecuación de valor, nombre, bonos apilados, garantía y precio. Usar con «diseña mi oferta», «crea un lead magnet», «qué bonos pongo», «qué precio le pongo». NO para escribir VSL o landing (vsl-expert-f100k)."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

@@ -1,6 +1,6 @@
 ---
 name: edicion-girlie-f100k
-description: "Edición Girlie — el estilo nativo de TikTok de «amiga que te cuenta» con una capa de chistes y series encima. (A) HABLADO a cámara: corte pegado sin aire, UNA palabra a la vez en letra redonda gruesa color crema arriba de la cabeza (la posición sale sola) y «ventanitas» con pruebas reales ancladas a la palabra que las nombra. Capa creativa opcional: sello de serie (título-sticker que se repite en cada capítulo), memes reales, notas escritas a mano, zooms secos en el chiste, blanco y negro, viñeta, brillos y garabatos. (B) VLOG/POV: tomas cortas pegadas con el texto nativo de TikTok fijo arriba. 0 créditos, todo local (macOS). Activar con «edición girlie», «edítalo girlie», «edita esto estilo TikTok», «una palabra a la vez», «con memes y sello de serie», «edita el capítulo de mi serie», «vlog con texto de TikTok», «POV con texto arriba». NO es para videos animados sin cara."
+description: "Edición nativa de TikTok tipo amiga que te cuenta: a cámara con una palabra a la vez y ventanitas con pruebas, o vlog/POV con texto arriba; memes y sello de serie opcionales. Usar con «edición girlie», «edita esto estilo TikTok», «una palabra a la vez». NO para animados sin cara."
 argument-hint: <video o clips> [hablado|vlog]
 ---
 

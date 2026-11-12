@@ -1,7 +1,6 @@
 ---
 name: radar-tendencias-f100k
-description: >
-  Radar que detecta tendencias emergentes ANTES de que lleguen al pico, dando 24-72h de ventana para publicar primero. Usar cuando alguien diga: "qué está despegando en mi nicho", "detectar tendencias emergentes", "qué va a ser viral pronto", "ejecutar radar tendencias", "dame las tendencias del día", o cuando el schedule automático lo invoque. Si no hay tendencia emergente real, lo dice y no inventa una. Toma el rubro y las keywords del pedido, de la ficha del negocio o de ~/.f100k-radar/config.json si existe.
+description: "Detecta tendencias emergentes de tu nicho antes del pico para publicar primero; si no hay una real, lo dice y no inventa. Usar con «qué está despegando en mi nicho», «detectar tendencias emergentes», «qué va a ser viral pronto». NO caza el hecho viral del día (usa radar-virales-f100k)."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

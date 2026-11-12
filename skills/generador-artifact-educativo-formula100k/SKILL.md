@@ -1,6 +1,6 @@
 ---
 name: generador-artifact-educativo-formula100k
-description: Use when the user asks to create an educational artifact, miniapp, interactive resource, or visual guide for any tab/concept of FÓRMULA 100K (her Skool community). Triggers on phrases like "crea un artifact", "miniapp educativa", "recurso para mis alumnas", "artifact del tab X", "guía interactiva", "construye un artifact sobre [tema]", "armemos un artifact de [concepto]". Generates a single self-contained HTML file with React + Tailwind + Babel via CDN that works by double-clicking — no server, no build, no Claude subscription needed. Output goes to ~/Documents/FORMULA100K/ARTIFACTS/.
+description: "Crea un artifact educativo o miniapp interactiva sobre un concepto de FÓRMULA 100K en un solo HTML que funciona con doble clic. Usar con «crea un artifact», «miniapp educativa», «recurso para mis alumnas», «guía interactiva sobre [tema]»."
 ---
 
 # Generador de Artifacts Educativos · FÓRMULA 100K

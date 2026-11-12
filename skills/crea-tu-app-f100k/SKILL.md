@@ -1,7 +1,6 @@
 ---
 name: crea-tu-app-f100k
-description: >
-  Wizard guiado para que una alumna de FÓRMULA 100K construya y publique su propia app de IA paso a paso, sin programar y personalizada a SU negocio. Puerta de entrada del Catálogo de Apps IA. Usar cuando alguien diga: "quiero crear mi app", "ayúdame a hacer una app", "construye mi primera app", "crea tu app", "/crea-tu-app [nombre]", "quiero la app de [X] del catálogo", "no sé qué app hacer para mi negocio", "guíame para construir una app", "hazme una app con mi marca". Entrevista a la alumna (nicho, oferta, audiencia) y le RECOMIENDA qué app le conviene; captura su MARCA; construye invocando constructor-miniapps-f100k; eleva el diseño con ux-elevacion-formula100k; conecta SUS cuentas/keys narrando cada paso; revisa la seguridad con seguridad-tu-app-f100k; y despliega en SU Vercel, con checkpoint humano entre fases. NO es el motor de build (ese es constructor-miniapps-f100k); NO usar para landings de venta (landing-producto-formula100k) ni artifacts educativos HTML (generador-artifact-educativo-formula100k).
+description: "Wizard que guía a una alumna a construir y publicar su app de IA sin programar: la entrevista, le recomienda la app, captura su marca, construye y despliega en su Vercel. Usar con «quiero crear mi app», «crea tu app». NO es el motor de build (usa constructor-miniapps-f100k)."
 argument-hint: [nombre de la app del catálogo o tu idea]
 disable-model-invocation: false
 ---

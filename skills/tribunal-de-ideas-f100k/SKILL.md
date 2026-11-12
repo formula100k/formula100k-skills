@@ -1,6 +1,6 @@
 ---
 name: tribunal-de-ideas-f100k
-description: Lleva una idea a juicio antes de invertirle tiempo o dinero - un fiscal argumenta por qué va a fracasar, una defensa argumenta por qué va a funcionar, 12 jurados con papeles distintos (la clienta ideal, la escéptica, la contadora, la competencia…) votan CULPABLE o INOCENTE sin ver el voto de los demás, y un juez lee el conteo y entrega veredicto, condiciones y una prueba barata para hacer con gente real. Sirve para ideas de producto, oferta, regalo, contenido, precio, nombre o negocio. Usar SIEMPRE que digan «lleva mi idea a juicio», «tribunal de ideas», «juzga esta idea», «¿esta idea va a funcionar?», «dime la verdad sobre esta idea», «no me digas que sí a todo», «12 jurados», «quiero una opinión honesta de mi idea», «apelo el veredicto» o escriban JUICIO seguido de una idea. NO usar para investigar un mercado con datos reales, ni para escribir el guion o la oferta (eso va después del veredicto).
+description: "Lleva una idea a juicio: fiscal, defensa y 12 jurados votan y un juez da veredicto, condiciones y una prueba barata. Usar con «lleva mi idea a juicio», «tribunal de ideas», «¿esta idea va a funcionar?». NO para criticar un guion o pieza ya escrita (usa consejo-contenido-formula100k)."
 argument-hint: [tu idea en una frase]
 ---
 

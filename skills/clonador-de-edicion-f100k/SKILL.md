@@ -1,6 +1,6 @@
 ---
 name: clonador-de-edicion-f100k
-description: Clonador de edición. Hace videos verticales «¿Qué pasaría si…?» (9:16, sin mostrar la cara, con voz narrada) clonando el estilo de un video de referencia. Baja la referencia, estudia su gramática visual (paleta, letra, cómo entran las cifras, ritmo), escribe una historia nueva en ese molde, dibuja cada cuadro con código (2D en canvas o 3D con three.js), le pone la voz y entrega el MP4 con subtítulos. Trae un catálogo de 56 estilos con su video de referencia (estilos/catalogo.md). Usar cuando digan «hazme un video qué pasaría si», «clona este estilo», «video what if», «usa el estilo [nombre del catálogo]», «video sin mostrar mi cara con voz», «clonador de edición», o peguen el link de un reel de ese formato. NO usar para editar un video grabado ni para reels hablando a cámara.
+description: "Hace videos verticales «¿Qué pasaría si…?» sin cara y con voz, clonando el estilo de un video de referencia o del catálogo, dibujados con código. Usar con «video qué pasaría si», «clona este estilo», «video what if», «usa el estilo [nombre]». NO para editar video grabado ni reels a cámara."
 argument-hint: [tema o pregunta] [estilo del catálogo o link de referencia]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: animacion-juego-de-cocina-f100k
-description: Arma una animación vertical de 10,5 s con estética de videojuego de cocina de los 2000 (portada del juego, «elige tu plato», tres ingredientes que vuelan al bowl y plato servido), con recortes de fotos reales, papel rasgado, rótulos que se escriben solos y movimiento a saltos. Usar cuando digan «hazme la animación del juego de cocina», «la receta de [algo] en formato videojuego», «animación tipo juego flash», «reel de receta paso a paso animado», «tres ingredientes para [resultado]» o pasen una idea de «receta» de cualquier rubro para volverla clip. NO usar para editar un video ya grabado (editor-video-formula100k), ni para carruseles, ni para animaciones dibujadas cuadro a cuadro (animacion-dibujada-f100k).
+description: "Animación vertical con estética de videojuego de cocina: portada, «elige tu plato», tres ingredientes al bowl y plato servido. Usar con «animación del juego de cocina», «la receta de X en formato videojuego», «tres ingredientes para X». NO para video grabado (editor-video-formula100k)."
 argument-hint: [tema de la receta]
 ---
 

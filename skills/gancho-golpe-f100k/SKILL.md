@@ -1,6 +1,6 @@
 ---
 name: gancho-golpe-f100k
-description: "Escribe y monta el GANCHO GOLPE (patrón de @devinjatho medido el 21-oct-2026): de 2 a 5 palabras en pantalla, una sola línea enorme en letra de diseño según el tema, sin brillo ni degradado y con corte seco (rojo si es negativo, verde si es lo que ganas, el color de tu marca para lo neutro) y otra chica en blanco, negativo o polémico, que entiende alguien que nunca abrió Claude. Da 3 variantes A/B/C por video o guion con su primera frase hablada, las puntúa con la tarjeta de 8 puntos y, si el video se editó con una skill que acepta variantes de gancho, renderiza las 3 versiones (mismo video, solo cambia el gancho) para subirlas como trial reels. Activar con 'gancho golpe', 'gancho a lo Devin', 'gancho más corto y polémico', 'hazle 3 ganchos cortos', 'cámbiale el gancho a este video', 'variantes de gancho de este reel editado', 'el gancho está muy largo'. NO escribe el guion entero ni edita el video desde cero."
+description: "Escribe y monta el gancho golpe: 2 a 5 palabras en pantalla, una línea enorme y otra chica, negativo o polémico, con 3 variantes A/B/C y renderizadas para trial reels. Usar con «gancho golpe», «hazle 3 ganchos cortos», «cámbiale el gancho a este video». NO escribe el guion entero."
 argument-hint: "[guion, tema o carpeta del video editado]"
 ---
 

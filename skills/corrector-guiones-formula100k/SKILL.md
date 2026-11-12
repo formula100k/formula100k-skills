@@ -1,6 +1,6 @@
 ---
 name: corrector-guiones-formula100k
-description: Skill para diagnosticar y corregir guiones de video aplicando la metodología completa de FÓRMULA 100K. Usar SIEMPRE que alguien pida "corrige este guion", "revisa este guion", "diagnostica este guion", "qué le falta a este guion", "mejora este guion", "audita mi guion", "este guion no funciona", "por qué no retiene este guion", "analiza mi script", "corrige mi reel", "diagnóstico de guion". Detecta propósito (TOFU/MOFU/BOFU), pilar de valor, estructura usada, ganchos detectados, gatillos activados y entrega un score de Escala Viral + versión corregida del guion.
+description: "Diagnostica y corrige guiones de video con la metodología F100K: propósito, pilar, estructura, ganchos, gatillos, score de Escala Viral y versión corregida. Usar con «corrige este guion», «qué le falta a este guion», «por qué no retiene», «audita mi guion»."
 argument-hint: [pega el guion completo o ruta al archivo]
 ---
 

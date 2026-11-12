@@ -1,6 +1,6 @@
 ---
 name: agente-investigadora-f100k
-description: "Agente de investigación profunda antes de crear contenido o calendarios. Orquesta: analizador-referencias-virales + investigacion-nicho + investigacion-contenido + benchmark-producto + analizador-perfiles + auditor-ganchos-cuenta + radar-virales + radar-tendencias. Hace DOBLE lectura de patrones: los del NICHO (referencias virales de la competencia) y los de TU PROPIA CUENTA (top contra bottom de tus reels) cuando se da un handle, y los cruza. Usar cuando se pida 'investígame este nicho antes de empezar', 'dame un brief de investigación completo', 'qué está funcionando en TikTok/IG en el nicho X', 'dame referencias virales con análisis de ganchos', 'investiga a la competencia', 'analiza los patrones de mi cuenta', 'cruza mis patrones con los del nicho'. Con Apify trae métricas reales; sin Apify investiga con búsqueda web y lo dice."
+description: "Investigación profunda antes de crear contenido: cruza patrones del nicho (virales de la competencia) con los de tu cuenta (top contra bottom). Usar con «investígame este nicho», «dame un brief de investigación», «analiza la competencia», «cruza mis patrones con los del nicho»."
 argument-hint: "[nicho o keyword] [plataforma: TikTok/IG/ambas] [tipo: referencias/nicho/competencia/mi-cuenta/todo] [@mi_handle opcional]"
 ---
 

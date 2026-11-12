@@ -1,6 +1,6 @@
 ---
 name: radar-contenido-f100k
-description: "Radar de contenido de FÓRMULA 100K: monta y corre un sistema que vigila Instagram y te avisa qué FORMATOS están despegando. Cosecha Explorar, tus guardados y búsquedas cortas (storytime, mi historia…) con tu sesión de Chrome; filtra cuentas pequeñas cuyas vistas multiplican sus seguidores; mira cada reel a fotogramas; describe la mecánica (no el tema) con anatomía de 4-6 pasos; y la anota en un registro de recurrencia. Una mecánica cruza el umbral cuando aparece en 2+ nichos sin relación. Usar cuando se diga: 'monta mi radar', 'corre mi radar de contenido', 'radar de formatos', 'qué formatos están despegando', 'baja por explorar', 'busca storytelling en Instagram', 'agrega este reel al radar [link]', 'qué cruzó el umbral'. Requiere Claude Code con Claude in Chrome conectado, yt-dlp y ffmpeg. NO escribe guiones (usa guionizacion-formula100k o adaptador-formatos-f100k), NO audita una cuenta entera (analizador-perfiles-formula100k), NO caza temas del día (radar-virales-f100k)."
+description: "Monta y corre un radar que vigila Instagram (Explorar, guardados, búsquedas), describe la mecánica de cada reel y avisa qué formatos despegan en 2+ nichos. Usar con «monta mi radar», «corre mi radar de contenido», «qué formatos están despegando». NO para guiones (adaptador-formatos-f100k)."
 ---
 
 # Radar de contenido · FÓRMULA 100K

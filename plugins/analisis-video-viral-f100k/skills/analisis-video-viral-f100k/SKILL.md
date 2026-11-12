@@ -1,6 +1,6 @@
 ---
 name: analisis-video-viral-f100k
-description: Ingeniería inversa de UN video viral concreto a partir de su URL (Instagram Reel o TikTok). Descarga el video real, lo transcribe con Whisper, extrae los frames y desglosa la estructura segundo a segundo — tríada de gancho, bloques con timestamps, estructura madre del catálogo de 34, pilar de valor, reparto del tiempo, movimientos replicables y plantilla lista para copiar. Usar SIEMPRE que alguien diga "analiza la estructura de este video", "desglosa este viral", "por qué funcionó este reel", "ingeniería inversa de este video", "qué hizo bien este video", "analízame este link", "estúdiame este reel", o pase una URL de IG/TikTok con intención de entender su arquitectura. NO usar para buscar referencias por keyword (analizador-referencias-virales-f100k), auditar una cuenta entera (analizador-perfiles-formula100k) ni escribir un guion nuevo (guionizacion-formula100k).
+description: "Ingeniería inversa de un video viral desde su URL de IG o TikTok: desglosa gancho, bloques, estructura y plantilla. Usar con «analiza la estructura de este video», «desglosa este viral», «por qué funcionó este reel». NO para buscar referencias por keyword (analizador-referencias-virales-f100k)."
 argument-hint: [URL de Instagram Reel o TikTok]
 disable-model-invocation: false
 ---

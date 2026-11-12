@@ -1,6 +1,6 @@
 ---
 name: collage-cine-f100k
-description: "Convierte un video grabado por el usuario en un reel estilo COLLAGE CINEMATOGRÁFICO (estética @andrewcodesmith): el talking-head se compone en paneles apilados sobre ESCENAS temáticas generadas (grafo de Obsidian, sala de control retro), con captions MANUSCRITOS (cursiva crema + palabra clave verde subrayada en amarillo) y grano de película vintage encima. Es el look 'second brain / sci-fi analógico': desaturado verdoso, paneles horizontales, sujeto recortado metido en escenas. Activar SIEMPRE que el usuario pase un .mov/.mp4 y diga 'hazme el estilo collage cinematográfico', 'estilo andrewcodesmith', 'mete mi cara en escenas temáticas', 'el look del second brain', 'collage cine', 'paneles apilados con escenas', 'captions a mano + grano vintage', o combine un video grabado con la intención de ese look compositeado-cinematográfico. NO confundir con editor-video-formula100k (talking-head normal) ni motion-takeover-f100k."
+description: "Convierte tu video grabado en un reel collage cinematográfico: paneles apilados, captions manuscritos y grano vintage. Usar con «estilo collage cinematográfico», «estilo andrewcodesmith», «mete mi cara en escenas temáticas». NO para talking-head normal (usa editor-video-formula100k)."
 disable-model-invocation: true
 argument-hint: "[ruta del video .mov/.mp4]"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill, mcp__higgsfield__generate_image, mcp__higgsfield__remove_background, mcp__higgsfield__job_status, mcp__higgsfield__job_display, mcp__higgsfield__balance

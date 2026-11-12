@@ -1,6 +1,6 @@
 ---
 name: pizarra-youtube-f100k
-description: "Pizarras para grabar videos de YouTube. Convierte una o varias fuentes (entrevista, podcast o charla en YouTube) en una PIZARRA 16:9 de pizarrón blanco con plumones para grabar el video: una lámina por bloque, cada una con CAPTURAS REALES sacadas de la fuente, el minuto de donde sale, lo que la persona dice debajo y una pestaña de Guion completo con avisos de qué confirmar. Es una página HTML (pantalla completa, flechas para pasar) que se abre con doble clic o se publica como Artifact. Activar con 'hazme la pizarra para el video de YouTube', 'pizarra como la de Mosseri', 'pizarra como la de Hormozi', 'arma la pizarra de esta entrevista', 'pizarra para grabar', o un link de YouTube con intención de explicarlo a cámara. NO es un clip animado de pizarra para un reel."
+description: "Convierte entrevistas, podcasts o charlas de YouTube en una pizarra 16:9 HTML para grabar, con capturas reales, minuto de origen y guion completo. Usar con «hazme la pizarra para el video de YouTube», «pizarra como la de Hormozi», «arma la pizarra de esta entrevista»."
 argument-hint: "[links de YouTube o guion existente] [opcional: CTA / regalo]"
 allowed-tools: Bash, Read, Write, Edit, Artifact, AskUserQuestion, Glob, Grep
 ---

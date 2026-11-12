@@ -1,6 +1,6 @@
 ---
 name: reel-faceless-f100k
-description: "Convierte un tema en un Reel 9:16 faceless (30-90s) donde el usuario GRABA la voz pero nunca sale en cámara. Pipeline: guion con gancho + retención + español neutro + cierre F100K → el usuario graba la voz leyendo el teleprompter → transcripción word-level (Whisper local) → Clip Director decide por gancho el visual de cada segmento (B-roll cinemático IA / card kinética / pixel-meme, mezcla obligatoria) → genera con Higgsfield y HyperFrames → compone visuales fullscreen + texto kinético de énfasis + la voz del usuario + música/SFX. Salida: REEL_FACELESS.mp4. Activar cuando el usuario diga 'hazme un reel faceless de X', 'video faceless sin mi cara', 'explainer faceless', 'convierte este tema en video sin grabarme en cámara', 'reel solo con mi voz'. NO usar para talking-head con su cara (editor-video/motion-reels), VSL (broll-vsl) ni carruseles."
+description: "Convierte un tema en un reel 9:16 faceless con tu voz grabada: guion, transcripción y visuales IA con texto kinético por segmento. Usar con «hazme un reel faceless de X», «reel solo con mi voz», «video sin mi cara». NO para talking-head (editor-video-formula100k) ni VSL (broll-vsl-formula100k)."
 argument-hint: "<tema | ruta-guion.md> [--duracion=30..90] [--estetica=cyberpunk|calido|minimalista]"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, mcp__higgsfield__generate_video, mcp__higgsfield__generate_image, mcp__higgsfield__job_status, mcp__higgsfield__media_upload, mcp__higgsfield__media_confirm, mcp__higgsfield__balance
 metadata:

@@ -1,18 +1,6 @@
 ---
 name: seguridad-tu-app-f100k
-description: >
-  Revisa y blinda la app que TÚ construiste con Claude Code antes de publicarla, y te entrega un
-  informe en lenguaje simple: qué encontró, qué arregló y cómo comprobó que quedó arreglado.
-  Primero reconoce qué tipo de app es (un solo HTML sin servidor, Next.js en Vercel, Supabase,
-  Stripe, login, subida de archivos) y marca cada uno de los 27 controles como Aplica / No aplica
-  con su porqué, para no asustarte ni hacer trabajo inútil. Después muestra los hallazgos por
-  gravedad, espera tu OK, arregla de a uno con un commit chico por arreglo, PRUEBA cada protección
-  y cierra con el informe. Usar cuando digan: "revisa la seguridad de mi app", "no quiero que
-  hackeen mi app", "blinda mi app", "auditoría de seguridad", "antes de publicar revisa que sea
-  segura", "¿mi app es segura?", "se me filtró una clave", "/seguridad-tu-app". NO es un pentest
-  de apps ajenas: solo trabaja sobre la app propia de quien la pide, en su carpeta y en su URL.
-  NO revisa la experiencia de uso (eso es auditor-ux-app-f100k) ni construye la app
-  (constructor-miniapps-f100k / crea-tu-app-f100k).
+description: "Revisa y blinda la app que construiste con Claude Code antes de publicarla: hallazgos por gravedad, arreglos probados y un informe simple. Usar con «revisa la seguridad de mi app», «blinda mi app», «se me filtró una clave», «/seguridad-tu-app». NO revisa la experiencia de uso (auditor-ux-app-f100k)."
 argument-hint: "[carpeta de tu app] [URL si ya está publicada]"
 disable-model-invocation: false
 ---

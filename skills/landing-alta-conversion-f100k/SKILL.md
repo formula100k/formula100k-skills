@@ -1,6 +1,6 @@
 ---
 name: landing-alta-conversion-f100k
-description: Use when someone asks to build a high-conversion landing page, a tripwire/launch sales page, a "landing de alta conversión", a landing with countdown, price anchoring, bonus stacking, guarantee, FAQ and creator bio, or a landing to upload to GHL or Vercel (estilo The Line Project). Triggers on "hazme una landing de venta", "landing tripwire", "landing de lanzamiento con countdown", "página de ventas con bonos y garantía", "landing para GHL".
+description: "Construye una landing de venta de alta conversión con countdown, anclaje de precio, bonos, garantía, FAQ y bio, lista para GHL o Vercel. Usar con «hazme una landing de venta», «landing tripwire», «landing de lanzamiento con countdown», «landing para GHL»."
 argument-hint: [nombre del producto]
 disable-model-invocation: true
 ---

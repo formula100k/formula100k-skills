@@ -11,7 +11,7 @@
       "name": "formula100k",
       "source": "./",
       "description": "Suite completa de skills de FÓRMULA 100K para creadoras de contenido hispano: guionización, calendarios, audios de venta, VSL, ofertas, comunidades Skool, ediciones de video, miniaturas, carruseles, historias y más, sistemas de diseño de marca y más.",
-      "version": "1.64.0",
+      "version": "1.65.0",
       "category": "content-creation",
       "homepage": "https://formula100k.app",
       "keywords": [
@@ -29,7 +29,7 @@
       "name": "analisis-video-viral-f100k",
       "source": "./plugins/analisis-video-viral-f100k",
       "description": "Ingeniería inversa de un video viral desde su URL. Descarga el reel real, lo transcribe y desglosa su estructura segundo a segundo: gancho, bloques con timestamps, estructura madre, pilar de valor, reparto del tiempo, movimientos replicables y plantilla lista para copiar.",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "category": "content-creation",
       "homepage": "https://formula100k.app",
       "keywords": [

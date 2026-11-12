@@ -1,6 +1,6 @@
 ---
 name: creadora-comunidades-skool
-description: Use when someone asks to create a Skool community, write an About Page for Skool, design an onboarding, write a VSL script, set up community structure, configure foro categories, leaderboard levels, pinned posts, cancellation video, design an irresistible offer for a community, build a vehículo único, or any copy or structure for a Skool community. Also triggers on: "construye mi Skool", "About Page de Skool", "onboarding para mi comunidad", "VSL de comunidad", "estructura de Skool", "configura mi Skool", "descripción de comunidad", "vehículo único", "oferta de mi comunidad", "diseña mi oferta para Skool", "propuesta integral de Skool", "propuesta final para cliente Skool", "armame el docx de la propuesta de comunidad", "entregable final de Skool".
+description: "Crea la estructura y el copy de una comunidad Skool: About Page, onboarding, VSL, categorías, niveles, posts fijados, oferta, vehículo único y propuesta final para clienta. Usar con «construye mi Skool», «About Page de Skool», «onboarding para mi comunidad», «propuesta integral de Skool»."
 ---
 
 ## Qué hace esta skill

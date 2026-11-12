@@ -1,13 +1,6 @@
 ---
 name: transcripcion-youtube-formula100k
-description: >
-  Skill para convertir videos de YouTube en batches de guiones virales usando FORMULA 100K.
-  Usar SIEMPRE que alguien comparta una URL de YouTube y quiera extraer ideas, guiones, o contenido de ese video.
-  También activar cuando digan: "transcribí este video", "sácame ideas de este YouTube", "convierte este video en guiones",
-  "quiero hacer un batch de scripts de este video", "extrae el contenido de este YouTube", "repurposea este video",
-  "quiero reutilizar este video largo", "dame guiones basados en este video", o cualquier variación que combine
-  una URL de YouTube con intención de crear contenido nuevo. Usa yt-transcript-mcp para extraer la transcripción y
-  luego aplica los frameworks de guionización de FORMULA 100K para producir múltiples guiones validados de un solo video.
+description: "Convierte un video de YouTube en un batch de guiones virales: saca la transcripción y aplica la guionización F100K. Usar cuando compartan una URL de YouTube y digan «sácame ideas de este YouTube», «convierte este video en guiones», «repurposea este video largo»."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

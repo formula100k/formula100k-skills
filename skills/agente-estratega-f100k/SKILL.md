@@ -1,6 +1,6 @@
 ---
 name: agente-estratega-f100k
-description: "Agente estratégico completo para creadoras de contenido. Construye la estrategia integral: diagnóstico de la cuenta, estudio de mercado y competencia, oferta, estrategia de contenido con pilares y ángulos de venta, y plan del mes por proyectos con responsables. Usar cuando se pida 'arma mi estrategia completa', 'hazme un diagnóstico completo', 'necesito una estrategia desde cero', 'arma la estrategia de mi clienta [X]', 'qué debería estar haciendo', o cuando se quiere un entregable estratégico antes de producir contenido."
+description: "Arma la estrategia integral de una creadora: diagnóstico de cuenta, mercado y competencia, oferta, pilares, ángulos de venta y plan del mes con responsables. Usar con «arma mi estrategia completa», «hazme un diagnóstico completo», «estrategia desde cero», «qué debería estar haciendo»."
 argument-hint: "[rubro o cliente] [mes y año opcional]"
 ---
 

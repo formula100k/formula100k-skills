@@ -1,6 +1,6 @@
 ---
 name: avatar-mini-tele-f100k
-description: Arma un reel vertical sin cara en estilo AVATAR CON MINI TELE, hecho en Blender por código y sin créditos. Tu avatar en 3D, con volumen y textura (piel con luz real, pelo con hebras y brillo, ropa de tela), explica abajo a la derecha. Arriba, una tele de verdad con perillas y cristal cambia de canal en cada frase y muestra una escena plana con trama de puntos. Debajo, una tarjetita de la app cambia con cada frase. El titular entra palabra por palabra con la clave enorme y en color, y cierra con tu palabra de CTA tecleándose en la tele. Usar cuando digan «avatar con mini tele», «plantilla Avatar con mini tele», «mi avatar explicando con una tele», «reel con mi avatar 3D y una tele retro», «hazme el de la tele naranja con mi avatar». NO usar para el avatar caricatura en el iPhone (reel-iphone-avatar-f100k), para los muñequitos en three.js (munequitos-3d-sin-creditos-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender: tu avatar 3D explica abajo y una tele retro arriba cambia de canal en cada frase. Usar con «avatar con mini tele», «mi avatar explicando con una tele». NO para el avatar en iPhone (reel-iphone-avatar-f100k) ni muñequitos three.js (munequitos-3d-sin-creditos-f100k)."
 argument-hint: [tema o guion de 4 frases + palabra del CTA]
 ---
 

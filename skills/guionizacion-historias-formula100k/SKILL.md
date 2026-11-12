@@ -1,17 +1,6 @@
 ---
 name: guionizacion-historias-formula100k
-description: >
-  Skill para crear guiones de SECUENCIAS DE HISTORIAS de Instagram (3-6 stories) usando la metodología
-  FÓRMULA 100K. Activar cuando el usuario o un usuario pida: "guioniza una historia", "arma una secuencia
-  de stories para vender X", "estructura mis historias", "necesito un guion de stories", "haz una
-  secuencia de historias para mi lanzamiento", "escribe stories para [oferta]", "diseña la secuencia
-  de historias del jueves", o cualquier variación que combine intención de vender/comunicar con el
-  formato historias de IG. Genera UNA secuencia completa con: categoría detectada (Urgencia/One-Shot/
-  Lead Magnet/Libre/Encuestas), estructura de guion (1 de 24 disponibles), copy slide-by-slide,
-  formato audiovisual por slide (🎥/📸 con uno de los 15 formatos), y briefing visual de diseño
-  (paleta, capas, capturas, emojis). Guarda el output en
-  ~/Documents/mi-contenido/historias/guiones/ como .md listo para ser tomado por la
-  skill historias-a-imagenes-nanobanana.
+description: "Escribe una secuencia de historias de Instagram (3 a 6 stories) para vender, con copy y formato por slide. Usar con «guioniza una historia», «arma una secuencia de stories para vender X», «escribe stories para mi oferta». Las imágenes van con historias-a-imagenes-nanobanana."
 argument-hint: "<idea, oferta o objetivo de la secuencia>"
 metadata:
   version: "1.0.0"

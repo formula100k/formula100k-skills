@@ -1,6 +1,6 @@
 ---
 name: analizador-referencias-virales-f100k
-description: "Dado un keyword, busca los videos más virales en TikTok e Instagram (Apify), transcribe cada uno con Supadata, identifica el gancho verbal, textual y visual, y entrega una tabla lista para usar en calendarios, guiones o investigación. Usar cuando pidan 'busca referencias virales de [keyword]', 'qué está funcionando en TikTok/IG con [tema]', 'dame el gancho de estos virales', o cuando el calendarizador Modo D necesite enriquecer sus resultados. Soporta TikTok, Instagram Reels, o ambas plataformas en una sola corrida."
+description: "Dado un keyword, busca los videos más virales en TikTok e Instagram, los transcribe y extrae el gancho verbal, textual y visual en una tabla. Usar con «busca referencias virales de [keyword]», «qué está funcionando en TikTok con [tema]». NO para analizar un solo video (analisis-video-viral-f100k)."
 argument-hint: [keyword(s) + plataforma — ej. "colon irritable, SII | ambas"]
 ---
 

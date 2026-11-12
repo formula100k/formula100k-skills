@@ -1,17 +1,6 @@
 ---
 name: carrusel-organico-f100k
-description: >-
-  Crea carruseles ORGÁNICOS estilo "diario / chat": la protagonista a pantalla
-  completa con burbujas de texto blancas redondeadas, flecha swipe, dots y
-  opcionalmente una tarjeta de "prueba" (captura) con un círculo dibujado a
-  mano. Usa fotos reales de la persona (selfies) y, si tiene el conector de
-  Higgsfield, puede generar variaciones a partir de esas selfies para que salga
-  ELLA en cada slide. Actívala cuando pidan: "carrusel orgánico", "carrusel
-  estilo diario / storytime", "carrusel con burbujas de texto sobre mi foto",
-  "un carrusel como el de [cuenta] pero con mi cara", "carrusel selfie + texto
-  para explicar X". Renderiza slides 1080×1350 en PNG listas para Instagram.
-  NO usar para carruseles tipográficos sin foto (usa carrusel-formatos-f100k)
-  ni para clonar un estilo ajeno desde captura (usa clonador-carrusel-formula100k).
+description: "Carrusel orgánico estilo diario/chat: tu foto a pantalla completa con burbujas de texto, en PNG. Usar con «carrusel orgánico», «carrusel storytime», «burbujas de texto sobre mi foto». NO para tipográficos sin foto (carrusel-formatos-f100k)."
 ---
 
 ## Tu brandkit (antes de producir)

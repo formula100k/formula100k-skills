@@ -1,7 +1,6 @@
 ---
 name: guionizacion-formula100k
-description: >
-  Skill especializada en guionización estratégica con los frameworks de FORMULA 100K. Usar SIEMPRE que alguien pida: crear un guion, estructurar un video, hacer un reel, escribir un script, elegir una estructura de contenido, hacer un gancho viral, guionizar una idea, crear contenido para Instagram/TikTok/YouTube, o cualquier solicitud relacionada con escribir o planear un video. También usar cuando alguien comparta una idea y quiera saber qué estructura usar. Contiene 35 estructuras de guion, sistema de hooks (gancho verbal, visual y textual), criterios de ideas virales, ficha de viralidad, y módulo de verificación de viralidad que busca referencias reales en TikTok/Instagram con millones de vistas para basar el gancho en contenido probado. Incluye una capa de OFICIO a nivel de frase (resbaladero, especificidad, verbo filmable, cadencia, kill-list de muletillas) y un pase de reescritura obligatorio, para que el guion no salga plano ni genérico.
+description: "Escribe guiones de reels y TikTok con 35 estructuras, sistema de ganchos, verificación con referencias virales reales y pase de reescritura. Usar con «crea un guion», «guioniza esta idea», «qué estructura uso para este video». NO para YouTube largo (guion-youtube-formula100k) ni ads."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

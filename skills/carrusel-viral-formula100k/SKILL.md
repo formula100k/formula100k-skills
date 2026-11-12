@@ -1,7 +1,6 @@
 ---
 name: carrusel-viral-formula100k
-description: >
-  Skill especializada en crear carruseles virales de Instagram completos. Activar SIEMPRE que alguien pida: crear un carrusel, diseñar slides, convertir un reel en carrusel, hacer un post de varias diapositivas, estructurar un carrusel, guionizar slides, o cualquier solicitud relacionada con crear contenido en formato carrusel para Instagram. También activar cuando digan "hazme un carrusel", "convierte esto en carrusel", "quiero hacer slides", "estructura mis diapositivas" o cualquier variación que implique producir un carrusel completo slide por slide. Conoce los 94 formatos de carrusel del recetario de FÓRMULA 100K (F01–F20 y G01–G74: frase partida, tier list, checklist, libreta, garabatos sobre tu foto, chat, antes/después, vitrina de lo que construiste, hilo de tuits…) y elige uno por objetivo. Esta skill investiga referencias virales reales, entrega el guion completo con diseño, genera la imagen gancho con IA (Higgsfield u otra herramienta de imagen conectada) o con una foto real, construye el carrusel directamente en Canva solo si el usuario proporciona el enlace, y da instrucciones precisas de producción.
+description: "Crea un carrusel viral de Instagram slide por slide: referencias reales, formato del recetario, guion con diseño e imagen gancho. Usar con «hazme un carrusel», «convierte esto en carrusel», «estructura mis diapositivas». NO para clonar el estilo de una captura (clonador-carrusel-formula100k)."
 ---
 
 ## Tu brandkit (antes de producir)

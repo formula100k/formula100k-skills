@@ -1,6 +1,6 @@
 ---
 name: adaptador-formatos-f100k
-description: Toma un video/post viral de CUALQUIER nicho (incluso uno random y ajeno) — por enlace de Instagram, TikTok o YouTube — DECODIFICA su formato/mecánica viral (no su tema) y lo ADAPTA al RUBRO DE QUIEN LO PIDE (cualquiera: se lee del Segundo Cerebro o se pregunta), proponiendo 2-3 ángulos listos para guionizar. Activar SIEMPRE que alguien diga "adapta este formato a lo nuestro", "roba el formato de este reel", "este video random me gustó, sirve para mi nicho?", "convierte este viral en algo mío", "decodifica este formato", "qué formato tiene este video y cómo lo uso", "hazme algo como este pero de mi tema", o cualquier variación que combine un ENLACE de video viral (de tema ajeno o no) con la intención de reutilizar su ESTRUCTURA/MECÁNICA. NO confundir con investigacion-contenido-formula100k (caza referencias por keyword) ni con remix-viral-formula100k (relanza contenido PROPIO). Esta skill parte de UN video ajeno y extrae su esqueleto viral para trasplantarlo.
+description: "Decodifica la mecánica viral (no el tema) de un video ajeno de IG, TikTok o YouTube y la adapta a tu rubro en 2-3 ángulos. Usar con «adapta este formato a lo nuestro», «roba el formato de este reel». NO para buscar referencias por keyword (investigacion-contenido-formula100k)."
 argument-hint: [URL del video viral] (+ tema/ángulo opcional)
 ---
 

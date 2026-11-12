@@ -1,6 +1,6 @@
 ---
 name: pizarra-explicativa-f100k
-description: "Convierte un video grabado (talking head) en un clip de PIZARRA de apoyo para pantalla dividida. Motion graphics de anotación a mano del kit R-03 de HyperFrames (hw-callout-circle, hw-arrow, hw-underline, hw-box-label) sincronizados con lo que se dice sobre un lienzo por el que viaja la cámara (yt-camera-move, yt-feather-highlight, yt-circle-pointer). Transcribe con tiempos palabra por palabra, propone el mapa de beats, PIDE APROBACIÓN, construye la composición, la verifica por fotogramas y entrega un .mov con alfa real LIGERO (HEVC ~100 MB, nunca el ProRes de 4 GB) más una previsualización del montaje con audio. Activar cuando se pase un .mov/.mp4 y se pida 'hazme la pizarra de este video', 'clip de pizarra para este reel', 'apoyo visual explicativo en pantalla dividida', 'motion graphics de pizarra', 'acompaña este video con una pizarra'. NO edita el video final (editor-video-formula100k) ni caza b-roll (recursos-de-video-formula100k). Output: FORMULA100K/RECURSOS VIDEOS/YYYY-MM-DD_slug/."
+description: "Convierte un talking head en un clip de pizarra animada a mano para pantalla dividida, y entrega un .mov con alfa. Usar con «hazme la pizarra de este video», «clip de pizarra para este reel», «apoyo visual en pantalla dividida». NO edita el video final (editor-video-formula100k)."
 argument-hint: "[ruta al video] [opcional: estilo o nota]"
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Glob, Grep
 ---

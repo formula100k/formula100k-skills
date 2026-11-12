@@ -1,6 +1,6 @@
 ---
 name: motion-tracking-dedo-f100k
-description: Agrega motion graphics que SIGUEN el dedo (motion tracking real) sobre un reel 9:16 de talking-head. Detecta la punta del índice cuadro por cuadro con MediaPipe y pega un elemento — punto con glow + etiqueta de texto, solo glow, o efecto tap/ripple — que se ancla a la yema y se mueve CON la mano cuando la creadora señala hacia arriba. A diferencia de motion-reels-f100k (overlays en zonas FIJAS), aquí el gráfico viaja con el dedo. Activar SIEMPRE que se diga 'haz que el gráfico siga mi dedo', 'motion tracking del dedo', 'que la animación me siga cuando señalo', 'pega una etiqueta a mi dedo', 'efecto que sigue la mano', 'anima lo que señalo', 'glow en la punta del dedo', 'el gráfico no se mueve cuando muevo el dedo / quiero que me siga', o cuando un reel tiene a la creadora señalando/apuntando algo y se quiere un gráfico anclado a la mano. NO usar para overlays fijos en zonas seguras (motion-reels-f100k), 16:9 (motion-youtube-f100k) ni gráficos estáticos PNG (graficos-de-video-formula100k).
+description: "Agrega motion graphics que siguen la punta del dedo cuadro por cuadro (glow, etiqueta o tap) en un reel 9:16 hablado. Usar con «haz que el gráfico siga mi dedo», «motion tracking del dedo», «pega una etiqueta a mi dedo». NO para overlays fijos (motion-reels-f100k) ni 16:9 (motion-youtube-f100k)."
 argument-hint: <ruta_video.mov> [contexto/etiquetas deseadas]
 disable-model-invocation: false
 ---

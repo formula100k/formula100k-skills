@@ -1,7 +1,6 @@
 ---
 name: radar-virales-f100k
-description: >
-  Radar diario: caza el HECHO más reaccionable del día —un lanzamiento de IA, una movida de marketing de una marca grande, o un formato viral SIN cara— evitando a propósito reaccionar a creadores del mismo nicho (eso le entrega la audiencia a un competidor). Elige 1 ganador con scoring + filtro de exclusión, genera un guion de reacción listo para grabar con la voz del usuario donde ÉL es el intérprete del hecho, y lo entrega en el chat (y por correo si está configurado). Usar cuando alguien diga: "corre mi radar", "qué hay viral hoy", "dame el viral del día", "ejecutar radar diario", "qué puedo reaccionar hoy", o cuando el schedule automático lo invoque. Toma el rubro y las keywords del pedido, de la ficha del negocio o de ~/.f100k-radar/config.json si existe.
+description: "Radar diario: caza el hecho más reaccionable del día (lanzamiento de IA, movida de marca o formato sin cara), sin reaccionar a creadores del nicho, y entrega un guion de reacción. Usar con «corre mi radar», «qué hay viral hoy», «dame el viral del día». NO para guardados (radar-formatos-f100k)."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

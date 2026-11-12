@@ -1,7 +1,6 @@
 ---
 name: higgsfield-carrusel-generador
-description: >
-  Genera las láminas de un carrusel de Instagram con imágenes de IA usando el conector de Higgsfield. Activar cuando alguien pida: generar un carrusel con imágenes de IA, crear láminas con Higgsfield, un carrusel con fotos tipo estilo de vida, o cualquier pedido que combine el guion de un carrusel con imágenes generadas. Si las láminas llevan a la persona, usa sus fotos reales como referencia. Sin Higgsfield conectado entrega los prompts listos y la versión en tipografía.
+description: "Genera las láminas de un carrusel de Instagram con imágenes de IA en Higgsfield, usando tus fotos reales si apareces. Usar con «carrusel con imágenes de IA», «crea las láminas con Higgsfield». Sin Higgsfield conectado entrega los prompts y una versión en tipografía."
 argument-hint: "<guion del carrusel o tema>"
 metadata:
   version: "2.0.0"

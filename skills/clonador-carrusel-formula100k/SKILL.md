@@ -1,17 +1,6 @@
 ---
 name: clonador-carrusel-formula100k
-description: >
-  Skill ESPEJO de FÓRMULA 100K. Toma una CAPTURA DE PANTALLA **o un ENLACE de Instagram/TikTok** del carrusel
-  de cualquier referente, extrae el "ADN de estilo" (layout, tipografía, paleta, patrón de gancho, arquitectura
-  de slides), lo MEJORA con los principios de viralidad y legibilidad de F100K, y RENDERIZA un carrusel completo
-  en PNGs finales con TU tema y TU marca en ese estilo clonado-mejorado. Activar SIEMPRE que alguien diga:
-  "clona este carrusel", "copia el estilo de este carrusel", "hazme un carrusel como este", "imita a este referente",
-  "tengo una captura de un carrusel que me gustó", "clona este carrusel desde este link", "replica este post de instagram",
-  "replica este estilo", "skill espejo", "carrusel espejo",
-  o cualquier variación que combine una imagen/captura O un enlace de un carrusel de referencia con la intención de
-  reproducir y mejorar su estilo para contenido propio. NO usar para escribir un guion desde cero sin
-  referencia visual (eso es carrusel-viral-formula100k) ni para renderizar un carrusel en tu propio estilo
-  sin referencia (eso es carrusel-render-formula100k).
+description: "Toma la captura o el link de un carrusel de referencia, extrae su estilo, lo mejora y renderiza PNGs con tu tema y tu marca. Usar con «clona este carrusel», «hazme un carrusel como este», «replica este estilo». NO sin referencia visual (carrusel-viral-formula100k o carrusel-render-formula100k)."
 argument-hint: "<captura(s) O enlace IG/TikTok del carrusel referente> + <tu tema> + <tus fotos (opcional)>"
 metadata:
   version: "1.1.0"

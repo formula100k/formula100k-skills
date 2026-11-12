@@ -1,6 +1,6 @@
 ---
 name: fabrica-design-md
-description: Use when someone asks to build a brand design system file, extract their visual identity, or create a DESIGN.md. Dispara con "hazme mi DESIGN.md", "arma mi sistema visual", "extrae mi identidad de marca", "quiero que todo lo que haga con IA se vea mío", "mis diseños salen genéricos", "define mi paleta y mi tipografía", "crea el archivo de marca", "design system para mi negocio". EXTRAE el sistema de las piezas que ya le funcionan a la persona (capturas, código de su web, o entrevista si no tiene archivos) en vez de inventarlo o copiar el de otra marca. Mide el contraste en vez de estimarlo, entrega el DESIGN.md y una página de prueba con el sistema aplicado y medida en móvil. NO usar para diseñar una pieza suelta ni para auditar accesibilidad de una página ya hecha.
+description: "Extrae el sistema visual de tu marca de tus piezas reales y entrega un DESIGN.md con contraste medido y página de prueba. Usar con «hazme mi DESIGN.md», «arma mi sistema visual», «extrae mi identidad de marca», «mis diseños salen genéricos». NO para una pieza suelta ni auditar accesibilidad."
 argument-hint: [carpeta con capturas | ruta del repo | vacío para entrevista]
 ---
 

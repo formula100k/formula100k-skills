@@ -1,6 +1,6 @@
 ---
 name: cazador-lead-magnets-f100k
-description: "Diseña LEAD MAGNETS DE ALTA TANGIBILIDAD (bases de datos con investigación real, miniapps, bots, custom GPTs, skills, audits) que generan comentarios masivos y deseo inmediato. Aplica el MÉTODO LMT — 3 capas (cazar el dolor latente, validar con reel-anzuelo, empaquetar tangible) + 1 filtro (se usa en menos de 1h). Activar SIEMPRE que se pida 'diseña un lead magnet', 'qué lead magnet hago', 'convierte esto en lead magnet', 'lead magnet que genere comentarios', 'lead magnet tangible', 'lead magnet con miniapp/bot/agente/base de datos', 'qué regalo previo a la venta', 'qué doy gratis para captar leads', 'lead magnet del dolor X', 'lead magnet para [nicho]'. Principio: mientras más tangible y usable al momento, más comentarios, deseo y leads de alta intención. Toma data real (comentarios, DMs, competencia) y devuelve briefing de producción. NO inventa dolores ni propone PDFs primero. NO usar para la OFERTA principal (constructor-ofertas-f100k) ni el VSL/landing (vsl-expert-f100k)."
+description: "Diseña lead magnets tangibles (bases de datos, miniapps, bots, skills, audits) que generan comentarios, con el método LMT. Usar con «diseña un lead magnet», «qué regalo previo a la venta», «lead magnet que genere comentarios». NO para la oferta principal (constructor-ofertas-f100k)."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)

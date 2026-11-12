@@ -1,17 +1,6 @@
 ---
 name: historias-a-imagenes-nanobanana
-description: >
-  Skill que convierte un guion de secuencia de historias (output de guionizacion-historias-formula100k)
-  en imágenes terminadas listas para subir a Instagram Stories. Activar SIEMPRE que el usuario o un usuario
-  pida: "renderiza este guion de historias", "convierte este guion en imágenes", "diséñame las stories
-  de [archivo]", "pasa este guion a imágenes con nanobanana", "genera las historias diseñadas",
-  "exporta este guion a PNG", "haz las imágenes de mi secuencia de stories", o cualquier variación
-  que combine un guion de historias con la intención de tener archivos visuales finales. Usa Nano Banana
-  por el motor que la persona tenga: el conector de Higgsfield o Gemini directo; sin ninguno entrega los
-  prompts y una versión en HTML. Se conecta
-  con una carpeta de fotos de marca personal (la pregunta y guarda como preset) y elige automáticamente
-  la mejor foto base por slide. Imita el estilo nativo de Instagram Stories (fuentes IG, cajas
-  redondeadas, paleta de su marca, capas de capturas/mockups, flechas amarillas, X/✓).
+description: "Convierte un guion de secuencia de historias en imágenes finales para Instagram Stories con Nano Banana, eligiendo tu foto de marca por slide y estilo nativo de IG. Usar con «renderiza este guion de historias», «diséñame las stories», «haz las imágenes de mi secuencia de stories»."
 argument-hint: "<ruta al .md del guion> [--motor=gemini|higgsfield] [--fotos=<carpeta>]"
 metadata:
   version: "1.0.0"

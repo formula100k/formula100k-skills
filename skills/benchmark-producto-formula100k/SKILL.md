@@ -1,6 +1,6 @@
 ---
 name: benchmark-producto-formula100k
-description: "Benchmark de producto/competencia profundo en cualquier nicho (cursos, comunidades Skool, coaching, SaaS, productos físicos). Activar SIEMPRE que se pida 'benchmark de producto', 'análisis de competencia', 'investiga a mi competencia', 'estudia el mercado de X', 'comparativa de competidores', 'mapeo competitivo', 'investigación de mercado', 'qué ofrecen otros en mi nicho', 'espía a mi competencia', 'qué gaps tiene mi nicho'. Stack de 4 motores juntos: Tavily (discovery web) + Supadata (landings públicas) + Apify (reviews/ads/Skool con auth) + agent-browser (permanente, no fallback) para sitios con login, anti-bot, Skool privadas, IG/TikTok del competidor y screenshots. Genera reporte con resumen ejecutivo, mapa competitivo, fichas del top 10, patrones, oportunidades y plan 30/60/90. NO usar para auditar UNA comunidad del cliente (auditor-formula100k), UN perfil (analizador-perfiles-formula100k) ni contenido viral (investigacion-contenido-formula100k)."
+description: "Benchmark profundo de competencia en cualquier nicho con reporte, oportunidades y plan 30/60/90. Usar con «análisis de competencia», «espía a mi competencia», «benchmark de producto», «qué gaps tiene mi nicho». NO para auditar una comunidad propia (auditor-formula100k)."
 argument-hint: "[nicho o vertical a investigar]"
 ---
 

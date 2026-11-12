@@ -1,6 +1,6 @@
 ---
 name: investigacion-nicho-formula100k
-description: "Investigación estratégica de nicho para creadoras de contenido con la metodología F100K. Usar cuando una creadora quiere validar si un nicho tiene potencial antes de invertir tiempo, cuando quiere analizar la competencia en Skool/TikTok/IG, cuando quiere saber si su oferta tiene mercado, o cuando necesita un brief de posicionamiento antes de crear contenido o lanzar una comunidad. Output = decisión con evidencia real, no teoría."
+description: "Investiga y valida un nicho con evidencia real: potencial, competencia en Skool, TikTok e IG, mercado para la oferta y brief de posicionamiento. Usar con «valida mi nicho», «analiza la competencia de mi nicho», «mi oferta tiene mercado?»."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

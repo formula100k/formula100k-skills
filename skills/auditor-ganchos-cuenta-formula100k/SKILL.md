@@ -1,7 +1,6 @@
 ---
 name: auditor-ganchos-cuenta-formula100k
-description: >
-  Auditoría end-to-end del PATRÓN DE GANCHO de una cuenta IG/TikTok. Activar cuando pidan: "audita los últimos N reels de @cuenta", "top 10 vs 10 peores", "analiza esta cuenta y su patrón ganador", "compara top vs bottom", "qué hace funcionar los reels de X", "reverse-engineering de @cuenta", "reporte visual de los ganchos de [cuenta]". Pipeline: Apify instagram-reel-scraper (transcripts) → ffmpeg frame @1s + frames 0/3/6/10s → integra estadísticas nativas de IG si las pasan (guardados, compartidos, seguidores, %no-seguidores) y carruseles → análisis Top-N vs Bottom-N + comparación de ganchos textual/visual/verbal + anatomía por segundos + ángulos (comentarios vs vistas vs guardados) + ganchos perfectos → HTML interactivo + layouts de gancho con Higgsfield (9:16/2k) para editores. Encadena opcional: calendario de guiones, memoria, Segundo Cerebro, Yapper. Output a ~/Documents/mi-contenido/auditorias/. NO confundir con analizador-perfiles, evaluador-ganchos (UN gancho), generador-ganchos (crea desde cero).
+description: "Audita el patrón de gancho de una cuenta IG/TikTok: top vs peores reels, ganchos textual/visual/verbal y anatomía por segundos, con reporte visual. Usar con «audita los últimos N reels de @cuenta», «top 10 vs 10 peores», «qué hace funcionar los reels de X». NO para UN gancho (evaluador-ganchos)."
 argument-hint: <@usuario o URL de IG/TikTok> [top N + bottom N=10]
 ---
 

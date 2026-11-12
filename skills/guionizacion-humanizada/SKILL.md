@@ -1,7 +1,6 @@
 ---
 name: guionizacion-humanizada
-description: >
-  Skill para humanizar guiones, textos y scripts para que no suenen escritos por IA. Usar SIEMPRE que alguien pida: humanizar un texto, hacer que suene más natural, quitarle el tono de IA, reescribir con mi voz, adaptar a mi estilo, hacer sonar más humano, revisar que no parezca IA, aplicar mi tono, o escribir como yo escribo. También activar cuando digan "esto suena muy de IA", "necesito que suene mío", "ponle mi estilo", "humaniza este guion" o cualquier variación que implique personalizar el tono y voz de un texto para que refleje la forma auténtica de comunicarse del usuario.
+description: "Humaniza guiones y textos para que no suenen a IA y reflejen la voz de quien escribe. Usar con «humaniza este guion», «esto suena muy de IA», «necesito que suene mío», «ponle mi estilo»."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

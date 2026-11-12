@@ -1,6 +1,6 @@
 ---
 name: guionizacion-ads-formula100k
-description: "Guioniza anuncios PAGADOS (Meta Ads, TikTok Ads, YouTube Ads, Reels promocionados) con el sistema H x M x C de FÓRMULA 100K (Hook 80% + Meat 15% + CTA 5%), derivado del GOAT de Hormozi. Activar SIEMPRE que se pida 'guioniza un ad', 'guion para anuncio', 'escribe el creativo de un ad', 'script de un anuncio', 'guion de Facebook/TikTok Ads', 'hazme un ad pagado', 'convierte mi reel en ad', 'adapta este orgánico a ad', 'dame 30 variantes de este ad', 'modulariza en H x M x C', 'ad para tráfico frío/caliente/retargeting/lookalike', 'ad de 30/60 segundos', o cualquier variación que combine GUIONIZAR + formato PAGADO. NO confundir con guionizacion-formula100k (orgánico), investigacion-ads-formula100k (caza ads de competencia), vsl-expert-f100k (VSL largo) ni audios-venta-f100k (DM). Genera 10 hooks GOAT, meat de 4 bloques (Agitación + Descalificación + Vehículo Único + Prueba), 3 niveles de CTA y 3 guiones calibrados a consciencia + plataforma + duración. Modo variantes masivas: 30-150 ads."
+description: "Guioniza anuncios pagados (Meta, TikTok, YouTube Ads) con el sistema Hook + Meat + CTA. Usar con «guioniza un ad», «guion para anuncio», «convierte mi reel en ad». NO para orgánico (usa guionizacion-formula100k), VSL (vsl-expert-f100k) ni caza de ads (investigacion-ads-formula100k)."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO — manda sobre cualquier ejemplo de esta skill)

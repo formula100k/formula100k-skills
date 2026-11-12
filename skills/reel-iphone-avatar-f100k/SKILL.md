@@ -1,6 +1,6 @@
 ---
 name: reel-iphone-avatar-f100k
-description: Reel animado estilo «iPhone + avatar abajo» (inspirado en un reel de @Koen Salo) — subtítulo de 2–3 palabras con la selección de texto de iPhone arriba, UNA ilustración plana iOS al centro, tu avatar abajo cambiando de pose cada 1–2 s (o sin avatar), fondo claro u oscuro según el tono y tu voz. Cada cuadro se dibuja con código y se renderiza en tu computadora (gratis) con el motor de animacion-dibujada-f100k. Usar cuando digan «hazlo con el avatar abajo», «estilo iPhone con avatar», «animación tipo iPhone con avatar explicando», «explica este estudio con mi avatar», «/reel-iphone-avatar <tema>». NO para clonar un estilo nuevo desde un link (clonador-animaciones-f100k) ni para editar un video hablado a cámara.
+description: "Reel animado estilo iPhone con avatar abajo: subtítulo con selección de texto iOS, ilustración plana y tu avatar cambiando de pose. Usar con «hazlo con el avatar abajo», «estilo iPhone con avatar», «explica este estudio con mi avatar». NO para clonar estilos (clonador-animaciones-f100k)."
 argument-hint: <tema o estudio a explicar>
 ---
 

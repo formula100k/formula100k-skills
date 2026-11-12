@@ -1,6 +1,6 @@
 ---
 name: motion-youtube-f100k
-description: "Agrega motion graphics estilo Softgirlnocode a videos de YouTube (16:9 horizontal). Analiza un frame del video para detectar la posición del sujeto y calcular zonas seguras de overlay, transcribe con Supadata (URL) o Whisper (archivo local), auto-clasifica el contenido del guión para proponer el tipo de overlay correcto (antes/ahora → comparison card, listas → chapter card, herramientas → UI card, identidad → pills), genera HTML/GSAP con HyperFrames posicionado en las zonas libres del frame con animaciones fluidas, renderiza en 1920×1080 y compone sobre el video original con ffmpeg. Activar cuando: 'agrega motion graphics a este video de YouTube', 'overlays para YouTube', 'motion graphics 16:9', 'edita este video de YouTube', 'quiero overlays como Softgirlnocode en horizontal'. Output: $CARPETA/video_final_motion.mp4"
+description: "Agrega motion graphics estilo Softgirlnocode a videos de YouTube 16:9 en las zonas libres del cuadro, según lo que se dice, y entrega el video compuesto. Usar con «agrega motion graphics a este video de YouTube», «overlays para YouTube», «motion graphics 16:9»."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 

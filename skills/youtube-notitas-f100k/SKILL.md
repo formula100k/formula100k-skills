@@ -1,6 +1,6 @@
 ---
 name: youtube-notitas-f100k
-description: "Edita un video LARGO de YouTube 16:9 hablado a cámara (talking head) con el estilo «YouTube notitas»: corte fino de verdad (sin aire, sin retomas ni palabras mochas), gancho editorial con palabras que entran con la voz (Hormozi) y una manuscrita subrayada (Cristofari), títulos grandes al empezar cada sección, pantallas de papel cuadriculado a pantalla completa estilo notitas (texto Inter negro con la clave en azul o en el color de tu marca, capturas reales en tarjeta, círculo rojo), palabras y listas sobre la toma, clips de la fuente con subtítulos en español, punch-in con corte seco y efectos de sonido. Render local con Remotion (gratis), en Mac y en Windows. Activar con 'edita este video de YouTube', 'video de YouTube con motion', 'estilo YouTube notitas', '/youtube-notitas <video>'. NO para reels 9:16 (edicion-notitas-f100k), ni pizarras para grabar (pizarra-youtube-f100k), ni overlays con HyperFrames."
+description: "Edita un video largo de YouTube 16:9 a cámara en estilo notitas: corte fino, gancho editorial, títulos de sección y pantallas de papel cuadriculado. Usar con «edita este video de YouTube», «estilo YouTube notitas». NO para reels 9:16 (edicion-notitas-f100k) ni pizarras (pizarra-youtube-f100k)."
 argument-hint: "[ruta del video] [opcional: link de la fuente o pizarra]"
 ---
 

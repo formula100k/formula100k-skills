@@ -1,6 +1,6 @@
 ---
 name: calendarizador-urgencias-formula100k
-description: "Construye el CALENDARIO DE RAZONES DE URGENCIA (mensual + pool semanal) de cualquier producto/programa/servicio con la metodología de urgencia honesta de FÓRMULA 100K (motor biológico, 5 gatillos de decisión, aversión a la pérdida) + investigación web real con Tavily MCP para cazar fechas estacionales y comerciales del nicho. Activar SIEMPRE que el usuario, una clienta o alumna pida 'arma mi calendario de urgencias', 'razones de urgencia para mi producto', 'fechas de venta de [nicho]', 'cuándo activar urgencia este año', 'calendario de gatillos', 'dame razones de urgencia honestas', 'qué urgencia uso este mes', o cualquier variación que combine urgencia/escasez con planear cuándo activarla. NO confundir con calendarizador-contenido-formula100k (reels/carruseles) ni calendarizador-historias-formula100k (stories). Entrega calendario mensual + pool de razones reutilizables alineadas a fechas reales."
+description: "Construye el calendario mensual de razones de urgencia honesta de un producto, con fechas reales del nicho. Usar con «arma mi calendario de urgencias», «razones de urgencia para mi producto», «fechas de venta de [nicho]». NO para reels (calendarizador-contenido-formula100k) ni stories."
 argument-hint: "[nombre del producto opcional]"
 metadata:
   version: "1.0.0"

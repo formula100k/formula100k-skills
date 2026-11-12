@@ -1,6 +1,6 @@
 ---
 name: calendarizador-historias-formula100k
-description: "Arma calendarios SEMANALES de SECUENCIAS DE HISTORIAS de Instagram (Lunes-Domingo) con la metodología FÓRMULA 100K. Activar SIEMPRE que el usuario pida 'calendariza mis historias', 'arma mi semana de stories', 'calendario de historias', 'planifica mis historias de la semana', 'organiza mis stories por día', 'calendario semanal de historias', 'arma 7 secuencias de stories para la semana', 'planifica las historias de mi lanzamiento', o cualquier variación que combine organizar/planear con el formato historias de IG semanal. NO confundir con calendarizador-contenido-formula100k (reels/videos/carruseles) ni calendarizador-urgencias-formula100k. Distribuye las secuencias por día según energía y propósito, lista para producir con guionizacion-historias-formula100k."
+description: "Arma el calendario semanal de secuencias de historias de Instagram (lunes a domingo). Usar con «calendariza mis historias», «arma mi semana de stories», «planifica las historias de mi lanzamiento». NO para reels ni carruseles (usa calendarizador-contenido-formula100k)."
 argument-hint: "<modo: lanzamiento|nutricion|mixto|urgencia> [+ ideas/objetivos opcionales]"
 metadata:
   version: "1.0.0"

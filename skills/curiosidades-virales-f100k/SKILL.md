@@ -1,6 +1,6 @@
 ---
 name: curiosidades-virales-f100k
-description: Serie «Curiosidades virales». Toma una curiosidad que ya explotó en otra cuenta (ej. «¿por qué los aviones no vuelan en línea recta?»), la rehace 100 % con Claude (cada cuadro dibujado con código, apertura en 3D si la referencia es 3D, imágenes reales de la NASA o capturas reales, tu voz, efectos de sonido) y cierra con un CTA a tu regalo: un celular que baja por la página completa del regalo. Render en tu computadora, gratis. Usar cuando digan «otra curiosidad viral», «siguiente de la serie de curiosidades», «haz la curiosidad de [tema]», «clona este video de curiosidad», «como el de los aviones», «como el de tu mapa te miente», o peguen el link de un reel de curiosidad o ciencia explicada con animación. NO para reels hablando a cámara ni para clonar un estilo de animación cualquiera (clonador-animaciones-f100k).
+description: "Serie «Curiosidades virales»: rehace con código una curiosidad viral ajena, con tu voz y CTA al regalo. Usar con «otra curiosidad viral», «haz la curiosidad de [tema]», «clona este video de curiosidad». NO para reels a cámara."
 argument-hint: [link del reel de referencia o tema de la curiosidad]
 ---
 

@@ -1,8 +1,10 @@
-# FÓRMULA 100K — Skills oficiales
+# 🔒 FÓRMULA 100K · Skills exclusivas
 
 Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, creada por Andrea Vega.
 
-> Repo privado — acceso exclusivo para alumnas de la comunidad.
+> 🔒🔒🔒 **Si no eres de FÓRMULA 100K, no instales esto.** 🔒🔒🔒
+>
+> Estas skills son exclusivas para los miembros de la comunidad FÓRMULA 100K en Skool. Funcionan junto con las clases, plantillas y acompañamiento de la comunidad: fuera de ella no tienen soporte.
 
 ---
 

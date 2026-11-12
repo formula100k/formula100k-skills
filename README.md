@@ -67,6 +67,7 @@ Una vez instaladas, Claude Code activa la skill correcta automáticamente cuando
 | "Audita esta comunidad de Skool" | `auditor-formula100k` |
 | "Calendariza mi semana de contenido" | `calendarizador-contenido-formula100k` |
 | "Escribe un VSL para esta oferta" | `vsl-expert-f100k` |
+| "Arranca mis 7 movimientos" | `movimientos-de-venta-f100k` |
 | "Crea una infografía reel" | `infografia-reel-formula100k` |
 | "Hazme un reel faceless de X (sin mi cara)" | `reel-faceless-f100k` |
 
@@ -129,6 +130,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 - `benchmark-producto-formula100k` — Benchmark de competencia
 
 ### Venta y ofertas
+- `movimientos-de-venta-f100k` — Los 7 movimientos de venta: diagnóstico, plan de 30 días y las piezas de la semana 1 («Arranca mis 7 movimientos»)
 - `vsl-expert-f100k` — VSLs, landings, ads y emails de venta
 - `audios-venta-f100k` — Audios de venta para DM/WhatsApp
 - `constructor-ofertas-f100k` — Construir ofertas irresistibles

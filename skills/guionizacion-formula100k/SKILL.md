@@ -163,7 +163,7 @@ Este paso garantiza que el gancho no sea genérico sino basado en lo que ya prob
 ### Paso 6.5 — El pase de reescritura (OBLIGATORIO)
 
 Nadie escribe bien de una. Lo que acabas de terminar es el **borrador**, no el entregable.
-Antes del Chequeo Neuro, córrele los cuatro movimientos contra la sección **EL OFICIO**
+Antes del Chequeo Neuro, córrele los seis movimientos contra la sección **EL OFICIO**
 (más abajo en esta skill). Cada movimiento deja un número: si no puedes mostrar el número,
 no lo corriste.
 
@@ -190,6 +190,11 @@ textual o casi textual, la recogiste de una tabla en vez de escribirla: reescrí
 Y si escribiste varios guiones en esta sesión, ponlos **lado a lado**: ninguno puede abrir el
 primer ni la sobredimensión con la fórmula del anterior.
 
+**Movimiento 6 — Valor directo (solo piezas de valor).**
+Corre los 5 chequeos de la Regla 8: premio en la primera frase · porqué en cada consejo ·
+cero consejos genéricos · progresión si es lista · método con nombre si existe. Y revisa que el
+puente al regalo vaya después del valor.
+
 **Salida obligatoria del paso** (va antes del guion final):
 
 ```
@@ -200,6 +205,7 @@ Líneas eliminadas por resbaladero: 3
 Kill-list cazada: "la verdad es que" ×1 · "esto lo cambió todo" ×1
 Frases recogidas de una tabla: 1 → reescrita ("no le sirve a todo el mundo")
 Contraste con los otros guiones de la sesión: primer y sobredimensión distintos ✅
+Valor directo: premio en seg 1 ✅ · consejos sin porqué: 0 · genéricos cambiados: 2 · progresión ✅
 ```
 
 > Si el conteo bajó **menos del 15%**, no cortaste: volviste a leer. Corre el Movimiento 1 otra vez.
@@ -586,6 +592,40 @@ Si aparece textual o casi textual, no la escribiste: la recogiste. Reescríbela.
 **Regla de variación:** si escribes varios guiones en una misma sesión (un calendario, una serie),
 ninguno puede abrir el primer ni la sobredimensión con la fórmula del anterior. Revísalos juntos,
 no de a uno: el esqueleto compartido solo se ve al ponerlos lado a lado.
+
+### Regla 8 — Valor directo: la lección va al frente y cada consejo trae su porqué
+
+*(Aplica a piezas de VALOR —listas, métodos, pasos, planes—. En historias manda el arco de la
+historia, que igual tiene que terminar en algo útil para quien mira.)*
+
+El error de los nichos «saturados» (desarrollo personal, fitness, finanzas personales) no es dar la
+lección de frente. Es darla **genérica** o **esconderla**. Cinco chequeos:
+
+1. **El premio en la primera frase.** Quien mira sabe en el segundo 1 qué se lleva si se queda.
+   No se guarda la lección para el cierre «para que no se note». Lo que espanta no es que se note
+   la lección: es no saber qué se gana quedándose.
+   ❌ «Por 30 millones, ¿te tiras de un coche?» (la lección aparece en el segundo 30)
+   ✅ «Tu cerebro le pone peligro a cosas que no lo tienen. Te lo demuestro en diez segundos.»
+2. **Cada consejo = qué hacer + por qué funciona, en una frase.** Si no puedes escribir el
+   porqué, cambia el consejo. El porqué (un dato de cómo funciona el cuerpo, la mente, el dinero o
+   el oficio) es la autoridad de quien no tiene título.
+3. **Test de lo genérico.** Si cualquier cuenta del rubro podría decir el consejo («lee más», «sé
+   constante», «ahorra»), pregúntate «¿y eso cómo se hace?» hasta llegar a algo específico y
+   filmable (Regla 2 y Regla 4).
+   ❌ «Concéntrate más» → ✅ «Usa siempre el mismo olor cuando estudies: tu cerebro lo asocia
+   con el foco.»
+4. **Listas con progresión.** El gancho promete que cada punto será más raro, más fuerte o más
+   de nicho que el anterior, y el más fuerte va al final. Eso sostiene la retención hasta el
+   último punto.
+5. **Nombra el método si existe** (algo que se pueda buscar y contar a otra persona: «el palacio
+   de la memoria», «la cuadrícula 9x9»). Si no tiene nombre, no se lo inventes.
+
+**Puente al regalo:** en piezas para viralizar, el regalo o recurso entra **después** de entregar
+el valor, con una frase del tipo «esto es lo que me funcionó a mí», y el CTA usa una palabra
+ligada al tema. Nunca antes del valor.
+
+**Edad o poca experiencia no son objeción:** escríbele a quien va dos pasos atrás de ti, no
+veinte. «Tengo 18 y esto ya me cambió» es credibilidad para alguien de 15.
 
 ---
 

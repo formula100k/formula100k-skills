@@ -70,14 +70,16 @@ Si falta un dato, asume el default, decláralo en una línea y sigue. Nunca inve
 Corres **en primer plano** (la conversación activa) porque necesitas (a) despachar sub-agentes y (b) pausar a pedir aprobación. Entre fases retienes SOLO los handoffs estructurados (brief, calendario, rutas de archivo), nunca transcripciones crudas ni imágenes.
 
 ### FASE A — PLANEAR
-1. **Despacha a LUNA** (`Agent` con `subagent_type: agente-investigadora-f100k`): radar de ideas + investigación de referencias virales reales para el `perfil`/nicho/`tema`. Pásale perfil, propósito, semana. Recibe el brief.
-2. **Despacha a CALI** (`subagent_type: agente-calendarizadora-f100k`): pásale el brief de LUNA + perfil + propósito + semana. Recibe el **calendario semanal + guiones** (reels/carruseles/YouTube) en CSV/XLSX con sus rutas.
+> **Nombre de los agentes:** como vienen dentro del plugin `formula100k`, Claude Code los registra con prefijo (`formula100k:agente-…`). Si al despachar te responde «Agent type … not found», reintenta con el nombre sin prefijo (`agente-…`): así quedan cuando se instalaron sueltos, sin el plugin.
+
+1. **Despacha a LUNA** (`Agent` con `subagent_type: formula100k:agente-investigadora-f100k`): radar de ideas + investigación de referencias virales reales para el `perfil`/nicho/`tema`. Pásale perfil, propósito, semana. Recibe el brief.
+2. **Despacha a CALI** (`subagent_type: formula100k:agente-calendarizadora-f100k`): pásale el brief de LUNA + perfil + propósito + semana. Recibe el **calendario semanal + guiones** (reels/carruseles/YouTube) en CSV/XLSX con sus rutas.
 
 ### 📋 CHECKPOINT (humano, obligatorio)
 Muestra a la persona el **calendario + los guiones** de forma legible y pregunta: ¿lo apruebas, edito algo, o cambio un día? **No produzcas nada hasta el OK.** Aplica los cambios pedidos (re-despacha solo lo necesario, no rehagas todo).
 
 ### FASE B — PRODUCIR + COLOCAR (solo tras el OK)
-3. **Despacha a NOVA** (`subagent_type: agente-produccion-f100k`): pásale los guiones aprobados. Genera **carruseles renderizados** y **miniaturas de YouTube**. Recibe las rutas.
+3. **Despacha a NOVA** (`subagent_type: formula100k:agente-produccion-f100k`): pásale los guiones aprobados. Genera **carruseles renderizados** y **miniaturas de YouTube**. Recibe las rutas.
 4. **Guion de intro de YouTube**: para cada video YouTube del calendario, redacta el guion de intro (gancho 8s + promesa) en la voz del perfil. Puedes apoyarte en la skill `guionizacion-formula100k`.
 5. **Coloca todo en su sitio** (con degradación elegante, ver abajo):
    - **Orden de guiones → Yapper.** Sube los guiones YA ORDENADOS por día a la cuenta del perfil.

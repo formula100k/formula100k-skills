@@ -1,0 +1,17 @@
+{
+  "frases": ["Un farol chiquito…", "…le devolvió el color."],
+  "cta_frase": "Comenta",
+  "cta": "GUÍA",
+  "cta_bajada": "",
+  "colores": {
+    "farol": "#ffc247",
+    "concha": "#ea8b6c",
+    "fachadas": ["#9fcbb5", "#efc47c", "#eaa58e", "#aab7e4", "#f2d49c"],
+    "flores": ["#f47d8c", "#ffd166", "#ffffff", "#c59bf0"],
+    "cieloArriba": "#6fa6da",
+    "cieloAbajo": "#d4ebf4"
+  },
+  "duracion_historia": 5,
+  "duracion_cta": 2.8,
+  "fuente": null
+}

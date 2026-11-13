@@ -1,0 +1,28 @@
+{
+  "cta": "GUÍA",
+  "comenta": "COMENTA",
+  "cta_dur": 1.8,
+  "colores": {
+    "papel": "#f3f2ef",
+    "tinta": "#1d1d20",
+    "traje": "#3d4a86",
+    "corbata": "#d33a2c",
+    "camisa": "#7c9a52",
+    "barra1": "#e8c440",
+    "barra2": "#e48a3c",
+    "barra3": "#d6463a",
+    "rojo": "#d8322b",
+    "cta": "#d8322b"
+  },
+  "voz": null,
+  "escenas": [
+    {
+      "archivo": "escena.html",
+      "dur": 4.0,
+      "cartel": "REUNIÓN",
+      "globo": "OTRA GRÁFICA",
+      "remate": ["PUDO SER", "UN CORREO"],
+      "cierre": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "titulo": {"chica_1": "TU EQUIPO", "grande_1": "TRABAJA", "chica_2": "mientras", "clave": "DUERMES"},
+  "modulos": ["IDEAS", "GUION", "ANIMACIÓN", "PUBLICA"],
+  "cota": "TRABAJA SOLA",
+  "cajetin": ["PLANO 01", "TU SISTEMA"],
+  "sala": {"entra": "1 IDEA", "sale": "8 VIDEOS", "piezas": 8},
+  "cta_chica": "COMENTA",
+  "cta": "GUÍA",
+  "colores": {"acento": "#FFC200"}
+}

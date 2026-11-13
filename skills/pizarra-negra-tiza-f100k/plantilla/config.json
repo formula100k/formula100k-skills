@@ -1,0 +1,21 @@
+{
+  "titulo": "ESTO ES",
+  "izquierda": "MALO",
+  "derecha": "BUENO",
+  "rotulo": "SE ROMPIÓ SU RED",
+  "pregunta": "?",
+  "cta_frase": "Comenta",
+  "cta": "GUÍA",
+  "fantasmas": ["tres redes", "mar", "x = ?", "viento"],
+  "colores": {
+    "pizarra": "#181b19",
+    "tiza": "#efede4",
+    "rojo": "#ec8a6c",
+    "amarillo": "#f1cf6a",
+    "verde": "#8fae8c",
+    "cafe": "#b98a62"
+  },
+  "duracion_escena": 4.0,
+  "duracion_cta": 2.8,
+  "fuente": null
+}

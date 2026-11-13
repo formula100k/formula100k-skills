@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ensayo de palitos</title>
+<style>/*FUENTES*/
+html,body{margin:0;background:#ddd;display:grid;place-items:center;height:100vh}canvas{height:100vh;width:auto;max-width:100vw}</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// ENSAYO DE PALITOS · una escena (un remate). build.mjs mete aquí la escena de config.json y el motor de dibujo.
+// Papel casi blanco, línea de plumón negro que hierve, monigotes de cabeza redonda con 3 pelos y cuerpo de huevo,
+// relleno de lápiz de color rayado en diagonal, rótulos en cajitas colgadas, poses que cambian con corte seco,
+// palabra roja gorda que remata el chiste, suelo con matas de pasto y cámara que se desliza.
+// ANATOMIA: estilizada — monigotes de palitos (círculo, huevo y líneas), la convención del estilo
+const CONFIG = /*CONFIG*/{};
+const ESC = CONFIG.escena || {};
+const CARTEL = ESC.cartel ?? 'REUNIÓN';
+const GLOBO = ESC.globo ?? 'OTRA GRÁFICA';
+const REMATE = ESC.remate ?? ['PUDO SER', 'UN CORREO'];
+const CTA = ESC.cierre ? (CONFIG.cta || 'GUÍA') : null;            // solo la última escena lleva el CTA
+const COMENTA = CONFIG.comenta || 'COMENTA';
+const COLORES = Object.assign({
+  papel: '#f3f2ef', tinta: '#1d1d20',
+  traje: '#3d4a86', corbata: '#d33a2c', camisa: '#7c9a52',
+  barra1: '#e8c440', barra2: '#e48a3c', barra3: '#d6463a', rojo: '#d8322b', cta: '#d8322b',
+}, CONFIG.colores || {});
+const ESCENA_DUR = ESC.dur ?? 4.0;                                 // la acción (globo → remate → se duerme)
+const CTA_DUR = CTA ? (CONFIG.cta_dur ?? 1.8) : 0;                 // cierre con la palabra
+const DUR = ESCENA_DUR + CTA_DUR;
+const K = ESCENA_DUR / 4.0;                                        // todos los tiempos de la escena se estiran con su duración
+const W = 1080, H = 1920, FPS = 30;
+const LETRA = '"Kalam", "Chalkboard SE", "Marker Felt", cursive';
+const GORDA = '"Bangers", Impact, sans-serif';
+window.LISTO = (document.fonts ? Promise.all(['56px Kalam', '120px Bangers'].map(f => document.fonts.load(f))) : Promise.resolve()).then(() => true);
+</script>
+<!--NUCLEO-->
+<script>
+const G = 1420;                                       // suelo
+const BX = -400, BY = -300, BW = W + 800, BH = H + 600;
+const PAPEL = (() => {
+  const c = capa(BW, BH), p = c.getContext('2d'), r = rng(5);
+  p.translate(-BX, -BY); p.fillStyle = COLORES.papel; p.fillRect(BX, BY, BW, BH);
+  for (let y = BY; y < BY + BH; y += 10) for (let x = BX; x < BX + BW; x += 10) {
+    const n = vnoise(x * .004, y * .004) * .6 + vnoise(x * .03, y * .03) * .4;
+    p.fillStyle = n > .5 ? `rgba(255,255,255,${(n - .5) * .5})` : `rgba(120,110,95,${(.5 - n) * .07})`; p.fillRect(x, y, 10, 10);
+  }
+  for (let i = 0; i < 60000; i++) { p.fillStyle = r() < .5 ? 'rgba(90,80,70,.07)' : 'rgba(255,255,255,.5)'; p.fillRect(BX + r() * BW, BY + r() * BH, 1.3, 1.3); }
+  return c;
+})();
+
+// ================= KIT DE DIBUJO (úsalo para armar escenas nuevas) =================
+// tinta(puntos)            trazo de plumón que hierve (la semilla cambia cada 4 cuadros)
+// linea(x0,y0,x1,y1)       palito recto            ovalo(cx,cy,rx,ry,giro)   puntos de un óvalo
+// caja(x,y,w,h)            puntos de una caja      blanco(puntos)            tapa con papel (para que no se transparente)
+// lapiz(puntos,color,sem)  relleno de lápiz de color rayado en diagonal
+// texto(s,x,y,tam)         letra a mano centrada
+// cartelColgado(s,x,y,w,h) rótulo en cajita colgada de dos hilos
+// globo(s,x,y)             globo de diálogo        sentado(x,{...})          monigote sentado en su pupitre
+// parado(x,{...})          monigote de pie         cara(x,y,ojos,boca,mira)  ojos: punto|medio|cerrado|enojo · boca: plana|triste|abierta|sonrisa
+let SEM = 0, HIERVE = 0;
+const sem = () => (SEM += 1.618) + HIERVE * 97.3;
+function tinta(pts, o = {}) {
+  const s = new Trazo(pts, { w: o.w ?? 7, col: o.col ?? COLORES.tinta, temblor: o.temblor ?? 1.0, onda: o.onda ?? 150, semilla: sem(), suave: o.suave, alpha: o.alpha ?? .95 });
+  pintarTrazo(ctx, s, 0, { p: o.p ?? 1, gota: false });
+}
+const linea = (x0, y0, x1, y1, o) => tinta([[x0, y0], [(x0 + x1) / 2, (y0 + y1) / 2], [x1, y1]], o);
+const ovalo = (cx, cy, rx, ry, rot = 0, n = 40) => { const p = []; for (let i = 0; i <= n + 2; i++) { const a = -2 + i / n * 6.283; const x = Math.cos(a) * rx, y = Math.sin(a) * ry; p.push([cx + x * Math.cos(rot) - y * Math.sin(rot), cy + x * Math.sin(rot) + y * Math.cos(rot)]); } return p; };
+const caja = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y - 3]];
+function blanco(pts) { ctx.save(); ctx.fillStyle = COLORES.papel; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.restore(); }
+function lapiz(pts, col, semilla, o = {}) {
+  const r = rng(semilla * 31 + HIERVE * 7), ang = o.ang ?? 1.02, paso = o.paso ?? 9;
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const [x, y] of pts) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  ctx.save(); blanco(pts); ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.clip();
+  ctx.globalAlpha = .16; ctx.fillStyle = col; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+  ctx.strokeStyle = col; ctx.lineCap = 'round';
+  const d = Math.hypot(x1 - x0, y1 - y0), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, ux = Math.cos(ang), uy = Math.sin(ang), nx = -uy, ny = ux;
+  for (let k = -d / 2; k < d / 2; k += paso * (.8 + r() * .45)) {
+    let s = -d / 2 - r() * 20;
+    while (s < d / 2) {
+      const l = 30 + r() * 140, a = s, b = s + l; s = b + 3 + r() * 12;
+      ctx.globalAlpha = .62 + r() * .33; ctx.lineWidth = 3 + r() * 3.2;
+      const kk = k + (r() - .5) * 2;
+      ctx.beginPath(); ctx.moveTo(cx + nx * kk + ux * a, cy + ny * kk + uy * a); ctx.lineTo(cx + nx * (kk + (r() - .5) * 3) + ux * b, cy + ny * (kk + (r() - .5) * 3) + uy * b); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+function texto(s, x, y, size, o = {}) {
+  let tam = size; if (o.ancho) { while (tam > 24 && medir(s, `${tam}px ${LETRA}`) > o.ancho) tam -= 2; }   // achica si no cabe
+  const L = letras(s, x, y, `${tam}px ${LETRA}`, { centro: true, col: o.col ?? COLORES.tinta, semilla: o.semilla ?? 3, giro: .05, base: .06, grosor: o.grosor ?? 1.2 });
+  for (const l of L) pintarLetra(ctx, l, 0, { p: 1 });
+}
+function cartelColgado(s, x, y, w, h, o = {}) {
+  linea(x + 20, BY, x + 32, y + 4, { w: 3.5 }); linea(x + w - 20, BY, x + w - 32, y + 4, { w: 3.5 });
+  blanco(caja(x, y, w, h)); tinta(caja(x, y, w, h), { w: 6, suave: 0 }); texto(s, x + w / 2, y + h * .7, o.tam ?? 56, { semilla: o.semilla ?? 4, ancho: w - 40 });
+}
+function globo(s, gx, gy, o = {}) {
+  const gl = ovalo(gx, gy, o.rx ?? 230, o.ry ?? 70, 0, 56);
+  blanco(gl); tinta(gl, { w: 6 }); tinta([[gx + 120, gy + 60], [gx + 220, gy + 168], [gx + 160, gy + 58]], { w: 6, suave: 0 });
+  blanco([[gx + 118, gy + 52], [gx + 165, gy + 52], [gx + 160, gy + 64], [gx + 124, gy + 64]]);
+  texto(s, gx, gy + 20, 58, { semilla: 8, ancho: (o.rx ?? 230) * 1.7 });
+}
+function mano(x, y) { tinta(ovalo(x, y, 10, 10), { w: 5, temblor: .4 }); }
+function pelos(x, y) { linea(x - 18, y + 4, x - 28, y - 30, { w: 5 }); linea(x + 2, y, x + 2, y - 36, { w: 5 }); linea(x + 22, y + 4, x + 32, y - 28, { w: 5 }); }
+function cara(x, y, ojos, boca, mira = 1) {
+  const ex = x + mira * 14;
+  if (ojos === 'punto') { for (const dx of [-14, 14]) { ctx.fillStyle = COLORES.tinta; ctx.beginPath(); ctx.arc(ex + dx, y - 6, 5.5, 0, 6.29); ctx.fill(); } }
+  else if (ojos === 'medio') { for (const dx of [-14, 14]) { linea(ex + dx - 10, y - 8, ex + dx + 10, y - 8, { w: 4.5, temblor: .3 }); ctx.fillStyle = COLORES.tinta; ctx.beginPath(); ctx.arc(ex + dx, y - 2, 4.5, 0, 3.14); ctx.fill(); } }
+  else if (ojos === 'cerrado') { for (const dx of [-14, 14]) tinta([[ex + dx - 10, y - 4], [ex + dx, y + 2], [ex + dx + 10, y - 4]], { w: 4.5, temblor: .3 }); }
+  else if (ojos === 'enojo') { for (const dx of [-14, 14]) { linea(ex + dx - 11, y - 18 + (dx < 0 ? -5 : 5) * mira, ex + dx + 11, y - 18 - (dx < 0 ? -5 : 5) * mira, { w: 5, temblor: .3 }); ctx.fillStyle = COLORES.tinta; ctx.beginPath(); ctx.arc(ex + dx, y - 4, 5.5, 0, 6.29); ctx.fill(); } }
+  if (boca === 'plana') linea(ex - 12, y + 24, ex + 12, y + 24, { w: 4.5, temblor: .3 });
+  else if (boca === 'triste') tinta([[ex - 13, y + 29], [ex, y + 21], [ex + 13, y + 29]], { w: 4.5, temblor: .3 });
+  else if (boca === 'abierta') tinta(ovalo(ex, y + 26, 8, 11), { w: 4.5, temblor: .3 });
+  else if (boca === 'sonrisa') tinta([[ex - 18, y + 18], [ex, y + 30], [ex + 20, y + 16]], { w: 4.5, temblor: .3 });
+}
+function cabeza(hx, hy, ojos, boca, mira = 1) { blanco(ovalo(hx, hy, 62, 62)); tinta(ovalo(hx, hy, 62, 62)); pelos(hx, hy - 62); cara(hx, hy, ojos, boca, mira); }
+// monigote sentado frente a su pupitre (mira a la derecha). o: {traje, ojos, boca, dormido}
+function sentado(x, o = {}) {
+  linea(x + 74, G - 214, x + 182, G - 220, { w: 6 }); linea(x + 78, G - 200, x + 180, G - 205, { w: 5 });
+  linea(x + 170, G - 205, x + 170, G - 2, { w: 6 }); linea(x - 48, G - 128, x + 40, G - 128, { w: 6 });
+  linea(x - 40, G - 128, x - 44, G - 2, { w: 5 }); linea(x + 32, G - 128, x + 34, G - 2, { w: 5 });
+  linea(x + 18, G - 150, x + 86, G - 158, {}); linea(x + 86, G - 158, x + 92, G - 4, {}); linea(x + 92, G - 4, x + 118, G - 4, { w: 6 });
+  const cuerpo = ovalo(x, G - 216, 50, 86, o.dormido ? .28 : 0);
+  if (o.traje) { lapiz(cuerpo, COLORES.traje, x); lapiz([[x + 4, G - 296], [x + 16, G - 296], [x + 14, G - 200], [x + 8, G - 186], [x + 2, G - 200]], COLORES.corbata, x + 3, { paso: 6 }); }
+  else blanco(cuerpo);
+  tinta(cuerpo);
+  if (o.dormido) {
+    const hx = x + 116, hy = G - 280;
+    linea(x + 36, G - 250, hx + 26, G - 224, {}); mano(hx + 34, G - 226);
+    blanco(ovalo(hx, hy, 62, 62)); tinta(ovalo(hx, hy, 62, 62)); pelos(hx + 6, hy - 64); cara(hx, hy, 'cerrado', 'abierta');
+  } else {
+    linea(x + 32, G - 252, x + 112, G - 222, {}); mano(x + 118, G - 222);
+    cabeza(x + 6, G - 356, o.ojos ?? 'punto', o.boca ?? 'plana');
+  }
+}
+// monigote de pie. o: {color, ojos, boca, mira, pose (0|1), brazo: [x,y] adonde apunta la mano}
+function parado(x, o = {}) {
+  linea(x - 16, G - 160, x - 26, G - 2, {}); linea(x + 16, G - 160, x + 22, G - 2, {});
+  linea(x - 26, G - 2, x - 52, G - 2, { w: 6 }); linea(x + 22, G - 2, x - 4, G - 2, { w: 6 });
+  const cuerpo = ovalo(x, G - 255, 48, 100); if (o.color) lapiz(cuerpo, o.color, x | 0); else blanco(cuerpo); tinta(cuerpo);
+  const p = o.pose ?? 0, mx = p ? x + 70 : x + 64, my = p ? G - 372 : G - 352;
+  linea(x + 34, G - 318, mx, my, {}); mano(mx, my);
+  if (o.brazo) linea(mx, my, o.brazo[0], o.brazo[1], { w: 5, temblor: .3 });
+  const ax = p ? x - 92 : x - 86, ay = p ? G - 300 : G - 270; linea(x - 36, G - 318, ax, ay, {}); mano(ax, ay);
+  cabeza(x, G - 418, o.ojos ?? 'punto', o.boca ?? 'plana', o.mira ?? 1);
+}
+// ===================================================================================
+
+// ---------- LA ESCENA DE EJEMPLO (cámbiala por la de tu tema; los tiempos van en segundos de una escena de 4 s) ----------
+const s = x => x * K;                                 // pasa un tiempo «de 4 s» a la duración real de la escena
+const PX = 810;                                       // el que presenta
+function escena(t) {
+  // suelo con matas de pasto
+  linea(BX + 100, G, BX + BW - 100, G + 3, { w: 6, onda: 400 });
+  for (const mx of [-120, 250, 470, 735, 1000, 1180]) { linea(mx, G, mx - 10, G - 26, { w: 3.5 }); linea(mx + 8, G, mx + 9, G - 32, { w: 3.5 }); linea(mx + 16, G, mx + 26, G - 24, { w: 3.5 }); }
+  // lámpara colgada
+  linea(180, BY, 180, 250, { w: 4 }); tinta([[120, 312], [240, 312], [215, 252], [145, 252], [120, 312]], { w: 6, suave: 0 }); tinta(ovalo(180, 324, 13, 11), { w: 4.5 });
+  // cartel colgado con el lugar o la situación
+  cartelColgado(CARTEL, 570, 396, 300, 96);
+  // reloj de pared: corre normal y, cuando empieza el aburrimiento, da vueltas
+  const RX = 410, RY = 330; blanco(ovalo(RX, RY, 58, 58)); tinta(ovalo(RX, RY, 58, 58), { w: 6 });
+  for (let i = 0; i < 12; i += 3) { const a = i / 12 * 6.283; linea(RX + Math.cos(a) * 44, RY + Math.sin(a) * 44, RX + Math.cos(a) * 52, RY + Math.sin(a) * 52, { w: 4 }); }
+  const vuelta = t * .4 + 12.6 * ease(prog(t, s(1.4), s(2.8)));
+  const am = -1.57 + vuelta, ah = -1.57 + vuelta / 12 + 1.2;
+  linea(RX, RY, RX + Math.cos(am) * 44, RY + Math.sin(am) * 44, { w: 5, temblor: .2 }); linea(RX, RY, RX + Math.cos(ah) * 28, RY + Math.sin(ah) * 28, { w: 6, temblor: .2 });
+  // caballete con la gráfica que baja
+  const EX = 862, EY = G - 760, EW = 220, EH = 260;
+  linea(EX + 30, EY + EH, EX - 10, G - 2, { w: 6 }); linea(EX + EW - 30, EY + EH, EX + EW + 10, G - 2, { w: 6 });
+  blanco(caja(EX, EY, EW, EH)); tinta(caja(EX, EY, EW, EH), { w: 6, suave: 0 });
+  [[COLORES.barra1, 150], [COLORES.barra2, 100], [COLORES.barra3, 48]].forEach(([c, h], i) => { const bx = EX + 26 + i * 62, by = EY + EH - 26 - h;
+    lapiz(caja(bx, by, 46, h).slice(0, 4), c, 50 + i); tinta(caja(bx, by, 46, h), { w: 5, suave: 0 }); });
+  tinta([[EX + 36, EY + 50], [EX + 110, EY + 82], [EX + 190, EY + 150]], { w: 5, suave: 2 }); linea(EX + 190, EY + 150, EX + 166, EY + 150, { w: 5 }); linea(EX + 190, EY + 150, EX + 184, EY + 127, { w: 5 });
+  // los que escuchan: cambian de cara con corte seco
+  sentado(0, { ojos: t < s(2.2) ? 'punto' : 'medio', boca: t > s(2.0) && t < s(2.5) ? 'abierta' : 'plana' });
+  const prota = t < s(1.45) ? { ojos: 'punto', boca: 'plana' } : t < s(2.65) ? { ojos: 'medio', boca: 'triste' } : { dormido: true };
+  sentado(250, { traje: true, ...prota });
+  sentado(540, { ojos: t < s(1.0) || (t > s(1.9) && t < s(2.05)) ? 'cerrado' : 'medio', boca: 'plana' });
+  // el que presenta: el puntero toca la gráfica, pose A/B con corte seco cada medio segundo
+  const pose = Math.floor(t / .5) % 2;
+  parado(PX, { color: COLORES.camisa, pose, mira: -1, boca: t < s(1.3) ? 'sonrisa' : 'abierta', brazo: pose ? [EX + 140, EY + 106] : [EX + 90, EY + 168] });
+  // globo: aparece con corte seco y se va cuando llega el remate
+  if (t > s(1.3) && t < s(2.7)) globo(GLOBO, 560, 720);
+  // Z que suben del dormido
+  ['Z', 'z', 'z'].forEach((z, i) => { if (t > s(2.9) + i * .3) texto(z, 430 + i * 50, 1050 - i * 64, 78 - i * 12, { semilla: 20 + i }); });
+}
+const T_REMATE = s(2.7);
+const CAM = camara([[0, 565, 960, 1.12], [s(1.3), 580, 950, 1.17], [s(1.95), 588, 945, 1.21], [s(2.7), 520, 936, 1.3], [ESCENA_DUR, 505, 930, 1.36],
+  ...(CTA ? [[ESCENA_DUR + .35, 540, 900, 1.06], [DUR, 540, 896, 1.04]] : [])]);
+// ---------------------------------------------------------------------------------------------------------------------
+
+// palabra roja gorda en pantalla (corte seco, sin animación de entrada). Se achica sola si no cabe.
+function gorda(lineas, ys, col, tamMax = 172) {
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+  lineas.forEach((txt, i) => {
+    let sz = tamMax; ctx.font = `${sz}px ${GORDA}`; while (sz > 60 && ctx.measureText(txt).width > 940) { sz -= 4; ctx.font = `${sz}px ${GORDA}`; }
+    ctx.save(); ctx.translate(540, ys[i]); ctx.rotate(i % 2 ? .025 : -.03);
+    ctx.lineWidth = 22; ctx.strokeStyle = COLORES.papel; ctx.strokeText(txt, 0, 0);
+    ctx.fillStyle = col; ctx.fillText(txt, 0, 0);
+    ctx.globalCompositeOperation = 'source-atop'; ctx.globalAlpha = .18; ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;   // vetas de marcador
+    for (let k = -500; k < 500; k += 13) { ctx.beginPath(); ctx.moveTo(k, -sz); ctx.lineTo(k + 70, 20); ctx.stroke(); }
+    ctx.restore();
+  });
+  ctx.restore();
+}
+function remate(t) {
+  if (t < T_REMATE || t >= ESCENA_DUR || !REMATE.length) return;
+  gorda(REMATE, REMATE.length > 1 ? [650, 822] : [740], COLORES.rojo);
+}
+// cierre: cartel colgado «COMENTA» + la palabra gorda (corte seco)
+function cierre(t) {
+  if (!CTA || t < ESCENA_DUR) return;
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const x = 200, y = 450, w = 680, h = 400;
+  linea(x + 40, -40, x + 60, y + 4, { w: 4 }); linea(x + w - 40, -40, x + w - 60, y + 4, { w: 4 });
+  blanco(caja(x, y, w, h)); tinta(caja(x, y, w, h), { w: 7, suave: 0 });
+  texto(COMENTA, 540, y + 112, 84, { semilla: 31, ancho: w - 60 });
+  ctx.restore();
+  gorda([CTA], [y + 320], COLORES.cta, 180);
+}
+
+arrancar(frame => {
+  const t = frame / FPS, c = CAM.at(t), te = Math.min(t, ESCENA_DUR - 1 / FPS);   // en el cierre la escena queda en su último instante
+  SEM = 0; HIERVE = Math.floor(frame / 4) % 3;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+  ponerCam(ctx, c); ctx.drawImage(PAPEL, BX, BY);
+  escena(te);
+  remate(t);
+  cierre(t);
+  grano(.1, 4);
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, H * .8); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(60,50,40,.12)');
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+});
+window.QUIETO = 0;
+</script>
+</body>
+</html>

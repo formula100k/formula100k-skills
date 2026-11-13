@@ -1,0 +1,21 @@
+{
+  "frase": ["tu equipo trabaja", "mientras", "DUERMES"],
+  "cierre": "comenta",
+  "cta": "GUÍA",
+  "equipo": 5,
+  "colores": {
+    "acento": "#FFD21F",
+    "texto": "#FFFFFF",
+    "ojos_heroe": "#D9EBFF",
+    "ojos_equipo": "#FF8019",
+    "ventanas": "#FF8C24"
+  },
+  "tiempos": {
+    "linea1": 5.9,
+    "linea2": 6.4,
+    "clave": 6.8,
+    "fuera": 8.3,
+    "cierre": 8.6,
+    "cta": 8.9
+  }
+}

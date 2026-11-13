@@ -1,0 +1,22 @@
+{
+  "cta": "GUÍA",
+  "cta_chica": "Comenta",
+  "gancho": {
+    "chica": "De una idea a",
+    "grande": ["VIDEOS", "LISTOS"]
+  },
+  "estaciones": [
+    {"titulo": "IDEAS", "renglon": "llega una idea"},
+    {"titulo": "GUIONES", "renglon": "se vuelve guion"},
+    {"titulo": "EDICIÓN", "renglon": "se edita sola"},
+    {"titulo": "PUBLICAR", "renglon": "listos para subir"}
+  ],
+  "colores": {
+    "acento": "#FFD43A",
+    "cable": "#5B86F2",
+    "tinta": "#2A2733",
+    "asistentes": "#EC8A62",
+    "muros": ["#F7C9AC", "#BFE5D0", "#D0C2EE", "#BBD9F4"],
+    "suelos": ["#FDE7D8", "#E2F4EA", "#EAE3F8", "#E1EEFA"]
+  }
+}

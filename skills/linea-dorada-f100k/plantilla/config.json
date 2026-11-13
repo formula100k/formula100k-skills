@@ -1,0 +1,12 @@
+{
+  "frases": [
+    {"chica": "mientras tú", "grande": "DUERMES", "figura": "luna"},
+    {"chica": "tu equipo", "grande": "TRABAJA", "figura": "equipo"},
+    {"chica": "le das", "grande": "1 IDEA", "figura": "foco"},
+    {"chica": "y te entrega", "grande": "8 VIDEOS", "figura": "telefono", "piezas": 8}
+  ],
+  "cta_chica": "comenta",
+  "cta": "GUÍA",
+  "cta_figura": "regalo",
+  "colores": {"linea": "#FFCF7C", "clave": "#E8B045", "texto": "#EDE3CC"}
+}

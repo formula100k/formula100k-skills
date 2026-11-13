@@ -1,0 +1,15 @@
+{
+  "cta": "GUÍA",
+  "frases": [
+    [["tu", "equipo"], ["*TRABAJA"], ["mientras", "duermes"]],
+    [["#1", "idea"], ["#»", "*8", "+VIDEOS"]],
+    [["se", "hacen"], ["*SOLOS"], ["~sin", "~que", "~los", "~toques"]],
+    [["comenta"], ["*{cta}"]]
+  ],
+  "colores": {
+    "texto": "#F1E7D0",
+    "acento": "#FFC83A",
+    "tenue": "#A08C6C",
+    "pantallas": ["#FFB347", "#F2E3C6", "#E8743B", "#FFD27A", "#C9D4E8", "#F4A259", "#FFE9B8", "#E0562F"]
+  }
+}

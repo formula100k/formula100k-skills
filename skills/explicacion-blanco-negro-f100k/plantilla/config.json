@@ -1,0 +1,8 @@
+{
+  "cta": "GUÍA",
+  "frase1": { "numero": "1", "palabra": "idea" },
+  "frase2": { "desde": "1 idea", "cantidad": 8, "singular": "video", "plural": "videos" },
+  "frase3": { "conector": "tu equipo trabaja", "linea": "MIENTRAS", "clave": "DUERMES" },
+  "frase4": { "conector": "comenta" },
+  "colores": { "oscuro": "#000000", "claro": "#FFFFFF", "acento": null }
+}

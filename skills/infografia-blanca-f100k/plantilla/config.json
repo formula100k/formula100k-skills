@@ -1,0 +1,24 @@
+{
+  "cta": "GUÍA",
+  "colores": { "acento": "#E0592F", "fondo": "#F4F1EA", "tinta": "#151411" },
+  "tramos": ["01 EQUIPO", "02 TAREAS", "03 VIDEOS", "04 GUÍA"],
+  "estacion1": {
+    "hora": ["3:07", "3:08"],
+    "hora_chica": "a. m.",
+    "estado": "TÚ: DURMIENDO",
+    "frase": ["Tu equipo", "TRABAJA", "mientras", "duermes"]
+  },
+  "estacion2": {
+    "app": "Tu equipo",
+    "estado": "EN TURNO",
+    "tareas": ["GUION", "VOZ", "DIBUJO", "MÚSICA", "EDICIÓN", "PUBLICA"],
+    "frase": ["Hacen tus videos", "SOLOS"]
+  },
+  "estacion3": {
+    "origen": ["1", "idea"],
+    "cantidad": 8,
+    "unidad": ["video", "videos"],
+    "remate": "LISTOS PARA PUBLICAR"
+  },
+  "estacion4": { "pide": "Comenta" }
+}

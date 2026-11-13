@@ -1,7 +1,6 @@
 ---
 name: patron-ig-f100k
-description: >
-  Módulo del Autopilot F100K que corre cada lunes a las 8:05 AM Lima: descarga los videos de la cuenta de Instagram del usuario publicados en los últimos 7 días vía Apify, transcribe el audio de cada video con Supadata, calcula mediana de views/likes/comentarios, clasifica videos como virales (>1.5x mediana) o negativos (<0.7x), extrae patrones de qué funcionó y qué no, y actualiza el archivo de memoria patterns_ig_<handle>.md para que guionización aprenda semana a semana. Usar cuando alguien diga: "analiza mis patrones de la semana", "qué patrones detectaste", "actualiza mi memoria de patrones IG", "ejecutar análisis de patrones IG", "qué me funcionó esta semana", o cuando el schedule automático lo invoque.
+description: "Analiza los videos de Instagram de los últimos 7 días, clasifica virales y negativos contra la mediana y actualiza la memoria de patrones para que la guionización aprenda. Usar con «analiza mis patrones de la semana», «actualiza mi memoria de patrones IG», o desde el schedule del lunes."
 ---
 
 # Skill: Análisis de Patrones IG — Autopilot F100K

@@ -1,6 +1,6 @@
 ---
 name: cuento-dibujado-f100k
-description: Arma un reel vertical sin cara en estilo CUENTO DIBUJADO, hecho con código y sin créditos (sin Blender, sin IA de video). Es un libro ilustrado plano que se mueve. El mundo arranca gris, frío y con lluvia, y un solo objeto (la ficha del cuento) tiene color desde el primer cuadro. La ficha se enciende y el color vuelve al mundo en una ola que nace de ella. Brotan flores, salen el sol y los pájaros, y el personaje pasa de la sorpresa a la alegría. Lleva subtítulo a mano y cierra con tu palabra de CTA escrita a mano en el color de la ficha. Usar cuando digan «cuento dibujado», «plantilla Cuento dibujado», «hazme un cuento infantil animado», «un mundo gris al que le vuelve el color», «reel tipo libro ilustrado», «cuento tierno sin grabar». NO usar para el corto narrado con títeres y escenas de rubro (corto-animado-narrado-f100k), para clips sueltos de pizarra, libreta o chat que van dentro de un reel (animacion-dibujada-f100k), para la parábola con monigotes de tiza y medidor (pizarra-negra-tiza-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara hecho con código, sin créditos: un cuento ilustrado donde el mundo gris recupera el color desde un solo objeto. Usar con «plantilla Cuento dibujado», «reel tipo cuento infantil»."
 argument-hint: [tema o 2 a 4 frases del cuento + palabra del CTA]
 ---
 

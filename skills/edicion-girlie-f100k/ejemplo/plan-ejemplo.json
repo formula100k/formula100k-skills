@@ -1,0 +1,92 @@
+{
+  "corregir": {
+    "Cloud": "Claude"
+  },
+  "sello": {
+    "archivo": "sello-ejemplo.png",
+    "desde": 0,
+    "hasta": 4.0,
+    "al_final": 2.0,
+    "y": 0.05
+  },
+  "ventanitas": [
+    {
+      "palabra": "ChatGPT",
+      "archivo": "recorte.png",
+      "tipo": "recorte",
+      "pos": "der",
+      "dur": 2.0
+    },
+    {
+      "palabra": "muerte",
+      "archivo": "meme.jpg",
+      "tipo": "meme",
+      "pos": "izq",
+      "y": 0.22,
+      "dur": 1.2
+    },
+    {
+      "palabra": "aplicaciones",
+      "archivo": "captura_app.png",
+      "tipo": "captura",
+      "pos": "izq",
+      "dur": 2.5
+    },
+    {
+      "palabra": "comunidad",
+      "archivo": "clip.mp4",
+      "tipo": "clip",
+      "pos": "der",
+      "dur": 2.5,
+      "inicio_clip": 3
+    }
+  ],
+  "notas": [
+    {
+      "palabra": "75",
+      "texto": "¡¿75?!",
+      "lado": "der",
+      "dur": 1.2
+    },
+    {
+      "palabra": "marzo",
+      "texto": "plot twist",
+      "lado": "izq",
+      "dur": 1.4
+    }
+  ],
+  "zooms": [
+    {
+      "palabra": "75",
+      "escala": 1.3,
+      "dur": 0.9
+    },
+    {
+      "palabra": "completamente",
+      "escala": 1.25,
+      "dur": 0.9
+    }
+  ],
+  "efectos": [
+    {
+      "palabra": "muerte",
+      "tipo": "bn",
+      "dur": 1.0
+    },
+    {
+      "palabra": "decisión",
+      "tipo": "vineta",
+      "dur": 1.6
+    },
+    {
+      "palabra": "cientos",
+      "tipo": "brillos",
+      "dur": 1.5
+    },
+    {
+      "palabra": "investigaciones",
+      "tipo": "garabatos",
+      "dur": 1.6
+    }
+  ]
+}

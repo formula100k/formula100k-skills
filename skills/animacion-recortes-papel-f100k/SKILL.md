@@ -1,6 +1,6 @@
 ---
 name: animacion-recortes-papel-f100k
-description: Arma una animación vertical narrada de 20 a 30 s en estilo recortes de papel - un mundo-metáfora por tema (una tienda, un mostrador, una caja), encabezado en tira de papel que cambia en cada escena, subtítulos palabra por palabra sincronizados con la voz, mascotas pixel que llevan en la mano lo que representan (el reel con su imán, su regadera o su bolsa) y cierre con la palabra del CTA escribiéndose en una caja de comentario. Parte de un guion de una frase por escena y de la voz (grabada o de IA provisional) y saca sola los cortes y los subtítulos. Usar cuando digan «animación de recortes de papel», «explícalo con una animación narrada», «un mundo de papel para explicar [idea]», «animación con voz en off y subtítulos palabra por palabra», «convierte este guion en animación», «reel animado sin salir a cámara» o pasen un guion corto de voz en off para animarlo. NO usar para editar un video ya grabado, ni para piezas sin voz de 10 s, ni para dibujos cuadro a cuadro, ni para carruseles.
+description: "Animación vertical narrada en recortes de papel: un mundo-metáfora por tema, encabezado en tira de papel, subtítulos sincronizados, mascotas pixel y CTA en caja de comentario. Usar con «animación de recortes de papel», «un mundo de papel para explicar». NO para editar video grabado ni carruseles."
 argument-hint: [tema o guion]
 ---
 

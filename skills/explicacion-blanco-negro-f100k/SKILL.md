@@ -1,6 +1,6 @@
 ---
 name: explicacion-blanco-negro-f100k
-description: Arma un reel vertical sin cara en estilo EXPLICACIÓN EN BLANCO Y NEGRO, hecho en Blender por código y sin créditos. Un solo plano secuencia de 10 s con línea técnica fina sobre fondo negro, un globo alámbrico en 3D real y una cámara que orbita y avanza sin parar. Una idea se arma pieza por pieza, de ella salen N arcos y en cada aterrizaje nace una pantalla mientras el contador sube, el equipo se pasa el trabajo y, al final, el globo se pela, la cámara entra y el fondo pasa a blanco sin corte para el CTA. Usar cuando digan «explicación en blanco y negro», «plantilla Explicación en blanco y negro», «el del globo de líneas», «reel de líneas blancas sobre negro», «explainer blanco y negro», «el que se invierte a blanco al final». NO usar para la pizarra a mano (pizarra-explicativa-f100k), para los objetos en pedestal con luz cálida (objetos-3d-minimal-f100k), para el avatar con tele (avatar-mini-tele-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: línea técnica blanca sobre negro, un globo 3D y una cámara que no para mientras la idea se multiplica. Usar con «plantilla Explicación en blanco y negro»."
 argument-hint: [tema + 4 frases cortas + palabra del CTA]
 ---
 

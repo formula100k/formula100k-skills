@@ -1,7 +1,6 @@
 ---
 name: rutina-maestra-formula100k
-description: >
-  Skill de configuración inicial del Autopilot F100K. Usar cuando alguien diga: "configura mi autopilot", "quiero activar mi radar de contenido", "configurar rutina diaria", "activar mis tareas programadas", "setup autopilot F100K", "quiero recibir ideas de contenido por email", o cualquier intención de automatizar su rutina de contenido. Este skill hace preguntas de personalización (nicho, keywords, email, horario, voz), guarda la config en ~/.f100k-radar/config.json, y programa los módulos elegidos vía /schedule. También usar para reconfigurar o ver la config actual.
+description: "Configura el Autopilot F100K: pregunta nicho, keywords, email, horario y voz, guarda la config y programa los módulos con /schedule. Usar con «configura mi autopilot», «activar mis tareas programadas», «quiero recibir ideas de contenido por email», o para ver o reconfigurar la config."
 argument-hint: [escribe "nuevo" para onboarding completo, o "ver config" para revisar la actual]
 ---
 

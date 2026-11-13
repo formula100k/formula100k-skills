@@ -1,6 +1,6 @@
 ---
 name: campana-lanzamiento-formula100k
-description: "Planificación y ejecución de campañas de lanzamiento completas para comunidades Skool, cursos, productos digitales o servicios con la metodología F100K. Usar cuando una creadora va a lanzar algo nuevo o relanzar algo existente y necesita: posicionamiento, guiones de reels, secuencia de historias, emails, landing copy y calendario. Orquesta los demás skills F100K para producir todo el arsenal de lanzamiento desde un solo brief."
+description: "Planifica una campaña de lanzamiento o relanzamiento completa (Skool, curso, producto o servicio): posicionamiento, guiones de reels, historias, emails, landing y calendario desde un solo brief. Usar con «voy a lanzar X», «arma mi lanzamiento», «campaña de relanzamiento»."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

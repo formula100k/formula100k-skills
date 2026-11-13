@@ -1,6 +1,6 @@
 ---
 name: animaciones-para-tu-video-f100k
-description: Fabrica animaciones cortas (5 s) para poner ENCIMA de un video en CapCut, sin saber editar. Deja un archivo HTML que se abre con doble clic en Chrome, dibuja la animación sobre fondo verde puro y trae un botón «Descargar video» que baja un MP4 listo para quitarle el verde en CapCut. Seis tipos probados: número que sube, lista que aparece, flecha que señala, antes y después en barras, gancho en letras y cartel con tu nombre. Usar SIEMPRE que pidan «hazme una animación para mi video», «un número que suba», «una lista que aparezca encima de mi reel», «un cartel con mi nombre», «texto animado para CapCut», «overlay», «algo que se mueva encima de mi video», «animación con fondo verde». NO edita el video completo (no corta silencios ni pone subtítulos) y NO genera video con IA.
+description: "Fabrica animaciones cortas en fondo verde para poner encima de tu video en CapCut (número que sube, lista, flecha, cartel con tu nombre). Usar con «hazme una animación para mi video», «texto animado para CapCut», «overlay con fondo verde». NO edita el video completo."
 ---
 
 > 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue

@@ -1,6 +1,6 @@
 ---
 name: galeria-animaciones-f100k
-description: Arma un reel vertical sin cara en estilo GALERÍA DE ANIMACIONES, hecho con código y sin créditos. Arriba, un título fijo (línea chica en itálica + línea ENORME en tu color). Debajo, una ventana de chat oscura y neutra con tu pedido en una burbuja; a la izquierda, una vista previa donde aparece algo distinto en cada cambio (tus fotos o capturas reales, o una de 9 mini animaciones dibujadas); a la derecha, una lista numerada que avanza con corte seco, un contador 06/09 y una barra de avance. Cierra con tu palabra de CTA en la vista previa. Sirve para mostrar un catálogo: tus productos, tus servicios, tus plantillas o todo lo que incluye tu regalo. Usar cuando digan «galería de animaciones», «plantilla Galería de animaciones», «reel que muestre todo mi catálogo en una lista», «lista que avanza con vista previa», «mostrar todo lo que incluye mi regalo una cosa tras otra». NO usar para una lista sobre tu video hablando (lista-sobre-video-hablado-f100k), para una lista con maquetas de celular (reel-lista-maquetas-f100k), para una lista con voz y sonido por item (reel-lista-que-suena-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara hecho con código, sin créditos: una ventana de chat donde aparecen una tras otra las animaciones o piezas que haces. Usar con «plantilla Galería de animaciones», «reel catálogo en un chat»."
 argument-hint: [qué catálogo mostrar + la lista de items + palabra del CTA]
 ---
 

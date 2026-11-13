@@ -1,6 +1,6 @@
 ---
 name: infografia-blanca-f100k
-description: Arma un reel vertical sin cara en estilo INFOGRAFÍA BLANCA, hecho en Blender por código y sin créditos. Fondo crema, tarjetas de cartón con borde negro grueso y un solo color de acento. La cámara viaja en una sola toma por 4 estaciones sobre la mesa; en cada una se construye a la vista una pantalla de la app (un reloj, una ventana con tareas que se llenan, un contador con tarjetas de video) y una barra arriba marca en qué parte vas. Cierra con tu palabra de CTA tecleándose en un campo de comentario que se publica. Usar cuando digan «infografía blanca», «plantilla Infografía blanca», «reel de infografía con tarjetas crema y borde negro», «explícalo paso a paso con pantallas de la app en 3D», «el de la barra de pasos arriba y fondo crema». NO usar para la infografía densa de una sola imagen animada con Higgsfield (infografia-reel-formula100k), para la infografía sobre tu video hablado (reel-infografia-con-clon-f100k) ni para el avatar con tele (avatar-mini-tele-f100k).
+description: "Reel sin cara en Blender, sin créditos: fondo crema, tarjetas con borde negro y las pantallas de tu app armándose paso a paso. Usar con «plantilla Infografía blanca», «reel infografía crema»."
 argument-hint: [tema o guion de 4 pasos + palabra del CTA]
 ---
 

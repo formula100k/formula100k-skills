@@ -1,6 +1,6 @@
 ---
 name: auto-edit-effects
-description: Auto Edit Effects — complemento de «auto-edicion» con 20 efectos más y 7 looks de color, que se ponen en una escena de cualquier estilo de Auto-Edición «Con tu video». Efectos — palabra ancla (match-cut de titulares con una palabra fija), fotos que se tachan, pantalla LED palabra por palabra, tarjeta con curva, partículas que llenan una caja, prueba al lado de la cabeza, carrusel 3D de tus reels, interruptores que se prenden, widgets alrededor de tu cara, tier list, barras con tus datos, pastillas detrás de tu cabeza con titular, contador de vistas, panel de render, comentario que escribe la palabra del CTA, cuadrícula de cierre, marco de comando, titular gigante detrás de ti, rótulo VHS y trama de puntos de transición. Looks — blanco y negro, cálido, duotono, documental, cine 2.39, VHS y grano. Todo en tu compu y gratis, con sonidos graves. Activar con «auto edit effects», «ponle los efectos nuevos», «palabra ancla», «tier list en mi video», «interruptores», «pantalla LED», «look VHS / cine / duotono / documental», «marco de comando», «cuadrícula de cierre», «qué efectos nuevos hay».
+description: "Complemento de auto-edicion con efectos extra y looks de color para una escena de Auto-Edición «Con tu video» (palabra ancla, pantalla LED, tier list, contador de vistas, titular gigante detrás). Usar con «ponle un efecto», «agrega el efecto X», «dale un look de color»."
 argument-hint: <proyecto de auto-edicion> [efecto]
 ---
 

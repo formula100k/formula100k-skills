@@ -1,6 +1,6 @@
 ---
 name: isometrico-f100k
-description: Arma un reel vertical sin cara en estilo ISOMÉTRICO, hecho en Blender por código y sin créditos. Una maqueta 3D vista en isométrico sobre un piso crema: 4 módulos cortados (dos muros y una losa) se construyen en pantalla, cada uno con su utilería y sus asistentes cubo que brincan, unidos por un cable azul que se dibuja solo y lleva un paquete de luz de una estación a la siguiente. La cámara recorre las 4 estaciones en una toma continua de 11 s con desenfoque de maqueta y cierra en plano general sobre tu palabra de CTA pintada en el piso. Usar cuando digan «estilo isométrico», «plantilla Isométrico», «maqueta isométrica», «reel de mi proceso en 4 pasos como maqueta 3D», «mi sistema explicado en estaciones», «hazme el de la maqueta con el cable». NO usar para cubitos 3D con personaje (animacion-cubitos-3d-f100k), para el avatar con tele (avatar-mini-tele-f100k), para pizarras (pizarra-explicativa-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: una maqueta isométrica de 4 módulos que se construyen, unidos por un cable que lleva la idea. Usar con «plantilla Isométrico», «reel maqueta isométrica»."
 argument-hint: [tema + 4 pasos del proceso + palabra del CTA]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: animacion-ascii-f100k
-description: Arma un reel vertical sin cara en estilo ANIMACIÓN ASCII, hecho en Blender por código y sin créditos. Una escena 3D de verdad (una oficina de noche con 3 asistentes de bloques frente a sus monitores, una pared de 8 pantallas y tu palabra de CTA en letras 3D) se convierte cuadro por cuadro en caracteres de computadora verdes sobre negro, como un monitor de fósforo antiguo. Lo cercano sale más denso y brillante, lo lejano más ralo, y los bordes se dibujan con | / \ - según su ángulo. Los textos se escriben solos con cursor y la palabra clave se arma enorme con bloques. Una sola toma continua de 10 s, sin voz por defecto. Usar cuando digan «animación ASCII», «plantilla ASCII», «estilo letras de computadora», «video hecho con caracteres», «estilo matrix», «monitor verde retro», «hazme el de los caracteres verdes». NO usar para la línea técnica blanca sobre negro con globo alámbrico (explicacion-blanco-negro-f100k), para el plano azul tipo blueprint (plano-del-sistema-f100k), para objetos 3D en pedestales (objetos-3d-minimal-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: una escena 3D convertida en caracteres verdes de computadora antigua. Usar con «plantilla Animación ASCII», «reel estilo código matrix»."
 argument-hint: [tema + 3 frases (chica + clave) + palabra del CTA]
 ---
 

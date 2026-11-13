@@ -1,6 +1,6 @@
 ---
 name: motion-reels-f100k
-description: "Agrega motion graphics estilo Softgirlnocode a un reel 9:16 (talking-head). Pipeline completo: analiza un frame del video para detectar dónde está el sujeto y calcular zonas seguras de overlay, transcribe word-level (Supadata si es YouTube, Whisper local si es archivo), auto-clasifica el contenido del guión para proponer el tipo de overlay correcto (antes/ahora → comparison card, listas → chapter card, herramientas → UI card, identidad → pill labels), genera HTML/CSS/GSAP con HyperFrames posicionado en las zonas libres del frame con animaciones fluidas, renderiza con npx hyperframes render → MP4 con alpha, y compone sobre el video original con ffmpeg. Output: video_final_motion.mp4 en la misma carpeta del video fuente. Activar cuando el usuario diga: 'agrega motion graphics a este reel', 'motion graphics 9:16', 'overlays animados reel', 'estilo softgirlnocode', 'agrégale animaciones al video', 'quiero motion graphics para este talking-head'."
+description: "Agrega motion graphics estilo Softgirlnocode a un reel 9:16 hablado: detecta zonas libres, propone overlays (comparación, capítulos, UI, etiquetas) y los compone con HyperFrames. Usar con «ponle motion graphics a mi reel», «overlays animados sobre mi video», «estilo Softgirlnocode»."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 

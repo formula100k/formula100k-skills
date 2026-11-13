@@ -1,7 +1,6 @@
 ---
 name: digest-comunidad-f100k
-description: >
-  Módulo del Autopilot F100K que corre cada viernes: analiza los comentarios e interacciones de los últimos 7 días en el perfil de Instagram/TikTok del usuario, extrae las 5 preguntas más repetidas y los dolores más mencionados, y los convierte en ideas de contenido de alto valor con estructura de guion lista. Usar cuando alguien diga: "qué preguntan mis seguidores", "ideas desde mis comentarios", "qué quiere ver mi comunidad", "ejecutar digest comunidad", o cuando el schedule lo invoque los viernes. Requiere ~/.f100k-radar/config.json con ig_handle o tiktok_handle configurado.
+description: "Módulo semanal del Autopilot: analiza los comentarios de los últimos 7 días, saca las preguntas y dolores más repetidos y los convierte en ideas con guion. Usar con «qué preguntan mis seguidores», «ideas desde mis comentarios», «ejecutar digest comunidad»."
 ---
 
 # Skill: Digest de Comunidad — Autopilot F100K

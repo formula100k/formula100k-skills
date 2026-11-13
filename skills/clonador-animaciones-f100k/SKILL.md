@@ -1,6 +1,6 @@
 ---
 name: clonador-animaciones-f100k
-description: Clona la MECÁNICA de un reel animado que te gustó y la recrea en código con tu tema, tu marca y tus personajes. Le pasas el enlace o el archivo de la referencia y tu tema - la descarga, la mira cuadro a cuadro, llena una ficha de mecánica (qué frena el dedo, ritmo, tipo de movimiento, cómo trata el texto), decide si ya existe un estilo hecho para eso o si se dibuja desde la pieza base, escribe tu guion de una frase por escena, dibuja cada escena en canvas, le pone tu voz y entrega el MP4 vertical. Usar cuando digan «clona esta animación», «recrea este reel animado», «hazme una animación como esta», «ponle mi tema a esta animación», «copia el estilo de esta animación», «quiero un video animado como este» o pasen el enlace de un reel animado con su tema. NO usar para editar un video grabado (editor-video-formula100k), para solo analizar una referencia (analisis-video-viral-f100k) ni para clonar carruseles (clonador-carrusel-formula100k).
+description: "Clona la mecánica de un reel animado de referencia y la recrea en código con tu tema, marca y voz, hasta el MP4. Usar con «clona esta animación», «hazme una animación como esta». NO para solo analizar (analisis-video-viral-f100k) ni para carruseles (clonador-carrusel-formula100k)."
 argument-hint: [enlace o archivo de la referencia] [tu tema]
 ---
 

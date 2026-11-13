@@ -1,7 +1,6 @@
 ---
 name: carrusel-render-formula100k
-description: >
-  Skill para renderizar guiones de carrusel a slides PNG terminados, listos para subir a Instagram, con la marca de quien la usa (lee su manual de identidad visual mi-marca/marca.md) en uno de dos estilos: scrapbook/collage (post-its, washi tape, stickers) o editorial con su foto real. Soporta integrar FOTOS REALES del usuario (polaroid, hero background, cutout). Activar SIEMPRE que el usuario pida: "renderiza este carrusel", "exporta este guion a PNG", "convierte este guion en slides", "diséñame el carrusel", "hazme las imágenes del carrusel", "genera las slides en mi estilo", "carrusel con mi foto", "usa mis fotos", o cualquier solicitud que combine un guion de carrusel (slide 1 / slide 2 / etc.) con la intención de tener archivos visuales listos. También activar cuando le pasen el output de la skill carrusel-viral-formula100k y quiera renderizarlo. NO usar para generar el guion — para eso está carrusel-viral-formula100k.
+description: "Renderiza un guion de carrusel a PNG listos para Instagram con tu marca, en estilo scrapbook o editorial, con tus fotos reales. Usar con «renderiza este carrusel», «convierte este guion en slides», «diséñame el carrusel», «carrusel con mi foto». NO escribe el guion (usa carrusel-viral-formula100k)."
 ---
 
 # Skill: Carrusel Render Fórmula 100K

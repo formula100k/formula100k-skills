@@ -1,6 +1,6 @@
 ---
 name: reel-manotazo-f100k
-description: Arma el reel del manotazo, un reel vertical de unos 7 segundos de problema y solución. Sobre una toma tuya a cámara va un texto con el problema y UNA imagen; das un manotazo hacia la cámara y, en ese cuadro exacto, el texto cambia a tu respuesta y la imagen se convierte en una cuadrícula de hasta nueve piezas. Usar cuando digan «reel del manotazo», «antes y después con un golpe a la cámara», «una imagen se convierte en nueve», «reel de problema y solución en 7 segundos», «reel de clienta dice / yo digo», «el reel donde le pego a la cámara y cambia», «muestra mis nueve publicaciones en un reel», o pasen un clip con un gesto brusco y pidan que el cambio caiga ahí. NO usar para editar un video hablado largo, cortar silencios o poner subtítulos (editor-video-formula100k), ni para animaciones sin persona a cámara (las skills de animación hermanas), ni para fabricar las imágenes del resultado (eso va antes, con tus skills de carrusel o con Higgsfield).
+description: "Reel del manotazo de unos 7 s: sobre tu toma va el problema y, al golpe a cámara, cambia a tu respuesta y a una cuadrícula de nueve piezas. Usar con «reel del manotazo», «una imagen se convierte en nueve», «clienta dice / yo digo». NO para video hablado largo (editor-video-formula100k)."
 ---
 
 > 🔴 **PROTOCOLO DE CORTE OBLIGATORIO:** si el video tiene a alguien hablando (tú, una clienta o una voz clonada), ANTES de montar nada se sigue

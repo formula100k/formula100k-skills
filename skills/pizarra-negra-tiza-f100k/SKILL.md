@@ -1,6 +1,6 @@
 ---
 name: pizarra-negra-tiza-f100k
-description: Arma un reel vertical sin cara en estilo PIZARRA NEGRA CON TIZA, hecho con código y sin créditos (sin Blender, sin IA de video). Cuenta una parábola con un monigote de tiza blanca que se dibuja trazo a trazo sobre una pizarra casi negra, con rellenos rayados en tiza de color, polvo que cae de la punta y textura de tiza real. Arriba hay un medidor de MALO a BUENO con una aguja que se mueve con la historia. Abajo, un rótulo de tiza cuenta el hecho. Al final el borrador limpia el rótulo y en su lugar se escribe tu palabra de CTA. Usar cuando digan «pizarra negra», «plantilla Pizarra negra», «parábola con monigotes de tiza», «reel de tiza con medidor de malo a bueno», «historia dibujada en pizarrón», «la del pescador con la aguja». NO usar para el clip de pizarra blanca con anotaciones que acompaña un video tuyo en pantalla dividida (pizarra-explicativa-f100k), para la pizarra 16:9 con capturas para grabar YouTube (pizarra-youtube-f100k), para el cuento a color con mundo ilustrado (cuento-dibujado-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara hecho con código, sin créditos: una parábola con monigote de tiza sobre pizarra negra y un medidor de malo a bueno. Usar con «plantilla Pizarra negra», «reel con dibujos de tiza»."
 argument-hint: [tema de la parábola + el hecho del rótulo + palabra del CTA]
 ---
 

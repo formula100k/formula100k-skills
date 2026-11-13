@@ -1,14 +1,6 @@
 ---
 name: ux-elevacion-formula100k
-description: >
-  Skill de elevación de UI/UX para el stack F100K (Next.js 16, Tailwind CSS, shadcn/ui).
-  Activa cuando alguien dice /polish, /craft, /animate, /typeset, /audit-ux, /landing, o frases
-  como "mejora el diseño", "este UI se ve muy AI-looking", "anima esta interacción", "el spacing
-  se ve raro", "el diseño se ve genérico", "añade microinteracciones", "quiero que se vea
-  profesional", "agrega animaciones", "construye una landing", "hazlo hiper profesional",
-  "necesito scroll animations", "agrega glow/glass/depth", "quiero un hero impactante".
-  Combina principios de Emil Kowalski (animaciones físicas), Paul Bakaus / Impeccable (7 dominios),
-  anti-slop rules, y patterns avanzados de landings: scroll reveal, bento grid, profundidad visual.
+description: "Eleva el UI/UX de apps Next.js, Tailwind y shadcn: pulido, animaciones, tipografía, profundidad y landings sin olor a IA. Usar con /polish, /animate, /audit-ux, «mejora el diseño», «se ve muy AI-looking», «agrega microinteracciones», «quiero un hero impactante»."
 allowed-tools: Bash, Read, Write, Edit
 ---
 

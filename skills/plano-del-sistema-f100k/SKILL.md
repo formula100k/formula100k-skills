@@ -1,6 +1,6 @@
 ---
 name: plano-del-sistema-f100k
-description: Arma un reel vertical sin cara en estilo PLANO DEL SISTEMA, hecho en Blender por código y sin créditos. Un plano azul tipo blueprint sobre una mesa de madera, con luz rasante y papel con relieve, se dibuja solo: 4 módulos numerados con sus conectores y puntos de luz que los recorren. La cámara se mete por la trampilla del módulo 03 a una sala donde una máquina 3D se arma pieza por pieza, recibe la idea y saca las piezas por una cinta con dos asistentes al lado, y vuelve a subir al plano para el cierre con tu palabra de CTA. Toma continua de 10 s, 1080×1920. Usar cuando digan «plano del sistema», «plantilla Plano del sistema», «el del plano azul», «reel tipo blueprint», «explica mi sistema como un plano de ingeniero», «el de la máquina debajo de la mesa». NO usar para la línea que se transforma en figuras (linea-dorada-f100k), para el avatar con la tele (avatar-mini-tele-f100k), para pizarras dibujadas a mano (pizarra-explicativa-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: un plano tipo blueprint de tu sistema que se dibuja solo y una máquina 3D que muestra cómo trabaja. Usar con «plantilla Plano del sistema», «reel blueprint»."
 argument-hint: [tema + 4 pasos de tu sistema + palabra del CTA]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: efecto-domino-f100k
-description: Arma un reel vertical sin cara en estilo EFECTO DOMINÓ, hecho en Blender por código y sin créditos. Cientos de fichas de dominó con física real caen en cadena por una serpentina sobre una mesa de madera; la cámara arranca en macro a ras de mesa con la primera ficha de color, sigue la ola y sube en grúa hasta ver desde arriba cómo las últimas fichas, al caer, escriben tu palabra de CTA. Las frases van pintadas en la mesa y aparecen justo cuando pasa la ola. Usar cuando digan «efecto dominó», «plantilla Efecto dominó», «fichas de dominó que escriben una palabra», «reel de una cosa que lleva a la otra», «hazme el de las fichas que caen». NO usar para el estilo de maqueta isométrica (isometrico-f100k), para cubitos 3D con personaje (animacion-cubitos-3d-f100k), para el avatar con tele (avatar-mini-tele-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: cientos de fichas de dominó caen en cadena y al final escriben tu palabra de CTA. Usar con «plantilla Efecto dominó», «reel de dominó»."
 argument-hint: [tema + 3 frases cortas + palabra del CTA]
 ---
 

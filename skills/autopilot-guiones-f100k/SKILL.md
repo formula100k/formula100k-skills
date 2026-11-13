@@ -1,7 +1,6 @@
 ---
 name: autopilot-guiones-f100k
-description: >
-  Módulo del Autopilot F100K que corre diariamente (Lun–Vie 8:30 AM Lima): busca las 3 noticias más relevantes de IA del día via Tavily, las convierte en 3 guiones listos para grabar usando el sistema de guionización F100K (pilar de valor + estructura de las 33 + gancho triple + CTA optimizado con priming triple), los guarda en Yapper y crea un draft de Gmail. Usar cuando alguien diga: "corre el autopilot de guiones", "dame los 3 guiones del día", "guiones de noticias de IA de hoy", "ejecutar autopilot guiones", o cuando el schedule automático lo invoque. El módulo vive en la rutina remota trig_01NFerZcieaNzfwR5v7K9gxo.
+description: "Módulo diario del Autopilot: busca las 3 noticias de IA del día, las convierte en 3 guiones listos para grabar, los guarda en Yapper y deja un borrador en Gmail. Usar con «corre el autopilot de guiones», «dame los 3 guiones del día», «guiones de noticias de IA de hoy»."
 ---
 
 # Skill: Autopilot Guiones — F100K

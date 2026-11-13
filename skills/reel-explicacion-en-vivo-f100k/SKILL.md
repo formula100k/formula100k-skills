@@ -1,6 +1,6 @@
 ---
 name: reel-explicacion-en-vivo-f100k
-description: Arma el reel «explicación en vivo», un reel hablado a cámara de 30 a 90 s donde la persona va dentro de una tarjeta en la mitad de abajo y, arriba, un panel animado dibuja lo que va diciendo, frase por frase; va por bloques (demostraciones), cada uno con su fondo y su título, y cierra con un mosaico de las tomas y una caja de comentario con la palabra del CTA. Incluye la biblioteca de 15 paneles (contador, puntos, barra, reloj, lista, mosaico…), la maqueta, la hoja de rodaje y el montaje con las tomas reales. Usar cuando digan «yo hablo y Claude lo dibuja», «panel arriba y yo abajo», «explicación en vivo», «te lo pruebo con N negocios», o pasen un guion por demostraciones y pidan el panel animado sobre su video. NO usar para un reel entero en animación sin persona, para clips animados sueltos (animacion-dibujada-f100k), para una toma con una lista al costado (lista-sobre-video-hablado-f100k), para cortar silencios o subtitular (editor-video-formula100k) ni para un guion que no explica nada dibujable.
+description: "Arma el reel «explicación en vivo»: tú hablas en una tarjeta abajo y arriba un panel animado dibuja lo que dices, por bloques de demostración. Usar con «yo hablo y Claude lo dibuja», «panel arriba y yo abajo», «explicación en vivo». NO para clips animados sueltos (usa animacion-dibujada-f100k)."
 argument-hint: "[tema o guion] [carpeta de salida]"
 ---
 

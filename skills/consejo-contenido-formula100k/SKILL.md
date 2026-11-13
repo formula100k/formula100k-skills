@@ -1,6 +1,6 @@
 ---
 name: consejo-contenido-formula100k
-description: "Convoca un CONSEJO de 7 críticos de contenido que debaten una pieza desde lentes distintos (gancho, neuro/retención, venta, algoritmo, voz de marca, audiencia, remix) y entregan un VEREDICTO con score de viralidad, 3 riesgos, gancho y CTA reescritos, y un Voto Disidente. Activar cuando se pida 'pasa esto por el consejo', 'qué opina el consejo', 'críticos de contenido', 'panel de críticos', 'debate esta idea/reel/guion/carrusel', 'stress-test este contenido', '¿vale la pena este reel?', '¿publico esto?', 'destroza este guion', o cuando alguien presente una idea/guion/carrusel/VSL/hook y quiera 7 perspectivas en conflicto, no una sola opinión. Aplica la metodología FÓRMULA 100K (ganchos verbal/visual/textual, rúbrica neuro tribe v2, CTAs, crear-para-vender, español neutro, ADN del usuario). Puede anclar el debate en virales reales con un @handle o keyword. NO confundir con corrector-guiones (una sola corrección), evaluador-ganchos (solo el primer segundo) ni auditor-formula100k (audita una cuenta entera)."
+description: "Convoca un consejo de 7 críticos que debaten una idea, guion o carrusel y dan veredicto con score, riesgos, gancho y CTA reescritos y voto disidente. Usar con «pasa esto por el consejo», «¿publico esto?», «destroza este guion». NO para corregir un guion (usa corrector-guiones-formula100k)."
 argument-hint: [pega la idea/guion/carrusel o ruta + opcional @handle/keyword para anclar]
 ---
 

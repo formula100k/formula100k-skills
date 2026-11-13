@@ -1,6 +1,6 @@
 ---
 name: agente-produccion-f100k
-description: "Agente de producción visual que genera los recursos de un calendario o de un guion: carruseles renderizados, carruseles con imágenes de IA, carruseles ilustrados, imágenes de historias, infografías y capturas de tutorial. Orquesta: carrusel-render + higgsfield-carrusel-generador + carrusel-ilustrado + historias-a-imagenes-nanobanana + infografia-reel + capturas-tutorial. Usar cuando se pida 'genera los recursos visuales de este calendario', 'produce las piezas de la semana', 'haz el carrusel visual de [idea]', 'genera las historias de esta semana'. Con Higgsfield genera imágenes con IA; sin Higgsfield entrega las piezas en HTML y deja los prompts listos."
+description: "Genera los recursos visuales de un calendario o guion: carruseles, imágenes de historias, infografías y capturas de tutorial, orquestando las skills de producción. Usar con «genera los recursos visuales de este calendario», «produce las piezas de la semana», «genera las historias de esta semana»."
 argument-hint: "[guiones o ideas a producir] [tipo: carrusel/historias/infografia/capturas/todo]"
 ---
 

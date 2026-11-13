@@ -1,7 +1,6 @@
 ---
 name: carrusel-ilustrado-formula100k
-description: >
-  Skill para crear carruseles de Instagram RENDERIZADOS COMPLETAMENTE (PNG finales listos para publicar, sin Canva). Ilustraciones minimalistas estilo Xiaohei (hand-drawn, figura negra sólida, fondo blanco puro) generadas con Higgsfield + slides HTML renderizados con Chrome headless. Puede mezclar slides de ilustración y slides con mockups de UI. Activar SIEMPRE que alguien diga: "carrusel ilustrado", "carrusel estilo Xiaohei", "ilustraciones minimalistas para carrusel", "carrusel con dibujos", "carrusel con ilustraciones", "slides ilustrados", o cualquier variación que implique generar un carrusel con ilustraciones de personaje hand-drawn.
+description: "Crea carruseles de Instagram renderizados en PNG con ilustraciones minimalistas estilo Xiaohei (figura negra hecha a mano, fondo blanco) y mockups de UI. Usar con «carrusel ilustrado», «carrusel estilo Xiaohei», «carrusel con dibujos»."
 argument-hint: "[tema o guion del carrusel] [contexto: educativo / venta / storytelling] [mockups: sí/no]"
 metadata:
   version: "2.0.0"

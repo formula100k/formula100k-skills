@@ -1,6 +1,6 @@
 ---
 name: animacion-cubitos-3d-f100k
-description: Arma un corto vertical narrado de 20 a 40 s en un mundo 3D de cubitos - una gradería de 12 mascotas de caja (bichitos y gatitos nerd con gorros y objetos), un estrado donde dos se enfrentan, el escritorio del jefe con sobre, tarjeta y mazo, más planos de papel (sello, marcador, edificio, ventana con lista, caja de comentario), encabezado en ventanita oscura y subtítulos palabra por palabra con la clave en serif dorada. Parte de un guion de una frase por escena y saca sola los cortes y los subtítulos, con voz o sin voz. Usar cuando digan «hazme un corto de cubitos», «animación 3D como la del tribunal», «un corto así sobre [noticia de IA, plugin, skill, herramienta]», «explica esta noticia con los cubitos», «12 Claudes hacen X», «corto 3D sin salir a cámara» o pasen un tema o guion corto para animarlo en ese mundo. NO usar para editar un video grabado (editor-video-formula100k), ni para mundos de papel 2D completos (animacion-recortes-papel-f100k), ni para clips sueltos de 5 s (animacion-dibujada-f100k), ni para video realista (Higgsfield).
+description: "Arma un corto vertical narrado en un mundo 3D de cubitos con subtítulos palabra por palabra. Usar con «hazme un corto de cubitos», «animación 3D como la del tribunal», «explica esta noticia con los cubitos». NO para video grabado (usa editor-video-formula100k)."
 argument-hint: [tema, noticia o guion]
 ---
 

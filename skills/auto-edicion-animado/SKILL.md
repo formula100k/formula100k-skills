@@ -1,6 +1,6 @@
 ---
 name: auto-edicion-animado
-description: "Auto-Edición Animado, el complemento de Auto-Edición: pones UN tema y te entrega un reel 9:16 100 % animado y sin avatar, donde la voz explica y la pantalla es la explicación. Cada frase dibuja en código la cosa REAL de la que habla (la app de verdad, el objeto por dentro, el documento, la cifra que cuenta) y la cambia justo en la palabra que la cambia. Antes de dibujar arma un plan visual con su crítica; la voz sale en UNA toma corrida que se parte por frase; y antes de entregar, un revisor mide si algo quedó quieto, si hay fondo vacío o si falta el golpe de los primeros 2 s. Usa el motor, Mi look y los scripts de auto-edicion. Activar con «auto-edición animado», «/auto-edicion-animado <tema>», «reel animado sin avatar sobre…», «explícalo todo animado», «hazlo full animado», «como Keyframes / full visual», «que se vea por dentro cómo funciona X». NO usar para reels con tu avatar (auto-edicion, modo Sin grabar) ni para editar un video grabado (auto-edicion, modo Con tu video)."
+description: "Pones un tema y entrega un reel 9:16 100 % animado y sin avatar donde cada frase dibuja en código la cosa real de la que habla. Usar con «auto-edición animado», «reel animado sin avatar sobre…», «hazlo full animado». NO para reels con tu avatar ni para editar un video grabado (auto-edicion)."
 argument-hint: <tema a explicar>
 ---
 

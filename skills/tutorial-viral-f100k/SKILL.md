@@ -1,6 +1,6 @@
 ---
 name: tutorial-viral-f100k
-description: "Orquesta el pipeline completo de tutorial viral faceless (sin cara) de FÓRMULA 100K: de una idea o guion a un BORRADOR_AUTO.mp4 listo para retoque. 5 fases con un solo checkpoint humano: guion con marcas (Fase 1) → BRIEF_GRABACION.md + pausa mientras el usuario graba voz y pantallas (Fase 2) → generación de recursos IA/web (Fase 3) → render con composición tutorial-faceless (Fase 4) → entrega de BORRADOR_AUTO.mp4 + MANIFEST.md (Fase 5). Captions cinéticos automáticos desde transcript word-level; voz es REAL (no TTS); pantallas son grabaciones reales del usuario. Activar cuando el usuario diga: 'tutorial viral', 'explicación viral faceless', 'video sin cara', 'hazme un tutorial de X', 'video tipo screen recording con captions', '/tutorial <tema>', '/tutorial-render <carpeta>'. NO usar para talking-head reels (usa editor-video-formula100k), carruseles, stories ni miniaturas."
+description: "Orquesta el tutorial viral faceless de idea a BORRADOR_AUTO.mp4: guion con marcas, pausa para que grabes voz y pantallas, recursos y render con captions. Usar con «tutorial viral», «hazme un tutorial de X», «/tutorial». NO para talking-head (editor-video-formula100k)."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Skill
 ---
 

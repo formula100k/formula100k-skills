@@ -1,6 +1,6 @@
 ---
 name: noticia-escandalo-f100k
-description: Arma un reel vertical sin cara en estilo NOTICIA DE ESCÁNDALO, hecho por código (canvas, sin Blender y sin créditos). Sobre un fondo azul noche con estrellas, un detalle chico y absurdo en papel recortado (un ticket, un correo, un mensaje) se marca con plumón amarillo y un óvalo rojo a mano alzada; la cámara baja hasta la consecuencia enorme (el titular del medio o el comunicado oficial), un sello rojo entra con corte seco y un hilo rojo une lo chico con lo grande. Cierra en una nota de papel donde se teclea tu palabra de CTA. Subtítulo palabra por palabra con la clave en caja. Usar cuando digan «noticia de escándalo», «plantilla Noticia de escándalo», «un detalle absurdo que tumbó a alguien», «cómo algo chiquito hizo caer a un director / una empresa», «reel de noticia con recortes y hilo rojo». NO usar para curiosidades que ya explotaron en otra cuenta (curiosidades-virales-f100k), para la animación de recortes de papel con un mundo-metáfora (animacion-recortes-papel-f100k), para el carrusel de una noticia (carrusel-noticiero) ni para buscar la noticia del día (radar-virales-f100k).
+description: "Reel sin cara hecho con código, sin créditos: recortes de papel y capturas reales; un detalle absurdo termina tumbando a alguien grande. Usar con «plantilla Noticia de escándalo», «reel de escándalo con recortes»."
 argument-hint: [el caso: detalle absurdo + caída + fuentes, y la palabra del CTA]
 ---
 

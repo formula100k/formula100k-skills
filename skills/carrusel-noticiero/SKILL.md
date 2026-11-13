@@ -1,6 +1,6 @@
 ---
 name: carrusel-noticiero
-description: Use when the user asks to build a "carrusel noticiero", "carrusel de noticia", "carrusel newsjacking", "convierte esta noticia de IA en carrusel", "el carrusel de la noticia de hoy", or wants to turn an AI/tech news item into an Instagram carousel with an animated news-style cover. Produces the 8-slide news narrative (QUÉ PASÓ → MOTIVO → EL DATO → Y A TI QUÉ → 3 JUGADAS → REGLA DE ORO → CTA) translated for creators with the F100K angle, renders finished PNGs from a swappable HTML body theme (scrapbook = default), and builds the signature animated cover (Higgsfield image → video → transparent overlay → ffmpeg composite). Do NOT use for generic viral carousels (carrusel-viral-formula100k) or plain scrapbook rendering of an existing script (carrusel-render-formula100k).
+description: "Convierte una noticia de IA o tecnología en carrusel de 8 slides con ángulo para creadoras y portada animada estilo noticiero. Usar con «carrusel noticiero», «carrusel de la noticia de hoy», «convierte esta noticia en carrusel». NO para carruseles virales genéricos (carrusel-viral-formula100k)."
 argument-hint: [tema o enlace de la noticia de IA]
 disable-model-invocation: true
 ---

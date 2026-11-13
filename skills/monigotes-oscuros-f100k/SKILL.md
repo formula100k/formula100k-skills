@@ -1,6 +1,6 @@
 ---
 name: monigotes-oscuros-f100k
-description: Arma un reel vertical sin cara en estilo MONIGOTES OSCUROS, hecho en Blender por código y sin créditos. Siluetas negras de palitos con ojos que brillan, en un paisaje nocturno de cine (luna, sierras que se pierden en la niebla, pasto en primer plano) y en una sola toma continua que se transforma. En el ejemplo, un monigote solo empuja una roca cuesta arriba, se le resbala, su equipo llega corriendo desde la niebla, la suben juntos y él se sienta a dormir. El texto entra palabra por palabra con corte seco y cierra con tu palabra de CTA en tu color. Va sin voz por defecto (10 s). Usar cuando digan «monigotes oscuros», «plantilla Monigotes oscuros», «monigotes de palitos en la noche», «siluetas con ojos que brillan», «reel del que empuja la roca», «hazme el de los monigotes en la niebla». NO usar para las figuras blancas en una sala oscura con narración (monigotes-blender-sala-oscura-f100k), para los monigotes planos de plumón sobre papel (ensayo-palitos-f100k), para el monigote de tiza en pizarra (pizarra-negra-tiza-f100k), para la línea técnica blanca sobre negro (explicacion-blanco-negro-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: siluetas de palitos con ojos que brillan en un paisaje nocturno de cine, en una sola toma. Usar con «plantilla Monigotes oscuros», «reel de siluetas de noche»."
 argument-hint: [tema o frase de 3 partes + palabra del CTA]
 ---
 

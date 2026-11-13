@@ -1,6 +1,6 @@
 ---
 name: infografia-reel-formula100k
-description: "Crea infografías virales animadas en formato reel (9:16) a partir de un tema, idea, URL de artículo o URL de YouTube. Activar SIEMPRE que se pida 'haz una infografía', 'convierte esto en infografía', 'crea un reel infográfico', 'infografía animada', 'reel tipo cross-section', 'infografía estilo riñón/piel/cuerpo', 'convierte este artículo en infografía', 'convierte este YouTube en reel infográfico', 'diséñame una infografía para [tema]', o cualquier variación que combine intención educativa/divulgativa con formato reel visual denso. Usa el MCP de Higgsfield como motor único: nano_banana_2 para la imagen estática 4K con texto + seedance_2_0 / kling3_0 para animarla en video 9:16 listo para publicar."
+description: "Crea una infografía animada en reel 9:16 desde un tema, artículo o YouTube, con imagen y animación en Higgsfield. Usar con «haz una infografía», «infografía animada», «reel tipo cross-section», «convierte este artículo en infografía»."
 argument-hint: "<tema | URL artículo | URL YouTube | ruta .md de guion>"
 metadata:
   version: "1.0.0"

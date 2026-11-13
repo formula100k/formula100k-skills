@@ -1,7 +1,6 @@
 ---
 name: optimizador-cta-formula100k
-description: >
-  Skill especializada en analizar, diagnosticar y mejorar llamados a la acción (CTAs) de guiones de video usando los patrones de FÓRMULA 100K. Usar SIEMPRE que alguien pida: mejorar un CTA, revisar un llamado a la acción, optimizar el final de un guion, hacer que un CTA genere más comentarios, crear variaciones de un llamado a la acción, o cuando comparta un guion y quiera que el CTA funcione mejor. También activar cuando digan: "¿cómo remato este guion?", "el CTA no está funcionando", "quiero que genere más engagement", "mejora este final".
+description: "Analiza, diagnostica y mejora el llamado a la acción de un guion de video y da variaciones que generan más comentarios. Usar con «mejora este CTA», «¿cómo remato este guion?», «el CTA no está funcionando», «mejora este final». NO escribe el guion completo (usa guionizacion-formula100k)."
 ---
 
 ## 🧰 EN TU COMPU (leer antes de seguir: manda sobre lo que diga esta skill más abajo)

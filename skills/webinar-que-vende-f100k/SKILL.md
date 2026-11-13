@@ -1,6 +1,6 @@
 ---
 name: webinar-que-vende-f100k
-description: Use when someone asks to structure, write, optimize or audit a webinar, workshop, masterclass or live class that sells, or to turn it into slides. Arma el mapa de los 9 acuerdos minuto a minuto, valida el One Belief y el mecanismo, escribe las láminas una por una (texto en pantalla + lo que dices + nota) y entrega un HTML con todas las slides para presentar o copiar y pegar en Canva, Google Slides o Keynote. Entra por wizard de preguntas, por un brief + One Belief pegado, o por un webinar que ya existe. Triggers on "arma mi webinar", "estructura mi workshop", "optimiza mi webinar", "audita mi masterclass", "hazme las slides de mi clase en vivo", "guion de mi webinar", "mi webinar no vende", "tengo mi brief y mi one belief", "clase de lanzamiento".
+description: "Estructura, escribe u optimiza un webinar, workshop o masterclass que vende: mapa minuto a minuto, One Belief, láminas una por una y HTML de slides. Usar con «arma mi webinar», «estructura mi workshop», «mi webinar no vende», «hazme las slides de mi clase en vivo»."
 argument-hint: [brief, archivo o "wizard"]
 ---
 

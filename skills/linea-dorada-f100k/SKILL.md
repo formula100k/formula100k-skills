@@ -1,6 +1,6 @@
 ---
 name: linea-dorada-f100k
-description: Arma un reel vertical sin cara en estilo LÍNEA DORADA, hecho en Blender por código y sin créditos. Sobre un fondo negro cálido, una sola línea de luz dorada en 3D se dibuja sola y se transforma, sin cortes, en una figura por frase (luna, equipo, foco, celular, fábrica, regalo o corazón), con polvo dorado flotando, un piso que la refleja y una cámara que gira alrededor con desenfoque de lente. Arriba, cada frase entra palabra por palabra: unas palabras chicas en itálica y la clave enorme en dorado. Cierra con tu palabra de CTA. 10 s, 1080×1920. Usar cuando digan «línea dorada», «plantilla Línea dorada», «el de la línea de luz que se transforma», «reel elegante negro y dorado», «una línea que dibuja lo que digo». NO usar para el plano azul con la máquina (plano-del-sistema-f100k), para el avatar con la tele (avatar-mini-tele-f100k), para pizarras dibujadas a mano (pizarra-explicativa-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: una línea de luz dorada sobre negro que se transforma en una figura por frase. Usar con «plantilla Línea dorada», «reel con línea de luz»."
 argument-hint: [tema + 4 frases cortas con su figura + palabra del CTA]
 ---
 

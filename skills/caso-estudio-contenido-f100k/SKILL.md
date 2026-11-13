@@ -1,6 +1,6 @@
 ---
 name: caso-estudio-contenido-f100k
-description: "Reto final del módulo de Creación de Contenido de FÓRMULA 100K: corre el pipeline completo sobre el nicho de una alumna y entrega una PÁGINA DE CASO DE ESTUDIO (HTML de una sola página) lista para subir a Netlify/Vercel como portafolio, más el calendario en CSV/XLSX. Activar SIEMPRE que se pida 'quiero hacer el reto final', 'crea mi caso de estudio de contenido', 'arma mi calendario + investigación del reto', 'el reto del módulo de contenido', 'haz mi caso de estudio como el de la crucerista', o cuando se invoque /caso-estudio. Despacha a los agentes LUNA (investigación) y CALI (calendario + guiones + ganchos), suma el plan de mes 2 y maqueta el HTML final. NO confundir con calendarizador-contenido (solo el calendario) ni con MAESTRO (semana completa con colocación en Yapper/Bento)."
+description: "Reto final del módulo de contenido: corre el pipeline sobre el nicho de la alumna y entrega una página HTML de caso de estudio para portafolio más el calendario en CSV/XLSX. Usar con «quiero hacer el reto final», «crea mi caso de estudio de contenido», «/caso-estudio». NO para solo el calendario."
 argument-hint: [nicho o keyword]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: ensayo-palitos-f100k
-description: Arma un reel vertical sin cara en estilo ENSAYO DE PALITOS, hecho con código y sin créditos. Monigotes planos de cabeza redonda y cuerpo de huevo, dibujados con plumón negro que «hierve» sobre papel casi blanco, con relleno de lápiz de color rayado, rótulos en cajitas colgadas y globos de diálogo. Las poses cambian con corte seco, la escena cuenta un chiste sarcástico de una situación que tu cliente ideal conoce, una palabra roja gorda remata y cierra con tu palabra de CTA en un cartel. Usar cuando digan «ensayo de palitos», «plantilla Ensayo de palitos», «reel de monigotes de palito en papel», «hazme el de los palitos sarcástico», «reel de palitos con lápiz de color». NO usar para los palitos en 3D que caminan en bucle (palitos-3d-bucle-f100k), para la parábola con monigotes de tiza en pizarra negra (pizarra-negra-tiza-f100k), para el cuento tierno dibujado (cuento-dibujado-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara hecho con código, sin créditos: monigotes de palito en papel blanco que cuentan un chiste de tu cliente con remate rojo. Usar con «plantilla Ensayo de palitos», «reel de monigotes en papel»."
 argument-hint: [tema o situación + el remate + palabra del CTA]
 ---
 

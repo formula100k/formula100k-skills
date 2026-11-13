@@ -1,14 +1,6 @@
 ---
 name: publicar-ig
-description: >
-  Skill para publicar fotos, carruseles o reels en Instagram directamente desde Claude Code
-  usando Zapier MCP (Instagram for Business). Activar SIEMPRE que el usuario pida: "publica esto
-  en Instagram", "/publicar-ig", "sube este carrusel a IG", "publica este reel", "manda esto
-  a Instagram", "haz el post en IG", "publica el render que acabamos de hacer", o cualquier
-  variación que combine un archivo/carpeta de imagen o video con la intención de publicarlo
-  en Instagram. Maneja foto suelta, carruseles de 1-10 slides y videos/reels. Acepta rutas
-  locales (sube a GitHub assets repo automáticamente) o URLs públicas directamente. NO maneja
-  Stories (Zapier no expone esa acción para Instagram for Business).
+description: "Publica fotos, carruseles o reels en Instagram desde Claude Code vía Zapier, desde rutas locales o URLs. Usar con «publica esto en Instagram», «/publicar-ig», «sube este carrusel a IG», «publica este reel». NO publica Stories."
 argument-hint: "<ruta archivo|carpeta|URL> [--caption=\"...\"] [--ubicacion=\"...\"] [--tags=@u1,@u2]"
 metadata:
   version: "1.0.0"

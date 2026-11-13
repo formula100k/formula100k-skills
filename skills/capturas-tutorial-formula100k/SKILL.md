@@ -1,7 +1,6 @@
 ---
 name: capturas-tutorial-formula100k
-description: >
-  Genera CAPTURAS UI tipo tutorial (cards de paso numerado, code blocks tipo terminal macOS con botón Copiar, callouts info/warning/success, screenshot frames, atajos de teclado, links, comparison antes/después, listas) con un estilo editorial claro (fondo crema, círculos coral, DM Serif Display, Inter, JetBrains Mono) que puedes cambiar por los colores de la persona. Render HTML+CSS+Puppeteer → PNG transparente o crema, 1920×1080. NO usa Nanobanana ni Higgsfield (la IA rompe el texto; HTML es pixel-perfect). Activar cuando pidan "diséñame una captura tipo tutorial", "imagen del comando", "renderiza un terminal con este comando", "card de paso 1/2/3", "callout warning/info/success", "tarjeta de atajo Cmd+V", "comparison antes/después", "imagen UI para mi landing/artifact/carrusel", "overlays UI para mi video tutorial", "convierte este guion en capturas tutorial". 2 modos: STANDALONE (PNGs sueltos) y BATCH (MANIFEST_UI.yml). También la invoca recursos-de-video-formula100k. NO renderiza video (editor-video-formula100k). NO usa stock.
+description: "Genera capturas UI tipo tutorial con HTML (cards de paso, terminal con botón Copiar, callouts, atajos, antes/después) en PNG pixel-perfect. Usar con «captura tipo tutorial», «renderiza un terminal con este comando», «card de paso 1», «callout warning»."
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion
 ---
 

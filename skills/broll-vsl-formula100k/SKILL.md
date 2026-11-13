@@ -1,6 +1,6 @@
 ---
 name: broll-vsl-formula100k
-description: "Genera entre 15-25 clips de B-roll cinematográficos para VSL o videos largos usando Higgsfield Seedance 2.0 y Cinema Studio 3.0. Regla 80/20: 80% de los clips incluyen el avatar/presentadora con foto de referencia (Seedance 2.0 + medias identity), 20% son tomas cinemáticas abstractas sin persona (Seedance 2.0 o Cinema Studio 3.0 puro). Estética configurable (default: cyberpunk azul eléctrico). Input: guion VSL (texto). Output: catálogo completo con URLs de video + frase exacta del guion donde insertar cada clip. Activar cuando se diga 'genera b-roll para mi VSL', 'clips para video largo', 'recursos cinematográficos para mi guion', 'haz los b-rolls de mi VSL', o cualquier variación que combine un guion largo (VSL, webinar, masterclass) con producir clips de b-roll con Higgsfield."
+description: "Genera clips de B-roll cinematográficos para un VSL o video largo con Higgsfield (mayoría con la presentadora, el resto tomas abstractas) y dice en qué frase del guion va cada uno. Usar con «genera b-roll para mi VSL», «clips para video largo», «haz los b-rolls de mi VSL»."
 argument-hint: "<ruta-al-guion.md | texto-del-guion> [--escenas=N] [--estetica=cyberpunk|corporativo|minimalista] [--duracion=5]"
 allowed-tools: Bash, Read, Write, AskUserQuestion, mcp__higgsfield__generate_video, mcp__higgsfield__job_status, mcp__higgsfield__media_upload, mcp__higgsfield__media_confirm
 metadata:

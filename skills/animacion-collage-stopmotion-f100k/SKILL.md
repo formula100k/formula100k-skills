@@ -1,6 +1,6 @@
 ---
 name: animacion-collage-stopmotion-f100k
-description: Arma una animación vertical de ~9 s tipo collage stop motion - escenarios de papel recortado que se arman capa por capa (cielo, luna, muelle, sala, jardín…), una persona recortada al centro que cambia de pose y de outfit a saltos, un texto fijo encima y cambio de escenario por corte seco. Usar cuando digan «animación tipo collage stop motion», «escenario de papel recortado», «yo recortada cambiando de outfit», «estilo whimsy», «collage que se arma por capas», «reel de recortes tipo revista», «ponme caminando en un escenario de papel», «yo ignorando X porque estoy Y en formato collage» o pasen fotos de cuerpo entero para montarlas en escenarios. NO usar para editar un video ya grabado (editor-video-formula100k), ni para dibujos animados cuadro a cuadro (animacion-dibujada-f100k), ni para carruseles, ni para motion graphics de texto suave (aquí todo se mueve a saltos).
+description: "Animación vertical corta tipo collage stop motion: escenarios de papel recortado por capas y tu figura recortada cambiando de pose y outfit. Usar con «collage stop motion», «yo recortada cambiando de outfit», «estilo whimsy». NO para editar video grabado (editor-video-formula100k)."
 argument-hint: [frase del texto fijo]
 ---
 

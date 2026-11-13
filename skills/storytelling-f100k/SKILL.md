@@ -1,7 +1,6 @@
 ---
 name: storytelling-f100k
-description: >
-  Coach de storytelling de FÓRMULA 100K. Te ayuda a ENCONTRAR, profundizar y darle forma a TUS historias verdaderas (un momento de tu vida, o una idea o convicción de tu trabajo) para que TÚ las escribas. Activar SIEMPRE que alguien diga: "ayúdame a encontrar mi historia", "coach de storytelling", "quiero contar una historia", "convierte este recuerdo en historia", "diagnostica esta historia", "mi historia no tiene payoff", "estoy atascada, no sé qué contar", "hazme preguntas hasta sacar mi historia", "afila el gancho de mi historia". Conduce una sesión corta de tres fases (encontrar, profundizar, dar forma) con los tres actos (Problema, Persecución, Payoff), los tres niveles de profundidad y la Rueda. NO escribe la historia por ti: ni borradores, ni líneas de ejemplo, ni plantillas; solo te devuelve TUS palabras ordenadas. NO escribe guiones ni reels (eso es guionizacion-formula100k) ni corrige guiones (corrector-guiones-formula100k).
+description: "Coach que te ayuda a encontrar, profundizar y dar forma a TUS historias verdaderas para que tú las escribas; no redacta por ti. Usar con «ayúdame a encontrar mi historia», «coach de storytelling», «mi historia no tiene payoff». NO escribe guiones ni reels (usa guionizacion-formula100k)."
 ---
 
 ## 🧭 ANCLAJE DE RUBRO (leer PRIMERO)

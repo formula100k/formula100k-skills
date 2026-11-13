@@ -1,6 +1,6 @@
 ---
 name: calendario-actividades-skool-f100k
-description: Toma una rutina semanal recurrente + eventos puntuales con fecha + un tema de marca, calcula la grilla real del mes y la renderiza con HTML→Chrome→PNG. Dos caminos: DESDE 0 (arma la rutina con la metodología F100K de anclas) o CLONAR el mes anterior y ajustar. Activar SIEMPRE que se pida "arma el calendario de actividades de mi comunidad/Skool", "hazme el calendario mensual de la comunidad", "el calendario de sesiones del mes", "calendario de eventos de Skool", "diséñame el calendario de actividades como el de F100K", "calendario de la comunidad de [clienta]", "actualiza el calendario de actividades a [mes]", o cualquier variación que combine una comunidad/Skool con el calendario VISUAL de sus sesiones/eventos del mes. NO confundir con calendario-semanal-f100k ni calendarizador-contenido-formula100k (esas son para CONTENIDO de redes), ni con calendarizador-historias/urgencias.
+description: "Arma y renderiza en PNG el calendario visual mensual de sesiones y eventos de una comunidad de Skool. Usar con «arma el calendario de actividades de mi comunidad», «calendario de eventos de Skool». NO para calendario de contenido de redes (calendarizador-contenido-formula100k)."
 ---
 
 # Skill: Calendario de Actividades de Skool · FÓRMULA 100K

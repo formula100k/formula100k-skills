@@ -1,6 +1,6 @@
 ---
 name: objetos-3d-minimal-f100k
-description: Arma un reel vertical sin cara en estilo OBJETOS 3D MINIMALISTAS, hecho en Blender por código y sin créditos. Una sola toma continua de 12 s en travelling por 4 mundos en miniatura sobre pedestales (un escritorio que se enciende, una claqueta que golpea y suelta 8 videos, una cinta que convierte tarjetas grises en videos y una caja que se abre con tu palabra de CTA), con fondo casi negro, luz cálida, desenfoque de lente real y letra de máquina de escribir que entra palabra por palabra. Usar cuando digan «objetos 3D minimalistas», «plantilla Objetos 3D minimal», «el de los pedestales», «reel de objetos en miniatura con luz cálida», «el de la claqueta y la caja», «minimalista 3D». NO usar para la línea blanca sobre negro (explicacion-blanco-negro-f100k), para los cubitos 3D (animacion-cubitos-3d-f100k), para los muñequitos en three.js (munequitos-3d-sin-creditos-f100k) ni para videos donde sales tú a cámara.
+description: "Reel sin cara en Blender, sin créditos: una toma continua por 4 mundos en miniatura sobre pedestales, con luz cálida y fondo oscuro. Usar con «plantilla Objetos 3D minimalistas», «reel de miniaturas 3D»."
 argument-hint: [tema + 4 frases cortas + palabra del CTA]
 ---
 

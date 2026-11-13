@@ -1,6 +1,6 @@
 ---
 name: trial-reels-lab-f100k
-description: "Convierte UN video (o UN guion) en 4 variantes de gancho A/B/C/D para publicar como TRIAL REELS de Instagram y descubrir con datos cuál gancho gana antes de que toque el grid. Dos modos — MODO VIDEO: le pasas el .mov grabado y devuelve 4 .mp4 finales con overlays compuestos. MODO PACK: le pasas solo el guion y devuelve 4 overlays .mov con alfa real + hoja de montaje con posiciones exactas para que el editor los monte. Usa la matriz forzada de 4 celdas (claim de texto / gancho visual / conflicto / prueba) para que el test enseñe algo en vez de dar ruido, con el criterio de las 300 fichas re-observadas y los patrones reales de la cuenta. Incluye plan de publicación (5/día, 5 min entre subidas, regla de 48h, regla del 25%, Play A vs Play B, reciclaje a 60 días) y recordatorios en Apple Reminders. Activar con: 'trial reels', 'testea este gancho', 'hazme 4 variantes de gancho', 'variantes ABCD de este reel', 'overlays de gancho para el editor', 'prueba este video antes de subirlo al grid'."
+description: "Convierte un video o guion en 4 variantes de gancho A/B/C/D para trial reels de Instagram, con overlays listos y plan de publicación. Usar con «hazme variantes de gancho», «trial reels de este video», «A/B de ganchos». NO para el gancho golpe de un solo reel (gancho-golpe-f100k)."
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

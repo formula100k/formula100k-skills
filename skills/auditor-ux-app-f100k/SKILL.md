@@ -1,17 +1,6 @@
 ---
 name: auditor-ux-app-f100k
-description: >
-  Auditor de la construcción de UX de una app (producto, no pixel) con la doctrina de FÓRMULA 100K
-  y las cicatrices reales de Yapper, Bento, VictoryOS, Challengerz y Skoop. Revisa CUALQUIER etapa:
-  brief, spec/PRD, plan de implementación o el código ya construido. Recorre la app como usuaria
-  (con navegador real si hay código), la puntúa contra una rúbrica de 10 dimensiones (claridad,
-  primer minuto, los 4+1 estados, feedback honesto, no perder el trabajo, la pantalla no miente,
-  móvil de verdad, dashboard 1-3-5, puertas de acceso y dinero, salir al mundo), entrega un informe
-  con termómetro 0-100 y hallazgos con evidencia, y —tras tu OK— APLICA los arreglos. Usar cuando
-  digan "revisa la UX de esta app", "audita mi app", "qué le falta a mi app", "revisa este
-  spec/plan/brief antes de construir", "/audita-ux", "por qué mi app se siente a medias". NO es la
-  skill de diseño visual (ux-elevacion-formula100k, a la que delega); NO construye la app desde cero
-  (crea-tu-app-f100k / constructor-miniapps-f100k).
+description: "Audita la UX de una app en cualquier etapa (brief, spec, plan o código), entrega informe con termómetro y aplica los arreglos tras tu OK. Usar con «revisa la UX de esta app», «audita mi app», «qué le falta a mi app», «/audita-ux». NO es para diseño visual (usa ux-elevacion-formula100k)."
 argument-hint: [ruta del repo, del documento, o URL de la app]
 disable-model-invocation: false
 ---

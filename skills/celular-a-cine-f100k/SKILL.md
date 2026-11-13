@@ -1,6 +1,6 @@
 ---
 name: celular-a-cine-f100k
-description: Convierte un clip grabado con el celular en una escena de película con IA en Higgsfield, con la MISMA persona - mismos movimientos, misma cara y cámara de cine en cada plano (contrapicado, detalle de manos, foco que pasa, perfil, primer plano). Primero arma la hoja de personaje (cara, perfil 90°, espalda, cuerpo sin rostro) con la ropa del clip; después escribe la lista de tomas por segundo, compara Seedance 2.5 y Wan 3.0 en borrador y te entrega el lado a lado para que elijas. Activar con "convierte mi video en película", "hazlo cine", "mi video del celular como escena de cine", "video a video cinematográfico", "plantilla Tu video hecho película", "compara Seedance y Wan con mi video". NO usar para editar un video donde hablas a cámara (auto-edicion) ni para copiar solo el movimiento a otro personaje (motion control).
+description: "Convierte un clip del celular en escena de película con IA en Higgsfield, con la misma persona; arma hoja de personaje y compara Seedance y Wan. Usar con «convierte mi video en película», «hazlo cine», «video a video cinematográfico». NO para editar un video hablado a cámara (usa auto-edicion)."
 argument-hint: [ruta del clip] [foto con la misma ropa]
 ---
 

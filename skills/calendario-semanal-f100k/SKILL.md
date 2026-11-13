@@ -1,7 +1,6 @@
 ---
 name: calendario-semanal-f100k
-description: >
-  Módulo del Autopilot F100K que corre cada lunes: caza 7 virales de la semana anterior en TikTok para el nicho del usuario, genera un calendario completo de 7 días con guiones listos usando los frameworks de guionizacion-formula100k, exporta CSV + XLSX, y envía el digest por email. Usar cuando alguien diga: "arma mi calendario de esta semana automáticamente", "genera mi calendario semanal", "ejecutar módulo calendario", "quiero mi semana lista", o cuando el schedule automático lo invoque los lunes. Requiere config en ~/.f100k-radar/config.json.
+description: "Módulo del Autopilot que cada lunes caza virales de la semana en TikTok para tu nicho, arma un calendario de 7 días con guiones, exporta CSV + XLSX y lo envía por email. Usar con «genera mi calendario semanal», «ejecutar módulo calendario», «quiero mi semana lista». Requiere config del radar."
 ---
 
 # Skill: Calendario Semanal — Autopilot F100K

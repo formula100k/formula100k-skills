@@ -1,6 +1,6 @@
 ---
 name: creador-estrategia-contenido-formula100k
-description: Skill conversacional que guía a una creadora paso a paso para construir su estrategia de contenido completa. Activar SIEMPRE que alguien pida "crea mi estrategia de contenido", "ayúdame a armar mi estrategia", "construye mi plan de contenido", "diseña mi estrategia", "no sé qué publicar", "necesito un plan de contenido", "hazme una estrategia para mi nicho de X", "armemos mi calendario de contenido", "qué publico esta semana", "estructura mi contenido". Combina avatar + oferta + 3 pilares + investigación web automática con stack permanente (agent-browser para IG/TikTok logueado + Tavily MCP para tendencias web + vidIQ MCP para outliers YouTube + Supadata MCP como complemento) + matriz Viralidad/Valor/Venta + calendario por niveles de energía. agent-browser es parte fija del stack, no fallback. Genera la estrategia completa lista para pegar en el TAB 6 del Manual de Negocio 100K.
+description: "Guía paso a paso para construir una estrategia de contenido completa: avatar, oferta, 3 pilares, investigación web y calendario por niveles de energía. Usar con «crea mi estrategia de contenido», «no sé qué publicar», «necesito un plan de contenido»."
 argument-hint: [tu nicho o tema, opcional]
 ---
 

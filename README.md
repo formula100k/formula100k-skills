@@ -1,8 +1,10 @@
-# FÓRMULA 100K — Skills oficiales
+# 🔒 FÓRMULA 100K · Skills exclusivas
 
 Suite completa de skills para Claude Code de la metodología **FÓRMULA 100K**, creada por Andrea Vega.
 
-> Repo privado — acceso exclusivo para alumnas de la comunidad.
+> 🔒🔒🔒 **Si no eres de FÓRMULA 100K, no instales esto.** 🔒🔒🔒
+>
+> Estas skills son exclusivas para los miembros de la comunidad FÓRMULA 100K en Skool. Funcionan junto con las clases, plantillas y acompañamiento de la comunidad: fuera de ella no tienen soporte.
 
 ---
 
@@ -65,6 +67,7 @@ Una vez instaladas, Claude Code activa la skill correcta automáticamente cuando
 | "Audita esta comunidad de Skool" | `auditor-formula100k` |
 | "Calendariza mi semana de contenido" | `calendarizador-contenido-formula100k` |
 | "Escribe un VSL para esta oferta" | `vsl-expert-f100k` |
+| "Arranca mis 7 movimientos" | `movimientos-de-venta-f100k` |
 | "Crea una infografía reel" | `infografia-reel-formula100k` |
 | "Hazme un reel faceless de X (sin mi cara)" | `reel-faceless-f100k` |
 
@@ -99,7 +102,7 @@ Identidad visual → Tu brandkit). Si tienes el conector de Yapper, lo leen sola
 elijas: colores, letras, gancho, subtítulos, elementos, stickers y CTA. La guía está en
 `references/tu-brandkit.md` de cada skill.
 
-## Las 267 plantillas de edición, completas
+## Las 268 plantillas de edición, completas
 
 Desde la v1.59.0 el plugin trae todos los motores del catálogo de plantillas (`plantillas-edicion-f100k`):
 Auto-Edición, notitas, motion recortada, cubitos 3D, collage, pizarra, listas, telenovela y los 66 estilos
@@ -127,6 +130,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 - `benchmark-producto-formula100k` — Benchmark de competencia
 
 ### Venta y ofertas
+- `movimientos-de-venta-f100k` — Los 7 movimientos de venta: diagnóstico, plan de 30 días y las piezas de la semana 1 («Arranca mis 7 movimientos»)
 - `vsl-expert-f100k` — VSLs, landings, ads y emails de venta
 - `audios-venta-f100k` — Audios de venta para DM/WhatsApp
 - `constructor-ofertas-f100k` — Construir ofertas irresistibles
@@ -141,6 +145,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 - `celular-a-cine-f100k` — Tu clip del celular vuelve a filmarse como escena de película con IA (Higgsfield): hoja de personaje primero, lista de tomas por segundo y Seedance 2.5 frente a Wan 3.0 lado a lado
 - `plantillas-edicion-f100k` — Catálogo único de 248 plantillas de edición (con 66 estilos de cine): dices «edita mi video con la plantilla «Pantalla dividida»» y sabe qué skill la hace, qué material pedir y cómo instalarla si falta
 - `reel-lista-maquetas-f100k` — Reel faceless de lista con voz: titular con la clave en color, una maqueta plana de pantalla por ítem y la barra «07/27 · CATEGORÍA»; render local gratis
+- `edicion-girlie-f100k` — Edición nativa de TikTok: una palabra a la vez arriba de tu cabeza, pruebas reales y, en cada chiste, un meme, una nota a mano o un zoom seco; sello para tus series; render local gratis
 - `telenovela-explicada-f100k` — Telenovela para explicar sin salir a cámara: frutas 3D que dialogan con tutoriales animados de la app, o la historia real en collage documental con fotos y documentos; corta en el punto más silencioso
 - `expediente-inteligencia-f100k` — Reel sin cara de un caso real de negocio como noticiero en blanco y negro con HUD: fotos y capturas reales, mira en la cara, etiquetas que cuelgan de lo que nombran, cifra que cuenta y revisión automática de cuadros; render local gratis
 - `avatar-mini-tele-f100k` — Reel sin cara en Blender: tu avatar 3D con volumen y textura explica abajo y una mini tele retro cambia de canal con cada frase (trama de puntos, tarjeta de la app, palabra clave enorme y tu CTA tecleándose); render local gratis

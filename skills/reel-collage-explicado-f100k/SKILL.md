@@ -1,6 +1,6 @@
 ---
 name: reel-collage-explicado-f100k
-description: Convierte un reel de referencia (alguien explicando una idea a cámara) en un video EXPLICACIÓN FACELESS de 70 a 95 s editado como collage animado - papel envejecido con textura y grano, recortes de fotos vintage (con borde y sombra), el concepto central DIBUJADO en código para que cada frase pase literal en pantalla, cintas washi, etiquetas de rotuladora, sellos que caen con golpe, tiras de papel rasgado, sin temblor de escena, una capa filosófica con fuente verificada, tu voz, música opcional generada en tu computadora, efectos de sonido sincronizados y mezcla a −14 LUFS. Molde aprobado con el reel «Sesgo de supervivencia». Usar cuando digan «conviértelo en video explicación faceless», «hazlo en collage animado con texturas, imágenes y recortes», «como el del sesgo de supervivencia», «como el de los aviones», «explicación filosófica animada», «sin salir yo, con recortes» o pasen un link de alguien hablando a cámara y pidan la versión faceless editada. NO usar para reflexiones de 30 a 45 s con fotos y capturas propias (collage-reflexion-f100k), clips animados sueltos (animacion-dibujada-f100k) ni para editar un video grabado.
+description: "Convierte un reel de referencia en un video explicación faceless en collage animado de papel vintage con tu voz. Usar con «conviértelo en video explicación faceless», «collage explicado», «como el de sesgo de supervivencia». NO para reflexiones cortas (collage-reflexion-f100k)."
 argument-hint: [link de Instagram o TikTok] [nota: tema o giro]
 ---
 

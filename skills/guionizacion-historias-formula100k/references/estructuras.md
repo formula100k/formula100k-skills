@@ -1,6 +1,6 @@
-# 24 ESTRUCTURAS DE GUION PARA HISTORIAS — FÓRMULA 100K
+# 35 ESTRUCTURAS DE GUION PARA HISTORIAS — FÓRMULA 100K
 
-Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, paso a paso del copy, y ejemplo aplicado de 5 historias.
+Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, paso a paso del copy, y ejemplo aplicado de 4 a 6 historias. Las #25–#35 traen además el paso a paso completo.
 
 ---
 
@@ -19,8 +19,8 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Me jalaron en la tesis 😭 No saben lo que pasó…"
 - H2: "¿De qué crees que trataba mi tesis? A) IA B) Marketing C) Contenido"
-- H3: "La verdad: analicé 150 videos virales a mano. Encontré patrones que NADIE enseña."
-- H4: "Estos fueron los insights más fuertes… (te muestro 3 puntos del análisis)"
+- H3: "La verdad: analicé [prueba real: cuántos casos revisaste] a mano. Encontré patrones que NADIE enseña."
+- H4: "Estos fueron los insights más fuertes… (te muestro los puntos clave del análisis)"
 - H5: "Si quieres ver el análisis completo → Responde: TESIS"
 
 ---
@@ -33,7 +33,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Actualización sobre mi tesis 😬"
 - H2: "Ahora detectan cuánta IA has usado… ¿Qué opinan de eso?"
-- H3: "En mi análisis revisé 150 videos virales y encontré 7 patrones…"
+- H3: "En mi análisis revisé [prueba real: cuántos casos] y encontré [prueba real: cuántos patrones]…"
 - H4: "Esta es la hoja real donde estoy clasificando todo (screenshot con flechas)"
 - H5: "Si quieres ver los patrones → Responde: TESIS"
 
@@ -49,7 +49,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H2: "La estaba fregando con el sistema anterior… así que lo rehice."
 - H3: "Y a todos les encantó → (screenshots de comentarios)"
 - H4: "Es un bot de consumo guiado que te dice qué ver cada día."
-- H5: "Si quieres probarlo GRATIS → Responde: YO"
+- H5: "Si quieres probarlo GRATIS → Responde: BOT"
 
 ---
 
@@ -59,10 +59,10 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar que un cambio puntual puede transformar resultados.
 
 **Ejemplo aplicado:**
-- H1: "Mis historias tenían menos de 300 views…"
+- H1: "Mis historias tenían [prueba real: tus vistas de antes]…"
 - H2: "El error: empezaba siempre hablando a cámara sin contexto."
 - H3: "Solo cambié la PRIMERA imagen: ahora abro con una escena del día relacionada al contenido."
-- H4: "Resultado → +1,200 views y 27 respuestas en una historia."
+- H4: "Resultado → [prueba real: captura de vistas y respuestas de después]."
 - H5: "Si quieres saber cuál sería TU cambio → Responde: CAMBIO"
 
 ---
@@ -73,7 +73,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** explicar un proceso en forma de transición visual o conceptual.
 
 **Ejemplo aplicado:**
-- H1: "Antes: tenía 0 ideas para historias. Literal 0. Y ahora mira mi calendario de planificación"
+- H1: "Antes: no tenía ideas para historias. Y ahora mira mi calendario de planificación"
 - H2: "Hice este proceso: 1) Definir objetivo 2) Usar gancho 3) Micro enseñanza 4) CTA"
 - H3: "El cambio clave → dejar de grabar ideas sueltas y empezar a grabar con estructura."
 - H4: "Después → Historias diarias, más interacciones y ventas cada semana."
@@ -87,8 +87,8 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar un resultado real y explicar por qué se logra.
 
 **Ejemplo aplicado:**
-- H1: "Esto es lo que pasa cuando usas un gancho visual potente: tus historias se disparan de 300 → 1,800 views."
-- H2: "¿Por qué? Porque la gente juzga en 0.2 segundos si se queda o no."
+- H1: "Esto es lo que pasa cuando usas un gancho visual potente: tus historias se disparan [prueba real: vistas antes → después]."
+- H2: "¿Por qué? Porque la gente decide en un instante si se queda o no."
 - H3: "El proceso: 1) Gancho visual 2) Gancho verbal 3) Micro enseñanza 4) CTA"
 - H4: "Así se ve mi dashboard → (captura mostrando incremento)"
 - H5: "Si quieres que te analice tu gancho → Responde: SUCEDE"
@@ -116,7 +116,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "¿Qué es un GANCHO VISUAL? La imagen que captura atención."
-- H2: "¿Por qué importa? Porque tu cerebro decide en 0.2 segundos si sigue mirando."
+- H2: "¿Por qué importa? Porque tu cerebro decide en un instante si sigue mirando."
 - H3: "Micro-explicación: es un objeto, acción o escena que genera curiosidad."
 - H4: "Ejemplo: mostrar una libreta abierta antes de enseñar el método."
 - H5: "Si quieres tu gancho visual ideal → Responde: GANCHO."
@@ -130,7 +130,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "Algo me sorprendió hoy…"
-- H2: "Revisé 50 historias de mis seguidores y más del 80% empezaba sin un gancho visual."
+- H2: "Revisé [prueba real: cuántas] historias de mis seguidores y [prueba real: qué parte] empezaba sin un gancho visual."
 - H3: "Y esto hace que la mayoría pierda al público en el primer segundo."
 - H4: "Conclusión: siempre abre con una escena que diga dónde estás o qué estás haciendo."
 - H5: "Si quieres que analice tus historias → Responde: SORPRESA."
@@ -198,10 +198,10 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** convertir casos reales en historias poderosas.
 
 **Ejemplo aplicado:**
-- H1: "Ella es Clara. Tenía 2,400 seguidores y cero ventas."
+- H1: "Ella es [caso de una clienta]. Tenía [prueba real: su punto de partida]."
 - H2: "Su problema: sus historias no generaban confianza."
 - H3: "El proceso: 1) Arreglamos su gancho 2) Añadimos mini historias 3) Creamos CTA personalizada"
-- H4: "Resultado → 3 sesiones vendidas en su primera semana."
+- H4: "Resultado → [prueba real: su resultado, con captura]."
 - H5: "¿Quieres que hagamos tu proceso? Responde: CASO."
 
 ---
@@ -212,7 +212,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** convertir una escena de tu vida en una enseñanza útil.
 
 **Ejemplo aplicado:**
-- H1: "Hoy en Starbucks pasó algo curioso…"
+- H1: "Hoy en la cafetería pasó algo curioso…"
 - H2: "Una chica estaba grabando historias pero nadie le respondía."
 - H3: "Insight: no mostraba NINGÚN contexto, solo su cara."
 - H4: "Aplicación: abre tus historias con una escena del entorno para aumentar conexión."
@@ -227,7 +227,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: (Clip mostrando tu escritorio lleno de post-its) Texto: "¿Ves este caos?"
-- H2: "Así amaneció mi escritorio porque estoy revisando 150 historias de mis alumnos."
+- H2: "Así amaneció mi escritorio porque estoy revisando [prueba real: cuántas] historias de mis alumnos."
 - H3: "Y descubrí algo: la mayoría abre sus historias sin contexto."
 - H4: "Lección: abre siempre con una escena visual del entorno."
 - H5: "¿Quieres una apertura cinematográfica diseñada para ti? Responde: CINE."
@@ -240,9 +240,9 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar un cambio tangible en ti, en tu cliente o en tu proceso.
 
 **Ejemplo aplicado:**
-- H1: "ANTES → mis historias tenían 300 views."
+- H1: "ANTES → mis historias tenían [prueba real: vistas de antes]."
 - H2: "Durante → estuve aplicando esta estructura y analizando mis aperturas."
-- H3: "DESPUÉS → ahora superan las 1,500 views."
+- H3: "DESPUÉS → ahora tienen [prueba real: vistas de después, con captura]."
 - H4: "El insight: el primer segundo define todo."
 - H5: "Si quieres tu evolución → Responde: EVOLUCIÓN."
 
@@ -284,7 +284,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Crees que no puedes vender porque tienes pocos seguidores."
 - H2: "Pero es falso: la gente compra claridad, no alcance."
-- H3: "Prueba: mis alumnas venden con menos de 1,500 seguidores."
+- H3: "Prueba: [prueba real: caso de una clienta que vende con pocos seguidores]."
 - H4: "Nueva creencia: necesitas estructura, no números."
 - H5: "Si quieres que revisemos tu creencia principal → Responde: CREENCIA."
 
@@ -299,7 +299,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H1: "Hoy cometí un error grabando historias…"
 - H2: "Contexto: estaba respondiendo mensajes y grabando a la vez."
 - H3: "El error: hablaba sin mostrar dónde estaba."
-- H4: "El aprendizaje: el contexto visual aumenta retención en 40%."
+- H4: "El aprendizaje: el contexto visual hace que la gente se quede."
 - H5: "La aplicación: abrí con una escena del café y luego recién hablé."
 - H6: "Si quieres saber tu error principal → Responde: ERROR."
 
@@ -326,7 +326,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "ALERTA: si estás haciendo esto, tu alcance va a caer."
-- H2: "Revisé 50 historias hoy y el 80% empieza sin contexto."
+- H2: "Revisé [prueba real: cuántas] historias hoy y [prueba real: qué parte] empieza sin contexto."
 - H3: "El algoritmo penaliza contenido que no retiene en el primer segundo."
 - H4: "Acción: abre con una escena + texto fuerte."
 - H5: "Si quieres una alerta para tus historias → Responde: ALERTA."
@@ -344,6 +344,241 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H3: "La mayoría muestra siempre su cara → la gente lo ignora."
 - H4: "Cuando abres con un objeto inesperado, tu retención sube."
 - H5: "Si quieres tu rompe patrón diseñado → Responde: PATRÓN."
+
+---
+
+## #25 — STORYTELLING DE MOMENTO INCÓMODO
+**Patrón:** Escena incómoda → Emoción → Revelación → Enseñanza → CTA
+**Clasificación:** Storytelling emocional + vulnerabilidad
+**Objetivo:** convertir un momento real que te incomodó (un mensaje, una duda de un cliente, un silencio) en una enseñanza que tu audiencia también necesita.
+
+**Pasos:**
+1. **Escena incómoda** (real y cotidiana, sin exagerar): un mensaje que te "picó", un cliente que dudó, un comentario que te dejó pensando
+2. **Emoción** (cómo te hizo sentir): "Me picó.", "Me incomodó más de lo normal.", "Me dejó pensando."
+3. **Revelación** (qué entendiste a partir de esa incomodidad): "Me di cuenta de que ese comentario venía del miedo."
+4. **Enseñanza aplicable** (conecta la revelación con una idea práctica para tu audiencia)
+5. **CTA**: "Si quieres que analice tu caso → responde INCÓMODO."
+
+**Ejemplo aplicado:**
+- H1: "Ayer un cliente me dijo: 'No entiendo bien lo que ofreces'… y me picó."
+- H2: "Me incomodó más de lo que debería."
+- H3: "Revelación: si una persona no entiende, es porque no estoy comunicando con claridad."
+- H4: "Enseñanza: tus historias deben explicar tu oferta incluso cuando no estás vendiendo."
+- H5: "¿Quieres que revise si tu oferta se entiende? Responde: INCÓMODO."
+
+---
+
+## #26 — PREGUNTA RETÓRICA
+**Patrón:** Pregunta → Micro reflexión → Explicación → Mini enseñanza → CTA
+**Clasificación:** Reflexión + cambio de perspectiva
+**Objetivo:** cuestionar algo que tu audiencia da por "normal" y llevarla a una enseñanza que puede aplicar hoy.
+
+**Pasos:**
+1. **Pregunta retórica potente** (cuestiona lo que se asume como normal): "¿Y si el problema no es tu contenido, sino tu mensaje?"
+2. **Micro reflexión** (empuja la incomodidad): "La mayoría nunca se lo pregunta…", "Piénsalo un momento."
+3. **Explicación** (la razón detrás de la pregunta)
+4. **Mini enseñanza** (algo práctico para aplicar hoy)
+5. **CTA**: "Si quieres tu pregunta personalizada → responde PREGUNTA."
+
+**Ejemplo aplicado:**
+- H1: "¿Y si el problema no es tu contenido, sino cómo lo cuentas?"
+- H2: "La mayoría nunca se lo pregunta."
+- H3: "Explicación: no usas una estructura narrativa, solo hablas."
+- H4: "Mini enseñanza: abre siempre con una escena + texto fuerte."
+- H5: "¿Quieres tu pregunta retórica personalizada? → Responde: PREGUNTA."
+
+---
+
+## #27 — DESMONTANDO UNA OBJECIÓN
+**Patrón:** Objeción → Por qué aparece → Contraprueba → Reemplazo → CTA
+**Clasificación:** Venta consultiva / manejo de objeciones
+**Objetivo:** responder en público la objeción más frecuente antes de comprar y reemplazarla por una creencia que sí ayuda a decidir.
+
+**Pasos:**
+1. **Objeción directa** (dicha como la diría tu cliente): "Suena bonito, pero no tengo tiempo.", "No sé si esto funcionará conmigo."
+2. **Por qué aparece** (desde la empatía): "Esa objeción aparece porque has probado sin estructura."
+3. **Contraprueba / evidencia** (un caso, una captura o un dato REAL tuyo)
+4. **Reemplazo mental** (una creencia más útil): "No necesitas tiempo, necesitas método."
+5. **CTA**: "Si quieres que desmontemos tu objeción → responde OBJECIÓN."
+
+**Ejemplo aplicado:**
+- H1: "'[Tu nombre], no sé qué decir en historias…'"
+- H2: "Esa objeción aparece porque has probado contenido sin estructura."
+- H3: "Contraprueba: [caso real de una clienta que pensaba igual, con su captura]."
+- H4: "Reemplazo: no necesitas más seguidores, necesitas claridad."
+- H5: "Si quieres que desmontemos tu objeción → Responde: OBJECIÓN."
+
+---
+
+## #28 — NARRATIVA DE RUTINA
+**Patrón:** Momento cotidiano → Acción → Micro explicación → Enseñanza → CTA
+**Clasificación:** Lifestyle + educación disimulada
+**Objetivo:** enseñar algo de tu tema usando una escena simple de tu día, sin parecer clase.
+
+**Pasos:**
+1. **Momento cotidiano** (escena simple y real): preparando café, caminando, ordenando el escritorio, esperando transporte
+2. **Acción** (lo que estás haciendo exactamente): "Estoy ordenando mis ideas…"
+3. **Micro explicación** (conecta la acción con un concepto de tu tema): "Así como ordeno mi escritorio, ordeno mis historias…"
+4. **Enseñanza práctica** (una idea que puedan aplicar ya)
+5. **CTA**: "Si quieres tu guion de rutina → responde RUTINA."
+
+**Ejemplo aplicado:**
+- H1: (Clip preparando café) Texto: "Mira esto…"
+- H2: "Mientras espero, ordeno mis ideas para grabar historias."
+- H3: "Me di cuenta de que cuando no tengo claridad, las vistas bajan."
+- H4: "Lección: tu rutina es una gran forma de enseñar sin parecer profe."
+- H5: "¿Quieres tu guion para historias de rutina? → Responde: RUTINA."
+
+---
+
+## #29 — INICIO → CAOS → ORDEN
+**Patrón:** Inicio tranquilo → Aparición del caos → Explicación → Orden → CTA
+**Clasificación:** Storytelling de giro (mini arco narrativo)
+**Objetivo:** generar un pequeño "¡uy!" con un imprevisto y mostrar cómo lo resolviste con tu método.
+
+**Pasos:**
+1. **Inicio tranquilo** (escena calmada): "Todo empezó normal…", "Mi día estaba fluyendo…"
+2. **Aparición del caos** (algo rompe la calma): un mensaje inesperado, un error técnico, una mala métrica, una idea que no funcionó
+3. **Explicación** (qué significó ese caos): "Me di cuenta de que estaba trabajando sin estructura."
+4. **Orden** (cómo lo resolviste): "Volví a lo básico y todo fluyó."
+5. **CTA**: "Si quieres armar tu versión → responde CAOS."
+
+**Ejemplo aplicado:**
+- H1: "Mi día empezó normal…"
+- H2: "Hasta que revisé mis historias y vi esto: retención bajísima 🤦🏻‍♀️ (captura)"
+- H3: "Entendí que estaba volviendo a grabar sin estructura."
+- H4: "Ajusté la apertura con contexto visual → la retención subió."
+- H5: "¿Quieres tu estructura inicio, caos y orden? → Responde: CAOS."
+
+---
+
+## #30 — DEMOSTRACIÓN INVISIBLE
+**Patrón:** Acción silenciosa → Revelación → Explicación → Conexión → CTA
+**Clasificación:** Autoridad por proceso (detrás de cámara)
+**Objetivo:** mostrar el trabajo que no se ve para que tu audiencia valore lo que hay detrás del resultado.
+
+**Pasos:**
+1. **Acción silenciosa** (no hablas, solo se VE tu proceso): analizando, subrayando un cuaderno, diseñando, respondiendo clientes
+2. **Revelación** (texto que explica qué estás haciendo): "Estoy revisando las historias de mis alumnas."
+3. **Explicación del impacto** (qué significa esa acción para tus clientes): "Esto es lo que no se ve, pero hace que todo funcione."
+4. **Conexión emocional** (une el proceso con su problema): "Tú ves la historia final; yo veo lo que te impide avanzar."
+5. **CTA**: "Si quieres que revise la tuya → responde INVISIBLE."
+
+**Ejemplo aplicado:**
+- H1: (Video: tú revisando historias en tu laptop, sin hablar)
+- H2: "Estoy revisando las historias que me mandaron hoy."
+- H3: "Esto es lo que realmente cambia tus ventas."
+- H4: "La gente solo ve el resultado, no el análisis detrás de cada historia."
+- H5: "¿Quieres que revise la tuya? → Responde: INVISIBLE."
+
+---
+
+## #31 — ROMPIENDO EL CICLO
+**Patrón:** Ciclo negativo → Identificación → Ruptura → Nuevo camino → CTA
+**Clasificación:** Identificación + cambio de hábito
+**Objetivo:** nombrar el patrón que tu avatar repite sin darse cuenta y mostrarle la salida con tu método.
+
+**Pasos:**
+1. **Ciclo negativo** (el patrón que repite): "Publicas → nadie compra → te frustras → dejas de publicar."
+2. **Identificación** (que sienta que la entiendes): "Sé que te pasa porque yo también estuve ahí."
+3. **Ruptura** (el momento en que tú rompiste ese ciclo)
+4. **Nuevo camino** (tu método o tu forma de salir)
+5. **CTA**: "Si quieres romper tu ciclo → responde CICLO."
+
+**Ejemplo aplicado:**
+- H1: "¿Te das cuenta de este ciclo? Publicas → nadie compra → te frustras → dejas de publicar."
+- H2: "Sé que te pasa porque yo también estuve ahí."
+- H3: "Lo rompí cuando entendí que mis historias no estaban hechas para retener."
+- H4: "El camino nuevo empezó con estructura: escena → texto → mensaje → CTA."
+- H5: "Si quieres romper tu ciclo → Responde: CICLO."
+
+---
+
+## #32 — EL CAMBIO DE PERSONAJE
+**Patrón:** Antes emocional → Punto de quiebre → Nueva versión → Prueba → CTA
+**Clasificación:** Transformación personal (identidad)
+**Objetivo:** contar quién eras y quién eres hoy para que tu audiencia se vea en tu "antes" y quiera tu "después".
+
+**Pasos:**
+1. **Antes emocional** (no visual, emocional): "Antes me daba pánico vender."
+2. **Punto de quiebre** (el momento específico que te hizo cambiar): "Hasta que un día alguien me dijo que no se entendía lo que hacía."
+3. **Nueva versión** (quién eres ahora): "Hoy sé exactamente cómo abrir una historia."
+4. **Prueba del cambio** (algo concreto y REAL: captura, testimonio, resultado tuyo)
+5. **CTA**: "Si tú también quieres tu cambio → responde PERSONAJE."
+
+**Ejemplo aplicado:**
+- H1: "Antes me daba miedo grabar historias. Literal."
+- H2: "Hasta que un día un cliente me dijo: 'No entiendo lo que cuentas'."
+- H3: "A partir de ahí, cambié mi enfoque a contar una historia cada día."
+- H4: "Hoy mis historias retienen, enseñan y venden. [Prueba real: captura de respuestas o ventas]"
+- H5: "¿Quieres tu cambio de personaje? → Responde: PERSONAJE."
+
+---
+
+## #33 — TRANSFORMACIÓN DEL CLIENTE
+**Patrón:** Antes → Duda → Punto clave → Después → Invitación
+**Clasificación:** Prueba social + storytelling
+**Objetivo:** mostrar el cambio de un cliente desde su duda inicial (no solo su resultado) y cerrar con una invitación suave.
+
+**Pasos:**
+1. **Antes del cliente** (estado inicial emocional o funcional): "Ella no sabía qué decir en historias."
+2. **Duda inicial** (la creencia que lo frenaba): "Pensaba que no era para ella."
+3. **Punto clave** (el momento de tu método que le cambió la percepción)
+4. **Después** (resultado real, emocional o numérico, solo si es verificable)
+5. **Invitación suave** (acompaña, no empuja): "Si quieres tu propia transformación, responde TRANSFORMACIÓN."
+
+**Diferencia con #14 Mini documental:** el #14 se centra en el proceso paso a paso; el #33 se centra en la duda que tenía el cliente y en cómo cambió su forma de verse.
+
+**Ejemplo aplicado:**
+- H1: "Ella pensaba que sus historias eran aburridas…"
+- H2: "Creía que nunca iba a vender por Instagram."
+- H3: "Hasta que aplicó una estructura: escena → texto → micro enseñanza."
+- H4: "Hoy vende todas las semanas con historias reales."
+- H5: "¿Quieres tu transformación? → Responde: TRANSFORMACIÓN."
+
+---
+
+## #34 — DESMENTIDA ESTRATÉGICA
+**Patrón:** Mito → Por qué es falso → Prueba → Qué sí funciona → CTA
+**Clasificación:** Ruptura de mito del mercado + autoridad
+**Objetivo:** desmentir una creencia popular de tu nicho y presentar tu método como lo que sí funciona.
+
+**Pasos:**
+1. **Mito del mercado** (frase poderosa que tu audiencia cree): "Para vender necesitas miles de seguidores."
+2. **Por qué es falso** (explicación directa)
+3. **Prueba** (tu caso, casos de clientes o ejemplos REALES)
+4. **Qué sí funciona** (aquí colocas tu método)
+5. **CTA**: "Si quieres desmontar un mito de tu nicho → responde MITO."
+
+**Diferencia con #19 y #20:** el #19 revela una verdad oculta, el #20 ataca una creencia personal del avatar; el #34 desmiente un mito que repite todo el mercado.
+
+**Ejemplo aplicado:**
+- H1: "El mito más común: necesitas miles de seguidores para vender."
+- H2: "Es falso: lo que necesitas es claridad."
+- H3: "[Prueba real: captura o caso de una clienta que vende con pocos seguidores]"
+- H4: "Lo que sí funciona: estructura + narrativa."
+- H5: "¿Quieres desmontar un mito de tu nicho? → Responde: MITO."
+
+---
+
+## #35 — ATMÓSFERA / ESCENA SENSITIVA
+**Patrón:** Escena sensorial → Emoción → Reflexión → Conexión → CTA
+**Clasificación:** Lifestyle sensorial + reflexión
+**Objetivo:** transmitir una sensación (no información) con una escena bonita y conectarla con tu tema.
+
+**Pasos:**
+1. **Escena sensorial** (video o foto que genere atmósfera): luz cálida filtrándose, lluvia en la ventana, vapor del café, manos escribiendo
+2. **Emoción interna** (lo que esa escena te hace sentir): "Esto me recordó por qué empecé."
+3. **Reflexión** (tu insight personal): "La claridad llega cuando paras."
+4. **Conexión con tu tema** (lo vinculas con tu nicho)
+5. **CTA**: "Si quieres mejorar la atmósfera de tus historias → responde ATM."
+
+**Ejemplo aplicado:**
+- H1: (Clip: luz del amanecer entrando por la ventana) Texto: "Mira esta luz…"
+- H2: "Me recordó por qué empecé este trabajo."
+- H3: "Reflexión: la claridad llega cuando paras."
+- H4: "Así deberían sentirse tus historias: claras, suaves y con propósito."
+- H5: "¿Quieres mejorar la atmósfera de tus historias? → Responde: ATM."
 
 ---
 

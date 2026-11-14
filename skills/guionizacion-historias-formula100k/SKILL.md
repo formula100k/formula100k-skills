@@ -85,7 +85,7 @@ Convierte una idea, oferta u objetivo en una **secuencia completa de 3-6 histori
 Cargar **siempre** estos archivos del directorio `references/` antes de generar:
 
 1. `references/categorias.md` — las 5 categorías de historia
-2. `references/estructuras.md` — las 24 estructuras de guion disponibles
+2. `references/estructuras.md` — las 35 estructuras de guion disponibles
 3. `references/formatos.md` — los 15 formatos audiovisuales
 4. `references/ctas.md` — guía de CTAs con consecuencia
 5. `references/briefing-visual.md` — paleta de colores y reglas visuales
@@ -109,16 +109,16 @@ Toma como input la idea/oferta/objetivo del usuario y devuelve un **archivo .md*
 ## INPUT
 
 El usuario te dará alguna combinación de:
-- Una **idea** ("quiero contar el caso de Brenda")
-- Una **oferta a vender** ("vender el GPT del primer segundo")
-- Un **objetivo** ("captar leads para el banco de historias")
+- Una **idea** ("quiero contar el caso de [una clienta]")
+- Una **oferta a vender** ("vender [tu oferta]")
+- Un **objetivo** ("captar leads para [tu regalo]")
 - Una **categoría preferida** ("hagamos un Lead Magnet" / "esto es de urgencia")
 - Una **estructura específica** ("usa la #14 Mini documental")
 - **Día/hora** dentro de un calendario ("para el jueves a las 6pm")
 
 Si el input es ambiguo, hacer **máximo 1 pregunta clarificadora** corta antes de generar. Ejemplos de buena pregunta:
 - "¿Esto es para captar leads o cerrar venta?"
-- "¿Es de la oferta del Banco de Historias o del GPT?"
+- "¿Es para [tu oferta A] o para [tu oferta B]?"
 
 No pidas más de un dato: con la oferta + objetivo basta.
 
@@ -140,10 +140,10 @@ Lee `references/categorias.md`. Decide cuál encaja:
 
 Si el usuario ya te dijo la categoría, respétala. Si no, dedúcela del objetivo.
 
-### Paso 2 — Elegir la ESTRUCTURA (de 24)
+### Paso 2 — Elegir la ESTRUCTURA (de 35)
 
 Lee `references/estructuras.md`. Cada estructura tiene:
-- Número (#1-24)
+- Número (#1-35)
 - Nombre (ej: "Soltamos la bomba")
 - Patrón (ej: Tensión → Problema → Revelación → Beneficio → CTA)
 - Cuándo usar
@@ -158,6 +158,27 @@ Reglas para elegir:
 - Si es **urgencia con consecuencia** → #6 Esto es lo que sucede cuando + CTA con deadline real
 - Si es **storytelling personal** → #1 Storytelling Chisme, #15 Lección Inesperada o #18 Diario Personal
 - Si es **corregir un error común** → #7 Error Fatal o #4 Solo tuve que hacer un cambio
+- Si un **momento te incomodó** (un mensaje, una duda de un cliente) → #25 Momento incómodo
+- Si quieres **cuestionar lo que tu audiencia da por normal** → #26 Pregunta retórica
+- Si hay una **objeción que frena la compra** → #27 Desmontando una objeción
+- Si es **lifestyle que enseña** (día a día, recuperar vistas) → #28 Narrativa de rutina o #35 Atmósfera
+- Si pasó un **imprevisto que resolviste** → #29 Inicio → Caos → Orden
+- Si quieres **mostrar el trabajo que no se ve** → #30 Demostración invisible
+- Si el avatar **repite un patrón sin darse cuenta** → #31 Rompiendo el ciclo
+- Si es **tu propia transformación** (quién eras y quién eres) → #32 El cambio de personaje
+- Si es **la transformación de un cliente desde su duda** → #33 Transformación del cliente (#14 si quieres contar el proceso)
+- Si hay un **mito que repite todo el mercado** → #34 Desmentida estratégica
+
+**Selector rápido por categoría** (las 35 caben en las 5 categorías; esto es punto de partida, no regla):
+
+| Categoría | Estructuras que mejor encajan |
+|---|---|
+| 🔥 URGENCIA | #6, #10, #13, #23, #27 |
+| 💥 ONE-SHOT | #1, #9, #16, #19, #24, #26, #34 |
+| 🎁 LEAD MAGNET | #3, #4, #7, #8, #11, #12, #22, #31 |
+| 💛 LIBRE/Lifestyle | #15, #18, #21, #25, #28, #29, #30, #35 |
+| 📊 ENCUESTAS | #1, #2, #20, #26 |
+| (venta con prueba, cualquier categoría) | #5, #14, #17, #32, #33 |
 
 Si dudas entre 2, elige la más usada en el patrón observado en sus 11 ejemplos: #9, #10, #14, #6 son los caballos de batalla.
 
@@ -192,13 +213,13 @@ Para cada slide produce 6 datos:
 2. **Frase principal** (la caja blanca/negra/amarilla del slide — máx 12 palabras)
 3. **Capa visual** (qué captura/mockup/elemento va sobre el fondo — describe en 1 línea)
 4. **Formato** (🎥 [F1-F15] o 📸 [F1-F15])
-5. **Qué grabar/buscar** (instrucción concreta para el usuario: "graba caminando frente al Buda" o "captura de tu calendario lleno")
+5. **Qué grabar/buscar** (instrucción concreta para el usuario: "graba caminando por tu escenario" o "captura de tu calendario lleno")
 6. **Briefing de diseño** (cajas de qué color, dónde, qué emoji, qué flecha — usa `references/briefing-visual.md`)
 
 Reglas de copy:
 - Frases cortas (máx 12 palabras por slide).
 - Resalta 1-2 palabras clave por slide (las que irán con highlight amarillo/verde).
-- El último slide tiene **palabra clave fácil de tipear** (yo, GPT, INFO, BOMBA, TESIS, 100K, GUÍA…).
+- El último slide tiene **palabra clave fácil de tipear** (QUIERO, INFO, BOMBA, TESIS, GUÍA o una palabra ligada al tema).
 - El penúltimo slide muestra **el entregable** (mockup, dashboard, captura).
 - Si la categoría es URGENCIA: añade consecuencia real ("solo hoy", "mañana lo borro", "se cierra a las 23:59"). Lee `references/ctas.md` para 80+ frases.
 
@@ -222,8 +243,8 @@ Nombre del archivo:
 ```
 
 Ejemplos:
-- `2026-05-06_lead-magnet_gpt-primer-segundo.md`
-- `2026-05-06_one-shot_caso-brenda-39-sesiones.md`
+- `2026-05-06_lead-magnet_regalo-checklist.md`
+- `2026-05-06_one-shot_caso-clienta.md`
 - `2026-05-06_urgencia_ultimo-dia-banco-historias.md`
 
 El **formato exacto del archivo** está en `references/output-template.md`. Síguelo al pie de la letra: la skill `historias-a-imagenes-nanobanana` lo va a parsear.
@@ -231,7 +252,7 @@ El **formato exacto del archivo** está en `references/output-template.md`. Síg
 Después de guardar, muestra al usuario:
 1. **Preview de la tabla slide-by-slide** en el chat (markdown)
 2. **Ruta del archivo guardado**
-3. **Próximo paso sugerido**: "¿Querés que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
+3. **Próximo paso sugerido**: "¿Quieres que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
 
 ---
 

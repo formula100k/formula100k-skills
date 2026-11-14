@@ -23,8 +23,8 @@ Las que la gente puede tipear en 1 segundo. Patrón observado:
 
 | Tipo | Ejemplos |
 |---|---|
-| Iniciales/cortas | YO, GPT, INFO, GUÍA, CASO, DEMO, ACCESO, BOMBA |
-| Con identidad | TESIS, 100K, CHEVA, CLUB |
+| Iniciales/cortas | INFO, GUÍA, CASO, DEMO, ACCESO, BOMBA |
+| Con identidad (ligadas a tu tema o tu marca) | TESIS, CLUB, [palabra de tu marca] |
 | De contenido | TIPS, ESTRUCTURA, LISTA, MAPA, BANCO |
 | Emocionales | LISTO, QUIERO, NECESITO, AYUDA, SÍ, AHORA |
 
@@ -134,20 +134,20 @@ Versiones cortas, listas para escribir directo en el slide final:
 1. "Responde **GPT** y te llega el bot en 1 minuto 🎁"
 2. "Comenta **'Club'** y te mando la info"
 3. "Escribe **INFO** y te las envío 😉"
-4. "Responde **YO** y te mando el link automático"
+4. "Responde **QUIERO** y te mando el link automático"
 5. "Pon solo **'👀'** y te incluyo en la lista"
 6. "Comenta **CASO** y agendamos"
-7. "Responde **CHEVA** y te mando el banco"
+7. "Responde **BANCO** y te mando el banco"
 
 **Con consecuencia real:**
 8. "Responde **GUÍA** antes de las 23:59 — mañana ya no la mando"
-9. "Solo respondo **YO** a los primeros 20 mensajes"
+9. "Solo respondo **QUIERO** a los primeros mensajes"
 10. "Comenta **BOMBA** hoy. Mañana cambio el precio"
 11. "Escribe **DEMO** ahora — el bot se cierra a las 9pm"
 12. "Pon **AHORA** si quieres entrar antes del cierre del viernes"
 
 **Con doble CTA (cuando hay 2 audiencias):**
-13. "Responde **YO** si quieres el link / **NO** si prefieres que te explique antes"
+13. "Responde **LINK** si quieres el link / **NO** si prefieres que te explique antes"
 14. "Comenta **A** si tienes -1k seguidores / **B** si tienes +1k"
 15. "Responde **CASO** si te identificas / **DUDA** si tienes preguntas"
 
@@ -168,7 +168,7 @@ Versiones cortas, listas para escribir directo en el slide final:
 
 **Para lead magnet entregable:**
 25. "Si quieres el PDF — Responde **PDF**"
-26. "Para acceder al video → Responde **100K**"
+26. "Para acceder al video → Responde **VIDEO**"
 27. "Si quieres la plantilla → Comenta **GUÍA**"
 
 **Para urgencia con consecuencia tangible:**

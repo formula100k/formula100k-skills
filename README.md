@@ -135,6 +135,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 - `audios-venta-f100k` — Audios de venta para DM/WhatsApp
 - `constructor-ofertas-f100k` — Construir ofertas irresistibles
 - `cazador-lead-magnets-f100k` — Lead magnets tangibles que generan comentarios masivos (Método LMT)
+- `analiza-lanzamiento-f100k` — Analiza un lanzamiento que ya pasó: embudo, show-up, ventas, CPL, ROAS y LTV, dónde se cayó, 3 cambios y reporte HTML («analiza mi lanzamiento»)
 
 ### Comunidad Skool
 - `creadora-comunidades-skool` — Construir comunidades Skool desde cero

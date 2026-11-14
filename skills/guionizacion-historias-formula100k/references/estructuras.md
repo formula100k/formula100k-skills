@@ -19,8 +19,8 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Me jalaron en la tesis 😭 No saben lo que pasó…"
 - H2: "¿De qué crees que trataba mi tesis? A) IA B) Marketing C) Contenido"
-- H3: "La verdad: analicé 150 videos virales a mano. Encontré patrones que NADIE enseña."
-- H4: "Estos fueron los insights más fuertes… (te muestro 3 puntos del análisis)"
+- H3: "La verdad: analicé [prueba real: cuántos casos revisaste] a mano. Encontré patrones que NADIE enseña."
+- H4: "Estos fueron los insights más fuertes… (te muestro los puntos clave del análisis)"
 - H5: "Si quieres ver el análisis completo → Responde: TESIS"
 
 ---
@@ -33,7 +33,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Actualización sobre mi tesis 😬"
 - H2: "Ahora detectan cuánta IA has usado… ¿Qué opinan de eso?"
-- H3: "En mi análisis revisé 150 videos virales y encontré 7 patrones…"
+- H3: "En mi análisis revisé [prueba real: cuántos casos] y encontré [prueba real: cuántos patrones]…"
 - H4: "Esta es la hoja real donde estoy clasificando todo (screenshot con flechas)"
 - H5: "Si quieres ver los patrones → Responde: TESIS"
 
@@ -49,7 +49,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H2: "La estaba fregando con el sistema anterior… así que lo rehice."
 - H3: "Y a todos les encantó → (screenshots de comentarios)"
 - H4: "Es un bot de consumo guiado que te dice qué ver cada día."
-- H5: "Si quieres probarlo GRATIS → Responde: YO"
+- H5: "Si quieres probarlo GRATIS → Responde: BOT"
 
 ---
 
@@ -59,10 +59,10 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar que un cambio puntual puede transformar resultados.
 
 **Ejemplo aplicado:**
-- H1: "Mis historias tenían menos de 300 views…"
+- H1: "Mis historias tenían [prueba real: tus vistas de antes]…"
 - H2: "El error: empezaba siempre hablando a cámara sin contexto."
 - H3: "Solo cambié la PRIMERA imagen: ahora abro con una escena del día relacionada al contenido."
-- H4: "Resultado → +1,200 views y 27 respuestas en una historia."
+- H4: "Resultado → [prueba real: captura de vistas y respuestas de después]."
 - H5: "Si quieres saber cuál sería TU cambio → Responde: CAMBIO"
 
 ---
@@ -73,7 +73,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** explicar un proceso en forma de transición visual o conceptual.
 
 **Ejemplo aplicado:**
-- H1: "Antes: tenía 0 ideas para historias. Literal 0. Y ahora mira mi calendario de planificación"
+- H1: "Antes: no tenía ideas para historias. Y ahora mira mi calendario de planificación"
 - H2: "Hice este proceso: 1) Definir objetivo 2) Usar gancho 3) Micro enseñanza 4) CTA"
 - H3: "El cambio clave → dejar de grabar ideas sueltas y empezar a grabar con estructura."
 - H4: "Después → Historias diarias, más interacciones y ventas cada semana."
@@ -87,8 +87,8 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar un resultado real y explicar por qué se logra.
 
 **Ejemplo aplicado:**
-- H1: "Esto es lo que pasa cuando usas un gancho visual potente: tus historias se disparan de 300 → 1,800 views."
-- H2: "¿Por qué? Porque la gente juzga en 0.2 segundos si se queda o no."
+- H1: "Esto es lo que pasa cuando usas un gancho visual potente: tus historias se disparan [prueba real: vistas antes → después]."
+- H2: "¿Por qué? Porque la gente decide en un instante si se queda o no."
 - H3: "El proceso: 1) Gancho visual 2) Gancho verbal 3) Micro enseñanza 4) CTA"
 - H4: "Así se ve mi dashboard → (captura mostrando incremento)"
 - H5: "Si quieres que te analice tu gancho → Responde: SUCEDE"
@@ -116,7 +116,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "¿Qué es un GANCHO VISUAL? La imagen que captura atención."
-- H2: "¿Por qué importa? Porque tu cerebro decide en 0.2 segundos si sigue mirando."
+- H2: "¿Por qué importa? Porque tu cerebro decide en un instante si sigue mirando."
 - H3: "Micro-explicación: es un objeto, acción o escena que genera curiosidad."
 - H4: "Ejemplo: mostrar una libreta abierta antes de enseñar el método."
 - H5: "Si quieres tu gancho visual ideal → Responde: GANCHO."
@@ -130,7 +130,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "Algo me sorprendió hoy…"
-- H2: "Revisé 50 historias de mis seguidores y más del 80% empezaba sin un gancho visual."
+- H2: "Revisé [prueba real: cuántas] historias de mis seguidores y [prueba real: qué parte] empezaba sin un gancho visual."
 - H3: "Y esto hace que la mayoría pierda al público en el primer segundo."
 - H4: "Conclusión: siempre abre con una escena que diga dónde estás o qué estás haciendo."
 - H5: "Si quieres que analice tus historias → Responde: SORPRESA."
@@ -198,10 +198,10 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** convertir casos reales en historias poderosas.
 
 **Ejemplo aplicado:**
-- H1: "Ella es Clara. Tenía 2,400 seguidores y cero ventas."
+- H1: "Ella es [caso de una clienta]. Tenía [prueba real: su punto de partida]."
 - H2: "Su problema: sus historias no generaban confianza."
 - H3: "El proceso: 1) Arreglamos su gancho 2) Añadimos mini historias 3) Creamos CTA personalizada"
-- H4: "Resultado → 3 sesiones vendidas en su primera semana."
+- H4: "Resultado → [prueba real: su resultado, con captura]."
 - H5: "¿Quieres que hagamos tu proceso? Responde: CASO."
 
 ---
@@ -212,7 +212,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** convertir una escena de tu vida en una enseñanza útil.
 
 **Ejemplo aplicado:**
-- H1: "Hoy en Starbucks pasó algo curioso…"
+- H1: "Hoy en la cafetería pasó algo curioso…"
 - H2: "Una chica estaba grabando historias pero nadie le respondía."
 - H3: "Insight: no mostraba NINGÚN contexto, solo su cara."
 - H4: "Aplicación: abre tus historias con una escena del entorno para aumentar conexión."
@@ -227,7 +227,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: (Clip mostrando tu escritorio lleno de post-its) Texto: "¿Ves este caos?"
-- H2: "Así amaneció mi escritorio porque estoy revisando 150 historias de mis alumnos."
+- H2: "Así amaneció mi escritorio porque estoy revisando [prueba real: cuántas] historias de mis alumnos."
 - H3: "Y descubrí algo: la mayoría abre sus historias sin contexto."
 - H4: "Lección: abre siempre con una escena visual del entorno."
 - H5: "¿Quieres una apertura cinematográfica diseñada para ti? Responde: CINE."
@@ -240,9 +240,9 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Objetivo:** mostrar un cambio tangible en ti, en tu cliente o en tu proceso.
 
 **Ejemplo aplicado:**
-- H1: "ANTES → mis historias tenían 300 views."
+- H1: "ANTES → mis historias tenían [prueba real: vistas de antes]."
 - H2: "Durante → estuve aplicando esta estructura y analizando mis aperturas."
-- H3: "DESPUÉS → ahora superan las 1,500 views."
+- H3: "DESPUÉS → ahora tienen [prueba real: vistas de después, con captura]."
 - H4: "El insight: el primer segundo define todo."
 - H5: "Si quieres tu evolución → Responde: EVOLUCIÓN."
 
@@ -284,7 +284,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 **Ejemplo aplicado:**
 - H1: "Crees que no puedes vender porque tienes pocos seguidores."
 - H2: "Pero es falso: la gente compra claridad, no alcance."
-- H3: "Prueba: mis alumnas venden con menos de 1,500 seguidores."
+- H3: "Prueba: [prueba real: caso de una clienta que vende con pocos seguidores]."
 - H4: "Nueva creencia: necesitas estructura, no números."
 - H5: "Si quieres que revisemos tu creencia principal → Responde: CREENCIA."
 
@@ -299,7 +299,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H1: "Hoy cometí un error grabando historias…"
 - H2: "Contexto: estaba respondiendo mensajes y grabando a la vez."
 - H3: "El error: hablaba sin mostrar dónde estaba."
-- H4: "El aprendizaje: el contexto visual aumenta retención en 40%."
+- H4: "El aprendizaje: el contexto visual hace que la gente se quede."
 - H5: "La aplicación: abrí con una escena del café y luego recién hablé."
 - H6: "Si quieres saber tu error principal → Responde: ERROR."
 
@@ -326,7 +326,7 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 
 **Ejemplo aplicado:**
 - H1: "ALERTA: si estás haciendo esto, tu alcance va a caer."
-- H2: "Revisé 50 historias hoy y el 80% empieza sin contexto."
+- H2: "Revisé [prueba real: cuántas] historias hoy y [prueba real: qué parte] empieza sin contexto."
 - H3: "El algoritmo penaliza contenido que no retiene en el primer segundo."
 - H4: "Acción: abre con una escena + texto fuerte."
 - H5: "Si quieres una alerta para tus historias → Responde: ALERTA."

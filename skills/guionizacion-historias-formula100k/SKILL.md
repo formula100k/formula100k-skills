@@ -109,16 +109,16 @@ Toma como input la idea/oferta/objetivo del usuario y devuelve un **archivo .md*
 ## INPUT
 
 El usuario te dará alguna combinación de:
-- Una **idea** ("quiero contar el caso de Brenda")
-- Una **oferta a vender** ("vender el GPT del primer segundo")
-- Un **objetivo** ("captar leads para el banco de historias")
+- Una **idea** ("quiero contar el caso de [una clienta]")
+- Una **oferta a vender** ("vender [tu oferta]")
+- Un **objetivo** ("captar leads para [tu regalo]")
 - Una **categoría preferida** ("hagamos un Lead Magnet" / "esto es de urgencia")
 - Una **estructura específica** ("usa la #14 Mini documental")
 - **Día/hora** dentro de un calendario ("para el jueves a las 6pm")
 
 Si el input es ambiguo, hacer **máximo 1 pregunta clarificadora** corta antes de generar. Ejemplos de buena pregunta:
 - "¿Esto es para captar leads o cerrar venta?"
-- "¿Es de la oferta del Banco de Historias o del GPT?"
+- "¿Es para [tu oferta A] o para [tu oferta B]?"
 
 No pidas más de un dato: con la oferta + objetivo basta.
 
@@ -213,13 +213,13 @@ Para cada slide produce 6 datos:
 2. **Frase principal** (la caja blanca/negra/amarilla del slide — máx 12 palabras)
 3. **Capa visual** (qué captura/mockup/elemento va sobre el fondo — describe en 1 línea)
 4. **Formato** (🎥 [F1-F15] o 📸 [F1-F15])
-5. **Qué grabar/buscar** (instrucción concreta para el usuario: "graba caminando frente al Buda" o "captura de tu calendario lleno")
+5. **Qué grabar/buscar** (instrucción concreta para el usuario: "graba caminando por tu escenario" o "captura de tu calendario lleno")
 6. **Briefing de diseño** (cajas de qué color, dónde, qué emoji, qué flecha — usa `references/briefing-visual.md`)
 
 Reglas de copy:
 - Frases cortas (máx 12 palabras por slide).
 - Resalta 1-2 palabras clave por slide (las que irán con highlight amarillo/verde).
-- El último slide tiene **palabra clave fácil de tipear** (yo, GPT, INFO, BOMBA, TESIS, 100K, GUÍA…).
+- El último slide tiene **palabra clave fácil de tipear** (QUIERO, INFO, BOMBA, TESIS, GUÍA o una palabra ligada al tema).
 - El penúltimo slide muestra **el entregable** (mockup, dashboard, captura).
 - Si la categoría es URGENCIA: añade consecuencia real ("solo hoy", "mañana lo borro", "se cierra a las 23:59"). Lee `references/ctas.md` para 80+ frases.
 
@@ -243,8 +243,8 @@ Nombre del archivo:
 ```
 
 Ejemplos:
-- `2026-05-06_lead-magnet_gpt-primer-segundo.md`
-- `2026-05-06_one-shot_caso-brenda-39-sesiones.md`
+- `2026-05-06_lead-magnet_regalo-checklist.md`
+- `2026-05-06_one-shot_caso-clienta.md`
 - `2026-05-06_urgencia_ultimo-dia-banco-historias.md`
 
 El **formato exacto del archivo** está en `references/output-template.md`. Síguelo al pie de la letra: la skill `historias-a-imagenes-nanobanana` lo va a parsear.

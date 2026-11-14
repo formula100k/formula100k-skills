@@ -15,8 +15,8 @@ La skill `historias-a-imagenes-nanobanana` lo va a parsear, así que la estructu
 - `tema-slug-3-palabras`: kebab-case, máximo 3 palabras descriptivas
 
 Ejemplos válidos:
-- `2026-05-06_lead-magnet_gpt-primer-segundo.md`
-- `2026-05-07_one-shot_caso-brenda-39-sesiones.md`
+- `2026-05-06_lead-magnet_regalo-checklist.md`
+- `2026-05-07_one-shot_caso-clienta.md`
 - `2026-05-09_urgencia_ultimo-dia-banco-historias.md`
 
 Ruta completa: `~/Documents/mi-contenido/historias/guiones/[NOMBRE].md`
@@ -79,8 +79,8 @@ mood: [breve frase mood, ej: "viaje + autoridad + cercanía"]
 ## 📝 Notas de producción
 
 - [Nota 1: ej. "El slide 3 puede grabarse en el mismo escenario del slide 1 si haces un giro de cámara"]
-- [Nota 2: ej. "Para slide 4 necesitas captura del dashboard del Banco de Historias — pídela a Cheva si no la tienes"]
-- [Nota 3: ej. "Si no tienes mockup del GPT, abre el GPT en pantalla completa y graba un screen recording de 5s"]
+- [Nota 2: ej. "Para slide 4 necesitas captura del panel de [tu oferta] — pídela a tu equipo si no la tienes"]
+- [Nota 3: ej. "Si no tienes mockup de [tu producto], ábrelo en pantalla completa y graba un screen recording de 5s"]
 
 ---
 

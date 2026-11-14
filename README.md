@@ -112,6 +112,7 @@ de cine. Dices «edita mi video con la plantilla …» y funciona sin instalar n
 
 ### Guionización y contenido
 - `guionizacion-formula100k` — 33 estructuras de guion + hooks + criterios virales
+- `guion-youtube-formula100k` — Guion completo de un video largo de YouTube con estructura de retención (doble caída, bucle abierto, cliffhangers), entregado como teleprompter .docx
 - `guionizacion-historias-formula100k` — Secuencias de historias para IG (3-6 stories)
 - `guionizacion-humanizada` — Quitar el tono de IA y aplicar voz personal
 - `carrusel-viral-formula100k` — Carruseles completos slide por slide

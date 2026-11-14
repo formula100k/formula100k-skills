@@ -131,7 +131,7 @@ Basadas en patrones observados en 11 secuencias reales del usuario:
 
 | Posición del slide | Formato preferido | Por qué |
 |---|---|---|
-| **Slide 1 (gancho)** | F1, F5, F7, F2 (siempre 🎥) | Movimiento atrapa; **NUNCA F4 o F9** acá |
+| **Slide 1 (gancho)** | F1, F5, F7, F2 (siempre 🎥) | Movimiento atrapa; **NUNCA F4 o F9** aquí |
 | **Slide 2 (problema/datos)** | F4, F13, F14 (📸) | Información densa que necesita lectura |
 | **Slide 3 (hallazgo/prueba)** | F4, F13 (📸) o F1/F15 (🎥) | Captura + voz para reforzar |
 | **Slide 4 (solución/demo)** | F15, F13 (mockup del producto) | Mostrar el entregable |

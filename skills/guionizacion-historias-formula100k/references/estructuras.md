@@ -1,6 +1,6 @@
-# 24 ESTRUCTURAS DE GUION PARA HISTORIAS — FÓRMULA 100K
+# 35 ESTRUCTURAS DE GUION PARA HISTORIAS — FÓRMULA 100K
 
-Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, paso a paso del copy, y ejemplo aplicado de 5 historias.
+Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, paso a paso del copy, y ejemplo aplicado de 4 a 6 historias. Las #25–#35 traen además el paso a paso completo.
 
 ---
 
@@ -344,6 +344,241 @@ Catálogo completo. Cada estructura incluye: patrón, clasificación, objetivo, 
 - H3: "La mayoría muestra siempre su cara → la gente lo ignora."
 - H4: "Cuando abres con un objeto inesperado, tu retención sube."
 - H5: "Si quieres tu rompe patrón diseñado → Responde: PATRÓN."
+
+---
+
+## #25 — STORYTELLING DE MOMENTO INCÓMODO
+**Patrón:** Escena incómoda → Emoción → Revelación → Enseñanza → CTA
+**Clasificación:** Storytelling emocional + vulnerabilidad
+**Objetivo:** convertir un momento real que te incomodó (un mensaje, una duda de un cliente, un silencio) en una enseñanza que tu audiencia también necesita.
+
+**Pasos:**
+1. **Escena incómoda** (real y cotidiana, sin exagerar): un mensaje que te "picó", un cliente que dudó, un comentario que te dejó pensando
+2. **Emoción** (cómo te hizo sentir): "Me picó.", "Me incomodó más de lo normal.", "Me dejó pensando."
+3. **Revelación** (qué entendiste a partir de esa incomodidad): "Me di cuenta de que ese comentario venía del miedo."
+4. **Enseñanza aplicable** (conecta la revelación con una idea práctica para tu audiencia)
+5. **CTA**: "Si quieres que analice tu caso → responde INCÓMODO."
+
+**Ejemplo aplicado:**
+- H1: "Ayer un cliente me dijo: 'No entiendo bien lo que ofreces'… y me picó."
+- H2: "Me incomodó más de lo que debería."
+- H3: "Revelación: si una persona no entiende, es porque no estoy comunicando con claridad."
+- H4: "Enseñanza: tus historias deben explicar tu oferta incluso cuando no estás vendiendo."
+- H5: "¿Quieres que revise si tu oferta se entiende? Responde: INCÓMODO."
+
+---
+
+## #26 — PREGUNTA RETÓRICA
+**Patrón:** Pregunta → Micro reflexión → Explicación → Mini enseñanza → CTA
+**Clasificación:** Reflexión + cambio de perspectiva
+**Objetivo:** cuestionar algo que tu audiencia da por "normal" y llevarla a una enseñanza que puede aplicar hoy.
+
+**Pasos:**
+1. **Pregunta retórica potente** (cuestiona lo que se asume como normal): "¿Y si el problema no es tu contenido, sino tu mensaje?"
+2. **Micro reflexión** (empuja la incomodidad): "La mayoría nunca se lo pregunta…", "Piénsalo un momento."
+3. **Explicación** (la razón detrás de la pregunta)
+4. **Mini enseñanza** (algo práctico para aplicar hoy)
+5. **CTA**: "Si quieres tu pregunta personalizada → responde PREGUNTA."
+
+**Ejemplo aplicado:**
+- H1: "¿Y si el problema no es tu contenido, sino cómo lo cuentas?"
+- H2: "La mayoría nunca se lo pregunta."
+- H3: "Explicación: no usas una estructura narrativa, solo hablas."
+- H4: "Mini enseñanza: abre siempre con una escena + texto fuerte."
+- H5: "¿Quieres tu pregunta retórica personalizada? → Responde: PREGUNTA."
+
+---
+
+## #27 — DESMONTANDO UNA OBJECIÓN
+**Patrón:** Objeción → Por qué aparece → Contraprueba → Reemplazo → CTA
+**Clasificación:** Venta consultiva / manejo de objeciones
+**Objetivo:** responder en público la objeción más frecuente antes de comprar y reemplazarla por una creencia que sí ayuda a decidir.
+
+**Pasos:**
+1. **Objeción directa** (dicha como la diría tu cliente): "Suena bonito, pero no tengo tiempo.", "No sé si esto funcionará conmigo."
+2. **Por qué aparece** (desde la empatía): "Esa objeción aparece porque has probado sin estructura."
+3. **Contraprueba / evidencia** (un caso, una captura o un dato REAL tuyo)
+4. **Reemplazo mental** (una creencia más útil): "No necesitas tiempo, necesitas método."
+5. **CTA**: "Si quieres que desmontemos tu objeción → responde OBJECIÓN."
+
+**Ejemplo aplicado:**
+- H1: "'[Tu nombre], no sé qué decir en historias…'"
+- H2: "Esa objeción aparece porque has probado contenido sin estructura."
+- H3: "Contraprueba: [caso real de una clienta que pensaba igual, con su captura]."
+- H4: "Reemplazo: no necesitas más seguidores, necesitas claridad."
+- H5: "Si quieres que desmontemos tu objeción → Responde: OBJECIÓN."
+
+---
+
+## #28 — NARRATIVA DE RUTINA
+**Patrón:** Momento cotidiano → Acción → Micro explicación → Enseñanza → CTA
+**Clasificación:** Lifestyle + educación disimulada
+**Objetivo:** enseñar algo de tu tema usando una escena simple de tu día, sin parecer clase.
+
+**Pasos:**
+1. **Momento cotidiano** (escena simple y real): preparando café, caminando, ordenando el escritorio, esperando transporte
+2. **Acción** (lo que estás haciendo exactamente): "Estoy ordenando mis ideas…"
+3. **Micro explicación** (conecta la acción con un concepto de tu tema): "Así como ordeno mi escritorio, ordeno mis historias…"
+4. **Enseñanza práctica** (una idea que puedan aplicar ya)
+5. **CTA**: "Si quieres tu guion de rutina → responde RUTINA."
+
+**Ejemplo aplicado:**
+- H1: (Clip preparando café) Texto: "Mira esto…"
+- H2: "Mientras espero, ordeno mis ideas para grabar historias."
+- H3: "Me di cuenta de que cuando no tengo claridad, las vistas bajan."
+- H4: "Lección: tu rutina es una gran forma de enseñar sin parecer profe."
+- H5: "¿Quieres tu guion para historias de rutina? → Responde: RUTINA."
+
+---
+
+## #29 — INICIO → CAOS → ORDEN
+**Patrón:** Inicio tranquilo → Aparición del caos → Explicación → Orden → CTA
+**Clasificación:** Storytelling de giro (mini arco narrativo)
+**Objetivo:** generar un pequeño "¡uy!" con un imprevisto y mostrar cómo lo resolviste con tu método.
+
+**Pasos:**
+1. **Inicio tranquilo** (escena calmada): "Todo empezó normal…", "Mi día estaba fluyendo…"
+2. **Aparición del caos** (algo rompe la calma): un mensaje inesperado, un error técnico, una mala métrica, una idea que no funcionó
+3. **Explicación** (qué significó ese caos): "Me di cuenta de que estaba trabajando sin estructura."
+4. **Orden** (cómo lo resolviste): "Volví a lo básico y todo fluyó."
+5. **CTA**: "Si quieres armar tu versión → responde CAOS."
+
+**Ejemplo aplicado:**
+- H1: "Mi día empezó normal…"
+- H2: "Hasta que revisé mis historias y vi esto: retención bajísima 🤦🏻‍♀️ (captura)"
+- H3: "Entendí que estaba volviendo a grabar sin estructura."
+- H4: "Ajusté la apertura con contexto visual → la retención subió."
+- H5: "¿Quieres tu estructura inicio, caos y orden? → Responde: CAOS."
+
+---
+
+## #30 — DEMOSTRACIÓN INVISIBLE
+**Patrón:** Acción silenciosa → Revelación → Explicación → Conexión → CTA
+**Clasificación:** Autoridad por proceso (detrás de cámara)
+**Objetivo:** mostrar el trabajo que no se ve para que tu audiencia valore lo que hay detrás del resultado.
+
+**Pasos:**
+1. **Acción silenciosa** (no hablas, solo se VE tu proceso): analizando, subrayando un cuaderno, diseñando, respondiendo clientes
+2. **Revelación** (texto que explica qué estás haciendo): "Estoy revisando las historias de mis alumnas."
+3. **Explicación del impacto** (qué significa esa acción para tus clientes): "Esto es lo que no se ve, pero hace que todo funcione."
+4. **Conexión emocional** (une el proceso con su problema): "Tú ves la historia final; yo veo lo que te impide avanzar."
+5. **CTA**: "Si quieres que revise la tuya → responde INVISIBLE."
+
+**Ejemplo aplicado:**
+- H1: (Video: tú revisando historias en tu laptop, sin hablar)
+- H2: "Estoy revisando las historias que me mandaron hoy."
+- H3: "Esto es lo que realmente cambia tus ventas."
+- H4: "La gente solo ve el resultado, no el análisis detrás de cada historia."
+- H5: "¿Quieres que revise la tuya? → Responde: INVISIBLE."
+
+---
+
+## #31 — ROMPIENDO EL CICLO
+**Patrón:** Ciclo negativo → Identificación → Ruptura → Nuevo camino → CTA
+**Clasificación:** Identificación + cambio de hábito
+**Objetivo:** nombrar el patrón que tu avatar repite sin darse cuenta y mostrarle la salida con tu método.
+
+**Pasos:**
+1. **Ciclo negativo** (el patrón que repite): "Publicas → nadie compra → te frustras → dejas de publicar."
+2. **Identificación** (que sienta que la entiendes): "Sé que te pasa porque yo también estuve ahí."
+3. **Ruptura** (el momento en que tú rompiste ese ciclo)
+4. **Nuevo camino** (tu método o tu forma de salir)
+5. **CTA**: "Si quieres romper tu ciclo → responde CICLO."
+
+**Ejemplo aplicado:**
+- H1: "¿Te das cuenta de este ciclo? Publicas → nadie compra → te frustras → dejas de publicar."
+- H2: "Sé que te pasa porque yo también estuve ahí."
+- H3: "Lo rompí cuando entendí que mis historias no estaban hechas para retener."
+- H4: "El camino nuevo empezó con estructura: escena → texto → mensaje → CTA."
+- H5: "Si quieres romper tu ciclo → Responde: CICLO."
+
+---
+
+## #32 — EL CAMBIO DE PERSONAJE
+**Patrón:** Antes emocional → Punto de quiebre → Nueva versión → Prueba → CTA
+**Clasificación:** Transformación personal (identidad)
+**Objetivo:** contar quién eras y quién eres hoy para que tu audiencia se vea en tu "antes" y quiera tu "después".
+
+**Pasos:**
+1. **Antes emocional** (no visual, emocional): "Antes me daba pánico vender."
+2. **Punto de quiebre** (el momento específico que te hizo cambiar): "Hasta que un día alguien me dijo que no se entendía lo que hacía."
+3. **Nueva versión** (quién eres ahora): "Hoy sé exactamente cómo abrir una historia."
+4. **Prueba del cambio** (algo concreto y REAL: captura, testimonio, resultado tuyo)
+5. **CTA**: "Si tú también quieres tu cambio → responde PERSONAJE."
+
+**Ejemplo aplicado:**
+- H1: "Antes me daba miedo grabar historias. Literal."
+- H2: "Hasta que un día un cliente me dijo: 'No entiendo lo que cuentas'."
+- H3: "A partir de ahí, cambié mi enfoque a contar una historia cada día."
+- H4: "Hoy mis historias retienen, enseñan y venden. [Prueba real: captura de respuestas o ventas]"
+- H5: "¿Quieres tu cambio de personaje? → Responde: PERSONAJE."
+
+---
+
+## #33 — TRANSFORMACIÓN DEL CLIENTE
+**Patrón:** Antes → Duda → Punto clave → Después → Invitación
+**Clasificación:** Prueba social + storytelling
+**Objetivo:** mostrar el cambio de un cliente desde su duda inicial (no solo su resultado) y cerrar con una invitación suave.
+
+**Pasos:**
+1. **Antes del cliente** (estado inicial emocional o funcional): "Ella no sabía qué decir en historias."
+2. **Duda inicial** (la creencia que lo frenaba): "Pensaba que no era para ella."
+3. **Punto clave** (el momento de tu método que le cambió la percepción)
+4. **Después** (resultado real, emocional o numérico, solo si es verificable)
+5. **Invitación suave** (acompaña, no empuja): "Si quieres tu propia transformación, responde TRANSFORMACIÓN."
+
+**Diferencia con #14 Mini documental:** el #14 se centra en el proceso paso a paso; el #33 se centra en la duda que tenía el cliente y en cómo cambió su forma de verse.
+
+**Ejemplo aplicado:**
+- H1: "Ella pensaba que sus historias eran aburridas…"
+- H2: "Creía que nunca iba a vender por Instagram."
+- H3: "Hasta que aplicó una estructura: escena → texto → micro enseñanza."
+- H4: "Hoy vende todas las semanas con historias reales."
+- H5: "¿Quieres tu transformación? → Responde: TRANSFORMACIÓN."
+
+---
+
+## #34 — DESMENTIDA ESTRATÉGICA
+**Patrón:** Mito → Por qué es falso → Prueba → Qué sí funciona → CTA
+**Clasificación:** Ruptura de mito del mercado + autoridad
+**Objetivo:** desmentir una creencia popular de tu nicho y presentar tu método como lo que sí funciona.
+
+**Pasos:**
+1. **Mito del mercado** (frase poderosa que tu audiencia cree): "Para vender necesitas miles de seguidores."
+2. **Por qué es falso** (explicación directa)
+3. **Prueba** (tu caso, casos de clientes o ejemplos REALES)
+4. **Qué sí funciona** (aquí colocas tu método)
+5. **CTA**: "Si quieres desmontar un mito de tu nicho → responde MITO."
+
+**Diferencia con #19 y #20:** el #19 revela una verdad oculta, el #20 ataca una creencia personal del avatar; el #34 desmiente un mito que repite todo el mercado.
+
+**Ejemplo aplicado:**
+- H1: "El mito más común: necesitas miles de seguidores para vender."
+- H2: "Es falso: lo que necesitas es claridad."
+- H3: "[Prueba real: captura o caso de una clienta que vende con pocos seguidores]"
+- H4: "Lo que sí funciona: estructura + narrativa."
+- H5: "¿Quieres desmontar un mito de tu nicho? → Responde: MITO."
+
+---
+
+## #35 — ATMÓSFERA / ESCENA SENSITIVA
+**Patrón:** Escena sensorial → Emoción → Reflexión → Conexión → CTA
+**Clasificación:** Lifestyle sensorial + reflexión
+**Objetivo:** transmitir una sensación (no información) con una escena bonita y conectarla con tu tema.
+
+**Pasos:**
+1. **Escena sensorial** (video o foto que genere atmósfera): luz cálida filtrándose, lluvia en la ventana, vapor del café, manos escribiendo
+2. **Emoción interna** (lo que esa escena te hace sentir): "Esto me recordó por qué empecé."
+3. **Reflexión** (tu insight personal): "La claridad llega cuando paras."
+4. **Conexión con tu tema** (lo vinculas con tu nicho)
+5. **CTA**: "Si quieres mejorar la atmósfera de tus historias → responde ATM."
+
+**Ejemplo aplicado:**
+- H1: (Clip: luz del amanecer entrando por la ventana) Texto: "Mira esta luz…"
+- H2: "Me recordó por qué empecé este trabajo."
+- H3: "Reflexión: la claridad llega cuando paras."
+- H4: "Así deberían sentirse tus historias: claras, suaves y con propósito."
+- H5: "¿Quieres mejorar la atmósfera de tus historias? → Responde: ATM."
 
 ---
 

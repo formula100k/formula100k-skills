@@ -85,7 +85,7 @@ Convierte una idea, oferta u objetivo en una **secuencia completa de 3-6 histori
 Cargar **siempre** estos archivos del directorio `references/` antes de generar:
 
 1. `references/categorias.md` — las 5 categorías de historia
-2. `references/estructuras.md` — las 24 estructuras de guion disponibles
+2. `references/estructuras.md` — las 35 estructuras de guion disponibles
 3. `references/formatos.md` — los 15 formatos audiovisuales
 4. `references/ctas.md` — guía de CTAs con consecuencia
 5. `references/briefing-visual.md` — paleta de colores y reglas visuales
@@ -140,10 +140,10 @@ Lee `references/categorias.md`. Decide cuál encaja:
 
 Si el usuario ya te dijo la categoría, respétala. Si no, dedúcela del objetivo.
 
-### Paso 2 — Elegir la ESTRUCTURA (de 24)
+### Paso 2 — Elegir la ESTRUCTURA (de 35)
 
 Lee `references/estructuras.md`. Cada estructura tiene:
-- Número (#1-24)
+- Número (#1-35)
 - Nombre (ej: "Soltamos la bomba")
 - Patrón (ej: Tensión → Problema → Revelación → Beneficio → CTA)
 - Cuándo usar
@@ -158,6 +158,27 @@ Reglas para elegir:
 - Si es **urgencia con consecuencia** → #6 Esto es lo que sucede cuando + CTA con deadline real
 - Si es **storytelling personal** → #1 Storytelling Chisme, #15 Lección Inesperada o #18 Diario Personal
 - Si es **corregir un error común** → #7 Error Fatal o #4 Solo tuve que hacer un cambio
+- Si un **momento te incomodó** (un mensaje, una duda de un cliente) → #25 Momento incómodo
+- Si quieres **cuestionar lo que tu audiencia da por normal** → #26 Pregunta retórica
+- Si hay una **objeción que frena la compra** → #27 Desmontando una objeción
+- Si es **lifestyle que enseña** (día a día, recuperar vistas) → #28 Narrativa de rutina o #35 Atmósfera
+- Si pasó un **imprevisto que resolviste** → #29 Inicio → Caos → Orden
+- Si quieres **mostrar el trabajo que no se ve** → #30 Demostración invisible
+- Si el avatar **repite un patrón sin darse cuenta** → #31 Rompiendo el ciclo
+- Si es **tu propia transformación** (quién eras y quién eres) → #32 El cambio de personaje
+- Si es **la transformación de un cliente desde su duda** → #33 Transformación del cliente (#14 si quieres contar el proceso)
+- Si hay un **mito que repite todo el mercado** → #34 Desmentida estratégica
+
+**Selector rápido por categoría** (las 35 caben en las 5 categorías; esto es punto de partida, no regla):
+
+| Categoría | Estructuras que mejor encajan |
+|---|---|
+| 🔥 URGENCIA | #6, #10, #13, #23, #27 |
+| 💥 ONE-SHOT | #1, #9, #16, #19, #24, #26, #34 |
+| 🎁 LEAD MAGNET | #3, #4, #7, #8, #11, #12, #22, #31 |
+| 💛 LIBRE/Lifestyle | #15, #18, #21, #25, #28, #29, #30, #35 |
+| 📊 ENCUESTAS | #1, #2, #20, #26 |
+| (venta con prueba, cualquier categoría) | #5, #14, #17, #32, #33 |
 
 Si dudas entre 2, elige la más usada en el patrón observado en sus 11 ejemplos: #9, #10, #14, #6 son los caballos de batalla.
 
@@ -231,7 +252,7 @@ El **formato exacto del archivo** está en `references/output-template.md`. Síg
 Después de guardar, muestra al usuario:
 1. **Preview de la tabla slide-by-slide** en el chat (markdown)
 2. **Ruta del archivo guardado**
-3. **Próximo paso sugerido**: "¿Querés que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
+3. **Próximo paso sugerido**: "¿Quieres que pase esto a imágenes con `historias-a-imagenes-nanobanana`?"
 
 ---
 

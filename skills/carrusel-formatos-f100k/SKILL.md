@@ -9,8 +9,11 @@ Esta skill viaja en el plugin de FÓRMULA 100K y corre igual en Mac y en Windows
 **«la carpeta de esta skill»** es la carpeta donde está este `SKILL.md` (con el plugin no vive en `~/.claude/skills/`):
 `build.js`, `export.js`, `templates/`, `kit/`, `ejemplos/` y `references/` están ahí.
 
-- **Su negocio.** Rubro, avatar y oferta salen de `~/Documents/mi-contenido/mi-negocio.md`; su forma de hablar, de
-  `~/Documents/mi-contenido/mi-voz.md`. Léelos antes de escribir. Si no existen, sigue el ANCLAJE DE RUBRO de abajo.
+- **¿Viene de Yapper?** Si el pedido nombra «mi guion … de Yapper», `leer_guion` o `mi_brandkit`, NO empieces por el «Flujo»:
+  haz primero el «🔌 ARRANQUE DESDE YAPPER» de abajo, completo y en orden. Es lo que más se salta y es lo que hace que el carrusel sea SUYO.
+- **Su negocio.** Rubro, avatar y oferta salen de su Manual de Yapper (`mi_manual` del conector, si está conectado); si no,
+  de `~/Documents/mi-contenido/mi-negocio.md`; su forma de hablar, de `~/Documents/mi-contenido/mi-voz.md`. Léelos antes de escribir.
+  Si no existe ninguno, sigue el ANCLAJE DE RUBRO de abajo.
 - **Su brandkit, antes que todo lo demás:** primero `mi_brandkit` del conector de Yapper (si el pedido viene de Yapper o el conector está disponible; con varios proyectos, pásale `cuenta`);
   si no, `mi-marca/brandkit.md` en la carpeta del proyecto (sus stickers, en `mi-marca/stickers/`). Trae gancho, subtítulos, elementos de marca, stickers y CTA; los colores y las letras siguen saliendo de su marca (abajo).
   Cómo se aplica en un carrusel: «Su brandkit (antes del flujo)». Si no hay brandkit, sigue con su marca como siempre.
@@ -102,6 +105,24 @@ Convierte un tema en un carrusel terminado eligiendo **una ficha** y girando 3 p
 Los archivos de `references/` los mantiene el equipo de FÓRMULA 100K y llegan con cada actualización del paquete: no los edites.
 
 **Voz:** tuteo siempre (tú, tienes, sube, comenta). Nunca voseo, tampoco en los textos de las slides.
+
+## 🔌 ARRANQUE DESDE YAPPER (obligatorio si el pedido viene de Yapper)
+Cuando la alumna pega la frase de «Llevar a Claude» o «Diseñar con Claude», el carrusel ya tiene guion, marca y negocio en Yapper.
+Antes de tocar una plantilla, haz estos 4 pasos con el conector de Yapper, en este orden, sin saltarte ninguno:
+1. **`mi_brandkit`** (con `guion` = el id del pedido): colores, letras, gancho, elementos, stickers y CTA. Aplícalo como dice «Su brandkit».
+2. **`mi_manual`**: su negocio (rubro, avatar, oferta, voz). Con eso eliges la ficha y entiendes a quién le habla; se entiende, no se cita.
+3. **`leer_guion`** (el id del pedido): su gancho, su texto y su CTA **mandan**. En el paso 2 del Flujo NO lo reescribas con el prompt de la ficha:
+   solo repártelo en láminas según la anatomía de la ficha (puedes cortar frases largas, nunca cambiar lo que dice ni inventar datos).
+4. **La ficha:** si el pedido trae una («tipo G14…»), esa. Si dice «elige tú», elige UNA del catálogo según el objetivo del guion y su negocio
+   (no preguntes ni propongas 3: ya te dio el guion) y di cuál y por qué en una línea.
+
+Luego muéstrale este parte, ANTES de renderizar, y espera su OK:
+> **Leí de tu Yapper:** brandkit ✅/❌ · manual ✅/❌ · guion ✅ · **Ficha:** G__ (por qué) · **Aplico:** fondo `#…`, acento `#…`, letra …, cierre con …
+> Tabla lámina por lámina con SU texto.
+
+- Si una herramienta del conector no responde o falta permiso, dilo con esas palabras y sigue con lo demás. **Si no tiene el conector de Yapper**, pídele que lo conecte (Yapper → Conecta tu Claude) en vez de inventar el guion o la marca.
+- Si su brandkit y su manual se contradicen (ej.: un elemento «fondo de cuaderno» y el manual prohíbe «texturas de papel»), **manda el manual** y avísale en una línea.
+- Al entregar, cierra con la línea de «Su brandkit» (qué aplicaste) + qué tomaste de su manual.
 
 ## Su brandkit (antes del flujo)
 Basta con que diga «usa mi brandkit» o adjunte su `brandkit.md` o su ZIP (guía completa en `references/tu-brandkit.md`). Búscalo antes que la marca: lo que te dio en esta conversación; si no, `mi_brandkit` del conector de Yapper (devuelve su brandkit, su manual y los enlaces de sus stickers); si no, `mi-marca/brandkit.md` con `mi-marca/stickers/`; si no hay ninguno, sigue con «Su marca» y nada más.

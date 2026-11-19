@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Piloto 01 v3 · Claude copia cualquier video</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;700;800&display=swap">
+<style>html,body{margin:0;background:#111}canvas{display:block;max-height:100vh;margin:0 auto}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// Línea «Claude explicado en tarjetas» · piloto 01 v2 = MIX de 3 refs:
+//  IG Dfxmz3ggKQ5 (paleta crema, tarjetas planas, Claudito) + IG De96Bc9MIsZ y Dd6HP5tsQsu (algo cambia cada 0,3–0,6 s:
+//  terminal que escribe, chat que entra, multitud de mascotas pixel, marcador rojo a mano, cursor que hace clic,
+//  cámara que entra al detalle, subtítulo píldora oscura mono que se arma palabra por palabra).
+// Tiempos de cada escena = segundos de la palabra en la voz (whisper por palabra), no fracciones.
+const W = 1080, H = 1920, FPS = 30;
+const C = { fondo: '#F1ECE3', durazno: '#EBC9AE', tarjeta: '#FBF8F2', naranja: '#D9653B', oscuro: '#26221F', tinta: '#1E1B18', gris: '#9A938A', linea: '#E4DDD2', rojo: '#D63C31', crema2: '#EFE8DC' };
+const SANS = '"Inter Tight", Helvetica, Arial, sans-serif', SERIF = '"Instrument Serif", Georgia, serif', MONO = '"JetBrains Mono", Menlo, monospace';
+const PAUSA = 0.25;
+const LINEAS = [
+  { d: 3.36, txt: 'Deja de copiar a mano los videos que te gustan: Claude los *clona.*', gancho: true },
+  { d: 2.54, txt: 'Ayer vi un reel con un estilo que me *encantó.*' },
+  { d: 1.45, txt: 'Le pasé el *link* a Claude.' },
+  { d: 5.83, txt: 'Lo vio *cuadro* por cuadro y me sacó la *receta:* colores, letra y cada cuánto cambia la pantalla.' },
+  { d: 2.52, txt: 'Le di mi *idea* y armó el video con ese *estilo.*' },
+  { d: 2.49, txt: 'Sin *editora* y sin gastar *créditos* de video.' },
+  { d: 2.33, txt: 'Este video que estás viendo salió *así.*' },
+];
+// subtítulos: grupos separados por |, palabra:segundo, * = clave
+const SUBS = [
+  '',
+  'Ayer:0 vi:.29 un:.44 *reel:.59 | con:.89 un:1.11 *estilo:1.26 | que:1.71 me:1.93 *encantó:2.08',
+  'Le:0 pasé:.24 el:.49 *link:.65 | a:.98 Claude:1.06',
+  'Lo:0 vio:.14 *cuadro:.35 | por:.85 cuadro:1.05 | y:1.52 me:1.55 sacó:1.70 | la:2.00 *receta:2.15 | *colores:2.90 | *letra:3.58 | y:4.13 cada:4.27 cuánto:4.50 | cambia:4.96 la:5.26 *pantalla:5.39',
+  'Le:0 di:.13 mi:.26 *idea:.39 | y:.65 armó:.71 el:.96 video:1.09 | con:1.43 ese:1.61 *estilo:1.80',
+  'Sin:.07 *editora:.24 | y:.86 sin:.88 gastar:1.10 | *créditos:1.60 de:2.20 video:2.36',
+  'Este:0 video:.28 | que:.63 estás:.89 viendo:1.19 | salió:1.63 *así:1.96',
+].map(s => s ? s.split('|').map(g => g.trim().split(' ').map(w => { const [p, t] = w.split(':'); return { s: p.replace('*', ''), t: +t, clave: p.startsWith('*') }; })) : []);
+const INICIOS = []; { let a = 0; for (const l of LINEAS) { INICIOS.push(a); a += l.d + PAUSA; } }
+const DUR = INICIOS.at(-1) + LINEAS.at(-1).d + 0.6;
+</script>
+<script src="../nucleo/nucleo.js"></script>
+<script>
+let F = {};
+const NOMBRES = ['ref1', 'ref2', 'ref3', 'ref4', 'ref5', 'ref6', 'hoja', 'mio1', 'mio2', 'mio3', 'mio4'];
+const cargaUna = (n) => new Promise(ok => { const im = new Image(); im.onload = () => ok([n, im]); im.onerror = () => ok([n, null]); im.src = 'fotos/' + n + (n === 'hoja' || n.startsWith('ref') ? '.jpg' : '.png'); });
+window.LISTO = Promise.all([
+  Promise.all(NOMBRES.map(cargaUna)).then(r => { F = Object.fromEntries(r); }),
+  document.fonts.load(`900 100px ${SANS}`), document.fonts.load(`800 100px ${SANS}`), document.fonts.load(`600 40px ${SANS}`),
+  document.fonts.load(`italic 100px ${SERIF}`), document.fonts.load(`500 30px ${MONO}`), document.fonts.load(`700 30px ${MONO}`), document.fonts.load(`800 30px ${MONO}`),
+]);
+
+// ---------- piezas base ----------
+function txt(s, x, y, tam, { peso = 800, color = C.tinta, al = 'left', fam = SANS } = {}) {
+  ctx.save(); ctx.font = fam === SERIF ? `italic ${tam}px ${SERIF}` : `${peso} ${tam}px ${fam}`;
+  ctx.fillStyle = color; ctx.textAlign = al; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y); ctx.restore();
+}
+function ancho(s, tam, peso = 800, fam = SANS) { ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; const w = ctx.measureText(s).width; ctx.restore(); return w; }
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+function tarjeta(x, y, w, h, { oscura = false, r = 26 } = {}) {
+  ctx.save(); ctx.shadowColor = 'rgba(80,50,20,.14)'; ctx.shadowBlur = 36; ctx.shadowOffsetY = 14;
+  ctx.fillStyle = oscura ? C.oscuro : C.tarjeta; rr(x, y, w, h, r); ctx.fill(); ctx.restore();
+  if (!oscura) { ctx.save(); ctx.strokeStyle = C.linea; ctx.lineWidth = 2; rr(x, y, w, h, r); ctx.stroke(); ctx.restore(); }
+}
+function semaforo(x, y) { ['#E36A5A', '#E8B04A', '#7FB069'].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x + i * 30, y, 9, 0, 7); ctx.fill(); }); }
+function foto(im, x, y, w, h, r = 18, desenfoque = 0, fx = .5, fy = .3) {
+  if (!im) { ctx.save(); ctx.fillStyle = C.linea; rr(x, y, w, h, r); ctx.fill(); ctx.restore(); return; }
+  ctx.save(); rr(x, y, w, h, r); ctx.clip(); if (desenfoque) ctx.filter = `blur(${desenfoque}px)`; fotoCover(im, x, y, w, h, fx, fy); ctx.restore();
+}
+// un cuadro de la hoja real (8 columnas × 5 filas)
+function cuadroHoja(n, x, y, w, h, r = 10) {
+  const im = F.hoja; if (!im) return foto(null, x, y, w, h, r);
+  const cw = im.width / 8, ch = im.height / 5, c = n % 8, f = Math.floor(n / 8) % 5;
+  ctx.save(); rr(x, y, w, h, r); ctx.clip(); ctx.drawImage(im, c * cw, f * ch, cw, ch, x, y, w, h); ctx.restore();
+}
+function fondo() {
+  ctx.fillStyle = C.fondo; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createRadialGradient(W * .5, H * 1.02, 60, W * .5, H * 1.02, 900);
+  g.addColorStop(0, 'rgba(235,201,174,.85)'); g.addColorStop(1, 'rgba(235,201,174,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function chip(s, x, y, { tam = 30, fondoC = C.naranja, color = C.tarjeta, al = 'center', fam = SANS, peso = 800 } = {}) {
+  ctx.save(); ctx.font = `${peso} ${tam}px ${fam}`; const w = ctx.measureText(s).width + tam * .8, h = tam * 1.45;
+  const x0 = al === 'center' ? x - w / 2 : x; ctx.fillStyle = fondoC; rr(x0, y - h * .72, w, h, 10); ctx.fill();
+  ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.fillText(s, x0 + tam * .4, y); ctx.restore(); return w;
+}
+function etiqueta(s, x, y, { color = C.gris, al = 'left', tam = 22 } = {}) { txt(s.toUpperCase(), x, y, tam, { peso: 500, fam: MONO, color, al }); }
+// texto que se escribe letra por letra (terminal / chat)
+function tecleo(s, x, y, tam, p, { color = C.tinta, fam = MONO, peso = 500, cursor = true } = {}) {
+  const n = Math.floor(s.length * clamp(p)); txt(s.slice(0, n), x, y, tam, { color, fam, peso });
+  if (cursor && p < 1.05 && Math.floor(FR / 8) % 2 === 0) { const w = ancho(s.slice(0, n), tam, peso, fam); ctx.fillStyle = color; ctx.fillRect(x + w + 3, y - tam * .8, tam * .5, tam); }
+}
+
+// ANATOMIA: estilizada — Claudito es pixel art de 10×6 cuadritos (brazos de 1 cuadrito), sin manos ni cara vectorial
+// ---------- Claudito ACTOR (pixel): ojos, cejas, brazos, gorros — actúa cada escena como las mascotas de las refs ----------
+const CUERPO = ['..XXXXXX..', '.XXXXXXXX.', 'XXXXXXXXXX', 'XXXXXXXXXX', '.XXXXXXXX.'];
+const PATAS = ['.X.X..X.X.', 'X..X..X..X'];
+const COLORES = ['#D9653B', '#E8A15C', '#6F9BD6', '#7DB47A', '#B784D1', '#E36A5A', '#4FB3AE', '#E9B949'];
+const OJOS = {
+  normal: [[2, 2], [7, 2]], der: [[3, 2], [8, 2]], izq: [[1, 2], [6, 2]],
+  enojo: [[2, 2], [7, 2], [2, 1], [3, 2], [7, 1], [6, 2]],
+  feliz: [[1, 3], [2, 2], [3, 3], [6, 3], [7, 2], [8, 3]],
+  sorpresa: [[2, 1], [2, 2], [7, 1], [7, 2]],
+  cerrado: [[1, 2], [2, 2], [3, 2], [6, 2], [7, 2], [8, 2]],
+};
+const CORAZON_OJOS = [[1, 2], [3, 2], [2, 3], [6, 2], [8, 2], [7, 3]];
+// brazo derecho (columnas 10+); el izquierdo es su espejo (9 - x)
+const BRAZOS = {
+  abajo: [[10, 3], [10, 4]], lado: [[10, 3], [11, 3]], arriba: [[10, 2], [10, 1], [10, 0]],
+  adelante: [[10, 3], [11, 3], [12, 3]], alto: [[10, 2], [11, 1], [12, 0], [12, -1]],
+  golpe: [[10, 3], [11, 4], [12, 5], [13, 5]], escribe: [[10, 3], [11, 4], [12, 4]], nada: [],
+};
+const mezcla = (a, b, t) => { const h = s => [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16)); const A = h(a), B = h(b); return '#' + A.map((v, i) => Math.round(lerp(v, B[i], t)).toString(16).padStart(2, '0')).join(''); };
+function claudito(x, y, p, o = {}) {
+  const { color = C.naranja, ojos = 'normal', bi = 'abajo', bd = 'abajo', paso: ps = 0, rojo = 0, gorro = null, espejo = false } = o;
+  const col = rojo ? mezcla(color, '#C0261C', rojo) : color;
+  const px = (i, j, c) => { ctx.fillStyle = c; ctx.fillRect(x + (espejo ? 9 - i : i) * p, y + j * p, p + .5, p + .5); };
+  CUERPO.forEach((fila, j) => [...fila].forEach((c, i) => { if (c !== '.') px(i, j, col); }));
+  [...PATAS[ps % 2]].forEach((c, i) => { if (c === 'X') px(i, 5, col); });
+  BRAZOS[bd].forEach(([i, j]) => px(i, j, col));
+  BRAZOS[bi].forEach(([i, j]) => px(9 - i, j, col));
+  if (ojos === 'corazon') CORAZON_OJOS.forEach(([i, j]) => px(i, j, '#8E1222'));
+  else OJOS[ojos].forEach(([i, j]) => px(i, j, C.oscuro));
+  if (gorro === 'chef') { ['...XXXX...', '..XXXXXX..', '..XXXXXX..', '...XXXX...'].forEach((f, j) => [...f].forEach((c, i) => { if (c === 'X') { px(i, j - 4, '#FFFFFF'); ctx.strokeStyle = C.linea; ctx.lineWidth = 1; ctx.strokeRect(x + (espejo ? 9 - i : i) * p, y + (j - 4) * p, p, p); } })); }
+  if (gorro === 'casco') { ['..XXXXXX..', 'XXXXXXXXXX'].forEach((f, j) => [...f].forEach((c, i) => { if (c === 'X') px(i, j - 2, '#E9B949'); })); }
+}
+// punto de la mano derecha (o izquierda) en pantalla, para pegarle lápiz, cuchara, lupa…
+function mano(x, y, p, brazo, izq = false) { const b = BRAZOS[brazo].at(-1); const i = izq ? 9 - b[0] : b[0]; return [x + i * p + p / 2, y + b[1] * p + p / 2]; }
+function bicho(x, y, p, color = C.naranja, ps = 0, ojos = 'normal') { claudito(x, y, p, { color, paso: ps, ojos }); }
+const paso = (sem = 0) => Math.floor(FR / 5 + sem) % 2;
+function corazon(x, y, p, c = '#E0483E') { ['.X.X.', 'XXXXX', '.XXX.', '..X..'].forEach((f, j) => [...f].forEach((k, i) => { if (k === 'X') { ctx.fillStyle = c; ctx.fillRect(x + i * p, y + j * p, p + .5, p + .5); } })); }
+function vapor(x, y, u, s = 1) { for (let k = 0; k < 3; k++) { const f = ((u * 2.2 + k / 3) % 1); ctx.save(); ctx.globalAlpha = .55 * (1 - f); ctx.fillStyle = '#9A938A'; ctx.beginPath(); ctx.arc(x + (k - 1) * 26 * s, y - f * 90 * s, (12 + 10 * f) * s, 0, 7); ctx.fill(); ctx.restore(); } }
+function laptop(x, y, w, h, abierta, contenido) {
+  // y = línea de la base; la tapa crece hacia arriba
+  const hh = h * clamp(abierta);
+  ctx.fillStyle = '#3A3430'; rr(x - 14, y - 4, w + 28, 18, 6); ctx.fill();
+  if (hh > 6) { ctx.fillStyle = C.oscuro; rr(x, y - hh, w, hh, 12); ctx.fill(); ctx.save(); rr(x + 10, y - hh + 10, w - 20, hh - 20, 6); ctx.clip(); contenido && contenido(x + 10, y - hh + 10, w - 20, hh - 20); ctx.restore(); }
+  else { ctx.fillStyle = C.oscuro; ctx.fillRect(x, y - 10, w, 8); }
+}
+function impacto(x, y, t) { if (t < 0 || t > .5) return; ctx.save(); ctx.strokeStyle = C.tinta; ctx.lineWidth = 7; ctx.lineCap = 'round';
+  for (let k = 0; k < 7; k++) { const a = -Math.PI + k * Math.PI / 6, r1 = 40 + 30 * t, r2 = 85 + 50 * t; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r1, y + Math.sin(a) * r1); ctx.lineTo(x + Math.cos(a) * r2, y + Math.sin(a) * r2); ctx.stroke(); } ctx.restore(); }
+// cierre con CTA propio (para quien no usa un cierre aparte): Claudito sostiene el cartel con la palabra
+function cartelCTA(u, palabra, chica = 'y te lo regalo') {
+  txt('Comenta', 540, 640, 90, { peso: 900, al: 'center' });
+  if (u >= .25) chip(palabra.toUpperCase(), 540, 820, { tam: 120, fam: SANS, peso: 900 });
+  if (u >= .6) txt(chica, 540, 960, 70, { fam: SERIF, color: C.naranja, al: 'center' });
+  claudito(450, 1240 - 6 * 18, 18, { bi: 'arriba', bd: Math.floor(u / .2) % 2 ? 'arriba' : 'alto', ojos: 'feliz' });
+}
+function exclama(x, y, p) { ctx.fillStyle = C.naranja; ctx.fillRect(x, y, p, p * 3); ctx.fillRect(x, y + p * 4, p, p); }
+
+// ---------- marcador rojo a mano, cursor y clic ----------
+function marcador(pts, p, { color = C.rojo, gros = 9 } = {}) {
+  if (p <= 0) return; const n = Math.max(2, Math.round(pts.length * clamp(p)));
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = gros; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.globalAlpha = .92;
+  ctx.beginPath(); pts.slice(0, n).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+function ovalo(cx, cy, rx, ry, sem = 1) { const pts = []; for (let i = 0; i <= 60; i++) { const a = -2.2 + i / 60 * 6.9, w = 1 + .04 * Math.sin(i * .7 + sem); pts.push([cx + Math.cos(a) * rx * w, cy + Math.sin(a) * ry * w]); } return pts; }
+function raya(x1, y1, x2, y2, sem = 1) { const pts = []; for (let i = 0; i <= 30; i++) { const t = i / 30; pts.push([lerp(x1, x2, t), lerp(y1, y2, t) + 4 * Math.sin(t * 9 + sem)]); } return pts; }
+function cursor(x, y, clic = -1) {
+  if (clic >= 0 && clic < .4) { const r = 18 + 70 * clic; ctx.save(); ctx.strokeStyle = 'rgba(30,27,24,' + (.5 - clic) + ')'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.stroke(); ctx.restore(); }
+  ctx.save(); ctx.translate(x, y); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 52); ctx.lineTo(13, 40); ctx.lineTo(23, 62); ctx.lineTo(32, 58); ctx.lineTo(22, 37); ctx.lineTo(39, 37); ctx.closePath();
+  ctx.fillStyle = C.tinta; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+}
+// recorrido del cursor: [[t,x,y],...]
+function ruta(keys, u) { let [, x, y] = keys[0]; for (let j = 1; j < keys.length; j++) { const [t, xx, yy] = keys[j], a = ease(prog(u, t - .35, t)); x = lerp(x, xx, a); y = lerp(y, yy, a); } return [x, y]; }
+
+// ---------- subtítulo: píldora oscura mono, se arma palabra por palabra (corte seco) ----------
+function subtitulo(i, u) {
+  const G = SUBS[i]; if (!G.length) return;
+  let g = G.findLastIndex(gr => u >= gr[0].t); if (g < 0) return;
+  const pals = G[g].filter(w => u >= w.t); const tam = 46, esp = 18;
+  ctx.save(); ctx.font = `800 ${tam}px ${MONO}`;
+  const ws = pals.map(w => ctx.measureText(w.s.toUpperCase()).width); const tot = ws.reduce((a, b) => a + b, 0) + esp * (pals.length - 1);
+  const pad = 30, h = 82, y = 1420; ctx.fillStyle = C.oscuro; rr(W / 2 - tot / 2 - pad, y - h / 2, tot + pad * 2, h, 14); ctx.fill();
+  let x = W / 2 - tot / 2; ctx.textBaseline = 'middle';
+  pals.forEach((w, k) => { ctx.fillStyle = w.clave ? '#F08A5D' : C.tarjeta; ctx.fillText(w.s.toUpperCase(), x, y + 3); x += ws[k] + esp; });
+  ctx.restore();
+}
+
+// ---------- cámara que entra al detalle: [[t, cx, cy, zoom], ...] ----------
+function camara(keys, u) { let [, cx, cy, z] = keys[0]; for (let j = 1; j < keys.length; j++) { const [t, x, y, zz] = keys[j], a = ease(prog(u, t, t + .32)); cx = lerp(cx, x, a); cy = lerp(cy, y, a); z = lerp(z, zz, a); } return [cx, cy, z]; }
+
+
+const CAM = [
+  [[0, 540, 880, 1]],
+  [[0, 540, 820, 1.0], [1.2, 620, 700, 1.14], [1.95, 520, 860, 1.06]],
+  [[0, 560, 1000, 1.12], [1.0, 600, 900, 1.06]],
+  [[0, 540, 880, 1.0], [1.45, 520, 980, 1.06], [2.8, 430, 580, 1.14], [3.5, 440, 800, 1.15], [4.2, 540, 1080, 1.12], [5.3, 540, 840, 1.0]],
+  [[0, 540, 560, 1.08], [.65, 540, 840, 1.0], [1.75, 600, 980, 1.08]],
+  [[0, 540, 560, 1.1], [.85, 540, 860, 1.0], [1.85, 520, 1040, 1.12]],
+  [[0, 540, 840, 1.0], [.85, 540, 660, 1.12], [1.6, 600, 900, 1.06]],
+];
+
+const ESC = [
+  // 0 · GANCHO: Claudito copia a mano el reel, se frustra y golpea la laptop → «Claude los clona» → ×12
+  (u) => {
+    txt('NO COPIES', 540, 700, 150, { peso: 900, al: 'center' });
+    txt('A MANO', 540, 840, 150, { peso: 900, al: 'center' });
+    txt('clona el estilo', 540, 922, 74, { fam: SERIF, color: C.naranja, al: 'center' });
+    const mesa = 1290;
+    if (u < 3.05) {
+      // escena actuada en grande: se escala desde el borde de arriba (anclada al bloque del gancho)
+      ctx.save(); ctx.translate(540, 985); ctx.scale(1.45, 1.45); ctx.translate(-540, -840 - 222);
+      ctx.fillStyle = '#D9B898'; rr(180, mesa, 720, 20, 8); ctx.fill();
+      // la laptop con el reel que le gustó (real, desenfocado)
+      const abierta = u < 1.9 ? 1 : (u < 2.4 ? 1 - prog(u, 1.9, 1.97) : prog(u, 2.4, 2.52));
+      laptop(595, mesa, 285, 200, abierta, (x, y, w, h) => {
+        if (u < 2.4) foto(F['ref' + (2 + Math.floor(u / .22) % 5)], x, y, w, h, 4, 3);
+        else { ctx.fillStyle = C.tarjeta; ctx.fillRect(x, y, w, h); txt('✳', x + w / 2, y + h / 2 + 10, 90, { color: C.naranja, peso: 900, al: 'center' }); txt('Claude', x + w / 2, y + h - 22, 30, { fam: MONO, peso: 800, al: 'center' }); }
+      });
+      // la hoja donde copia a mano
+      const hx = 200, hy = 1065, hw = 165, hh = 220;
+      ctx.save(); ctx.translate(hx + hw / 2, hy + hh / 2); ctx.rotate(-.05); ctx.translate(-hx - hw / 2, -hy - hh / 2); tarjeta(hx, hy, hw, hh, { r: 8 });
+      const cont = [...raya(hx + 25, hy + 30, hx + hw - 30, hy + 40, 1), ...raya(hx + hw - 30, hy + 40, hx + hw - 40, hy + hh - 40, 2), ...raya(hx + hw - 40, hy + hh - 40, hx + 30, hy + hh - 30, 3), ...raya(hx + 30, hy + hh - 30, hx + 25, hy + 30, 4)];
+      const lin = raya(hx + 45, hy + 90, hx + hw - 60, hy + 105, 5), lin2 = raya(hx + 45, hy + 140, hx + hw - 80, hy + 130, 6);
+      const zig = []; for (let k = 0; k <= 9; k++) zig.push([hx + 30 + (k % 2) * (hw - 60), hy + 50 + k * 15 + 8 * Math.sin(k)]);
+      marcador(cont, prog(u, 0, .7), { gros: 5, color: C.tinta }); marcador(lin, prog(u, .6, .85), { gros: 10, color: C.tinta }); marcador(lin2, prog(u, .8, 1.0), { gros: 10, color: C.tinta });
+      marcador(zig, prog(u, 1.15, 1.6), { gros: 7, color: C.rojo });
+      ctx.restore();
+      // Claudito
+      const P = 15, cx = 392, cy = mesa - 6 * P;
+      const enojo = u >= 1.0, rojo = enojo ? .75 * prog(u, 1.0, 1.6) : 0;
+      let bd = 'abajo', bi = 'escribe', ojos = 'der';
+      if (u < 1.6) { bi = 'escribe'; ojos = enojo ? 'enojo' : (Math.floor(u / .35) % 2 ? 'der' : 'izq'); }
+      else if (u < 1.9) { bi = 'abajo'; bd = 'alto'; ojos = 'enojo'; }
+      else if (u < 2.4) { bi = 'abajo'; bd = 'golpe'; ojos = 'enojo'; }
+      else { bi = 'arriba'; bd = 'arriba'; ojos = u < 2.6 ? 'sorpresa' : 'feliz'; }
+      claudito(cx, cy, P, { bi, bd, ojos, rojo: u < 2.4 ? rojo : 0 });
+      if (u < 1.6) { const [mx, my] = mano(cx, cy, P, 'escribe', true); const pts = u < .7 ? cont : (u < .85 ? lin : (u < 1.15 ? lin2 : zig)); const pp = u < .7 ? prog(u, 0, .7) : (u < .85 ? prog(u, .6, .85) : (u < 1.15 ? prog(u, .8, 1) : prog(u, 1.15, 1.6)));
+        const [tx, ty] = pts[Math.min(pts.length - 1, Math.floor(pts.length * pp))]; const a = Math.atan2(ty - my, tx - mx);
+        ctx.save(); ctx.strokeStyle = '#E9B949'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(tx - Math.cos(a) * 14, ty - Math.sin(a) * 14); ctx.stroke(); ctx.strokeStyle = C.tinta; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(tx - Math.cos(a) * 14, ty - Math.sin(a) * 14); ctx.lineTo(tx, ty); ctx.stroke(); ctx.restore(); }
+      if (u >= 1.2 && u < 2.4) vapor(cx + 75, cy - 25, u, .9);
+      if (u >= 1.9 && u < 2.4) { impacto(602, mesa - 8, u - 1.9); txt('¡PUM!', 745, 1150, 80, { peso: 900, color: C.rojo, al: 'center' }); }
+      if (u >= 2.4) exclama(cx + 68, cy - 95, 14);
+      ctx.restore();
+    } else {
+      // los clones: el mismo estilo multiplicado (corte seco uno por uno), cada Claudito con su reel
+      const n = Math.min(12, 1 + Math.floor((u - 3.05) / .025)), y0 = 985;
+      for (let k = 0; k < n; k++) { const c = k % 4, f = Math.floor(k / 4), x = 120 + c * 215, y = y0 + f * 160;
+        tarjeta(x, y, 195, 145, { r: 14 }); foto(F['ref' + (2 + (k % 5))], x + 8, y + 8, 179, 129, 10, 3); claudito(x + 120, y + 90, 7, { color: COLORES[k % 8], ojos: 'feliz', bd: 'arriba', paso: paso(k) }); }
+      chip('×' + n, 540, y0 + 3 * 160 + 40, { tam: 44, fondoC: C.oscuro });
+    }
+  },
+  // 1 · Claudito ve el reel en el celular, se enamora del estilo y lo guarda
+  (u) => {
+    const x = 540, y = 470, w = 320, h = 568;
+    tarjeta(x - 16, y - 16, w + 32, h + 32, { oscura: true, r: 46 });
+    const fr = 2 + Math.floor(u / .28) % 5; foto(F['ref' + fr], x, y, w, h, 34, 3);
+    ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(x + 24, y + h - 26, w - 48, 6); ctx.fillStyle = '#fff'; ctx.fillRect(x + 24, y + h - 26, (w - 48) * prog(u, 0, 2.5), 6);
+    if (u >= .59) chip('reel', x + w - 50, y - 36, { tam: 26, fondoC: C.oscuro, fam: MONO });
+    const gx = x + w + 60, gy = y + h - 120, guardado = u >= 2.15;
+    ctx.save(); ctx.fillStyle = guardado ? C.naranja : C.tarjeta; ctx.strokeStyle = guardado ? C.naranja : C.tinta; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(gx - 22, gy - 30); ctx.lineTo(gx + 22, gy - 30); ctx.lineTo(gx + 22, gy + 30); ctx.lineTo(gx, gy + 14); ctx.lineTo(gx - 22, gy + 30); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    if (u >= 1.26) { marcador(ovalo(x + w / 2, y + 150, 200, 100, 2), prog(u, 1.26, 1.66)); if (u >= 1.55) txt('este estilo', 120, y + 120, 70, { fam: SERIF, color: C.rojo }); }
+    // Claudito sostiene el celular
+    const P = 20, cx = 330, cy = 1000, en = u >= 2.08;
+    claudito(cx, cy, P, { bd: 'adelante', bi: 'abajo', ojos: en ? 'corazon' : (u >= 1.26 ? 'sorpresa' : 'der') });
+    if (en) for (let k = 0; k < 4; k++) { const t0 = 2.08 + k * .08; if (u >= t0) corazon(cx + 20 + k * 45, cy - 40 - (u - t0) * 260 - (k % 2) * 30, 7); }
+    if (u >= 2.25) { tarjeta(560, 1190, 300, 96, { r: 22 }); txt('guardado ✓', 600, 1252, 38, { peso: 800 }); }
+  },
+  // 2 · Claudito escribe el link pisando las teclas y salta sobre «enviar»
+  (u) => {
+    tarjeta(110, 600, 860, 560); semaforo(150, 640);
+    txt('✳', 150, 720, 44, { color: C.naranja, peso: 900 }); txt('Claude', 200, 716, 36, { peso: 800 });
+    const enviado = u >= 1.06, link = 'instagram.com/reel/Dfxm…';
+    if (enviado) {
+      ctx.save(); ctx.fillStyle = C.crema2; rr(330, 760, 600, 150, 22); ctx.fill(); ctx.restore();
+      txt('copia este estilo', 360, 818, 36, { peso: 600 }); txt(link, 360, 870, 30, { peso: 500, fam: MONO, color: C.naranja });
+      if (u >= 1.2) { txt('✳', 150, 970, 40, { color: C.naranja, peso: 900 }); txt('viendo el reel' + '.'.repeat(1 + Math.floor(FR / 6) % 3), 200, 966, 34, { peso: 600, color: C.gris }); }
+    }
+    ctx.save(); ctx.strokeStyle = enviado ? C.linea : C.naranja; ctx.lineWidth = enviado ? 2 : 4; rr(150, 1020, 780, 110, 30); ctx.stroke(); ctx.restore();
+    if (!enviado) { txt('copia este estilo', 190, 1066, 30, { peso: 600 }); tecleo(link, 190, 1110, 28, prog(u, .1, .9), { color: C.naranja }); }
+    else txt('Responde a Claude…', 190, 1086, 30, { peso: 600, color: C.gris });
+    const pressed = u >= 1.0 && u < 1.2;
+    ctx.save(); ctx.fillStyle = u >= .95 ? C.naranja : C.gris; ctx.beginPath(); ctx.arc(872, 1075 + (pressed ? 6 : 0), 34, 0, 7); ctx.fill(); ctx.restore(); txt('↑', 872, 1089 + (pressed ? 6 : 0), 40, { peso: 900, color: C.tarjeta, al: 'center' });
+    // Claudito: teclea con las dos patas encima de la caja y salta al botón
+    const P = 12;
+    if (u < .9) { const t = Math.floor(u / .1) % 2; claudito(560, 1020 - 6 * P, P, { bi: t ? 'abajo' : 'lado', bd: t ? 'lado' : 'abajo', ojos: 'izq', paso: t }); }
+    else { const s = prog(u, .9, 1.0), x = lerp(560, 812, s), y = lerp(1020 - 6 * P, 1041 - 6 * P, s) - Math.sin(s * Math.PI) * 120;
+      claudito(x, y, P, { bi: s < 1 ? 'arriba' : 'abajo', bd: s < 1 ? 'arriba' : 'abajo', ojos: u >= 1.06 ? 'feliz' : 'sorpresa' }); }
+  },
+  // 3 · Claudito revisa cuadro por cuadro con lupa → de chef saca la receta de la olla → la receta se arma
+  (u) => {
+    if (u < 1.52) {
+      const N = Math.min(44, Math.floor(prog(u, 0, 1.45) * 45)), tw = 240, th = 427, gap = 26, sy = 600, off = N * (tw + gap);
+      for (let k = Math.max(0, N - 3); k <= Math.min(44, N + 3); k++) { const x = 540 - tw / 2 + k * (tw + gap) - off; tarjeta(x - 8, sy - 8, tw + 16, th + 16, { r: 16 }); cuadroHoja(k % 40, x, sy, tw, th); }
+      chip(`cuadro ${N + 1} de 45`, 540, 540, { tam: 38, fam: MONO });
+      // lupa sobre el cuadro actual (el cuadro se ve más grande adentro)
+      const lx = 540, ly = 810, R = 165;
+      ctx.save(); ctx.beginPath(); ctx.arc(lx, ly, R, 0, 7); ctx.clip(); ctx.fillStyle = C.tarjeta; ctx.fillRect(lx - R, ly - R, 2 * R, 2 * R); cuadroHoja(N % 40, lx - 180, ly - 320, 360, 640, 0); ctx.restore();
+      ctx.save(); ctx.strokeStyle = C.oscuro; ctx.lineWidth = 16; ctx.beginPath(); ctx.arc(lx, ly, R, 0, 7); ctx.stroke(); ctx.restore();
+      const P = 15, cx = 380, cy = 1130; claudito(cx, cy, P, { bd: 'alto', ojos: 'sorpresa', paso: paso() });
+      const [mx, my] = mano(cx, cy, P, 'alto'); ctx.save(); ctx.strokeStyle = C.oscuro; ctx.lineWidth = 20; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(lx + R * .62, ly + R * .62); ctx.stroke(); ctx.restore();
+      return;
+    }
+    if (u < 2.9) {
+      // olla con vapor, Claudito chef revuelve; la receta sale de la olla
+      const ox = 430, oy = 1060, ow = 340, oh = 190;
+      if (u >= 2.15) { const yy = lerp(oy + 40, 520, easeOut(prog(u, 2.15, 2.6))); tarjeta(ox + 20, yy, ow - 40, 420, { r: 14 }); chip('LA RECETA', ox + ow / 2, yy + 60, { tam: 30, fam: MONO });
+        ['colores', 'letra', 'ritmo'].forEach((s, k) => { if (u >= 2.35 + k * .12) { txt('☐', ox + 50, yy + 140 + k * 70, 36, { peso: 800 }); txt(s, ox + 100, yy + 140 + k * 70, 36, { peso: 800 }); } }); }
+      vapor(ox + ow / 2, oy - 10, u, 1.4);
+      ctx.fillStyle = C.oscuro; rr(ox, oy, ow, oh, 30); ctx.fill(); ctx.fillRect(ox - 30, oy + 20, 30, 20); ctx.fillRect(ox + ow, oy + 20, 30, 20);
+      ctx.fillStyle = '#3A3430'; ctx.fillRect(ox - 10, oy - 6, ow + 20, 18);
+      const P = 16, cx = 150, cy = 1250 - 6 * P; claudito(cx, cy, P, { gorro: 'chef', bd: 'adelante', ojos: 'feliz' });
+      const [mx, my] = mano(cx, cy, P, 'adelante'), sx = ox + ow / 2 + 70 * Math.sin(u * 12);
+      ctx.save(); ctx.strokeStyle = '#B07A4A'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(sx, oy + 10); ctx.stroke(); ctx.restore();
+      ctx.fillStyle = '#D9B898'; rr(60, 1250, 960, 20, 8); ctx.fill();
+      return;
+    }
+    tarjeta(110, 380, 860, 900);
+    chip('LA RECETA', 540, 340, { tam: 40, fam: MONO });
+    const sw = [['#F1ECE3', 'fondo'], ['#D9653B', 'acento'], ['#26221F', 'pantalla'], ['#FBF8F2', 'tarjeta']];
+    sw.forEach(([hex, nom], k) => { const t0 = 2.9 + k * .12; if (u < t0) return; const x = 160 + k * 195;
+      ctx.save(); ctx.fillStyle = hex; rr(x, 430, 170, 170, 20); ctx.fill(); ctx.strokeStyle = C.linea; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+      tecleo(hex, x, 640, 22, prog(u, t0, t0 + .25), { cursor: false }); etiqueta(nom, x, 672, { tam: 20 }); });
+    if (u >= 3.58) { ctx.save(); ctx.strokeStyle = C.linea; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(160, 720); ctx.lineTo(920, 720); ctx.stroke(); ctx.restore();
+      txt('Aa', 160, 850, 120, { peso: 900 }); if (u >= 3.75) txt('Aa', 340, 850, 132, { fam: SERIF, color: C.naranja });
+      if (u >= 3.9) etiqueta('grotesca + serif itálica', 520, 830, { tam: 22, color: C.tinta }); }
+    if (u >= 4.27) { ctx.save(); ctx.strokeStyle = C.linea; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(160, 910); ctx.lineTo(920, 910); ctx.stroke(); ctx.restore();
+      etiqueta('cada cambio de pantalla', 160, 965, { tam: 22, color: C.tinta });
+      const n = 16, act = Math.floor((u - 4.27) / .1);
+      for (let k = 0; k < n; k++) { ctx.fillStyle = k <= act ? (k % 3 === 0 ? C.naranja : C.durazno) : C.linea; rr(160 + k * 47, 1000, 36, 90, 6); ctx.fill(); }
+      if (u >= 4.96) { txt('1–2', 160, 1220, 110, { peso: 900 }); txt('seg', 370, 1220, 64, { fam: SERIF, color: C.naranja }); }
+      if (u >= 5.39) marcador(raya(150, 1245, 470, 1240, 3), prog(u, 5.39, 5.7)); }
+    // el chef presenta cada ingrediente
+    const nuevo = [2.9, 3.58, 4.27, 4.96].some(t => u >= t && u < t + .25);
+    claudito(760, 1280 - 6 * 13, 13, { gorro: 'chef', bd: nuevo ? 'arriba' : 'lado', bi: 'abajo', ojos: 'feliz' });
+  },
+  // 4 · le da la idea → la cuadrilla de Clauditos con casco arma la línea de tiempo
+  (u) => {
+    tarjeta(110, 420, 860, 220);
+    txt('✳', 150, 492, 40, { color: C.naranja, peso: 900 }); txt('Claude', 196, 488, 32, { peso: 800 });
+    ctx.save(); ctx.fillStyle = C.crema2; rr(300, 520, 630, 90, 20); ctx.fill(); ctx.restore();
+    tecleo('mi idea: «Claude copia videos»', 326, 578, 32, prog(u, 0, .6), { fam: SANS, peso: 600 });
+    if (u < .71) return;
+    tarjeta(110, 700, 860, 560, { oscura: true }); semaforo(150, 742); etiqueta('piloto-01 · línea de tiempo', 540, 750, { al: 'center', color: '#B9AFA3' });
+    const tiles = [F.mio1, F.mio2, F.mio3, F.mio4], esc = k => (k < 4 ? (x, y, w, h) => foto(tiles[k], x, y, w, h, 8) : (x, y, w, h) => cuadroHoja(k * 5, x, y, w, h, 8));
+    const llega = k => 1.0 + k * .11, llenos = [...Array(7).keys()].filter(k => u >= llega(k)).length;
+    for (let k = 0; k < 7; k++) { const x = 150 + k * 112;
+      ctx.save(); ctx.fillStyle = '#3A3430'; rr(x, 900, 96, 170, 12); ctx.fill(); ctx.restore();
+      if (k < llenos) { esc(k)(x, 900, 96, 170); ctx.save(); ctx.strokeStyle = C.naranja; ctx.lineWidth = 4; rr(x, 900, 96, 170, 12); ctx.stroke(); ctx.restore(); }
+      etiqueta(String(k + 1), x + 48, 1106, { al: 'center', color: k < llenos ? C.tarjeta : '#6B625A' }); }
+    for (let k = 0; k < 7; k++) { const P = 6, t0 = .71 + k * .06, xf = 150 + k * 112 + 18, x = lerp(1010, xf, easeOut(prog(u, t0, llega(k)))), y = 900 - 6 * P - 4;
+      const lleva = u < llega(k);
+      claudito(x, y - (lleva ? 0 : 0), P, { color: COLORES[k % 8], gorro: 'casco', bi: lleva ? 'arriba' : 'abajo', bd: lleva ? 'arriba' : 'lado', paso: lleva ? paso(k) : 0, ojos: lleva ? 'izq' : 'feliz' });
+      if (lleva) esc(k)(x + 2, y - 100, 56, 96); }
+    ctx.fillStyle = '#3A3430'; ctx.fillRect(150, 1140, 780, 10); ctx.fillStyle = C.naranja; ctx.fillRect(150, 1140, 780 * llenos / 7, 10);
+    etiqueta(Math.round(100 * llenos / 7) + ' %', 930, 1190, { al: 'right', color: C.tarjeta, tam: 26 });
+    if (u >= 1.8) chip('video listo ✓', 540, 1235, { tam: 36 });
+  },
+  // 5 · Claudito tacha «Editora» caminando sobre la tarjeta · abraza sus créditos: 0 gastados
+  (u) => {
+    tarjeta(110, 420, 860, 300);
+    etiqueta('antes', 160, 480, { color: C.gris });
+    txt('Editora', 160, 640, 110, { peso: 900, color: u >= .5 ? C.gris : C.tinta });
+    const pr = prog(u, .2, .6); marcador(raya(150, 605, 590, 590, 2), pr, { gros: 14 });
+    if (u >= .55) chip('✕', 840, 610, { tam: 64, fondoC: C.rojo });
+    const P = 11; claudito(lerp(150, 560, pr), 420 - 6 * P, P, { bd: u < .6 ? 'golpe' : 'arriba', ojos: u < .6 ? 'enojo' : 'feliz', paso: u < .6 ? paso() : 0 });
+    if (u < .86) return;
+    tarjeta(110, 780, 860, 470);
+    etiqueta('créditos de video gastados', 540, 860, { al: 'center', tam: 26, color: C.tinta });
+    // la pila de monedas queda entera
+    for (let k = 0; k < 7; k++) { ctx.fillStyle = k % 2 ? '#E9B949' : '#D9A23A'; rr(200, 1180 - k * 26, 150, 30, 15); ctx.fill(); }
+    claudito(330, 1210 - 6 * 12, 12, { bi: 'lado', bd: 'abajo', ojos: u >= 1.6 ? 'feliz' : 'normal' });
+    if (u >= 1.6) txt('0', 640, 1140, 230, { peso: 900, color: C.naranja, al: 'center' });
+    if (u >= 1.95) marcador(ovalo(640, 1065, 120, 120, 4), prog(u, 1.95, 2.35));
+  },
+  // 6 · el editor con cuadros reales de este video; Claudito va montado en el cabezal y saluda
+  (u) => {
+    tarjeta(90, 380, 900, 920, { oscura: true }); semaforo(140, 425);
+    etiqueta('piloto-01-clona.mp4', 540, 433, { al: 'center', color: '#B9AFA3' });
+    const k = Math.floor(u / .3) % 4; foto(F['mio' + (k + 1)], 380, 470, 320, 569, 14, 0, .5, .5);
+    if (u >= .89) { ctx.fillStyle = C.rojo; ctx.beginPath(); ctx.arc(410, 505, 10, 0, 7); ctx.fill(); txt('este video', 430, 515, 28, { fam: MONO, peso: 800, color: '#fff' }); }
+    ['mio1', 'mio2', 'mio3', 'mio4'].forEach((m, i) => { const x = 130 + (i < 2 ? i * 120 : 590 + (i - 2) * 120); foto(F[m], x, 520, 100, 178, 8); if (i === k) { ctx.save(); ctx.strokeStyle = C.naranja; ctx.lineWidth = 4; rr(x, 520, 100, 178, 8); ctx.stroke(); ctx.restore(); } });
+    for (let i = 0; i < 7; i++) { ctx.fillStyle = i % 2 ? '#E8875F' : C.naranja; ctx.fillRect(130 + i * 117, 1110, 110, 50); }
+    for (let i = 0; i < 46; i++) { const hh = 10 + 26 * Math.abs(Math.sin(i * 1.7)); ctx.fillStyle = '#6B625A'; ctx.fillRect(130 + i * 17.6, 1210 - hh / 2, 8, hh); }
+    const xc = lerp(130, 950, prog(u, 0, 2.2)); ctx.fillStyle = C.tarjeta; ctx.fillRect(xc - 2, 1090, 4, 160);
+    const P = 7;
+    if (u < 1.63) claudito(xc - 5 * P, 1090 - 6 * P, P, { ojos: 'feliz', bi: 'arriba', bd: 'arriba' });
+    else { claudito(820, 1250 - 6 * 10, 10, { ojos: 'feliz', bd: Math.floor(u / .18) % 2 ? 'arriba' : 'alto', espejo: true }); chip('salió así ✓', 500, 1265, { tam: 40 }); }
+  },
+];
+
+let FR = 0;
+function draw(f) {
+  FR = f; const t = f / FPS;
+  let i = INICIOS.findLastIndex(s => t >= s); if (i < 0) i = 0;
+  const L = LINEAS[i], u = t - INICIOS[i];
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = 'none';
+  fondo();
+  const [cx, cy, z0] = camara(CAM[i], u), z = z0 * (1 + (i ? .025 : 0) * clamp(u / L.d));
+  ctx.save(); ctx.translate(W / 2, 880); ctx.scale(z, z); ctx.translate(-cx, -cy);
+  ESC[i](u);
+  ctx.restore();
+  // zona del subtítulo limpia: lo que la cámara empuja hacia abajo se funde con el fondo (nada encimado)
+  if (i) { ctx.save(); ctx.beginPath(); ctx.rect(0, 1372, W, H); ctx.clip(); fondo(); ctx.restore();
+    const g = ctx.createLinearGradient(0, 1322, 0, 1372); g.addColorStop(0, 'rgba(241,236,227,0)'); g.addColorStop(1, 'rgba(241,236,227,1)'); ctx.fillStyle = g; ctx.fillRect(0, 1322, W, 50); }
+  if (!L.gancho) subtitulo(i, u);
+  grano(.04, 3);
+}
+arrancar(draw);
+</script>
+</body>
+</html>

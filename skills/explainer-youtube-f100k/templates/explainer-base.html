@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0" />
+  <title>Explainer YouTube · FÓRMULA 100K</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Caveat:wght@600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg: #FAF6EE;
+      --ink: #1C1917;
+      --muted: #57534E;
+      --accent: #E11D48;
+      --accent-2: #0D9488;
+      --hl: #FDE047;
+      --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-display);
+    }
+    /* Escenario con cámara viva (anti-PowerPoint) */
+    #viewport {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+    #camera {
+      position: absolute;
+      inset: 0;
+      transform-origin: 960px 540px;
+      will-change: transform;
+    }
+    .escena {
+      position: absolute;
+      width: 1920px;
+      height: 1080px;
+      padding: 96px 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 28px;
+    }
+    /* Escena 2 a la derecha para paneo real en vez de fade-in */
+    #escena-1 { left: 0; top: 0; }
+    #escena-2 { left: 1920px; top: 0; }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    h1 {
+      font-size: 92px;
+      line-height: 1.02;
+      font-weight: 800;
+      max-width: 1200px;
+      letter-spacing: -0.02em;
+    }
+    .nota-mano {
+      font-family: var(--font-hand);
+      font-size: 46px;
+      color: var(--accent-2);
+    }
+    .hl {
+      background: linear-gradient(180deg, transparent 58%, var(--hl) 58% 92%, transparent 92%);
+      padding: 0 8px;
+    }
+    .trazo {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewport">
+    <div id="camera">
+      <!-- ESCENA 1: Cuadro 0 nunca vacío (sirve como portada) -->
+      <section id="escena-1" class="escena">
+        <p class="kicker">IDEA CLAVE · 01</p>
+        <h1>Título directo con <span class="hl">una cifra real</span></h1>
+        <p class="nota-mano">↑ Reemplaza con tu gancho visual</p>
+        <svg width="640" height="120" viewBox="0 0 640 120" fill="none" aria-hidden="true">
+          <path id="flecha-1" class="trazo" d="M10 90 C 160 15, 380 15, 590 70" stroke="#E11D48" stroke-width="8" stroke-linecap="round" />
+        </svg>
+      </section>
+
+      <!-- ESCENA 2: La cámara se desplaza hacia aquí sin cortes bruscos -->
+      <section id="escena-2" class="escena">
+        <p class="kicker">PASO 1 · CÓMO FUNCIONA</p>
+        <h1>El diagrama entra al ritmo de tu voz</h1>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Timeline maestro compatible con HyperFrames (seek determinista en cualquier segundo t)
+    const tl = gsap.timeline({ paused: true });
+
+    // 0.0 s: cuadro 0 visible desde el inicio; el trazo se dibuja al hablar
+    tl.to('#flecha-1', { strokeDashoffset: 0, duration: 1.1, ease: 'power2.out' }, 0.4)
+      // 3.5 s: paneo de cámara hacia la escena 2 (anti-PPT)
+      .to('#camera', { x: -1920, duration: 0.9, ease: 'power3.inOut' }, 3.5);
+
+    // Control para HyperFrames / vista previa en navegador
+    window.__TIMELINE__ = tl;
+    window.__SEEK__ = (t) => tl.pause(t, false);
+    if (!window.__HYPERFRAMES__) tl.play(0);
+  </script>
+</body>
+</html>

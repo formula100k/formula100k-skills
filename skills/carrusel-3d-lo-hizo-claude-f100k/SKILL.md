@@ -21,9 +21,10 @@ Plantilla lista: `templates/gen.py` (textos editables arriba; lee las imágenes 
 6. CTA gigante «COMENTA / PALABRA» + objeto 3D a sangre.
 
 ## Cómo se hace
-1. **3D** (`blender/`): instala Blender (gratis). Desde la terminal: `SALIDA=./salida ./todo.sh` (o una pieza: `SALIDA=./salida blender -b -P escena.py -- hero`). Salen `hero`, `pose`, `lapiz` y `planta` en `salida/render/`. Para otro tema cambia los objetos de `escena.py` (nuevo tema = nuevos objetos con sentido) y los colores. Claudito es la mascota de la comunidad; úsalo tal cual.
+0. **Camino rápido (sin instalar nada):** los 4 objetos 3D ya vienen hechos en `templates/img/` (`hero.png`, `pose.png`, `lapiz.png`, `planta.png`, fondo transparente). Copia la carpeta `templates` entera a la carpeta del carrusel, pon sus 3 diseños en `img/` y salta al paso 3. Es el camino para una clase en vivo: no instales Blender salvo que pida objetos de su rubro.
+1. **3D a medida** (`blender/`, opcional): instala Blender (gratis). Desde la terminal: `SALIDA=./salida ./todo.sh` (o una pieza: `SALIDA=./salida blender -b -P escena.py -- hero`). Salen `hero`, `pose`, `lapiz` y `planta` en `salida/render/`. Para otro tema cambia los objetos de `escena.py` (nuevo tema = nuevos objetos con sentido) y los colores. Claudito es la mascota de la comunidad; úsalo tal cual.
 2. Copia los PNG a `img/` y tus diseños como `tab-a.jpg`, `tab-b.jpg`, `tab-c.jpg`.
-3. Edita los textos y colores de arriba de `gen.py` (paleta de tu brandkit) y corre `python3 gen.py`.
+3. Edita los textos y colores de arriba de `gen.py` (paleta de tu brandkit) y corre `python3 gen.py`. Si no hay Python (Windows), edita directo la copia de `carrusel.html`.
 4. Exporta: `node ../carrusel-formatos-f100k/export.js <ruta>/carrusel.html --width 1080 --height 1350 --scale 2`. Mira cada lámina antes de entregar.
 
 ## Reglas

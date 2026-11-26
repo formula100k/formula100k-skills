@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Carrusel paso a paso · plantilla</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
+/* PALETA: reemplaza por los colores del brandkit de la alumna (mi_brandkit). --oro = fondo/acento, --tinta = pastillas, --papel = resaltado, --rojo = chips */
+:root{--oro:#D7F25A;--tinta:#161616;--papel:#FFFFFF;--rojo:#2F6BFF;--rojo2:#D9E4FF;--rosa:#F3B6C4;--gris:#666;--linea:#e4e4e4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--oro);color:var(--tinta);font-family:'Inter Tight',sans-serif}
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0 0  0 0 0 0.10 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");mix-blend-mode:multiply}
+.c{text-align:center}
+.pill{display:inline-block;background:var(--tinta);color:var(--papel);border-radius:14px;padding:14px 30px 16px;font-weight:500;font-size:58px;letter-spacing:-.01em;line-height:1.1}
+.pill b{font-weight:900;text-transform:uppercase}
+.sub{font-weight:800;font-size:50px;line-height:1.18;letter-spacing:-.02em;margin-top:30px}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:0}
+.tag{display:inline-block;background:var(--tinta);color:var(--papel);border-radius:10px;padding:8px 18px;font-weight:900;font-size:36px;letter-spacing:.02em;text-transform:uppercase}
+.marca{position:absolute;right:38px;bottom:30px;font-weight:900;font-size:22px;letter-spacing:.12em;background:var(--tinta);color:var(--oro);padding:6px 10px;border-radius:6px}
+.handle{position:absolute;left:40px;bottom:32px;font-weight:700;font-size:24px;opacity:.7}
+/* mockup calendario estilo Google */
+.cal{background:#fff;border:4px solid var(--tinta);border-radius:22px;overflow:hidden;font-family:'Inter',sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.cal .bar{display:flex;align-items:center;gap:16px;padding:16px 22px;border-bottom:1px solid var(--linea);font-size:24px}
+.cal .ico{width:38px;height:40px;border-radius:7px;background:#fff;border:2px solid var(--rojo);color:var(--rojo);font-weight:700;font-size:17px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;position:relative}
+.cal .ico::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--rojo)}
+.cal .btn{border:1px solid #cfc8bb;border-radius:20px;padding:5px 16px;font-size:20px;font-weight:500}
+.cal .mes{font-size:28px;font-weight:500}
+.cal .av{width:44px;height:44px;border-radius:50%;background:url(img/avatar.png) center/cover;margin-left:auto;border:2px solid var(--oro)}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.grid .dh{font-size:15px;font-weight:600;color:#70757a;text-align:center;padding:8px 0 2px}
+.grid .d{border-right:1px solid var(--linea);border-top:1px solid var(--linea);padding:4px 5px 6px;min-height:var(--h,120px)}
+.grid .d:nth-child(7n){border-right:none}
+.grid .n{font-size:18px;color:#3c4043;text-align:center;margin-bottom:4px}
+.grid .n.hoy span{background:#1A73E8;color:#fff;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center}
+.grid .n.fuera{color:#b0aca4}
+.chip{background:var(--rojo);color:#fff;font-size:13px;font-weight:600;border-radius:4px;padding:3px 6px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.idea{background:var(--rojo2);color:#1b3a8a;font-weight:500}
+.chip.solo{font-size:17px;padding:6px 8px}
+/* miniaturas reales */
+.th{width:118px;height:184px;border-radius:12px;border:3px solid var(--tinta);background:center/cover;flex:0 0 auto}
+.recorte{position:absolute;filter:drop-shadow(8px 0 0 #fff) drop-shadow(-8px 0 0 #fff) drop-shadow(0 8px 0 #fff) drop-shadow(0 -8px 0 #fff) drop-shadow(0 18px 24px rgba(0,0,0,.3))}
+/* tabla */
+table{border-collapse:separate;border-spacing:0;background:#fff;border:4px solid var(--tinta);border-radius:20px;overflow:hidden;font-family:'Inter',sans-serif}
+th{background:var(--tinta);color:var(--papel);font-family:'Inter Tight';font-weight:800;font-size:19px;padding:14px 6px;line-height:1.15;border-left:1px solid #3a342d}
+td{font-size:16.5px;line-height:1.22;padding:10px 8px;text-align:center;border-top:1px solid var(--linea);border-left:1px solid var(--linea);vertical-align:middle}
+td.rot{font-family:'Inter Tight';font-weight:800;font-size:19px;width:120px;padding:8px 6px}
+td.rot .mini{width:74px;height:74px;border-radius:12px;margin:0 auto 6px;background:center 18%/cover;border:2px solid var(--tinta)}
+</style></head><body>
+
+<!-- 01 · PORTADA -->
+<section class="slide">
+  <div class="c" style="padding-top:78px">
+    <div style="font-weight:900;font-size:66px;letter-spacing:-.03em">Cómo planear un</div>
+    <div class="pill" style="font-size:132px;font-weight:900;padding:6px 44px 18px;margin-top:14px;border-radius:24px;letter-spacing:-.035em">MES ENTERO</div>
+    <div style="font-weight:900;font-size:66px;letter-spacing:-.03em;margin-top:14px">de contenido que <span class="serif" style="font-size:86px;background:linear-gradient(transparent 62%,var(--papel) 62%);padding:0 .12em">vende</span></div>
+  </div>
+  <div id="calPortada" class="cal" style="position:absolute;left:150px;top:470px;width:860px"></div>
+  <img class="recorte" src="img/recorte.png" style="left:-30px;bottom:-10px;height:620px">
+  <div style="position:absolute;right:70px;top:880px;width:230px;height:230px;border-radius:50%;background:var(--rojo);border:8px solid #fff;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(0,0,0,.25);transform:rotate(-8deg)">
+    <div style="font-weight:900;font-size:110px;line-height:.9">5</div><div style="font-weight:900;font-size:40px;letter-spacing:.04em">PASOS</div></div>
+  <div style="position:absolute;left:560px;bottom:120px;background:#fff;border-radius:50px;padding:18px 40px;font-weight:800;font-size:42px;box-shadow:0 8px 20px rgba(0,0,0,.15)">Desliza →</div>
+  <div class="marca">TU MARCA</div>
+</section>
+
+<!-- 02 · PASO 1 -->
+<section class="slide">
+  <div class="c" style="padding-top:150px">
+    <div class="pill">Paso #1: <b>Cuánto publicas</b></div>
+    <div class="sub">Elige uno</div>
+  </div>
+  <div id="filas" style="position:absolute;left:70px;top:420px;right:60px"></div>
+  <div class="handle">@tuusuario</div><div class="marca">TU MARCA</div>
+</section>
+
+<!-- 03 · PASO 2 -->
+<section class="slide">
+  <div class="c" style="padding-top:90px">
+    <div class="pill">Paso #2: <b>Tus días</b></div>
+    <div class="sub">Da igual qué días. Esto es<br>para que cumplas contigo.</div>
+  </div>
+  <div id="semanas" style="position:absolute;left:80px;right:80px;top:430px"></div>
+  <div class="handle">@tuusuario</div><div class="marca">TU MARCA</div>
+</section>
+
+<!-- 04 · PASO 3 -->
+<section class="slide">
+  <div class="c" style="padding-top:120px">
+    <div class="pill">Paso #3: <b>Tus temas</b></div>
+    <div class="sub">Escribe tu nicho y de 3 a 7<br>subtemas que salen de él</div>
+  </div>
+  <svg style="position:absolute;inset:0" width="1080" height="1350"><g stroke="#1A1612" stroke-width="7" stroke-linecap="round" fill="none">
+    <defs><marker id="pt" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0 L5 2.5 L0 5z" fill="#1A1612"/></marker></defs>
+    <line x1="540" y1="800" x2="540" y2="690"/><line x1="400" y1="850" x2="300" y2="790"/><line x1="680" y1="850" x2="780" y2="790"/>
+    <line x1="430" y1="960" x2="310" y2="1030"/><line x1="650" y1="960" x2="770" y2="1030"/></g></svg>
+  <div class="c" style="position:absolute;left:330px;top:810px;width:420px">
+    <div style="font-weight:900;font-size:34px;letter-spacing:.04em">NICHO:</div>
+    <div class="tag" style="font-size:52px;padding:10px 24px;margin-top:6px;line-height:1.02">VENDER CON<br>CONTENIDO</div>
+  </div>
+  <div id="mapa"></div>
+  <div class="handle">@tuusuario</div><div class="marca">TU MARCA</div>
+</section>
+
+<!-- 05 · PASO 4 -->
+<section class="slide">
+  <div class="c" style="padding-top:70px">
+    <div class="pill">Paso #4: <b>Tipos de contenido</b></div>
+    <div class="sub" style="margin-top:22px">Arma una tabla así y llénala</div>
+    <div style="margin-top:18px;display:flex;gap:16px;justify-content:center"><span class="tag" style="font-size:24px;text-transform:none">→ Tipos de contenido</span><span class="tag" style="font-size:24px;text-transform:none">↓ Subtemas</span></div>
+  </div>
+  <table id="tabla" style="position:absolute;left:40px;right:40px;top:380px;width:1000px"></table>
+  <div class="handle">@tuusuario</div><div class="marca">TU MARCA</div>
+</section>
+
+<!-- 06 · PASO 5 -->
+<section class="slide">
+  <div class="c" style="padding-top:100px">
+    <div class="pill">Paso #5: <b>Arma tu mes</b></div>
+    <div class="sub">Reparte en el calendario tus<br>temas y tipos favoritos de la tabla</div>
+  </div>
+  <div id="calMes" class="cal" style="position:absolute;left:50px;right:50px;top:420px"></div>
+  <div class="handle">@tuusuario</div><div class="marca">TU MARCA</div>
+</section>
+
+<!-- 07 · CTA -->
+<section class="slide">
+  <div class="c" style="padding-top:230px">
+    <div style="font-weight:900;font-size:62px;letter-spacing:-.03em;line-height:1.12">¿Quieres ganchos listos<br>para cada uno de<br>estos tipos de video?</div>
+  </div>
+  <div style="position:absolute;left:90px;top:560px;display:flex;align-items:center;gap:34px">
+    <div style="background:var(--tinta);color:var(--oro);border:8px solid #fff;border-radius:30px;padding:0 42px 14px;font-weight:900;font-size:220px;letter-spacing:-.05em;line-height:1.05;transform:rotate(-3deg);box-shadow:0 14px 30px rgba(0,0,0,.2)">10</div>
+    <div style="font-weight:900;font-size:110px;line-height:.92;letter-spacing:-.04em">GANCHOS<br><span class="serif" style="font-size:96px;background:linear-gradient(transparent 60%,var(--papel) 60%)">de ejemplo</span></div>
+  </div>
+  <div class="c" style="position:absolute;left:0;right:0;top:900px;font-weight:700;font-size:44px">Comenta</div>
+  <div style="position:absolute;left:190px;right:190px;top:975px;background:#fff;border:5px solid var(--tinta);border-radius:26px;padding:22px 26px;display:flex;align-items:center;gap:22px;font-family:'Inter',sans-serif">
+    <div style="width:84px;height:84px;border-radius:50%;background:url(img/avatar.png) center/cover;border:3px solid var(--oro)"></div>
+    <div style="flex:1"><div style="font-size:24px;color:#555">tuusuario</div><div style="font-family:'Inter Tight';font-weight:900;font-size:50px;line-height:1.05">GANCHOS</div></div>
+    <div style="width:64px;height:64px;border-radius:50%;background:var(--rojo);color:#fff;font-size:38px;font-weight:900;display:flex;align-items:center;justify-content:center">↑</div>
+  </div>
+  <div class="c" style="position:absolute;left:0;right:0;top:1145px;font-weight:700;font-size:40px">y te mando mi guía gratis</div>
+  <div class="marca">TU MARCA</div>
+</section>
+
+<script>
+// ---- datos
+const reels=[1,2,3,4,5,6,7,8].map(n=>`img/reel0${n}.jpg`);
+const tipos=['Paso a paso','Error común','Antes vs. después','Comparación','Mito','Caso real'];
+const filasT=[
+ ['Guiones','reel01',['Tu guion en 4 pasos','Explicar antes de enganchar','Guion improvisado vs. guion que vende','Guion largo vs. corto','«Ser auténtica es no escribir»','Mi guion de la semana, desarmado']],
+ ['Ganchos','reel06',['Cómo escribir un gancho con cifra','Saludar en el segundo 1','Mi gancho de antes vs. el de hoy','Pregunta vs. dato','«El gancho es solo el título»','Mi mejor reel, segundo a segundo']],
+ ['Videos animados','reel03',['Tu primer video animado','Animar sin guion','Video hablado vs. animado','Animar a mano vs. con IA','«Animar es carísimo»','Un animado mío, por dentro']],
+ ['Tu equipo de IA','reel04',['Arma tu oficina de IA','Pedirle todo a un solo chat','Mi semana sin IA vs. con IA','Contratar vs. delegar en IA','«La IA escribe genérico»','Lo que hizo mi IA hoy']],
+ ['Ventas','reel08',['Del comentario al DM','Vender solo en lanzamiento','Pitch largo vs. CTA de una palabra','Regalo vs. descuento','«Vender es molestar»','Un DM real, paso a paso']],
+];
+// ---- calendario
+function cal(el,{mes,dias,inicio,total,hoy,h,chips,mini}){
+  el.innerHTML=`<div class="bar">${mini?'':'<span style="font-size:30px">☰</span>'}<div class="ico">31</div><span style="font-size:26px;color:#3c4043">Calendario</span><span class="btn">Hoy</span><span style="color:#5f6368">‹ ›</span><span class="mes">${mes}</span><span class="btn" style="margin-left:auto">Mes ▾</span><div class="av" style="margin-left:0"></div></div>`;
+  const g=document.createElement('div');g.className='grid';g.style.setProperty('--h',h+'px');
+  ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'].forEach(d=>g.insertAdjacentHTML('beforeend',`<div class="dh">${d}</div>`));
+  for(let i=0;i<total;i++){const dia=i-inicio+1;const fuera=dia<1||dia>dias;const num=fuera?(dia<1?30+dia:dia-dias):dia;
+    const c=!fuera&&chips[dia]?chips[dia].map(([a,b])=>`<div class="chip">${a}</div>${b?`<div class="chip idea">${b}</div>`:''}`).join(''):'';
+    g.insertAdjacentHTML('beforeend',`<div class="d"><div class="n ${dia===hoy?'hoy':''} ${fuera?'fuera':''}"><span>${num}</span></div>${c}</div>`);}
+  el.appendChild(g);
+}
+// diciembre 2026: el 1 cae martes (inicio=2)
+const plan={},orden=[];filasT.forEach(([t,,ideas])=>ideas.forEach((idea,j)=>orden.push([tipos[j],idea])));
+let k=0;for(let d=1;d<=31;d++){const wd=(d+1)%7; if(wd>=1&&wd<=5){plan[d]=[orden[(k*7)%orden.length]];k++;}}
+cal(document.getElementById('calMes'),{mes:'Diciembre 2026',dias:31,inicio:2,total:35,hoy:1,h:138,chips:Object.fromEntries(Object.entries(plan).map(([d,v])=>[d,v]))});
+const pp={};Object.entries(plan).forEach(([d,v])=>pp[d]=[[v[0][0]]]);
+cal(document.getElementById('calPortada'),{mes:'Diciembre 2026',dias:31,inicio:2,total:28,hoy:1,h:78,chips:pp});
+// paso 1: filas con miniaturas reales
+const niv=[['FÁCIL','3 posts a la semana',3],['MEDIO','5 posts a la semana',5],['PRO','7 posts a la semana',7]];
+document.getElementById('filas').innerHTML=niv.map(([n,t,c],i)=>`<div style="display:flex;align-items:center;gap:26px;margin-bottom:70px"><div style="width:250px;flex:0 0 250px"><span class="tag" style="font-size:44px">${n}</span><div style="font-weight:800;font-size:28px;margin-top:10px">${t}</div></div><div style="display:flex;gap:12px">${Array.from({length:c},(_,j)=>`<div class="th" style="width:82px;height:130px;background-image:url(${reels[(j+i*3)%8]})"></div>`).join('')}</div></div>`).join('');
+// paso 2: semanas
+function semana(n,label,dias){return `<div class="c" style="margin-bottom:26px"><span class="tag" style="font-size:40px">${n}</span><div style="font-weight:800;font-size:30px;margin:8px 0 12px">${label}</div><div class="cal" style="border-radius:16px"><div class="grid">${['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'].map(d=>`<div class="dh">${d}</div>`).join('')}${[29,30,1,2,3,4,5].map((d,i)=>`<div class="d" style="min-height:96px"><div class="n ${d===1?'hoy':''} ${d>25?'fuera':''}"><span>${d}</span></div>${dias.includes(i)?'<div class="chip solo">Post</div>':''}</div>`).join('')}</div></div></div>`}
+document.getElementById('semanas').innerHTML=semana('FÁCIL','3 posts a la semana',[1,3,5])+semana('MEDIO','5 posts a la semana',[1,2,3,4,5])+semana('PRO','7 posts a la semana',[0,1,2,3,4,5,6]);
+// paso 3: mapa con miniaturas reales
+const nodos=[['Guiones','reel01',440,420],['Videos animados','reel03',90,560],['Tu equipo de IA','reel04',790,560],['Ganchos','reel06',130,1000],['Ventas','reel08',750,1000]];
+document.getElementById('mapa').innerHTML=nodos.map(([t,r,x,y])=>`<div class="c" style="position:absolute;left:${x}px;top:${y}px;width:200px"><div class="th" style="width:140px;height:186px;margin:0 auto;background-image:url(img/${r}.jpg);background-position:center 10%;transform:rotate(${(x%3)-1}deg)"></div><span class="tag" style="font-size:26px;margin-top:10px;text-transform:none;white-space:nowrap">${t}</span></div>`).join('');
+// paso 4: tabla
+document.getElementById('tabla').innerHTML=`<tr><th style="border-left:none"></th>${tipos.map(t=>`<th>${t}</th>`).join('')}</tr>`+filasT.map(([t,r,ideas])=>`<tr><td class="rot" style="border-left:none"><div class="mini" style="background-image:url(img/${r}.jpg)"></div>${t}</td>${ideas.map(i=>`<td>${i}</td>`).join('')}</tr>`).join('');
+</script>
+</body></html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Carrusel pintado de opinión · plantilla</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Special+Elite&display=swap');
+:root{
+  /* PALETA: reemplaza por los colores del brandkit de la alumna (mi_brandkit) */
+  --papel:#F3ECDD; --tinta:#1A1612; --gris:#6F665A;
+  --oro:#F0B24A; --rojo:#D8452E; --rosa:#F3B6C4; --azul:#BFD0F5; --salvia:#B9CFA8; --kraft:#C9A77A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;color:var(--tinta);font-family:'Caveat Brush',cursive;background:var(--papel)}
+/* fondo pintado a mano: base + manchas de pincel + grano */
+.slide::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(ellipse 60% 35% at 20% 15%,rgba(255,255,255,.22),transparent 70%),
+   radial-gradient(ellipse 55% 40% at 85% 70%,rgba(0,0,0,.07),transparent 70%),
+   radial-gradient(ellipse 70% 30% at 40% 95%,rgba(255,255,255,.14),transparent 70%),
+   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.012 0.09' numOctaves='4' seed='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.22 -0.02'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.2  0 0 0 0 0.15  0 0 0 0 0.1  0 0 0 0.13 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  mix-blend-mode:multiply}
+.slide>*{position:relative;z-index:1}
+.salvia{background:var(--salvia)} .rojo{background:var(--rojo);color:var(--papel)} .azul{background:var(--azul)} .crema{background:var(--papel)}
+.pad{padding:150px 92px 0}
+.kick{font-size:64px;letter-spacing:.04em;text-transform:uppercase;color:transparent;-webkit-text-stroke:2.5px currentColor;line-height:1.1;padding-bottom:.08em}
+.salvia .kick,.azul .kick,.crema .kick{-webkit-text-stroke-color:var(--tinta)}
+.rojo .kick{-webkit-text-stroke-color:var(--papel)}
+h1,h2{font-weight:400;line-height:1.08;padding-bottom:.1em}
+h2{font-size:118px;letter-spacing:-.005em}
+p{font-size:62px;line-height:1.25}
+.acento{color:var(--rojo)} .oro{color:var(--oro)}
+.handle{position:absolute;left:0;right:0;bottom:34px;text-align:center;font-family:'Special Elite',monospace;font-size:26px;letter-spacing:.08em;opacity:.6;z-index:2}
+.star{position:absolute;z-index:2}
+/* tarjeta de papel con cinta (como los recortes del referente) */
+.card{position:absolute;background:#FBF7EE;padding:44px 50px;box-shadow:0 10px 26px rgba(0,0,0,.22);border-left:8px solid #d9cfbd}
+.quote{border:4px solid var(--tinta);background:#FBF7EE;padding:34px 40px;font-size:60px;line-height:1.2;margin-top:44px;box-shadow:4px 5px 0 rgba(0,0,0,.85)}
+.flecha{display:flex;gap:30px;align-items:flex-start;margin-top:56px}
+.flecha svg{flex:0 0 150px;margin-top:6px}
+.flecha p{font-size:66px}
+.num{font-size:150px;color:var(--rojo);line-height:1}
+.subr{height:16px;margin:8px 0 14px}
+.pola{position:absolute;background:#fff;padding:18px;box-shadow:0 14px 30px rgba(0,0,0,.28)}
+.pola img{display:block;width:100%}
+.tape{position:absolute;width:170px;height:46px;background:rgba(240,178,74,.75);z-index:3}
+.recorte{position:absolute;filter:drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff) drop-shadow(0 16px 22px rgba(0,0,0,.32))}
+</style></head><body>
+
+<!-- SVG reutilizables: estrella pintada (8 puntas, borde de pincel) y flecha rosa -->
+<svg width="0" height="0" style="position:absolute">
+ <defs>
+  <filter id="pincel"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter>
+  <filter id="pincel2"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="2" result="t"/><feColorMatrix in="t" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.4 1.25" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+  <symbol id="estrella" viewBox="0 0 200 200"><g filter="url(#pincel)"><path d="M100 4 L114 72 L170 30 L128 86 L196 100 L128 114 L170 170 L114 128 L100 196 L86 128 L30 170 L72 114 L4 100 L72 86 L30 30 L86 72 Z"/></g></symbol>
+  <symbol id="flecha" viewBox="0 0 160 70"><g filter="url(#pincel)"><path d="M4 22 L104 18 L102 2 L156 36 L102 68 L104 50 L4 48 Z"/></g></symbol>
+ </defs>
+</svg>
+
+<!-- 01 · PORTADA: foto real a sangre + letras a mano -->
+<section class="slide" style="background:#2b3540">
+  <img src="img/foto-portada.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%;z-index:0">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,22,28,.45) 0%,rgba(20,22,28,.08) 55%,rgba(20,22,28,.55) 100%);z-index:1"></div>
+  <div style="position:absolute;inset:0;z-index:2;color:var(--papel);text-shadow:0 3px 20px rgba(0,0,0,.45)">
+    <div style="position:absolute;left:90px;top:90px;font-size:120px;line-height:1">Cómo te</div>
+    <div style="position:absolute;left:150px;top:190px;font-size:270px;line-height:1;color:var(--oro)">PAGAN</div>
+    <div style="position:absolute;left:640px;top:520px;font-size:104px;line-height:1.02;transform:rotate(-4deg)">por<br>tener</div>
+    <div style="position:absolute;left:70px;top:1060px;font-size:230px;line-height:1;color:var(--rojo);text-shadow:0 4px 24px rgba(0,0,0,.55)">opiniones</div>
+  </div>
+  <svg class="star" style="left:820px;top:110px;width:190px;height:190px;fill:var(--oro)"><use href="#estrella"/></svg>
+  <svg class="star" style="left:900px;top:760px;width:90px;height:90px;fill:var(--rosa)"><use href="#estrella"/></svg>
+  <svg class="star" style="left:900px;top:930px;width:110px;height:110px;fill:var(--rojo)"><use href="#estrella"/></svg>
+  <svg class="star" style="left:880px;top:1120px;width:120px;height:120px;fill:var(--azul)"><use href="#estrella"/></svg>
+</section>
+
+<!-- 02 · TENSIÓN -->
+<section class="slide salvia">
+  <div class="pad" style="padding-top:220px">
+    <h2>Instagram cambió.</h2>
+    <p style="margin-top:60px">Ya nadie quiere ver a una creadora que no dice nada.</p>
+    <p style="margin-top:46px">Ni aprender de alguien que lo leyó en otro lado <span class="acento">(hola, curso reciclado)</span>.</p>
+  </div>
+  <svg class="star" style="right:90px;top:90px;width:150px;height:150px;fill:var(--rojo)"><use href="#estrella"/></svg>
+  <div class="handle">@tuusuario</div>
+</section>
+
+<!-- 03 · QUÉ QUIERE LA GENTE -->
+<section class="slide crema">
+  <div class="pad" style="padding-top:200px">
+    <h2>¿Qué quiere<br>la gente?</h2>
+    <div class="flecha"><svg viewBox="0 0 160 70" style="fill:var(--rosa)"><use href="#flecha"/></svg><p>Aprender a través de ti.</p></div>
+    <div class="flecha"><svg viewBox="0 0 160 70" style="fill:var(--rosa)"><use href="#flecha"/></svg><p>Escuchar lo que tú viviste.</p></div>
+    <div class="flecha"><svg viewBox="0 0 160 70" style="fill:var(--rosa)"><use href="#flecha"/></svg><p>Seguir tu camino, porque se parecen a ti.</p></div>
+  </div>
+  <svg class="star" style="right:110px;top:110px;width:130px;height:130px;fill:#2B4FBF"><use href="#estrella"/></svg>
+  <div class="handle">@tuusuario</div>
+</section>
+
+<!-- 04 · REENCUADRE -->
+<section class="slide rojo">
+  <div class="pad" style="padding-top:250px">
+    <div class="kick">Bienvenida a</div>
+    <h2 style="font-size:128px;margin-top:10px">la era de la creadora con punto de vista.</h2>
+    <p style="margin-top:50px">La que cuenta lo que vive y dice lo que piensa de eso.</p>
+  </div>
+  <svg class="star" style="right:110px;bottom:130px;width:140px;height:140px;fill:var(--papel)"><use href="#estrella"/></svg>
+  <div class="handle">@tuusuario</div>
+</section>
+
+<!-- 05 · EJEMPLOS -->
+<section class="slide crema">
+  <div class="pad" style="padding-top:140px">
+    <h2 style="font-size:100px">Las que hoy venden con su contenido dicen cosas como:</h2>
+    <div class="quote">«Probé esto en mi cuenta esta semana. Te cuento qué pasó.»</div>
+    <div class="quote">«Esto que todas recomiendan a mí no me funcionó.»</div>
+    <p style="margin-top:56px">No solo muestran su vida. <span class="acento">Te dicen qué piensan de ella.</span></p>
+  </div>
+  <div class="handle">@tuusuario</div>
+</section>
+
+<!-- 06 · PRUEBA 1: la comunidad -->
+<section class="slide salvia">
+  <div class="pad" style="padding-top:130px">
+    <div class="kick">Desde cero</div>
+    <h2 style="font-size:104px;margin-top:6px">Así llegué a [tu resultado real].</h2>
+    <p style="margin-top:40px">Diciendo lo que pienso de [tu tema].</p>
+  </div>
+  <div class="card" style="left:120px;top:880px;width:840px;transform:rotate(-1.5deg);font-family:'Special Elite',monospace;font-size:40px;line-height:1.4">
+    [Un dato real tuyo con su fuente:<br>una encuesta, un mensaje o un número<br>que puedas mostrar.]
+  </div>
+  <div class="tape" style="left:460px;top:858px;transform:rotate(3deg)"></div>
+  <svg class="star" style="right:80px;bottom:60px;width:120px;height:120px;fill:var(--rojo)"><use href="#estrella"/></svg>
+</section>
+
+<!-- 07 · PRUEBA 2: captura real + cifras -->
+<section class="slide crema">
+  <div class="pad" style="padding-top:120px">
+    <div class="kick">Mis resultados</div>
+    <h2 style="font-size:104px;margin-top:6px">Mi cuenta, opinando en vez de repetir:</h2>
+  </div>
+  <div class="pola" style="left:110px;top:560px;width:860px;transform:rotate(-1.2deg)"><img src="img/captura-real.png"></div>
+  <svg class="star" style="right:70px;top:500px;width:120px;height:120px;fill:var(--oro)"><use href="#estrella"/></svg>
+  <div style="position:absolute;left:92px;top:960px;width:420px">
+    <div class="num">[CIFRA]</div>
+    <svg class="subr" viewBox="0 0 400 16" style="width:380px;fill:var(--rojo)"><path filter="url(#pincel)" d="M0 8 Q50 0 100 8 T200 8 T300 8 T400 8 L400 14 Q350 6 300 14 T200 14 T100 14 T0 14Z"/></svg>
+    <p style="font-size:44px">[qué mide]</p>
+  </div>
+  <div style="position:absolute;left:580px;top:960px;width:420px">
+    <div class="num">[CIFRA]</div>
+    <svg class="subr" viewBox="0 0 400 16" style="width:380px;fill:var(--rojo)"><path filter="url(#pincel)" d="M0 8 Q50 0 100 8 T200 8 T300 8 T400 8 L400 14 Q350 6 300 14 T200 14 T100 14 T0 14Z"/></svg>
+    <p style="font-size:44px">[qué mide]</p>
+  </div>
+  <div class="handle">@tuusuario</div>
+</section>
+
+<!-- 08 · PRUEBA 3: la brecha -->
+<section class="slide azul">
+  <div class="pad" style="padding-top:130px">
+    <div class="kick">La diferencia</div>
+    <h2 style="font-size:112px;margin-top:6px"><span class="acento">[N]×</span> entre mi mejor y mi peor post.</h2>
+    <p style="margin-top:36px">No fue la duración ni el CTA. Fue decir algo con postura desde el primer segundo.</p>
+  </div>
+  <div class="card" style="left:90px;top:900px;width:500px;transform:rotate(-2deg);font-family:'Special Elite',monospace">
+    <div style="font-size:30px;letter-spacing:.1em;color:var(--gris)">MEJOR REEL</div>
+    <div style="font-size:84px;font-weight:700">[CIFRA]</div><div style="font-size:30px">vistas</div>
+  </div>
+  <div class="card" style="left:540px;top:1010px;width:450px;transform:rotate(2.5deg);font-family:'Special Elite',monospace;background:#ECE3D2">
+    <div style="font-size:30px;letter-spacing:.1em;color:var(--gris)">PEOR REEL</div>
+    <div style="font-size:84px;font-weight:700">[CIFRA]</div><div style="font-size:30px">vistas</div>
+  </div>
+</section>
+
+<!-- 09 · CTA -->
+<section class="slide rojo">
+  <div class="pad" style="padding-top:120px">
+    <div class="kick">Hoy</div>
+    <h2 style="font-size:104px;margin-top:6px">Te regalo [tu regalo].</h2>
+    <p style="margin-top:30px">Para que escribas con tu opinión, no con la de otras.</p>
+  </div>
+  <svg style="position:absolute;left:150px;top:760px;width:220px;height:200px;fill:var(--rosa);transform:rotate(55deg)" viewBox="0 0 160 70"><use href="#flecha"/></svg>
+  <div style="position:absolute;left:80px;top:960px;font-size:84px;line-height:1.05;color:var(--azul)">Comenta<br><span style="font-size:118px">PALABRA</span><br>y te lo mando</div>
+  <img class="recorte" src="img/recorte.png" style="right:-10px;bottom:0;height:640px">
+  <svg class="star" style="right:90px;top:80px;width:120px;height:120px;fill:var(--oro)"><use href="#estrella"/></svg>
+</section>
+
+<script>
+/* anti-texto-cortado: si un bloque se sale del lienzo, baja la letra */
+document.fonts.ready.then(()=>{document.querySelectorAll('.slide').forEach(s=>{s.querySelectorAll('h2,p,.quote').forEach(el=>{let f=parseFloat(getComputedStyle(el).fontSize),i=0;while(el.getBoundingClientRect().right>s.getBoundingClientRect().right-40&&i++<30){f*=.96;el.style.fontSize=f+'px'}})})});
+</script>
+</body></html>
